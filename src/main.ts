@@ -18,7 +18,7 @@ import combineFilesAgent from "./agents/combine_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { ScriptData } from "./type";
+import { ScriptData, VoiceMap } from "./type";
 import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
@@ -36,7 +36,7 @@ const graph_tts: GraphData = {
       },
     },
     voice: {
-      agent: (namedInputs: any) => {
+      agent: (namedInputs: { speaker: string; voicemap: VoiceMap; voice0: string }) => {
         const { speaker, voicemap, voice0 } = namedInputs;
         return voicemap[speaker] ?? voice0;
       },
@@ -186,7 +186,7 @@ const main = async () => {
     podcastData.ttsAgent = "ttsOpenaiAgent";
   }
   const speakers = podcastData.speakers ?? ["Host", "Guest"];
-  podcastData.voicemap = speakers.reduce((map: any, speaker: string, index: number) => {
+  podcastData.voicemap = speakers.reduce((map: VoiceMap, speaker: string, index: number) => {
     map[speaker] = podcastData.voices![index];
     return map;
   }, {});

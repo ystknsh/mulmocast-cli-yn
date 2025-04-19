@@ -15,6 +15,8 @@ export type ImageInfo = {
   image: string | undefined; // path to the image
 };
 
+export type VoiceMap = Map<string, string>;
+
 export type PodcastScript = {
   title: string;
   padding: number | undefined;
@@ -25,7 +27,7 @@ export type PodcastScript = {
   speakers: string[] | undefined;
   script: ScriptData[];
   filename: string; // generated
-  voicemap: Map<string, string>; // generated
+  voicemap: VoiceMap; // generated
   ttsAgent: string; // generated
   // imageInfo: any[]; // generated
   aspectRatio: string | undefined; // "16:9" or "9:16"
