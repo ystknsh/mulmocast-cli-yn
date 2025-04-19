@@ -15,7 +15,7 @@ export type ImageInfo = {
   image: string | undefined; // path to the image
 };
 
-export type VoiceMap = Map<string, string>;
+export type VoiceMap = Record<string, string>;
 
 export type PodcastScript = {
   title: string;

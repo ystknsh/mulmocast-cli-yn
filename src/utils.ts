@@ -2,7 +2,22 @@ import fs from "fs";
 import path from "path";
 import { PodcastScript } from "./type";
 
-export const readPodcastScriptFile = (arg2: string, errorMessage?: string) => {
+export function readPodcastScriptFile(
+  path: string,
+  errorMessage: string,
+): {
+  podcastData: PodcastScript;
+  podcastDataPath: string;
+  fileName: string;
+};
+
+export function readPodcastScriptFile(path: string): {
+  podcastData: PodcastScript;
+  podcastDataPath: string;
+  fileName: string;
+} | null;
+
+export function readPodcastScriptFile(arg2: string, errorMessage?: string) {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
@@ -20,7 +35,7 @@ export const readPodcastScriptFile = (arg2: string, errorMessage?: string) => {
     podcastDataPath: scriptPath,
     fileName: parsedPath.name,
   };
-};
+}
 
 export const getOutputFilePath = (fileName: string) => {
   const filePath = path.resolve("./output/" + fileName);

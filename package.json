@@ -15,6 +15,7 @@
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/main.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
     "ci_test": "node --test  --require ts-node/register ./test/test_*.ts",
     "lint": "eslint src",
+    "build": "tsc",
     "format": "prettier --write '{src,scripts,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },
   "repository": "git+ssh://git@github.com/snakajima/ai-podcaster.git",
@@ -31,7 +32,6 @@
     "@graphai/tts_openai_agent": "^0.0.2",
     "@graphai/vanilla_node_agents": "^1.0.1",
     "@types/fluent-ffmpeg": "^2.1.26",
-    "@types/sharp": "^0.32.0",
     "canvas": "^3.1.0",
     "dotenv": "^16.4.7",
     "fluent-ffmpeg": "^2.1.3",
