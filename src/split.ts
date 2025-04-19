@@ -58,7 +58,7 @@ const replacements: Replacement[] = [
   { from: "Anthropic", to: "アンスロピック" },
 ];
 */
-const script2Images = (scripts: ScriptData[]) => {
+export const script2Images = (scripts: ScriptData[]) => {
   return scripts.map((script, index) => {
     script.imageIndex = index;
     const ret = {
