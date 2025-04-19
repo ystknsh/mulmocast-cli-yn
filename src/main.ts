@@ -186,7 +186,7 @@ const main = async () => {
     podcastData.ttsAgent = "ttsOpenaiAgent";
   }
   const speakers = podcastData.speakers ?? ["Host", "Guest"];
-  podcastData.voicemap = speakers.reduce<VoiceMap>((map: VoiceMap, speaker: string, index: number) => {
+  podcastData.voicemap = speakers.reduce((map: VoiceMap, speaker: string, index: number) => {
     map[speaker] = podcastData.voices![index];
     return map;
   }, {});
