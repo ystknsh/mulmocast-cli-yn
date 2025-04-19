@@ -221,7 +221,7 @@ const main = async () => {
   const promises = jsonData.script.map(async (element: ScriptData, index: number) => {
     try {
       const imagePath = `./scratchpad/${name}_${index}.png`; // Output file path
-      await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
+      await renderJapaneseTextToPNG(element.text, imagePath, canvasInfo);
       const caption: CaptionInfo = {
         pathCaption: path.resolve(imagePath),
         imageIndex: element.imageIndex,
