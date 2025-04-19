@@ -9,6 +9,15 @@ type CanvasInfo = {
   height: number;
 };
 
+const PORTRAIT_SIZE = {
+  width: 720,
+  height: 1280,
+};
+const LANDSCAPE_SIZE = {
+  width: 1280, // not 1920
+  height: 720, // not 1080
+};
+
 const separateText = (text: string, fontSize: number, actualWidth: number) => {
   let currentLine = "";
   let currentWidth = 0;
@@ -191,14 +200,6 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
-  const PORTRAIT_SIZE = {
-    width: 720,
-    height: 1280,
-  };
-  const LANDSCAPE_SIZE = {
-    width: 1280, // not 1920
-    height: 720, // not 1080
-  };
   const canvasInfo = podcastData.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
 
   try {
@@ -212,16 +213,15 @@ const main = async () => {
     throw err;
   }
 
-  const promises = podcastData.script.map(async (element: ScriptData, index: number) => {
+  const promises = podcastData.script.map(async (element: ScriptData, index: number): Promise<CaptionInfo> => {
     try {
       const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
       await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
-      const caption: CaptionInfo = {
+      return {
         pathCaption: imagePath,
         imageIndex: element.imageIndex,
         duration: outputJsonData.script[index].duration,
       };
-      return caption;
     } catch (err) {
       console.error("Error generating PNG:", err);
       throw err;
