@@ -18,7 +18,7 @@ const LANDSCAPE_SIZE = {
   height: 720, // not 1080
 };
 
-export const separateText = (text: string, fontSize: number, actualWidth: number) => {
+export const separateText = (text: string, fontSize: number, actualWidth: number): string[] => {
   let currentLine = "";
   let currentWidth = 0;
 
