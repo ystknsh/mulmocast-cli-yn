@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import { GraphAI, GraphData, DefaultResultData } from "graphai";
 import * as agents from "@graphai/agents";
-import { PodcastScript } from "./type";
+import { PodcastScript, ImageInfo } from "./type";
 import { readPodcastScriptFile, getOutputFilePath, mkdir } from "./utils";
 
 dotenv.config();
@@ -142,6 +142,9 @@ const graph_data: GraphData = {
       agent: "mapAgent",
       inputs: { rows: ":script.images", script: ":script" },
       isResult: true,
+      params: {
+        compositeResult: true,
+      },
       graph: {
         nodes: {
           plain: {
@@ -188,18 +191,11 @@ const main = async () => {
   mkdir(`images/${outputJsonData.filename}`);
   podcastData.filename = outputJsonData.filename; // Hack: It allows us to use the source script
 
-  // DEBUG
-  // outputJsonData.imageInfo = [outputJsonData.imageInfo[0]];
-
   const graph = new GraphAI(graph_data, { ...agents });
   graph.injectValue("script", podcastData);
-  const results = await graph.run();
-  if (results.map) {
-    const data = results.map as DefaultResultData[];
-    const info = data.map((element: any) => {
-      return element.output;
-    });
-    outputJsonData.images = info;
+  const results = await graph.run<{ output: ImageInfo[] }>();
+  if (results?.map?.output) {
+    outputJsonData.images = results?.map?.output;
     fs.writeFileSync(outputFilePath, JSON.stringify(outputJsonData, null, 2));
   }
 };
