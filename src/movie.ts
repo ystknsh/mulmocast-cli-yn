@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 import ffmpeg from "fluent-ffmpeg";
 import { createCanvas } from "canvas";
 import { ScriptData, ImageInfo } from "./type";
@@ -218,7 +217,7 @@ const main = async () => {
       const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
       await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
       const caption: CaptionInfo = {
-        pathCaption: path.resolve(imagePath),
+        pathCaption: imagePath,
         imageIndex: element.imageIndex,
         duration: outputJsonData.script[index].duration,
       };
