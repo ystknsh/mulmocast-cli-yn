@@ -1,16 +1,15 @@
 import fs from "fs";
-import path from "path";
 import dotenv from "dotenv";
 import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
-import { ScriptData } from "./type";
-import { readPodcastScriptFile } from "./utils";
+import { ScriptData, PodcastScript } from "./type";
+import { readPodcastScriptFile, getOutputFilePath } from "./utils";
 
 dotenv.config();
 
-const writeTranslatedJson = async (inputs: { jsonData: any; name: string }) => {
+const writeTranslatedJson = async (inputs: { jsonData: PodcastScript; name: string }) => {
   const { name, jsonData } = inputs;
-  const outputScript = path.resolve("./output/" + name + "_ja.json");
+  const outputScript = getOutputFilePath(name + "_ja.json");
   const textData: string = JSON.stringify(jsonData, null, 2);
   fs.writeFileSync(outputScript, textData);
   return outputScript;
