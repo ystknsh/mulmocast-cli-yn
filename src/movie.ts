@@ -1,12 +1,21 @@
 import fs from "fs";
-import path from "path";
 import ffmpeg from "fluent-ffmpeg";
 import { createCanvas } from "canvas";
-import { ScriptData, PodcastScript, ImageInfo } from "./type";
+import { ScriptData, ImageInfo } from "./type";
+import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 type CanvasInfo = {
   width: number;
   height: number;
+};
+
+const PORTRAIT_SIZE = {
+  width: 720,
+  height: 1280,
+};
+const LANDSCAPE_SIZE = {
+  width: 1280, // not 1920
+  height: 720, // not 1080
 };
 
 const separateText = (text: string, fontSize: number, actualWidth: number) => {
@@ -94,9 +103,9 @@ interface CaptionInfo {
 
 const createVideo = (
   audioPath: string,
+  outputVideoPath: string,
   captions: CaptionInfo[],
   images: ImageInfo[],
-  outputVideoPath: string,
   canvasInfo: CanvasInfo,
   omitCaptions: boolean,
 ) => {
@@ -186,31 +195,17 @@ const createVideo = (
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const scriptPath = path.resolve(arg2);
-  const parsedPath = path.parse(scriptPath);
-  const name = parsedPath.name;
-  const data = fs.readFileSync(scriptPath, "utf-8");
-  const jsonData: PodcastScript = JSON.parse(data);
+  const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
 
-  const tmScriptPath = path.resolve("./output/" + name + ".json");
-  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
-  const outputJsonData: PodcastScript = JSON.parse(outputData);
+  const outputFilePath = getOutputFilePath(fileName + ".json");
+  const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
-  const canvasInfo =
-    jsonData.aspectRatio === "9:16"
-      ? {
-          width: 720,
-          height: 1280,
-        }
-      : {
-          width: 1280, // not 1920
-          height: 720, // not 1080
-        };
+  const canvasInfo = podcastData.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
 
   try {
     await renderJapaneseTextToPNG(
-      `${jsonData.title}\n\n${jsonData.description}`,
-      `./scratchpad/${name}_00.png`, // Output file path
+      `${podcastData.title}\n\n${podcastData.description}`,
+      getScratchpadFilePath(`${fileName}_00.png`), // Output file path
       canvasInfo,
     );
   } catch (err) {
@@ -218,57 +213,44 @@ const main = async () => {
     throw err;
   }
 
-  const promises = jsonData.script.map(async (element: ScriptData, index: number) => {
+  const captionPromises = podcastData.script.map(async (element: ScriptData, index: number): Promise<CaptionInfo> => {
     try {
-      const imagePath = `./scratchpad/${name}_${index}.png`; // Output file path
+      const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
       await renderJapaneseTextToPNG(element.text, imagePath, canvasInfo);
-      const caption: CaptionInfo = {
-        pathCaption: path.resolve(imagePath),
+      return {
+        pathCaption: imagePath,
         imageIndex: element.imageIndex,
         duration: outputJsonData.script[index].duration,
       };
-      return caption;
     } catch (err) {
       console.error("Error generating PNG:", err);
       throw err;
     }
   });
-  const captions = await Promise.all(promises);
+  const captions = await Promise.all(captionPromises);
 
-  const audioPath = path.resolve("./output/" + name + "_bgm.mp3");
-  const outputVideoPath = path.resolve("./output/" + name + "_ja.mp4");
   const titleInfo: CaptionInfo = {
-    pathCaption: path.resolve(`./scratchpad/${name}_00.png`), // HACK
+    pathCaption: getScratchpadFilePath(`${fileName}_00.png`), // HACK
     imageIndex: 0, // HACK
-    duration: (jsonData.padding ?? 4000) / 1000,
+    duration: (podcastData.padding ?? 4000) / 1000,
   };
   const captionsWithTitle = [titleInfo].concat(captions);
   // const captionsWithTitle = [captions[0], captions[1], captions[5], captions[8]];
-  const images: ImageInfo[] = [];
-  if (jsonData.imagePath) {
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: jsonData.imagePath + "001.png",
-    });
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: jsonData.imagePath + "002.png",
-    });
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: jsonData.imagePath + "003.png",
-    });
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: jsonData.imagePath + "004.png",
-    });
-  }
 
-  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : outputJsonData.images, outputVideoPath, canvasInfo, !!jsonData.omitCaptions);
+  const images = podcastData.imagePath
+    ? ["001.png", "002.png", "003.png", "004.png"].map((imageFileName) => {
+        return {
+          index: 0,
+          imagePrompt: undefined,
+          image: podcastData.imagePath + imageFileName,
+        };
+      })
+    : outputJsonData.images;
+
+  const audioPath = getOutputFilePath(fileName + "_bgm.mp3");
+  const outputVideoPath = getOutputFilePath(fileName + "_ja.mp4");
+
+  createVideo(audioPath, outputVideoPath, captionsWithTitle, images, canvasInfo, !!podcastData.omitCaptions);
 };
 
 main();

@@ -8,7 +8,7 @@ test("test script2Images", async () => {
     {
       speaker: "",
       text: "",
-      caption: "",
+      ttsText: "",
       instructions: "",
       duration: 1,
       filename: "",
@@ -18,7 +18,7 @@ test("test script2Images", async () => {
     {
       speaker: "",
       text: "",
-      caption: "",
+      ttsText: "",
       instructions: "",
       duration: 1,
       filename: "",
@@ -36,7 +36,7 @@ test("test script2Images", async () => {
     {
       speaker: "",
       text: "",
-      caption: "",
+      ttsText: "",
       instructions: "",
       duration: 1,
       filename: "",
@@ -45,7 +45,7 @@ test("test script2Images", async () => {
     {
       speaker: "",
       text: "",
-      caption: "",
+      ttsText: "",
       instructions: "",
       duration: 1,
       filename: "",
