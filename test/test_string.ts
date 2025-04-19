@@ -1,5 +1,6 @@
 import { splitIntoSentences, recursiveSplit } from "../src/split";
 import { replacePairs, replacements } from "../src/fixtext";
+import { separateText } from "../src/movie";
 
 import test from "node:test";
 import assert from "node:assert";
@@ -115,4 +116,34 @@ test("test replacePairs", async () => {
 
   assert.equal(voice_text, expect);
   // console.log(voice_text);
+});
+
+test("test separateText", async () => {
+  const fontSize = 48;
+  const paddingX = fontSize * 2;
+  const width = 720;
+  const actualWidth = width - paddingX * 2;
+
+  const text1 = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
+  const text2 = "あいうえお かきくけこ さしすせそ たちつてと なにぬねの はひふへほ まみむめも やゆよ らりるれろ わをん";
+
+  const text3 = "いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせすん";
+  const text4 = "いろはにほへと ちりぬるを わかよたれそ つねならむ うゐのおく やまけふこ えてあさき ゆめみし ゑひもせす ん";
+
+  const expect1 = ["あいうえおかきくけこさ", "しすせそたちつてとなに", "ぬねのはひふへほまみむ", "めもやゆよらりるれろわ", "をん"];
+  const expect2 = ["あいうえお かきくけこ ", "さしすせそ たちつてと ", "なにぬねの はひふへほ ", "まみむめも やゆよ らり", "るれろ わをん"];
+  const expect3 = ["いろはにほへとちりぬる", "をわかよたれそつねなら", "むうゐのおくやまけふこ", "えてあさきゆめみしゑひ", "もせすん"];
+  const expect4 = ["いろはにほへと ちりぬ", "るを わかよたれそ つね", "ならむ うゐのおく やま", "けふこ えてあさき ゆめ", "みし ゑひもせす ん"];
+
+  const lines1 = separateText(text1, fontSize, actualWidth);
+  assert.deepStrictEqual(lines1, expect1);
+
+  const lines2 = separateText(text2, fontSize, actualWidth);
+  assert.deepStrictEqual(lines2, expect2);
+
+  const lines3 = separateText(text3, fontSize, actualWidth);
+  assert.deepStrictEqual(lines3, expect3);
+
+  const lines4 = separateText(text4, fontSize, actualWidth);
+  assert.deepStrictEqual(lines4, expect4);
 });

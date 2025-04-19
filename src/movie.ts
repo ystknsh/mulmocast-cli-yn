@@ -18,7 +18,7 @@ const LANDSCAPE_SIZE = {
   height: 720, // not 1080
 };
 
-const separateText = (text: string, fontSize: number, actualWidth: number) => {
+export const separateText = (text: string, fontSize: number, actualWidth: number) => {
   let currentLine = "";
   let currentWidth = 0;
 
@@ -253,4 +253,6 @@ const main = async () => {
   createVideo(audioPath, outputVideoPath, captionsWithTitle, images, canvasInfo, !!podcastData.omitCaptions);
 };
 
-main();
+if (process.argv[1] === __filename) {
+  main();
+}
