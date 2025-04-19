@@ -3,6 +3,7 @@ import path from "path";
 import ffmpeg from "fluent-ffmpeg";
 import { createCanvas } from "canvas";
 import { ScriptData, PodcastScript, ImageInfo } from "./type";
+import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 type CanvasInfo = {
   width: number;
@@ -186,18 +187,13 @@ const createVideo = (
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const scriptPath = path.resolve(arg2);
-  const parsedPath = path.parse(scriptPath);
-  const name = parsedPath.name;
-  const data = fs.readFileSync(scriptPath, "utf-8");
-  const jsonData: PodcastScript = JSON.parse(data);
+  const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
 
-  const tmScriptPath = path.resolve("./output/" + name + ".json");
-  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
-  const outputJsonData: PodcastScript = JSON.parse(outputData);
+  const outputFilePath = getOutputFilePath(fileName + ".json");
+  const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
   const canvasInfo =
-    jsonData.aspectRatio === "9:16"
+    podcastData.aspectRatio === "9:16"
       ? {
           width: 720,
           height: 1280,
@@ -209,8 +205,8 @@ const main = async () => {
 
   try {
     await renderJapaneseTextToPNG(
-      `${jsonData.title}\n\n${jsonData.description}`,
-      `./scratchpad/${name}_00.png`, // Output file path
+      `${podcastData.title}\n\n${podcastData.description}`,
+      getScratchpadFilePath(`${fileName}_00.png`), // Output file path
       canvasInfo,
     );
   } catch (err) {
@@ -218,9 +214,9 @@ const main = async () => {
     throw err;
   }
 
-  const promises = jsonData.script.map(async (element: ScriptData, index: number) => {
+  const promises = podcastData.script.map(async (element: ScriptData, index: number) => {
     try {
-      const imagePath = `./scratchpad/${name}_${index}.png`; // Output file path
+      const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
       await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
       const caption: CaptionInfo = {
         pathCaption: path.resolve(imagePath),
@@ -235,40 +231,40 @@ const main = async () => {
   });
   const captions = await Promise.all(promises);
 
-  const audioPath = path.resolve("./output/" + name + "_bgm.mp3");
-  const outputVideoPath = path.resolve("./output/" + name + "_ja.mp4");
+  const audioPath = getOutputFilePath(fileName + "_bgm.mp3");
+  const outputVideoPath = getOutputFilePath(fileName + "_ja.mp4");
   const titleInfo: CaptionInfo = {
-    pathCaption: path.resolve(`./scratchpad/${name}_00.png`), // HACK
+    pathCaption: getScratchpadFilePath(`${fileName}_00.png`), // HACK
     imageIndex: 0, // HACK
-    duration: (jsonData.padding ?? 4000) / 1000,
+    duration: (podcastData.padding ?? 4000) / 1000,
   };
   const captionsWithTitle = [titleInfo].concat(captions);
   // const captionsWithTitle = [captions[0], captions[1], captions[5], captions[8]];
   const images: ImageInfo[] = [];
-  if (jsonData.imagePath) {
+  if (podcastData.imagePath) {
     images.push({
       index: 0,
       imagePrompt: undefined,
-      image: jsonData.imagePath + "001.png",
+      image: podcastData.imagePath + "001.png",
     });
     images.push({
       index: 0,
       imagePrompt: undefined,
-      image: jsonData.imagePath + "002.png",
+      image: podcastData.imagePath + "002.png",
     });
     images.push({
       index: 0,
       imagePrompt: undefined,
-      image: jsonData.imagePath + "003.png",
+      image: podcastData.imagePath + "003.png",
     });
     images.push({
       index: 0,
       imagePrompt: undefined,
-      image: jsonData.imagePath + "004.png",
+      image: podcastData.imagePath + "004.png",
     });
   }
 
-  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : outputJsonData.images, outputVideoPath, canvasInfo, !!jsonData.omitCaptions);
+  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : outputJsonData.images, outputVideoPath, canvasInfo, !!podcastData.omitCaptions);
 };
 
 main();
