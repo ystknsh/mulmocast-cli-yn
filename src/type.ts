@@ -1,7 +1,7 @@
 export type ScriptData = {
   speaker: string;
   text: string;
-  caption: string | undefined;
+  ttsText: string | undefined;
   instructions: string | undefined;
   duration: number; // generated
   filename: string; // generated

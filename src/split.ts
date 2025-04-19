@@ -38,26 +38,18 @@ export const recursiveSplit = (scripts: ScriptData[]) => {
   }, []);
 };
 
-/*
-interface Replacement {
-  from: string;
-  to: string;
-}
-
-function replacePairs(str: string, replacements: Replacement[]): string {
-  replacements.forEach(({ from, to }) => {
-    // Escape any special regex characters in the 'from' string.
-    const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(escapedFrom, "g");
-    str = str.replace(regex, to);
+export const script2Images = (scripts: ScriptData[]) => {
+  return scripts.map((script, index) => {
+    script.imageIndex = index;
+    const ret = {
+      imagePrompt: script.imagePrompt,
+      index,
+      image: undefined,
+    };
+    delete script.imagePrompt;
+    return ret;
   });
-  return str;
-}
-
-const replacements: Replacement[] = [
-  { from: "Anthropic", to: "アンスロピック" },
-];
-*/
+};
 
 const main = async () => {
   const arg2 = process.argv[2];
@@ -67,15 +59,7 @@ const main = async () => {
 
   if (podcastData.images === undefined) {
     // Transfer imagePrompts to images.
-    podcastData.images = podcastData.script.map((script, index) => {
-      script.imageIndex = index;
-      delete script.imagePrompt;
-      return {
-        imagePrompt: script.imagePrompt,
-        index,
-        image: undefined,
-      };
-    });
+    podcastData.images = script2Images(podcastData.script);
   }
 
   podcastData.script = recursiveSplit(podcastData.script);

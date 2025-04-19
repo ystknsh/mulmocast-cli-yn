@@ -49,7 +49,7 @@ const graph_tts: GraphData = {
     tts: {
       agent: ":script.ttsAgent",
       inputs: {
-        text: ":row.text",
+        text: ":row.ttsText",
         file: ":path.path",
       },
       params: {

@@ -216,7 +216,7 @@ const main = async () => {
   const captionPromises = podcastData.script.map(async (element: ScriptData, index: number): Promise<CaptionInfo> => {
     try {
       const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
-      await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
+      await renderJapaneseTextToPNG(element.text, imagePath, canvasInfo);
       return {
         pathCaption: imagePath,
         imageIndex: element.imageIndex,
