@@ -9,6 +9,7 @@ const text = "あかさたなはまやらわ。東京特許許可局！今日は
 const scriptData = {
   speaker: "",
   text,
+  ttsText: "",
   caption: "",
   instructions: "",
   duration: 1,
@@ -20,6 +21,7 @@ const scriptData = {
 const scriptData2 = {
   speaker: "",
   text: "あかさかさかす。スカイツリーかな！ハウアーユーってなに？",
+  ttsText: "",
   caption: "",
   instructions: "",
   duration: 2,
@@ -39,6 +41,7 @@ test("test recursiveSplit", async () => {
     {
       speaker: "",
       text: "あかさたなはまやらわ。",
+      ttsText: "",
       caption: "",
       instructions: "",
       duration: 1,
@@ -49,6 +52,7 @@ test("test recursiveSplit", async () => {
     {
       speaker: "",
       text: "東京特許許可局！",
+      ttsText: "",
       caption: "",
       instructions: "",
       duration: 1,
@@ -59,6 +63,7 @@ test("test recursiveSplit", async () => {
     {
       speaker: "",
       text: "今日はいい天気ですか？",
+      ttsText: "",
       caption: "",
       instructions: "",
       duration: 1,
@@ -69,6 +74,7 @@ test("test recursiveSplit", async () => {
     {
       speaker: "",
       text: "あかさかさかす。",
+      ttsText: "",
       caption: "",
       instructions: "",
       duration: 2,
@@ -79,6 +85,7 @@ test("test recursiveSplit", async () => {
     {
       speaker: "",
       text: "スカイツリーかな！",
+      ttsText: "",
       caption: "",
       instructions: "",
       duration: 2,
@@ -89,6 +96,7 @@ test("test recursiveSplit", async () => {
     {
       speaker: "",
       text: "ハウアーユーってなに？",
+      ttsText: "",
       caption: "",
       instructions: "",
       duration: 2,
