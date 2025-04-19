@@ -194,8 +194,8 @@ const main = async () => {
   const graph = new GraphAI(graph_data, { ...agents });
   graph.injectValue("script", podcastData);
   const results = await graph.run<{ output: ImageInfo[] }>();
-  if (results?.map?.output) {
-    outputJsonData.images = results?.map?.output;
+  if (results.map?.output) {
+    outputJsonData.images = results.map?.output;
     fs.writeFileSync(outputFilePath, JSON.stringify(outputJsonData, null, 2));
   }
 };
