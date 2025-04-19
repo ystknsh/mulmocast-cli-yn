@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 // import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
-import { GraphAI, GraphData, DefaultResultData } from "graphai";
+import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import { PodcastScript, ImageInfo } from "./type";
 import { readPodcastScriptFile, getOutputFilePath, mkdir } from "./utils";
