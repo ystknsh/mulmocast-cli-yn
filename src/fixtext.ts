@@ -40,11 +40,7 @@ export const replacements: Replacement[] = [
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const readData = readPodcastScriptFile(arg2);
-  if (!readData) {
-    console.log("no file exists");
-    return;
-  }
+  const readData = readPodcastScriptFile(arg2, "no file exists");
   const { podcastData, podcastDataPath } = readData;
 
   podcastData.script = podcastData.script.map((script: ScriptData) => {
@@ -56,7 +52,6 @@ const main = async () => {
     }
     return script;
   });
-
   fs.writeFileSync(podcastDataPath, JSON.stringify(podcastData, null, 2));
 };
 
