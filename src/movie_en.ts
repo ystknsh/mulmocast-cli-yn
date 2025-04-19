@@ -21,11 +21,7 @@ async function renderJapaneseTextToPNG(text: string, outputFilePath: string) {
     const code = char.charCodeAt(0);
     const isAnsi = code < 255;
     const isCapital = code >= 0x40 && code < 0x60;
-    const charWidth = isAnsi
-      ? isCapital
-        ? fontSize * 0.8
-        : fontSize * 0.5
-      : fontSize;
+    const charWidth = isAnsi ? (isCapital ? fontSize * 0.8 : fontSize * 0.5) : fontSize;
 
     if (char === "\n") {
       lines.push(currentLine);
@@ -69,11 +65,7 @@ interface ImageDetails {
   duration: number; // Duration in seconds for each image
 }
 
-const createVideo = (
-  audioPath: string,
-  images: ImageDetails[],
-  outputVideoPath: string,
-) => {
+const createVideo = (audioPath: string, images: ImageDetails[], outputVideoPath: string) => {
   let command = ffmpeg();
 
   // Add each image input
@@ -157,15 +149,13 @@ const main = async () => {
   const jsonDataTm = JSON.parse(dataTm);
 
   const audioPath = path.resolve("./output/" + name + "_bgm.mp3");
-  const images: ImageDetails[] = jsonDataTm.script.map(
-    (item: any, index: number) => {
-      const duration = item.duration;
-      return {
-        path: path.resolve(`./scratchpad/${name}_${index}.png`),
-        duration,
-      };
-    },
-  );
+  const images: ImageDetails[] = jsonDataTm.script.map((item: any, index: number) => {
+    const duration = item.duration;
+    return {
+      path: path.resolve(`./scratchpad/${name}_${index}.png`),
+      duration,
+    };
+  });
   const outputVideoPath = path.resolve("./output/" + name + "_ja.mp4");
   const titleImage: ImageDetails = {
     path: path.resolve(`./scratchpad/${name}_00.png`),

@@ -43,11 +43,7 @@ const separateText = (text: string, fontSize: number, actualWidth: number) => {
   return lines;
 };
 
-async function renderJapaneseTextToPNG(
-  text: string,
-  outputFilePath: string,
-  canvasInfo: CanvasInfo,
-) {
+async function renderJapaneseTextToPNG(text: string, outputFilePath: string, canvasInfo: CanvasInfo) {
   const fontSize = 48;
   const paddingX = fontSize * 2;
   const paddingY = 12;
@@ -80,11 +76,7 @@ async function renderJapaneseTextToPNG(
   context.shadowBlur = 10;
 
   lines.forEach((line: string, index: number) => {
-    context.fillText(
-      line,
-      canvasInfo.width / 2,
-      textTop + lineHeight * index + paddingY,
-    );
+    context.fillText(line, canvasInfo.width / 2, textTop + lineHeight * index + paddingY);
   });
 
   // Save the image
@@ -155,9 +147,7 @@ const createVideo = (
 
   // Concatenate the trimmed images
   const concatInput = captions.map((_, index) => `[v${index}]`).join("");
-  filterComplexParts.push(
-    `${concatInput}concat=n=${captions.length}:v=1:a=0[v]`,
-  );
+  filterComplexParts.push(`${concatInput}concat=n=${captions.length}:v=1:a=0[v]`);
 
   // Apply the filter complex for concatenation and map audio input
   command
@@ -228,27 +218,21 @@ const main = async () => {
     throw err;
   }
 
-  const promises = jsonData.script.map(
-    async (element: ScriptData, index: number) => {
-      try {
-        const imagePath = `./scratchpad/${name}_${index}.png`; // Output file path
-        await renderJapaneseTextToPNG(
-          element.caption ?? element.text,
-          imagePath,
-          canvasInfo,
-        );
-        const caption: CaptionInfo = {
-          pathCaption: path.resolve(imagePath),
-          imageIndex: element.imageIndex,
-          duration: jsonDataTm.script[index].duration,
-        };
-        return caption;
-      } catch (err) {
-        console.error("Error generating PNG:", err);
-        throw err;
-      }
-    },
-  );
+  const promises = jsonData.script.map(async (element: ScriptData, index: number) => {
+    try {
+      const imagePath = `./scratchpad/${name}_${index}.png`; // Output file path
+      await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
+      const caption: CaptionInfo = {
+        pathCaption: path.resolve(imagePath),
+        imageIndex: element.imageIndex,
+        duration: jsonDataTm.script[index].duration,
+      };
+      return caption;
+    } catch (err) {
+      console.error("Error generating PNG:", err);
+      throw err;
+    }
+  });
   const captions = await Promise.all(promises);
 
   const audioPath = path.resolve("./output/" + name + "_bgm.mp3");
@@ -284,14 +268,7 @@ const main = async () => {
     });
   }
 
-  createVideo(
-    audioPath,
-    captionsWithTitle,
-    images.length > 0 ? images : jsonDataTm.images,
-    outputVideoPath,
-    canvasInfo,
-    !!jsonData.omitCaptions,
-  );
+  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : jsonDataTm.images, outputVideoPath, canvasInfo, !!jsonData.omitCaptions);
 };
 
 main();

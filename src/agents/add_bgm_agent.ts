@@ -3,11 +3,10 @@ import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import { PodcastScript } from "../type";
 
-const addBGMAgent: AgentFunction<
-  { musicFileName: string },
-  string,
-  { voiceFile: string; outFileName: string; script: PodcastScript }
-> = async ({ namedInputs, params }) => {
+const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile: string; outFileName: string; script: PodcastScript }> = async ({
+  namedInputs,
+  params,
+}) => {
   const { voiceFile, outFileName, script } = namedInputs;
   const { musicFileName } = params;
   const outputFile = path.resolve(outFileName);
@@ -22,8 +21,7 @@ const addBGMAgent: AgentFunction<
 
       const speechDuration = metadata.format.duration;
       const padding = script.padding ?? 4000; // msec
-      const totalDuration =
-        (padding * 2) / 1000 + Math.round(speechDuration ?? 0);
+      const totalDuration = (padding * 2) / 1000 + Math.round(speechDuration ?? 0);
       console.log("totalDucation:", speechDuration, totalDuration);
 
       const command = ffmpeg();

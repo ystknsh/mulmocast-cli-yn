@@ -19,10 +19,7 @@ const scriptData = {
 
 test("test splitIntoSentences", async () => {
   const ret = splitIntoSentences(text, "。", 7);
-  assert.deepStrictEqual(ret, [
-    "あかさたなはまやらわ。",
-    "東京特許許可局！今日はいい天気ですか？",
-  ]);
+  assert.deepStrictEqual(ret, ["あかさたなはまやらわ。", "東京特許許可局！今日はいい天気ですか？"]);
 });
 
 test("test recursiveSplit", async () => {
@@ -64,8 +61,7 @@ test("test recursiveSplit", async () => {
 
 test("test replacePairs", async () => {
   const caption = "AGIとOpenAIの危険な麺類について危険な面を話します";
-  const expect =
-    "エージーアイとオープンエーアイの危険な麺類について危険なめんを話します";
+  const expect = "エージーアイとオープンエーアイの危険な麺類について危険なめんを話します";
   const voice_text = replacePairs(caption, replacements);
 
   assert.equal(voice_text, expect);

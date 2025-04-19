@@ -1,10 +1,6 @@
 import sharp from "sharp";
 
-async function renderJapaneseTextToPNG(
-  text: string,
-  imageWidth: number,
-  outputFilePath: string,
-) {
+async function renderJapaneseTextToPNG(text: string, imageWidth: number, outputFilePath: string) {
   const columns = Math.sqrt(text.length / 2) * 2;
   const fontSize = imageWidth / columns;
   const lineHeight = fontSize * 1.2;
@@ -19,11 +15,7 @@ async function renderJapaneseTextToPNG(
     const code = char.charCodeAt(0);
     const isAnsi = code < 255;
     const isCapital = code >= 0x40 && code < 0x60;
-    const charWidth = isAnsi
-      ? isCapital
-        ? fontSize * 0.8
-        : fontSize * 0.5
-      : fontSize;
+    const charWidth = isAnsi ? (isCapital ? fontSize * 0.8 : fontSize * 0.5) : fontSize;
 
     if (currentWidth + charWidth > imageWidth) {
       lines.push(currentLine);

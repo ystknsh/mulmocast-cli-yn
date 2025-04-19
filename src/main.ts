@@ -19,11 +19,7 @@ import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { ScriptData } from "./type";
-import {
-  readPodcastScriptFile,
-  getOutputFilePath,
-  getScratchpadFilePath,
-} from "./utils";
+import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -117,8 +113,7 @@ const graph_data: GraphData = {
         after: true,
       },
       inputs: {
-        title:
-          "\n${:script.title}\n\n${:script.description}\nReference: ${:script.reference}\n",
+        title: "\n${:script.title}\n\n${:script.description}\nReference: ${:script.reference}\n",
         waitFor: ":addBGM",
       },
     },
@@ -165,16 +160,13 @@ const main = async () => {
 
   // Check if any script changes
   const outputFilePath = getOutputFilePath(podcastData.filename + ".json");
-  const { podcastData: prevScript } =
-    readPodcastScriptFile(outputFilePath) ?? {};
+  const { podcastData: prevScript } = readPodcastScriptFile(outputFilePath) ?? {};
   if (prevScript) {
     console.log("found output script", prevScript.filename);
     podcastData.script.forEach((scriptData: ScriptData, index: number) => {
       const prevText = prevScript.script[index]?.text ?? "";
       if (scriptData.text !== prevText) {
-        const scratchpadFilePath = getScratchpadFilePath(
-          scriptData.filename + ".mp3",
-        );
+        const scratchpadFilePath = getScratchpadFilePath(scriptData.filename + ".mp3");
         if (fs.existsSync(scratchpadFilePath)) {
           console.log("deleting", scriptData.filename);
           fs.unlinkSync(scratchpadFilePath);
@@ -185,10 +177,7 @@ const main = async () => {
 
   if (podcastData.tts === "nijivoice") {
     graph_data.concurrency = 1;
-    podcastData.voices = podcastData.voices ?? [
-      rion_takanashi_voice,
-      ben_carter_voice,
-    ];
+    podcastData.voices = podcastData.voices ?? [rion_takanashi_voice, ben_carter_voice];
     podcastData.ttsAgent = "ttsNijivoiceAgent";
   } else {
     graph_data.concurrency = 8;
@@ -196,13 +185,10 @@ const main = async () => {
     podcastData.ttsAgent = "ttsOpenaiAgent";
   }
   const speakers = podcastData.speakers ?? ["Host", "Guest"];
-  podcastData.voicemap = speakers.reduce(
-    (map: any, speaker: string, index: number) => {
-      map[speaker] = podcastData.voices![index];
-      return map;
-    },
-    {},
-  );
+  podcastData.voicemap = speakers.reduce((map: any, speaker: string, index: number) => {
+    map[speaker] = podcastData.voices![index];
+    return map;
+  }, {});
   /*
   script.imageInfo = script.script.map((_: ScriptData, index: number) => {
     return {
