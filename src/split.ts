@@ -1,6 +1,6 @@
 import fs from "fs";
-import path from "path";
-import { ScriptData, PodcastScript } from "./type";
+import { ScriptData } from "./type";
+import { readPodcastScriptFile } from "./utils";
 
 export function splitIntoSentences(paragraph: string, divider: string, minimum: number): string[] {
   const sentences = paragraph
@@ -31,9 +31,10 @@ export const recursiveSplit = (scripts: ScriptData[]) => {
         [script.text],
       )
       .flat(1);
-    return sentences.map((sentence) => {
-      return { ...script, text: sentence };
+    sentences.forEach((sentence) => {
+      return prev.push({ ...script, text: sentence });
     });
+    return prev;
   }, []);
 };
 
@@ -60,26 +61,25 @@ const replacements: Replacement[] = [
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const scriptPath = path.resolve(arg2);
-  const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as PodcastScript;
 
-  if (script.images === undefined) {
+  const readData = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
+  const { podcastData, podcastDataPath } = readData;
+
+  if (podcastData.images === undefined) {
     // Transfer imagePrompts to images.
-    script.images = [];
-    script.script.forEach((element, index) => {
-      element.imageIndex = index;
-      script.images.push({
-        imagePrompt: element.imagePrompt,
+    podcastData.images = podcastData.script.map((script, index) => {
+      script.imageIndex = index;
+      delete script.imagePrompt;
+      return {
+        imagePrompt: script.imagePrompt,
         index,
         image: undefined,
-      });
-      delete element.imagePrompt;
+      };
     });
   }
 
-  script.script = recursiveSplit(script.script);
-  fs.writeFileSync(scriptPath, JSON.stringify(script, null, 2));
+  podcastData.script = recursiveSplit(podcastData.script);
+  fs.writeFileSync(podcastDataPath, JSON.stringify(podcastData, null, 2));
 };
 
 if (process.argv[1] === __filename) {
