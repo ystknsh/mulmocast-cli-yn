@@ -125,7 +125,7 @@ const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { file } = namedInputs;
   try {
     await fsPromise.access(file);
-    const elements = file.split('/')
+    const elements = file.split("/");
     console.log("cache hit: " + elements[elements.length - 1], namedInputs.text.slice(0, 10));
     return true;
   } catch (__e) {
@@ -213,7 +213,7 @@ const main = async () => {
   );
   graph.injectValue("script", podcastData);
   const results = await graph.run();
-  const result = results.combineFiles as { fileName:string };
+  const result = results.combineFiles as { fileName: string };
   console.log(`Generated: ${result.fileName}`);
 };
 
