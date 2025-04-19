@@ -179,7 +179,7 @@ const main = async () => {
   const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
 
   const outputFilePath = getOutputFilePath(fileName + ".json");
-  const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist " + fileName + ".json");
+  const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
   const currentDir = process.cwd();
   const imagesDir = path.join(currentDir, "images", outputJsonData.filename);
