@@ -192,16 +192,15 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
-  const canvasInfo =
-    podcastData.aspectRatio === "9:16"
-      ? {
-          width: 720,
-          height: 1280,
-        }
-      : {
-          width: 1280, // not 1920
-          height: 720, // not 1080
-        };
+  const PORTRAIT_SIZE = {
+    width: 720,
+    height: 1280,
+  };
+  const LANDSCAPE_SIZE = {
+    width: 1280, // not 1920
+    height: 720, // not 1080
+  };
+  const canvasInfo = podcastData.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
 
   try {
     await renderJapaneseTextToPNG(
