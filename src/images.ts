@@ -5,7 +5,7 @@ import path from "path";
 import { GraphAI, GraphData, DefaultResultData } from "graphai";
 import * as agents from "@graphai/agents";
 import { PodcastScript } from "./type";
-import { readPodcastScriptFile, getOutputFilePath } from "./utils";
+import { readPodcastScriptFile, getOutputFilePath, mkdir } from "./utils";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -167,13 +167,17 @@ const graph_data: GraphData = {
   },
 };
 
-const main = async () => {
+const googleAuth = async () => {
   const auth = new GoogleAuth({
     scopes: ["https://www.googleapis.com/auth/cloud-platform"],
   });
   const client = await auth.getClient();
   const accessToken = await client.getAccessToken();
-  tokenHolder.token = accessToken.token!;
+  return accessToken.token!;
+};
+
+const main = async () => {
+  tokenHolder.token = await googleAuth();
 
   const arg2 = process.argv[2];
   const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
@@ -181,20 +185,13 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
-  const currentDir = process.cwd();
-  const imagesDir = path.join(currentDir, "images", outputJsonData.filename);
-  if (!fs.existsSync(imagesDir)) {
-    fs.mkdirSync(imagesDir, { recursive: true });
-  }
-
+  mkdir(`images/${outputJsonData.filename}`);
   podcastData.filename = outputJsonData.filename; // Hack: It allows us to use the source script
 
   // DEBUG
   // outputJsonData.imageInfo = [outputJsonData.imageInfo[0]];
 
-  const graph = new GraphAI(graph_data, {
-    ...agents,
-  });
+  const graph = new GraphAI(graph_data, { ...agents });
   graph.injectValue("script", podcastData);
   const results = await graph.run();
   if (results.map) {
