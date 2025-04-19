@@ -238,31 +238,17 @@ const main = async () => {
   };
   const captionsWithTitle = [titleInfo].concat(captions);
   // const captionsWithTitle = [captions[0], captions[1], captions[5], captions[8]];
-  const images: ImageInfo[] = [];
-  if (podcastData.imagePath) {
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: podcastData.imagePath + "001.png",
-    });
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: podcastData.imagePath + "002.png",
-    });
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: podcastData.imagePath + "003.png",
-    });
-    images.push({
-      index: 0,
-      imagePrompt: undefined,
-      image: podcastData.imagePath + "004.png",
-    });
-  }
+  const images: ImageInfo[] = podcastData.imagePath
+    ? ["001.png", "002.png", "003.png", "004.png"].map((imageFileName) => {
+        return {
+          index: 0,
+          imagePrompt: undefined,
+          image: podcastData.imagePath + imageFileName,
+        };
+      })
+    : outputJsonData.images;
 
-  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : outputJsonData.images, outputVideoPath, canvasInfo, !!podcastData.omitCaptions);
+  createVideo(audioPath, captionsWithTitle, images, outputVideoPath, canvasInfo, !!podcastData.omitCaptions);
 };
 
 main();
