@@ -177,7 +177,6 @@ const main = async () => {
 
   const arg2 = process.argv[2];
   const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
-  const parsedPath = path.parse(scriptPath);
 
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist " + fileName);
