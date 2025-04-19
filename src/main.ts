@@ -155,11 +155,7 @@ const agentFilters = [
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const readData = readPodcastScriptFile(arg2);
-  if (!readData) {
-    console.error("ERROR: File does not exist", arg2);
-    return;
-  }
+  const readData = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
   const { podcastData, fileName } = readData;
 
   podcastData.filename = fileName;

@@ -2,9 +2,13 @@ import fs from "fs";
 import path from "path";
 import { PodcastScript } from "./type";
 
-export const readPodcastScriptFile = (arg2: string) => {
+export const readPodcastScriptFile = (arg2: string, errorMessage?: string) => {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
+    if (errorMessage) {
+      console.error(errorMessage);
+      process.exit(1);
+    }
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
