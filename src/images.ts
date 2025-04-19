@@ -181,15 +181,15 @@ const main = async () => {
   const script = JSON.parse(scriptData) as PodcastScript;
 
   const tmScriptPath = path.resolve("./output/" + parsedPath.name + ".json");
-  const dataTm = fs.readFileSync(tmScriptPath, "utf-8");
-  const jsonDataTm: PodcastScript = JSON.parse(dataTm);
+  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
+  const outputJsonData: PodcastScript = JSON.parse(outputData);
 
   const currentDir = process.cwd();
   const imagesFolderDir = path.join(currentDir, "images");
   if (!fs.existsSync(imagesFolderDir)) {
     fs.mkdirSync(imagesFolderDir);
   }
-  const imagesDir = path.join(imagesFolderDir, jsonDataTm.filename);
+  const imagesDir = path.join(imagesFolderDir, outputJsonData.filename);
   if (!fs.existsSync(imagesDir)) {
     fs.mkdirSync(imagesDir);
   }
@@ -197,10 +197,10 @@ const main = async () => {
     ...agents,
   });
 
-  script.filename = jsonDataTm.filename; // Hack: It allows us to use the source script
+  script.filename = outputJsonData.filename; // Hack: It allows us to use the source script
 
   // DEBUG
-  // jsonDataTm.imageInfo = [jsonDataTm.imageInfo[0]];
+  // outputJsonData.imageInfo = [outputJsonData.imageInfo[0]];
 
   graph.injectValue("script", script);
   const results = await graph.run();
@@ -209,8 +209,8 @@ const main = async () => {
     const info = data.map((element: any) => {
       return element.output;
     });
-    jsonDataTm.images = info;
-    fs.writeFileSync(tmScriptPath, JSON.stringify(jsonDataTm, null, 2));
+    outputJsonData.images = info;
+    fs.writeFileSync(tmScriptPath, JSON.stringify(outputJsonData, null, 2));
   }
 };
 
