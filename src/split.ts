@@ -58,6 +58,18 @@ const replacements: Replacement[] = [
   { from: "Anthropic", to: "アンスロピック" },
 ];
 */
+const script2Images = (scripts: ScriptData[]) => {
+  return scripts.map((script, index) => {
+    script.imageIndex = index;
+    const ret = {
+      imagePrompt: script.imagePrompt,
+      index,
+      image: undefined,
+    };
+    delete script.imagePrompt;
+    return ret;
+  });
+};
 
 const main = async () => {
   const arg2 = process.argv[2];
@@ -67,15 +79,7 @@ const main = async () => {
 
   if (podcastData.images === undefined) {
     // Transfer imagePrompts to images.
-    podcastData.images = podcastData.script.map((script, index) => {
-      script.imageIndex = index;
-      delete script.imagePrompt;
-      return {
-        imagePrompt: script.imagePrompt,
-        index,
-        image: undefined,
-      };
-    });
+    podcastData.images = script2Images(podcastData.script);
   }
 
   podcastData.script = recursiveSplit(podcastData.script);
