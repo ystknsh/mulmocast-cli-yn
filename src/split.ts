@@ -1,6 +1,5 @@
 import fs from "fs";
-import path from "path";
-import { ScriptData, PodcastScript } from "./type";
+import { ScriptData } from "./type";
 import { readPodcastScriptFile } from "./utils";
 
 export function splitIntoSentences(paragraph: string, divider: string, minimum: number): string[] {
