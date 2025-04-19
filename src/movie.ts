@@ -103,9 +103,9 @@ interface CaptionInfo {
 
 const createVideo = (
   audioPath: string,
+  outputVideoPath: string,
   captions: CaptionInfo[],
   images: ImageInfo[],
-  outputVideoPath: string,
   canvasInfo: CanvasInfo,
   omitCaptions: boolean,
 ) => {
@@ -213,7 +213,7 @@ const main = async () => {
     throw err;
   }
 
-  const promises = podcastData.script.map(async (element: ScriptData, index: number): Promise<CaptionInfo> => {
+  const captionPromises = podcastData.script.map(async (element: ScriptData, index: number): Promise<CaptionInfo> => {
     try {
       const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
       await renderJapaneseTextToPNG(element.caption ?? element.text, imagePath, canvasInfo);
@@ -227,7 +227,7 @@ const main = async () => {
       throw err;
     }
   });
-  const captions = await Promise.all(promises);
+  const captions = await Promise.all(captionPromises);
 
   const titleInfo: CaptionInfo = {
     pathCaption: getScratchpadFilePath(`${fileName}_00.png`), // HACK
@@ -250,7 +250,7 @@ const main = async () => {
   const audioPath = getOutputFilePath(fileName + "_bgm.mp3");
   const outputVideoPath = getOutputFilePath(fileName + "_ja.mp4");
 
-  createVideo(audioPath, captionsWithTitle, images, outputVideoPath, canvasInfo, !!podcastData.omitCaptions);
+  createVideo(audioPath, outputVideoPath, captionsWithTitle, images, canvasInfo, !!podcastData.omitCaptions);
 };
 
 main();
