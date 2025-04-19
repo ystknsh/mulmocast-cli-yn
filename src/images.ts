@@ -17,10 +17,7 @@ const tokenHolder = {
   token: "undefined",
 };
 
-async function generateImage(
-  prompt: string,
-  script: PodcastScript,
-): Promise<Buffer | undefined> {
+async function generateImage(prompt: string, script: PodcastScript): Promise<Buffer | undefined> {
   try {
     // Prepare the payload for the API request
     const payload = {
@@ -63,11 +60,7 @@ async function generateImage(
       }
     } else {
       // console.log(response);
-      console.log(
-        "No predictions returned from the API.",
-        responseData,
-        prompt,
-      );
+      console.log("No predictions returned from the API.", responseData, prompt);
       return undefined;
     }
   } catch (error) {
@@ -76,11 +69,7 @@ async function generateImage(
   }
 }
 
-const image_agent = async (namedInputs: {
-  row: { index: number; imagePrompt: string };
-  suffix: string;
-  script: PodcastScript;
-}) => {
+const image_agent = async (namedInputs: { row: { index: number; imagePrompt: string }; suffix: string; script: PodcastScript }) => {
   const { row, suffix, script } = namedInputs;
   const relativePath = `./images/${script.filename}/${row.index}${suffix}.png`;
   const imagePath = path.resolve(relativePath);

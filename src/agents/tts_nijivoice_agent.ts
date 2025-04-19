@@ -2,10 +2,7 @@ import { AgentFunction, AgentFunctionInfo } from "graphai";
 
 const nijovoiceApiKey = process.env.NIJIVOICE_API_KEY ?? "";
 
-export const ttsNijivoiceAgent: AgentFunction = async ({
-  params,
-  namedInputs,
-}) => {
+export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) => {
   const { apiKey, throwError, voice, speed, speed_global } = params;
   const { text } = namedInputs;
   const url = `https://api.nijivoice.com/api/platform/v1/voice-actors/${voice}/generate-voice`;
@@ -26,14 +23,8 @@ export const ttsNijivoiceAgent: AgentFunction = async ({
   try {
     const voiceRes = await fetch(url, options);
     const voiceJson: any = await voiceRes.json();
-    if (
-      voiceJson &&
-      voiceJson.generatedVoice &&
-      voiceJson.generatedVoice.audioFileDownloadUrl
-    ) {
-      const audioRes = await fetch(
-        voiceJson.generatedVoice.audioFileDownloadUrl,
-      );
+    if (voiceJson && voiceJson.generatedVoice && voiceJson.generatedVoice.audioFileDownloadUrl) {
+      const audioRes = await fetch(voiceJson.generatedVoice.audioFileDownloadUrl);
       const buffer = Buffer.from(await audioRes.arrayBuffer());
       return { buffer, generatedVoice: voiceJson.generatedVoice };
     }

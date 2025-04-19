@@ -1,10 +1,7 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 
-export const ttsOpenaiAgent: AgentFunction = async ({
-  namedInputs,
-  params,
-}) => {
+export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
   const { apiKey, model, voice, throwError, instructions } = params;
   const openai = new OpenAI({ apiKey });
@@ -41,8 +38,7 @@ const ttsOpenaiAgentInfo: AgentFunctionInfo = {
   description: "OpenAI TTS agent",
   category: ["tts"],
   author: "Receptron Team",
-  repository:
-    "https://github.com/receptron/graphai-agents/tree/main/tts/tts-openai-agent",
+  repository: "https://github.com/receptron/graphai-agents/tree/main/tts/tts-openai-agent",
   license: "MIT",
   environmentVariables: ["OPENAI_API_KEY"],
 };

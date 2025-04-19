@@ -10,13 +10,7 @@ import { ScriptData } from "./type";
 dotenv.config();
 const openai = new OpenAI();
 
-const image_agent = async (namedInputs: {
-  row: { text: string; index: number };
-  suffix: string;
-  script: ScriptData;
-  keywords: string;
-  prompt: string;
-}) => {
+const image_agent = async (namedInputs: { row: { text: string; index: number }; suffix: string; script: ScriptData; keywords: string; prompt: string }) => {
   const { row, suffix, script, keywords, prompt } = namedInputs;
   const relativePath = `./images/${script.filename}/${row.index}${suffix}.png`;
   const imagePath = path.resolve(relativePath);
@@ -79,8 +73,7 @@ const graph_data: GraphData = {
               messages: [
                 {
                   role: "system",
-                  content:
-                    "与えられたテキストからキーワードを抜き出して、JSONのarrayで返して",
+                  content: "与えられたテキストからキーワードを抜き出して、JSONのarrayで返して",
                 },
                 {
                   role: "user",

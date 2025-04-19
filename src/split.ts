@@ -2,11 +2,7 @@ import fs from "fs";
 import path from "path";
 import { ScriptData, PodcastScript } from "./type";
 
-export function splitIntoSentences(
-  paragraph: string,
-  divider: string,
-  minimum: number,
-): string[] {
+export function splitIntoSentences(paragraph: string, divider: string, minimum: number): string[] {
   const sentences = paragraph
     .split(divider) // Split by the Japanese full stop
     .map((sentence) => sentence.trim()) // Trim whitespace
@@ -21,11 +17,7 @@ export function splitIntoSentences(
       }
       return acc;
     }, [])
-    .map((sentence, index, array) =>
-      index < array.length - 1 || paragraph.endsWith(divider)
-        ? sentence + divider
-        : sentence,
-    );
+    .map((sentence, index, array) => (index < array.length - 1 || paragraph.endsWith(divider) ? sentence + divider : sentence));
 }
 
 export const recursiveSplit = (scripts: ScriptData[]) => {
@@ -34,9 +26,7 @@ export const recursiveSplit = (scripts: ScriptData[]) => {
     const sentences = delimiters
       .reduce<string[]>(
         (textData, delimiter) => {
-          return textData
-            .map((text) => splitIntoSentences(text, delimiter, 7))
-            .flat(1);
+          return textData.map((text) => splitIntoSentences(text, delimiter, 7)).flat(1);
         },
         [script.text],
       )
