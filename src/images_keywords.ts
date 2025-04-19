@@ -137,15 +137,15 @@ const main = async () => {
   const parsedPath = path.parse(scriptPath);
 
   const tmScriptPath = path.resolve("./output/" + parsedPath.name + ".json");
-  const dataTm = fs.readFileSync(tmScriptPath, "utf-8");
-  const jsonDataTm = JSON.parse(dataTm);
+  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
+  const outputJsonData = JSON.parse(outputData);
 
   const currentDir = process.cwd();
   const imagesFolderDir = path.join(currentDir, "images");
   if (!fs.existsSync(imagesFolderDir)) {
     fs.mkdirSync(imagesFolderDir);
   }
-  const imagesDir = path.join(imagesFolderDir, jsonDataTm.filename);
+  const imagesDir = path.join(imagesFolderDir, outputJsonData.filename);
   if (!fs.existsSync(imagesDir)) {
     fs.mkdirSync(imagesDir);
   }
@@ -154,17 +154,17 @@ const main = async () => {
   });
 
   // DEBUG
-  // jsonDataTm.imageInfo = [jsonDataTm.imageInfo[0]];
+  // outputJsonData.imageInfo = [outputJsonData.imageInfo[0]];
 
-  graph.injectValue("script", jsonDataTm);
+  graph.injectValue("script", outputJsonData);
   const results = await graph.run();
   if (results.map) {
     const data = results.map as DefaultResultData[];
     const info = data.map((element: any) => {
       return element.output;
     });
-    jsonDataTm.imageInfo = info;
-    fs.writeFileSync(tmScriptPath, JSON.stringify(jsonDataTm, null, 2));
+    outputJsonData.imageInfo = info;
+    fs.writeFileSync(tmScriptPath, JSON.stringify(outputJsonData, null, 2));
   }
 };
 

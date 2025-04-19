@@ -145,11 +145,11 @@ const main = async () => {
   await Promise.all(promises);
 
   const tmScriptPath = path.resolve("./output/" + name + ".json");
-  const dataTm = fs.readFileSync(tmScriptPath, "utf-8");
-  const jsonDataTm = JSON.parse(dataTm);
+  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
+  const outputJsonData = JSON.parse(outputData);
 
   const audioPath = path.resolve("./output/" + name + "_bgm.mp3");
-  const images: ImageDetails[] = jsonDataTm.script.map((item: any, index: number) => {
+  const images: ImageDetails[] = outputJsonData.script.map((item: any, index: number) => {
     const duration = item.duration;
     return {
       path: path.resolve(`./scratchpad/${name}_${index}.png`),

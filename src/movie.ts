@@ -193,8 +193,8 @@ const main = async () => {
   const jsonData: PodcastScript = JSON.parse(data);
 
   const tmScriptPath = path.resolve("./output/" + name + ".json");
-  const dataTm = fs.readFileSync(tmScriptPath, "utf-8");
-  const jsonDataTm: PodcastScript = JSON.parse(dataTm);
+  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
+  const outputJsonData: PodcastScript = JSON.parse(outputData);
 
   const canvasInfo =
     jsonData.aspectRatio === "9:16"
@@ -225,7 +225,7 @@ const main = async () => {
       const caption: CaptionInfo = {
         pathCaption: path.resolve(imagePath),
         imageIndex: element.imageIndex,
-        duration: jsonDataTm.script[index].duration,
+        duration: outputJsonData.script[index].duration,
       };
       return caption;
     } catch (err) {
@@ -268,7 +268,7 @@ const main = async () => {
     });
   }
 
-  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : jsonDataTm.images, outputVideoPath, canvasInfo, !!jsonData.omitCaptions);
+  createVideo(audioPath, captionsWithTitle, images.length > 0 ? images : outputJsonData.images, outputVideoPath, canvasInfo, !!jsonData.omitCaptions);
 };
 
 main();
