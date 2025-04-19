@@ -38,26 +38,6 @@ export const recursiveSplit = (scripts: ScriptData[]) => {
   }, []);
 };
 
-/*
-interface Replacement {
-  from: string;
-  to: string;
-}
-
-function replacePairs(str: string, replacements: Replacement[]): string {
-  replacements.forEach(({ from, to }) => {
-    // Escape any special regex characters in the 'from' string.
-    const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(escapedFrom, "g");
-    str = str.replace(regex, to);
-  });
-  return str;
-}
-
-const replacements: Replacement[] = [
-  { from: "Anthropic", to: "アンスロピック" },
-];
-*/
 export const script2Images = (scripts: ScriptData[]) => {
   return scripts.map((script, index) => {
     script.imageIndex = index;
