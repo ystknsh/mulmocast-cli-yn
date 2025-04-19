@@ -178,7 +178,7 @@ const createVideo = (
     })
     .on("end", () => {
       const end = performance.now();
-      console.log(`Video created successfully! ${end - start}ms`);
+      console.log(`Video created successfully! ${Math.round(end - start)/1000} sec`);
     })
     .output(outputVideoPath)
     .run();

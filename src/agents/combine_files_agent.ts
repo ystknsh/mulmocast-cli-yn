@@ -27,7 +27,6 @@ const combineFilesAgent: AgentFunction<null, string, { script: PodcastScript; co
   const promise = new Promise((resolve, reject) => {
     command
       .on("end", () => {
-        console.log("MP3 files have been successfully combined.");
         resolve(0);
       })
       .on("error", (err: any) => {

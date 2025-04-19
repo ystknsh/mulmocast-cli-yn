@@ -45,7 +45,6 @@ const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile:
           reject(err);
         })
         .on("end", () => {
-          console.log("File has been created successfully");
           resolve(0);
         })
         .save(outputFile);
