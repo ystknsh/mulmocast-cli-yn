@@ -1,5 +1,6 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
+import type { SpeechCreateParams } from "openai/resources/audio/speech";
 
 export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
@@ -7,7 +8,7 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => 
   const openai = new OpenAI({ apiKey });
 
   try {
-    const tts_options = {
+    const tts_options: SpeechCreateParams = {
       model: model ?? "gpt-4o-mini-tts", // "tts-1",
       voice: voice ?? "shimmer",
       input: text,

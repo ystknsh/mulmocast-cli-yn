@@ -2,7 +2,10 @@ import fs from "fs";
 import path from "path";
 import { PodcastScript } from "./type";
 
-export function readPodcastScriptFile(path: string, errorMessage: string): {
+export function readPodcastScriptFile(
+  path: string,
+  errorMessage: string,
+): {
   podcastData: PodcastScript;
   podcastDataPath: string;
   fileName: string;
@@ -32,7 +35,7 @@ export function readPodcastScriptFile(arg2: string, errorMessage?: string) {
     podcastDataPath: scriptPath,
     fileName: parsedPath.name,
   };
-};
+}
 
 export const getOutputFilePath = (fileName: string) => {
   const filePath = path.resolve("./output/" + fileName);
