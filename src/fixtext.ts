@@ -40,7 +40,7 @@ export const replacements: Replacement[] = [
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const readData = readPodcastScriptFile(arg2, "no file exists");
+  const readData = readPodcastScriptFile(arg2, "no file exists")!;
   const { podcastData, podcastDataPath } = readData;
 
   podcastData.script = podcastData.script.map((script: ScriptData) => {
