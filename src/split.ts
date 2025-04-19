@@ -67,15 +67,14 @@ const main = async () => {
 
   if (podcastData.images === undefined) {
     // Transfer imagePrompts to images.
-    podcastData.images = [];
-    podcastData.script.forEach((element, index) => {
-      element.imageIndex = index;
-      podcastData.images.push({
-        imagePrompt: element.imagePrompt,
+    podcastData.images = podcastData.script.map((script, index) => {
+      script.imageIndex = index;
+      delete script.imagePrompt;
+      return {
+        imagePrompt: script.imagePrompt,
         index,
         image: undefined,
-      });
-      delete element.imagePrompt;
+      };
     });
   }
 
