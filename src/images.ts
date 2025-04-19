@@ -5,6 +5,7 @@ import path from "path";
 import { GraphAI, GraphData, DefaultResultData } from "graphai";
 import * as agents from "@graphai/agents";
 import { PodcastScript } from "./type";
+import { readPodcastScriptFile, getOutputFilePath } from "./utils";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -175,34 +176,27 @@ const main = async () => {
   tokenHolder.token = accessToken.token!;
 
   const arg2 = process.argv[2];
-  const scriptPath = path.resolve(arg2);
+  const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
   const parsedPath = path.parse(scriptPath);
-  const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as PodcastScript;
 
-  const tmScriptPath = path.resolve("./output/" + parsedPath.name + ".json");
-  const outputData = fs.readFileSync(tmScriptPath, "utf-8");
-  const outputJsonData: PodcastScript = JSON.parse(outputData);
+  const outputFilePath = getOutputFilePath(fileName + ".json");
+  const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist " + fileName);
 
   const currentDir = process.cwd();
-  const imagesFolderDir = path.join(currentDir, "images");
-  if (!fs.existsSync(imagesFolderDir)) {
-    fs.mkdirSync(imagesFolderDir);
-  }
-  const imagesDir = path.join(imagesFolderDir, outputJsonData.filename);
+  const imagesDir = path.join(currentDir, "images", outputJsonData.filename);
   if (!fs.existsSync(imagesDir)) {
-    fs.mkdirSync(imagesDir);
+    fs.mkdirSync(imagesDir, { recursive: true });
   }
-  const graph = new GraphAI(graph_data, {
-    ...agents,
-  });
 
-  script.filename = outputJsonData.filename; // Hack: It allows us to use the source script
+  podcastData.filename = outputJsonData.filename; // Hack: It allows us to use the source script
 
   // DEBUG
   // outputJsonData.imageInfo = [outputJsonData.imageInfo[0]];
 
-  graph.injectValue("script", script);
+  const graph = new GraphAI(graph_data, {
+    ...agents,
+  });
+  graph.injectValue("script", podcastData);
   const results = await graph.run();
   if (results.map) {
     const data = results.map as DefaultResultData[];
@@ -210,7 +204,7 @@ const main = async () => {
       return element.output;
     });
     outputJsonData.images = info;
-    fs.writeFileSync(tmScriptPath, JSON.stringify(outputJsonData, null, 2));
+    fs.writeFileSync(outputFilePath, JSON.stringify(outputJsonData, null, 2));
   }
 };
 
