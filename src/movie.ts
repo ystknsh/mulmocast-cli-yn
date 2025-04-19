@@ -229,8 +229,6 @@ const main = async () => {
   });
   const captions = await Promise.all(promises);
 
-  const audioPath = getOutputFilePath(fileName + "_bgm.mp3");
-  const outputVideoPath = getOutputFilePath(fileName + "_ja.mp4");
   const titleInfo: CaptionInfo = {
     pathCaption: getScratchpadFilePath(`${fileName}_00.png`), // HACK
     imageIndex: 0, // HACK
@@ -238,7 +236,8 @@ const main = async () => {
   };
   const captionsWithTitle = [titleInfo].concat(captions);
   // const captionsWithTitle = [captions[0], captions[1], captions[5], captions[8]];
-  const images: ImageInfo[] = podcastData.imagePath
+
+  const images = podcastData.imagePath
     ? ["001.png", "002.png", "003.png", "004.png"].map((imageFileName) => {
         return {
           index: 0,
@@ -247,6 +246,9 @@ const main = async () => {
         };
       })
     : outputJsonData.images;
+
+  const audioPath = getOutputFilePath(fileName + "_bgm.mp3");
+  const outputVideoPath = getOutputFilePath(fileName + "_ja.mp4");
 
   createVideo(audioPath, captionsWithTitle, images, outputVideoPath, canvasInfo, !!podcastData.omitCaptions);
 };
