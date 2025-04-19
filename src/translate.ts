@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-// import OpenAI from "openai";
 import dotenv from "dotenv";
 import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
-import { PodcastScript } from "./type";
+import { ScriptData } from "./type";
+import { readPodcastScriptFile } from "./utils";
 
 dotenv.config();
 
@@ -43,18 +43,16 @@ const graph_data = {
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const scriptPath = path.resolve(arg2);
-  const parsedPath = path.parse(scriptPath);
-  const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as PodcastScript;
-  script.filename = parsedPath.name;
-  script.script.forEach((element: any, index: number) => {
-    element["key"] = script.filename + index;
+  const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
+
+  podcastData.filename = fileName;
+  podcastData.script.forEach((scriptData: ScriptData, index: number) => {
+    scriptData["key"] = fileName + index;
   });
 
   const graph = new GraphAI(graph_data, { ...agents });
-  graph.injectValue("jsonData", script);
-  graph.injectValue("name", script.filename);
+  graph.injectValue("jsonData", podcastData);
+  graph.injectValue("name", fileName);
   const results = await graph.run();
   console.log(results);
 
