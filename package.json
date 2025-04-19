@@ -2,7 +2,18 @@
   "name": "mulmo",
   "version": "0.0.1",
   "description": "",
-  "main": "main.ts",
+  "main": "lib/cli.js",
+  "bin": {
+    "mulmo": "lib/cli.js"
+  },
+  "files": [
+    "./lib"
+  ],
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
   "scripts": {
     "gen": "npx tsx ./src/main.ts",
     "ja": "npx tsx ./src/translate.ts",
@@ -18,13 +29,13 @@
     "build": "tsc",
     "format": "prettier --write '{src,scripts,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },
-  "repository": "git+ssh://git@github.com/snakajima/ai-podcaster.git",
+  "repository": "git+ssh://git@github.com/receptron/mulmocast-cli.git",
   "author": "snakajima",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/snakajima/ai-podcaster/issues"
+    "url": "https://github.com/receptron/mulmocast-cli/issues"
   },
-  "homepage": "https://github.com/snakajima/ai-podcaster#readme",
+  "homepage": "https://github.com/receptron/mulmocast-cli#readme",
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
     "@graphai/agents": "^1.0.2",
