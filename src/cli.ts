@@ -5,8 +5,9 @@ import "dotenv/config";
 import { args } from "./args";
 
 const main = () => {
-  if (args.log) {
-    console.log("log")
+  if (args.outdir) {
+    console.log("out dir");
+    console.log(args.outdir);
   }
   console.log("hello");
 };

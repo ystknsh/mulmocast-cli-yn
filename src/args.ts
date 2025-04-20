@@ -1,6 +1,5 @@
 import yargs from "yargs";
 
-
 export const args = yargs
   .scriptName("mulmocast")
   .option("outdir", {
@@ -19,10 +18,9 @@ export const args = yargs
     type: "string",
   })
   .command("* <ScriptFile>", "run mulmocast.")
-/*  .positional("CCC", {
+  /*  .positional("CCC", {
     describe: "DDD",
     type: "string",
     demandOption: false,
   })*/
   .parseSync();
-
