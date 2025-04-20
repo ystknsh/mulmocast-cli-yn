@@ -1,14 +1,7 @@
 import "dotenv/config";
 import fsPromise from "fs/promises";
 import fs from "fs";
-// import path from "path";
-import {
-  GraphAI,
-  AgentFilterFunction,
-  GraphData,
-  // ComputedNodeData,
-  // StaticNodeData,
-} from "graphai";
+import { GraphAI, AgentFilterFunction, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 // import { ttsNijivoiceAgent } from "@graphai/tts_nijivoice_agent";
 import ttsNijivoiceAgent from "./agents/tts_nijivoice_agent";
@@ -129,7 +122,7 @@ const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
     console.log("cache hit: " + elements[elements.length - 1], namedInputs.text.slice(0, 10));
     return true;
   } catch (__e) {
-    const output = (await next(context)) as Record<string, any>;
+    const output = (await next(context)) as { buffer: Buffer };
     const buffer = output ? output["buffer"] : undefined;
     if (buffer) {
       console.log("writing: " + file);

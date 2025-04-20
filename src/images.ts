@@ -2,10 +2,10 @@ import dotenv from "dotenv";
 // import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
-import { GraphAI, GraphData, DefaultResultData } from "graphai";
+import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
-import { PodcastScript } from "./type";
-import { readPodcastScriptFile, getOutputFilePath } from "./utils";
+import { PodcastScript, ImageInfo } from "./type";
+import { readPodcastScriptFile, getOutputFilePath, mkdir } from "./utils";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -16,6 +16,12 @@ const GOOGLE_IMAGEN_MODEL = "imagen-3.0-fast-generate-001";
 const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${GOOGLE_PROJECT_ID}/locations/us-central1/publishers/google/models/${GOOGLE_IMAGEN_MODEL}:predict`;
 const tokenHolder = {
   token: "undefined",
+};
+
+type PredictionResponse = {
+  predictions?: {
+    bytesBase64Encoded?: string;
+  }[];
 };
 
 async function generateImage(prompt: string, script: PodcastScript): Promise<Buffer | undefined> {
@@ -48,7 +54,7 @@ async function generateImage(prompt: string, script: PodcastScript): Promise<Buf
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
 
-    const responseData: any = await response.json();
+    const responseData: PredictionResponse = await response.json();
 
     // Parse and return the generated image URL or data
     const predictions = responseData.predictions;
@@ -142,6 +148,9 @@ const graph_data: GraphData = {
       agent: "mapAgent",
       inputs: { rows: ":script.images", script: ":script" },
       isResult: true,
+      params: {
+        compositeResult: true,
+      },
       graph: {
         nodes: {
           plain: {
@@ -167,13 +176,17 @@ const graph_data: GraphData = {
   },
 };
 
-const main = async () => {
+const googleAuth = async () => {
   const auth = new GoogleAuth({
     scopes: ["https://www.googleapis.com/auth/cloud-platform"],
   });
   const client = await auth.getClient();
   const accessToken = await client.getAccessToken();
-  tokenHolder.token = accessToken.token!;
+  return accessToken.token!;
+};
+
+const main = async () => {
+  tokenHolder.token = await googleAuth();
 
   const arg2 = process.argv[2];
   const { podcastData, fileName } = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2);
@@ -181,28 +194,14 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { podcastData: outputJsonData } = readPodcastScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
-  const currentDir = process.cwd();
-  const imagesDir = path.join(currentDir, "images", outputJsonData.filename);
-  if (!fs.existsSync(imagesDir)) {
-    fs.mkdirSync(imagesDir, { recursive: true });
-  }
-
+  mkdir(`images/${outputJsonData.filename}`);
   podcastData.filename = outputJsonData.filename; // Hack: It allows us to use the source script
 
-  // DEBUG
-  // outputJsonData.imageInfo = [outputJsonData.imageInfo[0]];
-
-  const graph = new GraphAI(graph_data, {
-    ...agents,
-  });
+  const graph = new GraphAI(graph_data, { ...agents });
   graph.injectValue("script", podcastData);
-  const results = await graph.run();
-  if (results.map) {
-    const data = results.map as DefaultResultData[];
-    const info = data.map((element: any) => {
-      return element.output;
-    });
-    outputJsonData.images = info;
+  const results = await graph.run<{ output: ImageInfo[] }>();
+  if (results.map?.output) {
+    outputJsonData.images = results.map?.output;
     fs.writeFileSync(outputFilePath, JSON.stringify(outputJsonData, null, 2));
   }
 };

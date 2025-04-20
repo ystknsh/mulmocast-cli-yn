@@ -18,7 +18,7 @@ const LANDSCAPE_SIZE = {
   height: 720, // not 1080
 };
 
-const separateText = (text: string, fontSize: number, actualWidth: number) => {
+export const separateText = (text: string, fontSize: number, actualWidth: number): string[] => {
   let currentLine = "";
   let currentWidth = 0;
 
@@ -213,13 +213,13 @@ const main = async () => {
     throw err;
   }
 
-  const captionPromises = podcastData.script.map(async (element: ScriptData, index: number): Promise<CaptionInfo> => {
+  const captionPromises = podcastData.script.map(async (scriptData: ScriptData, index: number): Promise<CaptionInfo> => {
     try {
       const imagePath = getScratchpadFilePath(`${fileName}_${index}.png`); // Output file path
-      await renderJapaneseTextToPNG(element.text, imagePath, canvasInfo);
+      await renderJapaneseTextToPNG(scriptData.text, imagePath, canvasInfo);
       return {
         pathCaption: imagePath,
-        imageIndex: element.imageIndex,
+        imageIndex: scriptData.imageIndex,
         duration: outputJsonData.script[index].duration,
       };
     } catch (err) {
@@ -235,7 +235,6 @@ const main = async () => {
     duration: (podcastData.padding ?? 4000) / 1000,
   };
   const captionsWithTitle = [titleInfo].concat(captions);
-  // const captionsWithTitle = [captions[0], captions[1], captions[5], captions[8]];
 
   const images = podcastData.imagePath
     ? ["001.png", "002.png", "003.png", "004.png"].map((imageFileName) => {
@@ -253,4 +252,6 @@ const main = async () => {
   createVideo(audioPath, outputVideoPath, captionsWithTitle, images, canvasInfo, !!podcastData.omitCaptions);
 };
 
-main();
+if (process.argv[1] === __filename) {
+  main();
+}

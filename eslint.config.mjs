@@ -7,6 +7,9 @@ export default [
   {
     files: ["{src,test,samles}/**/*.{js,ts,yaml,yml}"],
   },
+  {
+    ignores: ["lib"]
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -20,7 +23,7 @@ export default [
     },
     rules: {
       indent: ["error", 2],
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
