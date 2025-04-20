@@ -8,7 +8,7 @@ type PredictionResponse = {
 
 async function generateImage(projectId: string | undefined, model: string, token: string, prompt: string, aspectRatio: string): Promise<Buffer | undefined> {
   const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}:predict`;
-  
+
   try {
     // Prepare the payload for the API request
     const payload = {
@@ -68,7 +68,7 @@ export type ImageGoogleConfig = {
 export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }, ImageGoogleConfig> = async ({
   namedInputs,
   params,
-  config
+  config,
 }) => {
   const { prompt } = namedInputs;
   const aspectRatio = params.aspectRatio ?? "16:9";
