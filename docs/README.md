@@ -1,3 +1,38 @@
+# mulmocastの新しいデータの仕組み
+
+1. 元ネタは以下にいれる。ここは変更しない
+```
+{
+ originalScript:[{speaker: "", text: ""}]
+}
+```
+2. scriptを変換していく。データは上書き更新。scriptの長さは変えない。分割するデータはarrayにする text -> text[]や、{text: ""}[]とする。
+Stepを戻る場合は、それ以降のデータは削除する。つまり、そのstepで完成するデータを毎回生成させる。(ttsText前の処理の場合は、結果にttsTextを含めない)
+metaデータで直近に実行したコマンドの情報は入れておく（履歴ありでも良い？？）
+```
+{
+ originalScript: [...]
+ scripts: [{ text: ["aa", "bb"], ttsText: ["ああ", "ばば"], imagePrompt: "" }]
+ status: "imageGenearte",
+ history: ["..", "aaa"]
+}
+```
+
+## ai-podcasterのしくみ
+
+前準備
+1. セリフを作る(script)
+2. scriptごとに、背景イメージ用のprompt作成
+3. テキストを分割（字幕用に長い文章をさけるため)
+4. 読み上げ時に、誤読しないように一部かなに変換(ttsText)
+
+変換
+
+5. ttsTextを使って読み上げる
+6. imagePromptで画像生成
+7. 1つのファイルにまとめる
+
+
 # Step1.
 
 [プロンプト](../prompts/prompt.md)を使って、以下のデータを作る
@@ -72,7 +107,7 @@
 # Step 4
 
 セリフの修正（src/fixtext.tsを使用、オプション）
-ttsTextに修正後のテキストを追加。
+ttsTextに修正後のテキストを追加。(読み上げはttsText,字幕はtext)
 
 ```json
 {
@@ -94,7 +129,8 @@ ttsTextに修正後のテキストを追加。
 
 # Step5
 
-(src/main.ts)
+(src/main.ts)(音声ファイルを作る)
+ttsTextを読み上げる
 
 PosdcastScriptを更新し、ouputに保存
 
@@ -116,16 +152,16 @@ graphaiで以下を追加
 ```
 fileWriteAgentでoutputを保存する
 
-# Step6
+# Step6(画像を作る)
 
-(src/images.ts)
+(src/images.ts)(imagePromptを使う)
 
 outputファイルに以下を追加
 ```
     outputJsonData.images = results.map?.output;
 ```
 
-# Step7
+# Step7(まとめて動画にする)
 (src/movie.ts)
 
 更新なし
