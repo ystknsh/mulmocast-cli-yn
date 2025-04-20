@@ -49,7 +49,7 @@
     "dotenv": "^16.4.7",
     "fluent-ffmpeg": "^2.1.3",
     "google-auth-library": "^9.15.1",
-    "graphai": "^1.0.4",
+    "graphai": "^1.0.5",
     "openai": "^4.67.3",
     "yargs": "^17.7.2"
   },
