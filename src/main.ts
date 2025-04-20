@@ -122,7 +122,7 @@ const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
     console.log("cache hit: " + elements[elements.length - 1], namedInputs.text.slice(0, 10));
     return true;
   } catch (__e) {
-    const output = (await next(context)) as Record<string, any>;
+    const output = (await next(context)) as { buffer: Buffer };
     const buffer = output ? output["buffer"] : undefined;
     if (buffer) {
       console.log("writing: " + file);

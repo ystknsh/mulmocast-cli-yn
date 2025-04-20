@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
 import fs from "fs";
-import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import * as nodeAgents from "@graphai/vanilla_node_agents";
+import { getBaseDirPath } from "./utils";
+
 dotenv.config();
 
 const graph_data: GraphData = {
@@ -84,7 +85,7 @@ const main = async () => {
   const prompt = fs.readFileSync("./prompts/image_prompt.md", "utf-8");
   graph.injectValue("prompt", prompt);
   graph.injectValue("file", fileName);
-  graph.injectValue("baseDir", path.resolve(__dirname + "/../"));
+  graph.injectValue("baseDir", getBaseDirPath());
 
   await graph.run();
 };

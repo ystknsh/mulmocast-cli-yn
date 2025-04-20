@@ -23,7 +23,7 @@ export default [
     },
     rules: {
       indent: ["error", 2],
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
