@@ -18,14 +18,14 @@ type PredictionResponse = {
 };
 
 const googleAuth = async () => {
-    const auth = new GoogleAuth({
-      scopes: ["https://www.googleapis.com/auth/cloud-platform"],
-    });
-    const client = await auth.getClient();
-    const accessToken = await client.getAccessToken();
-    return accessToken.token!;
-  };
-  
+  const auth = new GoogleAuth({
+    scopes: ["https://www.googleapis.com/auth/cloud-platform"],
+  });
+  const client = await auth.getClient();
+  const accessToken = await client.getAccessToken();
+  return accessToken.token!;
+};
+
 async function generateImage(prompt: string, aspectRatio: string | undefined): Promise<Buffer | undefined> {
   try {
     // Prepare the payload for the API request
@@ -78,7 +78,10 @@ async function generateImage(prompt: string, aspectRatio: string | undefined): P
   }
 }
 
-export const imageGoogleAgent: AgentFunction<{ model:string, aspectRatio:string }, { buffer: Buffer }, { prompt: string }> = async ({ namedInputs, params }) => {
+export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }> = async ({
+  namedInputs,
+  params,
+}) => {
   const { prompt } = namedInputs;
   const { aspectRatio, model } = params;
 
@@ -89,7 +92,7 @@ export const imageGoogleAgent: AgentFunction<{ model:string, aspectRatio:string 
     if (buffer) {
       return { buffer };
     }
-    throw new Error("ERROR: geneateImage returned undefined")
+    throw new Error("ERROR: geneateImage returned undefined");
   } catch (error) {
     console.error("Failed to generate image:", error);
     throw error;

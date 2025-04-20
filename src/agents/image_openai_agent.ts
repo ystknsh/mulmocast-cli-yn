@@ -1,7 +1,10 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 
-export const imageOpenaiAgent: AgentFunction<{ apiKey:string, model:string }, { url: string; buffer: Buffer }, { prompt: string }> = async ({ namedInputs, params }) => {
+export const imageOpenaiAgent: AgentFunction<{ apiKey: string; model: string }, { url: string; buffer: Buffer }, { prompt: string }> = async ({
+  namedInputs,
+  params,
+}) => {
   const { prompt } = namedInputs;
   const { apiKey, model } = params;
   const openai = new OpenAI({ apiKey });

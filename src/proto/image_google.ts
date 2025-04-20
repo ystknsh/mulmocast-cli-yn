@@ -7,35 +7,32 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 const graph_data: GraphData = {
   version: 0.5,
   nodes: {
-		imageGenerator: {
-			agent: "imageGoogleAgent",
-			inputs: {
-				prompt: "Beatiful sunset in Hawaii"
-			},
-		},
+    imageGenerator: {
+      agent: "imageGoogleAgent",
+      inputs: {
+        prompt: "Beatiful sunset in Hawaii",
+      },
+    },
     fileWriter: {
       agent: "fileWriteAgent",
       inputs: {
         file: "./output/hawaii.png",
-				buffer: ":imageGenerator.buffer"
+        buffer: ":imageGenerator.buffer",
       },
       params: { baseDir: __dirname + "/../../" },
-			isResult: true
-    }
-	}
+      isResult: true,
+    },
+  },
 };
 
 const main = async () => {
-	const graph = new GraphAI(
-		graph_data,
-		{
-			...agents,
-			imageGoogleAgent,
-			fileWriteAgent
-		}
-	);
-	const results = await graph.run();
-	console.log(results);
-}
+  const graph = new GraphAI(graph_data, {
+    ...agents,
+    imageGoogleAgent,
+    fileWriteAgent,
+  });
+  const results = await graph.run();
+  console.log(results);
+};
 
 main();
