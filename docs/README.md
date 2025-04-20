@@ -87,3 +87,39 @@
  }]
 }
 ```
+
+# Step5
+
+(src/main.ts)
+
+PosdcastScriptを更新し、ouputに保存
+
+tsで以下を追加
+```
+{
+  filename: string
+  script[x].filename = filename + index
+  voices: string[]
+  ttsAgent: string
+  voicemap: Map
+}
+```
+graphaiで以下を追加
+{
+  script[x].duration = duration
+}
+fileWriteAgentでoutputを保存する
+
+# Step6
+
+(src/images.ts)
+
+outputファイルに以下を追加
+```
+    outputJsonData.images = results.map?.output;
+```
+
+# Step7
+(src/movie.ts)
+
+更新なし
