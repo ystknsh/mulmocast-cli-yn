@@ -1,7 +1,7 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import { PodcastScript } from "../type";
+import { PodcastScript, ScriptData } from "../type";
 
 const combineFilesAgent: AgentFunction<null, { script: PodcastScript; fileName: string }, { script: PodcastScript; combinedFileName: string }> = async ({
   namedInputs,
@@ -11,8 +11,8 @@ const combineFilesAgent: AgentFunction<null, { script: PodcastScript; fileName: 
   const silentPath = path.resolve("./music/silent300.mp3");
   const silentLastPath = path.resolve("./music/silent800.mp3");
   const command = ffmpeg();
-  script.script.forEach((element: any, index: number) => {
-    const filePath = path.resolve("./scratchpad/" + element.filename + ".mp3");
+  script.script.forEach((scriptData: ScriptData, index: number) => {
+    const filePath = path.resolve("./scratchpad/" + scriptData.filename + ".mp3");
     const isLast = index === script.script.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
@@ -21,7 +21,7 @@ const combineFilesAgent: AgentFunction<null, { script: PodcastScript; fileName: 
       if (err) {
         console.error("Error while getting metadata:", err);
       } else {
-        element["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
+        scriptData["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
       }
     });
   });
@@ -31,7 +31,7 @@ const combineFilesAgent: AgentFunction<null, { script: PodcastScript; fileName: 
       .on("end", () => {
         resolve(0);
       })
-      .on("error", (err: any) => {
+      .on("error", (err: unknown) => {
         console.error("Error while combining MP3 files:", err);
         reject(err);
       })
