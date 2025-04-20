@@ -1,14 +1,14 @@
 import "dotenv/config";
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
-import imageOpenaiAgent from "../agents/image_openai_agent";
+import imageGoogleAgent from "../agents/image_google_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 const graph_data: GraphData = {
   version: 0.5,
   nodes: {
 		imageGenerator: {
-			agent: "imageOpenaiAgent",
+			agent: "imageGoogleAgent",
 			inputs: {
 				prompt: "Beatiful sunset in Hawaii"
 			},
@@ -30,7 +30,7 @@ const main = async () => {
 		graph_data,
 		{
 			...agents,
-			imageOpenaiAgent,
+			imageGoogleAgent,
 			fileWriteAgent
 		}
 	);
