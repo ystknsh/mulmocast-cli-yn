@@ -1,4 +1,5 @@
-新しい仕組み
+# mulmocastの新しいデータの仕組み
+
 1. 元ネタは以下にいれる。ここは変更しない
 ```
 {
@@ -7,11 +8,13 @@
 ```
 2. scriptを変換していく。データは上書き更新。scriptの長さは変えない。分割するデータはarrayにする text -> text[]や、{text: ""}[]とする。
 Stepを戻る場合は、それ以降のデータは削除する。つまり、そのstepで完成するデータを毎回生成させる。(ttsText前の処理の場合は、結果にttsTextを含めない)
-
+metaデータで直近に実行したコマンドの情報は入れておく（履歴ありでも良い？？）
 ```
 {
  originalScript: [...]
  scripts: [{ text: ["aa", "bb"], ttsText: ["ああ", "ばば"], imagePrompt: "" }]
+ status: "imageGenearte",
+ history: ["..", "aaa"]
 }
 ```
 
