@@ -47,6 +47,10 @@ export const getScratchpadFilePath = (fileName: string) => {
   return filePath;
 };
 
+export const getBaseDirPath = () => {
+  return path.resolve("./");
+};
+
 export const mkdir = (dirPath: string) => {
   const currentDir = process.cwd();
   const imagesDir = path.join(currentDir, dirPath);

@@ -18,6 +18,12 @@ const tokenHolder = {
   token: "undefined",
 };
 
+type PredictionResponse = {
+  predictions?: {
+    bytesBase64Encoded?: string;
+  }[];
+};
+
 async function generateImage(prompt: string, script: PodcastScript): Promise<Buffer | undefined> {
   try {
     // Prepare the payload for the API request
@@ -48,7 +54,7 @@ async function generateImage(prompt: string, script: PodcastScript): Promise<Buf
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
 
-    const responseData: any = await response.json();
+    const responseData: PredictionResponse = await response.json(); // TODO remove any
 
     // Parse and return the generated image URL or data
     const predictions = responseData.predictions;
