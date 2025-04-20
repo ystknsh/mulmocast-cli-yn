@@ -105,9 +105,11 @@ tsで以下を追加
 }
 ```
 graphaiで以下を追加
+```
 {
   script[x].duration = duration
 }
+```
 fileWriteAgentでoutputを保存する
 
 # Step6
