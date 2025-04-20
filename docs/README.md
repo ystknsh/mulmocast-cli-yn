@@ -72,18 +72,22 @@
 # Step 4
 
 セリフの修正（src/fixtext.tsを使用、オプション）
+ttsTextに修正後のテキストを追加。
 
 ```json
 {
  "script": [{
   "speaker": "Announcer",
     "text": "米国で活躍するエンジニアが新しい技術やビジネスを分かりやすく解説する、",
+    "ttstext": "米国で活躍するエンジニアが新しい技術やビジネスを分かりやすく解説する、",
  },{
   "speaker": "Announcer",
     "text": "中島聡のLife is beautiful。",
+    "ttStext": "中島聡のLife is beautiful。",
  },{
   "speaker": "Announcer",
     "text": "今日は、アメリカの関税引き上げについての解説です。",
+    "ttStext": "今日は、アメリカの関税引き上げについての解説です。",
  }]
 }
 ```
