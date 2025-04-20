@@ -1,3 +1,14 @@
+前準備
+1. セリフを作る(script)
+2. scriptごとに、背景イメージ用のprompt作成
+3. テキストを分割（字幕用に長い文章をさけるため)
+4. 読み上げ時に、誤読しないように一部かなに変換(ttsText)
+
+変換
+5. ttsTextを使って読み上げる
+6. imagePromptで画像生成
+7. 1つのファイルにまとめる
+
 # Step1.
 
 [プロンプト](../prompts/prompt.md)を使って、以下のデータを作る
@@ -72,7 +83,7 @@
 # Step 4
 
 セリフの修正（src/fixtext.tsを使用、オプション）
-ttsTextに修正後のテキストを追加。
+ttsTextに修正後のテキストを追加。(読み上げはttsText,字幕はtext)
 
 ```json
 {
@@ -94,7 +105,8 @@ ttsTextに修正後のテキストを追加。
 
 # Step5
 
-(src/main.ts)
+(src/main.ts)(音声ファイルを作る)
+ttsTextを読み上げる
 
 PosdcastScriptを更新し、ouputに保存
 
@@ -116,16 +128,16 @@ graphaiで以下を追加
 ```
 fileWriteAgentでoutputを保存する
 
-# Step6
+# Step6(画像を作る)
 
-(src/images.ts)
+(src/images.ts)(imagePromptを使う)
 
 outputファイルに以下を追加
 ```
     outputJsonData.images = results.map?.output;
 ```
 
-# Step7
+# Step7(まとめて動画にする)
 (src/movie.ts)
 
 更新なし
