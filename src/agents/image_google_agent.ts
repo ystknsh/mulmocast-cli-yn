@@ -73,14 +73,20 @@ async function generateImage(projectId: string | undefined, model: string, token
   }
 }
 
-export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }> = async ({
+type GoogleConfig = {
+  projectId?: string;
+};
+
+export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }, GoogleConfig> = async ({
   namedInputs,
   params,
+  config
 }) => {
   const { prompt } = namedInputs;
   const aspectRatio = params.aspectRatio ?? "16:9";
   const model = params.model ?? "imagen-3.0-fast-generate-001";
-  const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
+  //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
+  const projectId = config?.projectId;
   const token = await googleAuth();
 
   try {

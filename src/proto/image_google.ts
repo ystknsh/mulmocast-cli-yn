@@ -26,11 +26,18 @@ const graph_data: GraphData = {
 };
 
 const main = async () => {
+  const options = {
+    config: {
+      imageGoogleAgent: {
+        projectId: process.env.GOOGLE_PROJECT_ID
+      }
+    }
+  };
   const graph = new GraphAI(graph_data, {
     ...agents,
     imageGoogleAgent,
     fileWriteAgent,
-  });
+  }, options);
   const results = await graph.run();
   console.log(results);
 };
