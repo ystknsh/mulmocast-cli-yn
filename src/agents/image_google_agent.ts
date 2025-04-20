@@ -100,12 +100,13 @@ const imageGoogleAgentInfo: AgentFunctionInfo = {
   agent: imageGoogleAgent,
   mock: imageGoogleAgent,
   samples: [],
-  description: "OpenAI Image agent",
+  description: "Google Image agent",
   category: ["image"],
   author: "Receptron Team",
-  repository: "https://github.com/receptron/graphai-agents/tree/main/image/image-openai-agent",
+  repository: "https://github.com/receptron/mulmocast-cli/",
+  source: "https://github.com/receptron/mulmocast-cli/blob/main/src/agents/image_google_agent.ts",
   license: "MIT",
-  environmentVariables: ["OPENAI_API_KEY"],
+  environmentVariables: [],
 };
 
 export default imageGoogleAgentInfo;
