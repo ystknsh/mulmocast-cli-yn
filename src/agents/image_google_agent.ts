@@ -7,9 +7,6 @@ import { GoogleAuth } from "google-auth-library";
 const GOOGLE_PROJECT_ID = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
 const GOOGLE_IMAGEN_MODEL = "imagen-3.0-fast-generate-001";
 const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${GOOGLE_PROJECT_ID}/locations/us-central1/publishers/google/models/${GOOGLE_IMAGEN_MODEL}:predict`;
-const tokenHolder = {
-  token: "undefined",
-};
 
 type PredictionResponse = {
   predictions?: {
@@ -26,7 +23,7 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-async function generateImage(prompt: string, aspectRatio: string | undefined): Promise<Buffer | undefined> {
+async function generateImage(token: string, prompt: string, aspectRatio: string | undefined): Promise<Buffer | undefined> {
   try {
     // Prepare the payload for the API request
     const payload = {
@@ -46,7 +43,7 @@ async function generateImage(prompt: string, aspectRatio: string | undefined): P
     const response = await fetch(GOOGLE_IMAGEN_ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${tokenHolder.token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
@@ -84,11 +81,10 @@ export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
 }) => {
   const { prompt } = namedInputs;
   const { aspectRatio, model } = params;
-
-  tokenHolder.token = await googleAuth();
+  const token = await googleAuth();
 
   try {
-    const buffer = await generateImage(prompt, aspectRatio);
+    const buffer = await generateImage(token, prompt, aspectRatio);
     if (buffer) {
       return { buffer };
     }
