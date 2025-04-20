@@ -1,13 +1,10 @@
 import "dotenv/config";
 import fsPromise from "fs/promises";
 import fs from "fs";
-// import path from "path";
 import {
   GraphAI,
   AgentFilterFunction,
   GraphData,
-  // ComputedNodeData,
-  // StaticNodeData,
 } from "graphai";
 import * as agents from "@graphai/agents";
 // import { ttsNijivoiceAgent } from "@graphai/tts_nijivoice_agent";
