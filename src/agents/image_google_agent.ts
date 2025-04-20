@@ -23,7 +23,7 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-async function generateImage(token: string, prompt: string, aspectRatio: string | undefined): Promise<Buffer | undefined> {
+async function generateImage(token: string, prompt: string, aspectRatio: string): Promise<Buffer | undefined> {
   try {
     // Prepare the payload for the API request
     const payload = {
@@ -34,7 +34,7 @@ async function generateImage(token: string, prompt: string, aspectRatio: string 
       ],
       parameters: {
         sampleCount: 1,
-        aspectRatio: aspectRatio ?? "16:9",
+        aspectRatio: aspectRatio,
         safetySetting: "block_only_high",
       },
     };
@@ -80,7 +80,8 @@ export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   params,
 }) => {
   const { prompt } = namedInputs;
-  const { aspectRatio, model } = params;
+  const aspectRatio = params.aspectRatio ?? "16:9";
+  const model = params.model ?? "imagen-3.0-fast-generate-001";
   const token = await googleAuth();
 
   try {
