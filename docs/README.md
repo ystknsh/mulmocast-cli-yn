@@ -26,7 +26,7 @@
 
 ```json
 {
- script: [{
+ "script": [{
   "speaker": "Announcer",
     "text": "米国で活躍するエンジニアが新しい技術やビジネスを分かりやすく解説する、中島聡のLife is beautiful。今日は、アメリカの関税引き上げについての解説です。",
     "imagePrompt": "some prompt"
@@ -40,21 +40,24 @@
 
 ### Step 3.1. scriptのimagePromptを削除しつつ、PodCastScriptのrootにimages(array)を追加
 
+```json
 {
- script: [{
+ "script": [{
   "speaker": "Announcer",
     "text": "米国で活躍するエンジニアが新しい技術やビジネスを分かりやすく解説する、中島聡のLife is beautiful。今日は、アメリカの関税引き上げについての解説です。",
  }],
- images: [{
+ "images": [{
    "imagePrompt": "some prompt"
-   index: 0,
-   image: undefined,
+   "index": 0,
+   "image": undefined
  }]
 }
+```
 
 ### Step 3.2. scriptを句読点などで分割。
+```json
 {
- script: [{
+ "script": [{
   "speaker": "Announcer",
     "text": "米国で活躍するエンジニアが新しい技術やビジネスを分かりやすく解説する、",
  },{
@@ -65,15 +68,14 @@
     "text": "今日は、アメリカの関税引き上げについての解説です。",
  }]
 }
-
+```
 # Step 4
 
 セリフの修正（src/fixtext.tsを使用、オプション）
 
-// 置換する。
-```
+```json
 {
- script: [{
+ "script": [{
   "speaker": "Announcer",
     "text": "米国で活躍するエンジニアが新しい技術やビジネスを分かりやすく解説する、",
  },{
