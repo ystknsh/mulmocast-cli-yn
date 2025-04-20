@@ -10,8 +10,8 @@ const main = async () => {
   // const parsedPath = path.parse(scriptPath);
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
   const script = JSON.parse(scriptData) as PodcastScript;
-  script.script.forEach((element: ScriptData) => {
-    console.log(element.speaker + ":" + element.text);
+  script.script.forEach((scriptData: ScriptData) => {
+    console.log(scriptData.speaker + ":" + scriptData.text);
   });
 };
 

@@ -20,33 +20,33 @@ export function splitIntoSentences(paragraph: string, divider: string, minimum: 
     .map((sentence, index, array) => (index < array.length - 1 || paragraph.endsWith(divider) ? sentence + divider : sentence));
 }
 
-export const recursiveSplit = (scripts: ScriptData[]) => {
+export const recursiveSplit = (scriptDataList: ScriptData[]) => {
   const delimiters = ["。", "？", "！", "、"];
-  return scripts.reduce<ScriptData[]>((prev, script) => {
+  return scriptDataList.reduce<ScriptData[]>((prev, scriptData) => {
     const sentences = delimiters
       .reduce<string[]>(
         (textData, delimiter) => {
           return textData.map((text) => splitIntoSentences(text, delimiter, 7)).flat(1);
         },
-        [script.text],
+        [scriptData.text],
       )
       .flat(1);
     sentences.forEach((sentence) => {
-      return prev.push({ ...script, text: sentence });
+      return prev.push({ ...scriptData, text: sentence });
     });
     return prev;
   }, []);
 };
 
-export const script2Images = (scripts: ScriptData[]) => {
-  return scripts.map((script, index) => {
-    script.imageIndex = index;
+export const script2Images = (scriptDataList: ScriptData[]) => {
+  return scriptDataList.map((scriptData, index) => {
+    scriptData.imageIndex = index;
     const ret = {
-      imagePrompt: script.imagePrompt,
+      imagePrompt: scriptData.imagePrompt,
       index,
       image: undefined,
     };
-    delete script.imagePrompt;
+    delete scriptData.imagePrompt;
     return ret;
   });
 };

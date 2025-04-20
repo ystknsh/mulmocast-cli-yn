@@ -43,9 +43,9 @@ const main = async () => {
   const readData = readPodcastScriptFile(arg2, "no file exists")!;
   const { podcastData, podcastDataPath } = readData;
 
-  podcastData.script = podcastData.script.map((script: ScriptData) => {
-    script.ttsText = replacePairs(script.text, replacements);
-    return script;
+  podcastData.script = podcastData.script.map((scriptData: ScriptData) => {
+    scriptData.ttsText = replacePairs(scriptData.text, replacements);
+    return scriptData;
   });
   fs.writeFileSync(podcastDataPath, JSON.stringify(podcastData, null, 2));
 };

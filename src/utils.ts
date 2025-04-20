@@ -46,3 +46,11 @@ export const getScratchpadFilePath = (fileName: string) => {
   const filePath = path.resolve("./scratchpad/" + fileName);
   return filePath;
 };
+
+export const mkdir = (dirPath: string) => {
+  const currentDir = process.cwd();
+  const imagesDir = path.join(currentDir, dirPath);
+  if (!fs.existsSync(imagesDir)) {
+    fs.mkdirSync(imagesDir, { recursive: true });
+  }
+};
