@@ -104,7 +104,7 @@ const imageGoogleAgentInfo: AgentFunctionInfo = {
   category: ["image"],
   author: "Receptron Team",
   repository: "https://github.com/receptron/mulmocast-cli/",
-  source: "https://github.com/receptron/mulmocast-cli/blob/main/src/agents/image_google_agent.ts",
+  // source: "https://github.com/receptron/mulmocast-cli/blob/main/src/agents/image_google_agent.ts",
   license: "MIT",
   environmentVariables: [],
 };
