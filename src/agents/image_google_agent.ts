@@ -1,22 +1,9 @@
-import dotenv from "dotenv";
 import { AgentFunction, AgentFunctionInfo } from "graphai";
-
-dotenv.config();
-import { GoogleAuth } from "google-auth-library";
 
 type PredictionResponse = {
   predictions?: {
     bytesBase64Encoded?: string;
   }[];
-};
-
-const googleAuth = async () => {
-  const auth = new GoogleAuth({
-    scopes: ["https://www.googleapis.com/auth/cloud-platform"],
-  });
-  const client = await auth.getClient();
-  const accessToken = await client.getAccessToken();
-  return accessToken.token!;
 };
 
 async function generateImage(projectId: string | undefined, model: string, token: string, prompt: string, aspectRatio: string): Promise<Buffer | undefined> {
@@ -75,6 +62,7 @@ async function generateImage(projectId: string | undefined, model: string, token
 
 type GoogleConfig = {
   projectId?: string;
+  token?: string;
 };
 
 export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }, GoogleConfig> = async ({
@@ -87,7 +75,7 @@ export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   const model = params.model ?? "imagen-3.0-fast-generate-001";
   //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
   const projectId = config?.projectId;
-  const token = await googleAuth();
+  const token = config?.token;
 
   try {
     const buffer = await generateImage(projectId, model, token, prompt, aspectRatio);
