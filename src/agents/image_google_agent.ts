@@ -19,9 +19,8 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-async function generateImage(model: string, token: string, prompt: string, aspectRatio: string): Promise<Buffer | undefined> {
-  const GOOGLE_PROJECT_ID = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
-  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${GOOGLE_PROJECT_ID}/locations/us-central1/publishers/google/models/${model}:predict`;
+async function generateImage(projectId: string | undefined, model: string, token: string, prompt: string, aspectRatio: string): Promise<Buffer | undefined> {
+  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}:predict`;
   
   try {
     // Prepare the payload for the API request
@@ -81,10 +80,11 @@ export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   const { prompt } = namedInputs;
   const aspectRatio = params.aspectRatio ?? "16:9";
   const model = params.model ?? "imagen-3.0-fast-generate-001";
+  const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
   const token = await googleAuth();
 
   try {
-    const buffer = await generateImage(model, token, prompt, aspectRatio);
+    const buffer = await generateImage(projectId, model, token, prompt, aspectRatio);
     if (buffer) {
       return { buffer };
     }
