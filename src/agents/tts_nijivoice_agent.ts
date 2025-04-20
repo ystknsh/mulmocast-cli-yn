@@ -2,11 +2,10 @@ import { AgentFunction, AgentFunctionInfo } from "graphai";
 
 const nijovoiceApiKey = process.env.NIJIVOICE_API_KEY ?? "";
 
-
 type VoiceJson = {
   generatedVoice: {
     audioFileDownloadUrl: string;
-  }
+  };
 };
 
 export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) => {
