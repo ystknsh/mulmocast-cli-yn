@@ -2,6 +2,7 @@ import "dotenv/config";
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import imageGoogleAgent from "../agents/image_google_agent";
+import { ImageGoogleConfig } from "../agents/image_google_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { GoogleAuth } from "google-auth-library";
 
@@ -35,9 +36,8 @@ const graph_data: GraphData = {
   },
 };
 
-
 const main = async () => {
-  const google_config = {
+  const google_config: ImageGoogleConfig = {
     projectId: process.env.GOOGLE_PROJECT_ID,
     token: ""
   };

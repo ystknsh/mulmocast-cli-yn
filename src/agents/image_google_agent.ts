@@ -60,12 +60,12 @@ async function generateImage(projectId: string | undefined, model: string, token
   }
 }
 
-type GoogleConfig = {
+export type ImageGoogleConfig = {
   projectId?: string;
   token?: string;
 };
 
-export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }, GoogleConfig> = async ({
+export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }, ImageGoogleConfig> = async ({
   namedInputs,
   params,
   config
