@@ -54,7 +54,7 @@ async function generateImage(prompt: string, script: PodcastScript): Promise<Buf
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
 
-    const responseData: PredictionResponse = await response.json(); // TODO remove any
+    const responseData: PredictionResponse = await response.json();
 
     // Parse and return the generated image URL or data
     const predictions = responseData.predictions;
