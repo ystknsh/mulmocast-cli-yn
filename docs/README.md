@@ -1,3 +1,22 @@
+新しい仕組み
+1. 元ネタは以下にいれる。ここは変更しない
+```
+{
+ originalScript:[{speaker: "", text: ""}]
+}
+```
+2. scriptを変換していく。データは上書き更新。scriptの長さは変えない。分割するデータはarrayにする text -> text[]や、{text: ""}[]とする。
+Stepを戻る場合は、それ以降のデータは削除する。つまり、そのstepで完成するデータを毎回生成させる。(ttsText前の処理の場合は、結果にttsTextを含めない)
+
+```
+{
+ originalScript: [...]
+ scripts: [{ text: ["aa", "bb"], ttsText: ["ああ", "ばば"], imagePrompt: "" }]
+}
+```
+
+## ai-podcasterのしくみ
+
 前準備
 1. セリフを作る(script)
 2. scriptごとに、背景イメージ用のprompt作成
