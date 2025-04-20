@@ -6,15 +6,12 @@ import imageOpenaiAgent from "../agents/image_openai_agent";
 const graph_data: GraphData = {
   version: 0.5,
   nodes: {
-		test: {
-			value: 123,
-			isResult: true
-		},
-		foo: {
-			agent: "copyAgent",
+		image: {
+			agent: "imageOpenaiAgent",
 			inputs: {
-				bar: ":test"
-			}
+				prompt: "Beatiful sunset in Hawaii"
+			},
+			isResult: true
 		}
 	}
 };
