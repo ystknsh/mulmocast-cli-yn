@@ -4,10 +4,11 @@
   "speakers": ["Host"],
   "voices": ["shimmer"],
   "reference": "Agrawal, A. (2024, April). The Economics of Generative AI. Apoorv's notes. https://apoorv03.com/p/the-economics-of-generative-ai",
+  "lang": "en",
   "script": [
     {
       "speaker": "Host",
-      "text": "Welcome to Mul-Mo-Cast Tech Insights, where we break down the latest trends and developments in the technology world. I'm your host, and today we're diving into the fascinating economics of generative AI based on a recent analysis by Apoorv Agrawal published on his Substack, \"Apoorv's notes.\" This piece provides valuable insights into where value and profits are currently concentrated in the generative AI ecosystem, and where they might shift in the future."
+      "text": "Welcome to Mulmocast Tech Insights, where we break down the latest trends and developments in the technology world. I'm your host, and today we're diving into the fascinating economics of generative AI based on a recent analysis by Apoorv Agrawal published on his Substack, \"Apoorv's notes.\" This piece provides valuable insights into where value and profits are currently concentrated in the generative AI ecosystem, and where they might shift in the future."
     },
     {
       "speaker": "Host",
