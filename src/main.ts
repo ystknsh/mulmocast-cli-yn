@@ -150,6 +150,10 @@ const main = async () => {
   podcastData.filename = fileName;
   podcastData.script.forEach((scriptData: ScriptData, index: number) => {
     scriptData.filename = podcastData.filename + index;
+    // HACK: In case, the operator skip the "Split" phase.
+    if (!scriptData.ttsText) {
+      scriptData.ttsText = scriptData.text;
+    }
   });
 
   // Check if any script changes
