@@ -10,11 +10,6 @@ import { MulmoScript, LANG, MultiLingualTexts, LocalizedText } from "./type";
 // 画像のprompt作成
 // text -> imagePrompt
 
-
-// outファイルを開く -> なければコピー
-// それぞれのstepをみて判断していく
-// defaultの言語、変換対象の言語
-
 const granslateGraph: GraphData = {
   version: 0.5,
   nodes: {
