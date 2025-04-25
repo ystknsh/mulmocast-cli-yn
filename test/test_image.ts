@@ -2,11 +2,12 @@ import test from "node:test";
 import assert from "node:assert";
 
 import { script2Images } from "../src/split";
+import { ScriptData } from "../src/type";
 
 test("test script2Images", async () => {
-  const scripts = [
+  const scripts: ScriptData[] = [
     {
-      speaker: "",
+      speaker: "Guest",
       text: "",
       ttsText: "",
       instructions: "",
@@ -16,7 +17,7 @@ test("test script2Images", async () => {
       imageIndex: 1,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "",
       ttsText: "",
       instructions: "",
@@ -34,7 +35,7 @@ test("test script2Images", async () => {
 
   const expectScripts = [
     {
-      speaker: "",
+      speaker: "Guest",
       text: "",
       ttsText: "",
       instructions: "",
@@ -43,7 +44,7 @@ test("test script2Images", async () => {
       imageIndex: 0,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "",
       ttsText: "",
       instructions: "",
