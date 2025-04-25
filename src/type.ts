@@ -1,12 +1,14 @@
-// type SPEAKER = "Host" | "Guest" | "Announcer" | "Student" | "Teacher";
+type SPEAKER = string;
+// type LANG = string;
 
+// Page Data
 export type ScriptData = {
-  speaker: string;
+  speaker: SPEAKER;
   text: string;
   ttsText: string | undefined;
-  instructions: string | undefined;  // tts_options for open ai
+  instructions: string | undefined; // tts_options for open ai
   duration: number; // generated // video duration tine (ms)
-  filename: string; // generated // 
+  filename: string; // generated //
   imagePrompt: string | undefined; // inserted by LLM
   imageIndex: number; // TODO: deprecated
 };
@@ -17,7 +19,7 @@ export type ImageInfo = {
   image: string | undefined; // path to the image
 };
 
-export type VoiceMap = Record<string, string>;
+export type VoiceMap = Record<SPEAKER, string>;
 
 // epsode
 export type PodcastScript = {
@@ -31,14 +33,14 @@ export type PodcastScript = {
 
   // for tts
   tts: string | undefined; // default: openAI
-  speakers: string[] | undefined;
+  speakers: SPEAKER[] | undefined;
   voicemap: VoiceMap; // generated
 
   // for graph data
   voices: string[] | undefined;
   ttsAgent: string; // generated
 
-  filename: string; // generated 
+  filename: string; // generated
   // imageInfo: any[]; // generated
 
   // for video and image
@@ -49,5 +51,4 @@ export type PodcastScript = {
 
   // for bgm
   padding: number | undefined; // for bgm
-
 };
