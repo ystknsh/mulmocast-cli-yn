@@ -1,7 +1,10 @@
-// type SPEAKER = "Host" | "Guest" | "Announcer" | "Student" | "Teacher";
 
+type SPEAKER = string;
+type LANG = string;
+
+// Page Data
 export type ScriptData = {
-  speaker: string;
+  speaker: SPEAKER;
   text: string;
   ttsText: string | undefined;
   instructions: string | undefined;  // tts_options for open ai
@@ -17,7 +20,7 @@ export type ImageInfo = {
   image: string | undefined; // path to the image
 };
 
-export type VoiceMap = Record<string, string>;
+export type VoiceMap = Record<SPEAKER, string>;
 
 // epsode
 export type PodcastScript = {
@@ -31,7 +34,7 @@ export type PodcastScript = {
 
   // for tts
   tts: string | undefined; // default: openAI
-  speakers: string[] | undefined;
+  speakers: SPEAKER[] | undefined;
   voicemap: VoiceMap; // generated
 
   // for graph data
