@@ -27,7 +27,6 @@ type MediaSource =
 type MulmoChatBeat = {
   type: "chat";
   speaker: SpeakerId;
-  text: string;
 };
 
 type MulmoMarkdownBeat = {
@@ -72,6 +71,7 @@ export type MulmoBeatOriginalData =
 
 // Beat Data
 export type MulmoBeat = MulmoBeatOriginalData & {
+  text: string;
   multiLingualText: Record<LANG, LocalizedText>;
 
   // ttsText: string | undefined;
@@ -81,7 +81,7 @@ export type MulmoBeat = MulmoBeatOriginalData & {
   image: string | undefined; // path to the image
 };
 
-export type VoiceMap = Record<SPEAKER, string>;
+// export type VoiceMap = Record<SPEAKER, string>;
 
 // epsode
 export type MulmoScript = {
