@@ -1,7 +1,7 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import { PodcastScript, ScriptData } from "../type";
+import { PodcastScript, ScriptData } from "../v1/type";
 
 const combineFilesAgent: AgentFunction<null, { script: PodcastScript; fileName: string }, { script: PodcastScript; combinedFileName: string }> = async ({
   namedInputs,

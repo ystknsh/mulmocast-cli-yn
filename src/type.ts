@@ -16,7 +16,7 @@ type SpeakerData = {
   displayName: Record<LANG, string>;
   voiceId: string;
 };
-type SpeakerDictonary = Record<SpeakerId, SpeakerData>;
+export type SpeakerDictonary = Record<SpeakerId, SpeakerData>;
 
 //
 type MediaSource =

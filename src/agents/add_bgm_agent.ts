@@ -1,7 +1,7 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import { PodcastScript } from "../type";
+import { PodcastScript } from "../v1/type";
 
 const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile: string; outFileName: string; script: PodcastScript }> = async ({
   namedInputs,

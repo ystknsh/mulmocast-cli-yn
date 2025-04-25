@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { PodcastScript } from "./type";
+import { PodcastScript } from "./v1/type";
 
 export function readPodcastScriptFile(
   path: string,
