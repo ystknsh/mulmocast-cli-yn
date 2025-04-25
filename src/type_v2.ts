@@ -1,4 +1,3 @@
-type SPEAKER = string;
 type LANG = string;
 type URLString = string;
 
@@ -12,6 +11,12 @@ type LocalizedText = {
   filename: string; // generated //
 };
 
+type SpeakerId = string;
+type SpeakerData = {
+  displayName: Record<LANG, string>;
+  voiceId: string;
+};
+type SpeakerDictonary = Record<SpeakerId, SpeakerData>;
 
 //
 type MediaSource =
@@ -21,7 +26,7 @@ type MediaSource =
 
 type MulmoChatBeat = {
   type: "chat";
-  speaker: SPEAKER;
+  speaker: SpeakerId;
   text: string;
 };
 
@@ -72,7 +77,6 @@ export type MulmoBeat = MulmoBeatOriginalData & {
   // ttsText: string | undefined;
   instructions: string | undefined; // tts_options for open ai
 
-  //
   imagePrompt: string | undefined; // inserted by LLM
   image: string | undefined; // path to the image
 };
@@ -92,11 +96,11 @@ export type MulmoScript = {
 
   // for tts
   tts: string | undefined; // default: openAI
-  speakers: SPEAKER[] | undefined;
-  voicemap: VoiceMap; // generated
+  speakers: SpeakerDictonary;
+  // voicemap: VoiceMap; // generated
 
   // for graph data
-  voices: string[] | undefined;
+  // voices: string[] | undefined;
   ttsAgent: string; // generated
 
   filename: string; // generated
