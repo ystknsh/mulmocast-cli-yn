@@ -1,23 +1,23 @@
 import fs from "fs";
 import path from "path";
-import { PodcastScript } from "./v1/type";
+import { MulmoScript } from "./type";
 
-export function readPodcastScriptFile(
+export function readMulmoScriptFile(
   path: string,
   errorMessage: string,
 ): {
-  podcastData: PodcastScript;
-  podcastDataPath: string;
+  mulmoData: MulmoScript;
+  mulmoDataPath: string;
   fileName: string;
 };
 
-export function readPodcastScriptFile(path: string): {
-  podcastData: PodcastScript;
-  podcastDataPath: string;
+export function readMulmoScriptFile(path: string): {
+  mulmoData: MulmoScript;
+  mulmoDataPath: string;
   fileName: string;
 } | null;
 
-export function readPodcastScriptFile(arg2: string, errorMessage?: string) {
+export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
@@ -27,12 +27,12 @@ export function readPodcastScriptFile(arg2: string, errorMessage?: string) {
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as PodcastScript;
+  const script = JSON.parse(scriptData) as MulmoScript;
   const parsedPath = path.parse(scriptPath);
 
   return {
-    podcastData: script,
-    podcastDataPath: scriptPath,
+    mulmoData: script,
+    mulmoDataPath: scriptPath,
     fileName: parsedPath.name,
   };
 }

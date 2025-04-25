@@ -70,6 +70,8 @@ export type MulmoBeat = {
 
   imagePrompt: string | undefined; // inserted by LLM
   image: string | undefined; // path to the image
+
+  filename: string; // generated
 };
 
 // export type VoiceMap = Record<SPEAKER, string>;

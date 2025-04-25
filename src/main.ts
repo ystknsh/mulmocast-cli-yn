@@ -9,8 +9,8 @@ import combineFilesAgent from "./agents/combine_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoScript, SpeakerDictonary } from "./type";
-import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
+import { MulmoScript, MulmoBeat, SpeakerDictonary } from "./type";
+import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -39,7 +39,8 @@ const graph_tts: GraphData = {
     tts: {
       agent: ":script.ttsAgent",
       inputs: {
-        text: ":row.ttsText",
+        // text: ":row.ttsText",
+        text: ":row.tts",
         file: ":path.path",
       },
       params: {
@@ -142,25 +143,27 @@ const agentFilters = [
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const readData = readPodcastScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
-  const { podcastData, fileName } = readData;
+  const readData = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
+  const { mulmoData, fileName } = readData;
 
-  podcastData.filename = fileName;
-  podcastData.script.forEach((mulmoScript: MulmoScript, index: number) => {
-    mulmoScript.filename = podcastData.filename + index;
+  mulmoData.filename = fileName;
+  mulmoData.beats.forEach((mulmoScript: MulmoBeat, index: number) => {
+    mulmoScript.filename = mulmoData.filename + index;
     // HACK: In case, the operator skip the "Split" phase.
+    /*
     if (!mulmoScript.ttsText) {
       mulmoScript.ttsText = mulmoScript.text;
     }
+    */
   });
 
   // Check if any script changes
-  const outputFilePath = getOutputFilePath(podcastData.filename + ".json");
-  const { podcastData: prevScript } = readPodcastScriptFile(outputFilePath) ?? {};
+  const outputFilePath = getOutputFilePath(mulmoData.filename + ".json");
+  const { mulmoData: prevScript } = readMulmoScriptFile(outputFilePath) ?? {};
   if (prevScript) {
     console.log("found output script", prevScript.filename);
-    podcastData.script.forEach((mulmoScript: MulmoScript, index: number) => {
-      const prevText = prevScript.script[index]?.text ?? "";
+    mulmoData.beats.forEach((mulmoScript: MulmoBeat, index: number) => {
+      const prevText = prevScript.beats[index]?.text ?? "";
       if (mulmoScript.text !== prevText) {
         const scratchpadFilePath = getScratchpadFilePath(mulmoScript.filename + ".mp3");
         if (fs.existsSync(scratchpadFilePath)) {
@@ -170,12 +173,13 @@ const main = async () => {
       }
     });
   }
-  if (podcastData.tts === "nijivoice") {
+
+  if (mulmoData.tts === "nijivoice") {
     graph_data.concurrency = 1;
-    podcastData.ttsAgent = "ttsNijivoiceAgent";
+    mulmoData.ttsAgent = "ttsNijivoiceAgent";
   } else {
     graph_data.concurrency = 8;
-    podcastData.ttsAgent = "ttsOpenaiAgent";
+    mulmoData.ttsAgent = "ttsOpenaiAgent";
   }
 
   const graph = new GraphAI(
@@ -191,7 +195,7 @@ const main = async () => {
     },
     { agentFilters },
   );
-  graph.injectValue("script", podcastData);
+  graph.injectValue("script", mulmoData);
   const results = await graph.run();
   const result = results.combineFiles as { fileName: string };
   console.log(`Generated: ${result.fileName}`);
