@@ -1,12 +1,14 @@
+type SPEAKER = "Host" | "Guest" | "Announcer" | "Student" | "Teacher";
+
 export type ScriptData = {
-  speaker: string;
+  speaker: SPEAKER;
   text: string;
   ttsText: string | undefined;
-  instructions: string | undefined;
-  duration: number; // generated
-  filename: string; // generated
+  instructions: string | undefined;  // tts_options for open ai
+  duration: number; // generated // video duration tine (ms)
+  filename: string; // generated // 
   imagePrompt: string | undefined; // inserted by LLM
-  imageIndex: number;
+  imageIndex: number; // TODO: deprecated
 };
 
 export type ImageInfo = {
@@ -17,21 +19,35 @@ export type ImageInfo = {
 
 export type VoiceMap = Record<string, string>;
 
+// epsode
 export type PodcastScript = {
+  // global setting
   title: string;
-  padding: number | undefined;
   description: string;
   reference: string;
-  tts: string | undefined; // default: openAI
-  voices: string[] | undefined;
-  speakers: string[] | undefined;
+
+  // mulmoScriot
   script: ScriptData[];
-  filename: string; // generated
+
+  // for tts
+  tts: string | undefined; // default: openAI
+  speakers: SPEAKER[] | undefined;
   voicemap: VoiceMap; // generated
+
+  // for graph data
+  voices: string[] | undefined;
   ttsAgent: string; // generated
+
+  filename: string; // generated 
   // imageInfo: any[]; // generated
-  aspectRatio: string | undefined; // "16:9" or "9:16"
+
+  // for video and image
+  aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
   images: ImageInfo[]; // generated
-  imagePath: string | undefined; // for Keynote images
+  imagePath: string | undefined; // for Keynote images movie ??
   omitCaptions: boolean | undefined; // default is false
+
+  // for bgm
+  padding: number | undefined; // for bgm
+
 };
