@@ -6,6 +6,9 @@ type LocalizedText = {
   lang: LANG;
   captions: string;
   ttsTexts: string;
+
+  duration: number; // generated // video duration time (ms)
+  filename: string; // generated //
 };
 
 // Beat Data
@@ -18,14 +21,11 @@ export type MulmoBeat = {
 
   // ttsText: string | undefined;
   instructions: string | undefined; // tts_options for open ai
-  duration: number; // generated // video duration tine (ms)
-  filename: string; // generated //
 
-  // 
+  //
   imagePrompt: string | undefined; // inserted by LLM
   image: string | undefined; // path to the image
 };
-
 
 export type VoiceMap = Record<SPEAKER, string>;
 
