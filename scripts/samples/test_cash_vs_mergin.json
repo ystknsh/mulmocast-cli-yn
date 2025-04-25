@@ -1,11 +1,23 @@
 {
   "title": "TESLA'S STRATEGIC MOAT: CASH FLOW VS. MARGINS",
   "description": "This episode examines Tesla's financial strategy, focusing on how decreasing gross margins paired with increasing cash flow from operations creates a competitive advantage. We explore how this counterintuitive approach strengthens Tesla's market position by making it harder for competitors to replicate their business model.",
-  "speakers": ["Host", "Guest"],
-  "voices": ["shimmer", "echo"],
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    },
+    "Guest": {
+      "voiceId": "echo",
+      "displayName": {
+        "en": "Guest"
+      }
+    }
+  },
   "reference": "Based on financial data and analysis of Tesla's performance through March 2025",
   "lang": "en",
-  "script": [
+  "beats": [
     {
       "speaker": "Host",
       "text": "Welcome to Mulmocast Tech Insights, where we break down the latest trends and developments in the technology and business world. I'm your host, and today we're analyzing Tesla's fascinating financial strategy and what it means for the company's competitive position."

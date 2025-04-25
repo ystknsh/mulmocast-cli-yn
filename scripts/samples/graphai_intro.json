@@ -1,11 +1,17 @@
 {
   "title": "Introduction to GraphAI",
   "description": "Declarative Dataflow Programming environment for AI agents.",
-  "speakers": ["Host"],
-  "voices": ["shimmer"],
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    }
+  },
   "imagePath": "./scripts/samples/images/graphai_intro/\u200EGraphAI_pararel.\u200E",
   "omitCaptions": true,
-  "script": [
+  "beats": [
     {
       "speaker": "Host",
       "text": "This is a quick introduction of GraphAI, a Declarative Dataflow Programming environment for AI agents.",

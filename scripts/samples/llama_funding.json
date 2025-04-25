@@ -1,11 +1,17 @@
 {
   "title": "META'S LLAMA FUNDING STRUGGLES",
   "description": "This episode explores Meta's efforts to create a funding consortium for its open-source Llama model, revealing the financial strain that even tech giants are facing due to rising AI development costs. Based on reporting from The Information, the podcast examines Meta's proposal, the challenges it faces, and the broader implications for AI economics.",
-  "speakers": ["Host"],
-  "voices": ["shimmer"],
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    }
+  },
   "reference": "Huang, K., & Woo, E. (2025, April 17). Meta Asked Amazon, Microsoft to Help Fund Llama. The Information. https://www.theinformation.com/articles/meta-asked-amazon-microsoft-help-fund-llama?rc=rvvbkr",
   "lang": "en",
-  "script": [
+  "beats": [
     {
       "speaker": "Host",
       "text": "Welcome to Mulmocast Tech Insights, your weekly deep dive into the technology transforming our world. Today we're exploring a fascinating development in the AI landscape. According to an article titled \"Meta Asked Amazon, Microsoft to Help Fund Llama\" published by The Information, Meta has been seeking financial partners to support its flagship AI model. This reveals the financial strain that even tech giants are facing as AI development costs continue to skyrocket."

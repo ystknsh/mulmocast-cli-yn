@@ -1,11 +1,23 @@
 {
   "title": "GLOBAL COMPETITION IN PHYSICAL AI: CHINA VS US",
   "description": "This episode explores the global competition in physical AI between China and the United States, focusing on humanoid robots and drones. Based on Elon Musk's insights from Tesla's 2025 Q1 earnings call and recent market analysis, we examine where each country stands, their relative strengths, and what this means for the future of technology and national security.",
-  "speakers": ["Host", "Guest"],
-  "voices": ["shimmer", "echo"],
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    },
+    "Guest": {
+      "voiceId": "echo",
+      "displayName": {
+        "en": "Guest"
+      }
+    }
+  },
   "reference": "Tesla 2025 Q1 Earnings Call Webcast; https://ir.tesla.com/#quarterly-disclosure",
   "lang": "en",
-  "script": [
+  "beats": [
     {
       "speaker": "Host",
       "text": "Welcome to Mulmocast Tech Insights, where we explore the cutting edge of technology and its global implications. I'm your host, and today we're diving into the fascinating world of physical AI - specifically humanoid robots and drones - and the intensifying competition between China and the United States in this arena."
