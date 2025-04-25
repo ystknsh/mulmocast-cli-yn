@@ -16,7 +16,6 @@ export type MulmoBeat = {
   speaker: SPEAKER;
 
   text: string;
-  lang: LANG;
   multiLingualText: Record<LANG, LocalizedText>;
 
   // ttsText: string | undefined;
@@ -35,6 +34,7 @@ export type MulmoScript = {
   title: string;
   description: string;
   reference: string;
+  lang: LANG;
 
   // mulmoScript PageData
   // script: ScriptData[];
