@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert";
 
-import { script2Images } from "../src/split";
-import { ScriptData } from "../src/type";
+import { script2Images } from "../../src/v1/split";
+import { ScriptData } from "../../src/v1/type";
 
 test("test script2Images", async () => {
   const scripts: ScriptData[] = [

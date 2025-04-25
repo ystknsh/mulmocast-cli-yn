@@ -24,7 +24,7 @@
     "fixtext": "npx tsx ./src/fixtext.ts",
     "movie": "npx tsx ./src/movie.ts",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/main.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
-    "ci_test": "node --test  --require ts-node/register ./test/test_*.ts",
+    "ci_test": "node --test  --require ts-node/register ./test/*/test_*.ts",
     "lint": "eslint src",
     "build": "tsc",
     "cli": "npx ts-node ./src/cli.ts",
