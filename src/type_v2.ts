@@ -1,4 +1,3 @@
-
 type SPEAKER = string;
 type LANG = string;
 
@@ -13,17 +12,17 @@ type LocalizedText = {
   ttsTexts: string;
 };
 
-// Page Data
-export type ScriptData = {
+// Beat Data
+export type MulmoBeat = {
   speaker: SPEAKER;
-  
+
   text: OriginalText;
-  multiLingualText: Record<LANG, LocalizedText>
-  
+  multiLingualText: Record<LANG, LocalizedText>;
+
   // ttsText: string | undefined;
-  instructions: string | undefined;  // tts_options for open ai
+  instructions: string | undefined; // tts_options for open ai
   duration: number; // generated // video duration tine (ms)
-  filename: string; // generated // 
+  filename: string; // generated //
   imagePrompt: string | undefined; // inserted by LLM
 };
 
@@ -33,7 +32,7 @@ export type ImageInfo = {
   image: string | undefined; // path to the image
 };
 
-export type VoiceMap = Record<string, string>;
+export type VoiceMap = Record<SPEAKER, string>;
 
 // epsode
 export type MulmoScript = {
@@ -44,7 +43,7 @@ export type MulmoScript = {
 
   // mulmoScript PageData
   // script: ScriptData[];
-  pages: ScriptData[];
+  beats: MulmoBeat[];
 
   // for tts
   tts: string | undefined; // default: openAI
@@ -55,7 +54,7 @@ export type MulmoScript = {
   voices: string[] | undefined;
   ttsAgent: string; // generated
 
-  filename: string; // generated 
+  filename: string; // generated
   // imageInfo: any[]; // generated
 
   // for video and image
@@ -66,5 +65,4 @@ export type MulmoScript = {
 
   // for bgm
   padding: number | undefined; // for bgm
-
 };
