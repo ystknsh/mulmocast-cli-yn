@@ -11,11 +11,61 @@ type LocalizedText = {
   filename: string; // generated //
 };
 
-// Beat Data
-export type MulmoBeat = {
-  speaker: SPEAKER;
 
+//
+type MediaSource =
+  | { kind: "url"; url: string }    // https://example.com/foo.pdf
+  | { kind: "data"; data: string }  // base64
+  | { kind: "file"; file: string }; // 
+
+type MulmoChatBeat = {
+  type: "chat";
+  speaker: SPEAKER;
   text: string;
+};
+
+type MulmoMarkdownBeat = {
+  type: "markdown";
+  markdown: string;
+};
+
+type MulmoWebBeat = {
+  type: "web";
+  url: string;
+};
+
+type MulmoPdfBeat = {
+  type: "pdf";
+  source: MediaSource;
+};
+
+type MulmoImageBeat = {
+  type: "image";
+  source: MediaSource;
+};
+
+type MulmoSvgBeat = {
+  type: "svg";
+  source: MediaSource;
+};
+
+type MulmoMovieBeat = {
+  type: "movie";
+  source: MediaSource;
+};
+
+export type MulmoBeatOriginalData =
+  | MulmoChatBeat
+  | MulmoMarkdownBeat
+  | MulmoWebBeat
+  | MulmoPdfBeat
+  | MulmoImageBeat
+  | MulmoSvgBeat
+  | MulmoMovieBeat;
+
+
+// Beat Data
+export type MulmoBeat = MulmoBeatOriginalData & {
   multiLingualText: Record<LANG, LocalizedText>;
 
   // ttsText: string | undefined;
@@ -54,7 +104,7 @@ export type MulmoScript = {
 
   // for video and image
   aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
-  images: ImageInfo[]; // generated
+  // images: ImageInfo[]; // generated
   imagePath: string | undefined; // for Keynote images movie ??
   omitCaptions: boolean | undefined; // default is false
 

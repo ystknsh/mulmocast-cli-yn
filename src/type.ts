@@ -1,5 +1,5 @@
 type SPEAKER = string;
-type LANG = string;
+// type LANG = string;
 
 // Page Data
 export type ScriptData = {
