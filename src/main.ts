@@ -3,15 +3,13 @@ import fsPromise from "fs/promises";
 import fs from "fs";
 import { GraphAI, AgentFilterFunction, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
-// import { ttsNijivoiceAgent } from "@graphai/tts_nijivoice_agent";
 import ttsNijivoiceAgent from "./agents/tts_nijivoice_agent";
 import addBGMAgent from "./agents/add_bgm_agent";
 import combineFilesAgent from "./agents/combine_files_agent";
-// import { ttsOpenaiAgent } from "@graphai/tts_openai_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { ScriptData, VoiceMap } from "./type";
+import { MulmoScript, SpeakerDictonary } from "./type";
 import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
@@ -29,21 +27,38 @@ const graph_tts: GraphData = {
       },
     },
     voice: {
-      agent: (namedInputs: { speaker: string; voicemap: VoiceMap; voice0: string }) => {
-        const { speaker, voicemap, voice0 } = namedInputs;
-        return voicemap[speaker] ?? voice0;
+      agent: (namedInputs: { speaker: string; speakers: SpeakerDictonary }) => {
+        const { speaker, speakers } = namedInputs;
+        return speakers[speaker].voiceId;
       },
       inputs: {
         speaker: ":row.speaker",
-        voicemap: ":script.voicemap",
-        voice0: ":script.voices.$0",
+        speakers: ":script.speakers",
       },
     },
+    /*
+    tts: {
+      agent: "copyAgent",
+      console: {before: true},
+      inputs: {
+        text: ":row.ttsText",
+        file: ":path.path",
+      },
+      params: {
+        throwError: true,
+        voice: ":voice",
+        speed: ":row.speed",
+        speed_global: ":script.speed",
+        instructions: ":row.instructions",
+      },
+    },
+    */
     tts: {
       agent: ":script.ttsAgent",
       inputs: {
         text: ":row.ttsText",
         file: ":path.path",
+        voice: ":voice",
       },
       params: {
         throwError: true,
@@ -67,6 +82,7 @@ const graph_data: GraphData = {
       agent: "mapAgent",
       inputs: { rows: ":script.script", script: ":script" },
       graph: graph_tts,
+      console: { after: true },
     },
     combineFiles: {
       agent: "combineFilesAgent",
@@ -148,11 +164,11 @@ const main = async () => {
   const { podcastData, fileName } = readData;
 
   podcastData.filename = fileName;
-  podcastData.script.forEach((scriptData: ScriptData, index: number) => {
-    scriptData.filename = podcastData.filename + index;
+  podcastData.script.forEach((mulmoScript: MulmoScript, index: number) => {
+    mulmoScript.filename = podcastData.filename + index;
     // HACK: In case, the operator skip the "Split" phase.
-    if (!scriptData.ttsText) {
-      scriptData.ttsText = scriptData.text;
+    if (!mulmoScript.ttsText) {
+      mulmoScript.ttsText = mulmoScript.text;
     }
   });
 
@@ -161,40 +177,40 @@ const main = async () => {
   const { podcastData: prevScript } = readPodcastScriptFile(outputFilePath) ?? {};
   if (prevScript) {
     console.log("found output script", prevScript.filename);
-    podcastData.script.forEach((scriptData: ScriptData, index: number) => {
+    podcastData.script.forEach((mulmoScript: MulmoScript, index: number) => {
       const prevText = prevScript.script[index]?.text ?? "";
-      if (scriptData.text !== prevText) {
-        const scratchpadFilePath = getScratchpadFilePath(scriptData.filename + ".mp3");
+      if (mulmoScript.text !== prevText) {
+        const scratchpadFilePath = getScratchpadFilePath(mulmoScript.filename + ".mp3");
         if (fs.existsSync(scratchpadFilePath)) {
-          console.log("deleting", scriptData.filename);
+          console.log("deleting", mulmoScript.filename);
           fs.unlinkSync(scratchpadFilePath);
         }
       }
     });
   }
-
   if (podcastData.tts === "nijivoice") {
     graph_data.concurrency = 1;
-    podcastData.voices = podcastData.voices ?? [rion_takanashi_voice, ben_carter_voice];
+    // podcastData.voices = podcastData.voices ?? [rion_takanashi_voice, ben_carter_voice];
     podcastData.ttsAgent = "ttsNijivoiceAgent";
   } else {
     graph_data.concurrency = 8;
-    podcastData.voices = podcastData.voices ?? ["shimmer", "echo"];
+    // podcastData.voices = podcastData.voices ?? ["shimmer", "echo"];
     podcastData.ttsAgent = "ttsOpenaiAgent";
   }
+  /*
   const speakers = podcastData.speakers ?? ["Host", "Guest"];
   podcastData.voicemap = speakers.reduce((map: VoiceMap, speaker: string, index: number) => {
     map[speaker] = podcastData.voices![index];
     return map;
-  }, {});
+    }, {});
+  */
   /*
-  script.imageInfo = script.script.map((_: ScriptData, index: number) => {
+  script.imageInfo = script.script.map((_: MulmoScript, index: number) => {
     return {
       index: index,
     };
   });
   */
-
   const graph = new GraphAI(
     graph_data,
     {
