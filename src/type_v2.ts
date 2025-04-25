@@ -20,9 +20,9 @@ type SpeakerDictonary = Record<SpeakerId, SpeakerData>;
 
 //
 type MediaSource =
-  | { kind: "url"; url: URLString }    // https://example.com/foo.pdf
-  | { kind: "data"; data: string }  // base64
-  | { kind: "file"; filename: string }; // 
+  | { kind: "url"; url: URLString } // https://example.com/foo.pdf
+  | { kind: "data"; data: string } // base64
+  | { kind: "file"; filename: string }; //
 
 type MulmoMarkdownMedia = {
   type: "markdown";
@@ -54,14 +54,7 @@ type MulmoMovieMedia = {
   source: MediaSource;
 };
 
-export type MulmoMedia =
-  | MulmoMarkdownMedia
-  | MulmoWebMedia
-  | MulmoPdfMedia
-  | MulmoImageMedia
-  | MulmoSvgMedia
-  | MulmoMovieMedia;
-
+export type MulmoMedia = MulmoMarkdownMedia | MulmoWebMedia | MulmoPdfMedia | MulmoImageMedia | MulmoSvgMedia | MulmoMovieMedia;
 
 // Beat Data
 export type MulmoBeat = {
@@ -71,7 +64,7 @@ export type MulmoBeat = {
   multiLingualText: Record<LANG, LocalizedText>;
 
   media?: MulmoMedia;
-  
+
   // ttsText: string | undefined;
   instructions: string | undefined; // tts_options for open ai
 
