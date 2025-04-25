@@ -1,5 +1,6 @@
 type SPEAKER = string;
 type LANG = string;
+type URLString = string;
 
 type LocalizedText = {
   text: string;
@@ -14,9 +15,9 @@ type LocalizedText = {
 
 //
 type MediaSource =
-  | { kind: "url"; url: string }    // https://example.com/foo.pdf
+  | { kind: "url"; url: URLString }    // https://example.com/foo.pdf
   | { kind: "data"; data: string }  // base64
-  | { kind: "file"; file: string }; // 
+  | { kind: "file"; filename: string }; // 
 
 type MulmoChatBeat = {
   type: "chat";
@@ -31,7 +32,7 @@ type MulmoMarkdownBeat = {
 
 type MulmoWebBeat = {
   type: "web";
-  url: string;
+  url: URLString;
 };
 
 type MulmoPdfBeat = {
@@ -86,8 +87,7 @@ export type MulmoScript = {
   reference: string;
   lang: LANG;
 
-  // mulmoScript PageData
-  // script: ScriptData[];
+  // page/slide
   beats: MulmoBeat[];
 
   // for tts
