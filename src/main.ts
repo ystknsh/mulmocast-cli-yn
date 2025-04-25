@@ -36,8 +36,19 @@ const graph_tts: GraphData = {
         speakers: ":script.speakers",
       },
     },
+    ttsAgent: {
+      agent: (namedInputs: { tts: string;}) => {
+        if (namedInputs.tts === "nijivoice") {
+          return "ttsNijivoiceAgent";
+        }
+        return "ttsOpenaiAgent";
+      },
+      inputs: {
+        tts: ":script.tts",
+      },
+    },
     tts: {
-      agent: ":script.ttsAgent",
+      agent: ":ttsAgent",
       inputs: {
         // text: ":row.ttsText",
         text: ":row.text",
@@ -173,13 +184,7 @@ const main = async () => {
     });
   }
 
-  if (mulmoData.tts === "nijivoice") {
-    graph_data.concurrency = 1;
-    mulmoData.ttsAgent = "ttsNijivoiceAgent";
-  } else {
-    graph_data.concurrency = 8;
-    mulmoData.ttsAgent = "ttsOpenaiAgent";
-  }
+  graph_data.concurrency = mulmoData.tts === "nijivoice" ? 1 : 8;
 
   const graph = new GraphAI(
     graph_data,

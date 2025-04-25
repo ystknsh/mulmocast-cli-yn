@@ -95,7 +95,7 @@ export type MulmoScript = {
 
   // for graph data
   // voices: string[] | undefined;
-  ttsAgent: string; // generated
+  // ttsAgent: string; // generated
 
   filename: string; // generated
   // imageInfo: any[]; // generated
