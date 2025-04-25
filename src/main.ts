@@ -12,8 +12,8 @@ import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScript, SpeakerDictonary } from "./type";
 import { readPodcastScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
-const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
-const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
+// const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
+// const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
 
 const graph_tts: GraphData = {
   nodes: {
