@@ -1,7 +1,7 @@
-import { splitIntoSentences, recursiveSplit } from "../src/split";
-import { replacePairs, replacements } from "../src/fixtext";
-import { separateText } from "../src/movie";
-import { ScriptData } from "../src/type";
+import { splitIntoSentences, recursiveSplit } from "../../src/v1/split";
+import { replacePairs, replacements } from "../../src/v1/fixtext";
+import { separateText } from "../../src/v1/movie";
+import { ScriptData } from "../../src/v1/type";
 
 import test from "node:test";
 import assert from "node:assert";
