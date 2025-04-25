@@ -40,7 +40,7 @@ const graph_tts: GraphData = {
       agent: ":script.ttsAgent",
       inputs: {
         // text: ":row.ttsText",
-        text: ":row.tts",
+        text: ":row.text",
         file: ":path.path",
       },
       params: {
@@ -63,9 +63,8 @@ const graph_data: GraphData = {
     },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.script", script: ":script" },
+      inputs: { rows: ":script.beats", script: ":script" },
       graph: graph_tts,
-      console: { after: true },
     },
     combineFiles: {
       agent: "combineFilesAgent",

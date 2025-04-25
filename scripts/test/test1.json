@@ -15,7 +15,7 @@
       "voiceId": "shimmer"
     }
   },
-  "script": [
+  "beats": [
     {
       "speaker": "Host",
       "text": "Hello and welcome to another episode of 'life is artificial', where we explore the cutting edge of technology, innovation, and what the future could look like.",

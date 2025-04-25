@@ -11,9 +11,9 @@ const combineFilesAgent: AgentFunction<null, { script: PodcastScript; fileName: 
   const silentPath = path.resolve("./music/silent300.mp3");
   const silentLastPath = path.resolve("./music/silent800.mp3");
   const command = ffmpeg();
-  script.script.forEach((scriptData: ScriptData, index: number) => {
+  script.beats.forEach((scriptData: ScriptData, index: number) => {
     const filePath = path.resolve("./scratchpad/" + scriptData.filename + ".mp3");
-    const isLast = index === script.script.length - 2;
+    const isLast = index === script.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
     // Measure and log the timestamp of each section
