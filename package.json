@@ -19,6 +19,7 @@
     "ja": "npx tsx ./src/translate.ts",
     "mov": "npx tsx ./src/movie.ts",
     "images": "npx tsx ./src/images.ts",
+    "preprocess": "npx tsx ./src/preprocess.ts",
     "imagep": "npx tsx ./src/imagep.ts",
     "split": "npx tsx ./src/split.ts",
     "fixtext": "npx tsx ./src/fixtext.ts",

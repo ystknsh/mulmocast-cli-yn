@@ -1,11 +1,13 @@
-type LANG = string;
+export type LANG = string;
 type URLString = string;
 
 type LocalizedText = {
   text: string;
   lang: LANG;
-  captions: string;
-  ttsTexts: string;
+  
+  // captions: string;
+  texts: string[];
+  ttsTexts: string[];
 
   duration: number; // generated // video duration time (ms)
   filename: string; // generated //
