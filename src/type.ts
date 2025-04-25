@@ -1,7 +1,7 @@
-type SPEAKER = "Host" | "Guest" | "Announcer" | "Student" | "Teacher";
+// type SPEAKER = "Host" | "Guest" | "Announcer" | "Student" | "Teacher";
 
 export type ScriptData = {
-  speaker: SPEAKER;
+  speaker: string;
   text: string;
   ttsText: string | undefined;
   instructions: string | undefined;  // tts_options for open ai
@@ -31,7 +31,7 @@ export type PodcastScript = {
 
   // for tts
   tts: string | undefined; // default: openAI
-  speakers: SPEAKER[] | undefined;
+  speakers: string[] | undefined;
   voicemap: VoiceMap; // generated
 
   // for graph data
