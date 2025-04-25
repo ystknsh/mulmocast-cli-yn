@@ -72,6 +72,7 @@ export type MulmoBeat = {
   image: string | undefined; // path to the image
 
   filename: string; // generated
+  duration?: number; // workaround
 };
 
 // export type VoiceMap = Record<SPEAKER, string>;
