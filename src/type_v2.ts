@@ -24,56 +24,55 @@ type MediaSource =
   | { kind: "data"; data: string }  // base64
   | { kind: "file"; filename: string }; // 
 
-type MulmoChatBeat = {
-  type: "chat";
-  speaker: SpeakerId;
-};
-
-type MulmoMarkdownBeat = {
+type MulmoMarkdownMedia = {
   type: "markdown";
   markdown: string;
 };
 
-type MulmoWebBeat = {
+type MulmoWebMedia = {
   type: "web";
   url: URLString;
 };
 
-type MulmoPdfBeat = {
+type MulmoPdfMedia = {
   type: "pdf";
   source: MediaSource;
 };
 
-type MulmoImageBeat = {
+type MulmoImageMedia = {
   type: "image";
   source: MediaSource;
 };
 
-type MulmoSvgBeat = {
+type MulmoSvgMedia = {
   type: "svg";
   source: MediaSource;
 };
 
-type MulmoMovieBeat = {
+type MulmoMovieMedia = {
   type: "movie";
   source: MediaSource;
 };
 
-export type MulmoBeatOriginalData =
-  | MulmoChatBeat
-  | MulmoMarkdownBeat
-  | MulmoWebBeat
-  | MulmoPdfBeat
-  | MulmoImageBeat
-  | MulmoSvgBeat
-  | MulmoMovieBeat;
+export type MulmoMedia =
+  | MulmoChatMedia
+  | MulmoMarkdownMedia
+  | MulmoWebMedia
+  | MulmoPdfMedia
+  | MulmoImageMedia
+  | MulmoSvgMedia
+  | MulmoMovieMedia;
 
 
 // Beat Data
 export type MulmoBeat = MulmoBeatOriginalData & {
+  speaker: SpeakerId;
   text: string;
+
   multiLingualText: Record<LANG, LocalizedText>;
 
+  media?: MulmoMedia;
+  
   // ttsText: string | undefined;
   instructions: string | undefined; // tts_options for open ai
 
