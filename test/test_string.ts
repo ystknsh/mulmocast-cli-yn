@@ -1,17 +1,18 @@
 import { splitIntoSentences, recursiveSplit } from "../src/split";
 import { replacePairs, replacements } from "../src/fixtext";
 import { separateText } from "../src/movie";
+import { ScriptData } from "../src/type";
 
 import test from "node:test";
 import assert from "node:assert";
 
 const text = "あかさたなはまやらわ。東京特許許可局！今日はいい天気ですか？";
 
-const scriptData = {
-  speaker: "",
+const scriptData: ScriptData = {
+  speaker: "Guest",
   text,
   ttsText: "",
-  caption: "",
+  // caption: "",
   instructions: "",
   duration: 1,
   filename: "",
@@ -19,11 +20,11 @@ const scriptData = {
   imageIndex: 1,
 };
 
-const scriptData2 = {
-  speaker: "",
+const scriptData2: ScriptData = {
+  speaker: "Guest",
   text: "あかさかさかす。スカイツリーかな！ハウアーユーってなに？",
   ttsText: "",
-  caption: "",
+  // caption: "",
   instructions: "",
   duration: 2,
   filename: "",
@@ -40,10 +41,10 @@ test("test recursiveSplit", async () => {
   const ret = recursiveSplit([scriptData, scriptData2]);
   const expect = [
     {
-      speaker: "",
+      speaker: "Guest",
       text: "あかさたなはまやらわ。",
       ttsText: "",
-      caption: "",
+      // caption: "",
       instructions: "",
       duration: 1,
       filename: "",
@@ -51,10 +52,10 @@ test("test recursiveSplit", async () => {
       imageIndex: 1,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "東京特許許可局！",
       ttsText: "",
-      caption: "",
+      // caption: "",
       instructions: "",
       duration: 1,
       filename: "",
@@ -62,10 +63,10 @@ test("test recursiveSplit", async () => {
       imageIndex: 1,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "今日はいい天気ですか？",
       ttsText: "",
-      caption: "",
+      // caption: "",
       instructions: "",
       duration: 1,
       filename: "",
@@ -73,10 +74,10 @@ test("test recursiveSplit", async () => {
       imageIndex: 1,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "あかさかさかす。",
       ttsText: "",
-      caption: "",
+      // caption: "",
       instructions: "",
       duration: 2,
       filename: "",
@@ -84,10 +85,10 @@ test("test recursiveSplit", async () => {
       imageIndex: 2,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "スカイツリーかな！",
       ttsText: "",
-      caption: "",
+      // caption: "",
       instructions: "",
       duration: 2,
       filename: "",
@@ -95,10 +96,10 @@ test("test recursiveSplit", async () => {
       imageIndex: 2,
     },
     {
-      speaker: "",
+      speaker: "Guest",
       text: "ハウアーユーってなに？",
       ttsText: "",
-      caption: "",
+      // caption: "",
       instructions: "",
       duration: 2,
       filename: "",
