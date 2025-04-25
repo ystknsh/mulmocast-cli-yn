@@ -1,7 +1,7 @@
 export type LANG = string;
 type URLString = string;
 
-type LocalizedText = {
+export type LocalizedText = {
   text: string;
   lang: LANG;
   
@@ -12,6 +12,8 @@ type LocalizedText = {
   duration: number; // generated // video duration time (ms)
   filename: string; // generated //
 };
+
+export type MultiLingualTexts = Record<LANG, LocalizedText>;
 
 type SpeakerId = string;
 type SpeakerData = {
@@ -63,7 +65,7 @@ export type MulmoBeat = {
   speaker: SpeakerId;
   text: string;
 
-  multiLingualText: Record<LANG, LocalizedText>;
+  multiLingualTexts: MultiLingualTexts;
 
   media?: MulmoMedia;
 

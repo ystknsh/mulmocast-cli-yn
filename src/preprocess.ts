@@ -3,7 +3,7 @@ import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 
 import { readMulmoScriptFile, getOutputFilePath } from "./utils";
-import { MulmoScript, LANG } from "./type";
+import { MulmoScript, LANG, MultiLingualTexts, LocalizedText } from "./type";
 
 // text -> (言語翻訳) multiLingualText.text ->  分割(split) multiLingualText.texts -> よみの変換 multiLingualText.ttsTexts
 
@@ -53,7 +53,7 @@ const granslateGraph: GraphData = {
                   isResult: true,
                   agent: (namedInputs) => {
                     const { targetLang, beat } = namedInputs;
-                    if (beat.multiLingualText && beat.multiLingualText[targetLang]) {
+                    if (beat.multiLingualTexts && beat.multiLingualTexts[targetLang]) {
                       return beat;
                     }
                     // TODO translate
@@ -96,12 +96,12 @@ const granslateGraph: GraphData = {
             console: { after: true},
             agent: (namedInputs) => {
               const { localizedTexts, beat } = namedInputs;
-              const multiLingualText = localizedTexts.reduce((tmp, translateResult) => {
+              const multiLingualTexts = localizedTexts.reduce((tmp: MultiLingualTexts, translateResult: LocalizedText) => {
                 const { lang } = translateResult;
                 tmp[lang] = translateResult;
                 return tmp;
               }, {});
-              beat.multiLingualText = multiLingualText;
+              beat.multiLingualTexts = multiLingualTexts;
               return beat;
             },
             inputs: {
@@ -135,9 +135,9 @@ const main = async() => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { mulmoData } = readMulmoScriptFile(outputFilePath) ?? { mulmoData: originalMulmoData };
 
-  const lang = mulmoData.lang ?? defaultLang;
-  console.log(lang);
+  // const lang = mulmoData.lang ?? defaultLang;
   const translatedMulmoData = translateText(mulmoData, defaultLang, targetLangs);
+  console.log(translatedMulmoData);
   // console.log(mulmoData, originalMulmoData);
   
   
