@@ -28,6 +28,7 @@
     "ci_test": "node --test  --require ts-node/register ./test/*/test_*.ts",
     "lint": "eslint src",
     "build": "tsc",
+    "prompt": "npx ts-node ./src/tools/prompt.ts",
     "cli": "npx ts-node ./src/cli.ts",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
@@ -55,6 +56,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@receptron/test_utils": "^1.0.3",
     "@types/yargs": "^17.0.33",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
