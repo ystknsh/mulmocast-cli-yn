@@ -1,13 +1,9 @@
 type SPEAKER = string;
 type LANG = string;
 
-type originalText = {
-  text: string;
-  lang: LANG;
-};
-
 type LocalizedText = {
   text: string;
+  lang: LANG;
   captions: string;
   ttsTexts: string;
 };
@@ -16,7 +12,8 @@ type LocalizedText = {
 export type MulmoBeat = {
   speaker: SPEAKER;
 
-  text: OriginalText;
+  text: string;
+  lang: LANG;
   multiLingualText: Record<LANG, LocalizedText>;
 
   // ttsText: string | undefined;
