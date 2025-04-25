@@ -9,7 +9,7 @@ import combineFilesAgent from "./agents/combine_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoScript, MulmoBeat, SpeakerDictonary } from "./type";
+import { MulmoBeat, SpeakerDictonary } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
@@ -146,12 +146,12 @@ const main = async () => {
   const { mulmoData, fileName } = readData;
 
   mulmoData.filename = fileName;
-  mulmoData.beats.forEach((mulmoScript: MulmoBeat, index: number) => {
-    mulmoScript.filename = mulmoData.filename + index;
+  mulmoData.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
+    mulmoBeat.filename = mulmoData.filename + index;
     // HACK: In case, the operator skip the "Split" phase.
     /*
-    if (!mulmoScript.ttsText) {
-      mulmoScript.ttsText = mulmoScript.text;
+    if (!mulmoBeat.ttsText) {
+      mulmoBeat.ttsText = mulmoBeat.text;
     }
     */
   });
@@ -161,12 +161,12 @@ const main = async () => {
   const { mulmoData: prevScript } = readMulmoScriptFile(outputFilePath) ?? {};
   if (prevScript) {
     console.log("found output script", prevScript.filename);
-    mulmoData.beats.forEach((mulmoScript: MulmoBeat, index: number) => {
+    mulmoData.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
       const prevText = prevScript.beats[index]?.text ?? "";
-      if (mulmoScript.text !== prevText) {
-        const scratchpadFilePath = getScratchpadFilePath(mulmoScript.filename + ".mp3");
+      if (mulmoBeat.text !== prevText) {
+        const scratchpadFilePath = getScratchpadFilePath(mulmoBeat.filename + ".mp3");
         if (fs.existsSync(scratchpadFilePath)) {
-          console.log("deleting", mulmoScript.filename);
+          console.log("deleting", mulmoBeat.filename);
           fs.unlinkSync(scratchpadFilePath);
         }
       }
