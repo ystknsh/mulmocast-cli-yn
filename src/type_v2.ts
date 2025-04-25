@@ -55,7 +55,6 @@ type MulmoMovieMedia = {
 };
 
 export type MulmoMedia =
-  | MulmoChatMedia
   | MulmoMarkdownMedia
   | MulmoWebMedia
   | MulmoPdfMedia
@@ -65,7 +64,7 @@ export type MulmoMedia =
 
 
 // Beat Data
-export type MulmoBeat = MulmoBeatOriginalData & {
+export type MulmoBeat = {
   speaker: SpeakerId;
   text: string;
 
