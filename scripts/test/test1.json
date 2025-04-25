@@ -1,9 +1,21 @@
 {
   "title": "The Honey Trap vs. The Frontier: Engineering at Tesla and SpaceX",
   "description": "We dive into Elon Musk's philosophy on building environments where engineers can truly flourish, contrasting the comfort-focused 'honey trap' with the high-expectation culture at Tesla and SpaceX.",
-  "speakers": ["Host", "Guest"],
-  "voices": ["onyx", "shimmer"],
-  "script": [
+  "speakers": {
+    "Host": {
+      "displayName": {
+        "ja": "司会"
+      },
+      "voiceId": "onyx"
+    },
+    "Guest": {
+      "displayName": {
+        "ja": "ゲスト"
+      },
+      "voiceId": "shimmer"
+    }
+  },
+  "beats": [
     {
       "speaker": "Host",
       "text": "Hello and welcome to another episode of 'life is artificial', where we explore the cutting edge of technology, innovation, and what the future could look like.",

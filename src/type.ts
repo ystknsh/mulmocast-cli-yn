@@ -16,7 +16,7 @@ type SpeakerData = {
   displayName: Record<LANG, string>;
   voiceId: string;
 };
-type SpeakerDictonary = Record<SpeakerId, SpeakerData>;
+export type SpeakerDictonary = Record<SpeakerId, SpeakerData>;
 
 //
 type MediaSource =
@@ -70,6 +70,9 @@ export type MulmoBeat = {
 
   imagePrompt: string | undefined; // inserted by LLM
   image: string | undefined; // path to the image
+
+  filename: string; // generated
+  duration?: number; // workaround
 };
 
 // export type VoiceMap = Record<SPEAKER, string>;
@@ -92,7 +95,7 @@ export type MulmoScript = {
 
   // for graph data
   // voices: string[] | undefined;
-  ttsAgent: string; // generated
+  // ttsAgent: string; // generated
 
   filename: string; // generated
   // imageInfo: any[]; // generated
