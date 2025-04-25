@@ -1,11 +1,17 @@
 {
   "title": "THE ECONOMICS OF GENERATIVE AI",
   "description": "This episode examines generative AI economics through three layers: semiconductors (NVIDIA dominates with 90% of profits), infrastructure, and applications. Unlike traditional tech, value concentrates in semiconductors but will likely shift toward applications by decade's end, creating opportunities as the technology matures.",
-  "speakers": ["Host"],
-  "voices": ["shimmer"],
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    }
+  },
   "reference": "Agrawal, A. (2024, April). The Economics of Generative AI. Apoorv's notes. https://apoorv03.com/p/the-economics-of-generative-ai",
   "lang": "en",
-  "script": [
+  "beats": [
     {
       "speaker": "Host",
       "text": "Welcome to Mulmocast Tech Insights, where we break down the latest trends and developments in the technology world. I'm your host, and today we're diving into the fascinating economics of generative AI based on a recent analysis by Apoorv Agrawal published on his Substack, \"Apoorv's notes.\" This piece provides valuable insights into where value and profits are currently concentrated in the generative AI ecosystem, and where they might shift in the future."
