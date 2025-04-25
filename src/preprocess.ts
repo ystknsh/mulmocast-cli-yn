@@ -16,6 +16,20 @@ const granslateGraph: GraphData = {
     mulmoScript: {},
     lang: {},
     targetLangs: {},
+    mergeResult: {
+      isResult: true,
+      agent: (namedInputs) => {
+        const { mulmoScript, beats } = namedInputs;
+        return {
+          ...mulmoScript,
+          beats,
+        };
+      },
+      inputs: {
+        mulmoScript: ":mulmoScript",
+        beats: ":beatsMap.mergeResult",
+      },
+    },
     beatsMap: {
       agent: "mapAgent",
       inputs: {
@@ -23,6 +37,10 @@ const granslateGraph: GraphData = {
         rows: ":mulmoScript.beats",
         lang: ":lang",
       },
+      params: {
+        compositeResult: true,
+      },
+      // isResult: true,
       graph: {
         version: 0.5,
         nodes: {
@@ -45,12 +63,12 @@ const granslateGraph: GraphData = {
                     beat: ":beat",
                     lang: ":lang",
                   },
-                  isResult: true,
                   agent: (namedInputs) => {
                     const { targetLang, beat } = namedInputs;
                     if (beat.multiLingualTexts && beat.multiLingualTexts[targetLang]) {
                       return beat;
                     }
+
                     // TODO translate
                     return { text: beat.text, lang: targetLang };
                   },
@@ -83,12 +101,24 @@ const granslateGraph: GraphData = {
                     beat: ":splitText",
                   },
                   isResult: true,
-                }
-              }
+                },
+              },
             },
           },
-          mergeResult: {
-            console: { after: true},
+          imagePrompt: {
+            agent: (namedInputs) => {
+              const { beat } = namedInputs;
+              if (beat.imagePrompt) {
+                return beat.imagePrompt;
+              }
+              return "123";
+            },
+            inputs: {
+              beat: ":row",
+              lang: ":lang",
+            },
+          },
+          mergeBeat: {
             agent: (namedInputs) => {
               const { localizedTexts, beat } = namedInputs;
               const multiLingualTexts = localizedTexts.reduce((tmp: MultiLingualTexts, translateResult: LocalizedText) => {
@@ -100,29 +130,43 @@ const granslateGraph: GraphData = {
               return beat;
             },
             inputs: {
-              "localizedTexts": ":preprocessBeats.ttsTexts",
-              "beat": ":row"
+              localizedTexts: ":preprocessBeats.ttsTexts",
+              beat: ":row",
+            },
+          },
+          mergeResult: {
+            isResult: true,
+            agent: (namedInputs) => {
+              const { beats, imagePrompt } = namedInputs;
+              return {
+                ...beats,
+                imagePrompt,
+              };
+            },
+            inputs: {
+              beats: ":mergeBeat",
+              imagePrompt: ":imagePrompt",
             },
           },
         },
       },
-    }
+    },
   },
 };
 const translateText = async (mulmoScript: MulmoScript, lang: LANG, targetLangs: LANG[]) => {
-  const graph = new GraphAI(granslateGraph, { ...agents});
+  const graph = new GraphAI(granslateGraph, { ...agents });
   graph.injectValue("mulmoScript", mulmoScript);
   graph.injectValue("lang", lang);
   graph.injectValue("targetLangs", targetLangs);
-  
+
   const results = await graph.run();
-  console.log(results);
+  return results.mergeResult;
 };
 
 const defaultLang = "ja";
 const targetLangs = ["ja", "en"];
 
-const main = async() => {
+const main = async () => {
   const arg2 = process.argv[2];
   const readData = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
   const { mulmoData: originalMulmoData, fileName } = readData;
@@ -131,11 +175,11 @@ const main = async() => {
   const { mulmoData } = readMulmoScriptFile(outputFilePath) ?? { mulmoData: originalMulmoData };
 
   // const lang = mulmoData.lang ?? defaultLang;
-  const translatedMulmoData = translateText(mulmoData, defaultLang, targetLangs);
-  console.log(translatedMulmoData);
+  const mulmoDataResult = await translateText(mulmoData, defaultLang, targetLangs);
+
+  console.log(JSON.stringify(mulmoDataResult, null, 2));
+
   // console.log(mulmoData, originalMulmoData);
-  
-  
 };
 
 main();

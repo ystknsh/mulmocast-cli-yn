@@ -37,7 +37,7 @@ const graph_tts: GraphData = {
       },
     },
     ttsAgent: {
-      agent: (namedInputs: { tts: string;}) => {
+      agent: (namedInputs: { tts: string }) => {
         if (namedInputs.tts === "nijivoice") {
           return "ttsNijivoiceAgent";
         }

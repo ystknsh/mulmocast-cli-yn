@@ -4,7 +4,7 @@ type URLString = string;
 export type LocalizedText = {
   text: string;
   lang: LANG;
-  
+
   // captions: string;
   texts: string[];
   ttsTexts: string[];
@@ -96,7 +96,6 @@ export type MulmoScript = {
   // for tts
   tts: string | undefined; // default: openAI
   speakers: SpeakerDictonary;
-
 
   // for video and image
   aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
