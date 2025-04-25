@@ -26,7 +26,7 @@ GOOGLE_PROJECT_ID={your Google Project ID}
 3. セリフの分割（src/split.tsを使用、オプション）
 4. セリフの修正（src/fixtext.tsを使用、オプション）
 5. Youtubeライブ向けの縦動画であれば、その指示を追加（手作業）
-6. 音声ファイルの作成（src/main.tsを使って自動作成）
+6. 音声ファイルの作成（src/audio.tsを使って自動作成）
 7. 画像ファイルの作成（src/images.tsを使って自動生成）
 8. 映像ファイルの作成（src/movie.tsを使って自動生成）
 

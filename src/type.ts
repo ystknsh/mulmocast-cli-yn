@@ -65,7 +65,6 @@ export type MulmoBeat = {
 
   media?: MulmoMedia;
 
-  // ttsText: string | undefined;
   instructions: string | undefined; // tts_options for open ai
 
   imagePrompt: string | undefined; // inserted by LLM
@@ -85,23 +84,19 @@ export type MulmoScript = {
   reference: string;
   lang: LANG;
 
+  filename: string; // generated
+
   // page/slide
   beats: MulmoBeat[];
 
   // for tts
   tts: string | undefined; // default: openAI
   speakers: SpeakerDictonary;
-  // voicemap: VoiceMap; // generated
 
-  // for graph data
-  // voices: string[] | undefined;
-  // ttsAgent: string; // generated
-
-  filename: string; // generated
-  // imageInfo: any[]; // generated
 
   // for video and image
   aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
+
   // images: ImageInfo[]; // generated
   imagePath: string | undefined; // for Keynote images movie ??
   omitCaptions: boolean | undefined; // default is false
