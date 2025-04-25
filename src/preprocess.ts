@@ -76,6 +76,9 @@ const granslateGraph: GraphData = {
                 splitText: {
                   agent: (namedInputs) => {
                     const { beat } = namedInputs;
+                    if (beat.texts) {
+                      return beat;
+                    }
                     // TODO split text
                     const ret = {
                       ...beat,
@@ -90,6 +93,9 @@ const granslateGraph: GraphData = {
                 ttsTexts: {
                   agent: (namedInputs) => {
                     const { beat } = namedInputs;
+                    if (beat.ttsTexts) {
+                      return beat;
+                    }
                     // TODO ttstext
                     const ret = {
                       ...beat,
