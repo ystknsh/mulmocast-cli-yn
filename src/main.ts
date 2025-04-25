@@ -36,29 +36,11 @@ const graph_tts: GraphData = {
         speakers: ":script.speakers",
       },
     },
-    /*
-    tts: {
-      agent: "copyAgent",
-      console: {before: true},
-      inputs: {
-        text: ":row.ttsText",
-        file: ":path.path",
-      },
-      params: {
-        throwError: true,
-        voice: ":voice",
-        speed: ":row.speed",
-        speed_global: ":script.speed",
-        instructions: ":row.instructions",
-      },
-    },
-    */
     tts: {
       agent: ":script.ttsAgent",
       inputs: {
         text: ":row.ttsText",
         file: ":path.path",
-        voice: ":voice",
       },
       params: {
         throwError: true,
@@ -190,27 +172,12 @@ const main = async () => {
   }
   if (podcastData.tts === "nijivoice") {
     graph_data.concurrency = 1;
-    // podcastData.voices = podcastData.voices ?? [rion_takanashi_voice, ben_carter_voice];
     podcastData.ttsAgent = "ttsNijivoiceAgent";
   } else {
     graph_data.concurrency = 8;
-    // podcastData.voices = podcastData.voices ?? ["shimmer", "echo"];
     podcastData.ttsAgent = "ttsOpenaiAgent";
   }
-  /*
-  const speakers = podcastData.speakers ?? ["Host", "Guest"];
-  podcastData.voicemap = speakers.reduce((map: VoiceMap, speaker: string, index: number) => {
-    map[speaker] = podcastData.voices![index];
-    return map;
-    }, {});
-  */
-  /*
-  script.imageInfo = script.script.map((_: MulmoScript, index: number) => {
-    return {
-      index: index,
-    };
-  });
-  */
+
   const graph = new GraphAI(
     graph_data,
     {
