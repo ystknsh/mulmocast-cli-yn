@@ -6,7 +6,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
-import { MulmoScript, LANG, MultiLingualTexts, LocalizedText, MulmoBeat } from "./type";
+import { MulmoScript, LANG, LocalizedText } from "./type";
 
 const granslateGraph: GraphData = {
   version: 0.5,
@@ -19,7 +19,7 @@ const granslateGraph: GraphData = {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":mulmoScript", { fileName: ":fileName" }, { beats: ":beatsMap.mergeBeatData"}],
+        items: [":mulmoScript", { fileName: ":fileName" }, { beats: ":beatsMap.mergeBeatData" }],
       },
     },
     beatsMap: {
@@ -133,7 +133,7 @@ const granslateGraph: GraphData = {
           mergeLocalizedText: {
             agent: "arrayToObjectAgent",
             inputs: {
-              items: ":preprocessBeats.ttsTexts"
+              items: ":preprocessBeats.ttsTexts",
             },
             params: {
               key: "lang",
@@ -143,7 +143,7 @@ const granslateGraph: GraphData = {
             isResult: true,
             agent: "mergeObjectAgent",
             inputs: {
-              items: [":row", {multiLingualTexts: ":mergeLocalizedText"}],
+              items: [":row", { multiLingualTexts: ":mergeLocalizedText" }],
               // imagePrompt: ":imagePrompt",
             },
             // console: {before: true, after: true},
