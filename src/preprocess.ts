@@ -63,13 +63,8 @@ const granslateGraph: GraphData = {
                     beat: ":beat",
                     lang: ":lang",
                   },
-                  agent: (namedInputs) => {
+                  agent: async (namedInputs) => {
                     const { targetLang, beat } = namedInputs;
-                    if (beat.multiLingualTexts && beat.multiLingualTexts[targetLang]) {
-                      return beat;
-                    }
-
-                    // TODO translate
                     return { text: beat.text, lang: targetLang };
                   },
                 },
@@ -159,8 +154,30 @@ const granslateGraph: GraphData = {
     },
   },
 };
+
+const localizedTextCacheAgentFilter: AgentFilterFunction = async (context, next) => {
+  const { namedInputs } = context;
+
+  const { targetLang, beat, lang } = namedInputs;
+  if (beat.multiLingualTexts && beat.multiLingualTexts[targetLang]) {
+    return beat;
+  }
+  if (targetLang === lang) {
+    return { text: beat.text, lang: targetLang };
+  }
+
+  return await next(context);
+};
+const agentFilters = [
+  {
+    name: "localizedTextCacheAgentFilter",
+    agent: localizedTextCacheAgentFilter,
+    nodeIds: ["localizedTexts"],
+  },
+];
+
 const translateText = async (mulmoScript: MulmoScript, lang: LANG, targetLangs: LANG[]) => {
-  const graph = new GraphAI(granslateGraph, { ...agents });
+  const graph = new GraphAI(granslateGraph, { ...agents }, { agentFilters });
   graph.injectValue("mulmoScript", mulmoScript);
   graph.injectValue("lang", lang);
   graph.injectValue("targetLangs", targetLangs);
