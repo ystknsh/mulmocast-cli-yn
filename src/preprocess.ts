@@ -3,6 +3,7 @@ import { GraphAI } from "graphai";
 import type { GraphData, AgentFilterFunction } from "graphai";
 import * as agents from "@graphai/agents";
 
+import { recursiveSplitJa } from "./utils/string";
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
 import { MulmoScript, LANG, MultiLingualTexts, LocalizedText } from "./type";
 
@@ -41,7 +42,6 @@ const granslateGraph: GraphData = {
       params: {
         compositeResult: true,
       },
-      // isResult: true,
       graph: {
         version: 0.5,
         nodes: {
@@ -76,18 +76,23 @@ const granslateGraph: GraphData = {
                 },
                 splitText: {
                   agent: (namedInputs) => {
-                    const { beat } = namedInputs;
+                    const { beat, targetLang } = namedInputs;
                     if (beat.texts) {
                       return beat;
                     }
-                    // TODO split text
-                    const ret = {
+                    if (targetLang === "ja") {
+                      return {
+                        ...beat,
+                        texts: recursiveSplitJa(beat.text),
+                      };
+                    }
+                    return {
                       ...beat,
                       texts: [beat.text],
                     };
-                    return ret;
                   },
                   inputs: {
+                    targetLang: ":row",
                     beat: ":localizedTexts",
                   },
                 },

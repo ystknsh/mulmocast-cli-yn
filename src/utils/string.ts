@@ -18,11 +18,12 @@ export function splitIntoSentencesJa(paragraph: string, divider: string, minimum
 
 export const recursiveSplitJa = (text: string) => {
   const delimiters = ["。", "？", "！", "、"];
-  return delimiters.reduce<string[]>(
-    (textData, delimiter) => {
-      return textData.map((text) => splitIntoSentencesJa(text, delimiter, 7)).flat(1);
-    },
-    [text],
-  )
+  return delimiters
+    .reduce<string[]>(
+      (textData, delimiter) => {
+        return textData.map((text) => splitIntoSentencesJa(text, delimiter, 7)).flat(1);
+      },
+      [text],
+    )
     .flat(1);
 };

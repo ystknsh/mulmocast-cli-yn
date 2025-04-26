@@ -12,7 +12,6 @@ test("test splitIntoSentences", async () => {
 
 test("test recursiveSplit", async () => {
   const ret = recursiveSplitJa(text);
-  const expect = [ 'あかさたなはまやらわ。', '東京特許許可局！', '今日はいい天気ですか？' ];
+  const expect = ["あかさたなはまやらわ。", "東京特許許可局！", "今日はいい天気ですか？"];
   assert.deepStrictEqual(ret, expect);
 });
-
