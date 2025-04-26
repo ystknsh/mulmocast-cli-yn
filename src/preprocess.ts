@@ -17,18 +17,9 @@ const granslateGraph: GraphData = {
     fileName: {},
     mergeResult: {
       isResult: true,
-      agent: (namedInputs: { mulmoScript: MulmoScript; beats: MulmoBeat[]; fileName: string }) => {
-        const { mulmoScript, beats, fileName } = namedInputs;
-        return {
-          fileName,
-          ...mulmoScript,
-          beats,
-        };
-      },
+      agent: "mergeObjectAgent",
       inputs: {
-        mulmoScript: ":mulmoScript",
-        beats: ":beatsMap.mergeResult",
-        fileName: ":fileName",
+        items: [":mulmoScript", { fileName: ":fileName" }, ":beatsMap.mergeResult"],
       },
     },
     beatsMap: {
@@ -157,16 +148,9 @@ const granslateGraph: GraphData = {
           },
           mergeResult: {
             isResult: true,
-            agent: (namedInputs: { beat: MulmoBeat }) => {
-              // const { beats, imagePrompt } = namedInputs;
-              const { beat } = namedInputs;
-              return {
-                ...beat,
-                //imagePrompt,
-              };
-            },
+            agent: "mergeObjectAgent",
             inputs: {
-              beat: ":mergeBeat",
+              items: [":mergeBeat"],
               // imagePrompt: ":imagePrompt",
             },
           },
