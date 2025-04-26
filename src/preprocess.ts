@@ -200,7 +200,7 @@ const translateText = async (mulmoScript: MulmoScript, fileName: string, lang: L
   return results.mergeResult;
 };
 
-const defaultLang = "ja";
+const defaultLang = "en";
 const targetLangs = ["ja", "en", "fr-FR", "zh-CN"];
 
 const main = async () => {
