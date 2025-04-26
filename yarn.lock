@@ -221,9 +221,9 @@
   integrity sha512-b/0pmSP47R8HSu/QmkU9RUQAcY8HUWYJvjaZEXA0SNZQAT/pnVwIH9ItMm2XQeN9RAGDdV5uSpPloCc1cQLvaQ==
 
 "@graphai/vanilla@^1.0.5":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-1.0.14.tgz#83dc1d1d487c4390542a5d61fdfb9f98115881c7"
-  integrity sha512-Ax7vrrTtnyIW1k/oFTN180duhYIVyyLVLD3mf03N07fic/5OEqzLgFXAxedwF0cYPkzqXxFN7SxfA7akeq8u2A==
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-1.0.15.tgz#1c6ee5ad810961b4ed97d5d5679b92ef3deb350c"
+  integrity sha512-9XHQl6hiEQYkxQwRCe/m9OknaX9i5TvpXoyS0Jqe6UUzC6nWVW7FOS9KsQgVreoHTC4ZtOm7cVq6r3PMWPoo2g==
   dependencies:
     "@graphai/agent_utils" "^0.0.9"
 
