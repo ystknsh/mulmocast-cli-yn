@@ -1,14 +1,20 @@
-# ai-podcaster
+# mulmocast-cli
 
 ## Initialization
 
+Install dependencies.
+
 ```
 yarn install
+brew install ffmpeg # Or install ffmpeg from https://ffmpeg.org/download.html
 ```
-create .env file with your OpenAI key
+
+Create .env file.
+
 ```
 OPENAI_API_KEY={your OpenAI key}
 GOOGLE_PROJECT_ID={your Google Project ID}
+NIJIVOICE_API_KEY={your Nijivoice API key}
 ```
 
 ## Create a podcast episode
@@ -21,7 +27,7 @@ GOOGLE_PROJECT_ID={your Google Project ID}
 
 ## Create a video
 
-1. Claudeを使って台本（PodcastScript）を作成
+1. Claudeを使って台本（MulmoScript）を作成
 2. 各セリフにimagePromptを追加（src/imagep.tsを使用）
 3. セリフの分割（src/split.tsを使用、オプション）
 4. セリフの修正（src/fixtext.tsを使用、オプション）
@@ -38,8 +44,21 @@ GOOGLE_PROJECT_ID={your Google Project ID}
   "description": "The description of the podcast.",
   "reference": "URL to the source data", // optional
   "tts": "openAI", // or "nijivoice", default is "openAI"
-  "voices": ["nova", "onyx"], // TTS-specific voice identifiers (host and others), optional.
-  "script": [
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    },
+    "Guest": {
+      "voiceId": "echo",
+      "displayName": {
+        "en": "Guest"
+      }
+    }
+  },
+  "beats": [
     {
       "speaker": "Host",
       "text": "words from the host."
