@@ -3,7 +3,7 @@ import { GraphAI } from "graphai";
 import type { GraphData, AgentFilterFunction } from "graphai";
 import * as agents from "@graphai/agents";
 
-import { readMulmoScriptFile, getOutputFilePath } from "./utils";
+import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
 import { MulmoScript, LANG, MultiLingualTexts, LocalizedText } from "./type";
 
 // text -> (言語翻訳) multiLingualText.text ->  分割(split) multiLingualText.texts -> よみの変換 multiLingualText.ttsTexts

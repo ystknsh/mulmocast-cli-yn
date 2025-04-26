@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { MulmoScript } from "./type";
+import { MulmoScript } from "../type";
 
 export function readMulmoScriptFile(
   path: string,
