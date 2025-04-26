@@ -1,5 +1,6 @@
 import "dotenv/config";
-import { GraphAI, GraphData } from "graphai";
+import { GraphAI } from "graphai";
+import type { GraphData, AgentFilterFunction } from "graphai";
 import * as agents from "@graphai/agents";
 
 import { readMulmoScriptFile, getOutputFilePath } from "./utils";
