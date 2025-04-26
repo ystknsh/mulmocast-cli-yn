@@ -3,7 +3,7 @@ import { GraphAI } from "graphai";
 import type { GraphData, AgentFilterFunction } from "graphai";
 import * as agents from "@graphai/agents";
 
-import { recursiveSplitJa } from "./utils/string";
+import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
 import { MulmoScript, LANG, MultiLingualTexts, LocalizedText } from "./type";
 
@@ -98,18 +98,23 @@ const granslateGraph: GraphData = {
                 },
                 ttsTexts: {
                   agent: (namedInputs) => {
-                    const { beat } = namedInputs;
+                    const { beat, targetLang } = namedInputs;
                     if (beat.ttsTexts) {
                       return beat;
                     }
-                    // TODO ttstext
-                    const ret = {
+                    if (targetLang === "ja") {
+                      return {
+                        ...beat,
+                        ttsTexts: beat.texts.map((text) => replacePairsJa(text, replacementsJa)),
+                      };
+                    }
+                    return {
                       ...beat,
                       ttsTexts: beat.texts,
                     };
-                    return ret;
                   },
                   inputs: {
+                    targetLang: ":row",
                     beat: ":splitText",
                   },
                   isResult: true,
@@ -211,7 +216,6 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { mulmoData } = readMulmoScriptFile(outputFilePath) ?? { mulmoData: originalMulmoData };
 
-  // const lang = mulmoData.lang ?? defaultLang;
   const mulmoDataResult = await translateText(mulmoData, defaultLang, targetLangs);
 
   console.log(JSON.stringify(mulmoDataResult, null, 2));
