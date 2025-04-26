@@ -2,6 +2,7 @@ import "dotenv/config";
 import { GraphAI } from "graphai";
 import type { GraphData, AgentFilterFunction } from "graphai";
 import * as agents from "@graphai/agents";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
@@ -18,6 +19,7 @@ const granslateGraph: GraphData = {
     mulmoScript: {},
     lang: {},
     targetLangs: {},
+    fileName: {},
     mergeResult: {
       isResult: true,
       agent: (namedInputs) => {
@@ -77,6 +79,7 @@ const granslateGraph: GraphData = {
                 splitText: {
                   agent: (namedInputs) => {
                     const { beat, targetLang } = namedInputs;
+                    // TODO: move to Agent Filter
                     if (beat.texts) {
                       return beat;
                     }
@@ -99,6 +102,7 @@ const granslateGraph: GraphData = {
                 ttsTexts: {
                   agent: (namedInputs) => {
                     const { beat, targetLang } = namedInputs;
+                    // TODO: move to Agent Filter
                     if (beat.ttsTexts) {
                       return beat;
                     }
@@ -171,6 +175,14 @@ const granslateGraph: GraphData = {
         },
       },
     },
+    debug: {
+      agent: "fileWriteAgent",
+      inputs: {
+        file: "./output/${:fileName}.json",
+        text: ":mergeResult.toJSON()",
+      },
+      params: { baseDir: __dirname + "/../" },
+    },
   },
 };
 
@@ -179,7 +191,7 @@ const localizedTextCacheAgentFilter: AgentFilterFunction = async (context, next)
 
   const { targetLang, beat, lang } = namedInputs;
   if (beat.multiLingualTexts && beat.multiLingualTexts[targetLang]) {
-    return beat;
+    return beat.multiLingualTexts[targetLang];
   }
   if (targetLang === lang) {
     return { text: beat.text, lang: targetLang };
@@ -195,11 +207,12 @@ const agentFilters = [
   },
 ];
 
-const translateText = async (mulmoScript: MulmoScript, lang: LANG, targetLangs: LANG[]) => {
-  const graph = new GraphAI(granslateGraph, { ...agents }, { agentFilters });
+const translateText = async (mulmoScript: MulmoScript, fileName: string, lang: LANG, targetLangs: LANG[]) => {
+  const graph = new GraphAI(granslateGraph, { ...agents, fileWriteAgent }, { agentFilters });
   graph.injectValue("mulmoScript", mulmoScript);
   graph.injectValue("lang", lang);
   graph.injectValue("targetLangs", targetLangs);
+  graph.injectValue("fileName", fileName);
 
   const results = await graph.run();
   return results.mergeResult;
@@ -216,7 +229,7 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { mulmoData } = readMulmoScriptFile(outputFilePath) ?? { mulmoData: originalMulmoData };
 
-  const mulmoDataResult = await translateText(mulmoData, defaultLang, targetLangs);
+  const mulmoDataResult = await translateText(mulmoData, fileName, defaultLang, targetLangs);
 
   console.log(JSON.stringify(mulmoDataResult, null, 2));
 
