@@ -221,9 +221,9 @@
   integrity sha512-b/0pmSP47R8HSu/QmkU9RUQAcY8HUWYJvjaZEXA0SNZQAT/pnVwIH9ItMm2XQeN9RAGDdV5uSpPloCc1cQLvaQ==
 
 "@graphai/vanilla@^1.0.5":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-1.0.11.tgz#fb5ab6b2c22073b2bf454fe14b280572d0952817"
-  integrity sha512-c8KW2+6su2wXCV6ZsWgSO0/c/ScvMPCKyj+NwyiwmN15cuxM9u9MvAQKw6lmwc93XvXhA0NdPtexCqXBXWwiTA==
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-1.0.14.tgz#83dc1d1d487c4390542a5d61fdfb9f98115881c7"
+  integrity sha512-Ax7vrrTtnyIW1k/oFTN180duhYIVyyLVLD3mf03N07fic/5OEqzLgFXAxedwF0cYPkzqXxFN7SxfA7akeq8u2A==
   dependencies:
     "@graphai/agent_utils" "^0.0.9"
 
@@ -1189,10 +1189,10 @@ gopd@^1.2.0:
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.2.0.tgz#89f56b8217bdbc8802bd299df6d7f1081d7e51a1"
   integrity sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
 
-graphai@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/graphai/-/graphai-1.0.5.tgz#05a34e9829bca954c83393a1393b5f54ae21ed53"
-  integrity sha512-dNWozFxiEGED5bj5ha1ICl3oWyaTSGfqIKOFLQ28hefvaO5e8Gpxi0wM1rr5EsZkEX6BH7l0WlMaq+nB6FhoQg==
+graphai@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/graphai/-/graphai-1.0.7.tgz#1a838324a701065c9c7a4fc4c5c49908b522d0d3"
+  integrity sha512-1mmSTZ36pvcQAmjfr/m8DvizwgSWlZi5j2AIXWHFnnDDSW5+p04QLtEuRA/+xh51VT+XXy2mLVvTlrB6rv/gaQ==
 
 graphemer@^1.4.0:
   version "1.4.0"

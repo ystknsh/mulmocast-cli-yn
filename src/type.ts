@@ -1,15 +1,19 @@
-type LANG = string;
+export type LANG = string;
 type URLString = string;
 
-type LocalizedText = {
+export type LocalizedText = {
   text: string;
   lang: LANG;
-  captions: string;
-  ttsTexts: string;
+
+  // captions: string;
+  texts: string[];
+  ttsTexts: string[];
 
   duration: number; // generated // video duration time (ms)
   filename: string; // generated //
 };
+
+export type MultiLingualTexts = Record<LANG, LocalizedText>;
 
 type SpeakerId = string;
 type SpeakerData = {
@@ -61,7 +65,7 @@ export type MulmoBeat = {
   speaker: SpeakerId;
   text: string;
 
-  multiLingualText: Record<LANG, LocalizedText>;
+  multiLingualTexts: MultiLingualTexts;
 
   media?: MulmoMedia;
 
@@ -92,7 +96,6 @@ export type MulmoScript = {
   // for tts
   tts: string | undefined; // default: openAI
   speakers: SpeakerDictonary;
-
 
   // for video and image
   aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
