@@ -8,7 +8,7 @@ import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
 import { MulmoScript, LANG, LocalizedText } from "./type";
 
-const granslateGraph: GraphData = {
+const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
     mulmoScript: {},
@@ -184,7 +184,7 @@ const agentFilters = [
 ];
 
 const translateText = async (mulmoScript: MulmoScript, fileName: string, lang: LANG, targetLangs: LANG[]) => {
-  const graph = new GraphAI(granslateGraph, { ...agents, fileWriteAgent }, { agentFilters });
+  const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
   graph.injectValue("mulmoScript", mulmoScript);
   graph.injectValue("lang", lang);
   graph.injectValue("targetLangs", targetLangs);
