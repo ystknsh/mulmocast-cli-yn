@@ -6,7 +6,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
-import { MulmoScript, LANG, MultiLingualTexts, LocalizedText, MulmoBeat } from "./type";
+import { MulmoScript, LANG, LocalizedText } from "./type";
 
 const granslateGraph: GraphData = {
   version: 0.5,
@@ -19,7 +19,7 @@ const granslateGraph: GraphData = {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":mulmoScript", { fileName: ":fileName" }, ":beatsMap.mergeResult"],
+        items: [":mulmoScript", { fileName: ":fileName" }, { beats: ":beatsMap.mergeBeatData" }],
       },
     },
     beatsMap: {
@@ -130,29 +130,23 @@ const granslateGraph: GraphData = {
             },
           },
           */
-          mergeBeat: {
-            agent: (namedInputs: { localizedTexts: LocalizedText[]; beat: MulmoBeat }) => {
-              const { localizedTexts, beat } = namedInputs;
-              const multiLingualTexts = localizedTexts.reduce((tmp: MultiLingualTexts, translateResult: LocalizedText) => {
-                const { lang } = translateResult;
-                tmp[lang] = translateResult;
-                return tmp;
-              }, {});
-              beat.multiLingualTexts = multiLingualTexts;
-              return beat;
-            },
+          mergeLocalizedText: {
+            agent: "arrayToObjectAgent",
             inputs: {
-              localizedTexts: ":preprocessBeats.ttsTexts",
-              beat: ":row",
+              items: ":preprocessBeats.ttsTexts",
+            },
+            params: {
+              key: "lang",
             },
           },
-          mergeResult: {
+          mergeBeatData: {
             isResult: true,
             agent: "mergeObjectAgent",
             inputs: {
-              items: [":mergeBeat"],
+              items: [":row", { multiLingualTexts: ":mergeLocalizedText" }],
               // imagePrompt: ":imagePrompt",
             },
+            // console: {before: true, after: true},
           },
         },
       },
