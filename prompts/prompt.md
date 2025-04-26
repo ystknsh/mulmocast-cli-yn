@@ -8,7 +8,16 @@ Article url: ...
   "title": "(title of this episode)",
   "description": "(short description of this episode)",
   "reference": "(url to the article)",
-  "script":[
+  "tts": "openAI", // or "nijivoice", default is "openAI"
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    },
+  },
+  "beats": [
     {
       "speaker": "Host",
       "text": "Hello and welcome to another episode of 'life is artificial', where we explore the cutting edge of technology, innovation, and what the future could look like.",
@@ -16,7 +25,8 @@ Article url: ...
     {
       "speaker": "Host",
       "text": "Today, ...",
-    }
+    },
+    ...
   ]
 }
 ```
