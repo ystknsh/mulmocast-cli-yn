@@ -10,10 +10,12 @@ const graphData = {
   },
   nodes: {
     messages: {
-      value: [{
-        role: "system",
-        content: prompts.prompt,
-      }],
+      value: [
+        {
+          role: "system",
+          content: prompts.prompt,
+        },
+      ],
       update: ":llm.messages",
     },
     userInput: {
@@ -40,16 +42,16 @@ const graphData = {
     json: {
       agent: "copyAgent",
       inputs: {
-        json: ":llm.text.codeBlock().jsonParse()"
+        json: ":llm.text.codeBlock().jsonParse()",
       },
-      console: { after: true},
+      console: { after: true },
     },
   },
 };
 const main = async () => {
   const graph = new GraphAI(graphData, { ...agents });
 
-  const results = await graph.run();
+  await graph.run();
 };
 main();
 
