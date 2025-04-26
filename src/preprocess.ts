@@ -23,8 +23,9 @@ const granslateGraph: GraphData = {
     mergeResult: {
       isResult: true,
       agent: (namedInputs) => {
-        const { mulmoScript, beats } = namedInputs;
+        const { mulmoScript, beats, fileName } = namedInputs;
         return {
+          fileName,
           ...mulmoScript,
           beats,
         };
@@ -32,6 +33,7 @@ const granslateGraph: GraphData = {
       inputs: {
         mulmoScript: ":mulmoScript",
         beats: ":beatsMap.mergeResult",
+        fileName: ":fileName",
       },
     },
     beatsMap: {
