@@ -6,12 +6,8 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
 import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
-import { MulmoScript, LANG, MultiLingualTexts, LocalizedText } from "./type";
+import { MulmoScript, LANG, MultiLingualTexts, LocalizedText, MulmoBeat } from "./type";
 
-// text -> (言語翻訳) multiLingualText.text ->  分割(split) multiLingualText.texts -> よみの変換 multiLingualText.ttsTexts
-
-// 画像のprompt作成
-// text -> imagePrompt
 
 const granslateGraph: GraphData = {
   version: 0.5,
@@ -22,7 +18,7 @@ const granslateGraph: GraphData = {
     fileName: {},
     mergeResult: {
       isResult: true,
-      agent: (namedInputs) => {
+      agent: (namedInputs: {mulmoScript: MulmoScript, beats: MulmoBeat[], fileName: string}) => {
         const { mulmoScript, beats, fileName } = namedInputs;
         return {
           fileName,
@@ -79,7 +75,7 @@ const granslateGraph: GraphData = {
                   agent: "openAIAgent",
                 },
                 splitText: {
-                  agent: (namedInputs) => {
+                  agent: (namedInputs: {localizedText: LocalizedText, targetLang: LANG}) => {
                     const { localizedText, targetLang } = namedInputs;
                     // Cache
                     if (localizedText.texts) {
@@ -103,7 +99,7 @@ const granslateGraph: GraphData = {
                   },
                 },
                 ttsTexts: {
-                  agent: (namedInputs) => {
+                  agent: (namedInputs:  {localizedText: LocalizedText, targetLang: LANG}) => {
                     const { localizedText, targetLang } = namedInputs;
                     // cache
                     if (localizedText.ttsTexts) {
@@ -145,7 +141,7 @@ const granslateGraph: GraphData = {
           },
           */
           mergeBeat: {
-            agent: (namedInputs) => {
+            agent: (namedInputs:  {localizedTexts: LocalizedText[], beat: MulmoBeat }) => {
               const { localizedTexts, beat } = namedInputs;
               const multiLingualTexts = localizedTexts.reduce((tmp: MultiLingualTexts, translateResult: LocalizedText) => {
                 const { lang } = translateResult;
@@ -162,16 +158,16 @@ const granslateGraph: GraphData = {
           },
           mergeResult: {
             isResult: true,
-            agent: (namedInputs) => {
+            agent: (namedInputs: {beat: MulmoBeat}) => {
               // const { beats, imagePrompt } = namedInputs;
-              const { beats } = namedInputs;
+              const { beat } = namedInputs;
               return {
-                ...beats,
+                ...beat,
                 //imagePrompt,
               };
             },
             inputs: {
-              beats: ":mergeBeat",
+              beat: ":mergeBeat",
               // imagePrompt: ":imagePrompt",
             },
           },
