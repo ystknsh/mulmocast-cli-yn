@@ -110,7 +110,7 @@ const granslateGraph: GraphData = {
                     if (targetLang === "ja") {
                       return {
                         ...localizedText,
-                        ttsTexts: localizedText.texts.map((text) => replacePairsJa(text, replacementsJa)),
+                        ttsTexts: localizedText.texts.map((text: string) => replacePairsJa(text, replacementsJa)),
                       };
                     }
                     return {
