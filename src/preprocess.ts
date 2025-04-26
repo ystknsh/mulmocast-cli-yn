@@ -62,11 +62,16 @@ const granslateGraph: GraphData = {
                     targetLang: ":row",
                     beat: ":beat",
                     lang: ":lang",
+                    system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
+                    prompt: ["## Language", ":row", "## Target", ":beat.text"],
                   },
-                  agent: async (namedInputs) => {
-                    const { targetLang, beat } = namedInputs;
-                    return { text: beat.text, lang: targetLang };
+                  passThrough: {
+                    lang: ":row",
                   },
+                  output: {
+                    text: ".text",
+                  },
+                  agent: "openAIAgent",
                 },
                 splitText: {
                   agent: (namedInputs) => {
@@ -77,7 +82,7 @@ const granslateGraph: GraphData = {
                     // TODO split text
                     const ret = {
                       ...beat,
-                      texts: [],
+                      texts: [beat.text],
                     };
                     return ret;
                   },
@@ -94,7 +99,7 @@ const granslateGraph: GraphData = {
                     // TODO ttstext
                     const ret = {
                       ...beat,
-                      ttsTexts: [],
+                      ttsTexts: beat.texts,
                     };
                     return ret;
                   },
@@ -106,19 +111,21 @@ const granslateGraph: GraphData = {
               },
             },
           },
+          /*
           imagePrompt: {
             agent: (namedInputs) => {
               const { beat } = namedInputs;
               if (beat.imagePrompt) {
                 return beat.imagePrompt;
               }
-              return "123";
+              return "not implemented";
             },
             inputs: {
               beat: ":row",
               lang: ":lang",
             },
           },
+          */
           mergeBeat: {
             agent: (namedInputs) => {
               const { localizedTexts, beat } = namedInputs;
@@ -138,15 +145,16 @@ const granslateGraph: GraphData = {
           mergeResult: {
             isResult: true,
             agent: (namedInputs) => {
-              const { beats, imagePrompt } = namedInputs;
+              // const { beats, imagePrompt } = namedInputs;
+              const { beats } = namedInputs;
               return {
                 ...beats,
-                imagePrompt,
+                //imagePrompt,
               };
             },
             inputs: {
               beats: ":mergeBeat",
-              imagePrompt: ":imagePrompt",
+              // imagePrompt: ":imagePrompt",
             },
           },
         },
@@ -187,7 +195,7 @@ const translateText = async (mulmoScript: MulmoScript, lang: LANG, targetLangs: 
 };
 
 const defaultLang = "ja";
-const targetLangs = ["ja", "en"];
+const targetLangs = ["ja", "en", "fr-FR", "zh-CN"];
 
 const main = async () => {
   const arg2 = process.argv[2];
