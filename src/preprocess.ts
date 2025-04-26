@@ -78,48 +78,49 @@ const granslateGraph: GraphData = {
                 },
                 splitText: {
                   agent: (namedInputs) => {
-                    const { beat, targetLang } = namedInputs;
-                    // TODO: move to Agent Filter
-                    if (beat.texts) {
-                      return beat;
+                    const { localizedText, targetLang } = namedInputs;
+                    // Cache
+                    if (localizedText.texts) {
+                      return localizedText;
                     }
                     if (targetLang === "ja") {
                       return {
-                        ...beat,
-                        texts: recursiveSplitJa(beat.text),
+                        ...localizedText,
+                        texts: recursiveSplitJa(localizedText.text),
                       };
                     }
+                    // not split
                     return {
-                      ...beat,
-                      texts: [beat.text],
+                      ...localizedText,
+                      texts: [localizedText.text],
                     };
                   },
                   inputs: {
                     targetLang: ":row",
-                    beat: ":localizedTexts",
+                    localizedText: ":localizedTexts",
                   },
                 },
                 ttsTexts: {
                   agent: (namedInputs) => {
-                    const { beat, targetLang } = namedInputs;
-                    // TODO: move to Agent Filter
-                    if (beat.ttsTexts) {
-                      return beat;
+                    const { localizedText, targetLang } = namedInputs;
+                    // cache
+                    if (localizedText.ttsTexts) {
+                      return localizedText;
                     }
                     if (targetLang === "ja") {
                       return {
-                        ...beat,
-                        ttsTexts: beat.texts.map((text) => replacePairsJa(text, replacementsJa)),
+                        ...localizedText,
+                        ttsTexts: localizedText.texts.map((text) => replacePairsJa(text, replacementsJa)),
                       };
                     }
                     return {
-                      ...beat,
-                      ttsTexts: beat.texts,
+                      ...localizedText,
+                      ttsTexts: localizedText.texts,
                     };
                   },
                   inputs: {
                     targetLang: ":row",
-                    beat: ":splitText",
+                    localizedText: ":splitText",
                   },
                   isResult: true,
                 },
