@@ -76,7 +76,7 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
   }
 }
 
-const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string, image: string }; index: number; suffix: string; script: MulmoScript }) => {
+const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string; image: string }; index: number; suffix: string; script: MulmoScript }) => {
   const { row, index, suffix, script } = namedInputs;
   const prompt = row.imagePrompt || row.text;
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
@@ -204,13 +204,13 @@ const main = async () => {
   const results = await graph.run<{ output: MulmoBeat[] }>();
   console.log(results.map);
   if (results.map?.output) {
-    results.map?.output.forEach((update,index) => {
+    results.map?.output.forEach((update, index) => {
       const beat = outputScript.beats[index];
       outputScript.beats[index] = { ...beat, ...update };
     });
     fs.writeFileSync(outputFilePath, JSON.stringify(outputScript, null, 2));
   }
-  
+
   /*
   const results = await graph.run<{ output: ImageInfo[] }>();
   if (results.map?.output) {
