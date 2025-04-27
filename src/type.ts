@@ -71,7 +71,7 @@ export type MulmoBeat = {
 
   instructions: string | undefined; // tts_options for open ai
 
-  imagePrompt: string | undefined; // inserted by LLM
+  imagePrompt: string | undefined; // specified or inserted by preprocessor
   image: string | undefined; // path to the image
 
   filename: string; // generated
