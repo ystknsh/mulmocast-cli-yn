@@ -1,7 +1,6 @@
 import "dotenv/config";
-import fsPromise from "fs/promises";
 import fs from "fs";
-import { GraphAI, AgentFilterFunction, GraphData } from "graphai";
+import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import ttsNijivoiceAgent from "./agents/tts_nijivoice_agent";
 import addBGMAgent from "./agents/add_bgm_agent";
@@ -11,6 +10,7 @@ import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoBeat, SpeakerDictonary } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
+import { fileCacheAgentFilter } from "./utils/filters";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -120,27 +120,6 @@ const graph_data: GraphData = {
       },
     },
   },
-};
-
-const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
-  const { namedInputs } = context;
-  const { file } = namedInputs;
-  try {
-    await fsPromise.access(file);
-    const elements = file.split("/");
-    console.log("cache hit: " + elements[elements.length - 1], namedInputs.text.slice(0, 10));
-    return true;
-  } catch (__e) {
-    const output = (await next(context)) as { buffer: Buffer };
-    const buffer = output ? output["buffer"] : undefined;
-    if (buffer) {
-      console.log("writing: " + file);
-      await fsPromise.writeFile(file, buffer);
-      return true;
-    }
-    console.log("no cache, no buffer: " + file);
-    return false;
-  }
 };
 
 const agentFilters = [
