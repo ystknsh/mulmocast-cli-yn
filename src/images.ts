@@ -7,9 +7,8 @@ import * as agents from "@graphai/agents";
 import { MulmoScript, MulmoBeat } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
-import imageGoogleAgent from "../agents/image_google_agent";
-import { ImageGoogleConfig } from "../agents/image_google_agent";
-
+import imageGoogleAgent from "./agents/image_google_agent";
+import { ImageGoogleConfig } from "./agents/image_google_agent";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -80,7 +79,12 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
   }
 }
 
-const preprocess_agent = async (namedInputs: { row: { imagePrompt: string; text: string; image: string }; index: number; suffix: string; script: MulmoScript }) => {
+const preprocess_agent = async (namedInputs: {
+  row: { imagePrompt: string; text: string; image: string };
+  index: number;
+  suffix: string;
+  script: MulmoScript;
+}) => {
   const { row, index, suffix, script } = namedInputs;
   const prompt = row.imagePrompt || row.text;
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
@@ -169,8 +173,7 @@ const graph_data: GraphData = {
       },
       graph: {
         nodes: {
-          preprocess: {
-
+          preprocessor: {
             agent: preprocess_agent,
             inputs: {
               row: ":row",
@@ -178,23 +181,22 @@ const graph_data: GraphData = {
               script: ":script",
               suffix: "p",
             },
-            isResult: true
+            isResult: true,
           },
-          image: {
-            agent: image_agent,
+          imageGenerator: {
+            agent: "imageGoogleAgent",
             inputs: {
-              row: ":row",
-              index: ":__mapIndex",
-              script: ":script",
-              suffix: "p",
+              prompt: ":preprocessor.prompt",
+              file: ":preprocessor.path",
             },
           },
           output: {
             agent: "copyAgent",
             inputs: {
-              image: ":image",
+              result: ":imageGenerator",
+              image: ":preprocessor.path",
             },
-            isResult: true
+            isResult: true,
           },
         },
       },
@@ -212,8 +214,6 @@ const googleAuth = async () => {
 };
 
 const main = async () => {
-
-
   tokenHolder.token = await googleAuth();
 
   const arg2 = process.argv[2];
@@ -228,7 +228,7 @@ const main = async () => {
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["foo"],
+      nodeIds: ["imageGenerator"],
     },
   ];
   const google_config: ImageGoogleConfig = {
@@ -243,8 +243,8 @@ const main = async () => {
       imageGoogleAgent: google_config,
     },
   };
-  
-  const graph = new GraphAI(graph_data, { ...agents }, options);
+
+  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent }, options);
   graph.injectValue("script", outputScript);
   const results = await graph.run<{ output: MulmoBeat[] }>();
   console.log(results.map);
