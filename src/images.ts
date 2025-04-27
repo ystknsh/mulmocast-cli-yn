@@ -34,18 +34,18 @@ const graph_data: GraphData = {
     script: {
       value: {},
     },
+    text2image: {
+      value: "",
+    },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script" },
+      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image" },
       isResult: true,
       params: {
         compositeResult: true,
       },
       graph: {
         nodes: {
-          image2text: {
-            value: "imageOpenaiAgent", // default
-          },
           preprocessor: {
             agent: preprocess_agent,
             inputs: {
@@ -56,7 +56,7 @@ const graph_data: GraphData = {
             },
           },
           imageGenerator: {
-            agent: ":image2text",
+            agent: ":text2image",
             inputs: {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
@@ -94,7 +94,6 @@ const main = async () => {
 
   mkdir(`images/${outputScript.filename}`);
 
-  // New way to authenticate google
   const agentFilters = [
     {
       name: "fileCacheAgentFilter",
@@ -107,6 +106,11 @@ const main = async () => {
     agentFilters,
   };
 
+  const injections: Record<string, any> = {
+    script: outputScript,
+    text2image: "imageOpenaiAgent",
+  };
+
   if (outputScript.text2Image == "google") {
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,
@@ -116,10 +120,13 @@ const main = async () => {
     options.config = {
       imageGoogleAgent: google_config,
     };
+    injections.text2image = "imageGoogleAgent";
   }
 
   const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent }, options);
-  graph.injectValue("script", outputScript);
+  Object.keys(injections).forEach((key:string)=>{
+    graph.injectValue(key, injections[key]);
+  });
   const results = await graph.run<{ output: MulmoBeat[] }>();
   console.log(results.map);
   if (results.map?.output) {
