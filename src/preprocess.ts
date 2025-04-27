@@ -12,7 +12,14 @@ const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
     mulmoScript: {},
-    lang: {},
+    defaultLang: {},
+    lang: {
+      agent: "stringUpdateTextAgent",
+      inputs: {
+        newText: ":mulmoScript.lang",
+        oldText: ":defaultLang",
+      },
+    },
     targetLangs: {},
     fileName: {},
     mergeResult: {
@@ -40,7 +47,7 @@ const translateGraph: GraphData = {
             inputs: {
               beat: ":row",
               rows: ":targetLangs",
-              lang: ":lang",
+              lang: ":lang.text",
             },
             params: {
               compositeResult: true,
@@ -49,12 +56,13 @@ const translateGraph: GraphData = {
               version: 0.5,
               nodes: {
                 localizedTexts: {
+                  // console: { before: true},
                   inputs: {
                     targetLang: ":row",
                     beat: ":beat",
                     lang: ":lang",
                     system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
-                    prompt: ["## Language", ":row", "## Target", ":beat.text"],
+                    prompt: ["## Original Language", ":lang", "", "## Language", ":row", "", "## Target", ":beat.text"],
                   },
                   passThrough: {
                     lang: ":row",
@@ -183,10 +191,10 @@ const agentFilters = [
   },
 ];
 
-const translateText = async (mulmoScript: MulmoScript, fileName: string, lang: LANG, targetLangs: LANG[]) => {
+const translateText = async (mulmoScript: MulmoScript, fileName: string, defaultLang: LANG, targetLangs: LANG[]) => {
   const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
   graph.injectValue("mulmoScript", mulmoScript);
-  graph.injectValue("lang", lang);
+  graph.injectValue("defaultLang", defaultLang);
   graph.injectValue("targetLangs", targetLangs);
   graph.injectValue("fileName", fileName);
 
