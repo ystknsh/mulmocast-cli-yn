@@ -16,6 +16,9 @@ export const imageOpenaiAgent: AgentFunction<{ apiKey: string; model: string }, 
     size: "1792x1024",
   });
 
+  if (!response.data) {
+    throw new Error(`response.data is undefined: ${response}`);
+  }
   const url = response.data[0].url;
   if (!url) {
     throw new Error(`No url was returned: ${response}`);

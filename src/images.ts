@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { GraphAI, GraphData, GraphOptions } from "graphai";
+import { GraphAI, GraphData } from "graphai";
+import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
 import { MulmoScript, MulmoBeat } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
