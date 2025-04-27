@@ -1,10 +1,15 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 
-export const imageOpenaiAgent: AgentFunction<{ apiKey: string; model: string, size: "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256" | "512x512" | "1024x1792" | null | undefined }, { url: string; buffer: Buffer }, { prompt: string }> = async ({
-  namedInputs,
-  params,
-}) => {
+export const imageOpenaiAgent: AgentFunction<
+  {
+    apiKey: string;
+    model: string;
+    size: "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256" | "512x512" | "1024x1792" | null | undefined;
+  },
+  { url: string; buffer: Buffer },
+  { prompt: string }
+> = async ({ namedInputs, params }) => {
   const { prompt } = namedInputs;
   const { apiKey, model, size } = params;
   const openai = new OpenAI({ apiKey });
