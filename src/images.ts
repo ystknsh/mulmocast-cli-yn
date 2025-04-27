@@ -6,6 +6,10 @@ import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import { MulmoScript, MulmoBeat } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
+import { fileCacheAgentFilter } from "./utils/filters";
+import imageGoogleAgent from "../agents/image_google_agent";
+import { ImageGoogleConfig } from "../agents/image_google_agent";
+
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -75,6 +79,13 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
     throw error;
   }
 }
+
+const preprocess_agent = async (namedInputs: { row: { imagePrompt: string; text: string; image: string }; index: number; suffix: string; script: MulmoScript }) => {
+  const { row, index, suffix, script } = namedInputs;
+  const prompt = row.imagePrompt || row.text;
+  const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
+  return { path: path.resolve(relativePath), prompt };
+};
 
 const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string; image: string }; index: number; suffix: string; script: MulmoScript }) => {
   const { row, index, suffix, script } = namedInputs;
@@ -158,6 +169,17 @@ const graph_data: GraphData = {
       },
       graph: {
         nodes: {
+          preprocess: {
+
+            agent: preprocess_agent,
+            inputs: {
+              row: ":row",
+              index: ":__mapIndex",
+              script: ":script",
+              suffix: "p",
+            },
+            isResult: true
+          },
           image: {
             agent: image_agent,
             inputs: {
@@ -172,7 +194,7 @@ const graph_data: GraphData = {
             inputs: {
               image: ":image",
             },
-            isResult: true,
+            isResult: true
           },
         },
       },
@@ -190,6 +212,8 @@ const googleAuth = async () => {
 };
 
 const main = async () => {
+
+
   tokenHolder.token = await googleAuth();
 
   const arg2 = process.argv[2];
@@ -199,7 +223,28 @@ const main = async () => {
 
   mkdir(`images/${outputScript.filename}`);
 
-  const graph = new GraphAI(graph_data, { ...agents });
+  // New way to authenticate google
+  const agentFilters = [
+    {
+      name: "fileCacheAgentFilter",
+      agent: fileCacheAgentFilter,
+      nodeIds: ["foo"],
+    },
+  ];
+  const google_config: ImageGoogleConfig = {
+    projectId: process.env.GOOGLE_PROJECT_ID,
+    token: "",
+  };
+  google_config.token = await googleAuth();
+
+  const options = {
+    agentFilters,
+    config: {
+      imageGoogleAgent: google_config,
+    },
+  };
+  
+  const graph = new GraphAI(graph_data, { ...agents }, options);
   graph.injectValue("script", outputScript);
   const results = await graph.run<{ output: MulmoBeat[] }>();
   console.log(results.map);
