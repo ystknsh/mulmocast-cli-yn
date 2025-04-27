@@ -78,7 +78,7 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
 
 const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string, image: string }; index: number; suffix: string; script: MulmoScript }) => {
   const { row, index, suffix, script } = namedInputs;
-  row.imagePrompt = row.imagePrompt || row.text;
+  const prompt = row.imagePrompt || row.text;
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   if (row.image && row.image !== relativePath) {
     console.log("specified", row.image);
@@ -91,8 +91,8 @@ const image_agent = async (namedInputs: { row: { imagePrompt: string; text: stri
   }
 
   try {
-    console.log("generating", index, row.imagePrompt);
-    const imageBuffer = await generateImage(row.imagePrompt, script);
+    console.log("generating", index, prompt);
+    const imageBuffer = await generateImage(prompt, script);
     if (imageBuffer) {
       fs.writeFileSync(imagePath, imageBuffer);
       console.log("generated:", imagePath);
@@ -158,7 +158,7 @@ const graph_data: GraphData = {
       },
       graph: {
         nodes: {
-          plain: {
+          image: {
             agent: image_agent,
             inputs: {
               row: ":row",
@@ -170,9 +170,7 @@ const graph_data: GraphData = {
           output: {
             agent: "copyAgent",
             inputs: {
-              index: ":__mapIndex",
-              imagePrompt: ":row.imagePrompt",
-              image: ":plain",
+              image: ":image",
             },
             isResult: true,
           },
@@ -195,8 +193,7 @@ const main = async () => {
   tokenHolder.token = await googleAuth();
 
   const arg2 = process.argv[2];
-  const { mulmoData: _originalScript, fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
-
+  const { fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { mulmoData: outputScript } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
@@ -204,8 +201,16 @@ const main = async () => {
 
   const graph = new GraphAI(graph_data, { ...agents });
   graph.injectValue("script", outputScript);
-  const results = await graph.run();
+  const results = await graph.run<{ output: MulmoBeat[] }>();
   console.log(results.map);
+  if (results.map?.output) {
+    results.map?.output.forEach((update,index) => {
+      const beat = outputScript.beats[index];
+      outputScript.beats[index] = { ...beat, ...update };
+    });
+    fs.writeFileSync(outputFilePath, JSON.stringify(outputScript, null, 2));
+  }
+  
   /*
   const results = await graph.run<{ output: ImageInfo[] }>();
   if (results.map?.output) {
