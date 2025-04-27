@@ -76,10 +76,14 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
   }
 }
 
-const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string }; index: number; suffix: string; script: MulmoScript }) => {
+const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string, image: string }; index: number; suffix: string; script: MulmoScript }) => {
   const { row, index, suffix, script } = namedInputs;
   row.imagePrompt = row.imagePrompt || row.text;
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
+  if (row.image && row.image !== relativePath) {
+    console.log("specified", row.image);
+    return row.image;
+  }
   const imagePath = path.resolve(relativePath);
   if (fs.existsSync(imagePath)) {
     console.log("cached", imagePath);
