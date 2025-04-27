@@ -210,14 +210,6 @@ const main = async () => {
     });
     fs.writeFileSync(outputFilePath, JSON.stringify(outputScript, null, 2));
   }
-
-  /*
-  const results = await graph.run<{ output: ImageInfo[] }>();
-  if (results.map?.output) {
-    outputJsonData.images = results.map?.output;
-    fs.writeFileSync(outputFilePath, JSON.stringify(outputJsonData, null, 2));
-  }]
-  */
 };
 
 main();
