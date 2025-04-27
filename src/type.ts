@@ -71,7 +71,7 @@ export type MulmoBeat = {
 
   instructions: string | undefined; // tts_options for open ai
 
-  imagePrompt: string | undefined; // inserted by LLM
+  imagePrompt: string | undefined; // specified or inserted by preprocessor
   image: string | undefined; // path to the image
 
   filename: string; // generated
@@ -98,6 +98,7 @@ export type MulmoScript = {
   speakers: SpeakerDictonary;
 
   // for video and image
+  text2image: string | undefined; // default: openAI
   aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
 
   // images: ImageInfo[]; // generated
