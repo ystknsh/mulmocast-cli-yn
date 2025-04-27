@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { GraphAI, GraphData } from "graphai";
+import { GraphAI, GraphData, GraphOptions } from "graphai";
 import * as agents from "@graphai/agents";
 import { MulmoScript, MulmoBeat } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
@@ -43,6 +43,9 @@ const graph_data: GraphData = {
       },
       graph: {
         nodes: {
+          image2text: {
+            value: "imageOpenaiAgent", // default
+          },
           preprocessor: {
             agent: preprocess_agent,
             inputs: {
@@ -53,9 +56,9 @@ const graph_data: GraphData = {
             },
           },
           imageGenerator: {
-            agent: "imageOpenaiAgent",
+            agent: ":image2text",
             inputs: {
-              prompt: ":preprocessor.prompt", 
+              prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
             },
@@ -99,18 +102,21 @@ const main = async () => {
       nodeIds: ["imageGenerator"],
     },
   ];
-  const google_config: ImageGoogleConfig = {
-    projectId: process.env.GOOGLE_PROJECT_ID,
-    token: "",
-  };
-  google_config.token = await googleAuth();
 
-  const options = {
+  const options: GraphOptions = {
     agentFilters,
-    config: {
-      imageGoogleAgent: google_config,
-    },
   };
+
+  if (outputScript.text2Image == "google") {
+    const google_config: ImageGoogleConfig = {
+      projectId: process.env.GOOGLE_PROJECT_ID,
+      token: "",
+    };
+    google_config.token = await googleAuth();
+    options.config = {
+      imageGoogleAgent: google_config,
+    };
+  }
 
   const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent }, options);
   graph.injectValue("script", outputScript);

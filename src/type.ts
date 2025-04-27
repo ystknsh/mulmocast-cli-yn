@@ -98,6 +98,7 @@ export type MulmoScript = {
   speakers: SpeakerDictonary;
 
   // for video and image
+  text2Image: string | undefined; // default: openAI
   aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
 
   // images: ImageInfo[]; // generated
