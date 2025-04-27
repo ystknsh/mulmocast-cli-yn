@@ -6,6 +6,9 @@
   "aspectRatio": "9:16",
   "tts": "nijivoice",
   "lang": "ja",
+  "text2image": {
+    "style": "\n<style>白黒のイラスト"
+  },
   "speakers": {
     "Announcer": {
       "displayName": {

@@ -80,6 +80,13 @@ export type MulmoBeat = {
 
 // export type VoiceMap = Record<SPEAKER, string>;
 
+export type text2imageParms = {
+  model: string | undefined; // default: provider specific
+  size: string | undefined; // default: provider specific
+  aspectRatio: string | undefined; // default: "16:9"
+  style: string | undefined; // optional image style
+};
+
 // epsode
 export type MulmoScript = {
   // global setting
@@ -97,9 +104,10 @@ export type MulmoScript = {
   tts: string | undefined; // default: openAI
   speakers: SpeakerDictonary;
 
-  // for video and image
-  text2image: string | undefined; // default: openAI
-  aspectRatio: string | undefined; // "16:9" or "9:16" for movie and images
+  // for image
+  text2image: text2imageParms & {
+    provider: string | undefined; // default: openAI
+  };
 
   // images: ImageInfo[]; // generated
   imagePath: string | undefined; // for Keynote images movie ??
