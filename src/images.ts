@@ -24,7 +24,7 @@ const preprocess_agent = async (namedInputs: {
   style: string | undefined;
 }) => {
   const { row, index, suffix, script, style } = namedInputs;
-  const prompt = (row.imagePrompt || row.text) + style || "";
+  const prompt = (row.imagePrompt || row.text) + (style || "");
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   return { path: path.resolve(relativePath), prompt };
 };

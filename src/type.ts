@@ -105,12 +105,8 @@ export type MulmoScript = {
   speakers: SpeakerDictonary;
 
   // for image
-  text2image: {
+  text2image: text2imageParms & {
     provider: string | undefined; // default: openAI
-    model: string | undefined; // default: provider specific
-    size: string | undefined; // default: provider specific
-    aspectRatio: string | undefined; // default: "16:9"
-    style: string | undefined; // optional image style
   };
 
   // images: ImageInfo[]; // generated
