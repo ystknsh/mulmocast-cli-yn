@@ -76,17 +76,17 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
   }
 }
 
-const image_agent = async (namedInputs: { row: { index: number; imagePrompt: string }; suffix: string; script: PodcastScript }) => {
-  const { row, suffix, script } = namedInputs;
-  const relativePath = `./images/${script.filename}/${row.index}${suffix}.png`;
+const image_agent = async (namedInputs: { row: { imagePrompt: string }; index: number; suffix: string; script: MulmoScript }) => {
+  const { row, index, suffix, script } = namedInputs;
+  const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   const imagePath = path.resolve(relativePath);
   if (fs.existsSync(imagePath)) {
-    // console.log("cached", imagePath);
+    console.log("cached", imagePath);
     return relativePath;
   }
 
   try {
-    // console.log("generating", row.index, row.imagePrompt);
+    console.log("generating", row.index, row.imagePrompt);
     const imageBuffer = await generateImage(row.imagePrompt, script);
     if (imageBuffer) {
       fs.writeFileSync(imagePath, imageBuffer);
@@ -157,6 +157,7 @@ const graph_data: GraphData = {
             agent: image_agent,
             inputs: {
               row: ":row",
+              index: ":__mapIndex",
               script: ":script",
               suffix: "p",
             },
@@ -164,7 +165,7 @@ const graph_data: GraphData = {
           output: {
             agent: "copyAgent",
             inputs: {
-              index: ":row.index",
+              index: ":__mapIndex",
               imagePrompt: ":row.imagePrompt",
               image: ":plain",
             },
@@ -189,18 +190,17 @@ const main = async () => {
   tokenHolder.token = await googleAuth();
 
   const arg2 = process.argv[2];
-  const { mulmoData, fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
+  const { mulmoData: _originalScript, fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
 
   const outputFilePath = getOutputFilePath(fileName + ".json");
-  const { mulmoData: outputJsonData } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
+  const { mulmoData: outputScript } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
 
-  mkdir(`images/${outputJsonData.filename}`);
-  mulmoData.filename = outputJsonData.filename; // Hack: It allows us to use the source script
+  mkdir(`images/${outputScript.filename}`);
 
   const graph = new GraphAI(graph_data, { ...agents });
-  graph.injectValue("script", mulmoData);
+  graph.injectValue("script", outputScript);
   const results = await graph.run();
-  console.log(results);
+  console.log(results.map);
   /*
   const results = await graph.run<{ output: ImageInfo[] }>();
   if (results.map?.output) {
