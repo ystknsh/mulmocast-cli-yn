@@ -35,10 +35,10 @@ const graph_data: GraphData = {
   nodes: {
     script: { value: {} },
     text2image: { value: "" },
-    params: { value: {} },
+    imageParams: { value: {} },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image", params: ":params" },
+      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image", imageParams: ":imageParams" },
       isResult: true,
       params: {
         compositeResult: true,
@@ -52,15 +52,15 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               script: ":script",
               suffix: "p",
-              style: ":params.style",
+              style: ":imageParams.style",
             },
           },
           imageGenerator: {
             agent: ":text2image",
             params: {
-              model: ":params.model",
-              size: ":params.size",
-              aspectRatio: "params.aspectRatio",
+              model: ":imageParams.model",
+              size: ":imageParams.size",
+              aspectRatio: "imageParams.aspectRatio",
             },
             inputs: {
               prompt: ":preprocessor.prompt",
@@ -114,7 +114,7 @@ const main = async () => {
   const injections: Record<string, string | MulmoScript | text2imageParms | undefined> = {
     script: outputScript,
     text2image: "imageOpenaiAgent",
-    params: {
+    imageParams: {
       model: outputScript.text2image?.model,
       size: outputScript.text2image?.size,
       aspectRatio: outputScript.text2image?.aspectRatio,
