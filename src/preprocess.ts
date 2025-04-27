@@ -19,7 +19,7 @@ const translateGraph: GraphData = {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":mulmoScript", { fileName: ":fileName" }, { beats: ":beatsMap.mergeBeatData" }],
+        items: [":mulmoScript", { filename: ":fileName" }, { beats: ":beatsMap.mergeBeatData" }],
       },
     },
     beatsMap: {
