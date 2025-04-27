@@ -76,8 +76,9 @@ async function generateImage(prompt: string, script: MulmoScript): Promise<Buffe
   }
 }
 
-const image_agent = async (namedInputs: { row: { imagePrompt: string }; index: number; suffix: string; script: MulmoScript }) => {
+const image_agent = async (namedInputs: { row: { imagePrompt: string; text: string }; index: number; suffix: string; script: MulmoScript }) => {
   const { row, index, suffix, script } = namedInputs;
+  row.imagePrompt = row.imagePrompt || row.text;
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   const imagePath = path.resolve(relativePath);
   if (fs.existsSync(imagePath)) {
@@ -86,7 +87,7 @@ const image_agent = async (namedInputs: { row: { imagePrompt: string }; index: n
   }
 
   try {
-    console.log("generating", row.index, row.imagePrompt);
+    console.log("generating", index, row.imagePrompt);
     const imageBuffer = await generateImage(row.imagePrompt, script);
     if (imageBuffer) {
       fs.writeFileSync(imagePath, imageBuffer);
