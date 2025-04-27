@@ -4,11 +4,11 @@ import { AgentFilterFunction } from "graphai";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file } = namedInputs;
+  const { file, text } = namedInputs;
   try {
     await fsPromise.access(file);
     const elements = file.split("/");
-    console.log("cache hit: " + elements[elements.length - 1], namedInputs.text.slice(0, 10));
+    console.log("cache hit: " + elements[elements.length - 1], text.slice(0, 10));
     return true;
   } catch (__e) {
     const output = (await next(context)) as { buffer: Buffer };
