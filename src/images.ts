@@ -106,12 +106,13 @@ const main = async () => {
     agentFilters,
   };
 
-  const injections: Record<string, any> = {
+  const injections: Record<string, string | MulmoScript> = {
     script: outputScript,
     text2image: "imageOpenaiAgent",
   };
 
-  if (outputScript.text2Image == "google") {
+  if (outputScript.text2image === "google") {
+    console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,
       token: "",
@@ -124,7 +125,7 @@ const main = async () => {
   }
 
   const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent }, options);
-  Object.keys(injections).forEach((key:string)=>{
+  Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
   const results = await graph.run<{ output: MulmoBeat[] }>();
