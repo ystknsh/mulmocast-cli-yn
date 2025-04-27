@@ -1,19 +1,19 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 
-export const imageOpenaiAgent: AgentFunction<{ apiKey: string; model: string }, { url: string; buffer: Buffer }, { prompt: string }> = async ({
+export const imageOpenaiAgent: AgentFunction<{ apiKey: string; model: string, size: "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256" | "512x512" | "1024x1792" | null | undefined }, { url: string; buffer: Buffer }, { prompt: string }> = async ({
   namedInputs,
   params,
 }) => {
   const { prompt } = namedInputs;
-  const { apiKey, model } = params;
+  const { apiKey, model, size } = params;
   const openai = new OpenAI({ apiKey });
 
   const response = await openai.images.generate({
     model: model ?? "dall-e-3",
     prompt,
     n: 1,
-    size: "1792x1024",
+    size: size || "1792x1024",
   });
 
   if (!response.data) {

@@ -57,11 +57,13 @@ const graph_data: GraphData = {
           },
           imageGenerator: {
             agent: ":text2image",
-            inputs: {
-              prompt: ":preprocessor.prompt",
+            params: {
               model: ":params.model",
               size: ":params.size",
               aspectRatio: "params.aspectRatio",
+            },
+            inputs: {
+              prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
             },
