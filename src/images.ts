@@ -7,6 +7,8 @@ import { MulmoScript, MulmoBeat } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import imageGoogleAgent from "./agents/image_google_agent";
+import imageOpenaiAgent from "./agents/image_openai_agent";
+
 import { ImageGoogleConfig } from "./agents/image_google_agent";
 
 dotenv.config();
@@ -52,7 +54,7 @@ const graph_data: GraphData = {
             isResult: true,
           },
           imageGenerator: {
-            agent: "imageGoogleAgent",
+            agent: "imageOpenaiAgent",
             inputs: {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path",
@@ -110,7 +112,7 @@ const main = async () => {
     },
   };
 
-  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent }, options);
+  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent }, options);
   graph.injectValue("script", outputScript);
   const results = await graph.run<{ output: MulmoBeat[] }>();
   console.log(results.map);
