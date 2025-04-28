@@ -21,11 +21,11 @@ const preprocess_agent = async (namedInputs: {
   index: number;
   suffix: string;
   script: MulmoScript;
-  style: string | undefined;
+  imageParams: text2imageParms;
 }) => {
-  const { row, index, suffix, script, style } = namedInputs;
-  const prompt = (row.imagePrompt || row.text) + "\n" + (style || "");
-  // console.log(`style: ${style} prompt: ${prompt}`);
+  const { row, index, suffix, script, imageParams } = namedInputs;
+  const prompt = (row.imagePrompt || row.text) + "\n" + (imageParams.style || "");
+  console.log(`style: ${imageParams.style} prompt: ${prompt}`);
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   return { path: path.resolve(relativePath), prompt };
 };
@@ -53,7 +53,7 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               script: ":script",
               suffix: "p",
-              style: ":imageParams.style",
+              imageParams: ":imageParams",
             },
           },
           imageGenerator: {
@@ -118,12 +118,7 @@ const main = async () => {
   const injections: Record<string, string | MulmoScript | text2imageParms | undefined> = {
     script: outputScript,
     text2image: "imageOpenaiAgent",
-    imageParams: {
-      model: outputScript.text2image?.model,
-      size: outputScript.text2image?.size,
-      aspectRatio: outputScript.text2image?.aspectRatio,
-      style: outputScript.text2image?.style,
-    },
+    imageParams: outputScript.text2image || {}
   };
 
   if (outputScript.text2image?.provider === "google") {
