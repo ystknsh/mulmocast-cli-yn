@@ -18,7 +18,7 @@ import { GoogleAuth } from "google-auth-library";
 
 const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
   const { beat, index, suffix, script } = namedInputs;
-  const imageParams = { ...script.text2image, ...beat.text2image };
+  const imageParams = { ...script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   console.log(`prompt: ${prompt}`);
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
@@ -113,7 +113,7 @@ const main = async () => {
     text2image: "imageOpenaiAgent",
   };
 
-  if (outputScript.text2image?.provider === "google") {
+  if (outputScript.imageParams?.provider === "google") {
     console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,

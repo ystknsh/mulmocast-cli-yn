@@ -76,7 +76,7 @@ export type MulmoBeat = {
 
   media?: MulmoMedia;
 
-  text2image: text2imageParams | undefined; // beat specific parameters
+  imageParams: text2imageParams | undefined; // beat specific parameters
 
   instructions: string | undefined; // tts_options for open ai
 
@@ -107,7 +107,7 @@ export type MulmoScript = {
   speakers: SpeakerDictonary;
 
   // for image
-  text2image: text2imageParams & {
+  imageParams: text2imageParams & {
     provider: string | undefined; // default: openAI
   };
 
