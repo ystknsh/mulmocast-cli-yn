@@ -76,7 +76,7 @@ test("test updateMultiLingualTexts update", async () => {
   assert.equal(ret.beats[0].text, "123123");
 });
 
-test("test updateMultiLingualTexts update", async () => {
+test("test updateMultiLingualTexts update len", async () => {
   const originalBeat = {
     ...beat,
     text: "123123",
@@ -96,5 +96,32 @@ test("test updateMultiLingualTexts update", async () => {
   const ret = updateMultiLingualTexts(originalData, updateData);
   assert.equal(ret.beats.length, 1);
   assert.equal(ret.beats[0].text, "123123");
+  // assert.equal(ret.beats[0].text, "123123");
+});
+
+
+test("test updateMultiLingualTexts update len", async () => {
+  const originalBeat = {
+    ...beat,
+    text: "123123",
+    imagePrompt: "imageOriginal",
+  };
+  const originalData = {
+    ...data,
+    beats: [originalBeat]
+  };
+  
+  const updateBeat = {
+    ...beat,
+    imagePrompt: "imageUpdate",
+  };
+  const updateData = {
+    ...data,
+    beats: [updateBeat, originalBeat]
+  };
+  const ret = updateMultiLingualTexts(originalData, updateData);
+  assert.equal(ret.beats.length, 1);
+  assert.equal(ret.beats[0].text, "123123");
+  assert.equal(ret.beats[0].imagePrompt, "imageOriginal");
   // assert.equal(ret.beats[0].text, "123123");
 });

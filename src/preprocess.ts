@@ -205,8 +205,11 @@ const translateText = async (mulmoScript: MulmoScript, fileName: string, default
 export const updateMultiLingualTexts = (originalMulmoData: MulmoScript, mulmoData: MulmoScript): MulmoScript => {
   mulmoData.beats = mulmoData.beats.map((beat, index) => {
     const originalBeat = originalMulmoData?.beats[index];
-    if (originalBeat?.text === beat?.text) {
-      return beat;
+    if (originalBeat?.text === beat?.text && beat.multiLingualTexts) {
+      return {
+        ...originalBeat,
+        multiLingualTexts: beat.multiLingualTexts,
+      }
     }
     return originalBeat;
   }).filter(beat => beat);
