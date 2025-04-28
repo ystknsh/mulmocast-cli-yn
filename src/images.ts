@@ -18,7 +18,6 @@ import { GoogleAuth } from "google-auth-library";
 
 const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
   const { beat, index, suffix, script } = namedInputs;
-  console.log(script.imageParams);
   const imageParams = { ...script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   console.log(`prompt: ${prompt}`);
