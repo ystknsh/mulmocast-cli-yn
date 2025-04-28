@@ -60,6 +60,13 @@ type MulmoMovieMedia = {
 
 export type MulmoMedia = MulmoMarkdownMedia | MulmoWebMedia | MulmoPdfMedia | MulmoImageMedia | MulmoSvgMedia | MulmoMovieMedia;
 
+export type text2imageParms = {
+  model: string | undefined; // default: provider specific
+  size: string | undefined; // default: provider specific
+  aspectRatio: string | undefined; // default: "16:9"
+  style: string | undefined; // optional image style
+};
+
 // Beat Data
 export type MulmoBeat = {
   speaker: SpeakerId;
@@ -68,6 +75,8 @@ export type MulmoBeat = {
   multiLingualTexts: MultiLingualTexts;
 
   media?: MulmoMedia;
+
+  text2image: text2imageParms | undefined; // beat specific parameters
 
   instructions: string | undefined; // tts_options for open ai
 
@@ -79,13 +88,6 @@ export type MulmoBeat = {
 };
 
 // export type VoiceMap = Record<SPEAKER, string>;
-
-export type text2imageParms = {
-  model: string | undefined; // default: provider specific
-  size: string | undefined; // default: provider specific
-  aspectRatio: string | undefined; // default: "16:9"
-  style: string | undefined; // optional image style
-};
 
 // epsode
 export type MulmoScript = {

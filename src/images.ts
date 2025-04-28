@@ -17,14 +17,14 @@ dotenv.config();
 import { GoogleAuth } from "google-auth-library";
 
 const preprocess_agent = async (namedInputs: {
-  row: { imagePrompt: string; text: string; image: string };
+  beat: MulmoBeat;
   index: number;
   suffix: string;
   script: MulmoScript;
 }) => {
-  const { row, index, suffix, script } = namedInputs;
-  const imageParams = script.text2image ?? {};
-  const prompt = (row.imagePrompt || row.text) + "\n" + (imageParams.style || "");
+  const { beat, index, suffix, script } = namedInputs;
+  const imageParams = { ...script.text2image, ...beat.text2image };
+  const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   console.log(`prompt: ${prompt}`);
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   return { path: path.resolve(relativePath), prompt, imageParams };
@@ -48,7 +48,7 @@ const graph_data: GraphData = {
           preprocessor: {
             agent: preprocess_agent,
             inputs: {
-              row: ":row",
+              beat: ":row",
               index: ":__mapIndex",
               script: ":script",
               suffix: "p",
