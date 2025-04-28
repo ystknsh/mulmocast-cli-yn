@@ -21,13 +21,13 @@ const preprocess_agent = async (namedInputs: {
   index: number;
   suffix: string;
   script: MulmoScript;
-  style: string | undefined;
 }) => {
-  const { row, index, suffix, script, style } = namedInputs;
-  const prompt = (row.imagePrompt || row.text) + "\n" + (style || "");
-  // console.log(`style: ${style} prompt: ${prompt}`);
+  const { row, index, suffix, script } = namedInputs;
+  const imageParams = script.text2image ?? {};
+  const prompt = (row.imagePrompt || row.text) + "\n" + (imageParams.style || "");
+  console.log(`prompt: ${prompt}`);
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
-  return { path: path.resolve(relativePath), prompt };
+  return { path: path.resolve(relativePath), prompt, imageParams };
 };
 
 const graph_data: GraphData = {
@@ -36,10 +36,9 @@ const graph_data: GraphData = {
   nodes: {
     script: { value: {} },
     text2image: { value: "" },
-    imageParams: { value: {} },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image", imageParams: ":imageParams" },
+      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image" },
       isResult: true,
       params: {
         compositeResult: true,
@@ -53,15 +52,14 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               script: ":script",
               suffix: "p",
-              style: ":imageParams.style",
             },
           },
           imageGenerator: {
             agent: ":text2image",
             params: {
-              model: ":imageParams.model",
-              size: ":imageParams.size",
-              aspectRatio: "imageParams.aspectRatio",
+              model: ":preprocessor.imageParams.model",
+              size: ":preprocessor.imageParams.size",
+              aspectRatio: ":preprocessor.imageParams.aspectRatio",
             },
             inputs: {
               prompt: ":preprocessor.prompt",
@@ -118,12 +116,6 @@ const main = async () => {
   const injections: Record<string, string | MulmoScript | text2imageParms | undefined> = {
     script: outputScript,
     text2image: "imageOpenaiAgent",
-    imageParams: {
-      model: outputScript.text2image?.model,
-      size: outputScript.text2image?.size,
-      aspectRatio: outputScript.text2image?.aspectRatio,
-      style: outputScript.text2image?.style,
-    },
   };
 
   if (outputScript.text2image?.provider === "google") {
