@@ -202,30 +202,14 @@ const translateText = async (mulmoScript: MulmoScript, fileName: string, default
   return results.mergeResult;
 };
 
-export const updateMultiLingualTexts = (originalMulmoData: MulmoScript, mulmoData: MulmoScript, defaultLang: Lang) => {
-  const lang = originalMulmoData.lang ?? defaultLang;
+export const updateMultiLingualTexts = (originalMulmoData: MulmoScript, mulmoData: MulmoScript): MulmoScript => {
   mulmoData.beats = mulmoData.beats.map((beat, index) => {
-    // Not translated yet
-    if (!beat.multiLingualTexts) {
-      return beats;
+    const originalBeat = originalMulmoData?.beats[index];
+    if (originalBeat?.text === beat?.text) {
+      return beat;
     }
-    // No default target Language data. maybe changed langu??
-    if (!beat.multiLingualTexts[lang]) {
-      beat.multiLingualTexts = {};
-      return beats;
-    }
-    // index was changed
-    if (!originalMulmoData.beats[index]) {
-      beat.multiLingualTexts = {};
-      return beats;
-    }
-    //
-    if (beat.multiLingualTexts[lang].text !== originalMulmoData.beats[index].text) {
-      beat.multiLingualTexts = {};
-      return beats;
-    }
-    return beats;
-  });
+    return originalBeat;
+  }).filter(beat => beat);
   return mulmoData;
 };
 
@@ -240,13 +224,15 @@ const main = async () => {
   const outputFilePath = getOutputFilePath(fileName + ".json");
   const { mulmoData } = readMulmoScriptFile(outputFilePath) ?? { mulmoData: originalMulmoData };
 
-  const targetMulmoData = updateMultiLingualTexts(originalMulmoData, mulmoData, defaultLang);
+  const targetMulmoData = updateMultiLingualTexts(originalMulmoData, mulmoData);
 
-  const mulmoDataResult = await translateText(mulmoData, fileName, defaultLang, targetLangs);
+  const mulmoDataResult = await translateText(targetMulmoData, fileName, defaultLang, targetLangs);
 
   console.log(JSON.stringify(mulmoDataResult, null, 2));
 
   // console.log(mulmoData, originalMulmoData);
 };
 
-main();
+if (process.argv[1] === __filename) {
+  main();
+}
