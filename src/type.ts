@@ -61,10 +61,10 @@ type MulmoMovieMedia = {
 export type MulmoMedia = MulmoMarkdownMedia | MulmoWebMedia | MulmoPdfMedia | MulmoImageMedia | MulmoSvgMedia | MulmoMovieMedia;
 
 export type text2imageParams = {
-  model: string | undefined; // default: provider specific
-  size: string | undefined; // default: provider specific
-  aspectRatio: string | undefined; // default: "16:9"
-  style: string | undefined; // optional image style
+  model?: string; // default: provider specific
+  size?: string; // default: provider specific
+  aspectRatio?: string; // default: "16:9"
+  style?: string; // optional image style
 };
 
 // Beat Data
@@ -76,12 +76,12 @@ export type MulmoBeat = {
 
   media?: MulmoMedia;
 
-  imageParams: text2imageParams | undefined; // beat specific parameters
+  imageParams?: text2imageParams; // beat specific parameters
 
-  instructions: string | undefined; // tts_options for open ai
+  instructions?: string; // tts_options for open ai
 
-  imagePrompt: string | undefined; // specified or inserted by preprocessor
-  image: string | undefined; // path to the image
+  imagePrompt?: string; // specified or inserted by preprocessor
+  image?: string; // path to the image
 
   filename: string; // generated
   duration?: number; // workaround
@@ -103,18 +103,18 @@ export type MulmoScript = {
   beats: MulmoBeat[];
 
   // for tts
-  tts: string | undefined; // default: openAI
+  tts?: string; // default: openAI
   speakers: SpeakerDictonary;
 
   // for image
   imageParams: text2imageParams & {
-    provider: string | undefined; // default: openAI
+    provider?: string; // default: openAI
   };
 
   // images: ImageInfo[]; // generated
-  imagePath: string | undefined; // for Keynote images movie ??
-  omitCaptions: boolean | undefined; // default is false
+  imagePath?: string; // for Keynote images movie ??
+  omitCaptions?: boolean; // default is false
 
   // for bgm
-  padding: number | undefined; // for bgm
+  padding?: number; // for bgm
 };
