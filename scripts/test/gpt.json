@@ -4,7 +4,7 @@
   "text2image": {
     "model": "gpt-image-1",
     "size": "1536x1024",
-    "style": "In Japanese anime style"
+    "style": "<style>Japanese animation with soft watercolor backgrounds, rounded character designs with expressive eyes, pastel color palette, detailed natural environments, whimsical magical elements, hand-drawn aesthetic, gentle lighting, attention to small life moments, flowing movement in hair and clothing, nostalgic scenery with fantasy elements."
   },
   "speakers": {
     "Host": {
