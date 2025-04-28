@@ -60,6 +60,13 @@ type MulmoMovieMedia = {
 
 export type MulmoMedia = MulmoMarkdownMedia | MulmoWebMedia | MulmoPdfMedia | MulmoImageMedia | MulmoSvgMedia | MulmoMovieMedia;
 
+export type text2imageParams = {
+  model?: string; // default: provider specific
+  size?: string; // default: provider specific
+  aspectRatio?: string; // default: "16:9"
+  style?: string; // optional image style
+};
+
 // Beat Data
 export type MulmoBeat = {
   speaker: SpeakerId;
@@ -69,23 +76,18 @@ export type MulmoBeat = {
 
   media?: MulmoMedia;
 
-  instructions: string | undefined; // tts_options for open ai
+  imageParams?: text2imageParams; // beat specific parameters
 
-  imagePrompt: string | undefined; // specified or inserted by preprocessor
-  image: string | undefined; // path to the image
+  instructions?: string; // tts_options for open ai
+
+  imagePrompt?: string; // specified or inserted by preprocessor
+  image?: string; // path to the image
 
   filename: string; // generated
   duration?: number; // workaround
 };
 
 // export type VoiceMap = Record<SPEAKER, string>;
-
-export type text2imageParms = {
-  model: string | undefined; // default: provider specific
-  size: string | undefined; // default: provider specific
-  aspectRatio: string | undefined; // default: "16:9"
-  style: string | undefined; // optional image style
-};
 
 // epsode
 export type MulmoScript = {
@@ -101,18 +103,18 @@ export type MulmoScript = {
   beats: MulmoBeat[];
 
   // for tts
-  tts: string | undefined; // default: openAI
+  tts?: string; // default: openAI
   speakers: SpeakerDictonary;
 
   // for image
-  text2image: text2imageParms & {
-    provider: string | undefined; // default: openAI
+  imageParams?: text2imageParams & {
+    provider?: string; // default: openAI
   };
 
   // images: ImageInfo[]; // generated
-  imagePath: string | undefined; // for Keynote images movie ??
-  omitCaptions: boolean | undefined; // default is false
+  imagePath?: string; // for Keynote images movie ??
+  omitCaptions?: boolean; // default is false
 
   // for bgm
-  padding: number | undefined; // for bgm
+  padding?: number; // for bgm
 };

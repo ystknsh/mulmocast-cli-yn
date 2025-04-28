@@ -4,7 +4,7 @@ import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
-import { MulmoScript, MulmoBeat, text2imageParms } from "./type";
+import { MulmoScript, MulmoBeat, text2imageParams } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import imageGoogleAgent from "./agents/image_google_agent";
@@ -16,15 +16,11 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: {
-  row: { imagePrompt: string; text: string; image: string };
-  index: number;
-  suffix: string;
-  script: MulmoScript;
-}) => {
-  const { row, index, suffix, script } = namedInputs;
-  const imageParams = script.text2image ?? {};
-  const prompt = (row.imagePrompt || row.text) + "\n" + (imageParams.style || "");
+const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
+  const { beat, index, suffix, script } = namedInputs;
+  console.log(script.imageParams);
+  const imageParams = { ...script.imageParams, ...beat.imageParams };
+  const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   console.log(`prompt: ${prompt}`);
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
   return { path: path.resolve(relativePath), prompt, imageParams };
@@ -35,10 +31,10 @@ const graph_data: GraphData = {
   concurrency: 2,
   nodes: {
     script: { value: {} },
-    text2image: { value: "" },
+    text2imageAgent: { value: "" },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image" },
+      inputs: { rows: ":script.beats", script: ":script", text2imageAgent: ":text2imageAgent" },
       isResult: true,
       params: {
         compositeResult: true,
@@ -48,14 +44,14 @@ const graph_data: GraphData = {
           preprocessor: {
             agent: preprocess_agent,
             inputs: {
-              row: ":row",
+              beat: ":row",
               index: ":__mapIndex",
               script: ":script",
               suffix: "p",
             },
           },
           imageGenerator: {
-            agent: ":text2image",
+            agent: ":text2imageAgent",
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
@@ -113,12 +109,12 @@ const main = async () => {
     agentFilters,
   };
 
-  const injections: Record<string, string | MulmoScript | text2imageParms | undefined> = {
+  const injections: Record<string, string | MulmoScript | text2imageParams | undefined> = {
     script: outputScript,
-    text2image: "imageOpenaiAgent",
+    text2imageAgent: "imageOpenaiAgent",
   };
 
-  if (outputScript.text2image?.provider === "google") {
+  if (outputScript.imageParams?.provider === "google") {
     console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,
