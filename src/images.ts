@@ -16,12 +16,7 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: {
-  beat: MulmoBeat;
-  index: number;
-  suffix: string;
-  script: MulmoScript;
-}) => {
+const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
   const { beat, index, suffix, script } = namedInputs;
   const imageParams = { ...script.text2image, ...beat.text2image };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");

@@ -18,7 +18,10 @@
     {
       "speaker": "Host",
       "text": "How are you?",
-      "imagePrompt": "A witch in Harajuku"
+      "imagePrompt": "A witch in Harajuku",
+      "text2image": {
+        "style": "Ukiyoe-style"
+      }
     }
   ]
 }
