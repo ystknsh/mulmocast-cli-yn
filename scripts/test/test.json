@@ -42,6 +42,9 @@
       "imagePrompt": "Blue sky, a flock of birds",
       "imageParams": {
         "style": "<style>sumie-style"
+      },
+      "speechParams": {
+        "speed": 0.8
       }
     }
   ]
