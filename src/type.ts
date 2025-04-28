@@ -60,7 +60,7 @@ type MulmoMovieMedia = {
 
 export type MulmoMedia = MulmoMarkdownMedia | MulmoWebMedia | MulmoPdfMedia | MulmoImageMedia | MulmoSvgMedia | MulmoMovieMedia;
 
-export type text2imageParms = {
+export type text2imageParams = {
   model: string | undefined; // default: provider specific
   size: string | undefined; // default: provider specific
   aspectRatio: string | undefined; // default: "16:9"
@@ -76,7 +76,7 @@ export type MulmoBeat = {
 
   media?: MulmoMedia;
 
-  text2image: text2imageParms | undefined; // beat specific parameters
+  text2image: text2imageParams | undefined; // beat specific parameters
 
   instructions: string | undefined; // tts_options for open ai
 
@@ -107,7 +107,7 @@ export type MulmoScript = {
   speakers: SpeakerDictonary;
 
   // for image
-  text2image: text2imageParms & {
+  text2image: text2imageParams & {
     provider: string | undefined; // default: openAI
   };
 
