@@ -4,13 +4,15 @@ import OpenAI from "openai";
 // NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
 type OpenAIImageSize = "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256";
 
+// https://platform.openai.com/docs/guides/image-generation
+
 export const imageOpenaiAgent: AgentFunction<
   {
     apiKey: string;
     model: string; // dall-e-3 or gpt-image-1
     size: OpenAIImageSize | null | undefined;
   },
-  { url: string; buffer: Buffer },
+  { buffer: Buffer },
   { prompt: string }
 > = async ({ namedInputs, params }) => {
   const { prompt } = namedInputs;
@@ -47,7 +49,7 @@ export const imageOpenaiAgent: AgentFunction<
   const arrayBuffer = await res.arrayBuffer();
 
   // 3. Convert the ArrayBuffer to a Node.js Buffer and return it along with url
-  return { url, buffer: Buffer.from(arrayBuffer) };
+  return { buffer: Buffer.from(arrayBuffer) };
 };
 
 const imageOpenaiAgentInfo: AgentFunctionInfo = {
