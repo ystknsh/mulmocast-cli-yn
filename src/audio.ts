@@ -8,7 +8,7 @@ import combineFilesAgent from "./agents/combine_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoBeat, SpeakerDictonary } from "./type";
+import { MulmoBeat, SpeakerDictonary, text2speechParams } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 
@@ -27,12 +27,16 @@ const graph_tts: GraphData = {
       },
     },
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary }) => {
-        const { beat, speakers } = namedInputs;
-        return { voiceId: speakers[beat.speaker].voiceId };
+      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: text2speechParams }) => {
+        const { beat, speakers, speechParams } = namedInputs;
+        return {
+          voiceId: speakers[beat.speaker].voiceId,
+          speechParams: { ...speechParams, ...beat.speechParams },
+        };
       },
       inputs: {
         beat: ":row",
+        speechParams: ":script.speechParams",
         speakers: ":script.speechParams.speakers",
       },
     },
@@ -57,9 +61,8 @@ const graph_tts: GraphData = {
       params: {
         throwError: true,
         voice: ":preprocessor.voiceId",
-        speed: ":row.speechParams.speed",
-        speed_global: ":script.speechParams.speed",
-        instructions: ":row.speechParams.instructions",
+        speed: ":preprocessor.speed",
+        instructions: ":preprocessor.instructions",
       },
     },
   },
