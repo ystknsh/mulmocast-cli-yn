@@ -1,0 +1,23 @@
+{
+  "title": "Testing OpenAI's new Image Generation",
+  "description": "Hello",
+  "text2image": {
+    "model": "gpt-image-1",
+    "size": "1536x1024"
+  },
+  "speakers": {
+    "Host": {
+      "voiceId": "shimmer",
+      "displayName": {
+        "en": "Host"
+      }
+    }
+  },
+  "beats": [
+    {
+      "speaker": "Host",
+      "text": "How are you?",
+      "imagePrompt": "A witch in Harajuku"
+    }
+  ]
+}

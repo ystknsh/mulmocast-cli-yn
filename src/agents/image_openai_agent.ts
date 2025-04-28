@@ -1,12 +1,13 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 
+// NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
 type OpenAIImageSize = "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256";
 
 export const imageOpenaiAgent: AgentFunction<
   {
     apiKey: string;
-    model: string;
+    model: string; // dall-e-3 or gpt-image-1
     size: OpenAIImageSize | null | undefined;
   },
   { url: string; buffer: Buffer },
@@ -28,9 +29,15 @@ export const imageOpenaiAgent: AgentFunction<
   }
   const url = response.data[0].url;
   if (!url) {
-    throw new Error(`No url was returned: ${response}`);
+    // For gpt-image-1
+    const image_base64 = response.data[0].b64_json;
+    if (!image_base64) {
+      throw new Error(`response.data[0].b64_json is undefined: ${response}`);
+    }
+    return { buffer: Buffer.from(image_base64, "base64") };
   }
 
+  // For dall-e-3
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
