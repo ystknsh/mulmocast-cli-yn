@@ -21,13 +21,13 @@ const preprocess_agent = async (namedInputs: {
   index: number;
   suffix: string;
   script: MulmoScript;
-  imageParams: text2imageParms;
 }) => {
-  const { row, index, suffix, script, imageParams } = namedInputs;
+  const { row, index, suffix, script } = namedInputs;
+  const imageParams = script.text2image ?? {};
   const prompt = (row.imagePrompt || row.text) + "\n" + (imageParams.style || "");
-  console.log(`style: ${imageParams.style} prompt: ${prompt}`);
+  console.log(`prompt: ${prompt}`);
   const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
-  return { path: path.resolve(relativePath), prompt };
+  return { path: path.resolve(relativePath), prompt, imageParams };
 };
 
 const graph_data: GraphData = {
@@ -53,15 +53,14 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               script: ":script",
               suffix: "p",
-              imageParams: ":imageParams",
             },
           },
           imageGenerator: {
             agent: ":text2image",
             params: {
-              model: ":imageParams.model",
-              size: ":imageParams.size",
-              aspectRatio: "imageParams.aspectRatio",
+              model: ":preprocessor.imageParams.model",
+              size: ":preprocessor.imageParams.size",
+              aspectRatio: ":preprocessor.imageParams.aspectRatio",
             },
             inputs: {
               prompt: ":preprocessor.prompt",
