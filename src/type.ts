@@ -67,6 +67,11 @@ export type text2imageParams = {
   style?: string; // optional image style
 };
 
+export type text2speechParams = {
+  speed?: number; // default 1.0
+  instruction?: string;
+};
+
 // Beat Data
 export type MulmoBeat = {
   speaker: SpeakerId;
@@ -77,8 +82,7 @@ export type MulmoBeat = {
   media?: MulmoMedia;
 
   imageParams?: text2imageParams; // beat specific parameters
-
-  instructions?: string; // tts_options for open ai
+  speechParams?: text2speechParams;
 
   imagePrompt?: string; // specified or inserted by preprocessor
   image?: string; // path to the image
@@ -102,11 +106,13 @@ export type MulmoScript = {
   // page/slide
   beats: MulmoBeat[];
 
-  // for tts
-  tts?: string; // default: openAI
-  speakers: SpeakerDictonary;
+  // for text2speech
+  speechParams?: text2speechParams & {
+    provider?: string; // default openai
+    speakers: SpeakerDictonary;
+  };
 
-  // for image
+  // for text2image
   imageParams?: text2imageParams & {
     provider?: string; // default: openAI
   };

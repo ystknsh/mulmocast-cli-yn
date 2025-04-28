@@ -6,11 +6,13 @@
     "size": "1536x1024",
     "style": "<style>Japanese animation with soft watercolor backgrounds, characters with simple rounded faces, large expressive eyes, small nose and mouth, soft jawlines, minimalist facial features, pastel color palette, detailed natural environments, whimsical magical elements, hand-drawn aesthetic, gentle lighting, flowing movement in hair and clothing, nostalgic countryside scenery with fantasy elements."
   },
-  "speakers": {
-    "Host": {
-      "voiceId": "shimmer",
-      "displayName": {
-        "en": "Host"
+  "speechParams": {
+    "speakers": {
+      "Host": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Host"
+        }
       }
     }
   },

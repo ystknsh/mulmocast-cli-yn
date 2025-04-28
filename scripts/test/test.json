@@ -2,31 +2,33 @@
   "title": "MASAI: A Modular Future for Software Engineering AI",
   "description": "Exploring MASAI, a modular approach for AI agents in software engineering that revolutionizes how complex coding issues are tackled.",
   "reference": "https://arxiv.org/abs/2406.11638",
-  "speed": 1.666,
-  "aspectRatio": "9:16",
-  "tts": "nijivoice",
   "lang": "ja",
   "imageParams": {
-    "style": "<style>monochrome"
+    "style": "<style>monochrome",
+    "aspectRatio": "9:16"
   },
-  "speakers": {
-    "Announcer": {
-      "displayName": {
-        "ja": "アナウンサー"
+  "speechParams": {
+    "provider": "nijivoice",
+    "speed": 1.666,
+    "speakers": {
+      "Announcer": {
+        "displayName": {
+          "ja": "アナウンサー"
+        },
+        "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62"
       },
-      "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62"
-    },
-    "Student": {
-      "displayName": {
-        "ja": "生徒"
+      "Student": {
+        "displayName": {
+          "ja": "生徒"
+        },
+        "voiceId": "a7619e48-bf6a-4f9f-843f-40485651257f"
       },
-      "voiceId": "a7619e48-bf6a-4f9f-843f-40485651257f"
-    },
-    "Teacher": {
-      "displayName": {
-        "ja": "先生"
-      },
-      "voiceId": "bc06c63f-fef6-43b6-92f7-67f919bd5dae"
+      "Teacher": {
+        "displayName": {
+          "ja": "先生"
+        },
+        "voiceId": "bc06c63f-fef6-43b6-92f7-67f919bd5dae"
+      }
     }
   },
   "beats": [
@@ -40,6 +42,9 @@
       "imagePrompt": "Blue sky, a flock of birds",
       "imageParams": {
         "style": "<style>sumie-style"
+      },
+      "speechParams": {
+        "speed": 0.8
       }
     }
   ]

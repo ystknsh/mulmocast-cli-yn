@@ -8,7 +8,7 @@ import combineFilesAgent from "./agents/combine_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoBeat, SpeakerDictonary } from "./type";
+import { MulmoBeat, SpeakerDictonary, text2speechParams } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 
@@ -26,25 +26,29 @@ const graph_tts: GraphData = {
         dirs: ["scratchpad", "${:row.filename}.mp3"],
       },
     },
-    voice: {
-      agent: (namedInputs: { speaker: string; speakers: SpeakerDictonary }) => {
-        const { speaker, speakers } = namedInputs;
-        return speakers[speaker].voiceId;
+    preprocessor: {
+      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: text2speechParams }) => {
+        const { beat, speakers, speechParams } = namedInputs;
+        return {
+          voiceId: speakers[beat.speaker].voiceId,
+          speechParams: { ...speechParams, ...beat.speechParams },
+        };
       },
       inputs: {
-        speaker: ":row.speaker",
-        speakers: ":script.speakers",
+        beat: ":row",
+        speechParams: ":script.speechParams",
+        speakers: ":script.speechParams.speakers",
       },
     },
     ttsAgent: {
-      agent: (namedInputs: { tts: string }) => {
-        if (namedInputs.tts === "nijivoice") {
+      agent: (namedInputs: { provider: string }) => {
+        if (namedInputs.provider === "nijivoice") {
           return "ttsNijivoiceAgent";
         }
         return "ttsOpenaiAgent";
       },
       inputs: {
-        tts: ":script.tts",
+        provider: ":script.speechParams.provider",
       },
     },
     tts: {
@@ -56,10 +60,9 @@ const graph_tts: GraphData = {
       },
       params: {
         throwError: true,
-        voice: ":voice",
-        speed: ":row.speed",
-        speed_global: ":script.speed",
-        instructions: ":row.instructions",
+        voice: ":preprocessor.voiceId",
+        speed: ":preprocessor.speechParams.speed",
+        instructions: ":preprocessor.speechParams.instructions",
       },
     },
   },
@@ -163,7 +166,7 @@ const main = async () => {
     });
   }
 
-  graph_data.concurrency = mulmoData.tts === "nijivoice" ? 1 : 8;
+  graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
 
   const graph = new GraphAI(
     graph_data,
