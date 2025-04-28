@@ -61,8 +61,8 @@ const graph_tts: GraphData = {
       params: {
         throwError: true,
         voice: ":preprocessor.voiceId",
-        speed: ":preprocessor.speed",
-        instructions: ":preprocessor.instructions",
+        speed: ":preprocessor.speechParams.speed",
+        instructions: ":preprocessor.speechParams.instructions",
       },
     },
   },
