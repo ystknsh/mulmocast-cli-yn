@@ -36,10 +36,9 @@ const graph_data: GraphData = {
   nodes: {
     script: { value: {} },
     text2image: { value: "" },
-    imageParams: { value: {} },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image", imageParams: ":imageParams" },
+      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image" },
       isResult: true,
       params: {
         compositeResult: true,
@@ -117,7 +116,6 @@ const main = async () => {
   const injections: Record<string, string | MulmoScript | text2imageParms | undefined> = {
     script: outputScript,
     text2image: "imageOpenaiAgent",
-    imageParams: outputScript.text2image || {}
   };
 
   if (outputScript.text2image?.provider === "google") {
