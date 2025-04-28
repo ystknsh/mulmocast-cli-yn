@@ -107,7 +107,7 @@ export type MulmoScript = {
   speakers: SpeakerDictonary;
 
   // for image
-  imageParams: text2imageParams & {
+  imageParams?: text2imageParams & {
     provider?: string; // default: openAI
   };
 
