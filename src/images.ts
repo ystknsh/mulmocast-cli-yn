@@ -75,6 +75,9 @@ const graph_data: GraphData = {
               result: ":imageGenerator",
               image: ":preprocessor.path",
             },
+            output: {
+              image: ".image",
+            },
             isResult: true,
           },
         },
