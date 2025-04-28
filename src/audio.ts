@@ -33,7 +33,7 @@ const graph_tts: GraphData = {
       },
       inputs: {
         speaker: ":row.speaker",
-        speakers: ":script.speakers",
+        speakers: ":script.speechParams.speakers",
       },
     },
     ttsAgent: {
@@ -44,7 +44,7 @@ const graph_tts: GraphData = {
         return "ttsOpenaiAgent";
       },
       inputs: {
-        tts: ":script.tts",
+        tts: ":script.speechParams.provider",
       },
     },
     tts: {
@@ -57,9 +57,9 @@ const graph_tts: GraphData = {
       params: {
         throwError: true,
         voice: ":voice",
-        speed: ":row.speed",
-        speed_global: ":script.speed",
-        instructions: ":row.instructions",
+        speed: ":row.speechParams.speed",
+        speed_global: ":script.speechParams.speed",
+        instructions: ":row.speechParams.instructions",
       },
     },
   },
@@ -163,7 +163,7 @@ const main = async () => {
     });
   }
 
-  graph_data.concurrency = mulmoData.tts === "nijivoice" ? 1 : 8;
+  graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
 
   const graph = new GraphAI(
     graph_data,
