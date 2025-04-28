@@ -26,10 +26,10 @@ const graph_tts: GraphData = {
         dirs: ["scratchpad", "${:row.filename}.mp3"],
       },
     },
-    voice: {
+    preprocessor: {
       agent: (namedInputs: { speaker: string; speakers: SpeakerDictonary }) => {
         const { speaker, speakers } = namedInputs;
-        return speakers[speaker].voiceId;
+        return { voice: speakers[speaker].voiceId };
       },
       inputs: {
         speaker: ":row.speaker",
@@ -37,14 +37,14 @@ const graph_tts: GraphData = {
       },
     },
     ttsAgent: {
-      agent: (namedInputs: { tts: string }) => {
-        if (namedInputs.tts === "nijivoice") {
+      agent: (namedInputs: { provider: string }) => {
+        if (namedInputs.provider === "nijivoice") {
           return "ttsNijivoiceAgent";
         }
         return "ttsOpenaiAgent";
       },
       inputs: {
-        tts: ":script.speechParams.provider",
+        provider: ":script.speechParams.provider",
       },
     },
     tts: {
@@ -56,7 +56,7 @@ const graph_tts: GraphData = {
       },
       params: {
         throwError: true,
-        voice: ":voice",
+        voice: ":preprocessor.voiceId",
         speed: ":row.speechParams.speed",
         speed_global: ":script.speechParams.speed",
         instructions: ":row.speechParams.instructions",
