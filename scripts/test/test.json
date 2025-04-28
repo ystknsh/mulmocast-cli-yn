@@ -6,8 +6,8 @@
   "aspectRatio": "9:16",
   "tts": "nijivoice",
   "lang": "ja",
-  "text2image": {
-    "style": "\n<style>白黒のイラスト"
+  "imageParams": {
+    "style": "<style>monochrome"
   },
   "speakers": {
     "Announcer": {
@@ -37,7 +37,10 @@
     {
       "speaker": "Announcer",
       "text": "今日は、アメリカで発表された「スターゲート・プロジェクト」に、ついて解説します。",
-      "imagePrompt": "Blue sky, a flock of birds"
+      "imagePrompt": "Blue sky, a flock of birds",
+      "imageParams": {
+        "style": "<style>sumie-style"
+      }
     }
   ]
 }

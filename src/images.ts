@@ -18,6 +18,7 @@ import { GoogleAuth } from "google-auth-library";
 
 const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
   const { beat, index, suffix, script } = namedInputs;
+  console.log(script.imageParams);
   const imageParams = { ...script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   console.log(`prompt: ${prompt}`);
@@ -30,10 +31,10 @@ const graph_data: GraphData = {
   concurrency: 2,
   nodes: {
     script: { value: {} },
-    text2image: { value: "" },
+    text2imageAgent: { value: "" },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2image: ":text2image" },
+      inputs: { rows: ":script.beats", script: ":script", text2imageAgent: ":text2imageAgent" },
       isResult: true,
       params: {
         compositeResult: true,
@@ -50,7 +51,7 @@ const graph_data: GraphData = {
             },
           },
           imageGenerator: {
-            agent: ":text2image",
+            agent: ":text2imageAgent",
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
@@ -110,7 +111,7 @@ const main = async () => {
 
   const injections: Record<string, string | MulmoScript | text2imageParams | undefined> = {
     script: outputScript,
-    text2image: "imageOpenaiAgent",
+    text2imageAgent: "imageOpenaiAgent",
   };
 
   if (outputScript.imageParams?.provider === "google") {
