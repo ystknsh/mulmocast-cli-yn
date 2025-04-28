@@ -27,12 +27,12 @@ const graph_tts: GraphData = {
       },
     },
     preprocessor: {
-      agent: (namedInputs: { speaker: string; speakers: SpeakerDictonary }) => {
-        const { speaker, speakers } = namedInputs;
-        return { voice: speakers[speaker].voiceId };
+      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary }) => {
+        const { beat, speakers } = namedInputs;
+        return { voiceId: speakers[beat.speaker].voiceId };
       },
       inputs: {
-        speaker: ":row.speaker",
+        beat: ":row",
         speakers: ":script.speechParams.speakers",
       },
     },
