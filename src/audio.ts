@@ -4,7 +4,7 @@ import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import ttsNijivoiceAgent from "./agents/tts_nijivoice_agent";
 import addBGMAgent from "./agents/add_bgm_agent";
-import combineFilesAgent from "./agents/combine_files_agent";
+import combineAudioFilesAgent from "./agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
@@ -81,7 +81,7 @@ const graph_data: GraphData = {
       graph: graph_tts,
     },
     combineFiles: {
-      agent: "combineFilesAgent",
+      agent: "combineAudioFilesAgent",
       inputs: {
         map: ":map",
         script: ":script",
@@ -177,7 +177,7 @@ const main = async () => {
       ttsOpenaiAgent,
       ttsNijivoiceAgent,
       addBGMAgent,
-      combineFilesAgent,
+      combineAudioFilesAgent,
     },
     { agentFilters },
   );

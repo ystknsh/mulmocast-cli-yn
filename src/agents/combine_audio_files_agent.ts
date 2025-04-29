@@ -3,7 +3,7 @@ import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import { MulmoScript, MulmoBeat } from "../type";
 
-const combineFilesAgent: AgentFunction<null, { script: MulmoScript; fileName: string }, { script: MulmoScript; combinedFileName: string }> = async ({
+const combineAudioFilesAgent: AgentFunction<null, { script: MulmoScript; fileName: string }, { script: MulmoScript; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
   const { script, combinedFileName } = namedInputs;
@@ -46,16 +46,16 @@ const combineFilesAgent: AgentFunction<null, { script: MulmoScript; fileName: st
   };
 };
 
-const combineFilesAgentInfo: AgentFunctionInfo = {
-  name: "combineFilesAgent",
-  agent: combineFilesAgent,
-  mock: combineFilesAgent,
+const combineAudioFilesAgentInfo: AgentFunctionInfo = {
+  name: "combineAudioFilesAgent",
+  agent: combineAudioFilesAgent,
+  mock: combineAudioFilesAgent,
   samples: [],
-  description: "combineFilesAgent",
+  description: "combineAudioFilesAgent",
   category: ["ffmpeg"],
   author: "satoshi nakajima",
   repository: "https://github.com/snakajima/ai-podcaster",
   license: "MIT",
 };
 
-export default combineFilesAgentInfo;
+export default combineAudioFilesAgentInfo;
