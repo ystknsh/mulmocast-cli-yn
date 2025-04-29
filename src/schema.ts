@@ -30,18 +30,6 @@ export const speakerDataSchema = z.object({
   voiceId: z.string(),
 });
 
-export const mulmoBeatSchema = z.object({
-  speaker: z.string(),
-  text: z.string(),
-  multiLingualTexts: z.record(z.string(), localizedTextSchema),
-  media: mulmoMediaSchema.optional(),
-  instructions: z.union([z.string(), z.undefined()]),
-  imagePrompt: z.union([z.string(), z.undefined()]),
-  image: z.union([z.string(), z.undefined()]),
-  filename: z.string(),
-  duration: z.number().optional(),
-});
-
 export const text2imageParmsSchema = z.object({
   model: z.string().optional(),
   size: z.string().optional(),
@@ -49,8 +37,22 @@ export const text2imageParmsSchema = z.object({
   style: z.string().optional(),
 });
 
-export const text2imageSchema = text2imageParmsSchema.extend({
-  provider: z.string().optional(),
+export const text2speechParamsSchema = z.object({
+  speed: z.number().optional(),
+  instruction: z.string().optional(),
+});
+
+export const mulmoBeatSchema = z.object({
+  speaker: z.string(),
+  text: z.string(),
+  multiLingualTexts: z.record(z.string(), localizedTextSchema),
+  media: mulmoMediaSchema.optional(),
+  imageParams: text2imageParmsSchema.optional(),
+  speechParams: text2speechParamsSchema.optional(),
+  imagePrompt: z.string().optional(),
+  image: z.string().optional(),
+  filename: z.string(),
+  duration: z.number().optional(),
 });
 
 export const mulmoScriptSchema: z.ZodType<MulmoScript> = z.object({
@@ -60,10 +62,14 @@ export const mulmoScriptSchema: z.ZodType<MulmoScript> = z.object({
   lang: z.string(),
   filename: z.string(),
   beats: z.array(mulmoBeatSchema),
-  tts: z.union([z.string(), z.undefined()]),
-  speakers: z.record(z.string(), speakerDataSchema),
-  text2image: text2imageSchema,
-  imagePath: z.union([z.string(), z.undefined()]),
-  omitCaptions: z.union([z.boolean(), z.undefined()]),
-  padding: z.union([z.number(), z.undefined()]),
+  speechParams: text2speechParamsSchema.extend({
+    provider: z.string().optional(),
+    speakers: z.record(z.string(), speakerDataSchema),
+  }).optional(),
+  imageParams: text2imageParmsSchema.extend({
+    provider: z.string().optional(),
+  }).optional(),
+  imagePath: z.string().optional(),
+  omitCaptions: z.boolean().optional(),
+  padding: z.number().optional(),
 });

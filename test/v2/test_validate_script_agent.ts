@@ -22,22 +22,61 @@ const validMulmoScriptJson = JSON.stringify({
           duration: 2000,
           filename: "test_ja_001.mp3",
         },
+        en: {
+          text: "Hello, this is a test",
+          lang: "en",
+          texts: ["Hello, ", "this is a test"],
+          ttsTexts: ["Hello, this is a test"],
+          duration: 1800,
+          filename: "test_en_001.mp3",
+        }
       },
+      media: {
+        type: "image",
+        source: {
+          kind: "url",
+          url: "https://example.com/test-image.jpg"
+        }
+      },
+      imageParams: {
+        model: "dall-e-3",
+        size: "1024x1024",
+        aspectRatio: "1:1"
+      },
+      speechParams: {
+        speed: 1.0,
+        instruction: "Speak clearly"
+      },
+      imagePrompt: "A test image showing something interesting",
+      image: "test_image_001.jpg",
       filename: "test_001.mp3",
+      duration: 2000
     },
   ],
-  speakers: {
-    speaker1: {
-      displayName: {
-        ja: "Speaker 1",
-      },
-      voiceId: "voice-123",
-    },
+  speechParams: {
+    provider: "openai",
+    speed: 1.0,
+    instruction: "Speak naturally",
+    speakers: {
+      speaker1: {
+        displayName: {
+          ja: "スピーカー 1",
+          en: "Speaker 1",
+        },
+        voiceId: "voice-123",
+      }
+    }
   },
-  text2image: {
+  imageParams: {
     model: "dall-e-3",
     provider: "openai",
+    size: "1792x1024",
+    aspectRatio: "16:9",
+    style: "natural"
   },
+  imagePath: "images/",
+  omitCaptions: false,
+  padding: 500
 });
 
 const invalidMulmoScriptJson = JSON.stringify({
