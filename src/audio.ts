@@ -149,6 +149,8 @@ const main = async () => {
     filename: fileName,
     beats: Array(mulmoData.beats.length).fill({}),
   };
+  studio.script = mulmoData; // update the script
+  studio.beats.length = mulmoData.beats.length; // In case it became shorter
   mulmoData.beats.forEach((beat: MulmoStudioBeat, index: number) => {
     studio.beats[index] = { ...studio.beats[index], ...beat, filename: fileName + index };
   });
@@ -168,7 +170,6 @@ const main = async () => {
     });
   }
   */
-  studio.script = mulmoData; // update the script
 
   graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
 
