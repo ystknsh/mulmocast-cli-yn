@@ -1,4 +1,12 @@
-import { langSchema, localizedTextSchema, mulmoBeatSchema, mulmoScriptSchema, speakerDictionarySchema, text2imageParamsSchema, text2speechParamsSchema } from "./schema";
+import {
+  langSchema,
+  localizedTextSchema,
+  mulmoBeatSchema,
+  mulmoScriptSchema,
+  speakerDictionarySchema,
+  text2imageParamsSchema,
+  text2speechParamsSchema,
+} from "./schema";
 import { z } from "zod";
 
 export type LANG = z.infer<typeof langSchema>;

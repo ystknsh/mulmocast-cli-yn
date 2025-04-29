@@ -16,7 +16,9 @@ interface ValidateMulmoScriptResponse {
  * MulmoScript JSON validation agent
  * Validates if a JSON string conforms to the MulmoScript schema
  */
-export const validateMulmoScriptAgent: AgentFunction<object, ValidateMulmoScriptResponse, ValidateMulmoScriptInputs, DefaultConfigData> = async ({ namedInputs }) => {
+export const validateMulmoScriptAgent: AgentFunction<object, ValidateMulmoScriptResponse, ValidateMulmoScriptInputs, DefaultConfigData> = async ({
+  namedInputs,
+}) => {
   const { text } = namedInputs;
   try {
     const jsonData = JSON.parse(text);
