@@ -1,11 +1,13 @@
 {
   "title": "THE ECONOMICS OF GENERATIVE AI",
   "description": "This episode examines generative AI economics through three layers: semiconductors (NVIDIA dominates with 90% of profits), infrastructure, and applications. Unlike traditional tech, value concentrates in semiconductors but will likely shift toward applications by decade's end, creating opportunities as the technology matures.",
-  "speakers": {
-    "Host": {
-      "voiceId": "shimmer",
-      "displayName": {
-        "en": "Host"
+  "speechParams": {
+    "speakers": {
+      "Host": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Host"
+        }
       }
     }
   },

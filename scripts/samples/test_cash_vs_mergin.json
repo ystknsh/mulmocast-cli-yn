@@ -1,17 +1,19 @@
 {
   "title": "TESLA'S STRATEGIC MOAT: CASH FLOW VS. MARGINS",
   "description": "This episode examines Tesla's financial strategy, focusing on how decreasing gross margins paired with increasing cash flow from operations creates a competitive advantage. We explore how this counterintuitive approach strengthens Tesla's market position by making it harder for competitors to replicate their business model.",
-  "speakers": {
-    "Host": {
-      "voiceId": "shimmer",
-      "displayName": {
-        "en": "Host"
-      }
-    },
-    "Guest": {
-      "voiceId": "echo",
-      "displayName": {
-        "en": "Guest"
+  "speechParams": {
+    "speakers": {
+      "Host": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Host"
+        }
+      },
+      "Guest": {
+        "voiceId": "echo",
+        "displayName": {
+          "en": "Guest"
+        }
       }
     }
   },
