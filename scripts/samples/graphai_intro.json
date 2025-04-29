@@ -1,11 +1,13 @@
 {
   "title": "Introduction to GraphAI",
   "description": "Declarative Dataflow Programming environment for AI agents.",
-  "speakers": {
-    "Host": {
-      "voiceId": "shimmer",
-      "displayName": {
-        "en": "Host"
+  "speechParams": {
+    "speakers": {
+      "Host": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Host"
+        }
       }
     }
   },

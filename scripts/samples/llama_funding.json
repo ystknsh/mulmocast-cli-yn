@@ -1,11 +1,13 @@
 {
   "title": "META'S LLAMA FUNDING STRUGGLES",
   "description": "This episode explores Meta's efforts to create a funding consortium for its open-source Llama model, revealing the financial strain that even tech giants are facing due to rising AI development costs. Based on reporting from The Information, the podcast examines Meta's proposal, the challenges it faces, and the broader implications for AI economics.",
-  "speakers": {
-    "Host": {
-      "voiceId": "shimmer",
-      "displayName": {
-        "en": "Host"
+  "speechParams": {
+    "speakers": {
+      "Host": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Host"
+        }
       }
     }
   },
