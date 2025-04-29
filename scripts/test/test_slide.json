@@ -1,0 +1,23 @@
+{
+  "title": "Human Evolution",
+  "beats": [
+    {
+      "text": "Human was evolved from Early Primates",
+      "media": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Human Evolution",
+          "bullets": [
+            "Early Primates",
+            "Hominids and Hominins",
+            "Australopithecus",
+            "Genus Homo Emerges",
+            "Homo erectus and Migration",
+            "Neanderthals and Other Archaic Humans",
+            "Homo sapiens"
+          ]
+        }
+      }
+    }
+  ]
+}
