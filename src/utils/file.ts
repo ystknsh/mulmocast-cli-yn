@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { MulmoScript } from "../type";
+import { MulmoScript, MulmoStudio } from "../type";
 
 export function readMulmoScriptFile(
   path: string,
@@ -33,6 +33,26 @@ export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
   return {
     mulmoData: script,
     mulmoDataPath: scriptPath,
+    fileName: parsedPath.name,
+  };
+}
+
+export function readMulmoStudioFile(arg2: string, errorMessage?: string) {
+  const scriptPath = path.resolve(arg2);
+  if (!fs.existsSync(scriptPath)) {
+    if (errorMessage) {
+      console.error(errorMessage);
+      process.exit(1);
+    }
+    return null;
+  }
+  const scriptData = fs.readFileSync(scriptPath, "utf-8");
+  const studio = JSON.parse(scriptData) as MulmoStudio;
+  const parsedPath = path.parse(scriptPath);
+
+  return {
+    mulmoStudio: studio,
+    mulmoStrdioPath: scriptPath,
     fileName: parsedPath.name,
   };
 }

@@ -9,8 +9,9 @@ import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoBeat, SpeakerDictonary, Text2speechParams } from "./type";
-import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
+import { readMulmoScriptFile, readMulmoStudioFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
+import { mulmoScriptSchema } from "./schema";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -72,27 +73,27 @@ const graph_data: GraphData = {
   version: 0.5,
   concurrency: 8,
   nodes: {
-    script: {
+    studio: {
       value: {},
     },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script" },
+      inputs: { rows: ":studio.script.beats", script: ":studio.script" },
       graph: graph_tts,
     },
     combineFiles: {
       agent: "combineAudioFilesAgent",
       inputs: {
         map: ":map",
-        script: ":script",
-        combinedFileName: "./output/${:script.filename}.mp3",
+        script: ":studio.script",
+        combinedFileName: "./output/${:studio.script.filename}.mp3",
       },
       isResult: true,
     },
     fileWrite: {
       agent: "fileWriteAgent",
       inputs: {
-        file: "./output/${:script.filename}.json",
+        file: "./output/${:studio.script.filename}_xxx.json",
         text: ":combineFiles.script.toJSON()",
       },
       params: { baseDir: __dirname + "/../" },
@@ -104,8 +105,8 @@ const graph_data: GraphData = {
       },
       inputs: {
         voiceFile: ":combineFiles.fileName",
-        outFileName: "./output/${:script.filename}_bgm.mp3",
-        script: ":script",
+        outFileName: "./output/${:studio.script.filename}_bgm.mp3",
+        script: ":studio.script",
       },
       isResult: true,
     },
@@ -118,7 +119,7 @@ const graph_data: GraphData = {
         after: true,
       },
       inputs: {
-        title: "\n${:script.title}\n\n${:script.description}\nReference: ${:script.reference}\n",
+        title: "\n${:studio.script.title}\n\n${:studio.script.description}\nReference: ${:studio.script.reference}\n",
         waitFor: ":addBGM",
       },
     },
@@ -150,12 +151,17 @@ const main = async () => {
   });
 
   // Check if any script changes
-  const outputFilePath = getOutputFilePath(mulmoData.filename + ".json");
-  const { mulmoData: prevScript } = readMulmoScriptFile(outputFilePath) ?? {};
-  if (prevScript) {
-    console.log("found output script", prevScript.filename);
+  const outputFilePath = getOutputFilePath(mulmoData.filename + "_studio.json");
+  const { mulmoStudio: studio } = readMulmoStudioFile(outputFilePath) ?? {
+    mulmoStudio: {
+      script: mulmoData,
+      beats: Array(mulmoData.beats.length).fill({}),
+    },
+  };
+  if (studio) {
+    console.log("found output script", studio.script.filename);
     mulmoData.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
-      const prevText = prevScript.beats[index]?.text ?? "";
+      const prevText = studio.script.beats[index]?.text ?? "";
       if (mulmoBeat.text !== prevText) {
         const scratchpadFilePath = getScratchpadFilePath(mulmoBeat.filename + ".mp3");
         if (fs.existsSync(scratchpadFilePath)) {
@@ -165,6 +171,7 @@ const main = async () => {
       }
     });
   }
+  studio.script = mulmoData;
 
   graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
 
@@ -181,7 +188,7 @@ const main = async () => {
     },
     { agentFilters },
   );
-  graph.injectValue("script", mulmoData);
+  graph.injectValue("studio", studio);
   const results = await graph.run();
   const result = results.combineFiles as { fileName: string };
   console.log(`Generated: ${result.fileName}`);
