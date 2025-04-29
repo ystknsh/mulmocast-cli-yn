@@ -8,7 +8,7 @@ import combineFilesAgent from "./agents/combine_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoBeat, SpeakerDictonary, text2speechParams } from "./type";
+import { MulmoBeat, SpeakerDictonary, Text2speechParams } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 
@@ -27,7 +27,7 @@ const graph_tts: GraphData = {
       },
     },
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: text2speechParams }) => {
+      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: Text2speechParams }) => {
         const { beat, speakers, speechParams } = namedInputs;
         return {
           voiceId: speakers[beat.speaker].voiceId,
