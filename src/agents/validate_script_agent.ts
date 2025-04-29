@@ -38,7 +38,7 @@ const validateScriptAgentInfo: AgentFunctionInfo = {
   agent: validateScriptAgent,
   mock: validateScriptAgent,
   samples: [],
-  description: "Validates if a JSON string conforms to the MulmoScript schema using valibot",
+  description: "Validates if a JSON string conforms to the MulmoScript schema",
   category: ["validation"],
   author: "Receptron Team",
   repository: "https://github.com/receptron/mulmocast-cli/tree/main/src/agents/validate_script_agent.ts",
