@@ -16,3 +16,16 @@ export type Text2speechParams = z.infer<typeof text2speechParamsSchema>;
 export type Text2imageParams = z.infer<typeof text2imageParamsSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
+
+export type MulmoStudioBeat = MulmoBeat & {
+  hash?: string;
+  duration?: number;
+  filename?: string;
+};
+
+export type MulmoStudio = {
+  script: MulmoScript; // readonly
+
+  filename: string;
+  beats: MulmoStudioBeat[];
+};
