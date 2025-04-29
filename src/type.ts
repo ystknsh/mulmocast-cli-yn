@@ -17,7 +17,7 @@ export type Text2imageParams = z.infer<typeof text2imageParamsSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
 
-export type MulmoStudioBeat = {
+export type MulmoStudioBeat = MulmoBeat & {
   hash?: string;
   duration?: number;
   filename?: string;

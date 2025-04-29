@@ -77,7 +77,7 @@ const graph_data: GraphData = {
     },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":studio.script.beats", script: ":studio.script" },
+      inputs: { rows: ":studio.beats", script: ":studio.script" },
       graph: graph_tts,
     },
     combineFiles: {
@@ -146,8 +146,8 @@ const main = async () => {
     filename: fileName,
     beats: Array(mulmoData.beats.length).fill({}),
   };
-  studio.beats.forEach((beat: MulmoStudioBeat, index: number) => {
-    beat.filename = fileName + index;
+  mulmoData.beats.forEach((beat: MulmoStudioBeat, index: number) => {
+    studio.beats[index] = { ...beat, filename: fileName + index };
   });
 
   /*
