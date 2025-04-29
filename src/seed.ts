@@ -2,6 +2,7 @@ import "dotenv/config";
 import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
 import { prompts } from "./agents/prompts_data";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 const graphData = {
   version: 0.5,
@@ -9,11 +10,14 @@ const graphData = {
     while: true,
   },
   nodes: {
+    fileName: {
+      update: ":fileName",
+    },
     messages: {
       value: [
         {
           role: "system",
-          content: prompts.prompt,
+          content: prompts.prompt_seed,
         },
       ],
       update: ":llm.messages",
@@ -43,14 +47,26 @@ const graphData = {
       agent: "copyAgent",
       inputs: {
         json: ":llm.text.codeBlock().jsonParse()",
+        text: ":llm.text.codeBlock()",
       },
       console: { after: true },
+    },
+    writeJSON: {
+      if: ":json.json",
+      agent: "fileWriteAgent",
+      inputs: {
+        file: "./tmp/${:fileName}-${@now}.json",
+        text: ":json.text",
+      },
+      console: { after: true, before: true },
     },
   },
 };
 const main = async () => {
-  const graph = new GraphAI(graphData, { ...agents });
+  const arg2 = process.argv[2];
 
+  const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
+  graph.injectValue("fileName", arg2);
   await graph.run();
 };
 main();
