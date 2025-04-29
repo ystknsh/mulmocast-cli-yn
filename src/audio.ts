@@ -1,5 +1,5 @@
 import "dotenv/config";
-import fs from "fs";
+// import fs from "fs";
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import ttsNijivoiceAgent from "./agents/tts_nijivoice_agent";
@@ -9,7 +9,7 @@ import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "./type";
-import { readMulmoScriptFile, readMulmoStudioFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
+import { readMulmoScriptFile, readMulmoStudioFile, getOutputFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
@@ -141,7 +141,7 @@ const main = async () => {
   const readData = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
   const { mulmoData, fileName } = readData;
 
-  // Check if any script changes
+  // Create or update MulmoStudio file with MulmoScript
   const outputFilePath = getOutputFilePath(fileName + "_studio.json");
   const info = readMulmoStudioFile(outputFilePath);
   const studio: MulmoStudio = info?.mulmoData ?? {
@@ -150,7 +150,7 @@ const main = async () => {
     beats: Array(mulmoData.beats.length).fill({}),
   };
   mulmoData.beats.forEach((beat: MulmoStudioBeat, index: number) => {
-    studio.beats[index] = { ...beat, filename: fileName + index };
+    studio.beats[index] = { ...studio.beats[index], ...beat, filename: fileName + index };
   });
 
   /*
