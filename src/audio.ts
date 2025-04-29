@@ -8,10 +8,9 @@ import combineAudioFilesAgent from "./agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoBeat, SpeakerDictonary, Text2speechParams } from "./type";
+import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "./type";
 import { readMulmoScriptFile, readMulmoStudioFile, getOutputFilePath, getScratchpadFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
-import { mulmoScriptSchema } from "./schema";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -85,16 +84,16 @@ const graph_data: GraphData = {
       agent: "combineAudioFilesAgent",
       inputs: {
         map: ":map",
-        script: ":studio.script",
-        combinedFileName: "./output/${:studio.script.filename}.mp3",
+        studio: ":studio",
+        combinedFileName: "./output/${:studio.filename}.mp3",
       },
       isResult: true,
     },
     fileWrite: {
       agent: "fileWriteAgent",
       inputs: {
-        file: "./output/${:studio.script.filename}_xxx.json",
-        text: ":combineFiles.script.toJSON()",
+        file: "./output/${:studio.filename}_studio.json",
+        text: ":combineFiles.studio.toJSON()",
       },
       params: { baseDir: __dirname + "/../" },
     },
@@ -104,8 +103,8 @@ const graph_data: GraphData = {
         musicFileName: process.env.PATH_BGM ?? "./music/StarsBeyondEx.mp3",
       },
       inputs: {
-        voiceFile: ":combineFiles.fileName",
-        outFileName: "./output/${:studio.script.filename}_bgm.mp3",
+        voiceFile: ":combineFiles.studio.filename",
+        outFileName: "./output/${:studio.filename}_bgm.mp3",
         script: ":studio.script",
       },
       isResult: true,
@@ -139,25 +138,19 @@ const main = async () => {
   const readData = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
   const { mulmoData, fileName } = readData;
 
-  mulmoData.filename = fileName;
-  mulmoData.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
-    mulmoBeat.filename = mulmoData.filename + index;
-    // HACK: In case, the operator skip the "Split" phase.
-    /*
-    if (!mulmoBeat.ttsText) {
-      mulmoBeat.ttsText = mulmoBeat.text;
-    }
-    */
+  // Check if any script changes
+  const outputFilePath = getOutputFilePath(fileName + "_studio.json");
+  const info = readMulmoStudioFile(outputFilePath);
+  const studio: MulmoStudio = info?.mulmoStudio ?? {
+    script: mulmoData,
+    filename: fileName,
+    beats: Array(mulmoData.beats.length).fill({}),
+  };
+  studio.beats.forEach((beat: MulmoStudioBeat, index: number) => {
+    beat.filename = fileName + index;
   });
 
-  // Check if any script changes
-  const outputFilePath = getOutputFilePath(mulmoData.filename + "_studio.json");
-  const { mulmoStudio: studio } = readMulmoStudioFile(outputFilePath) ?? {
-    mulmoStudio: {
-      script: mulmoData,
-      beats: Array(mulmoData.beats.length).fill({}),
-    },
-  };
+  /*
   if (studio) {
     console.log("found output script", studio.script.filename);
     mulmoData.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
@@ -171,7 +164,8 @@ const main = async () => {
       }
     });
   }
-  studio.script = mulmoData;
+  */
+  studio.script = mulmoData; // update the script
 
   graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
 

@@ -1,19 +1,19 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import { MulmoScript, MulmoBeat } from "../type";
+import { MulmoScript, MulmoStudio, MulmoBeat } from "../type";
 
-const combineAudioFilesAgent: AgentFunction<null, { script: MulmoScript; fileName: string }, { script: MulmoScript; combinedFileName: string }> = async ({
+const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileName: string }, { studio: MulmoStudio; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
-  const { script, combinedFileName } = namedInputs;
+  const { studio, combinedFileName } = namedInputs;
   const outputFile = path.resolve(combinedFileName);
   const silentPath = path.resolve("./music/silent300.mp3");
   const silentLastPath = path.resolve("./music/silent800.mp3");
   const command = ffmpeg();
-  script.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
+  studio.script.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
     const filePath = path.resolve("./scratchpad/" + mulmoBeat.filename + ".mp3");
-    const isLast = index === script.beats.length - 2;
+    const isLast = index === studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
     // Measure and log the timestamp of each section
@@ -21,7 +21,7 @@ const combineAudioFilesAgent: AgentFunction<null, { script: MulmoScript; fileNam
       if (err) {
         console.error("Error while getting metadata:", err);
       } else {
-        mulmoBeat["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
+        studio.beats[index]["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
       }
     });
   });
@@ -42,7 +42,7 @@ const combineAudioFilesAgent: AgentFunction<null, { script: MulmoScript; fileNam
 
   return {
     fileName: outputFile,
-    script,
+    studio,
   };
 };
 

@@ -20,9 +20,12 @@ export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
 export type MulmoStudioBeat = {
   hash?: string;
   duration?: number;
+  filename?: string;
 };
 
 export type MulmoStudio = {
   script: MulmoScript; // readonly
+
+  filename: string;
   beats: MulmoStudioBeat[];
 };
