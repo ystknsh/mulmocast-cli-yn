@@ -51,8 +51,8 @@ export function readMulmoStudioFile(arg2: string, errorMessage?: string) {
   const parsedPath = path.parse(scriptPath);
 
   return {
-    mulmoStudio: studio,
-    mulmoStrdioPath: scriptPath,
+    mulmoData: studio,
+    mulmoDataPath: scriptPath,
     fileName: parsedPath.name,
   };
 }

@@ -102,6 +102,9 @@ const graph_data: GraphData = {
       params: {
         musicFileName: process.env.PATH_BGM ?? "./music/StarsBeyondEx.mp3",
       },
+      console: {
+        before: true,
+      },
       inputs: {
         voiceFile: ":combineFiles.studio.filename",
         outFileName: "./output/${:studio.filename}_bgm.mp3",
@@ -141,7 +144,7 @@ const main = async () => {
   // Check if any script changes
   const outputFilePath = getOutputFilePath(fileName + "_studio.json");
   const info = readMulmoStudioFile(outputFilePath);
-  const studio: MulmoStudio = info?.mulmoStudio ?? {
+  const studio: MulmoStudio = info?.mulmoData ?? {
     script: mulmoData,
     filename: fileName,
     beats: Array(mulmoData.beats.length).fill({}),
