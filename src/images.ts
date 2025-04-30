@@ -93,10 +93,6 @@ const main = async () => {
   const arg2 = process.argv[2];
   const studio = createOrUpdateStudioData(arg2);
 
-  // const { fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
-  // const outputFilePath = getOutputFilePath(fileName + ".json");
-  // const { mulmoData: outputScript } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
-
   mkdir(`images/${studio.filename}`);
 
   const agentFilters = [
@@ -116,6 +112,7 @@ const main = async () => {
     text2imageAgent: "imageOpenaiAgent",
   };
 
+  // We need to get google's auth token only if the google is the text2image provider.
   if (studio.script.imageParams?.provider === "google") {
     console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
@@ -136,6 +133,11 @@ const main = async () => {
   const results = await graph.run<{ output: MulmoStudioBeat[] }>();
   console.log(results.map);
   if (results.map?.output) {
+    // THe output looks like this. We need to merge it into MultiStudioBeat array
+    // [
+    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/0p.png' },
+    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/1p.png' }
+    // ]
     results.map?.output.forEach((update, index) => {
       const beat = studio.beats[index];
       studio.beats[index] = { ...beat, ...update };
