@@ -9,7 +9,7 @@ import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "./type";
-import { readMulmoScriptFile, readMulmoStudioFile, getOutputFilePath } from "./utils/file";
+import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import { text2hash } from "./utils/text_hash";
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
@@ -143,7 +143,7 @@ const main = async () => {
 
   // Create or update MulmoStudio file with MulmoScript
   const outputFilePath = getOutputFilePath(fileName + "_studio.json");
-  const info = readMulmoStudioFile(outputFilePath);
+  const info = readMulmoScriptFile<MulmoStudio>(outputFilePath);
   const studio: MulmoStudio = info?.mulmoData ?? {
     script: mulmoData,
     filename: fileName,
