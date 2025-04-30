@@ -11,7 +11,9 @@ export function readMulmoScriptFile<T = MulmoScript>(
   fileName: string;
 };
 
-export function readMulmoScriptFile<T = MulmoScript>(path: string): {
+export function readMulmoScriptFile<T = MulmoScript>(
+  path: string,
+): {
   mulmoData: T;
   mulmoDataPath: string;
   fileName: string;
