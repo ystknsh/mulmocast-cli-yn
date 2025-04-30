@@ -4,19 +4,19 @@ import { text2hash } from "./text_hash";
 
 export const createOrUpdateStudioData = (mulmoFile: string) => {
   const readData = readMulmoScriptFile(mulmoFile, "ERROR: File does not exist " + mulmoFile)!;
-  const { mulmoData, fileName } = readData;
+  const { mulmoData: mulmoScript, fileName } = readData;
 
   // Create or update MulmoStudio file with MulmoScript
-  const outputFilePath = getOutputStudioFilePath(fileName);
-  const info = readMulmoScriptFile<MulmoStudio>(outputFilePath);
-  const studio: MulmoStudio = info?.mulmoData ?? {
-    script: mulmoData,
+  const outputStudioFilePath = getOutputStudioFilePath(fileName);
+  const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
+  const studio: MulmoStudio = currentStudio?.mulmoData ?? {
+    script: mulmoScript,
     filename: fileName,
-    beats: Array(mulmoData.beats.length).fill({}),
+    beats: Array(mulmoScript.beats.length).fill({}),
   };
-  studio.script = mulmoData; // update the script
-  studio.beats.length = mulmoData.beats.length; // In case it became shorter
-  mulmoData.beats.forEach((beat: MulmoStudioBeat, index: number) => {
+  studio.script = mulmoScript; // update the script
+  studio.beats.length = mulmoScript.beats.length; // In case it became shorter
+  mulmoScript.beats.forEach((beat: MulmoStudioBeat, index: number) => {
     studio.beats[index] = { ...studio.beats[index], ...beat, filename: `${fileName}_${index}_${text2hash(beat.text)}` };
   });
   return studio;
