@@ -27,7 +27,7 @@ async function convertMarkdownToImage(markdown: string, outputPath: string) {
     "ul { margin-left: 40px } ",
     "li { font-size: 48px }",
   ];
-  const header = `<head><style>${styles.join('\n')}</style></head>`;
+  const header = `<head><style>${styles.join("\n")}</style></head>`;
 
   // Step 1: Convert Markdown to HTML
   const body = await marked(markdown);
