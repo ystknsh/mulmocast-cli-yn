@@ -1,4 +1,4 @@
-import { readMulmoScriptFile, getOutputFilePath } from "./file";
+import { readMulmoScriptFile, getOutputStudioFilePath } from "./file";
 import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "../type";
 import { text2hash } from "./text_hash";
 
@@ -7,7 +7,7 @@ export const createOrUpdateStudioData = (mulmoFile: string) => {
   const { mulmoData, fileName } = readData;
 
   // Create or update MulmoStudio file with MulmoScript
-  const outputFilePath = getOutputFilePath(fileName + "_studio.json");
+  const outputFilePath = getOutputStudioFilePath(fileName);
   const info = readMulmoScriptFile<MulmoStudio>(outputFilePath);
   const studio: MulmoStudio = info?.mulmoData ?? {
     script: mulmoData,
@@ -20,4 +20,4 @@ export const createOrUpdateStudioData = (mulmoFile: string) => {
     studio.beats[index] = { ...studio.beats[index], ...beat, filename: `${fileName}_${index}_${text2hash(beat.text)}` };
   });
   return studio;
-}  
+};
