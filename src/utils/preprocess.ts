@@ -14,6 +14,9 @@ export const createOrUpdateStudioData = (mulmoFile: string) => {
     filename: fileName,
     beats: Array(mulmoScript.beats.length).fill({}),
   };
+  if (!studio.beats) {
+    studio.beats = [];
+  }
   studio.script = mulmoScript; // update the script
   studio.beats.length = mulmoScript.beats.length; // In case it became shorter
   mulmoScript.beats.forEach((beat: MulmoStudioBeat, index: number) => {
