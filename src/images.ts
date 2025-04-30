@@ -17,6 +17,13 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
+const default_styles = [
+  "body { margin: 40px; margin-top: 60px; color:#333 }",
+  "h1 { font-size: 60px; text-align: center }",
+  "ul { margin-left: 40px } ",
+  "li { font-size: 48px }",
+];
+
 const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: number; suffix: string; studio: MulmoStudio }) => {
   const { beat, index, suffix, studio } = namedInputs;
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
@@ -27,7 +34,7 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
     if (beat.media.type === "textSlide") {
       const slide = beat.media.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await convertMarkdownToImage(markdown, imagePath);
+      await convertMarkdownToImage(markdown, default_styles, imagePath);
     }
   }
   return { path: imagePath, prompt, imageParams };
