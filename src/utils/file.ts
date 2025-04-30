@@ -1,23 +1,23 @@
 import fs from "fs";
 import path from "path";
-import { MulmoScript, MulmoStudio } from "../type";
+import { MulmoScript } from "../type";
 
-export function readMulmoScriptFile(
+export function readMulmoScriptFile<T = MulmoScript>(
   path: string,
   errorMessage: string,
 ): {
-  mulmoData: MulmoScript;
+  mulmoData: T;
   mulmoDataPath: string;
   fileName: string;
 };
 
-export function readMulmoScriptFile(path: string): {
-  mulmoData: MulmoScript;
+export function readMulmoScriptFile<T = MulmoScript>(path: string): {
+  mulmoData: T;
   mulmoDataPath: string;
   fileName: string;
 } | null;
 
-export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
+export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?: string) {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
@@ -27,31 +27,11 @@ export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as MulmoScript;
+  const script = JSON.parse(scriptData) as T;
   const parsedPath = path.parse(scriptPath);
 
   return {
     mulmoData: script,
-    mulmoDataPath: scriptPath,
-    fileName: parsedPath.name,
-  };
-}
-
-export function readMulmoStudioFile(arg2: string, errorMessage?: string) {
-  const scriptPath = path.resolve(arg2);
-  if (!fs.existsSync(scriptPath)) {
-    if (errorMessage) {
-      console.error(errorMessage);
-      process.exit(1);
-    }
-    return null;
-  }
-  const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const studio = JSON.parse(scriptData) as MulmoStudio;
-  const parsedPath = path.parse(scriptPath);
-
-  return {
-    mulmoData: studio,
     mulmoDataPath: scriptPath,
     fileName: parsedPath.name,
   };
