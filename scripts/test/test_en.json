@@ -15,11 +15,11 @@
   "beats": [
     {
       "speaker": "Host",
-      "text": "Welcome to Mulmocast Tech Insights, where we explore the cutting edge of technology and its implications for our future. I'm your host, and today we're diving into a fascinating and potentially alarming forecast called AI-2027 - a detailed scenario about how artificial intelligence might evolve in the next few years, culminating in what some researchers call artificial superintelligence."
+      "text": "Welcome to Mulmocast Tech Insights."
     },
     {
       "speaker": "Host",
-      "text": "AI-2027 is a project from the AI Futures Project, a nonprofit organization dedicated to forecasting AI development. It was created by a team led by Daniel Kokotajlo, who previously worked as a governance researcher at OpenAI. What makes this forecast particularly interesting is that Kokotajlo previously published 'What 2026 Looks Like' in 2021, which many observers note made several accurate predictions about AI development well before systems like ChatGPT existed."
+      "text": "AI-2028 is a project from the AI Futures Project."
     }
   ]
 }
