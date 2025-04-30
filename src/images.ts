@@ -21,8 +21,13 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
   const { beat, index, suffix, studio } = namedInputs;
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  console.log(`prompt: ${prompt}`);
+  // console.log(`prompt: ${prompt}`);
   const relativePath = `./images/${studio.filename}/${index}${suffix}.png`;
+  if (beat.media) {
+    if (beat.media.type === "textSlide") {
+      console.log("DEBUG: textSlide", beat.media.slide.title);
+    }
+  }
   return { path: path.resolve(relativePath), prompt, imageParams };
 };
 

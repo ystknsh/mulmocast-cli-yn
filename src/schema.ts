@@ -60,6 +60,14 @@ const MulmoMovieMediaSchema = z.object({
   source: mediaSourceSchema,
 });
 
+const MulmoTextSlideMediaSchema = z.object({
+  type: z.literal("textSlide"),
+  slide: z.object({
+    title: z.string(),
+    bullets: z.array(z.string())  
+  })
+});
+
 export const mulmoMediaSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
@@ -67,6 +75,7 @@ export const mulmoMediaSchema = z.union([
   MulmoImageMediaSchema,
   MulmoSvgMediaSchema,
   MulmoMovieMediaSchema,
+  MulmoTextSlideMediaSchema,
 ]);
 
 export const text2imageParamsSchema = z.object({
