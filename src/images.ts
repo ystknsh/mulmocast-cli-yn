@@ -52,6 +52,7 @@ const graph_data: GraphData = {
       inputs: { rows: ":studio.beats", studio: ":studio", text2imageAgent: ":text2imageAgent" },
       isResult: true,
       params: {
+        rowKey: "beat",
         compositeResult: true,
       },
       graph: {
@@ -59,7 +60,7 @@ const graph_data: GraphData = {
           preprocessor: {
             agent: preprocess_agent,
             inputs: {
-              beat: ":row",
+              beat: ":beat",
               index: ":__mapIndex",
               studio: ":studio",
               suffix: "p",
