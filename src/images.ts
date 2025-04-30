@@ -140,7 +140,7 @@ const main = async () => {
       const beat = studio.beats[index];
       studio.beats[index] = { ...beat, ...update };
     });
-    fs.writeFileSync(`./output/$:studio.filename}_studio.json`, JSON.stringify(studio, null, 2));
+    fs.writeFileSync(`./output/${studio.filename}_studio.json`, JSON.stringify(studio, null, 2));
   }
 };
 
