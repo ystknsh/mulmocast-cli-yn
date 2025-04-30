@@ -90,6 +90,10 @@ export const text2speechParamsSchema = z.object({
   instruction: z.string().optional(),
 });
 
+export const textSlideParamsSchema = z.object({
+  cssStyles: z.array(z.string()),
+});
+
 export const mulmoBeatSchema = z.object({
   speaker: speakerIdSchema,
   text: z.string(),
@@ -129,6 +133,9 @@ export const mulmoScriptSchema = z.object({
       provider: z.string().optional(),
     })
     .optional(),
+
+  // for textSlides
+  textSlideParams: textSlideParamsSchema.optional(),
 
   // images: ImageInfo[] // generated
   imagePath: z.string().optional(), // for keynote images movie ??
