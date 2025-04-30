@@ -64,8 +64,8 @@ const MulmoTextSlideMediaSchema = z.object({
   type: z.literal("textSlide"),
   slide: z.object({
     title: z.string(),
-    bullets: z.array(z.string())  
-  })
+    bullets: z.array(z.string()),
+  }),
 });
 
 export const mulmoMediaSchema = z.union([
