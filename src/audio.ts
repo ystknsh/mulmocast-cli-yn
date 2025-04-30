@@ -11,7 +11,7 @@ import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "./type";
 import { readMulmoScriptFile, readMulmoStudioFile, getOutputFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
-
+import { text2hash } from "./utils/text_hash";
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
 
@@ -152,24 +152,8 @@ const main = async () => {
   studio.script = mulmoData; // update the script
   studio.beats.length = mulmoData.beats.length; // In case it became shorter
   mulmoData.beats.forEach((beat: MulmoStudioBeat, index: number) => {
-    studio.beats[index] = { ...studio.beats[index], ...beat, filename: fileName + index };
+    studio.beats[index] = { ...studio.beats[index], ...beat, filename: `${fileName}_${index}_${text2hash(beat.text)}` };
   });
-
-  /*
-  if (studio) {
-    console.log("found output script", studio.script.filename);
-    mulmoData.beats.forEach((mulmoBeat: MulmoBeat, index: number) => {
-      const prevText = studio.script.beats[index]?.text ?? "";
-      if (mulmoBeat.text !== prevText) {
-        const scratchpadFilePath = getScratchpadFilePath(mulmoBeat.filename + ".mp3");
-        if (fs.existsSync(scratchpadFilePath)) {
-          console.log("deleting", mulmoBeat.filename);
-          fs.unlinkSync(scratchpadFilePath);
-        }
-      }
-    });
-  }
-  */
 
   graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
 
