@@ -1,4 +1,4 @@
-import { updateMultiLingualTexts } from "../../src/preprocess";
+import { updateMultiLingualTexts } from "../../src/translate";
 
 import test from "node:test";
 import assert from "node:assert";

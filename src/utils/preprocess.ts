@@ -1,5 +1,5 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file";
-import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "../type";
+import { MulmoStudio, MulmoStudioBeat } from "../type";
 import { text2hash } from "./text_hash";
 
 export const createOrUpdateStudioData = (mulmoFile: string) => {
