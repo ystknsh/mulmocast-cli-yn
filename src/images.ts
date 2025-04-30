@@ -4,8 +4,8 @@ import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
-import { MulmoScript, MulmoBeat, Text2imageParams } from "./type";
-import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
+import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./type";
+import { mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 import imageGoogleAgent from "./agents/image_google_agent";
@@ -17,12 +17,12 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
-  const { beat, index, suffix, script } = namedInputs;
-  const imageParams = { ...script.imageParams, ...beat.imageParams };
+const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: number; suffix: string; studio: MulmoStudio }) => {
+  const { beat, index, suffix, studio } = namedInputs;
+  const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   console.log(`prompt: ${prompt}`);
-  const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
+  const relativePath = `./images/${studio.filename}/${index}${suffix}.png`;
   return { path: path.resolve(relativePath), prompt, imageParams };
 };
 
@@ -30,11 +30,11 @@ const graph_data: GraphData = {
   version: 0.5,
   concurrency: 2,
   nodes: {
-    script: { value: {} },
+    studio: { value: {} },
     text2imageAgent: { value: "" },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2imageAgent: ":text2imageAgent" },
+      inputs: { rows: ":studio.beats", studio: ":studio", text2imageAgent: ":text2imageAgent" },
       isResult: true,
       params: {
         compositeResult: true,
@@ -46,7 +46,7 @@ const graph_data: GraphData = {
             inputs: {
               beat: ":row",
               index: ":__mapIndex",
-              script: ":script",
+              studio: ":studio",
               suffix: "p",
             },
           },
@@ -111,8 +111,8 @@ const main = async () => {
     agentFilters,
   };
 
-  const injections: Record<string, string | MulmoScript | Text2imageParams | undefined> = {
-    script: studio.script,
+  const injections: Record<string, string | MulmoStudio | Text2imageParams | undefined> = {
+    studio: studio,
     text2imageAgent: "imageOpenaiAgent",
   };
 
@@ -133,7 +133,7 @@ const main = async () => {
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
-  const results = await graph.run<{ output: MulmoBeat[] }>();
+  const results = await graph.run<{ output: MulmoStudioBeat[] }>();
   console.log(results.map);
   if (results.map?.output) {
     results.map?.output.forEach((update, index) => {
