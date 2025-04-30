@@ -90,8 +90,6 @@ export const mulmoBeatSchema = z.object({
   speechParams: text2speechParamsSchema.optional(),
   imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   image: z.string().optional(), // path to the image
-  filename: z.string(), // generated
-  duration: z.number().optional(), // workaround
 });
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
