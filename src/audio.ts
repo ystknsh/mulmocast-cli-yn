@@ -8,8 +8,8 @@ import combineAudioFilesAgent from "./agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
+import { createOrUpdateStudioData } from "./utils/preprocess";
 import { MulmoBeat, MulmoStudio, MulmoStudioBeat, SpeakerDictonary, Text2speechParams } from "./type";
-import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import { text2hash } from "./utils/text_hash";
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
@@ -138,24 +138,9 @@ const agentFilters = [
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const readData = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2)!;
-  const { mulmoData, fileName } = readData;
+  const studio = createOrUpdateStudioData(arg2);
 
-  // Create or update MulmoStudio file with MulmoScript
-  const outputFilePath = getOutputFilePath(fileName + "_studio.json");
-  const info = readMulmoScriptFile<MulmoStudio>(outputFilePath);
-  const studio: MulmoStudio = info?.mulmoData ?? {
-    script: mulmoData,
-    filename: fileName,
-    beats: Array(mulmoData.beats.length).fill({}),
-  };
-  studio.script = mulmoData; // update the script
-  studio.beats.length = mulmoData.beats.length; // In case it became shorter
-  mulmoData.beats.forEach((beat: MulmoStudioBeat, index: number) => {
-    studio.beats[index] = { ...studio.beats[index], ...beat, filename: `${fileName}_${index}_${text2hash(beat.text)}` };
-  });
-
-  graph_data.concurrency = mulmoData.speechParams?.provider === "nijivoice" ? 1 : 8;
+  graph_data.concurrency = studio.script.speechParams?.provider === "nijivoice" ? 1 : 8;
 
   const graph = new GraphAI(
     graph_data,
