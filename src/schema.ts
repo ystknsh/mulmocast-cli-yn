@@ -60,6 +60,14 @@ const MulmoMovieMediaSchema = z.object({
   source: mediaSourceSchema,
 });
 
+const MulmoTextSlideMediaSchema = z.object({
+  type: z.literal("textSlide"),
+  slide: z.object({
+    title: z.string(),
+    bullets: z.array(z.string()),
+  }),
+});
+
 export const mulmoMediaSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
@@ -67,6 +75,7 @@ export const mulmoMediaSchema = z.union([
   MulmoImageMediaSchema,
   MulmoSvgMediaSchema,
   MulmoMovieMediaSchema,
+  MulmoTextSlideMediaSchema,
 ]);
 
 export const text2imageParamsSchema = z.object({
@@ -79,6 +88,10 @@ export const text2imageParamsSchema = z.object({
 export const text2speechParamsSchema = z.object({
   speed: z.number().optional(), // default: 1.0
   instruction: z.string().optional(),
+});
+
+export const textSlideParamsSchema = z.object({
+  cssStyles: z.array(z.string()),
 });
 
 export const mulmoBeatSchema = z.object({
@@ -120,6 +133,9 @@ export const mulmoScriptSchema = z.object({
       provider: z.string().optional(),
     })
     .optional(),
+
+  // for textSlides
+  textSlideParams: textSlideParamsSchema.optional(),
 
   // images: ImageInfo[] // generated
   imagePath: z.string().optional(), // for keynote images movie ??

@@ -7,23 +7,38 @@ import * as agents from "@graphai/agents";
 import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./type";
 import { getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
+import { convertMarkdownToImage } from "./utils/markdown";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 import imageGoogleAgent from "./agents/image_google_agent";
 import imageOpenaiAgent from "./agents/image_openai_agent";
-
 import { ImageGoogleConfig } from "./agents/image_google_agent";
 
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
+const defaultStyles = [
+  "body { margin: 40px; margin-top: 60px; color:#333 }",
+  "h1 { font-size: 60px; text-align: center }",
+  "ul { margin-left: 40px } ",
+  "li { font-size: 48px }",
+];
+
 const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: number; suffix: string; studio: MulmoStudio }) => {
   const { beat, index, suffix, studio } = namedInputs;
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  console.log(`prompt: ${prompt}`);
-  const relativePath = `./images/${studio.filename}/${index}${suffix}.png`;
-  return { path: path.resolve(relativePath), prompt, imageParams };
+  const imagePath = path.resolve(`./images/${studio.filename}/${index}${suffix}.png`);
+
+  if (beat.media) {
+    if (beat.media.type === "textSlide") {
+      const slide = beat.media.slide;
+      const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
+      // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
+      await convertMarkdownToImage(markdown, studio.script.textSlideParams?.cssStyles ?? defaultStyles, imagePath);
+    }
+  }
+  return { path: imagePath, prompt, imageParams };
 };
 
 const graph_data: GraphData = {
@@ -131,7 +146,7 @@ const main = async () => {
     graph.injectValue(key, injections[key]);
   });
   const results = await graph.run<{ output: MulmoStudioBeat[] }>();
-  console.log(results.map);
+
   if (results.map?.output) {
     // THe output looks like this. We need to merge it into MultiStudioBeat array
     // [
