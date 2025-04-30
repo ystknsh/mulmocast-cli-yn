@@ -28,7 +28,7 @@ async function convertMarkdownToImage(markdown: string, outputPath: string) {
   const page = await browser.newPage();
 
   // Set the page content to the HTML generated from the Markdown
-  await page.setContent(html);
+  await page.setContent(`<htlm><head><style>body: { font-size: 80px }</style></head><body>${html}<body></html>`);
 
   // Adjust page settings if needed (like width, height, etc.)
   await page.setViewport({ width: 1200, height: 800 });
