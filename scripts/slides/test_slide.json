@@ -1,5 +1,13 @@
 {
   "title": "Human Evolution",
+  "textSlideParams": {
+    "cssStyles": [
+      "body { margin: 40px; margin-top: 60px; color:#333 }",
+      "h1 { font-size: 60px; text-align: center; color:green }",
+      "ul { margin-left: 40px } ",
+      "li { font-size: 48px }"
+    ]
+  },
   "speechParams": {
     "speakers": {
       "Presenter": {

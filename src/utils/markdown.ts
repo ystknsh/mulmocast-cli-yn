@@ -24,4 +24,4 @@ export const convertMarkdownToImage = async (markdown: string, styles: string[],
 
   await browser.close();
   console.log(`Image saved to ${outputPath}`);
-}
+};

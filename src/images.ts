@@ -34,7 +34,8 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
     if (beat.media.type === "textSlide") {
       const slide = beat.media.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await convertMarkdownToImage(markdown, default_styles, imagePath);
+      // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
+      await convertMarkdownToImage(markdown, studio.script.textSlideParams?.cssStyles ?? default_styles, imagePath);
     }
   }
   return { path: imagePath, prompt, imageParams };
