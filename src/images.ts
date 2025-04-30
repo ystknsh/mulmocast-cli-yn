@@ -5,7 +5,7 @@ import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
 import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./type";
-import { mkdir } from "./utils/file";
+import { getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 import imageGoogleAgent from "./agents/image_google_agent";
@@ -142,7 +142,7 @@ const main = async () => {
       const beat = studio.beats[index];
       studio.beats[index] = { ...beat, ...update };
     });
-    fs.writeFileSync(`./output/${studio.filename}_studio.json`, JSON.stringify(studio, null, 2));
+    fs.writeFileSync(getOutputFilePath(`${studio.filename}_studio.json`), JSON.stringify(studio, null, 2));
   }
 };
 
