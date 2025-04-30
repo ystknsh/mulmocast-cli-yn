@@ -90,8 +90,6 @@ export const mulmoBeatSchema = z.object({
   speechParams: text2speechParamsSchema.optional(),
   imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   image: z.string().optional(), // path to the image
-  filename: z.string(), // generated
-  duration: z.number().optional(), // workaround
 });
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
@@ -129,4 +127,16 @@ export const mulmoScriptSchema = z.object({
 
   // for bgm
   padding: z.number().optional(),
+});
+
+export const mulmoStudioBeatSchema = mulmoBeatSchema.extend({
+  hash: z.string().optional(),
+  duration: z.number().optional(),
+  filename: z.string().optional(),
+});
+
+export const mulmoStudioSchema = z.object({
+  script: mulmoScriptSchema,
+  filename: z.string(),
+  beats: z.array(mulmoStudioBeatSchema),
 });
