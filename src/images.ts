@@ -10,20 +10,61 @@ import { fileCacheAgentFilter } from "./utils/filters";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 import imageGoogleAgent from "./agents/image_google_agent";
 import imageOpenaiAgent from "./agents/image_openai_agent";
-
 import { ImageGoogleConfig } from "./agents/image_google_agent";
+
+import { marked } from "marked";
+import puppeteer from "puppeteer";
 
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
+async function convertMarkdownToImage(markdown: string, outputPath: string) {
+  // Step 0: Prepare the header
+  const styles = [
+    "body { margin: 40px; margin-top: 60px; color:#333 }",
+    "h1 { font-size: 60px; text-align: center }",
+    "ul { margin-left: 40px } ",
+    "li { font-size: 48px }",
+  ];
+  const header = `<head><style>${styles.join("\n")}</style></head>`;
+
+  // Step 1: Convert Markdown to HTML
+  const body = await marked(markdown);
+  const html = `<htlm>${header}<body>${body}</body></html>`;
+
+  // Step 2: Use Puppeteer to render HTML to an image
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  // Set the page content to the HTML generated from the Markdown
+  await page.setContent(html);
+
+  // Adjust page settings if needed (like width, height, etc.)
+  await page.setViewport({ width: 1200, height: 800 });
+
+  // Step 3: Capture screenshot of the page (which contains the Markdown-rendered HTML)
+  await page.screenshot({ path: outputPath });
+
+  await browser.close();
+  console.log(`Image saved to ${outputPath}`);
+}
+
 const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: number; suffix: string; studio: MulmoStudio }) => {
   const { beat, index, suffix, studio } = namedInputs;
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  console.log(`prompt: ${prompt}`);
-  const relativePath = `./images/${studio.filename}/${index}${suffix}.png`;
-  return { path: path.resolve(relativePath), prompt, imageParams };
+  const imagePath = path.resolve(`./images/${studio.filename}/${index}${suffix}.png`);
+
+  if (beat.media) {
+    if (beat.media.type === "textSlide") {
+      const slide = beat.media.slide;
+      const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
+      console.log(markdown);
+      await convertMarkdownToImage(markdown, imagePath);
+    }
+  }
+  return { path: imagePath, prompt, imageParams };
 };
 
 const graph_data: GraphData = {
