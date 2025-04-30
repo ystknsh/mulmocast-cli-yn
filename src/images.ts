@@ -17,7 +17,7 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const default_styles = [
+const defaultStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333 }",
   "h1 { font-size: 60px; text-align: center }",
   "ul { margin-left: 40px } ",
@@ -35,7 +35,7 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
       const slide = beat.media.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
       // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
-      await convertMarkdownToImage(markdown, studio.script.textSlideParams?.cssStyles ?? default_styles, imagePath);
+      await convertMarkdownToImage(markdown, studio.script.textSlideParams?.cssStyles ?? defaultStyles, imagePath);
     }
   }
   return { path: imagePath, prompt, imageParams };
