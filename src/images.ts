@@ -7,6 +7,7 @@ import * as agents from "@graphai/agents";
 import { MulmoScript, MulmoBeat, Text2imageParams } from "./type";
 import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
+import { createOrUpdateStudioData } from "./utils/preprocess";
 import imageGoogleAgent from "./agents/image_google_agent";
 import imageOpenaiAgent from "./agents/image_openai_agent";
 
@@ -90,11 +91,13 @@ const googleAuth = async () => {
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const { fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
-  const outputFilePath = getOutputFilePath(fileName + ".json");
-  const { mulmoData: outputScript } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
+  const studio = createOrUpdateStudioData(arg2);
 
-  mkdir(`images/${outputScript.filename}`);
+  // const { fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
+  // const outputFilePath = getOutputFilePath(fileName + ".json");
+  // const { mulmoData: outputScript } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
+
+  mkdir(`images/${studio.filename}`);
 
   const agentFilters = [
     {
@@ -109,11 +112,11 @@ const main = async () => {
   };
 
   const injections: Record<string, string | MulmoScript | Text2imageParams | undefined> = {
-    script: outputScript,
+    script: studio.script,
     text2imageAgent: "imageOpenaiAgent",
   };
 
-  if (outputScript.imageParams?.provider === "google") {
+  if (studio.script.imageParams?.provider === "google") {
     console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,
@@ -134,10 +137,10 @@ const main = async () => {
   console.log(results.map);
   if (results.map?.output) {
     results.map?.output.forEach((update, index) => {
-      const beat = outputScript.beats[index];
-      outputScript.beats[index] = { ...beat, ...update };
+      const beat = studio.beats[index];
+      studio.beats[index] = { ...beat, ...update };
     });
-    fs.writeFileSync(outputFilePath, JSON.stringify(outputScript, null, 2));
+    fs.writeFileSync(`./output/$:studio.filename}_studio.json`, JSON.stringify(studio, null, 2));
   }
 };
 
