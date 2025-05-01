@@ -6,6 +6,7 @@ import fs from "fs";
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
+import { outDirName } from "./utils/const";
 
 import { translate } from "./actions/translate";
 import { images } from "./actions/images";
@@ -33,7 +34,7 @@ const main = async () => {
   const { outdir, basedir, file } = args;
   const baseDirPath = getBaseDirPath(basedir as string);
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
-  const outFilePath = getFullPath(baseDirPath, (outdir as string) ?? "output");
+  const outFilePath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
 
   if (args.v) {
     console.log({ baseDirPath, mulmoFilePath, outFilePath });
