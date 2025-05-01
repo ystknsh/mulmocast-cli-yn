@@ -7,6 +7,7 @@ import { args } from "./args";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
 import { outDirName } from "./utils/const";
+import { MulmoScriptMethods } from "./methods";
 
 import { translate } from "./actions/translate";
 import { images } from "./actions/images";
@@ -34,10 +35,10 @@ const main = async () => {
   const { outdir, basedir, file } = args;
   const baseDirPath = getBaseDirPath(basedir as string);
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
-  const outFilePath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
+  const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
 
   if (args.v) {
-    console.log({ baseDirPath, mulmoFilePath, outFilePath });
+    console.log({ baseDirPath, mulmoFilePath, outDirPath });
   }
 
   if (!fs.existsSync(mulmoFilePath)) {
@@ -47,13 +48,13 @@ const main = async () => {
 
   // TODO some option process
   const { action } = args;
-  const studio = createOrUpdateStudioData(mulmoFilePath);
+  const studio = createOrUpdateStudioData(mulmoFilePath, { outDirPath });
 
   if (action === "translate") {
-    await translate(studio, { outFilePath });
+    await translate(studio, { outDirPath });
   }
   if (action === "audio") {
-    await audio(studio, studio.script.speechParams?.provider === "nijivoice" ? 1 : 8);
+    await audio(studio, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
   }
   if (action === "images") {
     await images(studio);

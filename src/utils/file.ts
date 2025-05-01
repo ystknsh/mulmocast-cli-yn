@@ -46,8 +46,8 @@ export const getOutputFilePath = (fileName: string) => {
   return filePath;
 };
 
-export const getOutputStudioFilePath = (fileName: string) => {
-  return getOutputFilePath(fileName + "_studio.json");
+export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + "_studio.json");
 };
 
 export const getScratchpadFilePath = (fileName: string) => {

@@ -12,7 +12,7 @@ const translateGraph: GraphData = {
   nodes: {
     studio: {},
     defaultLang: {},
-    outFilePath: {},
+    outDirPath: {},
     lang: {
       agent: "stringUpdateTextAgent",
       inputs: {
@@ -148,7 +148,7 @@ const translateGraph: GraphData = {
       console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
-        file: "${:outFilePath}/${:studio.filename}_studio.json", // TODO
+        file: "${:outDirPath}/${:studio.filename}_studio.json", // TODO
         text: ":mergeStudioResult.toJSON()",
       },
     },
@@ -190,14 +190,13 @@ const agentFilters = [
 const defaultLang = "en";
 const targetLangs = ["ja", "en"];
 
-export const translate = async (studio: MulmoStudio, files: { outFilePath: string }) => {
-  const { outFilePath } = files;
-  console.log(outFilePath);
+export const translate = async (studio: MulmoStudio, files: { outDirPath: string }) => {
+  const { outDirPath } = files;
   const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
   graph.injectValue("studio", studio);
   graph.injectValue("defaultLang", defaultLang);
   graph.injectValue("targetLangs", targetLangs);
-  graph.injectValue("outFilePath", outFilePath);
+  graph.injectValue("outDirPath", outDirPath);
 
   await graph.run();
   // const results = await graph.run();
