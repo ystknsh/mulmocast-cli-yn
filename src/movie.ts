@@ -1,5 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio } from "./types";
+import { MulmoScriptMethods } from "./methods";
 import { getOutputFilePath } from "./utils/file";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 
@@ -36,7 +37,7 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
   const filterComplexParts: string[] = [];
   studio.beats.forEach((beat, index) => {
     // Resize background image to match canvas dimensions
-    const duration = beat.duration! + (index === 0 ? 4.0 : 0); // HACK: until we support audio padding
+    const duration = beat.duration! + (index === 0 ? MulmoScriptMethods.getPadding(studio.script)/1000 : 0);
     const parts =
       `[${index}:v]loop=loop=-1:size=1:start=0,` +
       `trim=duration=${duration},` +

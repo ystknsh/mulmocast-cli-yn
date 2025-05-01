@@ -94,6 +94,10 @@ export const textSlideParamsSchema = z.object({
   cssStyles: z.array(z.string()),
 });
 
+export const videoParamsSchema = z.object({
+  padding: z.number().optional(), // msec
+});
+
 export const mulmoBeatSchema = z.object({
   speaker: speakerIdSchema,
   text: z.string(),
@@ -134,13 +138,11 @@ export const mulmoScriptSchema = z.object({
 
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
+  videoParams: videoParamsSchema.optional(),
 
   // images: ImageInfo[] // generated
   imagePath: z.string().optional(), // for keynote images movie ??
   omitCaptions: z.boolean().optional(), // default is false
-
-  // for bgm (REVIEW: come up with a better mechanism)
-  padding: z.number().optional(),
 });
 
 export const mulmoStudioBeatSchema = mulmoBeatSchema.extend({
