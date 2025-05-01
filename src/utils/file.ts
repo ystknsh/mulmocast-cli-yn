@@ -64,3 +64,6 @@ export const mkdir = (dirPath: string) => {
     fs.mkdirSync(imagesDir, { recursive: true });
   }
 };
+
+export const silentPath = path.resolve(__dirname, "../../music/silent300.mp3");
+export const silentLastPath = path.resolve(__dirname, "../../music/silent800.mp3");
