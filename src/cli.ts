@@ -6,6 +6,7 @@ import fs from "fs";
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
+import { MulmoScriptMethods } from "./methods";
 
 import { translate } from "./actions/translate";
 import { images } from "./actions/images";
@@ -52,7 +53,7 @@ const main = async () => {
     await translate(studio, { outFilePath });
   }
   if (action === "audio") {
-    await audio(studio, studio.script.speechParams?.provider === "nijivoice" ? 1 : 8);
+    await audio(studio, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
   }
   if (action === "images") {
     await images(studio);

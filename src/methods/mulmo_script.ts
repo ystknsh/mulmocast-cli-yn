@@ -12,4 +12,7 @@ export const MulmoScriptMethods = {
     const size = this.getCanvasSize(script);
     return (size.width > size.height) ? "16:9" : "9:16";
   },
+  getSpeechProvider(script: MulmoScript): string {
+    return script.speechParams?.provider ?? "openai";
+  },
 };
