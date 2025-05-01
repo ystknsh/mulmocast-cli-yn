@@ -12,16 +12,36 @@ import { images } from "./actions/images";
 import { audio } from "./actions/audio";
 import { movie } from "./actions/movie";
 
+const getBaseDirPath = (basedir?: string) => {
+  if (!basedir) {
+    return process.cwd();
+  }
+  if (path.isAbsolute(basedir)) {
+    return path.normalize(basedir);
+  }
+  return path.resolve(process.cwd(), basedir);
+};
+
+const getFullPath = (baseDirPath: string, file: string) => {
+  if (path.isAbsolute(file)) {
+    return path.normalize(file);
+  }
+  return path.resolve(baseDirPath, file);
+};
+
 const main = async () => {
-  const filePath = path.resolve(args.file as string);
-  if (!fs.existsSync(filePath)) {
+  const { basedir } = args;
+  const baseDirPath = getBaseDirPath(basedir);
+  const mulmoFilePath = getFullPath(baseDirPath, (args.file as string) ?? "");
+
+  if (!fs.existsSync(mulmoFilePath)) {
     console.error("File not exists");
     return -1;
   }
 
   // TODO some option process
   const { action } = args;
-  const studio = createOrUpdateStudioData(filePath);
+  const studio = createOrUpdateStudioData(mulmoFilePath);
 
   if (action === "translate") {
     await translate(studio);
