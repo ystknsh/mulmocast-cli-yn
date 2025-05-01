@@ -7,6 +7,7 @@ import { args } from "./args";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
 import { translate } from "./translate";
+import { images } from "./images";
 
 const main = async () => {
   const filePath = path.resolve(args.file as string);
@@ -18,11 +19,16 @@ const main = async () => {
   // TODO some option process
   const { action } = args;
   const studio = createOrUpdateStudioData(filePath);
-  // "translate", "audio", "image", "movie"
+  // "translate", "audio", "images", "movie"
 
   if (action === "translate") {
     await translate(studio);
   }
-  // console.log("hello");
+  if (action === "audio") {
+    //
+  }
+  if (action === "images") {
+    await images(studio);
+  }
 };
 main();

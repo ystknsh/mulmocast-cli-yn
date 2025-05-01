@@ -109,6 +109,10 @@ const main = async () => {
   const arg2 = process.argv[2];
   const studio = createOrUpdateStudioData(arg2);
 
+  await images(studio);
+};
+
+export const images = async (studio: MulmoStudio) => {
   mkdir(`images/${studio.filename}`);
 
   const agentFilters = [
@@ -162,4 +166,6 @@ const main = async () => {
   }
 };
 
-main();
+if (process.argv[1] === __filename) {
+  main();
+}

@@ -160,4 +160,6 @@ const main = async () => {
   console.log(`Generated: ${result.fileName}`);
 };
 
-main();
+if (process.argv[1] === __filename) {
+  main();
+}

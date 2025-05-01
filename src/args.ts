@@ -33,7 +33,7 @@ export const args = yargs(hideBin(process.argv))
       return yargs
         .positional("action", {
           describe: "action to perform",
-          choices: ["translate", "audio", "image", "movie"] as const,
+          choices: ["translate", "audio", "images", "movie"] as const,
           type: "string",
         })
         .positional("file", {
