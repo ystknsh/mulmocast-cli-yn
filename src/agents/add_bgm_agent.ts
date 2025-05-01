@@ -2,6 +2,7 @@ import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import { MulmoScript } from "../types";
+import { MulmoScriptMethods } from "../methods";
 
 const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile: string; outFileName: string; script: MulmoScript }> = async ({
   namedInputs,
@@ -20,7 +21,7 @@ const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile:
       }
 
       const speechDuration = metadata.format.duration;
-      const padding = script.padding ?? 4000; // msec
+      const padding = MulmoScriptMethods.getPadding(script);
       const totalDuration = (padding * 2) / 1000 + Math.round(speechDuration ?? 0);
       console.log("totalDucation:", speechDuration, totalDuration);
 
