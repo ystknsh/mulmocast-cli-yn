@@ -8,9 +8,9 @@ import { args } from "./args";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 
 import { translate } from "./actions/translate";
-import { images } from "./images";
+import { images } from "./actions/images";
 import { audio } from "./actions/audio";
-import { movie } from "./movie";
+import { movie } from "./actions/movie";
 
 const main = async () => {
   const filePath = path.resolve(args.file as string);

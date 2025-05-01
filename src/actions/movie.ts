@@ -1,8 +1,7 @@
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio } from "./types";
-import { MulmoScriptMethods } from "./methods";
-import { getOutputFilePath } from "./utils/file";
-import { createOrUpdateStudioData } from "./utils/preprocess";
+import { MulmoStudio } from "../types";
+import { MulmoScriptMethods } from "../methods";
+import { getOutputFilePath } from "../utils/file";
 
 type CanvasInfo = {
   width: number;
@@ -89,12 +88,6 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
     .run();
 };
 
-const main = async () => {
-  const arg2 = process.argv[2];
-  const studio = createOrUpdateStudioData(arg2);
-  await movie(studio);
-};
-
 export const movie = async (studio: MulmoStudio) => {
   const canvasInfo = studio.script.imageParams?.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
   const audioPath = getOutputFilePath(studio.filename + "_bgm.mp3");
@@ -102,7 +95,3 @@ export const movie = async (studio: MulmoStudio) => {
 
   createVideo(audioPath, outputVideoPath, studio, canvasInfo);
 };
-
-if (process.argv[1] === __filename) {
-  main();
-}
