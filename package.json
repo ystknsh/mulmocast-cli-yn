@@ -19,7 +19,7 @@
     "ja": "npx tsx ./src/cli.ts translate",
     "mov": "npx tsx ./src/movie.ts",
     "movie": "npx tsx ./src/movie.ts",
-    "images": "npx tsx ./src/images.ts",
+    "images": "npx tsx ./src/cli.ts images",
     "preprocess": "npx tsx ./src/preprocess.ts",
     "imagep": "npx tsx ./src/imagep.ts",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/audio.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
