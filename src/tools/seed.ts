@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
-import { prompts } from "./agents/prompts_data";
+import { prompts } from "../agents/prompts_data";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 const graphData = {
