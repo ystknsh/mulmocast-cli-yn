@@ -9,7 +9,7 @@ import ttsOpenaiAgent from "./agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
-import { MulmoBeat, SpeakerDictonary, Text2speechParams } from "./types";
+import { MulmoStudio, MulmoBeat, SpeakerDictonary, Text2speechParams } from "./types";
 import { fileCacheAgentFilter } from "./utils/filters";
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -138,9 +138,11 @@ const agentFilters = [
 const main = async () => {
   const arg2 = process.argv[2];
   const studio = createOrUpdateStudioData(arg2);
+  await audio(studio, studio.script.speechParams?.provider === "nijivoice" ? 1 : 8);
+};
 
-  graph_data.concurrency = studio.script.speechParams?.provider === "nijivoice" ? 1 : 8;
-
+export const audio = async (studio: MulmoStudio, concurrency: number) => {
+  graph_data.concurrency = concurrency;
   const graph = new GraphAI(
     graph_data,
     {
@@ -160,4 +162,6 @@ const main = async () => {
   console.log(`Generated: ${result.fileName}`);
 };
 
-main();
+if (process.argv[1] === __filename) {
+  main();
+}
