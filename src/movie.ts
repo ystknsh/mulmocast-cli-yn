@@ -22,6 +22,11 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
   const start = performance.now();
   let command = ffmpeg();
 
+  if (studio.beats.some((beat) => !beat.image)) {
+    console.error("beat.image is not set. Please run `yarn run images ${file}` ");
+    return;
+  }
+
   // Add each image input
   studio.beats.forEach((beat) => {
     command = command.input(beat.image!); // HACK
