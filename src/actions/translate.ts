@@ -4,9 +4,8 @@ import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultDa
 import * as agents from "@graphai/agents";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
-import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudio } from "./types";
-import { createOrUpdateStudioData } from "./utils/preprocess";
+import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string";
+import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudio } from "../types";
 
 const translateGraph: GraphData = {
   version: 0.5,
@@ -151,7 +150,7 @@ const translateGraph: GraphData = {
         file: "./output/${:studio.filename}_studio.json", // TODO
         text: ":mergeStudioResult.toJSON()",
       },
-      params: { baseDir: __dirname + "/../" },
+      params: { baseDir: __dirname + "/../../" },
     },
   },
 };
@@ -202,13 +201,3 @@ export const translate = async (studio: MulmoStudio) => {
   // const mulmoDataResult = results.mergeResult;
   // console.log(JSON.stringify(mulmoDataResult, null, 2));
 };
-
-const main = async () => {
-  const arg2 = process.argv[2];
-  const studio = createOrUpdateStudioData(arg2);
-  await translate(studio);
-};
-
-if (process.argv[1] === __filename) {
-  main();
-}

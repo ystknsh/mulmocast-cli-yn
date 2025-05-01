@@ -7,7 +7,7 @@ import { args } from "./args";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
 
-import { translate } from "./translate";
+import { translate } from "./actions/translate";
 import { images } from "./images";
 import { audio } from "./audio";
 import { movie } from "./movie";

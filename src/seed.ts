@@ -62,6 +62,7 @@ const graphData = {
     },
   },
 };
+
 const main = async () => {
   const arg2 = process.argv[2];
 
@@ -70,10 +71,3 @@ const main = async () => {
   await graph.run();
 };
 main();
-
-// 元ネタがある場合
-// 元ネタがない場合(テキストの場合でもmulmoの場合でもよい）
-
-// 現状報告
-// 指示
-// 作成
