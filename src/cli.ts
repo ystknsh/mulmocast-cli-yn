@@ -10,7 +10,7 @@ import { createOrUpdateStudioData } from "./utils/preprocess";
 import { translate } from "./actions/translate";
 import { images } from "./actions/images";
 import { audio } from "./audio";
-import { movie } from "./movie";
+import { movie } from "./actions/movie";
 
 const main = async () => {
   const filePath = path.resolve(args.file as string);
