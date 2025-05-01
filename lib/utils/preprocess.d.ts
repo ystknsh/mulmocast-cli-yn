@@ -70,7 +70,6 @@ export declare const createOrUpdateStudioData: (mulmoFile: string) => {
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
-            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -158,7 +157,6 @@ export declare const createOrUpdateStudioData: (mulmoFile: string) => {
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
-                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -172,7 +170,6 @@ export declare const createOrUpdateStudioData: (mulmoFile: string) => {
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
-            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         } | undefined;
@@ -186,6 +183,10 @@ export declare const createOrUpdateStudioData: (mulmoFile: string) => {
             provider?: string | undefined;
         } | undefined;
         reference?: string | undefined;
+        canvasSize?: {
+            width: number;
+            height: number;
+        } | undefined;
         textSlideParams?: {
             cssStyles: string[];
         } | undefined;
