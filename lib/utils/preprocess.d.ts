@@ -1,4 +1,6 @@
-export declare const createOrUpdateStudioData: (mulmoFile: string) => {
+export declare const createOrUpdateStudioData: (mulmoFile: string, files: {
+    outDirPath: string;
+}) => {
     filename: string;
     beats: {
         text: string;
