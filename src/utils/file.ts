@@ -2,6 +2,8 @@ import fs from "fs";
 import path from "path";
 import { MulmoScript } from "../types";
 
+import { outDirName, scratchpadDirName } from "./const";
+
 export function readMulmoScriptFile<T = MulmoScript>(
   path: string,
   errorMessage: string,
@@ -40,16 +42,16 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
 }
 
 export const getOutputFilePath = (fileName: string) => {
-  const filePath = path.resolve("./output/" + fileName);
+  const filePath = path.resolve(outDirName + fileName);
   return filePath;
 };
 
-export const getOutputStudioFilePath = (fileName: string) => {
-  return getOutputFilePath(fileName + "_studio.json");
+export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + "_studio.json");
 };
 
 export const getScratchpadFilePath = (fileName: string) => {
-  const filePath = path.resolve("./scratchpad/" + fileName);
+  const filePath = path.resolve(scratchpadDirName + fileName);
   return filePath;
 };
 
