@@ -114,8 +114,6 @@ export const mulmoScriptSchema = z.object({
   reference: z.string(),
   lang: langSchema,
 
-  filename: z.string(), // generated
-
   // page/slide
   beats: z.array(mulmoBeatSchema),
 
