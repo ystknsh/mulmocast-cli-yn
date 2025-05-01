@@ -1,8 +1,9 @@
 export declare const args: {
     [x: string]: unknown;
-    outdir: string | undefined;
+    o: string | undefined;
     scratchpad: string | undefined;
-    basedir: string | undefined;
+    v: boolean;
+    b: string | undefined;
     _: (string | number)[];
     $0: string;
 };
