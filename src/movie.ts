@@ -1,5 +1,5 @@
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio } from "./type";
+import { MulmoStudio } from "./types";
 import { getOutputFilePath } from "./utils/file";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 
@@ -21,6 +21,11 @@ const LANDSCAPE_SIZE = {
 const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoStudio, canvasInfo: CanvasInfo) => {
   const start = performance.now();
   let command = ffmpeg();
+
+  if (studio.beats.some((beat) => !beat.image)) {
+    console.error("beat.image is not set. Please run `yarn run images ${file}` ");
+    return;
+  }
 
   // Add each image input
   studio.beats.forEach((beat) => {

@@ -1,7 +1,7 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import { MulmoStudio, MulmoStudioBeat } from "../type";
+import { MulmoStudio, MulmoStudioBeat } from "../types";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileName: string }, { studio: MulmoStudio; combinedFileName: string }> = async ({
   namedInputs,
