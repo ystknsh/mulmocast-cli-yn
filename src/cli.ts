@@ -30,9 +30,14 @@ const getFullPath = (baseDirPath: string, file: string) => {
 };
 
 const main = async () => {
-  const { basedir } = args;
+  const { outdir, basedir, file } = args;
   const baseDirPath = getBaseDirPath(basedir);
-  const mulmoFilePath = getFullPath(baseDirPath, (args.file as string) ?? "");
+  const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
+  const outFilePath = getFullPath(baseDirPath, (outdir as string) ?? "output");
+
+  if (args.v) {
+    console.log({ baseDirPath, mulmoFilePath, outFilePath });
+  }
 
   if (!fs.existsSync(mulmoFilePath)) {
     console.error("File not exists");

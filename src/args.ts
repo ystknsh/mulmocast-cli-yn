@@ -3,7 +3,8 @@ import { hideBin } from "yargs/helpers";
 
 export const args = yargs(hideBin(process.argv))
   .scriptName("mulmocast")
-  .option("outdir", {
+  .option("o", {
+    alias: "outdir",
     description: "output dir",
     demandOption: false,
     type: "string",
@@ -13,7 +14,15 @@ export const args = yargs(hideBin(process.argv))
     demandOption: false,
     type: "string",
   })
-  .option("basedir", {
+  .option("v", {
+    alias: "verbose",
+    describe: "verbose log",
+    demandOption: true,
+    default: false,
+    type: "boolean",
+  })
+  .option("b", {
+    alias: "basedir",
     description: "base dir",
     demandOption: false,
     type: "string",
