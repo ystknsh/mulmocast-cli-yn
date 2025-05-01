@@ -7,9 +7,9 @@ export const localizedTextSchema = z.object({
   text: z.string(),
   lang: z.string(),
   // caption: z.string(),
-  texts: z.array(z.string()),
-  ttsTexts: z.array(z.string()),
-  duration: z.number(), // generated // video duration time(ms)
+  texts: z.array(z.string()).optional(),
+  ttsTexts: z.array(z.string()).optional(),
+  duration: z.number().optional(), // generated // video duration time(ms)
   filename: z.string(), // generated //
 });
 
@@ -97,8 +97,8 @@ export const textSlideParamsSchema = z.object({
 export const mulmoBeatSchema = z.object({
   speaker: speakerIdSchema,
   text: z.string(),
-  multiLingualTexts: multiLingualTextsSchema,
   media: mulmoMediaSchema.optional(),
+
   imageParams: text2imageParamsSchema.optional(), // beat specific parameters
   speechParams: text2speechParamsSchema.optional(),
   imagePrompt: z.string().optional(), // specified or inserted by preprocessor
@@ -146,6 +146,7 @@ export const mulmoScriptSchema = z.object({
 });
 
 export const mulmoStudioBeatSchema = mulmoBeatSchema.extend({
+  multiLingualTexts: multiLingualTextsSchema.optional(),
   hash: z.string().optional(),
   duration: z.number().optional(),
   filename: z.string().optional(),

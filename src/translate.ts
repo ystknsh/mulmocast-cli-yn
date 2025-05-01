@@ -1,42 +1,42 @@
 import "dotenv/config";
 import { GraphAI } from "graphai";
-import type { GraphData, AgentFilterFunction } from "graphai";
+import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
 import * as agents from "@graphai/agents";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
-import { readMulmoScriptFile, getOutputFilePath } from "./utils/file";
-import { MulmoScript, LANG, LocalizedText } from "./type";
+import { LANG, LocalizedText, MulmoStudioBeat } from "./type";
+import { createOrUpdateStudioData } from "./utils/preprocess";
 
 const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
-    mulmoScript: {},
+    studio: {},
     defaultLang: {},
     lang: {
       agent: "stringUpdateTextAgent",
       inputs: {
-        newText: ":mulmoScript.lang",
+        newText: ":studio.script.lang",
         oldText: ":defaultLang",
       },
     },
-    targetLangs: {},
-    fileName: {},
-    mergeResult: {
+    targetLangs: {}, // TODO
+    mergeStudioResult: {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":mulmoScript", { filename: ":fileName" }, { beats: ":beatsMap.mergeBeatData" }],
+        items: [":studio", { beats: ":beatsMap.mergeBeatData" }],
       },
     },
     beatsMap: {
       agent: "mapAgent",
       inputs: {
         targetLangs: ":targetLangs",
-        rows: ":mulmoScript.beats",
+        rows: ":studio.beats",
         lang: ":lang",
       },
       params: {
+        rowKey: "beat",
         compositeResult: true,
       },
       graph: {
@@ -45,31 +45,32 @@ const translateGraph: GraphData = {
           preprocessBeats: {
             agent: "mapAgent",
             inputs: {
-              beat: ":row",
+              beat: ":beat",
               rows: ":targetLangs",
               lang: ":lang.text",
             },
             params: {
               compositeResult: true,
+              rowKey: "targetLang",
             },
             graph: {
               version: 0.5,
               nodes: {
                 localizedTexts: {
-                  // console: { before: true},
                   inputs: {
-                    targetLang: ":row",
+                    targetLang: ":targetLang",
                     beat: ":beat",
                     lang: ":lang",
                     system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
-                    prompt: ["## Original Language", ":lang", "", "## Language", ":row", "", "## Target", ":beat.text"],
+                    prompt: ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"],
                   },
                   passThrough: {
-                    lang: ":row",
+                    lang: ":targetLang",
                   },
                   output: {
                     text: ".text",
                   },
+                  // return { lang, text } <- localizedText
                   agent: "openAIAgent",
                 },
                 splitText: {
@@ -90,9 +91,10 @@ const translateGraph: GraphData = {
                       ...localizedText,
                       texts: [localizedText.text],
                     };
+                    // return { lang, text, texts }
                   },
                   inputs: {
-                    targetLang: ":row",
+                    targetLang: ":targetLang",
                     localizedText: ":localizedTexts",
                   },
                 },
@@ -106,7 +108,7 @@ const translateGraph: GraphData = {
                     if (targetLang === "ja") {
                       return {
                         ...localizedText,
-                        ttsTexts: localizedText.texts.map((text: string) => replacePairsJa(text, replacementsJa)),
+                        ttsTexts: localizedText?.texts?.map((text: string) => replacePairsJa(text, replacementsJa)),
                       };
                     }
                     return {
@@ -115,7 +117,7 @@ const translateGraph: GraphData = {
                     };
                   },
                   inputs: {
-                    targetLang: ":row",
+                    targetLang: ":targetLang",
                     localizedText: ":splitText",
                   },
                   isResult: true,
@@ -123,21 +125,6 @@ const translateGraph: GraphData = {
               },
             },
           },
-          /*
-          imagePrompt: {
-            agent: (namedInputs) => {
-              const { beat } = namedInputs;
-              if (beat.imagePrompt) {
-                return beat.imagePrompt;
-              }
-              return "not implemented";
-            },
-            inputs: {
-              beat: ":row",
-              lang: ":lang",
-            },
-          },
-          */
           mergeLocalizedText: {
             agent: "arrayToObjectAgent",
             inputs: {
@@ -151,91 +138,71 @@ const translateGraph: GraphData = {
             isResult: true,
             agent: "mergeObjectAgent",
             inputs: {
-              items: [":row", { multiLingualTexts: ":mergeLocalizedText" }],
-              // imagePrompt: ":imagePrompt",
+              items: [":beat", { multiLingualTexts: ":mergeLocalizedText" }],
             },
-            // console: {before: true, after: true},
           },
         },
       },
     },
-    debug: {
+    writeOutout: {
+      console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
-        file: "./output/${:fileName}.json",
-        text: ":mergeResult.toJSON()",
+        file: "./output/${:studio.filename}_studio.json", // TODO
+        text: ":mergeStudioResult.toJSON()",
       },
       params: { baseDir: __dirname + "/../" },
     },
   },
 };
 
-const localizedTextCacheAgentFilter: AgentFilterFunction = async (context, next) => {
+const localizedTextCacheAgentFilter: AgentFilterFunction<
+  DefaultParamsType,
+  DefaultResultData,
+  { targetLang: LANG; beat: MulmoStudioBeat; lang: LANG }
+> = async (context, next) => {
   const { namedInputs } = context;
-
   const { targetLang, beat, lang } = namedInputs;
-  if (beat.multiLingualTexts && beat.multiLingualTexts[targetLang]) {
-    return beat.multiLingualTexts[targetLang];
-  }
-  if (targetLang === lang) {
-    return { text: beat.text, lang: targetLang };
-  }
 
+  // The original text is unchanged and the target language text is present
+  if (
+    beat.multiLingualTexts &&
+    beat.multiLingualTexts[lang] &&
+    beat.multiLingualTexts[lang].text === beat.text &&
+    beat.multiLingualTexts[targetLang] &&
+    beat.multiLingualTexts[targetLang].text
+  ) {
+    return { text: beat.multiLingualTexts[targetLang].text };
+  }
+  // same language
+  if (targetLang === lang) {
+    return { text: beat.text };
+  }
   return await next(context);
 };
 const agentFilters = [
   {
     name: "localizedTextCacheAgentFilter",
-    agent: localizedTextCacheAgentFilter,
+    agent: localizedTextCacheAgentFilter as AgentFilterFunction,
     nodeIds: ["localizedTexts"],
   },
 ];
 
-const translateText = async (mulmoScript: MulmoScript, fileName: string, defaultLang: LANG, targetLangs: LANG[]) => {
-  const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
-  graph.injectValue("mulmoScript", mulmoScript);
-  graph.injectValue("defaultLang", defaultLang);
-  graph.injectValue("targetLangs", targetLangs);
-  graph.injectValue("fileName", fileName);
-
-  const results = await graph.run();
-  return results.mergeResult;
-};
-
-export const updateMultiLingualTexts = (originalMulmoData: MulmoScript, mulmoData: MulmoScript): MulmoScript => {
-  mulmoData.beats = mulmoData.beats
-    .map((beat, index) => {
-      const originalBeat = originalMulmoData?.beats[index];
-      if (originalBeat?.text === beat?.text && beat.multiLingualTexts) {
-        return {
-          ...originalBeat,
-          multiLingualTexts: beat.multiLingualTexts,
-        };
-      }
-      return originalBeat;
-    })
-    .filter((beat) => beat);
-  return mulmoData;
-};
-
 const defaultLang = "en";
-const targetLangs = ["ja", "en", "fr-FR", "zh-CN"];
+const targetLangs = ["ja", "en"];
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const readData = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
-  const { mulmoData: originalMulmoData, fileName } = readData;
+  const studio = createOrUpdateStudioData(arg2);
 
-  const outputFilePath = getOutputFilePath(fileName + ".json");
-  const { mulmoData } = readMulmoScriptFile(outputFilePath) ?? { mulmoData: originalMulmoData };
+  const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
+  graph.injectValue("studio", studio);
+  graph.injectValue("defaultLang", defaultLang);
+  graph.injectValue("targetLangs", targetLangs);
 
-  const targetMulmoData = updateMultiLingualTexts(originalMulmoData, mulmoData);
-
-  const mulmoDataResult = await translateText(targetMulmoData, fileName, defaultLang, targetLangs);
-
+  const results = await graph.run();
+  const mulmoDataResult = results.mergeResult;
   console.log(JSON.stringify(mulmoDataResult, null, 2));
-
-  // console.log(mulmoData, originalMulmoData);
 };
 
 if (process.argv[1] === __filename) {
