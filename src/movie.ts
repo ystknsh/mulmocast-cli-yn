@@ -218,6 +218,7 @@ const main = async () => {
 
   const canvasInfo = studio.script.imageParams?.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
 
+  /*
   try {
     await renderJapaneseTextToPNG(
       `${studio.script.title}\n\n${studio.script.description}`,
@@ -228,7 +229,8 @@ const main = async () => {
     console.error("Error generating PNG:", err);
     throw err;
   }
-
+  */
+ 
   /*
   const captionPromises = studio.beats.map(async (beat: MulmoStudioBeat, index: number): Promise<CaptionInfo> => {
     try {
