@@ -1,5 +1,5 @@
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio } from "./type";
+import { MulmoStudio } from "./types";
 import { getOutputFilePath } from "./utils/file";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 
