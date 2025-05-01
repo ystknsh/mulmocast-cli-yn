@@ -13,24 +13,6 @@ const validMulmoScriptJson = JSON.stringify({
     {
       speaker: "speaker1",
       text: "Hello, this is a test",
-      multiLingualTexts: {
-        ja: {
-          text: "こんにちは、これはテストです",
-          lang: "ja",
-          texts: ["こんにちは、", "これはテストです"],
-          ttsTexts: ["こんにちは、これはテストです"],
-          duration: 2000,
-          filename: "test_ja_001.mp3",
-        },
-        en: {
-          text: "Hello, this is a test",
-          lang: "en",
-          texts: ["Hello, ", "this is a test"],
-          ttsTexts: ["Hello, this is a test"],
-          duration: 1800,
-          filename: "test_en_001.mp3",
-        },
-      },
       media: {
         type: "image",
         source: {
@@ -49,8 +31,6 @@ const validMulmoScriptJson = JSON.stringify({
       },
       imagePrompt: "A test image showing something interesting",
       image: "test_image_001.jpg",
-      filename: "test_001.mp3",
-      duration: 2000,
     },
   ],
   speechParams: {
@@ -80,7 +60,6 @@ const validMulmoScriptJson = JSON.stringify({
 });
 
 const invalidMulmoScriptJson = JSON.stringify({
-  title: "Incomplete Script",
   description: "Incomplete MulmoScript for testing",
   lang: "ja",
   beats: [],
