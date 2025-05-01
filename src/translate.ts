@@ -108,7 +108,7 @@ const translateGraph: GraphData = {
                     if (targetLang === "ja") {
                       return {
                         ...localizedText,
-                        ttsTexts: localizedText.texts.map((text: string) => replacePairsJa(text, replacementsJa)),
+                        ttsTexts: localizedText?.texts?.map((text: string) => replacePairsJa(text, replacementsJa)),
                       };
                     }
                     return {
