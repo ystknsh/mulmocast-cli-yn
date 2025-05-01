@@ -16,7 +16,7 @@
   },
   "scripts": {
     "gen": "npx tsx ./src/audio.ts",
-    "ja": "npx tsx ./src/translate.ts",
+    "ja": "npx tsx ./src/cli.ts translate",
     "mov": "npx tsx ./src/movie.ts",
     "movie": "npx tsx ./src/movie.ts",
     "images": "npx tsx ./src/images.ts",
