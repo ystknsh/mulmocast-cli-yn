@@ -4,7 +4,7 @@ import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
-import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./type";
+import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./types";
 import { getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
 import { convertMarkdownToImage } from "./utils/markdown";

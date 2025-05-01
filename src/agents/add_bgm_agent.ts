@@ -1,7 +1,7 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import { MulmoScript } from "../type";
+import { MulmoScript } from "../types";
 
 const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile: string; outFileName: string; script: MulmoScript }> = async ({
   namedInputs,
