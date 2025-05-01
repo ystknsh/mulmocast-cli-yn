@@ -60,7 +60,6 @@ const validMulmoScriptJson = JSON.stringify({
 });
 
 const invalidMulmoScriptJson = JSON.stringify({
-  title: "Incomplete Script",
   description: "Incomplete MulmoScript for testing",
   lang: "ja",
   beats: [],

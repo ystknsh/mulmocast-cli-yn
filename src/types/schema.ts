@@ -111,7 +111,7 @@ export const mulmoScriptSchema = z.object({
   // global settings
   title: z.string(),
   description: z.string().optional(),
-  reference: z.string(), // HACK: adding .optional() causes ci_test error
+  reference: z.string().optional(),
   lang: langSchema.optional(), // default "en"
 
   // page/slide
