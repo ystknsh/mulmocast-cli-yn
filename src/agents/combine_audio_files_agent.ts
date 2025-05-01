@@ -2,14 +2,13 @@ import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import { MulmoStudio, MulmoStudioBeat } from "../types";
+import { silentPath, silentLastPath } from "../utils/file";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileName: string }, { studio: MulmoStudio; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
   const { studio, combinedFileName } = namedInputs;
   const outputFile = path.resolve(combinedFileName);
-  const silentPath = path.resolve("./music/silent300.mp3");
-  const silentLastPath = path.resolve("./music/silent800.mp3");
   const command = ffmpeg();
   studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
     const filePath = path.resolve("./scratchpad/" + mulmoBeat.filename + ".mp3");
