@@ -16,7 +16,7 @@
   },
   "scripts": {
     "audio": "npx tsx ./src/cli.ts audio",
-    "ja": "npx tsx ./src/cli.ts translate",
+    "translate": "npx tsx ./src/cli.ts translate",
     "movie": "npx tsx ./src/cli.ts movie",
     "images": "npx tsx ./src/cli.ts images",
     "preprocess": "npx tsx ./src/cli.ts preprocess",
