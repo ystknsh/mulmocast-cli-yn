@@ -5,7 +5,7 @@ import * as agents from "@graphai/agents";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "./utils/string";
-import { LANG, LocalizedText, MulmoStudioBeat } from "./type";
+import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudio } from "./type";
 import { createOrUpdateStudioData } from "./utils/preprocess";
 
 const translateGraph: GraphData = {
@@ -191,18 +191,22 @@ const agentFilters = [
 const defaultLang = "en";
 const targetLangs = ["ja", "en"];
 
-const main = async () => {
-  const arg2 = process.argv[2];
-  const studio = createOrUpdateStudioData(arg2);
-
+export const translate = async (studio: MulmoStudio) => {
   const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
   graph.injectValue("studio", studio);
   graph.injectValue("defaultLang", defaultLang);
   graph.injectValue("targetLangs", targetLangs);
 
-  const results = await graph.run();
-  const mulmoDataResult = results.mergeResult;
-  console.log(JSON.stringify(mulmoDataResult, null, 2));
+  await graph.run();
+  // const results = await graph.run();
+  // const mulmoDataResult = results.mergeResult;
+  // console.log(JSON.stringify(mulmoDataResult, null, 2));
+};
+
+const main = async () => {
+  const arg2 = process.argv[2];
+  const studio = createOrUpdateStudioData(arg2);
+  await translate(studio);
 };
 
 if (process.argv[1] === __filename) {

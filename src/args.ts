@@ -1,6 +1,15 @@
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
-export const args = yargs
+type CliArgs = {
+  action: string;
+  file: string;
+  outdir?: string;
+  scratchpad?: string;
+  basedir?: string;
+};
+
+export const args = yargs(hideBin(process.argv))
   .scriptName("mulmocast")
   .option("outdir", {
     description: "output dir",
@@ -17,10 +26,22 @@ export const args = yargs
     demandOption: false,
     type: "string",
   })
-  .command("* <ScriptFile>", "run mulmocast.")
-  /*  .positional("CCC", {
-    describe: "DDD",
-    type: "string",
-    demandOption: false,
-  })*/
+  .command(
+    "$0 <action> <file>", // コマンド名は `$0` で、2つの positional 引数を指定
+    "Run mulmocast",
+    (yargs) => {
+      return yargs
+        .positional("action", {
+          describe: "action to perform",
+          choices: ["translate", "audio", "image", "movie"] as const,
+          type: "string",
+        })
+        .positional("file", {
+          describe: "Mulmo Script File",
+          type: "string",
+        });
+    },
+  )
+  .strict()
+  .help()
   .parseSync();
