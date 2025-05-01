@@ -7,9 +7,9 @@ export const localizedTextSchema = z.object({
   text: z.string(),
   lang: z.string(),
   // caption: z.string(),
-  texts: z.array(z.string()),
-  ttsTexts: z.array(z.string()),
-  duration: z.number(), // generated // video duration time(ms)
+  texts: z.array(z.string()).optional(),
+  ttsTexts: z.array(z.string()).optional(),
+  duration: z.number().optional(), // generated // video duration time(ms)
   filename: z.string(), // generated //
 });
 
@@ -60,6 +60,14 @@ const MulmoMovieMediaSchema = z.object({
   source: mediaSourceSchema,
 });
 
+const MulmoTextSlideMediaSchema = z.object({
+  type: z.literal("textSlide"),
+  slide: z.object({
+    title: z.string(),
+    bullets: z.array(z.string()),
+  }),
+});
+
 export const mulmoMediaSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
@@ -67,6 +75,7 @@ export const mulmoMediaSchema = z.union([
   MulmoImageMediaSchema,
   MulmoSvgMediaSchema,
   MulmoMovieMediaSchema,
+  MulmoTextSlideMediaSchema,
 ]);
 
 export const text2imageParamsSchema = z.object({
@@ -81,17 +90,19 @@ export const text2speechParamsSchema = z.object({
   instruction: z.string().optional(),
 });
 
+export const textSlideParamsSchema = z.object({
+  cssStyles: z.array(z.string()),
+});
+
 export const mulmoBeatSchema = z.object({
   speaker: speakerIdSchema,
   text: z.string(),
-  multiLingualTexts: multiLingualTextsSchema,
   media: mulmoMediaSchema.optional(),
+
   imageParams: text2imageParamsSchema.optional(), // beat specific parameters
   speechParams: text2speechParamsSchema.optional(),
   imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   image: z.string().optional(), // path to the image
-  filename: z.string(), // generated
-  duration: z.number().optional(), // workaround
 });
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
@@ -123,10 +134,26 @@ export const mulmoScriptSchema = z.object({
     })
     .optional(),
 
+  // for textSlides
+  textSlideParams: textSlideParamsSchema.optional(),
+
   // images: ImageInfo[] // generated
   imagePath: z.string().optional(), // for keynote images movie ??
   omitCaptions: z.boolean().optional(), // default is false
 
   // for bgm
   padding: z.number().optional(),
+});
+
+export const mulmoStudioBeatSchema = mulmoBeatSchema.extend({
+  multiLingualTexts: multiLingualTextsSchema.optional(),
+  hash: z.string().optional(),
+  duration: z.number().optional(),
+  filename: z.string().optional(),
+});
+
+export const mulmoStudioSchema = z.object({
+  script: mulmoScriptSchema,
+  filename: z.string(),
+  beats: z.array(mulmoStudioBeatSchema),
 });

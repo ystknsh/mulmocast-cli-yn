@@ -4,38 +4,55 @@ import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
-import { MulmoScript, MulmoBeat, Text2imageParams } from "./type";
-import { readMulmoScriptFile, getOutputFilePath, mkdir } from "./utils/file";
+import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./types";
+import { getOutputFilePath, mkdir } from "./utils/file";
 import { fileCacheAgentFilter } from "./utils/filters";
+import { convertMarkdownToImage } from "./utils/markdown";
+import { createOrUpdateStudioData } from "./utils/preprocess";
 import imageGoogleAgent from "./agents/image_google_agent";
 import imageOpenaiAgent from "./agents/image_openai_agent";
-
 import { ImageGoogleConfig } from "./agents/image_google_agent";
 
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: { beat: MulmoBeat; index: number; suffix: string; script: MulmoScript }) => {
-  const { beat, index, suffix, script } = namedInputs;
-  const imageParams = { ...script.imageParams, ...beat.imageParams };
+const defaultStyles = [
+  "body { margin: 40px; margin-top: 60px; color:#333 }",
+  "h1 { font-size: 60px; text-align: center }",
+  "ul { margin-left: 40px } ",
+  "li { font-size: 48px }",
+];
+
+const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: number; suffix: string; studio: MulmoStudio }) => {
+  const { beat, index, suffix, studio } = namedInputs;
+  const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  console.log(`prompt: ${prompt}`);
-  const relativePath = `./images/${script.filename}/${index}${suffix}.png`;
-  return { path: path.resolve(relativePath), prompt, imageParams };
+  const imagePath = path.resolve(`./images/${studio.filename}/${index}${suffix}.png`);
+
+  if (beat.media) {
+    if (beat.media.type === "textSlide") {
+      const slide = beat.media.slide;
+      const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
+      // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
+      await convertMarkdownToImage(markdown, studio.script.textSlideParams?.cssStyles ?? defaultStyles, imagePath);
+    }
+  }
+  return { path: imagePath, prompt, imageParams };
 };
 
 const graph_data: GraphData = {
   version: 0.5,
   concurrency: 2,
   nodes: {
-    script: { value: {} },
+    studio: { value: {} },
     text2imageAgent: { value: "" },
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":script.beats", script: ":script", text2imageAgent: ":text2imageAgent" },
+      inputs: { rows: ":studio.beats", studio: ":studio", text2imageAgent: ":text2imageAgent" },
       isResult: true,
       params: {
+        rowKey: "beat",
         compositeResult: true,
       },
       graph: {
@@ -43,9 +60,9 @@ const graph_data: GraphData = {
           preprocessor: {
             agent: preprocess_agent,
             inputs: {
-              beat: ":row",
+              beat: ":beat",
               index: ":__mapIndex",
-              script: ":script",
+              studio: ":studio",
               suffix: "p",
             },
           },
@@ -90,11 +107,9 @@ const googleAuth = async () => {
 
 const main = async () => {
   const arg2 = process.argv[2];
-  const { fileName } = readMulmoScriptFile(arg2, "ERROR: File does not exist " + arg2);
-  const outputFilePath = getOutputFilePath(fileName + ".json");
-  const { mulmoData: outputScript } = readMulmoScriptFile(outputFilePath, "ERROR: File does not exist outputs/" + fileName + ".json");
+  const studio = createOrUpdateStudioData(arg2);
 
-  mkdir(`images/${outputScript.filename}`);
+  mkdir(`images/${studio.filename}`);
 
   const agentFilters = [
     {
@@ -108,12 +123,13 @@ const main = async () => {
     agentFilters,
   };
 
-  const injections: Record<string, string | MulmoScript | Text2imageParams | undefined> = {
-    script: outputScript,
+  const injections: Record<string, string | MulmoStudio | Text2imageParams | undefined> = {
+    studio: studio,
     text2imageAgent: "imageOpenaiAgent",
   };
 
-  if (outputScript.imageParams?.provider === "google") {
+  // We need to get google's auth token only if the google is the text2image provider.
+  if (studio.script.imageParams?.provider === "google") {
     console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,
@@ -130,14 +146,19 @@ const main = async () => {
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
-  const results = await graph.run<{ output: MulmoBeat[] }>();
-  console.log(results.map);
+  const results = await graph.run<{ output: MulmoStudioBeat[] }>();
+
   if (results.map?.output) {
+    // THe output looks like this. We need to merge it into MultiStudioBeat array
+    // [
+    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/0p.png' },
+    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/1p.png' }
+    // ]
     results.map?.output.forEach((update, index) => {
-      const beat = outputScript.beats[index];
-      outputScript.beats[index] = { ...beat, ...update };
+      const beat = studio.beats[index];
+      studio.beats[index] = { ...beat, ...update };
     });
-    fs.writeFileSync(outputFilePath, JSON.stringify(outputScript, null, 2));
+    fs.writeFileSync(getOutputFilePath(`${studio.filename}_studio.json`), JSON.stringify(studio, null, 2));
   }
 };
 

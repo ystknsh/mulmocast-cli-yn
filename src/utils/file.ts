@@ -1,23 +1,25 @@
 import fs from "fs";
 import path from "path";
-import { MulmoScript } from "../type";
+import { MulmoScript } from "../types";
 
-export function readMulmoScriptFile(
+export function readMulmoScriptFile<T = MulmoScript>(
   path: string,
   errorMessage: string,
 ): {
-  mulmoData: MulmoScript;
+  mulmoData: T;
   mulmoDataPath: string;
   fileName: string;
 };
 
-export function readMulmoScriptFile(path: string): {
-  mulmoData: MulmoScript;
+export function readMulmoScriptFile<T = MulmoScript>(
+  path: string,
+): {
+  mulmoData: T;
   mulmoDataPath: string;
   fileName: string;
 } | null;
 
-export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
+export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?: string) {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
@@ -27,7 +29,7 @@ export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as MulmoScript;
+  const script = JSON.parse(scriptData) as T;
   const parsedPath = path.parse(scriptPath);
 
   return {
@@ -40,6 +42,10 @@ export function readMulmoScriptFile(arg2: string, errorMessage?: string) {
 export const getOutputFilePath = (fileName: string) => {
   const filePath = path.resolve("./output/" + fileName);
   return filePath;
+};
+
+export const getOutputStudioFilePath = (fileName: string) => {
+  return getOutputFilePath(fileName + "_studio.json");
 };
 
 export const getScratchpadFilePath = (fileName: string) => {
