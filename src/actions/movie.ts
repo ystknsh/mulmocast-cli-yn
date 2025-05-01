@@ -95,4 +95,3 @@ export const movie = async (studio: MulmoStudio) => {
 
   createVideo(audioPath, outputVideoPath, studio, canvasInfo);
 };
-
