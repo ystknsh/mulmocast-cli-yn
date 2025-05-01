@@ -6,8 +6,10 @@ import fs from "fs";
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "./utils/preprocess";
+
 import { translate } from "./translate";
 import { images } from "./images";
+import { audio } from "./audio";
 
 const main = async () => {
   const filePath = path.resolve(args.file as string);
@@ -25,7 +27,7 @@ const main = async () => {
     await translate(studio);
   }
   if (action === "audio") {
-    //
+    await audio(studio, studio.script.speechParams?.provider === "nijivoice" ? 1 : 8);
   }
   if (action === "images") {
     await images(studio);
