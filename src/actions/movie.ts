@@ -3,22 +3,7 @@ import { MulmoStudio } from "../types";
 import { MulmoScriptMethods } from "../methods";
 import { getOutputFilePath } from "../utils/file";
 
-type CanvasInfo = {
-  width: number;
-  height: number;
-};
-
-const PORTRAIT_SIZE = {
-  width: 720,
-  height: 1280,
-};
-
-const LANDSCAPE_SIZE = {
-  width: 1280, // not 1920
-  height: 720, // not 1080
-};
-
-const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoStudio, canvasInfo: CanvasInfo) => {
+const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoStudio) => {
   const start = performance.now();
   let command = ffmpeg();
 
@@ -32,6 +17,7 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
     command = command.input(beat.image!); // HACK
   });
   const imageCount = studio.beats.length;
+  const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
 
   const filterComplexParts: string[] = [];
   studio.beats.forEach((beat, index) => {
@@ -89,9 +75,8 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
 };
 
 export const movie = async (studio: MulmoStudio) => {
-  const canvasInfo = studio.script.imageParams?.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
   const audioPath = getOutputFilePath(studio.filename + "_bgm.mp3");
   const outputVideoPath = getOutputFilePath(studio.filename + ".mp4");
 
-  createVideo(audioPath, outputVideoPath, studio, canvasInfo);
+  createVideo(audioPath, outputVideoPath, studio);
 };

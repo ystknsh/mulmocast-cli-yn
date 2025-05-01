@@ -5,6 +5,7 @@ import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
 import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "../types";
+import { MulmoScriptMethods } from "../methods";
 import { getOutputFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
@@ -37,7 +38,8 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
       await convertMarkdownToImage(markdown, studio.script.textSlideParams?.cssStyles ?? defaultStyles, imagePath);
     }
   }
-  return { path: imagePath, prompt, imageParams };
+  const aspectRatio = MulmoScriptMethods.getAspectRatio(studio.script);
+  return { path: imagePath, prompt, imageParams, aspectRatio };
 };
 
 const graph_data: GraphData = {
@@ -70,7 +72,7 @@ const graph_data: GraphData = {
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
-              aspectRatio: ":preprocessor.imageParams.aspectRatio",
+              aspectRatio: ":preprocessor.aspectRatio",
             },
             inputs: {
               prompt: ":preprocessor.prompt",
