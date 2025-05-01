@@ -49,7 +49,7 @@ const main = async () => {
   const studio = createOrUpdateStudioData(mulmoFilePath);
 
   if (action === "translate") {
-    await translate(studio);
+    await translate(studio, { outFilePath });
   }
   if (action === "audio") {
     await audio(studio, studio.script.speechParams?.provider === "nijivoice" ? 1 : 8);
