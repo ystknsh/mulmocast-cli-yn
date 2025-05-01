@@ -4,7 +4,7 @@ import path from "path";
 import test from "node:test";
 import assert from "node:assert";
 
-import { mulmoScriptSchema } from "../../src/schema";
+import { mulmoScriptSchema } from "../../src/types/schema";
 
 test("test updateMultiLingualTexts not update", async () => {
   const jsonData = {};
@@ -15,7 +15,7 @@ test("test updateMultiLingualTexts not update", async () => {
       const jsonData = JSON.parse(content);
       const parsed = mulmoScriptSchema.parse(jsonData);
     } catch (e) {
-      console.error(file);
+      console.error(file, e);
     }
   });
-);
+});
