@@ -165,7 +165,3 @@ export const images = async (studio: MulmoStudio) => {
     fs.writeFileSync(getOutputFilePath(`${studio.filename}_studio.json`), JSON.stringify(studio, null, 2));
   }
 };
-
-if (process.argv[1] === __filename) {
-  main();
-}
