@@ -111,8 +111,8 @@ export const mulmoScriptSchema = z.object({
   // global settings
   title: z.string(),
   description: z.string().optional(),
-  reference: z.string(),
-  lang: langSchema,
+  reference: z.string(), // HACK: adding .optional() causes ci_test error
+  lang: langSchema.optional(), // default "en"
 
   // page/slide
   beats: z.array(mulmoBeatSchema),
@@ -139,7 +139,7 @@ export const mulmoScriptSchema = z.object({
   imagePath: z.string().optional(), // for keynote images movie ??
   omitCaptions: z.boolean().optional(), // default is false
 
-  // for bgm
+  // for bgm (REVIEW: come up with a better mechanism)
   padding: z.number().optional(),
 });
 
