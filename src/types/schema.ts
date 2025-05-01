@@ -109,7 +109,8 @@ export const mulmoBeatSchema = z.object({
 });
 
 export const mulmoDimensionSchema = z.object({
-  width: z.number(), height: z.number(),
+  width: z.number(),
+  height: z.number(),
 });
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
