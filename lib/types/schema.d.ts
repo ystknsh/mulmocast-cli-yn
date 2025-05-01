@@ -316,14 +316,17 @@ export declare const mulmoMediaSchema: z.ZodUnion<[z.ZodObject<{
 export declare const text2imageParamsSchema: z.ZodObject<{
     model: z.ZodOptional<z.ZodString>;
     size: z.ZodOptional<z.ZodString>;
+    aspectRatio: z.ZodOptional<z.ZodString>;
     style: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     model?: string | undefined;
     size?: string | undefined;
+    aspectRatio?: string | undefined;
     style?: string | undefined;
 }, {
     model?: string | undefined;
     size?: string | undefined;
+    aspectRatio?: string | undefined;
     style?: string | undefined;
 }>;
 export declare const text2speechParamsSchema: z.ZodObject<{
@@ -615,14 +618,17 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     imageParams: z.ZodOptional<z.ZodObject<{
         model: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
+        aspectRatio: z.ZodOptional<z.ZodString>;
         style: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     }, {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     }>>;
     speechParams: z.ZodOptional<z.ZodObject<{
@@ -705,6 +711,7 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     imageParams?: {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     } | undefined;
     speechParams?: {
@@ -780,6 +787,7 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     imageParams?: {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     } | undefined;
     speechParams?: {
@@ -788,31 +796,11 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     } | undefined;
     imagePrompt?: string | undefined;
 }>;
-export declare const mulmoDimensionSchema: z.ZodObject<{
-    width: z.ZodNumber;
-    height: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    width: number;
-    height: number;
-}, {
-    width: number;
-    height: number;
-}>;
 export declare const mulmoScriptSchema: z.ZodObject<{
     title: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
     reference: z.ZodOptional<z.ZodString>;
     lang: z.ZodOptional<z.ZodString>;
-    canvasSize: z.ZodOptional<z.ZodObject<{
-        width: z.ZodNumber;
-        height: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        width: number;
-        height: number;
-    }, {
-        width: number;
-        height: number;
-    }>>;
     beats: z.ZodArray<z.ZodObject<{
         speaker: z.ZodString;
         text: z.ZodString;
@@ -1078,14 +1066,17 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         imageParams: z.ZodOptional<z.ZodObject<{
             model: z.ZodOptional<z.ZodString>;
             size: z.ZodOptional<z.ZodString>;
+            aspectRatio: z.ZodOptional<z.ZodString>;
             style: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         }, {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         }>>;
         speechParams: z.ZodOptional<z.ZodObject<{
@@ -1168,6 +1159,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -1243,6 +1235,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -1286,17 +1279,20 @@ export declare const mulmoScriptSchema: z.ZodObject<{
     imageParams: z.ZodOptional<z.ZodObject<{
         model: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
+        aspectRatio: z.ZodOptional<z.ZodString>;
         style: z.ZodOptional<z.ZodString>;
     } & {
         provider: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
         provider?: string | undefined;
     }, {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
         provider?: string | undefined;
     }>>;
@@ -1386,6 +1382,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -1399,6 +1396,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
     imageParams?: {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
         provider?: string | undefined;
     } | undefined;
@@ -1412,10 +1410,6 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         provider?: string | undefined;
     } | undefined;
     reference?: string | undefined;
-    canvasSize?: {
-        width: number;
-        height: number;
-    } | undefined;
     textSlideParams?: {
         cssStyles: string[];
     } | undefined;
@@ -1494,6 +1488,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -1507,6 +1502,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
     imageParams?: {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
         provider?: string | undefined;
     } | undefined;
@@ -1520,10 +1516,6 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         provider?: string | undefined;
     } | undefined;
     reference?: string | undefined;
-    canvasSize?: {
-        width: number;
-        height: number;
-    } | undefined;
     textSlideParams?: {
         cssStyles: string[];
     } | undefined;
@@ -1798,14 +1790,17 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     imageParams: z.ZodOptional<z.ZodObject<{
         model: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
+        aspectRatio: z.ZodOptional<z.ZodString>;
         style: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     }, {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     }>>;
     speechParams: z.ZodOptional<z.ZodObject<{
@@ -1916,6 +1911,7 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     imageParams?: {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     } | undefined;
     speechParams?: {
@@ -2002,6 +1998,7 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     imageParams?: {
         model?: string | undefined;
         size?: string | undefined;
+        aspectRatio?: string | undefined;
         style?: string | undefined;
     } | undefined;
     speechParams?: {
@@ -2025,16 +2022,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         description: z.ZodOptional<z.ZodString>;
         reference: z.ZodOptional<z.ZodString>;
         lang: z.ZodOptional<z.ZodString>;
-        canvasSize: z.ZodOptional<z.ZodObject<{
-            width: z.ZodNumber;
-            height: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            width: number;
-            height: number;
-        }, {
-            width: number;
-            height: number;
-        }>>;
         beats: z.ZodArray<z.ZodObject<{
             speaker: z.ZodString;
             text: z.ZodString;
@@ -2300,14 +2287,17 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams: z.ZodOptional<z.ZodObject<{
                 model: z.ZodOptional<z.ZodString>;
                 size: z.ZodOptional<z.ZodString>;
+                aspectRatio: z.ZodOptional<z.ZodString>;
                 style: z.ZodOptional<z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             }, {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             }>>;
             speechParams: z.ZodOptional<z.ZodObject<{
@@ -2390,6 +2380,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -2465,6 +2456,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -2508,17 +2500,20 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams: z.ZodOptional<z.ZodObject<{
             model: z.ZodOptional<z.ZodString>;
             size: z.ZodOptional<z.ZodString>;
+            aspectRatio: z.ZodOptional<z.ZodString>;
             style: z.ZodOptional<z.ZodString>;
         } & {
             provider: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         }, {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         }>>;
@@ -2608,6 +2603,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -2621,6 +2617,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         } | undefined;
@@ -2634,10 +2631,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             provider?: string | undefined;
         } | undefined;
         reference?: string | undefined;
-        canvasSize?: {
-            width: number;
-            height: number;
-        } | undefined;
         textSlideParams?: {
             cssStyles: string[];
         } | undefined;
@@ -2716,6 +2709,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -2729,6 +2723,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         } | undefined;
@@ -2742,10 +2737,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             provider?: string | undefined;
         } | undefined;
         reference?: string | undefined;
-        canvasSize?: {
-            width: number;
-            height: number;
-        } | undefined;
         textSlideParams?: {
             cssStyles: string[];
         } | undefined;
@@ -3021,14 +3012,17 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams: z.ZodOptional<z.ZodObject<{
             model: z.ZodOptional<z.ZodString>;
             size: z.ZodOptional<z.ZodString>;
+            aspectRatio: z.ZodOptional<z.ZodString>;
             style: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         }, {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         }>>;
         speechParams: z.ZodOptional<z.ZodObject<{
@@ -3139,6 +3133,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -3225,6 +3220,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -3314,6 +3310,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -3401,6 +3398,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -3414,6 +3412,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         } | undefined;
@@ -3427,10 +3426,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             provider?: string | undefined;
         } | undefined;
         reference?: string | undefined;
-        canvasSize?: {
-            width: number;
-            height: number;
-        } | undefined;
         textSlideParams?: {
             cssStyles: string[];
         } | undefined;
@@ -3512,6 +3507,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
         } | undefined;
         speechParams?: {
@@ -3599,6 +3595,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             imageParams?: {
                 model?: string | undefined;
                 size?: string | undefined;
+                aspectRatio?: string | undefined;
                 style?: string | undefined;
             } | undefined;
             speechParams?: {
@@ -3612,6 +3609,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         imageParams?: {
             model?: string | undefined;
             size?: string | undefined;
+            aspectRatio?: string | undefined;
             style?: string | undefined;
             provider?: string | undefined;
         } | undefined;
@@ -3625,10 +3623,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             provider?: string | undefined;
         } | undefined;
         reference?: string | undefined;
-        canvasSize?: {
-            width: number;
-            height: number;
-        } | undefined;
         textSlideParams?: {
             cssStyles: string[];
         } | undefined;
