@@ -1,14 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-type CliArgs = {
-  action: string;
-  file: string;
-  outdir?: string;
-  scratchpad?: string;
-  basedir?: string;
-};
-
 export const args = yargs(hideBin(process.argv))
   .scriptName("mulmocast")
   .option("outdir", {
