@@ -86,6 +86,10 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
 const main = async () => {
   const arg2 = process.argv[2];
   const studio = createOrUpdateStudioData(arg2);
+  await movie(studio);
+};
+
+export const movie = async (studio: MulmoStudio) => {
   const canvasInfo = studio.script.imageParams?.aspectRatio === "9:16" ? PORTRAIT_SIZE : LANDSCAPE_SIZE;
   const audioPath = getOutputFilePath(studio.filename + "_bgm.mp3");
   const outputVideoPath = getOutputFilePath(studio.filename + ".mp4");
