@@ -8,7 +8,6 @@ import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "../types";
 import { getOutputFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
-import { createOrUpdateStudioData } from "../utils/preprocess";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
 import { ImageGoogleConfig } from "../agents/image_google_agent";
