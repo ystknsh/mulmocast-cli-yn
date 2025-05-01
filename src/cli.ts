@@ -31,7 +31,7 @@ const getFullPath = (baseDirPath: string, file: string) => {
 
 const main = async () => {
   const { outdir, basedir, file } = args;
-  const baseDirPath = getBaseDirPath(basedir);
+  const baseDirPath = getBaseDirPath(basedir as string);
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
   const outFilePath = getFullPath(baseDirPath, (outdir as string) ?? "output");
 
