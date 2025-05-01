@@ -42,7 +42,6 @@
   },
   "homepage": "https://github.com/receptron/mulmocast-cli#readme",
   "dependencies": {
-    "@google/generative-ai": "^0.24.0",
     "@graphai/agents": "^1.0.3",
     "@graphai/tts_nijivoice_agent": "^0.0.2",
     "@graphai/tts_openai_agent": "^0.0.2",
@@ -54,7 +53,6 @@
     "google-auth-library": "^9.15.1",
     "graphai": "^1.0.9",
     "marked": "^15.0.11",
-    "openai": "^4.96.0",
     "puppeteer": "^24.7.2",
     "yargs": "^17.7.2",
     "zod": "^3.24.3"
