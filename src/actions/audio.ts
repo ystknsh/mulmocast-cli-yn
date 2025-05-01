@@ -1,16 +1,16 @@
 import "dotenv/config";
-// import fs from "fs";
+
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
-import ttsNijivoiceAgent from "./agents/tts_nijivoice_agent";
-import addBGMAgent from "./agents/add_bgm_agent";
-import combineAudioFilesAgent from "./agents/combine_audio_files_agent";
-import ttsOpenaiAgent from "./agents/tts_openai_agent";
+import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
+import addBGMAgent from "../agents/add_bgm_agent";
+import combineAudioFilesAgent from "../agents/combine_audio_files_agent";
+import ttsOpenaiAgent from "../agents/tts_openai_agent";
 import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { createOrUpdateStudioData } from "./utils/preprocess";
-import { MulmoStudio, MulmoBeat, SpeakerDictonary, Text2speechParams } from "./types";
-import { fileCacheAgentFilter } from "./utils/filters";
+import { createOrUpdateStudioData } from "../utils/preprocess";
+import { MulmoStudio, MulmoBeat, SpeakerDictonary, Text2speechParams } from "../types";
+import { fileCacheAgentFilter } from "../utils/filters";
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
 
@@ -94,7 +94,7 @@ const graph_data: GraphData = {
         file: "./output/${:studio.filename}_studio.json",
         text: ":combineFiles.studio.toJSON()",
       },
-      params: { baseDir: __dirname + "/../" },
+      params: { baseDir: __dirname + "/../../" },
     },
     addBGM: {
       agent: "addBGMAgent",
@@ -135,12 +135,6 @@ const agentFilters = [
   },
 ];
 
-const main = async () => {
-  const arg2 = process.argv[2];
-  const studio = createOrUpdateStudioData(arg2);
-  await audio(studio, studio.script.speechParams?.provider === "nijivoice" ? 1 : 8);
-};
-
 export const audio = async (studio: MulmoStudio, concurrency: number) => {
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
@@ -161,7 +155,3 @@ export const audio = async (studio: MulmoStudio, concurrency: number) => {
   const result = results.combineFiles as { fileName: string };
   console.log(`Generated: ${result.fileName}`);
 };
-
-if (process.argv[1] === __filename) {
-  main();
-}

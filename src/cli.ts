@@ -9,7 +9,7 @@ import { createOrUpdateStudioData } from "./utils/preprocess";
 
 import { translate } from "./actions/translate";
 import { images } from "./images";
-import { audio } from "./audio";
+import { audio } from "./actions/audio";
 import { movie } from "./movie";
 
 const main = async () => {
