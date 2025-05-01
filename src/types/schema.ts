@@ -81,7 +81,6 @@ export const mulmoMediaSchema = z.union([
 export const text2imageParamsSchema = z.object({
   model: z.string().optional(), // default: provider specific
   size: z.string().optional(), // default: provider specific
-  aspectRatio: z.string().optional(), // default: "16:9"
   style: z.string().optional(), // optional image style
 });
 
@@ -109,6 +108,10 @@ export const mulmoBeatSchema = z.object({
   image: z.string().optional(), // path to the image
 });
 
+export const mulmoDimensionSchema = z.object({
+  width: z.number(), height: z.number(),
+});
+
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
 
 export const mulmoScriptSchema = z.object({
@@ -117,6 +120,7 @@ export const mulmoScriptSchema = z.object({
   description: z.string().optional(),
   reference: z.string().optional(),
   lang: langSchema.optional(), // default "en"
+  canvasSize: mulmoDimensionSchema.optional(),
 
   // page/slide
   beats: z.array(mulmoBeatSchema),
