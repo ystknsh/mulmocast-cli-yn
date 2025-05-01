@@ -37,13 +37,10 @@ yarn run movie scripts/test/test_en.json
 ## Create a video
 
 1. Claudeを使って台本（MulmoScript）を作成
-2. 各セリフにimagePromptを追加（src/imagep.tsを使用）
-3. セリフの分割（src/split.tsを使用、オプション）
-4. セリフの修正（src/fixtext.tsを使用、オプション）
-5. Youtubeライブ向けの縦動画であれば、その指示を追加（手作業）
-6. 音声ファイルの作成（`yarn run audio {path to the script file}`を使って自動作成）
-7. 画像ファイルの作成（`yarn run images {path to the script file}`を使って自動生成）
-8. 映像ファイルの作成（`yarn run movie {path to the script file}`を使って自動生成）
+2. Youtubeライブ向けの縦動画であれば、その指示を追加（手作業）
+3. 音声ファイルの作成（`yarn run audio {path to the script file}`を使って自動作成）
+4. 画像ファイルの作成（`yarn run images {path to the script file}`を使って自動生成）
+5. 映像ファイルの作成（`yarn run movie {path to the script file}`を使って自動生成）
 
 # Script format
 
@@ -87,4 +84,4 @@ Run ```yarn run translate {path to the script file}```
 
 ## Create a movie file with the Japanese script
 
-Run ```yarn run mov {path to the script file}```
+Run ```yarn run movie {path to the script file}```
