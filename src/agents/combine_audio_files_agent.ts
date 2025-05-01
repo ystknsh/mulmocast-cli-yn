@@ -8,8 +8,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileNam
 }) => {
   const { studio, combinedFileName } = namedInputs;
   const outputFile = path.resolve(combinedFileName);
-  const silentPath = path.resolve("./music/silent300.mp3");
-  const silentLastPath = path.resolve("./music/silent800.mp3");
+  const silentPath = path.resolve(__dirname,  "../../music/silent300.mp3");
+  const silentLastPath = path.resolve(__dirname, "../../music/silent800.mp3");
   const command = ffmpeg();
   studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
     const filePath = path.resolve("./scratchpad/" + mulmoBeat.filename + ".mp3");
