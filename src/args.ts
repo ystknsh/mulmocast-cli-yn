@@ -3,7 +3,8 @@ import { hideBin } from "yargs/helpers";
 
 export const args = yargs(hideBin(process.argv))
   .scriptName("mulmocast")
-  .option("outdir", {
+  .option("o", {
+    alias: "outdir",
     description: "output dir",
     demandOption: false,
     type: "string",
@@ -13,27 +14,31 @@ export const args = yargs(hideBin(process.argv))
     demandOption: false,
     type: "string",
   })
-  .option("basedir", {
+  .option("v", {
+    alias: "verbose",
+    describe: "verbose log",
+    demandOption: true,
+    default: false,
+    type: "boolean",
+  })
+  .option("b", {
+    alias: "basedir",
     description: "base dir",
     demandOption: false,
     type: "string",
   })
-  .command(
-    "$0 <action> <file>", // コマンド名は `$0` で、2つの positional 引数を指定
-    "Run mulmocast",
-    (yargs) => {
-      return yargs
-        .positional("action", {
-          describe: "action to perform",
-          choices: ["translate", "audio", "images", "movie", "preprocess"] as const,
-          type: "string",
-        })
-        .positional("file", {
-          describe: "Mulmo Script File",
-          type: "string",
-        });
-    },
-  )
+  .command("$0 <action> <file>", "Run mulmocast", (yargs) => {
+    return yargs
+      .positional("action", {
+        describe: "action to perform",
+        choices: ["translate", "audio", "images", "movie", "preprocess"] as const,
+        type: "string",
+      })
+      .positional("file", {
+        describe: "Mulmo Script File",
+        type: "string",
+      });
+  })
   .strict()
   .help()
   .parseSync();
