@@ -1,7 +1,7 @@
 import { MulmoScript } from "../types";
 
-export namespace MulmoScriptMethods {
-  export const getPadding = (script: MulmoScript) => {
+export const MulmoScriptMethods = {
+  getPadding(script: MulmoScript): number {
     return script.videoParams?.padding ?? 1000; // msec
-  };
-}
+  },
+};
