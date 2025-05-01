@@ -4,14 +4,13 @@ import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
-import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "./types";
-import { getOutputFilePath, mkdir } from "./utils/file";
-import { fileCacheAgentFilter } from "./utils/filters";
-import { convertMarkdownToImage } from "./utils/markdown";
-import { createOrUpdateStudioData } from "./utils/preprocess";
-import imageGoogleAgent from "./agents/image_google_agent";
-import imageOpenaiAgent from "./agents/image_openai_agent";
-import { ImageGoogleConfig } from "./agents/image_google_agent";
+import { MulmoStudio, MulmoStudioBeat, Text2imageParams } from "../types";
+import { getOutputFilePath, mkdir } from "../utils/file";
+import { fileCacheAgentFilter } from "../utils/filters";
+import { convertMarkdownToImage } from "../utils/markdown";
+import imageGoogleAgent from "../agents/image_google_agent";
+import imageOpenaiAgent from "../agents/image_openai_agent";
+import { ImageGoogleConfig } from "../agents/image_google_agent";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -105,13 +104,6 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-const main = async () => {
-  const arg2 = process.argv[2];
-  const studio = createOrUpdateStudioData(arg2);
-
-  await images(studio);
-};
-
 export const images = async (studio: MulmoStudio) => {
   mkdir(`images/${studio.filename}`);
 
@@ -165,7 +157,3 @@ export const images = async (studio: MulmoStudio) => {
     fs.writeFileSync(getOutputFilePath(`${studio.filename}_studio.json`), JSON.stringify(studio, null, 2));
   }
 };
-
-if (process.argv[1] === __filename) {
-  main();
-}
