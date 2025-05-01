@@ -48,7 +48,7 @@
     "dotenv": "^16.4.7",
     "fluent-ffmpeg": "^2.1.3",
     "google-auth-library": "^9.15.1",
-    "graphai": "^1.0.9",
+    "graphai": "^1.0.10",
     "marked": "^15.0.11",
     "puppeteer": "^24.7.2",
     "yargs": "^17.7.2",

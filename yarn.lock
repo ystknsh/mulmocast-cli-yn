@@ -1382,10 +1382,10 @@ gopd@^1.2.0:
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.2.0.tgz#89f56b8217bdbc8802bd299df6d7f1081d7e51a1"
   integrity sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
 
-graphai@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/graphai/-/graphai-1.0.9.tgz#2cceaf8e4d74af75b64a228bae8ad0829d84971e"
-  integrity sha512-Ojoi+amR4x8HH6wKcUFMMrHFppuM3naUldCRWg3y9+iilinbSrjyRgkpBY2NRF90cp8KfTLaHQXHnWEE/Miw5g==
+graphai@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/graphai/-/graphai-1.0.10.tgz#e706b16388622de89a24009aa6506bc90ed27e3e"
+  integrity sha512-puBHjZQQfbQJpvl/6e/oC5NnMDrR8fTZd9IPJ+IpKER8G9RX6WLL9ZIs/OAXOHF6ZdnwhwhkErU9Yf+k7/8BLw==
 
 graphemer@^1.4.0:
   version "1.4.0"
