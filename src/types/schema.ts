@@ -110,7 +110,7 @@ export const mulmoBeatSchema = z.object({
 export const mulmoScriptSchema = z.object({
   // global settings
   title: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
   reference: z.string(),
   lang: langSchema,
 
