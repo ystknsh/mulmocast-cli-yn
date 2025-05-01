@@ -20,7 +20,6 @@
     "movie": "npx tsx ./src/cli.ts movie",
     "images": "npx tsx ./src/cli.ts images",
     "preprocess": "npx tsx ./src/preprocess.ts",
-    "imagep": "npx tsx ./src/imagep.ts",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/audio.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
     "ci_test": "node --test  --require ts-node/register ./test/*/test_*.ts",
     "lint": "eslint src test",
