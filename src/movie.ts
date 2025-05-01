@@ -18,12 +18,7 @@ const LANDSCAPE_SIZE = {
   height: 720, // not 1080
 };
 
-const createVideo = (
-  audioPath: string,
-  outputVideoPath: string,
-  studio: MulmoStudio,
-  canvasInfo: CanvasInfo
-) => {
+const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoStudio, canvasInfo: CanvasInfo) => {
   const start = performance.now();
   let command = ffmpeg();
 
@@ -35,15 +30,16 @@ const createVideo = (
 
   const filterComplexParts: string[] = [];
   studio.beats.forEach((beat, index) => {
-      // Resize background image to match canvas dimensions
-      const duration = beat.duration! + ((index === 0) ? 4.0 : 0); // HACK: until we support audio padding
-      const parts = `[${index}:v]loop=loop=-1:size=1:start=0,` +
-          `trim=duration=${duration},` +
-          `fps=30,` +
-          `setpts=PTS-STARTPTS,` +
-          `scale=${canvasInfo.width}:${canvasInfo.height},` +
-          `setsar=1,format=yuv420p` +
-          `[v${index}]`;
+    // Resize background image to match canvas dimensions
+    const duration = beat.duration! + (index === 0 ? 4.0 : 0); // HACK: until we support audio padding
+    const parts =
+      `[${index}:v]loop=loop=-1:size=1:start=0,` +
+      `trim=duration=${duration},` +
+      `fps=30,` +
+      `setpts=PTS-STARTPTS,` +
+      `scale=${canvasInfo.width}:${canvasInfo.height},` +
+      `setsar=1,format=yuv420p` +
+      `[v${index}]`;
     // console.log(parts);
     filterComplexParts.push(parts);
   });
@@ -59,7 +55,7 @@ const createVideo = (
     .outputOptions([
       "-preset veryfast", // Faster encoding
       "-map [v]", // Map the video stream
-      `-map ${imageCount/* + captionCount*/}:a`, // Map the audio stream (audio is the next input after all images)
+      `-map ${imageCount /* + captionCount*/}:a`, // Map the audio stream (audio is the next input after all images)
       "-c:v h264_videotoolbox", // Set video codec
       "-threads 8",
       "-filter_threads 8",
