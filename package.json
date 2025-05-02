@@ -31,7 +31,7 @@
     "prompt": "npx ts-node ./src/tools/prompt.ts",
     "cli": "npx ts-node ./src/cli/cli.ts",
     "latest": "yarn upgrade-interactive  --latest",
-    "format": "prettier --write '{src,scripts,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
+    "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },
   "repository": "git+ssh://git@github.com/receptron/mulmocast-cli.git",
   "author": "snakajima",

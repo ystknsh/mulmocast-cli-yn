@@ -163,6 +163,7 @@ export const mulmoStudioSchema = z.object({
   beats: z.array(mulmoStudioBeatSchema),
 });
 
-export const mulmoScriptTemplateSchema = mulmoScriptSchema.extend({
-  systemPrompt: z.string().optional(),
+export const mulmoScriptTemplateSchema = z.object({
+  systemPrompt: z.string(),
+  script: mulmoScriptSchema,
 });
