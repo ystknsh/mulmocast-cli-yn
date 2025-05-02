@@ -22,7 +22,7 @@ const graphData: GraphData = {
     fetchResults: {
       agent: "mapAgent",
       inputs: {
-        rows: ":urls"
+        rows: ":urls",
       },
       params: {
         compositeResult: true,
@@ -48,9 +48,9 @@ const graphData: GraphData = {
               namedKey: "text",
             },
             isResult: true,
-          }
+          },
         },
-      }
+      },
     },
     // join the text content
     sourceText: {
@@ -77,7 +77,7 @@ const graphData: GraphData = {
         nodes: {
           counter: {
             value: 0,
-            update: ":counter.add(1)"
+            update: ":counter.add(1)",
           },
           openAIAgent: {
             agent: "openAIAgent",
@@ -103,7 +103,7 @@ const graphData: GraphData = {
               counter: ":counter",
             },
           },
-        }
+        },
       },
     },
     writeJSON: {
@@ -115,9 +115,8 @@ const graphData: GraphData = {
       },
       isResult: true,
     },
-  }
+  },
 };
-
 
 const createMulmoScriptFromUrl = async (urls: string[]) => {
   const urlsSchema = z.array(z.string().url({ message: "Invalid URL format" }));
@@ -135,8 +134,7 @@ const createMulmoScriptFromUrl = async (urls: string[]) => {
   graph.injectValue("prompt", prompts.prompt_seed_from_materials);
 
   await graph.run();
-}
-
+};
 
 // temporary main function
 const main = async () => {
