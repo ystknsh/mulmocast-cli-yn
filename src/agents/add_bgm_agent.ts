@@ -1,16 +1,14 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import path from "path";
 import { MulmoScript } from "../types";
 import { MulmoScriptMethods } from "../methods";
 
-const addBGMAgent: AgentFunction<{ musicFileName: string }, string, { voiceFile: string; outputFile: string; script: MulmoScript }> = async ({
+const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: string; outputFile: string; script: MulmoScript }> = async ({
   namedInputs,
   params,
 }) => {
   const { voiceFile, outputFile, script } = namedInputs;
-  const { musicFileName } = params;
-  const musicFile = path.resolve(musicFileName);
+  const { musicFile } = params;
 
   const promise = new Promise((resolve, reject) => {
     ffmpeg.ffprobe(voiceFile, (err, metadata) => {

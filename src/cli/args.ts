@@ -9,7 +9,7 @@ export const args = yargs(hideBin(process.argv))
     demandOption: false,
     type: "string",
   })
-  .option("scratchpad", {
+  .option("scratchpaddir", {
     description: "scratchpad dir",
     demandOption: false,
     type: "string",

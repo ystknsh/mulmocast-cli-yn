@@ -1,44 +1,36 @@
 #!/usr/bin/env node
 
 import "dotenv/config";
-import path from "path";
 import fs from "fs";
 import { args } from "./args";
 
-import { createOrUpdateStudioData } from "./utils/preprocess";
-import { outDirName, imageDirName } from "./utils/const";
-import { MulmoScriptMethods } from "./methods";
+import { createOrUpdateStudioData } from "../utils/preprocess";
+import { outDirName, imageDirName, scratchpadDirName } from "../utils/const";
+import { MulmoScriptMethods } from "../methods";
 
-import { translate } from "./actions/translate";
-import { images } from "./actions/images";
-import { audio } from "./actions/audio";
-import { movie } from "./actions/movie";
+import { translate } from "../actions/translate";
+import { images } from "../actions/images";
+import { audio } from "../actions/audio";
+import { movie } from "../actions/movie";
 
-const getBaseDirPath = (basedir?: string) => {
-  if (!basedir) {
-    return process.cwd();
-  }
-  if (path.isAbsolute(basedir)) {
-    return path.normalize(basedir);
-  }
-  return path.resolve(process.cwd(), basedir);
-};
+import { getBaseDirPath, getFullPath } from "../utils/file";
 
-const getFullPath = (baseDirPath: string, file: string) => {
-  if (path.isAbsolute(file)) {
-    return path.normalize(file);
-  }
-  return path.resolve(baseDirPath, file);
-};
-
-const main = async () => {
-  const { outdir, imagedir, basedir, file } = args;
+const getFileObject = () => {
+  const { basedir, file, outdir, imagedir, scratchpaddir } = args;
   const baseDirPath = getBaseDirPath(basedir as string);
+
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
+
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(baseDirPath, (imagedir as string) ?? imageDirName);
+  const scratchpadDirPath = getFullPath(baseDirPath, (scratchpaddir as string) ?? scratchpadDirName);
 
-  const files = { baseDirPath, mulmoFilePath, outDirPath, imageDirPath };
+  return { baseDirPath, mulmoFilePath, outDirPath, imageDirPath, scratchpadDirPath };
+};
+const main = async () => {
+  const files = getFileObject();
+  const { mulmoFilePath } = files;
+
   if (args.v) {
     console.log(files);
   }

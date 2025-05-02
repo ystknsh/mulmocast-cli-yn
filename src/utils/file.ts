@@ -2,8 +2,6 @@ import fs from "fs";
 import path from "path";
 import { MulmoScript } from "../types";
 
-import { scratchpadDirName } from "./const";
-
 export function readMulmoScriptFile<T = MulmoScript>(
   path: string,
   errorMessage: string,
@@ -50,19 +48,14 @@ export const getOutputBGMFilePath = (outDirPath: string, fileName: string) => {
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
 };
-
-export const getScratchpadFilePath = (fileName: string) => {
-  const filePath = path.resolve(scratchpadDirName + fileName);
-  return filePath;
+export const getOutputAudioFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + ".mp3");
 };
-
-export const getBaseDirPath = () => {
-  return path.resolve("./");
+export const getScratchpadFilePath = (scratchpadDirName: string, fileName: string) => {
+  return path.resolve(scratchpadDirName, fileName + ".mp3");
 };
 
 export const mkdir = (dirPath: string) => {
-  // const currentDir = process.cwd();
-  // const imagesDir = path.join(currentDir, dirPath);
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
@@ -70,3 +63,25 @@ export const mkdir = (dirPath: string) => {
 
 export const silentPath = path.resolve(__dirname, "../../music/silent300.mp3");
 export const silentLastPath = path.resolve(__dirname, "../../music/silent800.mp3");
+export const defaultBGMPath = path.resolve(__dirname, "../../music/StarsBeyondEx.mp3");
+
+// for cli
+export const getBaseDirPath = (basedir?: string) => {
+  if (!basedir) {
+    return process.cwd();
+  }
+  if (path.isAbsolute(basedir)) {
+    return path.normalize(basedir);
+  }
+  return path.resolve(process.cwd(), basedir);
+};
+
+export const getFullPath = (baseDirPath: string | undefined, file: string) => {
+  if (path.isAbsolute(file)) {
+    return path.normalize(file);
+  }
+  if (baseDirPath) {
+    return path.resolve(baseDirPath, file);
+  }
+  return path.resolve(file);
+};

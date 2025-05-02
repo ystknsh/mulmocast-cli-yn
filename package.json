@@ -2,12 +2,13 @@
   "name": "mulmo",
   "version": "0.0.1",
   "description": "",
-  "main": "lib/cli.js",
+  "main": "lib/cli/cli.js",
   "bin": {
-    "mulmo": "lib/cli.js"
+    "mulmo": "lib/cli/cli.js"
   },
   "files": [
     "./lib",
+    "./music/StarsBeyondEx.mp3",
     "./music/silent300.mp3",
     "./music/silent800.mp3"
   ],
@@ -17,17 +18,17 @@
     "test": "tests"
   },
   "scripts": {
-    "audio": "npx tsx ./src/cli.ts audio",
-    "translate": "npx tsx ./src/cli.ts translate",
-    "movie": "npx tsx ./src/cli.ts movie",
-    "images": "npx tsx ./src/cli.ts images",
-    "preprocess": "npx tsx ./src/cli.ts preprocess",
+    "audio": "npx tsx ./src/cli/cli.ts audio",
+    "translate": "npx tsx ./src/cli/cli.ts translate",
+    "movie": "npx tsx ./src/cli/cli.ts movie",
+    "images": "npx tsx ./src/cli/cli.ts images",
+    "preprocess": "npx tsx ./src/cli/cli.ts preprocess",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/audio.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
     "ci_test": "node --test  --require ts-node/register ./test/*/test_*.ts",
     "lint": "eslint src test",
     "build": "tsc",
     "prompt": "npx ts-node ./src/tools/prompt.ts",
-    "cli": "npx ts-node ./src/cli.ts",
+    "cli": "npx ts-node ./src/cli/cli.ts",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },

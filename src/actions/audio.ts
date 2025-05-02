@@ -6,26 +6,17 @@ import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
 import addBGMAgent from "../agents/add_bgm_agent";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "../agents/tts_openai_agent";
-import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudio, MulmoBeat, SpeakerDictonary, Text2speechParams, FileDirs } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { getOutputBGMFilePath } from "../utils/file";
+import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
 
 const graph_tts: GraphData = {
   nodes: {
-    path: {
-      agent: "pathUtilsAgent",
-      params: {
-        method: "resolve",
-      },
-      inputs: {
-        dirs: ["scratchpad", "${:row.filename}.mp3"],
-      },
-    },
     preprocessor: {
       agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: Text2speechParams }) => {
         const { beat, speakers, speechParams } = namedInputs;
@@ -35,7 +26,7 @@ const graph_tts: GraphData = {
         };
       },
       inputs: {
-        beat: ":row",
+        beat: ":beat",
         speechParams: ":script.speechParams",
         speakers: ":script.speechParams.speakers",
       },
@@ -54,9 +45,8 @@ const graph_tts: GraphData = {
     tts: {
       agent: ":ttsAgent",
       inputs: {
-        // text: ":row.ttsText",
-        text: ":row.text",
-        file: ":path.path",
+        text: ":beat.text",
+        file: "${:scratchpadDirPath}/${:beat.filename}.mp3", // TODO
       },
       params: {
         throwError: true,
@@ -73,10 +63,16 @@ const graph_data: GraphData = {
   concurrency: 8,
   nodes: {
     studio: {},
-    outputFile: {},
+    outputBGMFilePath: {},
+    outputAudioFilePath: {},
+    outputStudioFilePath: {},
+    scratchpadDirPath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":studio.beats", script: ":studio.script" },
+      inputs: { rows: ":studio.beats", script: ":studio.script", scratchpadDirPath: ":scratchpadDirPath" },
+      params: {
+        rowKey: "beat",
+      },
       graph: graph_tts,
     },
     combineFiles: {
@@ -84,29 +80,30 @@ const graph_data: GraphData = {
       inputs: {
         map: ":map",
         studio: ":studio",
-        combinedFileName: "./output/${:studio.filename}.mp3",
+        combinedFileName: ":outputAudioFilePath",
+        scratchpadDirPath: ":scratchpadDirPath",
       },
       isResult: true,
     },
     fileWrite: {
       agent: "fileWriteAgent",
       inputs: {
-        file: "./output/${:studio.filename}_studio.json",
+        file: ":outputStudioFilePath",
         text: ":combineFiles.studio.toJSON()",
       },
-      params: { baseDir: __dirname + "/../../" },
     },
     addBGM: {
       agent: "addBGMAgent",
       params: {
-        musicFileName: process.env.PATH_BGM ?? "./music/StarsBeyondEx.mp3",
+        musicFile: process.env.PATH_BGM ?? defaultBGMPath,
       },
       console: {
         before: true,
       },
       inputs: {
-        voiceFile: ":combineFiles.fileName",
-        outputFile: ":outputFile",
+        wait: ":combineFiles",
+        voiceFile: ":outputAudioFilePath",
+        outputFile: ":outputBGMFilePath",
         script: ":studio.script",
       },
       isResult: true,
@@ -136,15 +133,16 @@ const agentFilters = [
 ];
 
 export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: number) => {
-  const { outDirPath } = files;
-  const audioPath = getOutputBGMFilePath(outDirPath, studio.filename);
+  const { outDirPath, scratchpadDirPath } = files;
+  const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
+  const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
+  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
     graph_data,
     {
       ...agents,
-      pathUtilsAgent,
       fileWriteAgent,
       ttsOpenaiAgent,
       ttsNijivoiceAgent,
@@ -154,7 +152,10 @@ export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: n
     { agentFilters },
   );
   graph.injectValue("studio", studio);
-  graph.injectValue("outputFile", audioPath);
+  graph.injectValue("outputBGMFilePath", outputBGMFilePath);
+  graph.injectValue("outputAudioFilePath", outputAudioFilePath);
+  graph.injectValue("outputStudioFilePath", outputStudioFilePath);
+  graph.injectValue("scratchpadDirPath", scratchpadDirPath);
   const results = await graph.run();
 
   const result = results.combineFiles as { fileName: string };

@@ -1,17 +1,17 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import path from "path";
 import { MulmoStudio, MulmoStudioBeat } from "../types";
-import { silentPath, silentLastPath } from "../utils/file";
+import { silentPath, silentLastPath, getScratchpadFilePath } from "../utils/file";
 
-const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileName: string }, { studio: MulmoStudio; combinedFileName: string }> = async ({
-  namedInputs,
-}) => {
-  const { studio, combinedFileName } = namedInputs;
-  const outputFile = path.resolve(combinedFileName);
+const combineAudioFilesAgent: AgentFunction<
+  null,
+  { studio: MulmoStudio },
+  { studio: MulmoStudio; combinedFileName: string; scratchpadDirPath: string }
+> = async ({ namedInputs }) => {
+  const { studio, combinedFileName, scratchpadDirPath } = namedInputs;
   const command = ffmpeg();
   studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
-    const filePath = path.resolve("./scratchpad/" + mulmoBeat.filename + ".mp3");
+    const filePath = getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
     const isLast = index === studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
@@ -34,13 +34,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileNam
         console.error("Error while combining MP3 files:", err);
         reject(err);
       })
-      .mergeToFile(outputFile, path.dirname(outputFile));
+      .mergeToFile(combinedFileName, scratchpadDirPath);
   });
 
   await promise;
 
   return {
-    fileName: outputFile,
+    // fileName: combinedFileName,
     studio,
   };
 };

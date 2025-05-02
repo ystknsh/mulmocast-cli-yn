@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+
 import { MulmoStudio, MulmoStudioBeat, Text2imageParams, FileDirs } from "../types";
 import { MulmoScriptMethods } from "../methods";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
@@ -28,7 +28,7 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
   const { beat, index, suffix, studio, imageDirPath } = namedInputs;
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  const imagePath = path.resolve(`${imageDirPath}/${studio.filename}/${index}${suffix}.png`);
+  const imagePath = `${imageDirPath}/${studio.filename}/${index}${suffix}.png`;
 
   if (beat.media) {
     if (beat.media.type === "textSlide") {
@@ -49,6 +49,7 @@ const graph_data: GraphData = {
     studio: {},
     imageDirPath: {},
     text2imageAgent: { value: "" },
+    outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
       inputs: { rows: ":studio.beats", studio: ":studio", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
@@ -96,6 +97,29 @@ const graph_data: GraphData = {
         },
       },
     },
+    mergeResult: {
+      agent: (namedInputs: { array: { image: string }[]; studio: MulmoStudio }) => {
+        const { array, studio } = namedInputs;
+        array.forEach((update, index) => {
+          const beat = studio.beats[index];
+          studio.beats[index] = { ...beat, ...update };
+        });
+        // console.log(namedInputs);
+        return { studio };
+      },
+      inputs: {
+        array: ":map.output",
+        studio: ":studio",
+      },
+    },
+    writeOutout: {
+      // console: { before: true },
+      agent: "fileWriteAgent",
+      inputs: {
+        file: ":outputStudioFilePath",
+        text: ":mergeResult.studio.toJSON()",
+      },
+    },
   },
 };
 
@@ -124,9 +148,11 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
     agentFilters,
   };
 
+  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   const injections: Record<string, string | MulmoStudio | Text2imageParams | undefined> = {
     studio: studio,
     text2imageAgent: "imageOpenaiAgent",
+    outputStudioFilePath: outputStudioFilePath,
   };
 
   // We need to get google's auth token only if the google is the text2image provider.
@@ -143,24 +169,10 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
     injections.text2image = "imageGoogleAgent";
   }
 
-  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent }, options);
+  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
   graph.injectValue("imageDirPath", imageDirPath);
-  const results = await graph.run<{ output: MulmoStudioBeat[] }>();
-
-  if (results.map?.output) {
-    // THe output looks like this. We need to merge it into MultiStudioBeat array
-    // [
-    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/0p.png' },
-    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/1p.png' }
-    // ]
-    results.map?.output.forEach((update, index) => {
-      const beat = studio.beats[index];
-      studio.beats[index] = { ...beat, ...update };
-    });
-    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
-    fs.writeFileSync(outputStudioFilePath, JSON.stringify(studio, null, 2));
-  }
+  await graph.run<{ output: MulmoStudioBeat[] }>();
 };
