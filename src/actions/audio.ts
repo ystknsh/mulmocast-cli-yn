@@ -23,7 +23,7 @@ const graph_tts: GraphData = {
         method: "resolve",
       },
       inputs: {
-        dirs: ["scratchpad", "${:beat.filename}.mp3"],
+        dirs: [":scratchpadDirPath", "${:beat.filename}.mp3"],
       },
     },
     preprocessor: {
@@ -75,9 +75,10 @@ const graph_data: GraphData = {
     outputBGMFilePath: {},
     outputAudioFilePath: {},
     outputStudioFilePath: {},
+    scratchpadDirPath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":studio.beats", script: ":studio.script" },
+      inputs: { rows: ":studio.beats", script: ":studio.script", scratchpadDirPath: ":scratchpadDirPath" },
       params: {
         rowKey: "beat",
       },
@@ -89,6 +90,7 @@ const graph_data: GraphData = {
         map: ":map",
         studio: ":studio",
         combinedFileName: ":outputAudioFilePath",
+        scratchpadDirPath: ":scratchpadDirPath",
       },
       isResult: true,
     },
@@ -140,7 +142,7 @@ const agentFilters = [
 ];
 
 export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: number) => {
-  const { outDirPath } = files;
+  const { outDirPath, scratchpadDirPath } = files;
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
   const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
@@ -163,6 +165,7 @@ export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: n
   graph.injectValue("outputBGMFilePath", outputBGMFilePath);
   graph.injectValue("outputAudioFilePath", outputAudioFilePath);
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
+  graph.injectValue("scratchpadDirPath", scratchpadDirPath);
   const results = await graph.run();
 
   const result = results.combineFiles as { fileName: string };

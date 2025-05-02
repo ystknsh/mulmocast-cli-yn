@@ -29,7 +29,7 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${studio.filename}/${index}${suffix}.png`;
-  
+
   if (beat.media) {
     if (beat.media.type === "textSlide") {
       const slide = beat.media.slide;
