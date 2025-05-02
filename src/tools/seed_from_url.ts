@@ -1,10 +1,13 @@
 import "dotenv/config";
+import fs from "fs";
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
-import { prompts } from "../agents/prompts_data";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
+import { getTemplateFilePath } from "../utils/file";
+import { MulmoScriptTemplate } from "../types";
+import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
 import { z } from "zod";
 
 const graphData: GraphData = {
@@ -131,7 +134,12 @@ const createMulmoScriptFromUrl = async (urls: string[]) => {
 
   graph.injectValue("urls", parsedUrls);
   // TODO: Allow injecting a custom prompt from parameters if provided, otherwise use the default
-  graph.injectValue("prompt", prompts.prompt_seed_from_materials);
+  const templatePath = getTemplateFilePath("seed_materials");
+  const scriptData = fs.readFileSync(templatePath, "utf-8");
+  const template = JSON.parse(scriptData) as MulmoScriptTemplate;
+  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
+
+  graph.injectValue("prompt", prompt);
 
   await graph.run();
 };

@@ -1,6 +1,6 @@
 {
-  "systemPromps": "Generate a podcast script based on the materials provided by the user. The script should follow the JSON format specified below.",
-  "scripts": {
+  "systemPrompt": "Generate a podcast script based on the materials provided by the user. The script should follow the JSON format specified below.",
+  "script": {
     "title": "(title of this episode)",
     "description": "(short description of this episode)",
     "reference": "(url to the article)",
