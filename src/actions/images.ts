@@ -176,19 +176,4 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
   graph.injectValue("imageDirPath", imageDirPath);
   await graph.run<{ output: MulmoStudioBeat[] }>();
 
-  /*
-  if (results.map?.output) {
-    // THe output looks like this. We need to merge it into MultiStudioBeat array
-    // [
-    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/0p.png' },
-    //  { image: '/Users/satoshi/git/ai/mulmo/images/test_en/1p.png' }
-    // ]
-    results.map?.output.forEach((update, index) => {
-      const beat = studio.beats[index];
-      studio.beats[index] = { ...beat, ...update };
-    });
-    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
-    fs.writeFileSync(outputStudioFilePath, JSON.stringify(studio, null, 2));
-  }
-  */
 };
