@@ -10,6 +10,7 @@ import {
   text2speechParamsSchema,
   textSlideParamsSchema,
   mulmoDimensionSchema,
+  mulmoScriptTemplateSchema,
 } from "./schema";
 import { z } from "zod";
 
@@ -26,6 +27,7 @@ export type MulmoDimension = z.infer<typeof mulmoDimensionSchema>;
 export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
 
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
+export type MylmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
 
 export type FileDirs = {
   baseDirPath: string;
