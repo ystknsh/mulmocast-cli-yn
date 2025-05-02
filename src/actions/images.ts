@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import fs from "fs";
 import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
