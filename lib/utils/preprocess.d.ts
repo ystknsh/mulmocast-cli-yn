@@ -10,7 +10,7 @@ export declare const createOrUpdateStudioData: (mulmoFile: string, files: {
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -97,7 +97,7 @@ export declare const createOrUpdateStudioData: (mulmoFile: string, files: {
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;

@@ -56,13 +56,13 @@ export declare const speakerDictionarySchema: z.ZodRecord<z.ZodString, z.ZodObje
 }>>;
 export declare const mulmoMediaSchema: z.ZodUnion<[z.ZodObject<{
     type: z.ZodLiteral<"markdown">;
-    markdown: z.ZodString;
+    markdown: z.ZodArray<z.ZodString, "many">;
 }, "strip", z.ZodTypeAny, {
     type: "markdown";
-    markdown: string;
+    markdown: string[];
 }, {
     type: "markdown";
-    markdown: string;
+    markdown: string[];
 }>, z.ZodObject<{
     type: z.ZodLiteral<"web">;
     url: z.ZodString;
@@ -355,13 +355,13 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     text: z.ZodString;
     media: z.ZodOptional<z.ZodUnion<[z.ZodObject<{
         type: z.ZodLiteral<"markdown">;
-        markdown: z.ZodString;
+        markdown: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     }, {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     }>, z.ZodObject<{
         type: z.ZodLiteral<"web">;
         url: z.ZodString;
@@ -643,7 +643,7 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     image?: string | undefined;
     media?: {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     } | {
         type: "web";
         url: string;
@@ -718,7 +718,7 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     image?: string | undefined;
     media?: {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     } | {
         type: "web";
         url: string;
@@ -818,13 +818,13 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         text: z.ZodString;
         media: z.ZodOptional<z.ZodUnion<[z.ZodObject<{
             type: z.ZodLiteral<"markdown">;
-            markdown: z.ZodString;
+            markdown: z.ZodArray<z.ZodString, "many">;
         }, "strip", z.ZodTypeAny, {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         }, {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         }>, z.ZodObject<{
             type: z.ZodLiteral<"web">;
             url: z.ZodString;
@@ -1106,7 +1106,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -1181,7 +1181,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -1324,7 +1324,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -1432,7 +1432,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -1538,13 +1538,13 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     text: z.ZodString;
     media: z.ZodOptional<z.ZodUnion<[z.ZodObject<{
         type: z.ZodLiteral<"markdown">;
-        markdown: z.ZodString;
+        markdown: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     }, {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     }>, z.ZodObject<{
         type: z.ZodLiteral<"web">;
         url: z.ZodString;
@@ -1854,7 +1854,7 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     image?: string | undefined;
     media?: {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     } | {
         type: "web";
         url: string;
@@ -1940,7 +1940,7 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     image?: string | undefined;
     media?: {
         type: "markdown";
-        markdown: string;
+        markdown: string[];
     } | {
         type: "web";
         url: string;
@@ -2040,13 +2040,13 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             text: z.ZodString;
             media: z.ZodOptional<z.ZodUnion<[z.ZodObject<{
                 type: z.ZodLiteral<"markdown">;
-                markdown: z.ZodString;
+                markdown: z.ZodArray<z.ZodString, "many">;
             }, "strip", z.ZodTypeAny, {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             }, {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             }>, z.ZodObject<{
                 type: z.ZodLiteral<"web">;
                 url: z.ZodString;
@@ -2328,7 +2328,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;
@@ -2403,7 +2403,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;
@@ -2546,7 +2546,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;
@@ -2654,7 +2654,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;
@@ -2761,13 +2761,13 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         text: z.ZodString;
         media: z.ZodOptional<z.ZodUnion<[z.ZodObject<{
             type: z.ZodLiteral<"markdown">;
-            markdown: z.ZodString;
+            markdown: z.ZodArray<z.ZodString, "many">;
         }, "strip", z.ZodTypeAny, {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         }, {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         }>, z.ZodObject<{
             type: z.ZodLiteral<"web">;
             url: z.ZodString;
@@ -3077,7 +3077,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -3163,7 +3163,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -3252,7 +3252,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -3339,7 +3339,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;
@@ -3450,7 +3450,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         image?: string | undefined;
         media?: {
             type: "markdown";
-            markdown: string;
+            markdown: string[];
         } | {
             type: "web";
             url: string;
@@ -3537,7 +3537,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             image?: string | undefined;
             media?: {
                 type: "markdown";
-                markdown: string;
+                markdown: string[];
             } | {
                 type: "web";
                 url: string;
