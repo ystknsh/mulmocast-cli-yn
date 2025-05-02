@@ -1,6 +1,5 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import path from "path";
 import { MulmoStudio, MulmoStudioBeat } from "../types";
 import { silentPath, silentLastPath, getScratchpadFilePath } from "../utils/file";
 
