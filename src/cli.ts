@@ -15,14 +15,22 @@ import { movie } from "./actions/movie";
 
 import { getBaseDirPath, getFullPath } from "./utils/file";
 
-const main = async () => {
-  const { outdir, imagedir, scratchpaddir, basedir, file } = args;
+const getFileObject = () => {
+  const { basedir, file, outdir, imagedir, scratchpaddir } = args;
   const baseDirPath = getBaseDirPath(basedir as string);
+
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
+
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(baseDirPath, (imagedir as string) ?? imageDirName);
   const scratchpadDirPath = getFullPath(baseDirPath, (scratchpaddir as string) ?? scratchpadDirName);
-  const files = { baseDirPath, mulmoFilePath, outDirPath, imageDirPath, scratchpadDirPath };
+
+  return { baseDirPath, mulmoFilePath, outDirPath, imageDirPath, scratchpadDirPath };
+};
+const main = async () => {
+  const files = getFileObject();
+  const { mulmoFilePath } = files;
+
   if (args.v) {
     console.log(files);
   }
