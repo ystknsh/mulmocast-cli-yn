@@ -1,6 +1,5 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import path from "path";
 import { MulmoScript } from "../types";
 import { MulmoScriptMethods } from "../methods";
 

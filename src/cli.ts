@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import "dotenv/config";
-import path from "path";
 import fs from "fs";
 import { args } from "./args";
 
