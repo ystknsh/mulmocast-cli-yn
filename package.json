@@ -30,6 +30,7 @@
     "build_test": "tsc && git checkout -- lib/*",
     "prompt": "npx ts-node ./src/tools/prompt.ts",
     "cli": "npx ts-node ./src/cli/cli.ts",
+    "seed_from_url": "npx ts-node ./src/tools/seed_from_url.ts",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },
@@ -42,6 +43,7 @@
   "homepage": "https://github.com/receptron/mulmocast-cli#readme",
   "dependencies": {
     "@graphai/agents": "^1.0.3",
+    "@graphai/browserless_agent": "^0.0.3",
     "@graphai/tts_nijivoice_agent": "^0.0.2",
     "@graphai/tts_openai_agent": "^0.0.2",
     "@graphai/vanilla_node_agents": "^1.0.1",
