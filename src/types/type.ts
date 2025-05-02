@@ -32,4 +32,5 @@ export type FileDirs = {
   mulmoFilePath: string;
   outDirPath: string;
   imageDirPath: string;
+  scratchpadDirPath: string;
 };
