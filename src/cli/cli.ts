@@ -4,16 +4,16 @@ import "dotenv/config";
 import fs from "fs";
 import { args } from "./args";
 
-import { createOrUpdateStudioData } from "./utils/preprocess";
-import { outDirName, imageDirName, scratchpadDirName } from "./utils/const";
-import { MulmoScriptMethods } from "./methods";
+import { createOrUpdateStudioData } from "../utils/preprocess";
+import { outDirName, imageDirName, scratchpadDirName } from "../utils/const";
+import { MulmoScriptMethods } from "../methods";
 
-import { translate } from "./actions/translate";
-import { images } from "./actions/images";
-import { audio } from "./actions/audio";
-import { movie } from "./actions/movie";
+import { translate } from "../actions/translate";
+import { images } from "../actions/images";
+import { audio } from "../actions/audio";
+import { movie } from "../actions/movie";
 
-import { getBaseDirPath, getFullPath } from "./utils/file";
+import { getBaseDirPath, getFullPath } from "../utils/file";
 
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, scratchpaddir } = args;
