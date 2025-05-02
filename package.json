@@ -10,7 +10,8 @@
     "./lib",
     "./assets/music/StarsBeyondEx.mp3",
     "./assets/music/silent300.mp3",
-    "./assets/music/silent800.mp3"
+    "./assets/music/silent800.mp3",
+    "./assets/templates/"
   ],
   "types": "./lib/index.d.ts",
   "directories": {
