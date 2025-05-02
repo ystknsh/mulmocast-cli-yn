@@ -15,6 +15,9 @@ const graphData: GraphData = {
     urls: {
       value: [],
     },
+    prompt: {
+      value: "",
+    },
     // get the text content of the urls
     fetchResults: {
       agent: "mapAgent",
@@ -64,37 +67,23 @@ const graphData: GraphData = {
       agent: "nestedAgent",
       inputs: {
         sourceText: ":sourceText",
+        prompt: ":prompt",
       },
       graph: {
         loop: {
+          // If the script is not valid and the counter is less than 3, continue the loop
           while: ":continue",
         },
         nodes: {
-          // If the script is not valid and the counter is less than 3, continue the loop
-          continue: {
-            agent: ({ isValid, counter }) => {
-              return !isValid && counter < 3;
-            },
-            inputs: {
-              isValid: ":validateMulmoScriptAgent.isValid",
-              counter: ":counter",
-            },
-          },
           counter: {
             value: 0,
-            update: ":incrementCounter"
-          },
-          incrementCounter: {
-            agent: ({ value }) => value + 1,
-            inputs: {
-              value: ":counter"
-            },
+            update: ":counter.add(1)"
           },
           openAIAgent: {
             agent: "openAIAgent",
             inputs: {
               model: "gpt-4o",
-              system: prompts.prompt_seed_from_materials,
+              system: ":prompt",
               prompt: ":sourceText.text",
             },
           },
@@ -104,7 +93,16 @@ const graphData: GraphData = {
               text: ":openAIAgent.text.codeBlock()",
             },
             isResult: true,
-          }
+          },
+          continue: {
+            agent: ({ isValid, counter }) => {
+              return !isValid && counter < 3;
+            },
+            inputs: {
+              isValid: ":validateMulmoScriptAgent.isValid",
+              counter: ":counter",
+            },
+          },
         }
       },
     },
@@ -112,7 +110,7 @@ const graphData: GraphData = {
       if: ":mulmoScript.validateMulmoScriptAgent.isValid",
       agent: "fileWriteAgent",
       inputs: {
-        file: "./script-${@now}.json",
+        file: "./output/script-${@now}.json",
         text: ":mulmoScript.validateMulmoScriptAgent.data.toJSON()",
       },
       isResult: true,
@@ -133,6 +131,8 @@ const createMulmoScriptFromUrl = async (urls: string[]) => {
   });
 
   graph.injectValue("urls", parsedUrls);
+  // TODO: Allow injecting a custom prompt from parameters if provided, otherwise use the default
+  graph.injectValue("prompt", prompts.prompt_seed_from_materials);
 
   await graph.run();
 }
