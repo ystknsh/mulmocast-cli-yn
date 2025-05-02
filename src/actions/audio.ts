@@ -23,7 +23,7 @@ const graph_tts: GraphData = {
         method: "resolve",
       },
       inputs: {
-        dirs: ["scratchpad", "${:row.filename}.mp3"],
+        dirs: ["scratchpad", "${:beat.filename}.mp3"],
       },
     },
     preprocessor: {
@@ -35,7 +35,7 @@ const graph_tts: GraphData = {
         };
       },
       inputs: {
-        beat: ":row",
+        beat: ":beat",
         speechParams: ":script.speechParams",
         speakers: ":script.speechParams.speakers",
       },
@@ -54,8 +54,8 @@ const graph_tts: GraphData = {
     tts: {
       agent: ":ttsAgent",
       inputs: {
-        // text: ":row.ttsText",
-        text: ":row.text",
+        // text: ":beat.ttsText",
+        text: ":beat.text",
         file: ":path.path",
       },
       params: {
@@ -79,6 +79,9 @@ const graph_data: GraphData = {
     map: {
       agent: "mapAgent",
       inputs: { rows: ":studio.beats", script: ":studio.script" },
+      params: {
+        rowKey: "beat",
+      },
       graph: graph_tts,
     },
     combineFiles: {
