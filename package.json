@@ -8,9 +8,7 @@
   },
   "files": [
     "./lib",
-    "./music/StarsBeyondEx.mp3",
-    "./music/silent300.mp3",
-    "./music/silent800.mp3"
+    "./assets/"
   ],
   "types": "./lib/index.d.ts",
   "directories": {
