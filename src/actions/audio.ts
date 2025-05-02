@@ -6,7 +6,7 @@ import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
 import addBGMAgent from "../agents/add_bgm_agent";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "../agents/tts_openai_agent";
-import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudio, MulmoBeat, SpeakerDictonary, Text2speechParams, FileDirs } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
@@ -17,15 +17,6 @@ import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, 
 
 const graph_tts: GraphData = {
   nodes: {
-    path: {
-      agent: "pathUtilsAgent",
-      params: {
-        method: "resolve",
-      },
-      inputs: {
-        dirs: [":scratchpadDirPath", "${:beat.filename}.mp3"],
-      },
-    },
     preprocessor: {
       agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: Text2speechParams }) => {
         const { beat, speakers, speechParams } = namedInputs;
@@ -55,7 +46,7 @@ const graph_tts: GraphData = {
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: ":path.path",
+        file: "${:scratchpadDirPath}/${:beat.filename}.mp3", // TODO
       },
       params: {
         throwError: true,
@@ -152,7 +143,6 @@ export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: n
     graph_data,
     {
       ...agents,
-      pathUtilsAgent,
       fileWriteAgent,
       ttsOpenaiAgent,
       ttsNijivoiceAgent,

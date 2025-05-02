@@ -175,5 +175,4 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
   });
   graph.injectValue("imageDirPath", imageDirPath);
   await graph.run<{ output: MulmoStudioBeat[] }>();
-
 };
