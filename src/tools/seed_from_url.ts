@@ -143,7 +143,7 @@ const main = async () => {
   const urlsFromArgs = process.argv.slice(2);
 
   if (urlsFromArgs.length === 0) {
-    console.error("Usage: yarn run seed:url <url1> [url2] ...");
+    console.error("Usage: yarn run seed_from_url <url1> [url2] ...");
     process.exit(1);
   }
 
