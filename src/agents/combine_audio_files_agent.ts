@@ -8,7 +8,6 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileNam
   namedInputs,
 }) => {
   const { studio, combinedFileName } = namedInputs;
-  const outputFile = path.resolve(combinedFileName);
   const command = ffmpeg();
   studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
     const filePath = path.resolve("./scratchpad/" + mulmoBeat.filename + ".mp3");
@@ -34,13 +33,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileNam
         console.error("Error while combining MP3 files:", err);
         reject(err);
       })
-      .mergeToFile(outputFile, path.dirname(outputFile));
+      .mergeToFile(combinedFileName, path.dirname(combinedFileName));
   });
 
   await promise;
 
   return {
-    fileName: outputFile,
+    fileName: combinedFileName,
     studio,
   };
 };

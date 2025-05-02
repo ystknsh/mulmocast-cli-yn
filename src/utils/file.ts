@@ -50,6 +50,9 @@ export const getOutputBGMFilePath = (outDirPath: string, fileName: string) => {
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
 };
+export const getOutputAudioFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + ".mp3");
+};
 
 export const getScratchpadFilePath = (fileName: string) => {
   const filePath = path.resolve(scratchpadDirName + fileName);
