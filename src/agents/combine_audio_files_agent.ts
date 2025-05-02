@@ -4,7 +4,7 @@ import path from "path";
 import { MulmoStudio, MulmoStudioBeat } from "../types";
 import { silentPath, silentLastPath } from "../utils/file";
 
-const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileName: string }, { studio: MulmoStudio; combinedFileName: string }> = async ({
+const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; }, { studio: MulmoStudio; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
   const { studio, combinedFileName } = namedInputs;
@@ -39,7 +39,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; fileNam
   await promise;
 
   return {
-    fileName: combinedFileName,
+    // fileName: combinedFileName,
     studio,
   };
 };
