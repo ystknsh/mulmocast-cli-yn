@@ -55,8 +55,7 @@ export const getOutputAudioFilePath = (outDirPath: string, fileName: string) => 
 };
 
 export const getScratchpadFilePath = (fileName: string) => {
-  const filePath = path.resolve(scratchpadDirName + fileName);
-  return filePath;
+  return path.resolve(scratchpadDirName + fileName);
 };
 
 export const mkdir = (dirPath: string) => {
@@ -80,9 +79,12 @@ export const getBaseDirPath = (basedir?: string) => {
   return path.resolve(process.cwd(), basedir);
 };
 
-export const getFullPath = (baseDirPath: string, file: string) => {
+export const getFullPath = (baseDirPath: string | undefined, file: string) => {
   if (path.isAbsolute(file)) {
     return path.normalize(file);
   }
-  return path.resolve(baseDirPath, file);
+  if (baseDirPath) {
+    return path.resolve(baseDirPath, file);
+  }
+  return path.resolve(file);
 };
