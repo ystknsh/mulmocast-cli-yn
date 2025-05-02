@@ -32,7 +32,7 @@ const mediaSourceSchema = z.discriminatedUnion("kind", [
 
 const MulmoMarkdownMediaSchema = z.object({
   type: z.literal("markdown"),
-  markdown: z.string(),
+  markdown: z.array(z.string()),
 });
 
 const MulmoWebMediaSchema = z.object({
