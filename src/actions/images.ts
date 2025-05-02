@@ -4,6 +4,8 @@ import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+
 import { MulmoStudio, MulmoStudioBeat, Text2imageParams, FileDirs } from "../types";
 import { MulmoScriptMethods } from "../methods";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
@@ -49,6 +51,7 @@ const graph_data: GraphData = {
     studio: {},
     imageDirPath: {},
     text2imageAgent: { value: "" },
+    outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
       inputs: { rows: ":studio.beats", studio: ":studio", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
@@ -96,6 +99,29 @@ const graph_data: GraphData = {
         },
       },
     },
+    mergeResult: {
+      agent: (namedInputs: { array: { image: string }[]; studio: MulmoStudio }) => {
+        const { array, studio } = namedInputs;
+        array.forEach((update, index) => {
+          const beat = studio.beats[index];
+          studio.beats[index] = { ...beat, ...update };
+        });
+        // console.log(namedInputs);
+        return { studio };
+      },
+      inputs: {
+        array: ":map.output",
+        studio: ":studio",
+      },
+    },
+    writeOutout: {
+      // console: { before: true },
+      agent: "fileWriteAgent",
+      inputs: {
+        file: ":outputStudioFilePath",
+        text: ":mergeResult.studio.toJSON()",
+      },
+    },
   },
 };
 
@@ -124,9 +150,11 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
     agentFilters,
   };
 
+  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   const injections: Record<string, string | MulmoStudio | Text2imageParams | undefined> = {
     studio: studio,
     text2imageAgent: "imageOpenaiAgent",
+    outputStudioFilePath: outputStudioFilePath,
   };
 
   // We need to get google's auth token only if the google is the text2image provider.
@@ -143,13 +171,14 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
     injections.text2image = "imageGoogleAgent";
   }
 
-  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent }, options);
+  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
   graph.injectValue("imageDirPath", imageDirPath);
-  const results = await graph.run<{ output: MulmoStudioBeat[] }>();
+  await graph.run<{ output: MulmoStudioBeat[] }>();
 
+  /*
   if (results.map?.output) {
     // THe output looks like this. We need to merge it into MultiStudioBeat array
     // [
@@ -163,4 +192,5 @@ export const images = async (studio: MulmoStudio, files: FileDirs) => {
     const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
     fs.writeFileSync(outputStudioFilePath, JSON.stringify(studio, null, 2));
   }
+  */
 };
