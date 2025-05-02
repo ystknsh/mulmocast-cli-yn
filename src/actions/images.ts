@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
@@ -29,8 +28,8 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
   const { beat, index, suffix, studio, imageDirPath } = namedInputs;
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  const imagePath = path.resolve(`${imageDirPath}/${studio.filename}/${index}${suffix}.png`);
-
+  const imagePath = `${imageDirPath}/${studio.filename}/${index}${suffix}.png`;
+  
   if (beat.media) {
     if (beat.media.type === "textSlide") {
       const slide = beat.media.slide;
