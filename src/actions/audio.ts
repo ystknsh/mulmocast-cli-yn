@@ -10,7 +10,7 @@ import { pathUtilsAgent, fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudio, MulmoBeat, SpeakerDictonary, Text2speechParams, FileDirs } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { getOutputBGMFilePath, getOutputAudioFilePath, defaultBGMPath } from "../utils/file";
+import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -75,6 +75,7 @@ const graph_data: GraphData = {
     studio: {},
     outputBGMFilePath: {},
     outputAudioFilePath: {},
+    outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
       inputs: { rows: ":studio.beats", script: ":studio.script" },
@@ -90,12 +91,12 @@ const graph_data: GraphData = {
       isResult: true,
     },
     fileWrite: {
+      console: {before: true},
       agent: "fileWriteAgent",
       inputs: {
-        file: "./output/${:studio.filename}_studio.json",
+        file: ":outputStudioFilePath",
         text: ":combineFiles.studio.toJSON()",
       },
-      params: { baseDir: __dirname + "/../../" },
     },
     addBGM: {
       agent: "addBGMAgent",
@@ -141,6 +142,8 @@ export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: n
   const { outDirPath } = files;
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
   const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
+  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
     graph_data,
@@ -158,6 +161,7 @@ export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: n
   graph.injectValue("studio", studio);
   graph.injectValue("outputBGMFilePath", outputBGMFilePath);
   graph.injectValue("outputAudioFilePath", outputAudioFilePath);
+  graph.injectValue("outputStudioFilePath", outputStudioFilePath);
   const results = await graph.run();
 
   const result = results.combineFiles as { fileName: string };
