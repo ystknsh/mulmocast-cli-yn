@@ -54,7 +54,6 @@ const graph_tts: GraphData = {
     tts: {
       agent: ":ttsAgent",
       inputs: {
-        // text: ":beat.ttsText",
         text: ":beat.text",
         file: ":path.path",
       },
@@ -94,7 +93,6 @@ const graph_data: GraphData = {
       isResult: true,
     },
     fileWrite: {
-      console: {before: true},
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputStudioFilePath",
