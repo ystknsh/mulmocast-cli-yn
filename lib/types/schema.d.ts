@@ -1394,7 +1394,6 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         } | undefined;
         imagePrompt?: string | undefined;
     }[];
-    description?: string | undefined;
     lang?: string | undefined;
     imageParams?: {
         model?: string | undefined;
@@ -1411,6 +1410,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         instruction?: string | undefined;
         provider?: string | undefined;
     } | undefined;
+    description?: string | undefined;
     reference?: string | undefined;
     canvasSize?: {
         width: number;
@@ -1502,7 +1502,6 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         } | undefined;
         imagePrompt?: string | undefined;
     }[];
-    description?: string | undefined;
     lang?: string | undefined;
     imageParams?: {
         model?: string | undefined;
@@ -1519,6 +1518,7 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         instruction?: string | undefined;
         provider?: string | undefined;
     } | undefined;
+    description?: string | undefined;
     reference?: string | undefined;
     canvasSize?: {
         width: number;
@@ -2616,7 +2616,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             } | undefined;
             imagePrompt?: string | undefined;
         }[];
-        description?: string | undefined;
         lang?: string | undefined;
         imageParams?: {
             model?: string | undefined;
@@ -2633,6 +2632,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
@@ -2724,7 +2724,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             } | undefined;
             imagePrompt?: string | undefined;
         }[];
-        description?: string | undefined;
         lang?: string | undefined;
         imageParams?: {
             model?: string | undefined;
@@ -2741,6 +2740,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
@@ -3409,7 +3409,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             } | undefined;
             imagePrompt?: string | undefined;
         }[];
-        description?: string | undefined;
         lang?: string | undefined;
         imageParams?: {
             model?: string | undefined;
@@ -3426,6 +3425,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
@@ -3607,7 +3607,6 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             } | undefined;
             imagePrompt?: string | undefined;
         }[];
-        description?: string | undefined;
         lang?: string | undefined;
         imageParams?: {
             model?: string | undefined;
@@ -3624,6 +3623,7 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
