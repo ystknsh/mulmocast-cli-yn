@@ -4,9 +4,7 @@ import path from "path";
 import { MulmoStudio, MulmoStudioBeat } from "../types";
 import { silentPath, silentLastPath } from "../utils/file";
 
-const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio; }, { studio: MulmoStudio; combinedFileName: string }> = async ({
-  namedInputs,
-}) => {
+const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { studio: MulmoStudio; combinedFileName: string }> = async ({ namedInputs }) => {
   const { studio, combinedFileName } = namedInputs;
   const command = ffmpeg();
   studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
