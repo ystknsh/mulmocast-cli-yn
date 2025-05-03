@@ -21,3 +21,4 @@ export declare const silentLastPath: string;
 export declare const defaultBGMPath: string;
 export declare const getBaseDirPath: (basedir?: string) => string;
 export declare const getFullPath: (baseDirPath: string | undefined, file: string) => string;
+export declare const readTemplatePrompt: (templateName: string) => string;
