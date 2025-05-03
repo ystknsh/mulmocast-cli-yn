@@ -17,7 +17,7 @@ GOOGLE_PROJECT_ID={your Google Project ID}
 NIJIVOICE_API_KEY={your Nijivoice API key}
 ```
 
-## QuickStart
+## Quick Start
 
 ```
 yarn run audio scripts/test/test_en.json
@@ -27,12 +27,12 @@ yarn run movie scripts/test/test_en.json
 
 
 ## Create a podcast episode
-
-1. Feed some source text (ideas, news, press releases) to your favarite LLM.
-2. Ask the LLM to write a podcast script in JSON (use the contents of "./prompt.md").
-3. Create a json file with that generated JSON (such as ./scripts/elon.json)
-4. Run ```yarn run audio {path to the script file}```.
-5. The output will be generated in the ./output folder.
+1. Create a MulmoScript (LLMs are useful for this process)
+   1. Feed some source text (ideas, news, press releases) to your favorite LLM.
+   2. Ask the LLM to write a podcast script in MulmoScript JSON format (you can use the prompt examples in the [prompts](./prompts) folder as a reference).
+   3. Save the generated script as a MulmoScript JSON file (such as [graphai_intro.json](./scripts/samples/graphai_intro.json))
+2. Run ```yarn run audio {path to the script file}```.
+3. The output will be generated in the `./output` folder.
 
 ## Create a video
 
@@ -42,25 +42,27 @@ yarn run movie scripts/test/test_en.json
 4. 画像ファイルの作成（`yarn run images {path to the script file}`を使って自動生成）
 5. 映像ファイルの作成（`yarn run movie {path to the script file}`を使って自動生成）
 
-# Script format
+# MulmoScript format
 
-```Javascript
+```JSON
 {
   "title": "title of the podcast",
   "description": "The description of the podcast.",
   "reference": "URL to the source data", // optional
   "tts": "openAI", // or "nijivoice", default is "openAI"
-  "speakers": {
-    "Host": {
-      "voiceId": "shimmer",
-      "displayName": {
-        "en": "Host"
-      }
-    },
-    "Guest": {
-      "voiceId": "echo",
-      "displayName": {
-        "en": "Guest"
+  "speechParams": {
+    "speakers": {
+      "Host": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Host"
+        }
+      },
+      "Guest": {
+        "voiceId": "echo",
+        "displayName": {
+          "en": "Guest"
+        }
       }
     }
   },
