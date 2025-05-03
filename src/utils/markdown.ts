@@ -1,9 +1,9 @@
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 
-export const convertMarkdownToImage = async (markdown: string, styles: string[], outputPath: string) => {
+export const convertMarkdownToImage = async (markdown: string, style: string, outputPath: string) => {
   // Step 0: Prepare the header
-  const header = `<head><style>${styles.join("\n")}</style></head>`;
+  const header = `<head><style>${style}</style></head>`;
 
   // Step 1: Convert Markdown to HTML
   const body = await marked(markdown);
