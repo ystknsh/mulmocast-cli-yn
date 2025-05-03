@@ -35,7 +35,7 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
   .command("$0 <action>", "Run mulmocast tool", (yargs) => {
     return yargs.positional("action", {
       describe: "action to perform",
-      choices: ["scripting"] as const,
+      choices: ["scripting", "prompt"] as const,
       type: "string",
     });
   })
