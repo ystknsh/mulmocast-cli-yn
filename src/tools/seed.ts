@@ -5,6 +5,8 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { readTemplatePrompt } from "../utils/file";
 import { ScriptingParams } from "../types";
 
+const agentHeader = "\x1b[34m● \x1b[0m\x1b[1mAgent\x1b[0m:\x1b[0m";
+
 const graphData = {
   version: 0.5,
   loop: {
@@ -37,10 +39,6 @@ const graphData = {
         messages: ":messages",
         prompt: ":userInput.text",
       },
-      console: {
-        after: { message: ".text" },
-        // after: true,
-      },
     },
     json: {
       agent: "copyAgent",
@@ -48,7 +46,6 @@ const graphData = {
         json: ":llm.text.codeBlock().jsonParse()",
         text: ":llm.text.codeBlock()",
       },
-      console: { after: true },
     },
     writeJSON: {
       if: ":json.json",
@@ -57,7 +54,38 @@ const graphData = {
         file: "${:outdir}/${:fileName}-${@now}.json",
         text: ":json.text",
       },
-      console: { after: true, before: true },
+      console: {
+        after: "\n\x1b[32m🎉 Script file generated successfully! Type /bye to exit.\x1b[0m\n",
+      },
+    },
+    shouldResponse: {
+      agent: "compareAgent",
+      inputs: {
+        array: [
+          [
+          ":json.json",
+          "==",
+          undefined,
+          ],
+          "&&",
+          [
+            ":userInput.text",
+            "!=",
+            "/bye"
+          ]
+        ],
+      },
+    },
+    agentResponse: {
+      if: ":shouldResponse.result",
+      agent: "copyAgent",
+      inputs: {
+        text: "\n" + agentHeader + " ${:llm.text}\n",
+      },
+      params: {
+        namedKey: "text",
+      },
+      console: { after: true },
     },
     checkInput: {
       agent: "compareAgent",
@@ -85,5 +113,6 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, t
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
 
+  console.log(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
 };
