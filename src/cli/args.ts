@@ -1,29 +1,11 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { commonOptions } from "./common";
 
-export const args = yargs(hideBin(process.argv))
+export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmocast")
-  .option("o", {
-    alias: "outdir",
-    description: "output dir",
-    demandOption: false,
-    type: "string",
-  })
   .option("scratchpaddir", {
     description: "scratchpad dir",
-    demandOption: false,
-    type: "string",
-  })
-  .option("v", {
-    alias: "verbose",
-    describe: "verbose log",
-    demandOption: true,
-    default: false,
-    type: "boolean",
-  })
-  .option("b", {
-    alias: "basedir",
-    description: "base dir",
     demandOption: false,
     type: "string",
   })

@@ -1,7 +1,8 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { commonOptions } from "./common";
 
-export const args = yargs(hideBin(process.argv))
+export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmocast-tool")
   .option("u", {
     alias: "url",
@@ -21,24 +22,6 @@ export const args = yargs(hideBin(process.argv))
     description: "Template name to use",
     demandOption: false,
     type: "string",
-  })
-  .option("b", {
-    alias: "basedir",
-    description: "base dir",
-    demandOption: false,
-    type: "string",
-  })
-  .option("o", {
-    alias: "outdir",
-    description: "output dir",
-    demandOption: false,
-    type: "string",
-  })
-  .option("v", {
-    alias: "verbose",
-    description: "verbose log",
-    demandOption: false,
-    type: "boolean",
   })
   .option("f", {
     alias: "filename",
