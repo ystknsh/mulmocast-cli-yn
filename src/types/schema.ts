@@ -104,6 +104,7 @@ export const mulmoBeatSchema = z.object({
 
   imageParams: text2imageParamsSchema.optional(), // beat specific parameters
   speechParams: text2speechParamsSchema.optional(),
+  textSlideParams: textSlideParamsSchema.optional(),
   imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   image: z.string().optional(), // path to the image
 });

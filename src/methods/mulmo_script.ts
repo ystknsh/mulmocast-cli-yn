@@ -1,4 +1,4 @@
-import { MulmoDimension, MulmoScript } from "../types";
+import { MulmoDimension, MulmoScript, MulmoBeat } from "../types";
 
 const defaultTextSlideStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333 }",
@@ -23,8 +23,10 @@ export const MulmoScriptMethods = {
   getSpeechProvider(script: MulmoScript): string {
     return script.speechParams?.provider ?? "openai";
   },
-  getTextSlideStyle(script: MulmoScript): string {
+  getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string {
     const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
-    return styles.join('\n');
+    // NOTES: Taking advantage of CSS override rule (you can redefine it to override)
+    const extraStyles = beat.textSlideParams?.cssStyles ?? [];
+    return [...styles, ...extraStyles].join('\n');
   }
 };
