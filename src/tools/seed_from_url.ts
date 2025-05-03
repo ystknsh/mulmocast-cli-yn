@@ -6,9 +6,8 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
 import { getTemplateFilePath } from "../utils/file";
-import { MulmoScriptTemplate } from "../types";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
-import { z } from "zod";
+import { mulmoScriptTemplateSchema, urlsSchema } from "../types/schema";
 
 const graphData: GraphData = {
   version: 0.5,
@@ -19,6 +18,9 @@ const graphData: GraphData = {
       value: [],
     },
     prompt: {
+      value: "",
+    },
+    outdir: {
       value: "",
     },
     // get the text content of the urls
@@ -113,7 +115,7 @@ const graphData: GraphData = {
       if: ":mulmoScript.validateMulmoScriptAgent.isValid",
       agent: "fileWriteAgent",
       inputs: {
-        file: "./output/script-${@now}.json",
+        file: "${:outdir}/script-${@now}.json",
         text: ":mulmoScript.validateMulmoScriptAgent.data.toJSON()",
       },
       isResult: true,
@@ -121,8 +123,15 @@ const graphData: GraphData = {
   },
 };
 
-const createMulmoScriptFromUrl = async (urls: string[]) => {
-  const urlsSchema = z.array(z.string().url({ message: "Invalid URL format" }));
+export const createMulmoScriptFromUrl = async ({
+  urls,
+  template_name,
+  outdir,
+}: {
+  urls: string[];
+  outdir: string;
+  template_name?: string;
+}) => {
   const parsedUrls = urlsSchema.parse(urls);
 
   const graph = new GraphAI(graphData, {
@@ -133,32 +142,14 @@ const createMulmoScriptFromUrl = async (urls: string[]) => {
   });
 
   graph.injectValue("urls", parsedUrls);
-  // TODO: Allow injecting a custom prompt from parameters if provided, otherwise use the default
-  const templatePath = getTemplateFilePath("seed_materials");
+
+  const templatePath = getTemplateFilePath(template_name ?? "seed_materials");
   const scriptData = fs.readFileSync(templatePath, "utf-8");
-  const template = JSON.parse(scriptData) as MulmoScriptTemplate;
+  const template = mulmoScriptTemplateSchema.parse(JSON.parse(scriptData));
   const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
 
   graph.injectValue("prompt", prompt);
+  graph.injectValue("outdir", outdir);
 
   await graph.run();
 };
-
-// temporary main function
-const main = async () => {
-  const urlsFromArgs = process.argv.slice(2);
-
-  if (urlsFromArgs.length === 0) {
-    console.error("Usage: yarn run seed_from_url <url1> [url2] ...");
-    process.exit(1);
-  }
-
-  try {
-    await createMulmoScriptFromUrl(urlsFromArgs);
-  } catch (error) {
-    console.error("Error:", error);
-    process.exitCode = 1;
-  }
-};
-
-main();

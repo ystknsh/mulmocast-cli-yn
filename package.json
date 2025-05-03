@@ -4,7 +4,8 @@
   "description": "",
   "main": "lib/cli/cli.js",
   "bin": {
-    "mulmo": "lib/cli/cli.js"
+    "mulmo": "lib/cli/cli.js",
+    "mulmo-tool": "lib/cli/tool-cli.js"
   },
   "files": [
     "./lib",
@@ -31,7 +32,7 @@
     "build_test": "tsc && git checkout -- lib/*",
     "prompt": "npx ts-node ./src/tools/prompt.ts",
     "cli": "npx ts-node ./src/cli/cli.ts",
-    "seed_from_url": "npx ts-node ./src/tools/seed_from_url.ts",
+    "scripting": "npx ts-node ./src/cli/tool-cli.ts scripting",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },
