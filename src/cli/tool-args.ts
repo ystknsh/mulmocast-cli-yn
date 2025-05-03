@@ -40,6 +40,13 @@ export const args = yargs(hideBin(process.argv))
     demandOption: false,
     type: "boolean",
   })
+  .option("f", {
+    alias: "filename",
+    description: "output filename",
+    demandOption: false,
+    default: "script",
+    type: "string",
+  })
   .command("$0 <action>", "Run mulmocast tool", (yargs) => {
     return yargs.positional("action", {
       describe: "action to perform",

@@ -23,6 +23,9 @@ const graphData: GraphData = {
     outdir: {
       value: "",
     },
+    fileName: {
+      value: "",
+    },
     // get the text content of the urls
     fetchResults: {
       agent: "mapAgent",
@@ -115,7 +118,7 @@ const graphData: GraphData = {
       if: ":mulmoScript.validateMulmoScriptAgent.isValid",
       agent: "fileWriteAgent",
       inputs: {
-        file: "${:outdir}/script-${@now}.json",
+        file: "${:outdir}/${:fileName}-${@now}.json",
         text: ":mulmoScript.validateMulmoScriptAgent.data.toJSON()",
       },
       isResult: true,
@@ -123,7 +126,17 @@ const graphData: GraphData = {
   },
 };
 
-export const createMulmoScriptFromUrl = async ({ urls, template_name, outdir }: { urls: string[]; outdir: string; template_name?: string }) => {
+export const createMulmoScriptFromUrl = async ({
+  urls,
+  template_name,
+  outdir,
+  filename,
+}: {
+  urls: string[];
+  outdir: string;
+  template_name?: string;
+  filename: string; 
+}) => {
   const parsedUrls = urlsSchema.parse(urls);
 
   const graph = new GraphAI(graphData, {
@@ -142,6 +155,7 @@ export const createMulmoScriptFromUrl = async ({ urls, template_name, outdir }: 
 
   graph.injectValue("prompt", prompt);
   graph.injectValue("outdir", outdir);
+  graph.injectValue("fileName", filename);
 
   await graph.run();
 };

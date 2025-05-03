@@ -8,7 +8,7 @@ import { getBaseDirPath, getFullPath } from "../utils/file";
 import { createMulmoScriptWithInteractive } from "../tools/seed";
 
 const main = async () => {
-  const { o: outdir, t: template, u: urls, b: basedir, action, v: verbose, i: interactive } = args;
+  const { o: outdir, t: template, u: urls, b: basedir, action, v: verbose, i: interactive, f: filename } = args;
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
@@ -20,13 +20,14 @@ const main = async () => {
     console.log("urls:", urls);
     console.log("action:", action);
     console.log("interactive:", interactive);
+    console.log("filename:", filename);
   }
 
   if (action === "scripting") {
     if (interactive) {
-      await createMulmoScriptWithInteractive({ outdir: outDirPath });
+      await createMulmoScriptWithInteractive({ outdir: outDirPath, filename });
     } else if (urls) {
-      await createMulmoScriptFromUrl({ urls, template_name: template, outdir: outDirPath });
+      await createMulmoScriptFromUrl({ urls, template_name: template, outdir: outDirPath, filename });
     } else {
       throw new Error("urls is required when not in interactive mode");
     }
