@@ -1,13 +1,11 @@
 import "dotenv/config";
-import fs from "fs";
 import { GraphAI, GraphData } from "graphai";
 import * as agents from "@graphai/agents";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
-import { getTemplateFilePath } from "../utils/file";
-import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
-import { mulmoScriptTemplateSchema, urlsSchema } from "../types/schema";
+import { readTemplatePrompt } from "../utils/file";
+import { urlsSchema } from "../types/schema";
 
 const graphData: GraphData = {
   version: 0.5,
@@ -147,13 +145,7 @@ export const createMulmoScriptFromUrl = async ({
   });
 
   graph.injectValue("urls", parsedUrls);
-
-  const templatePath = getTemplateFilePath(template_name ?? "seed_materials");
-  const scriptData = fs.readFileSync(templatePath, "utf-8");
-  const template = mulmoScriptTemplateSchema.parse(JSON.parse(scriptData));
-  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
-
-  graph.injectValue("prompt", prompt);
+  graph.injectValue("prompt", readTemplatePrompt(template_name ?? "seed_materials"));
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", filename);
 
