@@ -5,10 +5,16 @@ export const args = yargs(hideBin(process.argv))
   .scriptName("mulmocast-tool")
   .option("u", {
     alias: "url",
-    description: "URLs to reference",
-    demandOption: true,
+    description: "URLs to reference (required when not in interactive mode)",
+    demandOption: false,
     type: "array",
     string: true,
+  })
+  .option("i", {
+    alias: "interactive",
+    description: "Generate script in interactive mode with user prompts",
+    demandOption: false,
+    type: "boolean",
   })
   .option("t", {
     alias: "template",
