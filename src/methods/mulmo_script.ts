@@ -27,6 +27,6 @@ export const MulmoScriptMethods = {
     const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
     // NOTES: Taking advantage of CSS override rule (you can redefine it to override)
     const extraStyles = beat.textSlideParams?.cssStyles ?? [];
-    return [...styles, ...extraStyles].join('\n');
-  }
+    return [...styles, ...extraStyles].join("\n");
+  },
 };

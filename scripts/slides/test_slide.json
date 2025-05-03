@@ -23,10 +23,7 @@
       "speaker": "Presenter",
       "text": "The evolution of humans is a complex journey that spans millions of years, shaped by biology, environment, and culture. Here's a high-level summary of the key stages in human evolution",
       "textSlideParams": {
-        "cssStyles": [
-          "body { background:#ffffcc }",
-          "h1 { color:green }"
-        ]
+        "cssStyles": ["body { background:#ffffcc }", "h1 { color:green }"]
       },
       "media": {
         "type": "textSlide",
