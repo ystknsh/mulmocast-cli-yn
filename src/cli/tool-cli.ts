@@ -23,8 +23,7 @@ const main = async () => {
   if (action === "scripting") {
     await createMulmoScriptFromUrl({ urls, template_name: template, outdir: outDirPath });
   } else {
-    console.error(`Unknown or unsupported action: ${action}`);
-    return -1;
+    throw new Error(`Unknown or unsupported action: ${action}`);
   }
 };
 
