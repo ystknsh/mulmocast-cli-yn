@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { MulmoScript } from "../types";
+import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
+import { mulmoScriptTemplateSchema } from "../types/schema";
 
 export function readMulmoScriptFile<T = MulmoScript>(
   path: string,
@@ -87,4 +89,12 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
     return path.resolve(baseDirPath, file);
   }
   return path.resolve(file);
+};
+
+export const readTemplatePrompt = (templateName: string) => {
+  const templatePath = getTemplateFilePath(templateName);
+  const scriptData = fs.readFileSync(templatePath, "utf-8");
+  const template = mulmoScriptTemplateSchema.parse(JSON.parse(scriptData));
+  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
+  return prompt;
 };

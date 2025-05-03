@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
-import { prompts } from "../agents/prompts_data";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+import { readTemplatePrompt } from "../utils/file";
 
 const graphData = {
   version: 0.5,
@@ -17,12 +17,7 @@ const graphData = {
       update: ":outdir",
     },
     messages: {
-      value: [
-        {
-          role: "system",
-          content: prompts.prompt_seed,
-        },
-      ],
+      value: [],
       update: ":llm.messages",
     },
     userInput: {
@@ -66,13 +61,24 @@ const graphData = {
   },
 };
 
-export const createMulmoScriptWithInteractive = async ({ outdir, filename }: { outdir: string; filename: string }) => {
+export const createMulmoScriptWithInteractive = async ({
+   outdir,
+   filename,
+   template_name,
+}: {
+  outdir: string;
+  filename: string;
+  template_name?: string;
+}) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
-  // FIXME: Temporarily fixed value. Need to verify if this is actually needed
-  graph.injectValue("fileName", "script");
-  console.log("filename", filename);
-
+  const prompt = readTemplatePrompt(template_name ?? "seed_interactive");
+  graph.injectValue("messages", [
+    {
+      role: "system",
+      content: prompt,
+    },
+  ]);
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", filename);
 
