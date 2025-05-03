@@ -6,6 +6,7 @@ import { outDirName } from "../utils/const";
 import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
 import { getBaseDirPath, getFullPath } from "../utils/file";
 import { createMulmoScriptWithInteractive } from "../tools/seed";
+import { dumpPromptFromTemplate } from "../tools/dump_prompt";
 
 const main = async () => {
   const { o: outdir, t: template, u: urls, b: basedir, action, v: verbose, i: interactive, f: filename } = args;
@@ -31,6 +32,8 @@ const main = async () => {
     } else {
       throw new Error("urls is required when not in interactive mode");
     }
+  } else if (action === "prompt") {
+    await dumpPromptFromTemplate({ templateName: template });
   } else {
     throw new Error(`Unknown or unsupported action: ${action}`);
   }
