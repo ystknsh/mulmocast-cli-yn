@@ -1,6 +1,7 @@
 export declare const args: {
     [x: string]: unknown;
-    u: string[];
+    u: string[] | undefined;
+    i: boolean | undefined;
     t: string | undefined;
     b: string | undefined;
     o: string | undefined;

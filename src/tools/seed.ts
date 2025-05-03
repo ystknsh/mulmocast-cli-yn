@@ -66,11 +66,7 @@ const graphData = {
   },
 };
 
-export const createMulmoScriptWithInteractive = async ({
-  outdir,
-}: {
-  outdir: string;
-}) => {
+export const createMulmoScriptWithInteractive = async ({ outdir }: { outdir: string }) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
   // FIXME: Temporarily fixed value. Need to verify if this is actually needed
