@@ -33,6 +33,7 @@
     "prompt": "npx ts-node ./src/tools/prompt.ts",
     "cli": "npx ts-node ./src/cli/cli.ts",
     "scripting": "npx ts-node ./src/cli/tool-cli.ts scripting",
+    "dump_prompt": "npx tsx ./src/cli/tool-cli.ts prompt",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
   },

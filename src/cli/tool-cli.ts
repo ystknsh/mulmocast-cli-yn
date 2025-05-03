@@ -33,7 +33,7 @@ const main = async () => {
       throw new Error("urls is required when not in interactive mode");
     }
   } else if (action === "prompt") {
-    await dumpPromptFromTemplate({ templateName: template })
+    await dumpPromptFromTemplate({ templateName: template });
   } else {
     throw new Error(`Unknown or unsupported action: ${action}`);
   }
