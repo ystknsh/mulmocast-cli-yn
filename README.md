@@ -27,10 +27,10 @@ yarn run movie scripts/test/test_en.json
 
 
 ## Create a podcast episode
-1. Create a MulmoScript (use LLM)
+1. Create a MulmoScript (LLMs are useful for this process)
    1. Feed some source text (ideas, news, press releases) to your favorite LLM.
-   2. Ask the LLM to write a podcast script in JSON (refer to the contents of [prompts](./prompts) folder ).
-   3. Create a JSON file with that generated JSON (such as [graphai_intro.json](./scripts/samples/graphai_intro.json))
+   2. Ask the LLM to write a podcast script in MulmoScript JSON format (you can use the prompt examples in the [prompts](./prompts) folder as a reference).
+   3. Save the generated script as a MulmoScript JSON file (such as [graphai_intro.json](./scripts/samples/graphai_intro.json))
 2. Run ```yarn run audio {path to the script file}```.
 3. The output will be generated in the `./output` folder.
 
