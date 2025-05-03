@@ -1,5 +1,12 @@
 import { MulmoDimension, MulmoScript } from "../types";
 
+const defaultTextSlideStyles = [
+  "body { margin: 40px; margin-top: 60px; color:#333 }",
+  "h1 { font-size: 60px; text-align: center }",
+  "ul { margin-left: 40px } ",
+  "li { font-size: 48px }",
+];
+
 export const MulmoScriptMethods = {
   getPadding(script: MulmoScript): number {
     return script.videoParams?.padding ?? 1000; // msec
@@ -16,4 +23,8 @@ export const MulmoScriptMethods = {
   getSpeechProvider(script: MulmoScript): string {
     return script.speechParams?.provider ?? "openai";
   },
+  getTextSlideStyle(script: MulmoScript): string {
+    const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
+    return styles.join('\n');
+  }
 };

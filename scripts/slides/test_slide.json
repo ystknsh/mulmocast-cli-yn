@@ -3,7 +3,7 @@
   "textSlideParams": {
     "cssStyles": [
       "body { margin: 40px; margin-top: 60px; color:#333 }",
-      "h1 { font-size: 60px; text-align: center; color:green }",
+      "h1 { font-size: 60px; text-align: center; color:red }",
       "ul { margin-left: 40px } ",
       "li { font-size: 48px }"
     ]
