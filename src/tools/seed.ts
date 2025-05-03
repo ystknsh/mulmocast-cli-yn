@@ -61,19 +61,7 @@ const graphData = {
     shouldResponse: {
       agent: "compareAgent",
       inputs: {
-        array: [
-          [
-          ":json.json",
-          "==",
-          undefined,
-          ],
-          "&&",
-          [
-            ":userInput.text",
-            "!=",
-            "/bye"
-          ]
-        ],
+        array: [[":json.json", "==", undefined], "&&", [":userInput.text", "!=", "/bye"]],
       },
     },
     agentResponse: {
