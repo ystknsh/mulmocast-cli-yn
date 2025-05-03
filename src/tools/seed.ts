@@ -8,7 +8,7 @@ import { ScriptingParams } from "../types";
 const graphData = {
   version: 0.5,
   loop: {
-    while: true,
+    while: ":continue",
   },
   nodes: {
     fileName: {
@@ -58,6 +58,14 @@ const graphData = {
         text: ":json.text",
       },
       console: { after: true, before: true },
+    },
+    checkInput: {
+      agent: "compareAgent",
+      inputs: { array: [":userInput.text", "!=", "/bye"] },
+    },
+    continue: {
+      value: true,
+      update: ":checkInput.result",
     },
   },
 };
