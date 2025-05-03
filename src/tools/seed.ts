@@ -62,11 +62,7 @@ const graphData = {
   },
 };
 
-export const createMulmoScriptWithInteractive = async ({
-  outDirPath,
-  filename,
-  templateName,
-}: Omit<ScriptingParams, "urls">) => {
+export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, templateName }: Omit<ScriptingParams, "urls">) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
   const prompt = readTemplatePrompt(templateName ?? "seed_interactive");

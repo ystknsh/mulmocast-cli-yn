@@ -1,7 +1,3 @@
 import "dotenv/config";
-export declare const createMulmoScriptFromUrl: ({ urls, template_name, outdir, filename, }: {
-    urls: string[];
-    outdir: string;
-    template_name?: string;
-    filename: string;
-}) => Promise<void>;
+import { ScriptingParams } from "../types";
+export declare const createMulmoScriptFromUrl: ({ urls, templateName, outDirPath, filename }: ScriptingParams) => Promise<void>;
