@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
-import { prompts } from "../agents/prompts_data";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+import { readTemplatePrompt } from "../utils/file";
 
 const graphData = {
   version: 0.5,
@@ -16,13 +16,12 @@ const graphData = {
     outdir: {
       update: ":outdir",
     },
+    prompt: {
+      value: "",
+      update: ":prompt",
+    },
     messages: {
-      value: [
-        {
-          role: "system",
-          content: prompts.prompt_seed,
-        },
-      ],
+      value: [],
       update: ":llm.messages",
     },
     userInput: {
@@ -39,6 +38,7 @@ const graphData = {
       },
       inputs: {
         messages: ":messages",
+        system: ":prompt",
         prompt: ":userInput.text",
       },
       console: {
@@ -66,9 +66,18 @@ const graphData = {
   },
 };
 
-export const createMulmoScriptWithInteractive = async ({ outdir, filename }: { outdir: string; filename: string }) => {
+export const createMulmoScriptWithInteractive = async ({
+   outdir,
+   filename,
+   template_name,
+}: {
+  outdir: string;
+  filename: string;
+  template_name?: string;
+}) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
+  graph.injectValue("prompt", readTemplatePrompt(template_name ?? "seed"));
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", filename);
 
