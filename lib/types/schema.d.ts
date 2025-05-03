@@ -635,6 +635,13 @@ export declare const mulmoBeatSchema: z.ZodObject<{
         speed?: number | undefined;
         instruction?: string | undefined;
     }>>;
+    textSlideParams: z.ZodOptional<z.ZodObject<{
+        cssStyles: z.ZodArray<z.ZodString, "many">;
+    }, "strip", z.ZodTypeAny, {
+        cssStyles: string[];
+    }, {
+        cssStyles: string[];
+    }>>;
     imagePrompt: z.ZodOptional<z.ZodString>;
     image: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
@@ -711,6 +718,9 @@ export declare const mulmoBeatSchema: z.ZodObject<{
         speed?: number | undefined;
         instruction?: string | undefined;
     } | undefined;
+    textSlideParams?: {
+        cssStyles: string[];
+    } | undefined;
     imagePrompt?: string | undefined;
 }, {
     text: string;
@@ -785,6 +795,9 @@ export declare const mulmoBeatSchema: z.ZodObject<{
     speechParams?: {
         speed?: number | undefined;
         instruction?: string | undefined;
+    } | undefined;
+    textSlideParams?: {
+        cssStyles: string[];
     } | undefined;
     imagePrompt?: string | undefined;
 }>;
@@ -1098,6 +1111,13 @@ export declare const mulmoScriptSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         }>>;
+        textSlideParams: z.ZodOptional<z.ZodObject<{
+            cssStyles: z.ZodArray<z.ZodString, "many">;
+        }, "strip", z.ZodTypeAny, {
+            cssStyles: string[];
+        }, {
+            cssStyles: string[];
+        }>>;
         imagePrompt: z.ZodOptional<z.ZodString>;
         image: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1174,6 +1194,9 @@ export declare const mulmoScriptSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
     }, {
         text: string;
@@ -1248,6 +1271,9 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         speechParams?: {
             speed?: number | undefined;
             instruction?: string | undefined;
+        } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
         } | undefined;
         imagePrompt?: string | undefined;
     }>, "many">;
@@ -1392,6 +1418,9 @@ export declare const mulmoScriptSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
     }[];
     lang?: string | undefined;
@@ -1410,14 +1439,14 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         instruction?: string | undefined;
         provider?: string | undefined;
     } | undefined;
+    textSlideParams?: {
+        cssStyles: string[];
+    } | undefined;
     description?: string | undefined;
     reference?: string | undefined;
     canvasSize?: {
         width: number;
         height: number;
-    } | undefined;
-    textSlideParams?: {
-        cssStyles: string[];
     } | undefined;
     videoParams?: {
         padding?: number | undefined;
@@ -1500,6 +1529,9 @@ export declare const mulmoScriptSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
     }[];
     lang?: string | undefined;
@@ -1518,14 +1550,14 @@ export declare const mulmoScriptSchema: z.ZodObject<{
         instruction?: string | undefined;
         provider?: string | undefined;
     } | undefined;
+    textSlideParams?: {
+        cssStyles: string[];
+    } | undefined;
     description?: string | undefined;
     reference?: string | undefined;
     canvasSize?: {
         width: number;
         height: number;
-    } | undefined;
-    textSlideParams?: {
-        cssStyles: string[];
     } | undefined;
     videoParams?: {
         padding?: number | undefined;
@@ -1818,6 +1850,13 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
         speed?: number | undefined;
         instruction?: string | undefined;
     }>>;
+    textSlideParams: z.ZodOptional<z.ZodObject<{
+        cssStyles: z.ZodArray<z.ZodString, "many">;
+    }, "strip", z.ZodTypeAny, {
+        cssStyles: string[];
+    }, {
+        cssStyles: string[];
+    }>>;
     imagePrompt: z.ZodOptional<z.ZodString>;
     image: z.ZodOptional<z.ZodString>;
 } & {
@@ -1922,6 +1961,9 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
         speed?: number | undefined;
         instruction?: string | undefined;
     } | undefined;
+    textSlideParams?: {
+        cssStyles: string[];
+    } | undefined;
     imagePrompt?: string | undefined;
     multiLingualTexts?: Record<string, {
         text: string;
@@ -2007,6 +2049,9 @@ export declare const mulmoStudioBeatSchema: z.ZodObject<{
     speechParams?: {
         speed?: number | undefined;
         instruction?: string | undefined;
+    } | undefined;
+    textSlideParams?: {
+        cssStyles: string[];
     } | undefined;
     imagePrompt?: string | undefined;
     multiLingualTexts?: Record<string, {
@@ -2320,6 +2365,13 @@ export declare const mulmoStudioSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             }>>;
+            textSlideParams: z.ZodOptional<z.ZodObject<{
+                cssStyles: z.ZodArray<z.ZodString, "many">;
+            }, "strip", z.ZodTypeAny, {
+                cssStyles: string[];
+            }, {
+                cssStyles: string[];
+            }>>;
             imagePrompt: z.ZodOptional<z.ZodString>;
             image: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
@@ -2396,6 +2448,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }, {
             text: string;
@@ -2470,6 +2525,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             speechParams?: {
                 speed?: number | undefined;
                 instruction?: string | undefined;
+            } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
             } | undefined;
             imagePrompt?: string | undefined;
         }>, "many">;
@@ -2614,6 +2672,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -2632,14 +2693,14 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -2722,6 +2783,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -2740,14 +2804,14 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -3041,6 +3105,13 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         }>>;
+        textSlideParams: z.ZodOptional<z.ZodObject<{
+            cssStyles: z.ZodArray<z.ZodString, "many">;
+        }, "strip", z.ZodTypeAny, {
+            cssStyles: string[];
+        }, {
+            cssStyles: string[];
+        }>>;
         imagePrompt: z.ZodOptional<z.ZodString>;
         image: z.ZodOptional<z.ZodString>;
     } & {
@@ -3145,6 +3216,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
         multiLingualTexts?: Record<string, {
             text: string;
@@ -3230,6 +3304,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
         speechParams?: {
             speed?: number | undefined;
             instruction?: string | undefined;
+        } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
         } | undefined;
         imagePrompt?: string | undefined;
         multiLingualTexts?: Record<string, {
@@ -3320,6 +3397,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
         multiLingualTexts?: Record<string, {
             text: string;
@@ -3407,6 +3487,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -3425,14 +3508,14 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -3518,6 +3601,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
         multiLingualTexts?: Record<string, {
             text: string;
@@ -3605,6 +3691,9 @@ export declare const mulmoStudioSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -3623,14 +3712,14 @@ export declare const mulmoStudioSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -3941,6 +4030,13 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             }>>;
+            textSlideParams: z.ZodOptional<z.ZodObject<{
+                cssStyles: z.ZodArray<z.ZodString, "many">;
+            }, "strip", z.ZodTypeAny, {
+                cssStyles: string[];
+            }, {
+                cssStyles: string[];
+            }>>;
             imagePrompt: z.ZodOptional<z.ZodString>;
             image: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
@@ -4017,6 +4113,9 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }, {
             text: string;
@@ -4091,6 +4190,9 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
             speechParams?: {
                 speed?: number | undefined;
                 instruction?: string | undefined;
+            } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
             } | undefined;
             imagePrompt?: string | undefined;
         }>, "many">;
@@ -4235,6 +4337,9 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -4253,14 +4358,14 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -4343,6 +4448,9 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -4361,14 +4469,14 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -4453,6 +4561,9 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -4471,14 +4582,14 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;
@@ -4564,6 +4675,9 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -4582,14 +4696,14 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;

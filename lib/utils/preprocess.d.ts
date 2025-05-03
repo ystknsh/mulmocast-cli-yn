@@ -78,6 +78,9 @@ export declare const createOrUpdateStudioData: (mulmoFile: string, files: {
             speed?: number | undefined;
             instruction?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         imagePrompt?: string | undefined;
         multiLingualTexts?: Record<string, {
             text: string;
@@ -165,6 +168,9 @@ export declare const createOrUpdateStudioData: (mulmoFile: string, files: {
                 speed?: number | undefined;
                 instruction?: string | undefined;
             } | undefined;
+            textSlideParams?: {
+                cssStyles: string[];
+            } | undefined;
             imagePrompt?: string | undefined;
         }[];
         lang?: string | undefined;
@@ -183,14 +189,14 @@ export declare const createOrUpdateStudioData: (mulmoFile: string, files: {
             instruction?: string | undefined;
             provider?: string | undefined;
         } | undefined;
+        textSlideParams?: {
+            cssStyles: string[];
+        } | undefined;
         description?: string | undefined;
         reference?: string | undefined;
         canvasSize?: {
             width: number;
             height: number;
-        } | undefined;
-        textSlideParams?: {
-            cssStyles: string[];
         } | undefined;
         videoParams?: {
             padding?: number | undefined;

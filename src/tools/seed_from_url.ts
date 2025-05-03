@@ -135,7 +135,7 @@ export const createMulmoScriptFromUrl = async ({
   urls: string[];
   outdir: string;
   template_name?: string;
-  filename: string; 
+  filename: string;
 }) => {
   const parsedUrls = urlsSchema.parse(urls);
 

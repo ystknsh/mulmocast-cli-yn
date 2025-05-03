@@ -6,6 +6,7 @@ export declare const args: {
     b: string | undefined;
     o: string | undefined;
     v: boolean | undefined;
+    f: string;
     _: (string | number)[];
     $0: string;
 };

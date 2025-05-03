@@ -1,7 +1,8 @@
-import { MulmoDimension, MulmoScript } from "../types";
+import { MulmoDimension, MulmoScript, MulmoBeat } from "../types";
 export declare const MulmoScriptMethods: {
     getPadding(script: MulmoScript): number;
     getCanvasSize(script: MulmoScript): MulmoDimension;
     getAspectRatio(script: MulmoScript): string;
     getSpeechProvider(script: MulmoScript): string;
+    getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string;
 };

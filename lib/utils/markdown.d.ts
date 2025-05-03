@@ -1,1 +1,1 @@
-export declare const convertMarkdownToImage: (markdown: string, styles: string[], outputPath: string) => Promise<void>;
+export declare const convertMarkdownToImage: (markdown: string, style: string, outputPath: string) => Promise<void>;
