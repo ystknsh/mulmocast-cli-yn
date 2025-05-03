@@ -1,6 +1,8 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { commonOptions } from "./common";
+import { GraphAILogger } from "graphai";
+GraphAILogger.setLevelEnabled("error", false);
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmocast-tool")
