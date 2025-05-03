@@ -13,6 +13,9 @@ const graphData = {
     fileName: {
       update: ":fileName",
     },
+    outdir: {
+      update: ":outdir",
+    },
     messages: {
       value: [
         {
@@ -55,7 +58,7 @@ const graphData = {
       if: ":json.json",
       agent: "fileWriteAgent",
       inputs: {
-        file: "./tmp/${:fileName}-${@now}.json",
+        file: "${:outdir}/${:fileName}-${@now}.json",
         text: ":json.text",
       },
       console: { after: true, before: true },
@@ -63,11 +66,16 @@ const graphData = {
   },
 };
 
-const main = async () => {
-  const arg2 = process.argv[2];
-
+export const createMulmoScriptWithInteractive = async ({
+  outdir,
+}: {
+  outdir: string;
+}) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
-  graph.injectValue("fileName", arg2);
+
+  // FIXME: Temporarily fixed value. Need to verify if this is actually needed
+  graph.injectValue("fileName", "script");
+
+  graph.injectValue("outdir", outdir);
   await graph.run();
 };
-main();
