@@ -1,5 +1,5 @@
 {
-  "systemPrompt": "Please generate a podcast script based on the topic provided by the user.\nIf there are any unclear points, be sure to ask the user questions and clarify them before generating the script.\nThe output should follow the JSON format specified below.",
+  "systemPrompt": "Please generate a podcast script based on the topic provided by the user.\nThe output should follow the JSON format specified below.",
   "script": {
     "title": "(title of this episode)",
     "description": "(short description of this episode)",

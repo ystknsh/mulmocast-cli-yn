@@ -62,6 +62,8 @@ const graphData = {
   },
 };
 
+const interactiveClarificationPrompt = `If there are any unclear points, be sure to ask the user questions and clarify them before generating the script.`;
+
 export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, templateName }: Omit<ScriptingParams, "urls">) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
@@ -69,7 +71,7 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, t
   graph.injectValue("messages", [
     {
       role: "system",
-      content: prompt,
+      content: `${prompt}\n\n${interactiveClarificationPrompt}`,
     },
   ]);
   graph.injectValue("outdir", outDirPath);
