@@ -16,10 +16,6 @@ const graphData = {
     outdir: {
       update: ":outdir",
     },
-    prompt: {
-      value: "",
-      update: ":prompt",
-    },
     messages: {
       value: [],
       update: ":llm.messages",
@@ -38,7 +34,6 @@ const graphData = {
       },
       inputs: {
         messages: ":messages",
-        system: ":prompt",
         prompt: ":userInput.text",
       },
       console: {
@@ -77,7 +72,13 @@ export const createMulmoScriptWithInteractive = async ({
 }) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
-  graph.injectValue("prompt", readTemplatePrompt(template_name ?? "seed_interactive"));
+  const prompt = readTemplatePrompt(template_name ?? "seed_interactive");
+  graph.injectValue("messages", [
+    {
+      role: "system",
+      content: prompt,
+    },
+  ]);
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", filename);
 
