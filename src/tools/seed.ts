@@ -77,7 +77,7 @@ export const createMulmoScriptWithInteractive = async ({
 }) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
-  graph.injectValue("prompt", readTemplatePrompt(template_name ?? "seed"));
+  graph.injectValue("prompt", readTemplatePrompt(template_name ?? "seed_interactive"));
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", filename);
 
