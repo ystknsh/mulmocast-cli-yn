@@ -123,15 +123,7 @@ const graphData: GraphData = {
   },
 };
 
-export const createMulmoScriptFromUrl = async ({
-  urls,
-  template_name,
-  outdir,
-}: {
-  urls: string[];
-  outdir: string;
-  template_name?: string;
-}) => {
+export const createMulmoScriptFromUrl = async ({ urls, template_name, outdir }: { urls: string[]; outdir: string; template_name?: string }) => {
   const parsedUrls = urlsSchema.parse(urls);
 
   const graph = new GraphAI(graphData, {

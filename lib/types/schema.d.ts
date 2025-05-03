@@ -4599,3 +4599,4 @@ export declare const mulmoScriptTemplateSchema: z.ZodObject<{
     };
     systemPrompt: string;
 }>;
+export declare const urlsSchema: z.ZodArray<z.ZodString, "many">;

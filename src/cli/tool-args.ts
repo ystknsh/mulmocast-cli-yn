@@ -35,12 +35,11 @@ export const args = yargs(hideBin(process.argv))
     type: "boolean",
   })
   .command("$0 <action>", "Run mulmocast tool", (yargs) => {
-    return yargs
-      .positional("action", {
-        describe: "action to perform",
-        choices: ["scripting"] as const,
-        type: "string",
-      })
+    return yargs.positional("action", {
+      describe: "action to perform",
+      choices: ["scripting"] as const,
+      type: "string",
+    });
   })
   .strict()
   .help()
