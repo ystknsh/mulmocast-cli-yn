@@ -25,9 +25,9 @@ const main = async () => {
 
   if (action === "scripting") {
     if (interactive) {
-      await createMulmoScriptWithInteractive({ outdir: outDirPath, template_name: template, filename });
+      await createMulmoScriptWithInteractive({ outDirPath, templateName: template, filename });
     } else if (urls) {
-      await createMulmoScriptFromUrl({ urls, template_name: template, outdir: outDirPath, filename });
+      await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename });
     } else {
       throw new Error("urls is required when not in interactive mode");
     }
