@@ -4,12 +4,14 @@
     "title": "(title of this episode)",
     "description": "(short description of this episode)",
     "reference": "(url to the article)",
-    "tts": "openAI",
-    "speakers": {
-      "Host": {
-        "voiceId": "shimmer",
-        "displayName": {
-          "en": "Host"
+    "lang": "en",
+    "speechParams": {
+      "speakers": {
+        "Host": {
+          "voiceId": "shimmer",
+          "displayName": {
+            "en": "Host"
+          }
         }
       }
     },

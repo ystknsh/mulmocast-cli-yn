@@ -4,6 +4,7 @@
     "title": "(title of this episode)",
     "description": "(short description of this episode)",
     "reference": "(url to the article)",
+    "lang": "en",
     "speechParams": {
       "speakers": {
         "Host": {
