@@ -36,3 +36,10 @@ export type FileDirs = {
   imageDirPath: string;
   scratchpadDirPath: string;
 };
+
+export type ScriptingParams = {
+  urls: string[];
+  outDirPath: string;
+  templateName?: string;
+  filename: string;
+};

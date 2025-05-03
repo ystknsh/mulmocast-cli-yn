@@ -3,6 +3,7 @@ import { GraphAI } from "graphai";
 import * as agents from "@graphai/agents";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { readTemplatePrompt } from "../utils/file";
+import { ScriptingParams } from "../types";
 
 const graphData = {
   version: 0.5,
@@ -61,17 +62,21 @@ const graphData = {
   },
 };
 
-export const createMulmoScriptWithInteractive = async ({ outdir, filename, template_name }: { outdir: string; filename: string; template_name?: string }) => {
+export const createMulmoScriptWithInteractive = async ({
+  outDirPath,
+  filename,
+  templateName,
+}: Omit<ScriptingParams, "urls">) => {
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
-  const prompt = readTemplatePrompt(template_name ?? "seed_interactive");
+  const prompt = readTemplatePrompt(templateName ?? "seed_interactive");
   graph.injectValue("messages", [
     {
       role: "system",
       content: prompt,
     },
   ]);
-  graph.injectValue("outdir", outdir);
+  graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
 
   await graph.run();

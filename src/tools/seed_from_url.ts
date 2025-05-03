@@ -6,6 +6,7 @@ import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
 import { readTemplatePrompt } from "../utils/file";
 import { urlsSchema } from "../types/schema";
+import { ScriptingParams } from "../types";
 
 const graphData: GraphData = {
   version: 0.5,
@@ -126,15 +127,10 @@ const graphData: GraphData = {
 
 export const createMulmoScriptFromUrl = async ({
   urls,
-  template_name,
-  outdir,
+  templateName,
+  outDirPath,
   filename,
-}: {
-  urls: string[];
-  outdir: string;
-  template_name?: string;
-  filename: string;
-}) => {
+}: ScriptingParams) => {
   const parsedUrls = urlsSchema.parse(urls);
 
   const graph = new GraphAI(graphData, {
@@ -145,8 +141,8 @@ export const createMulmoScriptFromUrl = async ({
   });
 
   graph.injectValue("urls", parsedUrls);
-  graph.injectValue("prompt", readTemplatePrompt(template_name ?? "seed_materials"));
-  graph.injectValue("outdir", outdir);
+  graph.injectValue("prompt", readTemplatePrompt(templateName ?? "seed_materials"));
+  graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
 
   await graph.run();
