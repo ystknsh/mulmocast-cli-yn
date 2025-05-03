@@ -12,7 +12,7 @@ export const args = yargs(hideBin(process.argv))
   })
   .option("t", {
     alias: "template",
-    description: "Template file to use",
+    description: "Template name to use",
     demandOption: false,
     type: "string",
   })
