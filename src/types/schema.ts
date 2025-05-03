@@ -167,3 +167,5 @@ export const mulmoScriptTemplateSchema = z.object({
   systemPrompt: z.string(),
   script: mulmoScriptSchema,
 });
+
+export const urlsSchema = z.array(z.string().url({ message: "Invalid URL format" }));
