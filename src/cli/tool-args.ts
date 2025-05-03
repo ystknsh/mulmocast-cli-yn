@@ -5,7 +5,7 @@ export const args = yargs(hideBin(process.argv))
   .scriptName("mulmocast-tool")
   .option("u", {
     alias: "url",
-    description: "URLs to process",
+    description: "URLs to reference",
     demandOption: true,
     type: "array",
     string: true,
