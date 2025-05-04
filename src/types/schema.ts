@@ -31,10 +31,7 @@ const mediaSourceSchema = z.discriminatedUnion("kind", [
 ]);
 
 // String is easier for AI, string array is easier for human
-const stringOrStringArray = z.union([
-  z.string(),
-  z.array(z.string())
-]);
+const stringOrStringArray = z.union([z.string(), z.array(z.string())]);
 
 const MulmoMarkdownMediaSchema = z.object({
   type: z.literal("markdown"),

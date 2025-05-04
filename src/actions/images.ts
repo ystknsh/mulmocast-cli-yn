@@ -30,7 +30,7 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
       // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
     } else if (beat.media.type === "markdown") {
-      const markdown: string = (Array.isArray(beat.media.markdown)) ? beat.media.markdown.join("\n") : beat.media.markdown ;
+      const markdown: string = Array.isArray(beat.media.markdown) ? beat.media.markdown.join("\n") : beat.media.markdown;
       // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
     }
