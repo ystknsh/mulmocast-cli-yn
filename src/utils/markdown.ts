@@ -8,7 +8,6 @@ export const convertMarkdownToImage = async (markdown: string, style: string, ou
   // Step 1: Convert Markdown to HTML
   const body = await marked(markdown);
   const html = `<htlm>${header}<body>${body}</body></html>`;
-  console.log(body);
 
   // Step 2: Use Puppeteer to render HTML to an image
   const browser = await puppeteer.launch();
