@@ -3,6 +3,7 @@ import OpenAI from "openai";
 
 // NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
 type OpenAIImageSize = "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256";
+type OpenAIModeration = "low" | "auto";
 
 // https://platform.openai.com/docs/guides/image-generation
 
@@ -11,12 +12,13 @@ export const imageOpenaiAgent: AgentFunction<
     apiKey: string;
     model: string; // dall-e-3 or gpt-image-1
     size: OpenAIImageSize | null | undefined;
+    moderation: OpenAIModeration | null | undefined;
   },
   { buffer: Buffer },
   { prompt: string }
 > = async ({ namedInputs, params }) => {
   const { prompt } = namedInputs;
-  const { apiKey, model, size } = params;
+  const { apiKey, model, size, moderation } = params;
   const openai = new OpenAI({ apiKey });
 
   const response = await openai.images.generate({
@@ -24,6 +26,7 @@ export const imageOpenaiAgent: AgentFunction<
     prompt,
     n: 1,
     size: size || "1792x1024",
+    moderation: moderation || "auto"
   });
 
   if (!response.data) {
