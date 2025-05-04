@@ -1,10 +1,11 @@
 import { MulmoDimension, MulmoScript, MulmoBeat } from "../types";
 
 const defaultTextSlideStyles = [
-  "body { margin: 40px; margin-top: 60px; color:#333 }",
+  "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
   "h1 { font-size: 60px; text-align: center }",
   "ul { margin-left: 40px } ",
-  "li { font-size: 48px }",
+  "pre { margin-left: 40px; font-size: 32px }",
+  "p { margin-left: 40px }",
 ];
 
 export const MulmoScriptMethods = {
