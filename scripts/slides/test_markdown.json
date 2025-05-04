@@ -57,6 +57,14 @@
           "| Codecademy Hoodie |  False   | 42.99 |"
         ]
       }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Our story begins with tree-dwelling primates—small mammals with forward-facing eyes and grasping hands. These ancestors lived in forests and evolved traits useful for climbing and visual depth perception.",
+      "media": {
+        "type": "markdown",
+        "markdown": "```TypeScript\nmain() {\n  ...\n}\n"
+      }
     }
   ]
 }

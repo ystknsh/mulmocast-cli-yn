@@ -30,9 +30,12 @@ const mediaSourceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("file"), filename: z.string() }), // foo.pdf
 ]);
 
+// String is easier for AI, string array is easier for human
+const stringOrStringArray = z.union([z.string(), z.array(z.string())]);
+
 const MulmoMarkdownMediaSchema = z.object({
   type: z.literal("markdown"),
-  markdown: z.array(z.string()),
+  markdown: stringOrStringArray,
 });
 
 const MulmoWebMediaSchema = z.object({
