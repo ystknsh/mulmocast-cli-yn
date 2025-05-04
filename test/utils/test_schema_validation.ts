@@ -1,0 +1,80 @@
+import fs from "fs";
+import path from "path";
+import test from "node:test";
+import assert from "node:assert";
+import { z } from "zod";
+import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../../src/types/schema";
+
+// Helper function: Validate JSON file
+const validateJsonFile = (filePath: string, schema: z.ZodObject<any>): { isValid: boolean; error?: string } => {
+  try {
+    const content = fs.readFileSync(filePath, "utf-8");
+    const jsonData = JSON.parse(content);
+    // Using strict() to reject objects with unknown parameters
+    schema.strict().parse(jsonData);
+    
+    return { isValid: true };
+  } catch (error) {
+    return { 
+      isValid: false, 
+      error: error instanceof Error ? error.message : String(error) 
+    };
+  }
+};
+
+// Get JSON files in a directory
+const getJsonFilesInDirectory = (dirPath: string): string[] => {
+  if (!fs.existsSync(dirPath)) {
+    return [];
+  }
+
+  return fs.readdirSync(dirPath)
+    .filter(file => path.extname(file) === ".json")
+    .map(file => path.join(dirPath, file));
+};
+
+// Get all subdirectories from a directory
+const getSubdirectories = (dirPath: string, excludeDirs: string[] = []): string[] => {
+  if (!fs.existsSync(dirPath)) {
+    return [];
+  }
+  
+  return fs.readdirSync(dirPath, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory() && !excludeDirs.includes(dirent.name))
+    .map(dirent => path.join(dirPath, dirent.name));
+};
+
+test("JSON files in scripts directory should conform to mulmoScriptSchema", async (t) => {
+  // Directories to exclude
+  const excludeDirs = ["errors"];
+  
+  const scriptsDir = path.resolve(__dirname, "../../scripts");
+  const directories = getSubdirectories(scriptsDir, excludeDirs);
+  
+  for (const dir of directories) {
+    const jsonFiles = getJsonFilesInDirectory(dir);
+    
+    for (const filePath of jsonFiles) {
+      await t.test(`Validating ${path.relative(scriptsDir, filePath)}`, async () => {
+        const result = validateJsonFile(filePath, mulmoScriptSchema);
+        if (!result.isValid) {
+          assert.fail(`File validation failed: ${result.error}`);
+        }
+      });
+    }
+  }
+});
+
+test("JSON files in templates directory should conform to mulmoScriptTemplateSchema", async (t) => {
+  const templatesDir = path.resolve(__dirname, "../../assets/templates");
+  const jsonFiles = getJsonFilesInDirectory(templatesDir);
+  
+  for (const filePath of jsonFiles) {
+    await t.test(`Validating template: ${path.basename(filePath)}`, async () => {
+      const result = validateJsonFile(filePath, mulmoScriptTemplateSchema);
+      if (!result.isValid) {
+        assert.fail(`File validation failed: ${result.error}`);
+      }
+    });
+  }
+});
