@@ -2,10 +2,12 @@
   "title": "Human Evolution",
   "textSlideParams": {
     "cssStyles": [
-      "body { margin: 40px; margin-top: 60px; color:#333 }",
+      "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
       "h1 { font-size: 60px; text-align: center; color:red }",
       "ul { margin-left: 40px } ",
-      "li { font-size: 48px }"
+      "li { font-size: 48px }",
+      "pre { margin-left: 40px; font-size: 32px }",
+      "p { margin-left: 40px }"
     ]
   },
   "speechParams": {
@@ -72,6 +74,8 @@
       "media": {
         "type": "markdown",
         "markdown": [
+          "# Coding Example",
+          "Here is a sample JSON code",
           "```json",
           "\"imageParams\": {",
           "  \"model\": \"gpt-image-1\"",
