@@ -10,6 +10,7 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
     alias: "url",
     description: "URLs to reference (required when not in interactive mode)",
     demandOption: false,
+    default: [],
     type: "array",
     string: true,
   })
