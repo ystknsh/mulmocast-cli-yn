@@ -1,6 +1,10 @@
 {
   "systemPrompt": "Please generate a podcast script based on the topic provided by the user.\nThe output should follow the JSON format specified below.",
   "script": {
+    "$mulmocast": {
+      "version": "1.0",
+      "credit": "closing"
+    },
     "title": "(title of this episode)",
     "description": "(short description of this episode)",
     "reference": "(url to the article)",
