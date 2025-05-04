@@ -72,6 +72,7 @@ const graph_data: GraphData = {
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
+              moderation: ":preprocessor.imageParams.moderation",
               aspectRatio: ":preprocessor.aspectRatio",
             },
             inputs: {

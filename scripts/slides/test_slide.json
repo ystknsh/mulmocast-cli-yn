@@ -18,6 +18,11 @@
       }
     }
   },
+  "imageParams": {
+    "model": "gpt-image-1",
+    "size": "1536x1024",
+    "moderation": "low"
+  },
   "beats": [
     {
       "speaker": "Presenter",
@@ -56,6 +61,10 @@
           ]
         }
       }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "The line that would eventually lead to humans diverged from other primates around 6-7 million years ago. These early hominids and hominins were the first to show adaptations for walking upright, a crucial development in our evolutionary journey."
     }
   ]
 }

@@ -82,6 +82,7 @@ export const text2imageParamsSchema = z.object({
   model: z.string().optional(), // default: provider specific
   size: z.string().optional(), // default: provider specific
   style: z.string().optional(), // optional image style
+  moderation: z.string().optional(), // optional image style
 });
 
 export const text2speechParamsSchema = z.object({
