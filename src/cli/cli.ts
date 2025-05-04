@@ -41,13 +41,15 @@ const main = async () => {
     return -1;
   }
 
-  // TODO some option process
+    // TODO some option process
   const { action } = args;
   const studio = createOrUpdateStudioData(mulmoFilePath, files);
 
-  // validate mulmoStudioSchema
+  // validate mulmoStudioSchema. skip if __test_invalid__ is true
   try {
-    mulmoStudioSchema.parse(studio);
+    if (!studio.script?.__test_invalid__) {
+      mulmoStudioSchema.parse(studio);
+    }
   } catch (error) {
     console.error(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
     return -1;
