@@ -1,0 +1,29 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Media Test",
+  "speechParams": {
+    "speakers": {
+      "Presenter": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Presenter"
+        }
+      }
+    }
+  },
+  "beats": [
+    {
+      "speaker": "Presenter",
+      "text": "This is a local image.",
+      "media": {
+        "type": "image",
+        "source": {
+          "kind": "path",
+          "path": "../../assets/images/mulmocast_credit.png"
+        }
+      }
+    }
+  ]
+}
