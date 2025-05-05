@@ -12,7 +12,6 @@ const validMulmoScriptJson = JSON.stringify({
   description: "MulmoScript for testing",
   reference: "None",
   lang: "ja",
-  filename: "test.json",
   beats: [
     {
       speaker: "speaker1",
@@ -27,7 +26,6 @@ const validMulmoScriptJson = JSON.stringify({
       imageParams: {
         model: "dall-e-3",
         size: "1024x1024",
-        aspectRatio: "1:1",
       },
       speechParams: {
         speed: 1.0,
@@ -55,12 +53,10 @@ const validMulmoScriptJson = JSON.stringify({
     model: "dall-e-3",
     provider: "openai",
     size: "1792x1024",
-    aspectRatio: "16:9",
     style: "natural",
   },
   imagePath: "images/",
   omitCaptions: false,
-  padding: 500,
 });
 
 const invalidMulmoScriptJson = JSON.stringify({
