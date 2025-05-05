@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "Whale Species of the World",
   "speechParams": {
     "speakers": {

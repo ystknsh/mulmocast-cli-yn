@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "MASAI: A Modular Future for Software Engineering AI",
   "description": "Exploring MASAI, a modular approach for AI agents in software engineering that revolutionizes how complex coding issues are tackled.",
   "reference": "https://arxiv.org/abs/2406.11638",

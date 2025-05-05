@@ -41,7 +41,7 @@ const main = async () => {
     return -1;
   }
 
-    // TODO some option process
+  // TODO some option process
   const { action } = args;
   const studio = createOrUpdateStudioData(mulmoFilePath, files);
 

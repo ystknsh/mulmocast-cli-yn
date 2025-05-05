@@ -120,8 +120,14 @@ export const mulmoDimensionSchema = z.object({
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
 
+export const mulmoCastCreditSchema = z.object({
+  version: z.literal("1.0"),
+  credit: z.literal("closing").optional(),
+});
+
 export const mulmoScriptSchema = z.object({
   // global settings
+  $mulmocast: mulmoCastCreditSchema,
   title: z.string(),
   description: z.string().optional(),
   reference: z.string().optional(),

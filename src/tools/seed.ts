@@ -37,7 +37,7 @@ const graphDataForScraping = {
           copyAgent: {
             agent: "copyAgent",
             inputs: {
-              text: "{ url: \"${:row}\", text: \"${:fetcher.text}\" }",
+              text: '{ url: "${:row}", text: "${:fetcher.text}" }',
             },
             params: {
               namedKey: "text",
@@ -57,8 +57,8 @@ const graphDataForScraping = {
       },
       isResult: true,
     },
-  }
-}
+  },
+};
 
 const graphData = {
   version: 0.5,
@@ -147,9 +147,9 @@ const scrapeWebContent = async (urls: string[]) => {
   const graph = new GraphAI(graphDataForScraping, { ...agents, fileWriteAgent, browserlessAgent });
   graph.injectValue("urls", urls);
 
-  const result = await graph.run() as { sourceText: { text: string } };
+  const result = (await graph.run()) as { sourceText: { text: string } };
   if (!result?.sourceText?.text) {
-    return ""
+    return "";
   }
   const prefixPrompt = "Here is the web content that can be used as reference material for the script:";
   return `\n\n${prefixPrompt}\n${result?.sourceText.text}`;
@@ -158,7 +158,7 @@ const scrapeWebContent = async (urls: string[]) => {
 export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, templateName, urls }: ScriptingParams) => {
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls) : "";
-   
+
   const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
 
   const prompt = readTemplatePrompt(templateName ?? "seed_interactive");
