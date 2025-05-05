@@ -39,10 +39,10 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from w
 
 ```bash
 # Generate script from web content
-mulmo-tool scripting -u https://example.com
+mulmo-tool scripting -u https://example.com -t seed_materials
 
 # Generate script with interactive mode
-mulmo-tool scripting -i
+mulmo-tool scripting -i -t seed_interactive
 ```
 
 ## Generate content from MulmoScript

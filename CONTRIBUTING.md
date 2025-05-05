@@ -21,7 +21,7 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from w
 ## Quick Start
 
 ```
-yarn run scripting -i
+yarn run scripting -i -t seed_interactive
 yarn run audio scripts/test/test_en.json
 yarn run images scripts/test/test_en.json
 yarn run movie scripts/test/test_en.json

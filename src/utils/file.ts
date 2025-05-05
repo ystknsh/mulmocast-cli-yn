@@ -98,3 +98,14 @@ export const readTemplatePrompt = (templateName: string) => {
   const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
   return prompt;
 };
+
+export const getAvailableTemplateNames = (): string[] => {
+  const templatesDir = path.resolve(__dirname, "../../assets/templates");
+
+  if (!fs.existsSync(templatesDir)) {
+    return [];
+  }
+
+  const files = fs.readdirSync(templatesDir);
+  return files.filter((file) => path.extname(file).toLowerCase() === ".json").map((file) => path.basename(file, ".json"));
+};
