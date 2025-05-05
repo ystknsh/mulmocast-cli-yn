@@ -8,8 +8,7 @@
   "reference": "https://blog.samaltman.com/three-observations",
   "lang": "ja",
   "imageParams": {
-    "style": "<style>monochrome",
-    "aspectRatio": "9:16"
+    "style": "<style>monochrome"
   },
   "speechParams": {
     "provider": "nijivoice",
@@ -54,7 +53,6 @@
     {
       "speaker": "Announcer",
       "text": "オープンエーアイのサム・アルトマン氏が語る「3つの重要な観察」とは何か？",
-      "caption": "OpenAIのサム・アルトマン氏が語る「3つの重要な観察」とは何か？",
       "speechParams": {
         "speed": 1.5
       }
