@@ -85,7 +85,7 @@ const graph_data: GraphData = {
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
             },
-            defaultValue: {}
+            defaultValue: {},
           },
           output: {
             agent: "copyAgent",

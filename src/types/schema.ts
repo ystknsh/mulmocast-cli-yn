@@ -138,12 +138,10 @@ export const mulmoScriptSchema = z.object({
   beats: z.array(mulmoBeatSchema),
 
   // for text2speech
-  speechParams: text2speechParamsSchema
-    .extend({
-      provider: z.string().optional(),
-      speakers: speakerDictionarySchema,
-    })
-    .optional(),
+  speechParams: text2speechParamsSchema.extend({
+    provider: z.string().optional(),
+    speakers: speakerDictionarySchema,
+  }),
 
   // for text2image
   imageParams: text2imageParamsSchema
