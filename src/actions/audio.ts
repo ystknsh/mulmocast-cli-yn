@@ -7,8 +7,9 @@ import addBGMAgent from "../agents/add_bgm_agent";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "../agents/tts_openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+import { MulmoScriptMethods } from "../methods";
 
-import { MulmoStudioContext, MulmoBeat, SpeakerDictonary, Text2speechParams } from "../types";
+import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
 
@@ -18,16 +19,16 @@ import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, 
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; speakers: SpeakerDictonary; speechParams: Text2speechParams }) => {
-        const { beat, speakers, speechParams } = namedInputs;
+      agent: (namedInputs: { beat: MulmoBeat; script: MulmoScript; speakers: SpeakerDictonary }) => {
+        const { beat, script, speakers } = namedInputs;
         return {
           voiceId: speakers[beat.speaker].voiceId,
-          speechParams: { ...speechParams, ...beat.speechParams },
+          speechOptions: MulmoScriptMethods.getSpeechOptions(script, beat),
         };
       },
       inputs: {
         beat: ":beat",
-        speechParams: ":script.speechParams",
+        script: ":script",
         speakers: ":script.speechParams.speakers",
       },
     },
@@ -51,8 +52,8 @@ const graph_tts: GraphData = {
       params: {
         throwError: true,
         voice: ":preprocessor.voiceId",
-        speed: ":preprocessor.speechParams.speed",
-        instructions: ":preprocessor.speechParams.instruction",
+        speed: ":preprocessor.speechOptions.speed",
+        instructions: ":preprocessor.speechOptions.instruction",
       },
     },
   },

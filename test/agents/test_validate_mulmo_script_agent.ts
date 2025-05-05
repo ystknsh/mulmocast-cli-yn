@@ -27,7 +27,7 @@ const validMulmoScriptJson = JSON.stringify({
         model: "dall-e-3",
         size: "1024x1024",
       },
-      speechParams: {
+      speechOptions: {
         speed: 1.0,
         instruction: "Speak clearly",
       },
@@ -37,8 +37,6 @@ const validMulmoScriptJson = JSON.stringify({
   ],
   speechParams: {
     provider: "openai",
-    speed: 1.0,
-    instruction: "Speak naturally",
     speakers: {
       speaker1: {
         displayName: {
@@ -46,6 +44,10 @@ const validMulmoScriptJson = JSON.stringify({
           en: "Speaker 1",
         },
         voiceId: "voice-123",
+        speechOptions: {
+          speed: 1.0,
+          instruction: "Speak naturally",
+        },
       },
     },
   },

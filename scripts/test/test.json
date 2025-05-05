@@ -12,13 +12,15 @@
   },
   "speechParams": {
     "provider": "nijivoice",
-    "speed": 1.666,
     "speakers": {
       "Announcer": {
         "displayName": {
           "ja": "アナウンサー"
         },
-        "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62"
+        "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62",
+        "speechOptions": {
+          "speed": 1.666
+        }
       },
       "Student": {
         "displayName": {
@@ -46,7 +48,7 @@
       "imageParams": {
         "style": "<style>sumie-style"
       },
-      "speechParams": {
+      "speechOptions": {
         "speed": 0.8
       }
     }

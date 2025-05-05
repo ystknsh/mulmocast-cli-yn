@@ -12,7 +12,6 @@
   },
   "speechParams": {
     "provider": "nijivoice",
-    "speed": 1.5,
     "speakers": {
       "Announcer": {
         "displayName": {
@@ -38,7 +37,7 @@
     {
       "speaker": "Announcer",
       "text": "私たちの目の前で、人工知能の革命が静かに、",
-      "speechParams": {
+      "speechOptions": {
         "speed": 1.5
       },
       "imagePrompt": "A futuristic scene depicting the quiet but certain advancement of AI, with digital interfaces and abstract representations of AI technology shaping the future."
@@ -46,14 +45,14 @@
     {
       "speaker": "Announcer",
       "text": "しかし確実に進んでいます。",
-      "speechParams": {
+      "speechOptions": {
         "speed": 1.5
       }
     },
     {
       "speaker": "Announcer",
       "text": "オープンエーアイのサム・アルトマン氏が語る「3つの重要な観察」とは何か？",
-      "speechParams": {
+      "speechOptions": {
         "speed": 1.5
       }
     }
