@@ -8,8 +8,7 @@
   "reference": "https://arxiv.org/abs/2406.11638",
   "lang": "ja",
   "imageParams": {
-    "style": "<style>monochrome",
-    "aspectRatio": "9:16"
+    "style": "<style>monochrome"
   },
   "speechParams": {
     "provider": "nijivoice",
