@@ -4,7 +4,7 @@ import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/agents";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudio, MulmoStudioBeat, Text2imageParams, FileDirs } from "../types";
+import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, Text2imageParams } from "../types";
 import { MulmoScriptMethods } from "../methods";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
@@ -136,8 +136,9 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-export const images = async (studio: MulmoStudio, files: FileDirs) => {
-  const { outDirPath, imageDirPath } = files;
+export const images = async (context: MulmoStudioContext) => {
+  const { studio, fileDirs } = context;
+  const { outDirPath, imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
 
   const agentFilters = [
