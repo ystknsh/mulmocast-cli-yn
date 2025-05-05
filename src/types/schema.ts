@@ -17,12 +17,20 @@ export const localizedTextSchema = z
 
 export const multiLingualTextsSchema = z.record(langSchema, localizedTextSchema);
 
+export const speechOptionsSchema = z
+  .object({
+    speed: z.number().optional(), // default: 1.0
+    instruction: z.string().optional(),
+  })
+  .strict();
+
 const speakerIdSchema = z.string();
 
 const speakerDataSchema = z
   .object({
     displayName: z.record(langSchema, z.string()),
     voiceId: z.string(),
+    speechOptions: speechOptionsSchema.optional(),
   })
   .strict();
 
@@ -108,13 +116,6 @@ export const text2imageParamsSchema = z
   })
   .strict();
 
-export const text2speechOptionsSchema = z
-  .object({
-    speed: z.number().optional(), // default: 1.0
-    instruction: z.string().optional(),
-  })
-  .strict();
-
 export const textSlideParamsSchema = z
   .object({
     cssStyles: z.array(z.string()),
@@ -134,7 +135,7 @@ export const mulmoBeatSchema = z
     media: mulmoMediaSchema.optional(),
 
     imageParams: text2imageParamsSchema.optional(), // beat specific parameters
-    speechOptions: text2speechOptionsSchema.optional(),
+    speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
     image: z.string().optional(), // path to the image
