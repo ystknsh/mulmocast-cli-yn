@@ -28,7 +28,7 @@ const graph_tts: GraphData = {
       },
       inputs: {
         beat: ":beat",
-        sscript: ":script",
+        script: ":script",
         speakers: ":script.speechParams.speakers",
       },
     },
