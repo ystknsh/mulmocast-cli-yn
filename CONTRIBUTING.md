@@ -19,14 +19,27 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from w
 ```
 
 ## Quick Start
-
-```
+### Generate MulmoScript interactively
+```bash
 yarn run scripting -i -t seed_interactive
-yarn run audio scripts/test/test_en.json
-yarn run images scripts/test/test_en.json
-yarn run movie scripts/test/test_en.json
 ```
 
+This will create a MulmoScript JSON file in the ⁠./output folder by default.
+
+### Generate content using either approach:
+- Option 1: Execute each step individually
+  ```bash
+  yarn run audio scripts/test/test_en.json
+  yarn run images scripts/test/test_en.json
+  yarn run movie scripts/test/test_en.json
+  ```
+
+- Option 2: Generate video in one go (this will process audio and images internally)
+
+  ```bash
+  yarn run movie scripts/test/test_en.json
+  ```
+ 
 
 ## Create a podcast episode
 1. Create a MulmoScript (LLMs are useful for this process)
