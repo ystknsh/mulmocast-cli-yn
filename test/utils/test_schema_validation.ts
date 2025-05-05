@@ -35,23 +35,20 @@ const getJsonFilesInDirectory = (dirPath: string): string[] => {
 };
 
 // Get all subdirectories from a directory
-const getSubdirectories = (dirPath: string, excludeDirs: string[] = []): string[] => {
+const getSubdirectories = (dirPath: string): string[] => {
   if (!fs.existsSync(dirPath)) {
     return [];
   }
 
   return fs
     .readdirSync(dirPath, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory() && !excludeDirs.includes(dirent.name))
+    .filter((dirent) => dirent.isDirectory())
     .map((dirent) => path.join(dirPath, dirent.name));
 };
 
 test("JSON files in scripts directory should conform to mulmoScriptSchema", async (t) => {
-  // Directories to exclude
-  const excludeDirs = ["errors"];
-
   const scriptsDir = path.resolve(__dirname, "../../scripts");
-  const directories = getSubdirectories(scriptsDir, excludeDirs);
+  const directories = getSubdirectories(scriptsDir);
 
   for (const dir of directories) {
     const jsonFiles = getJsonFilesInDirectory(dir);
