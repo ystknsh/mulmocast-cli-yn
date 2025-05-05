@@ -133,6 +133,7 @@ export const mulmoBeatSchema = z
     speaker: speakerIdSchema,
     text: z.string(),
     media: mulmoMediaSchema.optional(),
+    audio: mediaSourceSchema.optional(),
 
     imageParams: text2imageParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
