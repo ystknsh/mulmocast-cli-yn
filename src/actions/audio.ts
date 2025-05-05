@@ -52,7 +52,7 @@ const graph_tts: GraphData = {
         throwError: true,
         voice: ":preprocessor.voiceId",
         speed: ":preprocessor.speechParams.speed",
-        instructions: ":preprocessor.speechParams.instructions",
+        instructions: ":preprocessor.speechParams.instruction",
       },
     },
   },
