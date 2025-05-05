@@ -142,8 +142,7 @@ export const mulmoScriptSchema = z.object({
     .extend({
       provider: z.string().optional(),
       speakers: speakerDictionarySchema,
-    })
-    .optional(),
+    }),
 
   // for text2image
   imageParams: text2imageParamsSchema
