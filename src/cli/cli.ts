@@ -2,6 +2,7 @@
 
 import "dotenv/config";
 import fs from "fs";
+import path from "path";
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "../utils/preprocess";
@@ -21,12 +22,13 @@ const getFileObject = () => {
   const baseDirPath = getBaseDirPath(basedir as string);
 
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
+  const mulmoFileDirPath = path.dirname(mulmoFilePath);
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(baseDirPath, (imagedir as string) ?? imageDirName);
   const scratchpadDirPath = getFullPath(baseDirPath, (scratchpaddir as string) ?? scratchpadDirName);
 
-  return { baseDirPath, mulmoFilePath, outDirPath, imageDirPath, scratchpadDirPath };
+  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, scratchpadDirPath };
 };
 const main = async () => {
   const files = getFileObject();
@@ -55,19 +57,23 @@ const main = async () => {
     return -1;
   }
 
+  const context = {
+    studio,
+    fileDirs: files,
+  };
   if (action === "translate") {
-    await translate(studio, files);
+    await translate(context);
   }
   if (action === "audio") {
-    await audio(studio, files, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
+    await audio(context, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
   }
   if (action === "images") {
-    await images(studio, files);
+    await images(context);
   }
   if (action === "movie") {
-    await audio(studio, files, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
-    await images(studio, files);
-    await movie(studio, files);
+    await audio(context, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
+    await images(context);
+    await movie(context);
   }
 };
 main();

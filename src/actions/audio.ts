@@ -9,7 +9,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods";
 
-import { MulmoStudio, MulmoScript, MulmoBeat, SpeakerDictonary, FileDirs } from "../types";
+import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
 
@@ -134,8 +134,9 @@ const agentFilters = [
   },
 ];
 
-export const audio = async (studio: MulmoStudio, files: FileDirs, concurrency: number) => {
-  const { outDirPath, scratchpadDirPath } = files;
+export const audio = async (context: MulmoStudioContext, concurrency: number) => {
+  const { studio, fileDirs } = context;
+  const { outDirPath, scratchpadDirPath } = fileDirs;
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
   const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);

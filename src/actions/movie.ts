@@ -1,5 +1,5 @@
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio } from "../types";
+import { MulmoStudio, MulmoStudioContext } from "../types";
 import { MulmoScriptMethods } from "../methods";
 import { getOutputBGMFilePath, getOutputVideoFilePath } from "../utils/file";
 
@@ -74,8 +74,9 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
     .run();
 };
 
-export const movie = async (studio: MulmoStudio, files: { outDirPath: string }) => {
-  const { outDirPath } = files;
+export const movie = async (context: MulmoStudioContext) => {
+  const { studio, fileDirs } = context;
+  const { outDirPath } = fileDirs;
   const audioPath = getOutputBGMFilePath(outDirPath, studio.filename);
   const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename);
 

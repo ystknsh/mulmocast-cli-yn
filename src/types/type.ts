@@ -32,11 +32,18 @@ export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
 export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
 
 export type FileDirs = {
-  baseDirPath: string;
   mulmoFilePath: string;
+  mulmoFileDirPath: string;
+
+  baseDirPath: string;
   outDirPath: string;
   imageDirPath: string;
   scratchpadDirPath: string;
+};
+
+export type MulmoStudioContext = {
+  fileDirs: FileDirs;
+  studio: MulmoStudio;
 };
 
 export type ScriptingParams = {
