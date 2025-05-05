@@ -37,7 +37,6 @@ const validMulmoScriptJson = JSON.stringify({
   ],
   speechParams: {
     provider: "openai",
-    instruction: "Speak naturally",
     speakers: {
       speaker1: {
         displayName: {
@@ -47,6 +46,7 @@ const validMulmoScriptJson = JSON.stringify({
         voiceId: "voice-123",
         speechOptions: {
           speed: 1.0,
+          instruction: "Speak naturally",
         },
       },
     },

@@ -19,7 +19,7 @@ import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, 
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; script: MulmoScript, speakers: SpeakerDictonary }) => {
+      agent: (namedInputs: { beat: MulmoBeat; script: MulmoScript; speakers: SpeakerDictonary }) => {
         const { beat, script, speakers } = namedInputs;
         return {
           voiceId: speakers[beat.speaker].voiceId,
