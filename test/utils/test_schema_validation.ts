@@ -10,8 +10,7 @@ const validateJsonFile = (filePath: string, schema: z.ZodObject<any>): { isValid
   try {
     const content = fs.readFileSync(filePath, "utf-8");
     const jsonData = JSON.parse(content);
-    // Using strict() to reject objects with unknown parameters
-    schema.strict().parse(jsonData);
+    schema.parse(jsonData);
 
     return { isValid: true };
   } catch (error) {

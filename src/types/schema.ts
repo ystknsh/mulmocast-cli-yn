@@ -11,7 +11,7 @@ export const localizedTextSchema = z.object({
   ttsTexts: z.array(z.string()).optional(),
   duration: z.number().optional(), // generated // video duration time(ms)
   filename: z.string(), // generated //
-});
+}).strict();
 
 export const multiLingualTextsSchema = z.record(langSchema, localizedTextSchema);
 
@@ -20,14 +20,14 @@ const speakerIdSchema = z.string();
 const speakerDataSchema = z.object({
   displayName: z.record(langSchema, z.string()),
   voiceId: z.string(),
-});
+}).strict();
 
 export const speakerDictionarySchema = z.record(speakerIdSchema, speakerDataSchema);
 
 const mediaSourceSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("url"), url: URLStringSchema }), // https://example.com/foo.pdf
-  z.object({ kind: z.literal("data"), data: z.string() }), // base64
-  z.object({ kind: z.literal("file"), filename: z.string() }), // foo.pdf
+  z.object({ kind: z.literal("url"), url: URLStringSchema }).strict(), // https://example.com/foo.pdf
+  z.object({ kind: z.literal("data"), data: z.string() }).strict(), // base64
+  z.object({ kind: z.literal("file"), filename: z.string() }).strict(), // foo.pdf
 ]);
 
 // String is easier for AI, string array is easier for human
@@ -36,32 +36,32 @@ const stringOrStringArray = z.union([z.string(), z.array(z.string())]);
 const MulmoMarkdownMediaSchema = z.object({
   type: z.literal("markdown"),
   markdown: stringOrStringArray,
-});
+}).strict();
 
 const MulmoWebMediaSchema = z.object({
   type: z.literal("web"),
   url: URLStringSchema,
-});
+}).strict();
 
 const MulmoPdfMediaSchema = z.object({
   type: z.literal("pdf"),
   source: mediaSourceSchema,
-});
+}).strict();
 
 const MulmoImageMediaSchema = z.object({
   type: z.literal("image"),
   source: mediaSourceSchema,
-});
+}).strict();
 
 const MulmoSvgMediaSchema = z.object({
   type: z.literal("svg"),
   source: mediaSourceSchema,
-});
+}).strict();
 
 const MulmoMovieMediaSchema = z.object({
   type: z.literal("movie"),
   source: mediaSourceSchema,
-});
+}).strict();
 
 const MulmoTextSlideMediaSchema = z.object({
   type: z.literal("textSlide"),
@@ -69,7 +69,7 @@ const MulmoTextSlideMediaSchema = z.object({
     title: z.string(),
     bullets: z.array(z.string()),
   }),
-});
+}).strict();
 
 export const mulmoMediaSchema = z.union([
   MulmoMarkdownMediaSchema,
@@ -86,20 +86,20 @@ export const text2imageParamsSchema = z.object({
   size: z.string().optional(), // default: provider specific
   style: z.string().optional(), // optional image style
   moderation: z.string().optional(), // optional image style
-});
+}).strict();
 
 export const text2speechParamsSchema = z.object({
   speed: z.number().optional(), // default: 1.0
   instruction: z.string().optional(),
-});
+}).strict();
 
 export const textSlideParamsSchema = z.object({
   cssStyles: z.array(z.string()),
-});
+}).strict();
 
 export const videoParamsSchema = z.object({
   padding: z.number().optional(), // msec
-});
+}).strict();
 
 export const mulmoBeatSchema = z.object({
   speaker: speakerIdSchema,
@@ -111,19 +111,19 @@ export const mulmoBeatSchema = z.object({
   textSlideParams: textSlideParamsSchema.optional(),
   imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   image: z.string().optional(), // path to the image
-});
+}).strict();
 
 export const mulmoDimensionSchema = z.object({
   width: z.number(),
   height: z.number(),
-});
+}).strict();
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
 
 export const mulmoCastCreditSchema = z.object({
   version: z.literal("1.0"),
   credit: z.literal("closing").optional(),
-});
+}).strict();
 
 export const mulmoScriptSchema = z.object({
   // global settings
@@ -160,24 +160,24 @@ export const mulmoScriptSchema = z.object({
 
   // for debugging
   __test_invalid__: z.boolean().optional(),
-});
+}).strict();
 
 export const mulmoStudioBeatSchema = mulmoBeatSchema.extend({
   multiLingualTexts: multiLingualTextsSchema.optional(),
   hash: z.string().optional(),
   duration: z.number().optional(),
   filename: z.string().optional(),
-});
+}).strict();
 
 export const mulmoStudioSchema = z.object({
   script: mulmoScriptSchema,
   filename: z.string(),
   beats: z.array(mulmoStudioBeatSchema),
-});
+}).strict();
 
 export const mulmoScriptTemplateSchema = z.object({
   systemPrompt: z.string(),
   script: mulmoScriptSchema,
-});
+}).strict();
 
 export const urlsSchema = z.array(z.string().url({ message: "Invalid URL format" }));
