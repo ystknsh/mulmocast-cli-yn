@@ -4,10 +4,7 @@ import { AgentFilterFunction } from "graphai";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file, text, bypass } = namedInputs;
-  if (bypass) {
-    return;
-  }
+  const { file, text } = namedInputs;
   try {
     await fsPromise.access(file);
     const elements = file.split("/");

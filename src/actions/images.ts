@@ -34,7 +34,8 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
     } else if (beat.media.type === "image") {
       if (beat.media.source.kind === "url") {
-        return { path: beat.media.source.url, bypass: true, prompt, imageParams, aspectRatio };
+        // undefined prompt indicates "no need to generate image"
+        return { path: beat.media.source.url, prompt: undefined, imageParams, aspectRatio };
       }
     }
   }
@@ -71,6 +72,7 @@ const graph_data: GraphData = {
             },
           },
           imageGenerator: {
+            if: ":preprocessor.prompt",
             agent: ":text2imageAgent",
             params: {
               model: ":preprocessor.imageParams.model",
@@ -82,8 +84,8 @@ const graph_data: GraphData = {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
-              bypass: ":preprocessor.bypass", // only for fileCacheAgentFilter
             },
+            defaultValue: {}
           },
           output: {
             agent: "copyAgent",
