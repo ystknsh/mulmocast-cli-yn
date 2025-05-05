@@ -4,6 +4,10 @@ import assert from "node:assert";
 import type { GraphAI } from "graphai";
 
 const validMulmoScriptJson = JSON.stringify({
+  $mulmocast: {
+    version: "1.0",
+    credit: "closing",
+  },
   title: "Test Script",
   description: "MulmoScript for testing",
   reference: "None",

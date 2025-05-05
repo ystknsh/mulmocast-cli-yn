@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "Testing OpenAI's new Image Generation",
   "description": "Hello",
   "imageParams": {

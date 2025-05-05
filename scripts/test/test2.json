@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "AIの進化と私たちの未来 - サム・アルトマン氏の3つの観察",
   "description": "OpenAIのサム・アルトマン氏による、AIの進化と社会への影響に関する洞察を、高校生向けに分かりやすく解説する対話形式のスクリプト。",
   "reference": "https://blog.samaltman.com/three-observations",
