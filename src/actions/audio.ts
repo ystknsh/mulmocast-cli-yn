@@ -99,9 +99,6 @@ const graph_data: GraphData = {
       params: {
         musicFile: process.env.PATH_BGM ?? defaultBGMPath,
       },
-      console: {
-        before: true,
-      },
       inputs: {
         wait: ":combineFiles",
         voiceFile: ":outputAudioFilePath",
@@ -114,9 +111,6 @@ const graph_data: GraphData = {
       agent: "copyAgent",
       params: {
         namedKey: "title",
-      },
-      console: {
-        after: true,
       },
       inputs: {
         title: "\n${:studio.script.title}\n\n${:studio.script.description}\nReference: ${:studio.script.reference}\n",
