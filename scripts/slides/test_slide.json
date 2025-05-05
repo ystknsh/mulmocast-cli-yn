@@ -28,6 +28,17 @@
   "beats": [
     {
       "speaker": "Presenter",
+      "text": "This is our logo.",
+      "media": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
       "text": "The evolution of humans is a complex journey that spans millions of years, shaped by biology, environment, and culture. Here's a high-level summary of the key stages in human evolution",
       "textSlideParams": {
         "cssStyles": ["body { background:#ffffcc }", "h1 { color:green }"]

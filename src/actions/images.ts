@@ -22,20 +22,22 @@ const preprocess_agent = async (namedInputs: { beat: MulmoStudioBeat; index: num
   const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${studio.filename}/${index}${suffix}.png`;
+  const aspectRatio = MulmoScriptMethods.getAspectRatio(studio.script);
 
   if (beat.media) {
     if (beat.media.type === "textSlide") {
       const slide = beat.media.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
     } else if (beat.media.type === "markdown") {
       const markdown: string = Array.isArray(beat.media.markdown) ? beat.media.markdown.join("\n") : beat.media.markdown;
-      // NOTE: If we want to support per-beat CSS style, we need to add textSlideParams to MulmoBeat and process it here.
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
+    } else if (beat.media.type === "image") {
+      if (beat.media.source.kind === "url") {
+        return { path: beat.media.source.url, bypass: true, prompt, imageParams, aspectRatio };
+      }
     }
   }
-  const aspectRatio = MulmoScriptMethods.getAspectRatio(studio.script);
   return { path: imagePath, prompt, imageParams, aspectRatio };
 };
 
@@ -79,6 +81,7 @@ const graph_data: GraphData = {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
+              bypass: ":preprocessor.bypass", // only for fileCacheAgentFilter
             },
           },
           output: {
