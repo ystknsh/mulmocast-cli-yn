@@ -19,6 +19,22 @@ export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath:
   if (!studio.beats) {
     studio.beats = [];
   }
+
+  // Addition cloing credit
+  if (mulmoScript.$mulmocast.credit === "closing") {
+    mulmoScript.beats.push({
+      speaker: mulmoScript.beats[0].speaker, // First speaker
+      text: "This presentation is powered by Mulmocast",
+      media: {
+        type: "image",
+        source: {
+          kind: "url",
+          url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png",
+        },
+      },
+    });
+  }
+
   studio.script = mulmoScript; // update the script
   studio.beats.length = mulmoScript.beats.length; // In case it became shorter
   mulmoScript.beats.forEach((beat: MulmoStudioBeat, index: number) => {
