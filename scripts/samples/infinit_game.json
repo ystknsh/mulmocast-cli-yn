@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "AI WAR & INFINITE GAMES: RETHINKING US-CHINA TECH COMPETITION",
   "description": "This episode explores the problematic framing of US-China AI competition as a 'war' that can be won. Drawing on game theory concepts of finite versus infinite games, we examine how export controls and trade tensions are creating market uncertainty while potentially undermining American competitiveness in the global AI landscape.",
   "speechParams": {

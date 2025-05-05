@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "Human Evolution",
   "speechParams": {
     "speakers": {

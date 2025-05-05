@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "Introduction to GraphAI",
   "description": "Declarative Dataflow Programming environment for AI agents.",
   "speechParams": {

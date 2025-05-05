@@ -1,4 +1,8 @@
 {
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
   "title": "GOOGLE'S INNOVATOR'S DILEMMA: BALANCING SEARCH DOMINANCE WITH AI AMBITIONS",
   "description": "This episode explores Google's classic 'innovator's dilemma' as the company navigates the transition to AI-first products. Based on David Sacks' recent analysis and Alphabet's latest financial reports, we examine how Google is balancing its profitable search business with the need to compete in the rapidly evolving AI landscape.",
   "speechParams": {
