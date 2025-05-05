@@ -72,7 +72,6 @@ const graph_data: GraphData = {
               context: ":context",
               beat: ":beat",
               index: ":__mapIndex",
-              studio: ":studio",
               suffix: "p",
               imageDirPath: ":imageDirPath",
             },
