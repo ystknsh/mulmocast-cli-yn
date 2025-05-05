@@ -35,6 +35,16 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from w
 3. Generate images with `mulmo images` 
 4. Create final video with `mulmo movie`
 
+## Generate MulmoScript
+
+```bash
+# Generate script from web content
+mulmo-tool scripting -u https://example.com
+
+# Generate script with interactive mode
+mulmo-tool scripting -i
+```
+
 ## Generate content from MulmoScript
 
 Mulmo provides several commands to handle different aspects of content creation:
@@ -51,16 +61,6 @@ mulmo movie -f script.json
 
 # Translate script to Japanese
 mulmo translate -f script.json
-```
-
-## Generate MulmoScript
-
-```bash
-# Generate script from web content
-mulmo-tool scripting -u https://example.com
-
-# Generate script with interactive mode
-mulmo-tool scripting -i
 ```
 
 ## MulmoScript Format
