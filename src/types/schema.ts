@@ -108,7 +108,7 @@ export const text2imageParamsSchema = z
   })
   .strict();
 
-export const text2speechParamsSchema = z
+export const text2speechOptionsSchema = z
   .object({
     speed: z.number().optional(), // default: 1.0
     instruction: z.string().optional(),
@@ -134,7 +134,7 @@ export const mulmoBeatSchema = z
     media: mulmoMediaSchema.optional(),
 
     imageParams: text2imageParamsSchema.optional(), // beat specific parameters
-    speechParams: text2speechParamsSchema.optional(),
+    speechOptions: text2speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
     image: z.string().optional(), // path to the image
@@ -157,6 +157,13 @@ export const mulmoCastCreditSchema = z
   })
   .strict();
 
+export const text2speechParamsSchema = z
+  .object({
+    provider: z.string().optional(),
+    speakers: speakerDictionarySchema,
+  })
+  .strict();
+
 export const mulmoScriptSchema = z
   .object({
     // global settings
@@ -171,10 +178,7 @@ export const mulmoScriptSchema = z
     beats: z.array(mulmoBeatSchema),
 
     // for text2speech
-    speechParams: text2speechParamsSchema.extend({
-      provider: z.string().optional(),
-      speakers: speakerDictionarySchema,
-    }),
+    speechParams: text2speechParamsSchema,
 
     // for text2image
     imageParams: text2imageParamsSchema
