@@ -9,7 +9,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods";
 
-import { MulmoStudio, MulmoScript, MulmoBeat, SpeakerDictonary, Text2speechParams, FileDirs } from "../types";
+import { MulmoStudio, MulmoScript, MulmoBeat, SpeakerDictonary, FileDirs } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
 
