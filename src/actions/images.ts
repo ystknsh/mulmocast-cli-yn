@@ -56,6 +56,7 @@ const graph_data: GraphData = {
       params: {
         rowKey: "beat",
         compositeResult: true,
+        throwError: true,
       },
       graph: {
         nodes: {
