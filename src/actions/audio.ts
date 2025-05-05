@@ -8,7 +8,7 @@ import combineAudioFilesAgent from "../agents/combine_audio_files_agent";
 import ttsOpenaiAgent from "../agents/tts_openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudio, MulmoStudioContext, MulmoBeat, SpeakerDictonary, Text2speechParams, FileDirs } from "../types";
+import { MulmoStudioContext, MulmoBeat, SpeakerDictonary, Text2speechParams } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
 
