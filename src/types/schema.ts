@@ -159,6 +159,9 @@ export const mulmoScriptSchema = z.object({
   // images: ImageInfo[] // generated
   imagePath: z.string().optional(), // for keynote images movie ??
   omitCaptions: z.boolean().optional(), // default is false
+
+  // for debugging
+  __test_invalid__: z.boolean().optional(),
 });
 
 export const mulmoStudioBeatSchema = mulmoBeatSchema.extend({

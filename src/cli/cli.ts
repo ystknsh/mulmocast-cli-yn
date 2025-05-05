@@ -14,6 +14,7 @@ import { audio } from "../actions/audio";
 import { movie } from "../actions/movie";
 
 import { getBaseDirPath, getFullPath } from "../utils/file";
+import { mulmoStudioSchema } from "../types/schema";
 
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, scratchpaddir } = args;
@@ -40,9 +41,19 @@ const main = async () => {
     return -1;
   }
 
-  // TODO some option process
+    // TODO some option process
   const { action } = args;
   const studio = createOrUpdateStudioData(mulmoFilePath, files);
+
+  // validate mulmoStudioSchema. skip if __test_invalid__ is true
+  try {
+    if (!studio.script?.__test_invalid__) {
+      mulmoStudioSchema.parse(studio);
+    }
+  } catch (error) {
+    console.error(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
+    return -1;
+  }
 
   if (action === "translate") {
     await translate(studio, files);
