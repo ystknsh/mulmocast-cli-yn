@@ -1,89 +1,74 @@
-# mulmocast-cli
+# mulmo
 
-## Initialization
+A CLI tool for generating podcast and video content from script files. Automates the process of creating audio, images, and video from structured script files.
 
-Install dependencies.
+## Installation
 
-```
-yarn install
-brew install ffmpeg # Or install ffmpeg from https://ffmpeg.org/download.html
-```
-
-Create .env file.
-
-```
-OPENAI_API_KEY={your OpenAI key}
-GOOGLE_PROJECT_ID={your Google Project ID}
-NIJIVOICE_API_KEY={your Nijivoice API key}
+```bash
+npm install -g mulmo
 ```
 
-## Quick Start
+You'll also need to install ffmpeg:
+```bash
+# For macOS with Homebrew
+brew install ffmpeg
 
-```
-yarn run audio scripts/test/test_en.json
-yarn run images scripts/test/test_en.json
-yarn run movie scripts/test/test_en.json
-```
-
-
-## Create a podcast episode
-1. Create a MulmoScript (LLMs are useful for this process)
-   1. Feed some source text (ideas, news, press releases) to your favorite LLM.
-   2. Ask the LLM to write a podcast script in MulmoScript JSON format (you can use the prompt examples in the [prompts](./prompts) folder as a reference).
-   3. Save the generated script as a MulmoScript JSON file (such as [graphai_intro.json](./scripts/samples/graphai_intro.json))
-2. Run ```yarn run audio {path to the script file}```.
-3. The output will be generated in the `./output` folder.
-
-## Create a video
-
-1. Claudeを使って台本（MulmoScript）を作成
-2. Youtubeライブ向けの縦動画であれば、その指示を追加（手作業）
-3. 音声ファイルの作成（`yarn run audio {path to the script file}`を使って自動作成）
-4. 画像ファイルの作成（`yarn run images {path to the script file}`を使って自動生成）
-5. 映像ファイルの作成（`yarn run movie {path to the script file}`を使って自動生成）
-
-# MulmoScript format
-
-```JSON
-{
-  "title": "title of the podcast",
-  "description": "The description of the podcast.",
-  "reference": "URL to the source data", // optional
-  "tts": "openAI", // or "nijivoice", default is "openAI"
-  "speechParams": {
-    "speakers": {
-      "Host": {
-        "voiceId": "shimmer",
-        "displayName": {
-          "en": "Host"
-        }
-      },
-      "Guest": {
-        "voiceId": "echo",
-        "displayName": {
-          "en": "Guest"
-        }
-      }
-    }
-  },
-  "beats": [
-    {
-      "speaker": "Host",
-      "text": "words from the host."
-    },
-    {
-      "speaker": "Guest",
-      "text": "words from the guest."
-    },
-    ...
-  ]
-}
+# For other platforms
+# Visit https://ffmpeg.org/download.html
 ```
 
-## Translate the script into Japanese
+## Configuration
 
-Run ```yarn run translate {path to the script file}```
+Create a `.env` file in your project directory with the following API keys:
 
-## Create a movie file with the Japanese script
+```
+OPENAI_API_KEY=your_openai_api_key
+GOOGLE_PROJECT_ID=your_google_project_id # optional for movie, image generation
+NIJIVOICE_API_KEY=your_nijivoice_api_key # optional for movie, audio generation
+BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from web content
+```
 
-Run ```yarn run movie {path to the script file}```
+## Workflow
+
+1. Create a MulmoScript JSON file with `mulmo-tool scripting`
+2. Generate audio with `mulmo audio`
+3. Generate images with `mulmo images` 
+4. Create final video with `mulmo movie`
+
+## Generate MulmoScript
+
+```bash
+# Generate script from web content
+mulmo-tool scripting -u https://example.com
+
+# Generate script with interactive mode
+mulmo-tool scripting -i
+```
+
+## Generate content from MulmoScript
+
+Mulmo provides several commands to handle different aspects of content creation:
+
+```bash
+# Generate audio from script
+mulmo audio -f script.json
+
+# Generate images for script
+mulmo images -f script.json
+
+# Generate both audio and images, then combine into video
+mulmo movie -f script.json
+
+# Translate script to Japanese
+mulmo translate -f script.json
+```
+
+## MulmoScript Format
+
+MulmoScript is a JSON format to define podcast or video scripts:
+schema: [./src/types/schema.ts](./src/types/schema.ts)
+
+
+## Contributing
+
+For developers interested in contributing to this project, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
