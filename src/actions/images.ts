@@ -18,28 +18,21 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: {
-  context: MulmoStudioContext;
-  beat: MulmoStudioBeat;
-  index: number;
-  suffix: string;
-  studio: MulmoStudio;
-  imageDirPath: string;
-}) => {
-  const { context, beat, index, suffix, studio, imageDirPath } = namedInputs;
-  const imageParams = { ...studio.script.imageParams, ...beat.imageParams };
+const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string }) => {
+  const { context, beat, index, suffix, imageDirPath } = namedInputs;
+  const imageParams = { ...context.studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
-  const imagePath = `${imageDirPath}/${studio.filename}/${index}${suffix}.png`;
-  const aspectRatio = MulmoScriptMethods.getAspectRatio(studio.script);
+  const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
+  const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
 
   if (beat.media) {
     if (beat.media.type === "textSlide") {
       const slide = beat.media.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
+      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.media.type === "markdown") {
       const markdown: string = Array.isArray(beat.media.markdown) ? beat.media.markdown.join("\n") : beat.media.markdown;
-      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(studio.script, beat), imagePath);
+      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.media.type === "image") {
       if (beat.media.source.kind === "url") {
         // undefined prompt indicates "no need to generate image"
