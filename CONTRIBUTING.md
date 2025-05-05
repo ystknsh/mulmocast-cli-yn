@@ -64,8 +64,8 @@ This will create a MulmoScript JSON file in the ⁠./output folder by default.
   "title": "title of the podcast",
   "description": "The description of the podcast.",
   "reference": "URL to the source data", // optional
-  "tts": "openAI", // or "nijivoice", default is "openAI"
   "speechParams": {
+    "provider": "openAI", // or "nijivoice", default is "openAI"
     "speakers": {
       "Host": {
         "voiceId": "shimmer",
