@@ -36,8 +36,8 @@ export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath:
       audio: {
         type: "audio",
         source: {
-          kind: "path",
-          path: "../../assets/audio/silent300.mp3",
+          kind: "url",
+          url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/audio/silent300.mp3",
         },
       },
     });
