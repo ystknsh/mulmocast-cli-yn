@@ -3,6 +3,8 @@
 import "dotenv/config";
 import fs from "fs";
 import path from "path";
+import { GraphAILogger } from "graphai";
+
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "../utils/preprocess";
@@ -36,6 +38,8 @@ const main = async () => {
 
   if (args.v) {
     console.log(files);
+  } else {
+    GraphAILogger.setLevelEnabled("error", false);
   }
 
   if (!fs.existsSync(mulmoFilePath)) {
