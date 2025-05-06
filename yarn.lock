@@ -94,10 +94,10 @@
   resolved "https://registry.yarnpkg.com/@graphai/agent_utils/-/agent_utils-2.0.0.tgz#3bd3c917bdb0d24a2c85178e45ee716e3978dd58"
   integrity sha512-SmlJ94JkYuMJxXY4Nu6pOYrdQSNMbsEgMyYV5aojvjx7kSGCZfVfrAsor3MxDqLmGqgHMtJI2oL1q7WMPQiTfA==
 
-"@graphai/browserless_agent@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@graphai/browserless_agent/-/browserless_agent-0.0.3.tgz#d304726f7dc2fd88b780f410ee7576be0447ac5e"
-  integrity sha512-MmO4Xh72Sma7pYZ4gZ+EKXbbP00tbohPDa5emgdgzxnm/YJSyH8BwmVQw5YqBIXIeBZlEI90cAyRgjnOfDQ0Lw==
+"@graphai/browserless_agent@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@graphai/browserless_agent/-/browserless_agent-2.0.0.tgz#bd816c9ece23494587f47ae76d77ba861c97b24b"
+  integrity sha512-tjZC42maU70bUYhMX5IrmekXumhcm7hMl29t00XulMv09NCIAb9uMZA9IKOWHfavOICCQ6SXqGCFtGUGQHlFYw==
 
 "@graphai/input_agents@^1.0.1":
   version "1.0.1"
