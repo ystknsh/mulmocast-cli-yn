@@ -153,14 +153,6 @@ export const images = async (context: MulmoStudioContext) => {
   ];
 
 
-  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
-  const injections: Record<string, string | MulmoStudio | Text2imageParams | MulmoStudioContext | undefined> = {
-    studio,
-    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
-    outputStudioFilePath: outputStudioFilePath,
-    context,
-  };
-
   const options: GraphOptions = {
     agentFilters,
   };
@@ -176,10 +168,16 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
+  const injections: Record<string, string | MulmoStudio | Text2imageParams | MulmoStudioContext | undefined> = {
+    studio, // TODO remove
+    context,
+    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
+    outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
+    imageDirPath,
+  };
   const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
-  graph.injectValue("imageDirPath", imageDirPath);
   await graph.run<{ output: MulmoStudioBeat[] }>();
 };
