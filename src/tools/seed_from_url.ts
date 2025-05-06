@@ -43,9 +43,6 @@ const graphData: GraphData = {
               url: ":row",
               text_content: true,
             },
-            params: {
-              throwError: true,
-            },
           },
           copyAgent: {
             agent: "copyAgent",
