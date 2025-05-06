@@ -7,7 +7,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string";
 import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext } from "../types";
-import { getOutputStudioFilePath } from "../utils/file";
+import { getOutputStudioFilePath, mkdir } from "../utils/file";
 
 const translateGraph: GraphData = {
   version: 0.5,
@@ -197,6 +197,7 @@ export const translate = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
   const { outDirPath } = fileDirs;
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+  mkdir(outDirPath);
 
   assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
 

@@ -11,7 +11,7 @@ import { MulmoScriptMethods } from "../methods";
 
 import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath } from "../utils/file";
+import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath, mkdir } from "../utils/file";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -133,6 +133,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
   const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+  mkdir(scratchpadDirPath);
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(

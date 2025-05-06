@@ -62,6 +62,7 @@ export const getTemplateFilePath = (templateName: string) => {
 
 export const mkdir = (dirPath: string) => {
   if (!fs.existsSync(dirPath)) {
+    console.info("mkdir: " + dirPath);
     fs.mkdirSync(dirPath, { recursive: true });
   }
 };
