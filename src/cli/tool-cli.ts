@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import "dotenv/config";
+import { GraphAILogger } from "graphai";
+
 import { args } from "./tool-args";
 import { outDirName } from "../utils/const";
 import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
@@ -22,6 +24,10 @@ const main = async () => {
     console.log("action:", action);
     console.log("interactive:", interactive);
     console.log("filename:", filename);
+  } else {
+    GraphAILogger.setLevelEnabled("error", false);
+    GraphAILogger.setLevelEnabled("log", false);
+    GraphAILogger.setLevelEnabled("warn", false);
   }
 
   if (action === "scripting") {

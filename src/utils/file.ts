@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { GraphAILogger } from "graphai";
 import { MulmoScript } from "../types";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
 import { mulmoScriptTemplateSchema } from "../types/schema";
@@ -109,4 +110,8 @@ export const getAvailableTemplateNames = (): string[] => {
 
   const files = fs.readdirSync(templatesDir);
   return files.filter((file) => path.extname(file).toLowerCase() === ".json").map((file) => path.basename(file, ".json"));
+};
+
+export const writingMessage = (filePath: string) => {
+  GraphAILogger.info(`writing: ${filePath}`);
 };

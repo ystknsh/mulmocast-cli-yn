@@ -4,7 +4,8 @@ import { commonOptions } from "./common";
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmocast")
-  .option("scratchpaddir", {
+  .option("s", {
+    alias: "scratchpaddir",
     description: "scratchpad dir",
     demandOption: false,
     type: "string",

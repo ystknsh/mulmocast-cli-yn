@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { GraphAI, GraphAILogger, assert } from "graphai";
+import { GraphAI, assert } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -7,7 +7,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string";
 import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext } from "../types";
-import { getOutputStudioFilePath, mkdir } from "../utils/file";
+import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file";
 
 const translateGraph: GraphData = {
   version: 0.5,
@@ -209,7 +209,7 @@ export const translate = async (context: MulmoStudioContext) => {
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
 
   await graph.run();
-  GraphAILogger.info(`writing: ${outputStudioFilePath}`);
+  writingMessage(outputStudioFilePath);
   // const results = await graph.run();
   // const mulmoDataResult = results.mergeResult;
   // console.log(JSON.stringify(mulmoDataResult, null, 2));
