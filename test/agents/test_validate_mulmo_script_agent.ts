@@ -16,7 +16,7 @@ const validMulmoScriptJson = JSON.stringify({
     {
       speaker: "speaker1",
       text: "Hello, this is a test",
-      media: {
+      image: {
         type: "image",
         source: {
           kind: "url",

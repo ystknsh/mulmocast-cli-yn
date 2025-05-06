@@ -17,7 +17,7 @@
     {
       "speaker": "Presenter",
       "text": "This is a local image.",
-      "media": {
+      "image": {
         "type": "image",
         "source": {
           "kind": "path",
@@ -28,7 +28,7 @@
     {
       "speaker": "Presenter",
       "text": "",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Local Audio Test",
