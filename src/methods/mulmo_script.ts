@@ -6,6 +6,10 @@ const defaultTextSlideStyles = [
   "ul { margin-left: 40px } ",
   "pre { margin-left: 40px; font-size: 32px }",
   "p { margin-left: 40px }",
+  "table { font-size: 40px; margin: auto; border: 1px solid gray; border-collapse: collapse }",
+  "th { border-bottom: 1px solid gray }",
+  "td, th { padding: 8px }",
+  "tr:nth-child(even) { background-color: #eee }"
 ];
 
 export const MulmoScriptMethods = {

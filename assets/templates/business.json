@@ -1,7 +1,7 @@
 {
   "title": "Business presentation",
   "description": "Template for children book.",
-  "systemPrompt": "Generate a script for a business presentation. Use textSlides or markdown to show slides or use imagePrompt to generate an appropriate image for that page.",
+  "systemPrompt": "Generate a script for a business presentation of the given topic. Use textSlides or markdown to show slides or use imagePrompt to generate an appropriate image for that page. Use the JSON below as a template",
   "script": {
     "$mulmocast": {
       "version": "1.0",
