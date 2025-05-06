@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { GraphAI, GraphAILogger } from "graphai";
+import { GraphAI } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
