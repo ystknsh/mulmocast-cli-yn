@@ -32,7 +32,6 @@ const validMulmoScriptJson = JSON.stringify({
         instruction: "Speak clearly",
       },
       imagePrompt: "A test image showing something interesting",
-      image: "test_image_001.jpg",
     },
   ],
   speechParams: {

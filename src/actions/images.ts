@@ -95,7 +95,7 @@ const graph_data: GraphData = {
               image: ":preprocessor.path",
             },
             output: {
-              image: ".image",
+              imageFile: ".image",
             },
             isResult: true,
           },
@@ -103,7 +103,7 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { image: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
         array.forEach((update, index) => {
