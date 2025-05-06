@@ -32,9 +32,7 @@
         "type": "textSlide",
         "slide": {
           "title": "Local Audio Test",
-          "bullets": [
-            "Something"
-          ]
+          "bullets": ["Something"]
         }
       },
       "audio": {

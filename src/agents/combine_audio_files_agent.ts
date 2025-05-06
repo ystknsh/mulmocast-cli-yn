@@ -12,9 +12,10 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, scratchpadDirPath } = namedInputs;
   const command = ffmpeg();
   context.studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
-    const audioPath = (mulmoBeat.audio?.kind === "path") && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.path);
+    const audioPath =
+      (mulmoBeat.audio?.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.path)) ||
+      (mulmoBeat.audio?.kind === "url" && mulmoBeat.audio.url);
     const filePath = audioPath || getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
-    console.log("***", filePath);
     const isLast = index === context.studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
