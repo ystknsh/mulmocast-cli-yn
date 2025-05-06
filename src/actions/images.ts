@@ -4,7 +4,7 @@ import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoStudioBeat, Text2imageParams } from "../types";
+import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
@@ -166,7 +166,7 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  const injections: Record<string, string | Text2imageParams | MulmoStudioContext | undefined> = {
+  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
