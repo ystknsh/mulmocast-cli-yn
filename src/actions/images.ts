@@ -52,7 +52,7 @@ const graph_data: GraphData = {
     studio: {},
     context: {},
     imageDirPath: {},
-    text2imageAgent: { value: "" },
+    text2imageAgent: {},
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
