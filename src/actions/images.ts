@@ -5,14 +5,13 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, Text2imageParams } from "../types";
-import { MulmoScriptMethods } from "../methods";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
 import { ImageGoogleConfig } from "../agents/image_google_agent";
-import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context";
+import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -160,13 +159,13 @@ export const images = async (context: MulmoStudioContext) => {
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   const injections: Record<string, string | MulmoStudio | Text2imageParams | MulmoStudioContext | undefined> = {
     studio,
-    text2imageAgent: "imageOpenaiAgent",
+    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
     outputStudioFilePath: outputStudioFilePath,
     context,
   };
 
   // We need to get google's auth token only if the google is the text2image provider.
-  if (studio.script.imageParams?.provider === "google") {
+  if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
     console.log("google was specified as text2image engine");
     const google_config: ImageGoogleConfig = {
       projectId: process.env.GOOGLE_PROJECT_ID,
@@ -176,7 +175,6 @@ export const images = async (context: MulmoStudioContext) => {
     options.config = {
       imageGoogleAgent: google_config,
     };
-    injections.text2image = "imageGoogleAgent";
   }
 
   const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
