@@ -44,6 +44,7 @@ const graph_tts: GraphData = {
       },
     },
     tts: {
+      unless: ":beat.audio",
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",
@@ -62,14 +63,14 @@ const graph_data: GraphData = {
   version: 0.5,
   concurrency: 8,
   nodes: {
-    studio: {},
+    context: {},
     outputBGMFilePath: {},
     outputAudioFilePath: {},
     outputStudioFilePath: {},
     scratchpadDirPath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":studio.beats", script: ":studio.script", scratchpadDirPath: ":scratchpadDirPath" },
+      inputs: { rows: ":context.studio.beats", script: ":context.studio.script", scratchpadDirPath: ":scratchpadDirPath" },
       params: {
         rowKey: "beat",
       },
@@ -79,7 +80,7 @@ const graph_data: GraphData = {
       agent: "combineAudioFilesAgent",
       inputs: {
         map: ":map",
-        studio: ":studio",
+        context: ":context",
         combinedFileName: ":outputAudioFilePath",
         scratchpadDirPath: ":scratchpadDirPath",
       },
@@ -101,7 +102,7 @@ const graph_data: GraphData = {
         wait: ":combineFiles",
         voiceFile: ":outputAudioFilePath",
         outputFile: ":outputBGMFilePath",
-        script: ":studio.script",
+        script: ":context.studio.script",
       },
       isResult: true,
     },
@@ -111,7 +112,7 @@ const graph_data: GraphData = {
         namedKey: "title",
       },
       inputs: {
-        title: "\n${:studio.script.title}\n\n${:studio.script.description}\nReference: ${:studio.script.reference}\n",
+        title: "\n${:context.studio.script.title}\n\n${:context.studio.script.description}\nReference: ${:context.studio.script.reference}\n",
         waitFor: ":addBGM",
       },
     },
@@ -146,7 +147,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
     },
     { agentFilters },
   );
-  graph.injectValue("studio", studio);
+  graph.injectValue("context", context);
   graph.injectValue("outputBGMFilePath", outputBGMFilePath);
   graph.injectValue("outputAudioFilePath", outputAudioFilePath);
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);

@@ -1,18 +1,22 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio, MulmoStudioBeat } from "../types";
+import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types";
 import { silentPath, silentLastPath, getScratchpadFilePath } from "../utils/file";
+import { MulmoStudioContextMethods } from "../methods";
 
 const combineAudioFilesAgent: AgentFunction<
   null,
   { studio: MulmoStudio },
-  { studio: MulmoStudio; combinedFileName: string; scratchpadDirPath: string }
+  { context: MulmoStudioContext; combinedFileName: string; scratchpadDirPath: string }
 > = async ({ namedInputs }) => {
-  const { studio, combinedFileName, scratchpadDirPath } = namedInputs;
+  const { context, combinedFileName, scratchpadDirPath } = namedInputs;
   const command = ffmpeg();
-  studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
-    const filePath = getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
-    const isLast = index === studio.beats.length - 2;
+  context.studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
+    const audioPath =
+      (mulmoBeat.audio?.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.path)) ||
+      (mulmoBeat.audio?.kind === "url" && mulmoBeat.audio.url);
+    const filePath = audioPath || getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
+    const isLast = index === context.studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
     // Measure and log the timestamp of each section
@@ -20,7 +24,7 @@ const combineAudioFilesAgent: AgentFunction<
       if (err) {
         console.error("Error while getting metadata:", err);
       } else {
-        studio.beats[index]["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
+        context.studio.beats[index]["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
       }
     });
   });
@@ -41,7 +45,7 @@ const combineAudioFilesAgent: AgentFunction<
 
   return {
     // fileName: combinedFileName,
-    studio,
+    studio: context.studio,
   };
 };
 

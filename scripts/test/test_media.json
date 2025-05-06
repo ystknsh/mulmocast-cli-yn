@@ -24,6 +24,21 @@
           "path": "../../assets/images/mulmocast_credit.png"
         }
       }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "",
+      "media": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Local Audio Test",
+          "bullets": ["Something"]
+        }
+      },
+      "audio": {
+        "kind": "path",
+        "path": "../../assets/audio/local_voice.mp3"
+      }
     }
   ]
 }
