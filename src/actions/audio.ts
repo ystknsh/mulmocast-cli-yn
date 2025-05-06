@@ -154,8 +154,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   graph.injectValue("outputAudioFilePath", outputAudioFilePath);
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
   graph.injectValue("scratchpadDirPath", scratchpadDirPath);
-  const results = await graph.run();
+  await graph.run();
 
-  const result = results.combineFiles as { fileName: string };
   GraphAILogger.info(`writing: ${outputAudioFilePath}`);
 };
