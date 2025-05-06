@@ -10,7 +10,6 @@ import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
-import { ImageGoogleConfig } from "../agents/image_google_agent";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
 
 dotenv.config();
