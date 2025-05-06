@@ -221,7 +221,7 @@ export const mulmoStudioSchema = z
 export const mulmoScriptTemplateSchema = z
   .object({
     systemPrompt: z.string(),
-    script: mulmoScriptSchema,
+    script: mulmoScriptSchema.optional(),
   })
   .strict();
 
