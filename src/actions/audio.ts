@@ -82,7 +82,7 @@ const graph_data: GraphData = {
       agent: "combineAudioFilesAgent",
       inputs: {
         map: ":map",
-        studio: ":context.studio",
+        context: ":context",
         combinedFileName: ":outputAudioFilePath",
         scratchpadDirPath: ":scratchpadDirPath",
       },
