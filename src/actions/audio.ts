@@ -1,6 +1,7 @@
 import "dotenv/config";
 
-import { GraphAI, GraphData } from "graphai";
+import { GraphAI, GraphAILogger } from "graphai";
+import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
 import addBGMAgent from "../agents/add_bgm_agent";
@@ -156,5 +157,5 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const results = await graph.run();
 
   const result = results.combineFiles as { fileName: string };
-  console.log(`Generated: ${result.fileName}`);
+  GraphAILogger.info(`Generated: ${outputAudioFilePath}`);
 };

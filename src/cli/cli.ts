@@ -40,6 +40,8 @@ const main = async () => {
     console.log(files);
   } else {
     GraphAILogger.setLevelEnabled("error", false);
+    GraphAILogger.setLevelEnabled("log", false);
+    GraphAILogger.setLevelEnabled("warn", false);
   }
 
   if (!fs.existsSync(mulmoFilePath)) {
