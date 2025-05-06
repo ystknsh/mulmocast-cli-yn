@@ -2,13 +2,14 @@ import eslint from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
+import prettierPlugin from "eslint-plugin-prettier";
 
 export default [
   {
     files: ["{src,test,samles}/**/*.{js,ts,yaml,yml}"],
   },
   {
-    ignores: ["lib"]
+    ignores: ["lib"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -35,6 +36,10 @@ export default [
       "linebreak-style": ["error", "unix"],
       quotes: "off",
       semi: ["error", "always"],
+      "prettier/prettier": "error",
+    },
+    plugins: {
+      prettier: prettierPlugin,
     },
   },
   eslintConfigPrettier,

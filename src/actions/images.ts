@@ -151,7 +151,6 @@ export const images = async (context: MulmoStudioContext) => {
     },
   ];
 
-
   const options: GraphOptions = {
     agentFilters,
   };
@@ -163,7 +162,7 @@ export const images = async (context: MulmoStudioContext) => {
       imageGoogleAgent: {
         projectId: process.env.GOOGLE_PROJECT_ID,
         token,
-      }
+      },
     };
   }
 
