@@ -2,6 +2,7 @@ import "dotenv/config";
 import fsPromise from "fs/promises";
 import type { AgentFilterFunction } from "graphai";
 import { GraphAILogger } from "graphai";
+import { writingMessage } from "./file";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
@@ -15,7 +16,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     const output = (await next(context)) as { buffer: Buffer };
     const buffer = output ? output["buffer"] : undefined;
     if (buffer) {
-      GraphAILogger.info("writing: " + file);
+      writingMessage(file);
       await fsPromise.writeFile(file, buffer);
       return true;
     }
