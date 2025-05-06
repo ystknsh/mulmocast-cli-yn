@@ -2,6 +2,7 @@ import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types";
 import { silentPath, silentLastPath, getScratchpadFilePath } from "../utils/file";
+import { MulmoStudioContextMethods } from "../methods";
 
 const combineAudioFilesAgent: AgentFunction<
   null,
@@ -11,7 +12,7 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, scratchpadDirPath } = namedInputs;
   const command = ffmpeg();
   context.studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
-    const audioPath = (mulmoBeat.audio?.kind === "path") ? mulmoBeat.audio.path : undefined;
+    const audioPath = (mulmoBeat.audio?.kind === "path") ? MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.path) : undefined;
     const filePath = audioPath ?? getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
     console.log("***", filePath);
     const isLast = index === context.studio.beats.length - 2;
@@ -22,7 +23,6 @@ const combineAudioFilesAgent: AgentFunction<
       if (err) {
         console.error("Error while getting metadata:", err);
       } else {
-        console.log("***", metadata.format.duration);
         context.studio.beats[index]["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
       }
     });
