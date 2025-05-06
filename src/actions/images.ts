@@ -48,14 +48,13 @@ const graph_data: GraphData = {
   version: 0.5,
   concurrency: 2,
   nodes: {
-    studio: {},
     context: {},
     imageDirPath: {},
     text2imageAgent: {},
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":studio.beats", studio: ":studio", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.beats", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -104,8 +103,9 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { image: string }[]; studio: MulmoStudio }) => {
-        const { array, studio } = namedInputs;
+      agent: (namedInputs: { array: { image: string }[]; context: MulmoStudioContext }) => {
+        const { array, context } = namedInputs;
+        const { studio } = context;
         array.forEach((update, index) => {
           const beat = studio.beats[index];
           studio.beats[index] = { ...beat, ...update };
@@ -115,7 +115,7 @@ const graph_data: GraphData = {
       },
       inputs: {
         array: ":map.output",
-        studio: ":studio",
+        context: ":context",
       },
     },
     writeOutout: {
@@ -167,8 +167,7 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  const injections: Record<string, string | MulmoStudio | Text2imageParams | MulmoStudioContext | undefined> = {
-    studio, // TODO remove
+  const injections: Record<string, string | Text2imageParams | MulmoStudioContext | undefined> = {
     context,
     text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
