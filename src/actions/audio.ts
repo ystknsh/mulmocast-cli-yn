@@ -134,6 +134,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
   const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+  mkdir(outDirPath);
   mkdir(scratchpadDirPath);
 
   graph_data.concurrency = concurrency;
