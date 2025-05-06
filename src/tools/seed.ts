@@ -108,8 +108,12 @@ const graphData = {
         file: "${:outdir}/${:fileName}-${@now}.json",
         text: ":json.text",
       },
-      console: {
-        after: "\n\x1b[32m🎉 Script file generated successfully! Type /bye to exit.\x1b[0m\n",
+    },
+    writeLog: {
+      agent: "consoleAgent",
+      inputs: {
+        text: "\n\x1b[32m🎉 Script file generated successfully! Type /bye to exit.\x1b[0m\nwriting: ${:writeJSON.path}",
+        waiting: ":writeJSON",
       },
     },
     shouldResponse: {
@@ -171,4 +175,5 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, t
 
   console.log(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
+  
 };
