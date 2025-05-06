@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { GraphAI } from "graphai";
+import { GraphAI, assert } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -197,6 +197,8 @@ export const translate = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
   const { outDirPath } = fileDirs;
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+
+  assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
 
   const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent, openAIAgent }, { agentFilters });
   graph.injectValue("studio", studio);
