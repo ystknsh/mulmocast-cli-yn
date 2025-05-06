@@ -203,7 +203,7 @@ export const mulmoStudioBeatSchema = mulmoBeatSchema
     multiLingualTexts: multiLingualTextsSchema.optional(),
     hash: z.string().optional(),
     duration: z.number().optional(),
-    filename: z.string().optional(),
+    audioFile: z.string().optional(),
     imageFile: z.string().optional(), // path to the image
   })
   .strict();

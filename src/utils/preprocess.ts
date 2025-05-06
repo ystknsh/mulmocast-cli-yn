@@ -46,7 +46,7 @@ export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath:
     const voiceId = studio.script.speechParams.speakers[beat.speaker].voiceId;
     const speechOptions = MulmoScriptMethods.getSpeechOptions(studio.script, beat);
     const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
-    studio.beats[index] = { ...studio.beats[index], ...beat, filename: `${fileName}_${index}_${text2hash(hash_string)}` };
+    studio.beats[index] = { ...studio.beats[index], ...beat, audioFile: `${fileName}_${index}_${text2hash(hash_string)}` };
   });
   return studio;
 };

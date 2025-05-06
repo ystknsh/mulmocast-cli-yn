@@ -48,7 +48,7 @@ const graph_tts: GraphData = {
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: "${:scratchpadDirPath}/${:beat.filename}.mp3", // TODO
+        file: "${:scratchpadDirPath}/${:beat.audioFile}.mp3", // TODO
       },
       params: {
         voice: ":preprocessor.voiceId",
