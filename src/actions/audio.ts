@@ -44,7 +44,7 @@ const graph_tts: GraphData = {
       },
     },
     tts: {
-      if: ":script.text",
+      if: ":beat.text",
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",

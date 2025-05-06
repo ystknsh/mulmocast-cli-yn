@@ -39,7 +39,7 @@
       },
       "audio": {
         "kind": "path",
-        "path": "../../assets/images/mulmocast_credit.png"
+        "path": "/Users/satoshi/git/ai/mulmo/assets/audio/local_voice.mp3"
       }
     }
   ]

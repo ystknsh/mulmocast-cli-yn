@@ -11,7 +11,9 @@ const combineAudioFilesAgent: AgentFunction<
   const { studio, combinedFileName, scratchpadDirPath } = namedInputs;
   const command = ffmpeg();
   studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
-    const filePath = getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
+    const audioPath = (mulmoBeat.audio?.kind === "path") ? mulmoBeat.audio.path : undefined;
+    const filePath = audioPath ?? getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
+    console.log("***", filePath);
     const isLast = index === studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
@@ -20,6 +22,7 @@ const combineAudioFilesAgent: AgentFunction<
       if (err) {
         console.error("Error while getting metadata:", err);
       } else {
+        console.log("***", metadata.format.duration);
         studio.beats[index]["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
       }
     });
