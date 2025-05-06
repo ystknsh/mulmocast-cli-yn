@@ -4,7 +4,7 @@ import type { SpeechCreateParams } from "openai/resources/audio/speech";
 
 export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
-  const { apiKey, model, voice, throwError, instructions } = params;
+  const { apiKey, model, voice, suppressError, instructions } = params;
   const openai = new OpenAI({ apiKey });
 
   try {
@@ -21,13 +21,13 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => 
     const buffer = Buffer.from(await response.arrayBuffer());
     return { buffer };
   } catch (e) {
-    if (throwError) {
-      console.error(e);
-      throw new Error("TTS OpenAI Error");
+    if (suppressError) {
+      return {
+        error: e,
+      };
     }
-    return {
-      error: e,
-    };
+    console.error(e);
+    throw new Error("TTS OpenAI Error");
   }
 };
 
