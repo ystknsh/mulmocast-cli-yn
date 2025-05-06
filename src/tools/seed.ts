@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import * as vanilla from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { readTemplatePrompt } from "../utils/file";
+import { readTemplatePrompt, mkdir } from "../utils/file";
 import { ScriptingParams } from "../types";
 import { browserlessAgent } from "@graphai/browserless_agent";
 
@@ -157,6 +157,7 @@ const scrapeWebContent = async (urls: string[]) => {
 };
 
 export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, templateName, urls }: ScriptingParams) => {
+  mkdir(outDirPath);
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls) : "";
 
