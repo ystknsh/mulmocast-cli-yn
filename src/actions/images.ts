@@ -95,7 +95,7 @@ const graph_data: GraphData = {
               image: ":preprocessor.path",
             },
             output: {
-              image: ".image",
+              image: ".imageFile",
             },
             isResult: true,
           },

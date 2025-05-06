@@ -204,7 +204,7 @@ export const mulmoStudioBeatSchema = mulmoBeatSchema
     hash: z.string().optional(),
     duration: z.number().optional(),
     filename: z.string().optional(),
-    image: z.string().optional(), // path to the image
+    imageFile: z.string().optional(), // path to the image
   })
   .strict();
 
