@@ -108,8 +108,12 @@ const graphData = {
         file: "${:outdir}/${:fileName}-${@now}.json",
         text: ":json.text",
       },
-      console: {
-        after: "\n\x1b[32m🎉 Script file generated successfully! Type /bye to exit.\x1b[0m\n",
+    },
+    writeLog: {
+      agent: "consoleAgent",
+      inputs: {
+        text: "\n\x1b[32m🎉 Script file generated successfully! Type /bye to exit.\x1b[0m\nwriting: ${:writeJSON.path}",
+        waiting: ":writeJSON",
       },
     },
     shouldResponse: {
@@ -120,14 +124,10 @@ const graphData = {
     },
     agentResponse: {
       if: ":shouldResponse.result",
-      agent: "copyAgent",
+      agent: "consoleAgent",
       inputs: {
         text: "\n" + agentHeader + " ${:llm.text}\n",
       },
-      params: {
-        namedKey: "text",
-      },
-      console: { after: true },
     },
     checkInput: {
       agent: "compareAgent",
