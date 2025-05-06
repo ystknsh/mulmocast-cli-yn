@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { GraphAI, assert } from "graphai";
+import { GraphAI, GraphAILogger, assert } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -148,7 +148,7 @@ const translateGraph: GraphData = {
       },
     },
     writeOutout: {
-      console: { before: true },
+      // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputStudioFilePath",
@@ -209,6 +209,7 @@ export const translate = async (context: MulmoStudioContext) => {
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
 
   await graph.run();
+  GraphAILogger.info(`writing: ${outputStudioFilePath}`);
   // const results = await graph.run();
   // const mulmoDataResult = results.mergeResult;
   // console.log(JSON.stringify(mulmoDataResult, null, 2));
