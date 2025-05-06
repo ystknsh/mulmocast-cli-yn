@@ -11,7 +11,7 @@ export const localizedTextSchema = z
     texts: z.array(z.string()).optional(),
     ttsTexts: z.array(z.string()).optional(),
     duration: z.number().optional(), // generated // video duration time(ms)
-    filename: z.string().optional(), // generated //
+    // filename: z.string().optional(), // generated //
   })
   .strict();
 
