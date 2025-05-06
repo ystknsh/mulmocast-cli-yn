@@ -107,6 +107,25 @@ export const mulmoMediaSchema = z.union([
   MulmoTextSlideMediaSchema,
 ]);
 
+const MulmoAudioMediaSchema = z
+  .object({
+    type: z.literal("audio"),
+    source: mediaSourceSchema,
+  })
+  .strict();
+
+const MulmoMidiMediaSchema = z
+  .object({
+    type: z.literal("midi"),
+    source: z.string(), // TODO: define it later
+  })
+  .strict();
+
+export const mulmoAudioAssetSchema = z.union([
+  MulmoAudioMediaSchema,
+  MulmoMidiMediaSchema
+]);
+
 export const mulmoImageParamsSchema = z
   .object({
     model: z.string().optional(), // default: provider specific
@@ -133,7 +152,7 @@ export const mulmoBeatSchema = z
     speaker: speakerIdSchema,
     text: z.string(),
     image: mulmoMediaSchema.optional(),
-    audio: mediaSourceSchema.optional(),
+    audio: mulmoAudioAssetSchema.optional(),
 
     imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
