@@ -26,7 +26,7 @@ export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath:
     mulmoScript.beats.push({
       speaker: mulmoScript.beats[0].speaker, // First speaker
       text: "",
-      media: {
+      image: {
         type: "image",
         source: {
           kind: "url",

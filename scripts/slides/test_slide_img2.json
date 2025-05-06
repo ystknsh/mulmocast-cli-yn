@@ -26,7 +26,7 @@
     {
       "speaker": "Presenter",
       "text": "The evolution of humans is a complex journey that spans millions of years, shaped by biology, environment, and culture. Here's a high-level summary of the key stages in human evolution",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Human Evolution",
@@ -50,7 +50,7 @@
     {
       "speaker": "Presenter",
       "text": "Hominids are the family that includes great apes and humans. Around 7 million years ago, a branch known as hominins evolved—these are human ancestors who began walking upright, a critical adaptation that freed hands for tool use and carrying.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Hominids and Hominins",
@@ -72,7 +72,7 @@
     {
       "speaker": "Presenter",
       "text": "Around 2.5 million years ago, the genus Homo emerged, marking a significant milestone in our evolutionary journey. Homo habilis, meaning 'handy man,' was the first species in our genus and the first to create stone tools systematically.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Genus Homo Emerges",
@@ -94,7 +94,7 @@
     {
       "speaker": "Presenter",
       "text": "Between 400,000 and 40,000 years ago, several human species coexisted on Earth. Neanderthals lived in Europe and western Asia, while Denisovans inhabited parts of Asia. These archaic humans had sophisticated cultures, buried their dead, and even interbred with early Homo sapiens.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Neanderthals and Other Archaic Humans",
@@ -117,7 +117,7 @@
     {
       "speaker": "Presenter",
       "text": "Between 70,000 and 15,000 years ago, Homo sapiens migrated out of Africa and spread across the globe. This remarkable journey involved adapting to diverse environments from Arctic tundra to tropical rainforests, developing specialized tools and cultural practices for each new challenge.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Global Migration of Homo sapiens",
@@ -140,7 +140,7 @@
     {
       "speaker": "Presenter",
       "text": "Over the past 10,000 years, human biological evolution has continued, but cultural evolution has accelerated dramatically. The development of writing, cities, complex social structures, and technology has transformed our species' relationship with the planet and with each other.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Recent Human Evolution",
@@ -158,7 +158,7 @@
     {
       "speaker": "Presenter",
       "text": "Understanding human evolution provides crucial insights about who we are as a species. We are the product of millions of years of adaptation, with both biological and cultural inheritance shaping our capabilities and behaviors. And our evolutionary story continues to unfold.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Why Human Evolution Matters",

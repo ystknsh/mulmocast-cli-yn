@@ -33,7 +33,7 @@
     {
       "speaker": "Presenter",
       "text": "This is our logo.",
-      "media": {
+      "image": {
         "type": "image",
         "source": {
           "kind": "url",
@@ -47,7 +47,7 @@
       "textSlideParams": {
         "cssStyles": ["body { background:#ffffcc }", "h1 { color:green }"]
       },
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Human Evolution",
@@ -66,7 +66,7 @@
     {
       "speaker": "Presenter",
       "text": "Our story begins with tree-dwelling primates—small mammals with forward-facing eyes and grasping hands. These ancestors lived in forests and evolved traits useful for climbing and visual depth perception.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Early Primates",
@@ -86,7 +86,7 @@
     {
       "speaker": "Presenter",
       "text": "Our story begins with tree-dwelling primates—small mammals with forward-facing eyes and grasping hands. These ancestors lived in forests and evolved traits useful for climbing and visual depth perception.",
-      "media": {
+      "image": {
         "type": "markdown",
         "markdown": [
           "# Coding Example",

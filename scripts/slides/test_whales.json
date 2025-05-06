@@ -18,7 +18,7 @@
     {
       "speaker": "Presenter",
       "text": "Whales are magnificent marine mammals that have captivated human imagination for centuries. Let's explore the diverse species of whales, their evolution, behaviors, and the challenges they face in today's oceans.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Whale Species of the World",
@@ -37,7 +37,7 @@
     {
       "speaker": "Presenter",
       "text": "Whales evolved from land mammals that returned to the sea approximately 50 million years ago. Their ancestors were small, four-legged creatures that gradually adapted to aquatic life, developing the streamlined bodies and specialized features we see today.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Whale Evolution",
@@ -54,7 +54,7 @@
     {
       "speaker": "Presenter",
       "text": "The order Cetacea is divided into two main suborders: Mysticeti, the baleen whales, and Odontoceti, the toothed whales. Let's first explore the baleen whales, known for their unique filter-feeding system.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Baleen Whales (Mysticeti)",
@@ -71,7 +71,7 @@
     {
       "speaker": "Presenter",
       "text": "The other major group of whales, the Odontoceti or toothed whales, includes a diverse array of species that use teeth to capture prey. They're known for their advanced echolocation abilities, which help them navigate and hunt.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Toothed Whales (Odontoceti)",
@@ -89,7 +89,7 @@
     {
       "speaker": "Presenter",
       "text": "The blue whale holds the distinction of being the largest animal to have ever existed on Earth. Let's look at some of the most notable whale species and their unique characteristics.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Notable Whale Species",
@@ -107,7 +107,7 @@
     {
       "speaker": "Presenter",
       "text": "Whales display a fascinating range of behaviors, from the haunting songs of humpbacks to the cooperative hunting techniques of orcas. These behaviors showcase their intelligence and social complexity.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Whale Behaviors",
@@ -125,7 +125,7 @@
     {
       "speaker": "Presenter",
       "text": "Many whale species undertake some of the longest migrations of any mammals. These journeys between feeding and breeding grounds can span thousands of miles and are crucial to their life cycles.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Migration Patterns",
@@ -143,7 +143,7 @@
     {
       "speaker": "Presenter",
       "text": "Despite their size and longevity, many whale species face significant threats from human activities. Conservation efforts are critical to ensuring their survival in changing oceans.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Conservation Challenges",
@@ -161,7 +161,7 @@
     {
       "speaker": "Presenter",
       "text": "The vocalizations of whales range from the complex songs of humpbacks to the clicking communication of sperm whales. These sounds serve various purposes and showcase the sophisticated communication systems whales have developed.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Whale Acoustics",
@@ -179,7 +179,7 @@
     {
       "speaker": "Presenter",
       "text": "Whales play crucial roles in marine ecosystems, from regulating food chains to contributing to nutrient cycling. Their influence extends from the depths of the ocean to the atmosphere above.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Ecological Importance",
@@ -197,7 +197,7 @@
     {
       "speaker": "Presenter",
       "text": "The relationship between humans and whales has evolved dramatically over time, from commercial exploitation to conservation and appreciation. Today, whale watching and research continue to deepen our understanding of these magnificent creatures.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Humans and Whales",
@@ -215,7 +215,7 @@
     {
       "speaker": "Presenter",
       "text": "Our journey through the world of whales reveals a fascinating group of mammals that have successfully adapted to life in the oceans. Their continued survival depends on our understanding and protection of their marine habitats.",
-      "media": {
+      "image": {
         "type": "textSlide",
         "slide": {
           "title": "Conclusion",
