@@ -120,14 +120,10 @@ const graphData = {
     },
     agentResponse: {
       if: ":shouldResponse.result",
-      agent: "copyAgent",
+      agent: "consoleAgent",
       inputs: {
         text: "\n" + agentHeader + " ${:llm.text}\n",
       },
-      params: {
-        namedKey: "text",
-      },
-      console: { after: true },
     },
     checkInput: {
       agent: "compareAgent",
