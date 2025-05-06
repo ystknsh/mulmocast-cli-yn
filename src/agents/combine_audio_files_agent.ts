@@ -15,7 +15,7 @@ const combineAudioFilesAgent: AgentFunction<
     const audioPath =
       (mulmoBeat.audio?.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.path)) ||
       (mulmoBeat.audio?.kind === "url" && mulmoBeat.audio.url);
-    const filePath = audioPath || getScratchpadFilePath(scratchpadDirPath, mulmoBeat.filename ?? "");
+    const filePath = audioPath || getScratchpadFilePath(scratchpadDirPath, mulmoBeat.audioFile ?? "");
     const isLast = index === context.studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
