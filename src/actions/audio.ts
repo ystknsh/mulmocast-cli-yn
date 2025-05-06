@@ -157,5 +157,5 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const results = await graph.run();
 
   const result = results.combineFiles as { fileName: string };
-  GraphAILogger.info(`Generated: ${outputAudioFilePath}`);
+  GraphAILogger.info(`writing: ${outputAudioFilePath}`);
 };
