@@ -5,7 +5,7 @@ import * as vanilla from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
-import { readTemplatePrompt } from "../utils/file";
+import { readTemplatePrompt, mkdir } from "../utils/file";
 import { urlsSchema } from "../types/schema";
 import { ScriptingParams } from "../types";
 
@@ -124,6 +124,7 @@ const graphData: GraphData = {
 };
 
 export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename }: ScriptingParams) => {
+  mkdir(outDirPath);
   const parsedUrls = urlsSchema.parse(urls);
 
   const graph = new GraphAI(graphData, {
