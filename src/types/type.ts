@@ -6,8 +6,8 @@ import {
   mulmoStudioSchema,
   mulmoStudioBeatSchema,
   speakerDictionarySchema,
-  text2imageParamsSchema,
-  text2speechParamsSchema,
+  mulmoImageParamsSchema,
+  mulmoSpeechParamsSchema,
   textSlideParamsSchema,
   speechOptionsSchema,
   mulmoDimensionSchema,
@@ -18,9 +18,9 @@ import { z } from "zod";
 export type LANG = z.infer<typeof langSchema>;
 export type MulmoBeat = z.infer<typeof mulmoBeatSchema>;
 export type SpeakerDictonary = z.infer<typeof speakerDictionarySchema>;
-export type Text2speechParams = z.infer<typeof text2speechParamsSchema>;
+export type MulmoSpeechParams = z.infer<typeof mulmoSpeechParamsSchema>;
 export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
-export type Text2imageParams = z.infer<typeof text2imageParamsSchema>;
+export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
 export type TextSlideParams = z.infer<typeof textSlideParamsSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;

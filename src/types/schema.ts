@@ -107,7 +107,7 @@ export const mulmoMediaSchema = z.union([
   MulmoTextSlideMediaSchema,
 ]);
 
-export const text2imageParamsSchema = z
+export const mulmoImageParamsSchema = z
   .object({
     model: z.string().optional(), // default: provider specific
     size: z.string().optional(), // default: provider specific
@@ -135,7 +135,7 @@ export const mulmoBeatSchema = z
     media: mulmoMediaSchema.optional(),
     audio: mediaSourceSchema.optional(),
 
-    imageParams: text2imageParamsSchema.optional(), // beat specific parameters
+    imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
@@ -159,7 +159,7 @@ export const mulmoCastCreditSchema = z
   })
   .strict();
 
-export const text2speechParamsSchema = z
+export const mulmoSpeechParamsSchema = z
   .object({
     provider: z.string().optional(),
     speakers: speakerDictionarySchema,
@@ -176,14 +176,11 @@ export const mulmoScriptSchema = z
     lang: langSchema.optional(), // default "en"
     canvasSize: mulmoDimensionSchema.optional(),
 
-    // page/slide
     beats: z.array(mulmoBeatSchema),
 
-    // for text2speech
-    speechParams: text2speechParamsSchema,
+    speechParams: mulmoSpeechParamsSchema,
 
-    // for text2image
-    imageParams: text2imageParamsSchema
+    imageParams: mulmoImageParamsSchema
       .extend({
         provider: z.string().optional(),
       })
