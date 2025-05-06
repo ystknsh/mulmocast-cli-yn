@@ -167,13 +167,12 @@ export const images = async (context: MulmoStudioContext) => {
   // We need to get google's auth token only if the google is the text2image provider.
   if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
     console.log("google was specified as text2image engine");
-    const google_config: ImageGoogleConfig = {
-      projectId: process.env.GOOGLE_PROJECT_ID,
-      token: "",
-    };
-    google_config.token = await googleAuth();
+    const token = await googleAuth();
     options.config = {
-      imageGoogleAgent: google_config,
+      imageGoogleAgent: {
+        projectId: process.env.GOOGLE_PROJECT_ID,
+        token,
+      }
     };
   }
 
