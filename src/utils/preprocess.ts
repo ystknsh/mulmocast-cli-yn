@@ -38,7 +38,7 @@ export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath:
         source: {
           kind: "path",
           path: "../../assets/audio/silent300.mp3",
-        }
+        },
       },
     });
   }

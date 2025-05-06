@@ -121,10 +121,7 @@ const MulmoMidiMediaSchema = z
   })
   .strict();
 
-export const mulmoAudioAssetSchema = z.union([
-  MulmoAudioMediaSchema,
-  MulmoMidiMediaSchema
-]);
+export const mulmoAudioAssetSchema = z.union([MulmoAudioMediaSchema, MulmoMidiMediaSchema]);
 
 export const mulmoImageParamsSchema = z
   .object({
