@@ -162,7 +162,7 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, t
 
   const graph = new GraphAI(graphData, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent });
 
-  const prompt = readTemplatePrompt(templateName ?? "seed_interactive");
+  const prompt = readTemplatePrompt(templateName);
   graph.injectValue("messages", [
     {
       role: "system",

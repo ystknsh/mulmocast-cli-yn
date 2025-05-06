@@ -49,6 +49,6 @@ export type MulmoStudioContext = {
 export type ScriptingParams = {
   urls: string[];
   outDirPath: string;
-  templateName?: string;
+  templateName: string;
   filename: string;
 };

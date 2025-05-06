@@ -47,7 +47,7 @@ const graphData: GraphData = {
           copyAgent: {
             agent: "copyAgent",
             inputs: {
-              text: "{ url: ${:row}, text: ${:fetcher.text} }",
+              text: "{ url: \"${:row}\", text: \"${:fetcher.text}\" }",
             },
             params: {
               namedKey: "text",
@@ -89,7 +89,7 @@ const graphData: GraphData = {
             inputs: {
               model: "gpt-4o",
               system: ":prompt",
-              prompt: ":sourceText.text",
+              prompt: "Please create a script using the information from the following URLs as reference: ${:sourceText.text}",
             },
           },
           validateMulmoScriptAgent: {
@@ -135,7 +135,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   });
 
   graph.injectValue("urls", parsedUrls);
-  graph.injectValue("prompt", readTemplatePrompt(templateName ?? "seed_materials"));
+  graph.injectValue("prompt", readTemplatePrompt(templateName));
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
 
