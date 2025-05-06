@@ -1,4 +1,5 @@
-import { AgentFunction, AgentFunctionInfo } from "graphai";
+import { GraphAILogger } from "graphai";
+import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 import type { SpeechCreateParams } from "openai/resources/audio/speech";
 
@@ -16,7 +17,7 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => 
     if (instructions) {
       tts_options["instructions"] = instructions;
     }
-    console.log("ttsOptions", tts_options);
+    GraphAILogger.log("ttsOptions", tts_options);
     const response = await openai.audio.speech.create(tts_options);
     const buffer = Buffer.from(await response.arrayBuffer());
     return { buffer };

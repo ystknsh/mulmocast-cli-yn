@@ -45,7 +45,6 @@ const combineAudioFilesAgent: AgentFunction<
   await promise;
 
   return {
-    // fileName: combinedFileName,
     studio: context.studio,
   };
 };
