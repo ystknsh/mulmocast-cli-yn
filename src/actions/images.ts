@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
-import * as agents from "@graphai/agents";
+import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, Text2imageParams } from "../types";
