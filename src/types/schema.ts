@@ -221,6 +221,8 @@ export const mulmoStudioSchema = z
 
 export const mulmoScriptTemplateSchema = z
   .object({
+    title: z.string(),
+    description: z.string(),
     systemPrompt: z.string(),
     script: mulmoScriptSchema.optional(),
   })
