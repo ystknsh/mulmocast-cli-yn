@@ -4,15 +4,13 @@ import type { GraphOptions } from "graphai/lib/type";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, Text2imageParams } from "../types";
-import { MulmoScriptMethods } from "../methods";
+import { MulmoStudioContext, MulmoStudioBeat, Text2imageParams } from "../types";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
-import { ImageGoogleConfig } from "../agents/image_google_agent";
-import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context";
+import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -50,14 +48,13 @@ const graph_data: GraphData = {
   version: 0.5,
   concurrency: 2,
   nodes: {
-    studio: {},
     context: {},
     imageDirPath: {},
-    text2imageAgent: { value: "" },
+    text2imageAgent: {},
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":studio.beats", studio: ":studio", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.beats", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -106,8 +103,9 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { image: string }[]; studio: MulmoStudio }) => {
-        const { array, studio } = namedInputs;
+      agent: (namedInputs: { array: { image: string }[]; context: MulmoStudioContext }) => {
+        const { array, context } = namedInputs;
+        const { studio } = context;
         array.forEach((update, index) => {
           const beat = studio.beats[index];
           studio.beats[index] = { ...beat, ...update };
@@ -117,7 +115,7 @@ const graph_data: GraphData = {
       },
       inputs: {
         array: ":map.output",
-        studio: ":studio",
+        context: ":context",
       },
     },
     writeOutout: {
@@ -153,36 +151,31 @@ export const images = async (context: MulmoStudioContext) => {
     },
   ];
 
+
   const options: GraphOptions = {
     agentFilters,
   };
-
-  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
-  const injections: Record<string, string | MulmoStudio | Text2imageParams | MulmoStudioContext | undefined> = {
-    studio,
-    text2imageAgent: "imageOpenaiAgent",
-    outputStudioFilePath: outputStudioFilePath,
-    context,
-  };
-
   // We need to get google's auth token only if the google is the text2image provider.
-  if (studio.script.imageParams?.provider === "google") {
+  if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
     console.log("google was specified as text2image engine");
-    const google_config: ImageGoogleConfig = {
-      projectId: process.env.GOOGLE_PROJECT_ID,
-      token: "",
-    };
-    google_config.token = await googleAuth();
+    const token = await googleAuth();
     options.config = {
-      imageGoogleAgent: google_config,
+      imageGoogleAgent: {
+        projectId: process.env.GOOGLE_PROJECT_ID,
+        token,
+      }
     };
-    injections.text2image = "imageGoogleAgent";
   }
 
+  const injections: Record<string, string | Text2imageParams | MulmoStudioContext | undefined> = {
+    context,
+    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
+    outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
+    imageDirPath,
+  };
   const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
-  graph.injectValue("imageDirPath", imageDirPath);
   await graph.run<{ output: MulmoStudioBeat[] }>();
 };
