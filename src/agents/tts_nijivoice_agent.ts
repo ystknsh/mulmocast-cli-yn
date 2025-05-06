@@ -18,7 +18,7 @@ const errorMessage = [
 export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) => {
   const { apiKey, suppressError, voice, speed, speed_global } = params;
   const { text } = namedInputs;
-  assert(apiKey, errorMessage);
+  assert(apiKey ?? nijovoiceApiKey, errorMessage);
   const url = `https://api.nijivoice.com/api/platform/v1/voice-actors/${voice}/generate-voice`;
   const options = {
     method: "POST",
