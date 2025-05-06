@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { GraphAI, GraphData } from "graphai";
-import * as agents from "@graphai/agents";
+import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
 import addBGMAgent from "../agents/add_bgm_agent";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent";

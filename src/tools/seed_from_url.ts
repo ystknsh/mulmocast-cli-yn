@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { GraphAI, GraphData } from "graphai";
-import * as agents from "@graphai/agents";
+import { openAIAgent } from "@graphai/openai_agent";
+import * as vanilla from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
@@ -129,7 +130,8 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   const parsedUrls = urlsSchema.parse(urls);
 
   const graph = new GraphAI(graphData, {
-    ...agents,
+    ...vanilla,
+    openAIAgent,
     browserlessAgent,
     validateMulmoScriptAgent,
     fileWriteAgent,

@@ -1,7 +1,8 @@
 import "dotenv/config";
 import { GraphAI } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
-import * as agents from "@graphai/agents";
+import * as agents from "@graphai/vanilla";
+import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string";
@@ -196,7 +197,7 @@ export const translate = async (studio: MulmoStudio, files: FileDirs) => {
   const { outDirPath } = files;
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
 
-  const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent }, { agentFilters });
+  const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent, openAIAgent }, { agentFilters });
   graph.injectValue("studio", studio);
   graph.injectValue("defaultLang", defaultLang);
   graph.injectValue("targetLangs", targetLangs);

@@ -1,6 +1,10 @@
 import "dotenv/config";
 import { GraphAI } from "graphai";
-import * as agents from "@graphai/agents";
+import { textInputAgent } from "@graphai/input_agents";
+
+import { openAIAgent } from "@graphai/openai_agent";
+import * as vanilla from "@graphai/vanilla";
+
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { readTemplatePrompt } from "../utils/file";
 import { ScriptingParams } from "../types";
@@ -144,7 +148,7 @@ const interactiveClarificationPrompt = `If there are any unclear points, be sure
 const scrapeWebContent = async (urls: string[]) => {
   console.log(`${agentHeader} Scraping ${urls.length} URLs...\n`);
 
-  const graph = new GraphAI(graphDataForScraping, { ...agents, fileWriteAgent, browserlessAgent });
+  const graph = new GraphAI(graphDataForScraping, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent, browserlessAgent });
   graph.injectValue("urls", urls);
 
   const result = (await graph.run()) as { sourceText: { text: string } };
@@ -159,7 +163,7 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, t
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls) : "";
 
-  const graph = new GraphAI(graphData, { ...agents, fileWriteAgent });
+  const graph = new GraphAI(graphData, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent });
 
   const prompt = readTemplatePrompt(templateName ?? "seed_interactive");
   graph.injectValue("messages", [
