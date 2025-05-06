@@ -23,20 +23,20 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
 
-  if (beat.media) {
-    if (beat.media.type === "textSlide") {
-      const slide = beat.media.slide;
+  if (beat.image) {
+    if (beat.image.type === "textSlide") {
+      const slide = beat.image.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
-    } else if (beat.media.type === "markdown") {
-      const markdown: string = Array.isArray(beat.media.markdown) ? beat.media.markdown.join("\n") : beat.media.markdown;
+    } else if (beat.image.type === "markdown") {
+      const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
       await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
-    } else if (beat.media.type === "image") {
-      if (beat.media.source.kind === "url") {
+    } else if (beat.image.type === "image") {
+      if (beat.image.source.kind === "url") {
         // undefined prompt indicates "no need to generate image"
-        return { path: beat.media.source.url, prompt: undefined, imageParams, aspectRatio };
-      } else if (beat.media.source.kind === "path") {
-        const path = MulmoStudioContextMethods.resolveAssetPath(context, beat.media.source.path);
+        return { path: beat.image.source.url, prompt: undefined, imageParams, aspectRatio };
+      } else if (beat.image.source.kind === "path") {
+        const path = MulmoStudioContextMethods.resolveAssetPath(context, beat.image.source.path);
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
     }
