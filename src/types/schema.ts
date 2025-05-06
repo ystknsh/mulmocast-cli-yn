@@ -139,7 +139,6 @@ export const mulmoBeatSchema = z
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
-    image: z.string().optional(), // path to the image
   })
   .strict();
 
@@ -205,6 +204,7 @@ export const mulmoStudioBeatSchema = mulmoBeatSchema
     hash: z.string().optional(),
     duration: z.number().optional(),
     filename: z.string().optional(),
+    image: z.string().optional(), // path to the image
   })
   .strict();
 
