@@ -66,8 +66,8 @@ export const mkdir = (dirPath: string) => {
   }
 };
 
-export const silentPath = path.resolve(__dirname, "../../assets/music/silent300.mp3");
-export const silentLastPath = path.resolve(__dirname, "../../assets/music/silent800.mp3");
+export const silentPath = path.resolve(__dirname, "../../assets/audio/silent300.mp3");
+export const silentLastPath = path.resolve(__dirname, "../../assets/audio/silent800.mp3");
 export const defaultBGMPath = path.resolve(__dirname, "../../assets/music/StarsBeyondEx.mp3");
 
 // for cli
