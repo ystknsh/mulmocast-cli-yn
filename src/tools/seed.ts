@@ -175,5 +175,4 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, t
 
   console.log(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
-  
 };
