@@ -11,12 +11,14 @@ import { browserlessAgent } from "@graphai/browserless_agent";
 import { textInputAgent } from "@graphai/input_agents";
 
 import { openAIAgent } from "@graphai/openai_agent";
-import * as vanilla from "@graphai/vanilla";
+// import * as vanilla from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 export {
   openAIAgent,
   fileWriteAgent,
+  browserlessAgent,
+  textInputAgent,
   addBGMAgent,
   combineAudioFilesAgent,
   imageGoogleAgent,
