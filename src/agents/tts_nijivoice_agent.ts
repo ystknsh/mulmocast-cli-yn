@@ -16,7 +16,7 @@ const errorMessage = [
 ].join("\n");
 
 export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) => {
-  const { apiKey, throwError, voice, speed, speed_global } = params;
+  const { apiKey, suppressError, voice, speed, speed_global } = params;
   const { text } = namedInputs;
   assert(apiKey, errorMessage);
   const url = `https://api.nijivoice.com/api/platform/v1/voice-actors/${voice}/generate-voice`;
@@ -42,21 +42,21 @@ export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) 
       const buffer = Buffer.from(await audioRes.arrayBuffer());
       return { buffer, generatedVoice: voiceJson.generatedVoice };
     }
-    if (throwError) {
-      console.error(voiceJson);
-      throw new Error("TTS Nijivoice Error");
+    if (suppressError) {
+      return {
+        error: voiceJson,
+      };
     }
-    return {
-      error: voiceJson,
-    };
+    console.error(voiceJson);
+    throw new Error("TTS Nijivoice Error");
   } catch (e) {
-    if (throwError) {
-      console.error(e);
-      throw new Error("TTS Nijivoice Error");
+    if (suppressError) {
+      return {
+        error: e,
+      };
     }
-    return {
-      error: e,
-    };
+    console.error(e);
+    throw new Error("TTS Nijivoice Error");
   }
 };
 

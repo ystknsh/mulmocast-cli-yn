@@ -50,7 +50,6 @@ const graph_tts: GraphData = {
         file: "${:scratchpadDirPath}/${:beat.filename}.mp3", // TODO
       },
       params: {
-        throwError: true,
         voice: ":preprocessor.voiceId",
         speed: ":preprocessor.speechOptions.speed",
         instructions: ":preprocessor.speechOptions.instruction",
@@ -73,7 +72,6 @@ const graph_data: GraphData = {
       inputs: { rows: ":studio.beats", script: ":studio.script", scratchpadDirPath: ":scratchpadDirPath" },
       params: {
         rowKey: "beat",
-        throwError: true,
       },
       graph: graph_tts,
     },
