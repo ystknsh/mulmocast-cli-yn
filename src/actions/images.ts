@@ -152,9 +152,6 @@ export const images = async (context: MulmoStudioContext) => {
     },
   ];
 
-  const options: GraphOptions = {
-    agentFilters,
-  };
 
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   const injections: Record<string, string | MulmoStudio | Text2imageParams | MulmoStudioContext | undefined> = {
@@ -164,6 +161,9 @@ export const images = async (context: MulmoStudioContext) => {
     context,
   };
 
+  const options: GraphOptions = {
+    agentFilters,
+  };
   // We need to get google's auth token only if the google is the text2image provider.
   if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
     console.log("google was specified as text2image engine");
