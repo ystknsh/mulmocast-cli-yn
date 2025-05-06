@@ -47,7 +47,7 @@ const graphData: GraphData = {
           copyAgent: {
             agent: "copyAgent",
             inputs: {
-              text: "{ url: \"${:row}\", text: \"${:fetcher.text}\" }",
+              text: '{ url: "${:row}", text: "${:fetcher.text}" }',
             },
             params: {
               namedKey: "text",

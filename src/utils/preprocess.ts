@@ -25,13 +25,17 @@ export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath:
   if (mulmoScript.$mulmocast.credit === "closing") {
     mulmoScript.beats.push({
       speaker: mulmoScript.beats[0].speaker, // First speaker
-      text: "This presentation is powered by Mulmocast",
+      text: "",
       media: {
         type: "image",
         source: {
           kind: "url",
           url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png",
         },
+      },
+      audio: {
+        kind: "path",
+        path: "../../assets/audio/silent300.mp3",
       },
     });
   }
