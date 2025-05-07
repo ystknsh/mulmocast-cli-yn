@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions } from "../types";
+import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams } from "../types";
 
 const defaultTextSlideStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
@@ -14,9 +14,9 @@ const defaultTextSlideStyles = [
 ];
 
 export type Text2ImageAgentInfo = {
-  provider: string,
+  provider: Text2ImageProvider,
   agent: string;
-  defaultModel?: string;
+  imageParams: MulmoImageParams;
 };
 
 export const MulmoScriptMethods = {
@@ -50,10 +50,11 @@ export const MulmoScriptMethods = {
     const imageAgentInfo: Text2ImageAgentInfo = {
       provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      imageParams: script.imageParams ?? {}
     };
-    if (provider === "openai") {
+    if (!imageAgentInfo.imageParams.model && provider === "openai") {
       console.log("env", process.env.DEFAULT_OPENAI_IMAGE_MODEL);
-      imageAgentInfo.defaultModel = "dall-e-3";
+      imageAgentInfo.imageParams.model = "dall-e-3";
     }
     return imageAgentInfo;
   },

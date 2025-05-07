@@ -18,15 +18,10 @@ import { GoogleAuth } from "google-auth-library";
 
 const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string, imageAgentInfo: Text2ImageAgentInfo }) => {
   const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
-  const imageParams = { ...context.studio.script.imageParams, ...beat.imageParams };
+  const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
-
-  if (!imageParams.model) {
-    console.log("***DEBUG", imageAgentInfo.defaultModel);
-    imageParams.model = imageAgentInfo.defaultModel;
-  }
 
   if (beat.image) {
     if (beat.image.type === "textSlide") {
@@ -175,7 +170,7 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent} defaultModel=${imageAgentInfo.defaultModel}`);
+  console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
