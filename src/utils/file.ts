@@ -49,7 +49,7 @@ export const getAudioSegmentFilePath = (audioDirPath: string, fileName: string) 
   return path.resolve(audioDirPath, fileName + ".mp3");
 };
 export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string) => {
-  return path.resolve(audioDirPath, fileName + ".mp3");
+  return path.resolve(audioDirPath, fileName, fileName + ".mp3");
 };
 export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp3");
@@ -61,7 +61,8 @@ export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
 };
 
-export const mkdir = (dirPath: string) => {
+export const mkdir = (dirOrFilePath: string) => {
+  const dirPath = path.dirname(dirOrFilePath);
   if (!fs.existsSync(dirPath)) {
     console.info("mkdir: " + dirPath);
     fs.mkdirSync(dirPath, { recursive: true });

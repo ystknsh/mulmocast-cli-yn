@@ -135,7 +135,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
-  mkdir(audioDirPath);
+  mkdir(audioCombinedFilePath);
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
