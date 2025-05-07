@@ -35,9 +35,6 @@ export const MulmoScriptMethods = {
   getSpeechProvider(script: MulmoScript): string {
     return script.speechParams?.provider ?? "openai";
   },
-  getImageProvider(script: MulmoScript): string {
-    return script.imageParams?.provider ?? "openai";
-  },
   getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string {
     const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
     // NOTES: Taking advantage of CSS override rule (you can redefine it to override)
@@ -49,7 +46,7 @@ export const MulmoScriptMethods = {
   },
 
   getImageAgentInfo(script: MulmoScript): Text2ImageAgentInfo {
-    const provider = this.getImageProvider(script);
+    const provider = script.imageParams?.provider ?? "openai";
     const imageAgentInfo: Text2ImageAgentInfo = {
       provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
