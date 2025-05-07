@@ -9,7 +9,7 @@ GraphAILogger.setLevelEnabled("error", false);
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
-  .scriptName("mulmocast-tool")
+  .scriptName("mulmo-tool")
   .option("u", {
     alias: "url",
     description: "URLs to reference (required when not in interactive mode)",
