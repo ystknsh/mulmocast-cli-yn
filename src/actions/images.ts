@@ -1,3 +1,4 @@
+import fs from "fs";
 import dotenv from "dotenv";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
@@ -7,7 +8,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { renderMarkdownToImage } from "../utils/markdown";
+import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
@@ -39,6 +40,10 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
         const path = MulmoStudioContextMethods.resolveAssetPath(context, beat.image.source.path);
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
+    } else if (beat.image.type === "chart") {
+      const tempatePath = "/Users/satoshi/git/ai/mulmo/assets/html/chart.html";
+      const htmlData = fs.readFileSync(tempatePath, "utf-8");
+      await renderHTMLToImage(htmlData, imagePath);
     }
   }
   return { path: imagePath, prompt, imageParams, aspectRatio };

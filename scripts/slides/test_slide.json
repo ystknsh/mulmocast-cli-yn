@@ -100,6 +100,39 @@
           "```"
         ]
       }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Our story begins with tree-dwelling primates—small mammals with forward-facing eyes and grasping hands. These ancestors lived in forests and evolved traits useful for climbing and visual depth perception.",
+      "image": {
+        "type": "chart",
+        "chartData": {
+          "type": "bar",
+          "data": {
+            "labels": ["January", "February", "March", "April", "May", "June"],
+            "datasets": [
+              {
+                "label": "Revenue ($1000s)",
+                "data": [120, 135, 180, 155, 170, 190],
+                "backgroundColor": "rgba(54, 162, 235, 0.5)",
+                "borderColor": "rgba(54, 162, 235, 1)",
+                "borderWidth": 1
+              },
+              {
+                "label": "Profit ($1000s)",
+                "data": [45, 52, 68, 53, 61, 73],
+                "backgroundColor": "rgba(75, 192, 192, 0.5)",
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 1
+              }
+            ]
+          },
+          "options": {
+            "responsive": true,
+            "animation": false
+          }
+        }
+      }
     }
   ]
 }
