@@ -100,6 +100,7 @@ const MulmoTextSlideMediaSchema = z
 const MulmoChartMediaSchema = z
   .object({
     type: z.literal("chart"),
+    title: z.string(),
     chartData: z.record(z.any()),
   })
   .strict();

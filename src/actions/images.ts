@@ -42,11 +42,11 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
       }
     } else if (beat.image.type === "chart") {
       function interpolate(template: string, data: Record<string, any>): string {
-        return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? '');
+        return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
       }
       const tempatePath = "/Users/satoshi/git/ai/mulmo/assets/html/chart.html";
       const template = fs.readFileSync(tempatePath, "utf-8");
-      const htmlData = interpolate(template, { chart_data: JSON.stringify(beat.image.chartData) });
+      const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
       await renderHTMLToImage(htmlData, imagePath);
     }
   }
