@@ -14,7 +14,7 @@
     "./assets/audio/silent800.mp3",
     "./assets/templates/"
   ],
-  "types": "./lib/index.d.ts",
+  "types": "./lib/types/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "tests"
