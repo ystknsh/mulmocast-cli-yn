@@ -8,7 +8,7 @@ import { GraphAILogger } from "graphai";
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "../utils/preprocess";
-import { outDirName, imageDirName, scratchpadDirName } from "../utils/const";
+import { outDirName, imageDirName, audioDirName } from "../utils/const";
 import { MulmoScriptMethods } from "../methods";
 
 import { translate } from "../actions/translate";
@@ -28,7 +28,7 @@ const getFileObject = () => {
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
-  const scratchpadDirPath = getFullPath(outDirPath, (scratchpaddir as string) ?? scratchpadDirName); // audio
+  const scratchpadDirPath = getFullPath(outDirPath, (scratchpaddir as string) ?? audioDirName); // audio
 
   return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, scratchpadDirPath };
 };
