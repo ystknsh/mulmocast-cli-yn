@@ -10,7 +10,7 @@ import { fileCacheAgentFilter } from "../utils/filters";
 import { convertMarkdownToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
-import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
+import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods";
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -167,8 +167,8 @@ export const images = async (context: MulmoStudioContext) => {
   }
 
   const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
-  console.log(`text2image agent = ${imageAgentInfo.agent}`);
-  const injections: Record<string, { agent: string } | string | MulmoImageParams | MulmoStudioContext | undefined> = {
+  console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent}`);
+  const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),

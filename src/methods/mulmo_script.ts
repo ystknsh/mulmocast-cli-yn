@@ -12,6 +12,12 @@ const defaultTextSlideStyles = [
   "tr:nth-child(even) { background-color: #eee }",
 ];
 
+export type Text2ImageAgentInfo = {
+  provider: string,
+  agent: string;
+  defaultModel?: string;
+};
+
 export const MulmoScriptMethods = {
   getPadding(script: MulmoScript): number {
     return script.videoParams?.padding ?? 1000; // msec
@@ -41,10 +47,12 @@ export const MulmoScriptMethods = {
     return { ...script.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
 
-  getImageAgentInfo(script: MulmoScript): { agent: string } {
+  getImageAgentInfo(script: MulmoScript): Text2ImageAgentInfo {
     const provider = this.getImageProvider(script);
-    return {
+    const imageAgentInfo: Text2ImageAgentInfo = {
+      provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
     };
+    return imageAgentInfo;
   },
 };
