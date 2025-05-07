@@ -7,18 +7,21 @@ import inquirer from "inquirer";
 import { args } from "./tool-args";
 import { outDirName } from "../utils/const";
 import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
-import { getAvailableTemplateNames, getBaseDirPath, getFullPath } from "../utils/file";
+import { getAvailableTemplates, getBaseDirPath, getFullPath } from "../utils/file";
 import { createMulmoScriptWithInteractive } from "../tools/seed";
 import { dumpPromptFromTemplate } from "../tools/dump_prompt";
 
 const selectTemplate = async (): Promise<string> => {
-  const availableTemplates = getAvailableTemplateNames();
+  const availableTemplates = getAvailableTemplates();
   const answers = await inquirer.prompt([
     {
       type: "list",
       name: "templateName",
-      message: "Please select a template to use:",
-      choices: availableTemplates,
+      message: "テンプレートを選択してください:",
+      choices: availableTemplates.map((t) => ({
+        name: `${t.filename} - ${t.description}`,
+        value: t.filename,
+      })),
     },
   ]);
   return answers.templateName;
