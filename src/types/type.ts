@@ -12,6 +12,7 @@ import {
   speechOptionsSchema,
   mulmoDimensionSchema,
   mulmoScriptTemplateSchema,
+  text2ImageProviderSchema,
 } from "./schema";
 import { z } from "zod";
 
@@ -22,6 +23,7 @@ export type MulmoSpeechParams = z.infer<typeof mulmoSpeechParamsSchema>;
 export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
 export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
 export type TextSlideParams = z.infer<typeof textSlideParamsSchema>;
+export type Text2ImageProvider = z.infer<typeof text2ImageProviderSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
 export type MulmoDimension = z.infer<typeof mulmoDimensionSchema>;
