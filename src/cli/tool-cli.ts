@@ -2,34 +2,19 @@
 
 import "dotenv/config";
 import { GraphAILogger } from "graphai";
-import inquirer from "inquirer";
 
 import { args } from "./tool-args";
 import { outDirName } from "../utils/const";
 import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
-import { getAvailableTemplates, getBaseDirPath, getFullPath } from "../utils/file";
+import { getBaseDirPath, getFullPath } from "../utils/file";
 import { createMulmoScriptWithInteractive } from "../tools/seed";
 import { dumpPromptFromTemplate } from "../tools/dump_prompt";
-
-const selectTemplate = async (): Promise<string> => {
-  const availableTemplates = getAvailableTemplates();
-  const answers = await inquirer.prompt([
-    {
-      type: "list",
-      name: "templateName",
-      message: "Select a template to use",
-      choices: availableTemplates.map((t) => ({
-        name: `${t.filename} - ${t.description}`,
-        value: t.filename,
-      })),
-    },
-  ]);
-  return answers.templateName;
-};
+import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer";
 
 const main = async () => {
-  const { o: outdir, u: urls, b: basedir, action, v: verbose, i: interactive, f: filename } = args;
+  const { o: outdir, b: basedir, action, v: verbose, i: interactive, f: filename } = args;
   let { t: template } = args;
+  let { u: urls } = args;
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
@@ -56,13 +41,16 @@ const main = async () => {
     }
   }
 
+  // If urls are not specified, prompt for interactive input
+  if (!interactive) {
+    urls = await getUrlsIfNeeded(urls);
+  }
+
   if (action === "scripting") {
     if (interactive) {
-      await createMulmoScriptWithInteractive({ outDirPath, templateName: template, urls: urls, filename });
-    } else if (urls.length > 0) {
-      await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename });
+      await createMulmoScriptWithInteractive({ outDirPath, templateName: template, urls, filename });
     } else {
-      throw new Error("urls is required when not in interactive mode");
+      await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename });
     }
   } else if (action === "prompt") {
     await dumpPromptFromTemplate({ templateName: template });
