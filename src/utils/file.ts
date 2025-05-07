@@ -54,7 +54,7 @@ export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => 
 export const getOutputAudioFilePath = (audioDirPath: string, fileName: string) => {
   return path.resolve(audioDirPath, fileName + ".mp3");
 };
-export const getScratchpadFilePath = (audioDirPath: string, fileName: string) => {
+export const getAudioFilePath = (audioDirPath: string, fileName: string) => {
   return path.resolve(audioDirPath, fileName + ".mp3");
 };
 export const getTemplateFilePath = (templateName: string) => {
