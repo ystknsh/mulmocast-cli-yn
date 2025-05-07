@@ -49,7 +49,7 @@ const graph_tts: GraphData = {
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: "${:scratchpadDirPath}/${:beat.audioFile}.mp3", // TODO
+        file: "${:audioDirPath}/${:beat.audioFile}.mp3", // TODO
       },
       params: {
         voice: ":preprocessor.voiceId",
@@ -68,10 +68,10 @@ const graph_data: GraphData = {
     outputBGMFilePath: {},
     outputAudioFilePath: {},
     outputStudioFilePath: {},
-    scratchpadDirPath: {},
+    audioDirPath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", script: ":context.studio.script", scratchpadDirPath: ":scratchpadDirPath" },
+      inputs: { rows: ":context.studio.beats", script: ":context.studio.script", audioDirPath: ":audioDirPath" },
       params: {
         rowKey: "beat",
       },
@@ -83,7 +83,7 @@ const graph_data: GraphData = {
         map: ":map",
         context: ":context",
         combinedFileName: ":outputAudioFilePath",
-        scratchpadDirPath: ":scratchpadDirPath",
+        audioDirPath: ":audioDirPath",
       },
       isResult: true,
     },
@@ -130,12 +130,12 @@ const agentFilters = [
 
 export const audio = async (context: MulmoStudioContext, concurrency: number) => {
   const { studio, fileDirs } = context;
-  const { outDirPath, scratchpadDirPath } = fileDirs;
+  const { outDirPath, audioDirPath } = fileDirs;
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
-  const outputAudioFilePath = getOutputAudioFilePath(scratchpadDirPath, studio.filename);
+  const outputAudioFilePath = getOutputAudioFilePath(audioDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
-  mkdir(scratchpadDirPath);
+  mkdir(audioDirPath);
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
@@ -154,7 +154,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   graph.injectValue("outputBGMFilePath", outputBGMFilePath);
   graph.injectValue("outputAudioFilePath", outputAudioFilePath);
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
-  graph.injectValue("scratchpadDirPath", scratchpadDirPath);
+  graph.injectValue("audioDirPath", audioDirPath);
   await graph.run();
 
   writingMessage(outputAudioFilePath);

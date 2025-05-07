@@ -7,16 +7,16 @@ import { MulmoStudioContextMethods } from "../methods";
 const combineAudioFilesAgent: AgentFunction<
   null,
   { studio: MulmoStudio },
-  { context: MulmoStudioContext; combinedFileName: string; scratchpadDirPath: string }
+  { context: MulmoStudioContext; combinedFileName: string; audioDirPath: string }
 > = async ({ namedInputs }) => {
-  const { context, combinedFileName, scratchpadDirPath } = namedInputs;
+  const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
   context.studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
     const audioPath =
       mulmoBeat.audio?.type === "audio" &&
       ((mulmoBeat.audio?.source.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.source.path)) ||
         (mulmoBeat.audio?.source.kind === "url" && mulmoBeat.audio.source.url));
-    const filePath = audioPath || getAudioFilePath(scratchpadDirPath, mulmoBeat.audioFile ?? "");
+    const filePath = audioPath || getAudioFilePath(audioDirPath, mulmoBeat.audioFile ?? "");
     const isLast = index === context.studio.beats.length - 2;
     command.input(filePath);
     command.input(isLast ? silentLastPath : silentPath);
@@ -39,7 +39,7 @@ const combineAudioFilesAgent: AgentFunction<
         console.error("Error while combining MP3 files:", err);
         reject(err);
       })
-      .mergeToFile(combinedFileName, scratchpadDirPath);
+      .mergeToFile(combinedFileName, audioDirPath);
   });
 
   await promise;

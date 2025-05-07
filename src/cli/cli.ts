@@ -28,9 +28,9 @@ const getFileObject = () => {
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
-  const scratchpadDirPath = getFullPath(outDirPath, (scratchpaddir as string) ?? audioDirName); // audio
+  const audioDirPath = getFullPath(outDirPath, (scratchpaddir as string) ?? audioDirName); // audio
 
-  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, scratchpadDirPath };
+  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath };
 };
 const main = async () => {
   const files = getFileObject();
