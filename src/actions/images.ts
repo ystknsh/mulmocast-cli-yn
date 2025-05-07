@@ -7,7 +7,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
 import { getOutputStudioFilePath, mkdir } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { convertMarkdownToImage } from "../utils/markdown";
+import { renderMarkdownToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
@@ -27,10 +27,10 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
     if (beat.image.type === "textSlide") {
       const slide = beat.image.slide;
       const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.image.type === "markdown") {
       const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
-      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.image.type === "image") {
       if (beat.image.source.kind === "url") {
         // undefined prompt indicates "no need to generate image"
