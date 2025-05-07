@@ -16,12 +16,14 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string }) => {
-  const { context, beat, index, suffix, imageDirPath } = namedInputs;
+const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string, imageAgentInfo: Text2ImageAgentInfo }) => {
+  const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
   const imageParams = { ...context.studio.script.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
+
+  console.log("***DEBUG", imageAgentInfo);
 
   if (beat.image) {
     if (beat.image.type === "textSlide") {
@@ -70,6 +72,7 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               suffix: "p",
               imageDirPath: ":imageDirPath",
+              imageAgentInfo: ":imageAgentInfo"
             },
           },
           imageGenerator: {
