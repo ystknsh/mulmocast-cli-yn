@@ -23,7 +23,10 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
 
-  console.log("***DEBUG", imageAgentInfo);
+  if (!imageParams.model) {
+    console.log("***DEBUG", imageAgentInfo.defaultModel);
+    imageParams.model = imageAgentInfo.defaultModel;
+  }
 
   if (beat.image) {
     if (beat.image.type === "textSlide") {
