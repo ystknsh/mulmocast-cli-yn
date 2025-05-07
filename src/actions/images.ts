@@ -160,8 +160,11 @@ export const images = async (context: MulmoStudioContext) => {
   const options: GraphOptions = {
     agentFilters,
   };
+
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
+
   // We need to get google's auth token only if the google is the text2image provider.
-  if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
+  if (imageAgentInfo.provider === "google") {
     console.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
@@ -172,7 +175,6 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
   console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent} defaultModel=${imageAgentInfo.defaultModel}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
