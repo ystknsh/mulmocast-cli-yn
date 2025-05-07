@@ -35,6 +35,20 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from w
 3. Generate images with `mulmo images` 
 4. Create final video with `mulmo movie`
 
+## Quick Start
+
+```
+# Generate script with interactive mode
+mulmo-tool scripting -i -t children_book -o ./ -f story
+```
+After running this command, you'll create a story script through an interactive conversation with the AI.
+
+```
+# Generate both audio and images, then combine into video
+mulmo movie {generated_script_file}
+```
+Replace {generated_script_file} with the output file from the previous command, such as story-1746600802426.json.
+
 ## Generate MulmoScript
 
 ```bash
