@@ -32,6 +32,20 @@
     "beats": [
       {
         "speaker": "Presenter",
+        "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time: the Reality Distortion Field. This term has become synonymous with visionary leadership and the ability to accomplish seemingly impossible goals.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "This is the title of this slide",
+            "bullets": []
+          }
+        },
+        "textSlideParams": {
+          "cssStyles": ["h1 { margin-top: 400px }"]
+        }
+      },
+      {
+        "speaker": "Presenter",
         "text": "The evolution of humans is a complex journey that spans millions of years, shaped by biology, environment, and culture. Here's a high-level summary of the key stages in human evolution",
         "image": {
           "type": "textSlide",
