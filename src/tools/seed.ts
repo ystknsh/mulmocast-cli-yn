@@ -7,6 +7,7 @@ import * as vanilla from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { readTemplatePrompt, mkdir } from "../utils/file";
+import { browserlessCacheGenerator } from "../utils/filters";
 import { ScriptingParams } from "../types";
 import { browserlessAgent } from "@graphai/browserless_agent";
 
@@ -142,10 +143,20 @@ const graphData = {
 
 const interactiveClarificationPrompt = `If there are any unclear points, be sure to ask the user questions and clarify them before generating the script.`;
 
-const scrapeWebContent = async (urls: string[]) => {
+const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
+  mkdir(cacheDirPath);
   console.log(`${agentHeader} Scraping ${urls.length} URLs...\n`);
 
-  const graph = new GraphAI(graphDataForScraping, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent, browserlessAgent });
+  const browserlessCache = browserlessCacheGenerator(cacheDirPath);
+  const agentFilters = [
+    {
+      name: "browserlessCache",
+      agent: browserlessCache,
+      nodeIds: ["fetcher"],
+    },
+  ];
+
+  const graph = new GraphAI(graphDataForScraping, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent, browserlessAgent }, { agentFilters });
   graph.injectValue("urls", urls);
 
   const result = (await graph.run()) as { sourceText: { text: string } };
@@ -156,10 +167,10 @@ const scrapeWebContent = async (urls: string[]) => {
   return `\n\n${prefixPrompt}\n${result?.sourceText.text}`;
 };
 
-export const createMulmoScriptWithInteractive = async ({ outDirPath, filename, templateName, urls }: ScriptingParams) => {
+export const createMulmoScriptWithInteractive = async ({ outDirPath, cacheDirPath, filename, templateName, urls }: ScriptingParams) => {
   mkdir(outDirPath);
   // if urls is not empty, scrape web content and reference it in the prompt
-  const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls) : "";
+  const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls, cacheDirPath) : "";
 
   const graph = new GraphAI(graphData, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent });
 

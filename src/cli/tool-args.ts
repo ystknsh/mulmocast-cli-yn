@@ -31,6 +31,12 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
     choices: availableTemplates,
     type: "string",
   })
+  .option("c", {
+    alias: "cache",
+    description: "cache dir",
+    demandOption: false,
+    type: "string",
+  })
   .option("f", {
     alias: "filename",
     description: "output filename",
