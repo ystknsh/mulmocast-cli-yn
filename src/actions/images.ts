@@ -166,9 +166,11 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
+  console.log(`text2image agent = ${imageAgentInfo.agent}`);
   const injections: Record<string, { agent: string } | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
-    imageAgentInfo: MulmoScriptMethods.getImageAgentInfo(studio.script),
+    imageAgentInfo,
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
   };

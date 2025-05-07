@@ -42,8 +42,9 @@ export const MulmoScriptMethods = {
   },
 
   getImageAgentInfo(script: MulmoScript): { agent: string } {
+    const provider = this.getImageProvider(script);
     return {
-      agent: this.getImageProvider(script) === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
     };
   },
 };
