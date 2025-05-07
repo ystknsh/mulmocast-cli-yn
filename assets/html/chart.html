@@ -36,39 +36,7 @@
             const ctx = document.getElementById('myChart');
             
             // Create the data object (no TypeScript interfaces)
-            const chartData = {
-                type: 'bar',
-                data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                datasets: [
-                    {
-                        label: 'Revenue ($1000s)',
-                        data: [120, 135, 180, 155, 170, 190],
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue for revenue
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Profit ($1000s)',
-                        data: [45, 52, 68, 53, 61, 73],
-                        backgroundColor: 'rgba(75, 192, 192, 0.5)', // Teal for profit
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-                options: {
-                    responsive: true,
-                    animation: false,
-                    /*
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                    */
-                }
-            };
+            const chartData = ${chart_data};
 
             // Initialize the chart
             new Chart(ctx, chartData);
