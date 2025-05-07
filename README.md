@@ -52,7 +52,7 @@ After running this command, you'll create a story script through an interactive 
 # Generate both audio and images, then combine into video
 mulmo movie {generated_script_file}
 ```
-Replace {generated_script_file} with the output file from the previous command, such as story-1746600802426.json.
+Replace `{generated_script_file}` with the output file from the previous command, such as `story-1746600802426.json`.
 
 ## Generate MulmoScript
 
