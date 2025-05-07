@@ -12,7 +12,15 @@ import { MulmoScriptMethods } from "../methods";
 
 import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { getAudioArtifactFilePath, getAudioSegmentDirPath, getAudioCombinedFilePath, getOutputStudioFilePath, defaultBGMPath, mkdir, writingMessage } from "../utils/file";
+import {
+  getAudioArtifactFilePath,
+  getAudioSegmentDirPath,
+  getAudioCombinedFilePath,
+  getOutputStudioFilePath,
+  defaultBGMPath,
+  mkdir,
+  writingMessage,
+} from "../utils/file";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -133,7 +141,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const { studio, fileDirs } = context;
   const { outDirPath, audioDirPath } = fileDirs;
   const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
-  const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename)
+  const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
   const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
