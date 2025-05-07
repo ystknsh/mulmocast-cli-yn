@@ -9,9 +9,12 @@ import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
 import { getBaseDirPath, getFullPath } from "../utils/file";
 import { createMulmoScriptWithInteractive } from "../tools/seed";
 import { dumpPromptFromTemplate } from "../tools/dump_prompt";
+import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer";
 
 const main = async () => {
-  const { o: outdir, t: template, u: urls, b: basedir, action, v: verbose, i: interactive, f: filename, cache } = args;
+  const { o: outdir, b: basedir, action, v: verbose, i: interactive, f: filename, cache } = args;
+  let { t: template } = args;
+  let { u: urls } = args;
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
@@ -32,13 +35,24 @@ const main = async () => {
     GraphAILogger.setLevelEnabled("warn", false);
   }
 
+  // If template is not specified, show the selection prompt
+  if (!template) {
+    template = await selectTemplate();
+    if (verbose) {
+      console.log("Selected template:", template);
+    }
+  }
+
+  // If urls are not specified, prompt for interactive input
+  if (!interactive) {
+    urls = await getUrlsIfNeeded(urls);
+  }
+
   if (action === "scripting") {
     if (interactive) {
-      await createMulmoScriptWithInteractive({ outDirPath, templateName: template, urls: urls, filename, cacheDirPath });
-    } else if (urls.length > 0) {
-      await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename, cacheDirPath });
+      await createMulmoScriptWithInteractive({ outDirPath, templateName: template, urls, filename, cacheDirPath });
     } else {
-      throw new Error("urls is required when not in interactive mode");
+      await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename, cacheDirPath });
     }
   } else if (action === "prompt") {
     await dumpPromptFromTemplate({ templateName: template });
