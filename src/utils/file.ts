@@ -45,8 +45,11 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
 export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_studio.json");
 };
-export const getAudioSegmentFilePath = (audioDirPath: string, fileName: string) => {
-  return path.resolve(audioDirPath, fileName + ".mp3");
+export const getAudioSegmentDirPath = (audioDirPath: string, studioFileName: string) => {
+  return path.resolve(audioDirPath, studioFileName);
+};
+export const getAudioSegmentFilePath = (audioDirPath: string, studioFileName: string, fileName: string) => {
+  return path.resolve(getAudioSegmentDirPath(audioDirPath, studioFileName), fileName + ".mp3");
 };
 export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string) => {
   return path.resolve(audioDirPath, fileName, fileName + ".mp3");
@@ -61,8 +64,7 @@ export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
 };
 
-export const mkdir = (dirOrFilePath: string) => {
-  const dirPath = path.dirname(dirOrFilePath);
+export const mkdir = (dirPath: string) => {
   if (!fs.existsSync(dirPath)) {
     console.info("mkdir: " + dirPath);
     fs.mkdirSync(dirPath, { recursive: true });
