@@ -53,10 +53,10 @@ Replace {generated_script_file} with the output file from the previous command, 
 
 ```bash
 # Generate script from web content
-mulmo-tool scripting -u https://example.com -t seed_materials
+mulmo-tool scripting -u https://example.com
 
 # Generate script with interactive mode
-mulmo-tool scripting -i -t seed_interactive
+mulmo-tool scripting -i
 ```
 
 ## Generate content from MulmoScript
