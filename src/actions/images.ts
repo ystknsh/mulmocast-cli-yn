@@ -33,7 +33,7 @@ const preprocess_agent = async (namedInputs: {
   if (beat.image) {
     if (beat.image.type === "textSlide") {
       const slide = beat.image.slide;
-      const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
+      const markdown: string = `# ${slide.title}\n` + slide.bullets.map((text) => `- ${text}`).join("\n");
       await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.image.type === "markdown") {
       const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
