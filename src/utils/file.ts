@@ -75,7 +75,7 @@ export const defaultBGMPath = path.resolve(__dirname, "../../assets/music/StarsB
 export const getHTMLFile = (filename: string) => {
   const htmlPath = path.resolve(__dirname, `../../assets/html/${filename}.html`);
   return fs.readFileSync(htmlPath, "utf-8");
-}
+};
 
 // for cli
 export const getBaseDirPath = (basedir?: string) => {
