@@ -121,8 +121,8 @@ const graphData = {
           continue: {
             agent: ({ codeBlock, isValid, counter }: { codeBlock: string | undefined; isValid: boolean; counter: number }) => {
               if (counter >= 3) {
-                console.error("Failed to generate a valid script. Please try again.");
-                process.exit(1);
+                console.error("\n" + agentHeader + " \x1b[31mFailed to generate a valid script. Please try again.\n");
+                return false;
               }
               return !!codeBlock && !isValid;
             },
