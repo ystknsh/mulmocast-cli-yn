@@ -45,17 +45,17 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
 export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_studio.json");
 };
+export const getAudioSegmentFilePath = (audioDirPath: string, fileName: string) => {
+  return path.resolve(audioDirPath, fileName + ".mp3");
+};
+export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string) => {
+  return path.resolve(audioDirPath, fileName + ".mp3");
+};
 export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp3");
 };
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
-};
-export const getOutputAudioFilePath = (audioDirPath: string, fileName: string) => {
-  return path.resolve(audioDirPath, fileName + ".mp3");
-};
-export const getAudioSegmentFilePath = (audioDirPath: string, fileName: string) => {
-  return path.resolve(audioDirPath, fileName + ".mp3");
 };
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
