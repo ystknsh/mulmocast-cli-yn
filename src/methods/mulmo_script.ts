@@ -49,15 +49,13 @@ export const MulmoScriptMethods = {
     // Notice that we copy imageParams from script and update
     // provider and model appropriately.
     const provider = script.imageParams?.provider ?? "openai";
+    const defaultImageParams:MulmoImageParams = { model: (provider === "openai") ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined };
     const imageAgentInfo: Text2ImageAgentInfo = {
       provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
-      imageParams: script.imageParams ?? {}
+      imageParams: { ...defaultImageParams, ...script.imageParams }
     };
-    if (!imageAgentInfo.imageParams.model && provider === "openai") {
-      console.log("env", process.env.DEFAULT_OPENAI_IMAGE_MODEL);
-      imageAgentInfo.imageParams.model = "dall-e-3";
-    }
+    console.log(imageAgentInfo.imageParams);
     return imageAgentInfo;
   },
 };
