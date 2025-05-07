@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chart.js Bar Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .chart-container {
+            width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Sales Data</h1>
+    <div class="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <!-- Plain JavaScript instead of TypeScript -->
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the canvas element
+            const ctx = document.getElementById('myChart');
+            
+            // Create the data object (no TypeScript interfaces)
+            const chartData = {
+                type: 'bar',
+                data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [
+                    {
+                        label: 'Revenue ($1000s)',
+                        data: [120, 135, 180, 155, 170, 190],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue for revenue
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Profit ($1000s)',
+                        data: [45, 52, 68, 53, 61, 73],
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)', // Teal for profit
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+                options: {
+                    responsive: true,
+                    animation: false,
+                    /*
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                    */
+                }
+            };
+
+            // Initialize the chart
+            new Chart(ctx, chartData);
+        });
+    </script>
+</body>
+</html>
