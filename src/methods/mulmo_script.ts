@@ -53,6 +53,9 @@ export const MulmoScriptMethods = {
       provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
     };
+    if (provider === "openai") {
+      imageAgentInfo.defaultModel = "dall-e-3";
+    }
     return imageAgentInfo;
   },
 };

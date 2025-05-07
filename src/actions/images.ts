@@ -167,7 +167,7 @@ export const images = async (context: MulmoStudioContext) => {
   }
 
   const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
-  console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent}`);
+  console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent} defaultModel=${imageAgentInfo.defaultModel}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
