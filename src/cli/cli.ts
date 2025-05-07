@@ -46,7 +46,7 @@ const main = async () => {
 
   if (!fs.existsSync(mulmoFilePath)) {
     console.error("File not exists");
-    return -1;
+    process.exit(1);
   }
 
   // TODO some option process
@@ -60,7 +60,7 @@ const main = async () => {
     }
   } catch (error) {
     console.error(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
-    return -1;
+    process.exit(1);
   }
 
   const context = {
