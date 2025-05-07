@@ -19,7 +19,7 @@ const selectTemplate = async (): Promise<string> => {
       name: "templateName",
       message: "テンプレートを選択してください:",
       choices: availableTemplates.map((t) => ({
-        name: `${t.title} - ${t.description}`,
+        name: `${t.filename} - ${t.description}`,
         value: t.filename,
       })),
     },
