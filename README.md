@@ -51,16 +51,16 @@ Mulmo provides several commands to handle different aspects of content creation:
 
 ```bash
 # Generate audio from script
-mulmo audio -f script.json
+mulmo audio script.json
 
 # Generate images for script
-mulmo images -f script.json
+mulmo images script.json
 
 # Generate both audio and images, then combine into video
-mulmo movie -f script.json
+mulmo movie script.json
 
 # Translate script to Japanese
-mulmo translate -f script.json
+mulmo translate script.json
 ```
 
 ## MulmoScript Format
