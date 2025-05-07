@@ -16,8 +16,8 @@ import { images } from "../actions/images";
 import { audio } from "../actions/audio";
 import { movie } from "../actions/movie";
 
-import { getBaseDirPath, getFullPath } from "../utils/file";
-import { mulmoStudioSchema } from "../types/schema";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile } from "../utils/file";
+import { mulmoScriptSchema } from "../types/schema";
 
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, scratchpaddir } = args;
@@ -51,17 +51,21 @@ const main = async () => {
 
   // TODO some option process
   const { action } = args;
-  const studio = createOrUpdateStudioData(mulmoFilePath, files);
+
+  const readData = readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
+  const { mulmoData: mulmoScript, fileName } = readData;
 
   // validate mulmoStudioSchema. skip if __test_invalid__ is true
   try {
-    if (!studio.script?.__test_invalid__) {
-      mulmoStudioSchema.parse(studio);
+    if (!mulmoScript?.__test_invalid__) {
+      mulmoScriptSchema.parse(mulmoScript);
     }
   } catch (error) {
     console.error(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
     return -1;
   }
+
+  const studio = createOrUpdateStudioData(mulmoScript, fileName, files);
 
   const context = {
     studio,

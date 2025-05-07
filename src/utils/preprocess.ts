@@ -1,13 +1,10 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file";
-import { MulmoStudio, MulmoStudioBeat } from "../types";
+import { MulmoStudio, MulmoStudioBeat, MulmoScript } from "../types";
 import { text2hash } from "./text_hash";
 import { MulmoScriptMethods } from "../methods";
 
-export const createOrUpdateStudioData = (mulmoFile: string, files: { outDirPath: string }) => {
+export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
-
-  const readData = readMulmoScriptFile(mulmoFile, "ERROR: File does not exist " + mulmoFile)!;
-  const { mulmoData: mulmoScript, fileName } = readData;
 
   // Create or update MulmoStudio file with MulmoScript
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
