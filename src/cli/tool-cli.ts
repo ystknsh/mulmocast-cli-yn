@@ -17,7 +17,7 @@ const selectTemplate = async (): Promise<string> => {
     {
       type: "list",
       name: "templateName",
-      message: "テンプレートを選択してください:",
+      message: "Select a template to use",
       choices: availableTemplates.map((t) => ({
         name: `${t.filename} - ${t.description}`,
         value: t.filename,
