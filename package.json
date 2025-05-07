@@ -12,6 +12,7 @@
     "./assets/music/StarsBeyondEx.mp3",
     "./assets/audio/silent300.mp3",
     "./assets/audio/silent800.mp3",
+    "./assets/html/",
     "./assets/templates/"
   ],
   "types": "./lib/types/index.d.ts",

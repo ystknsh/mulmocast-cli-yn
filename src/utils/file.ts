@@ -72,6 +72,11 @@ export const silentPath = path.resolve(__dirname, "../../assets/audio/silent300.
 export const silentLastPath = path.resolve(__dirname, "../../assets/audio/silent800.mp3");
 export const defaultBGMPath = path.resolve(__dirname, "../../assets/music/StarsBeyondEx.mp3");
 
+export const getHTMLFile = (filename: string) => {
+  const htmlPath = path.resolve(__dirname, `../../assets/html/${filename}.html`);
+  return fs.readFileSync(htmlPath, "utf-8");
+};
+
 // for cli
 export const getBaseDirPath = (basedir?: string) => {
   if (!basedir) {

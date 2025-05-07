@@ -97,6 +97,14 @@ const MulmoTextSlideMediaSchema = z
   })
   .strict();
 
+const MulmoChartMediaSchema = z
+  .object({
+    type: z.literal("chart"),
+    title: z.string(),
+    chartData: z.record(z.any()),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
@@ -105,6 +113,7 @@ export const mulmoImageAssetSchema = z.union([
   MulmoSvgMediaSchema,
   MulmoMovieMediaSchema,
   MulmoTextSlideMediaSchema,
+  MulmoChartMediaSchema,
 ]);
 
 const MulmoAudioMediaSchema = z

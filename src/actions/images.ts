@@ -5,9 +5,9 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
-import { getOutputStudioFilePath, mkdir } from "../utils/file";
+import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { renderMarkdownToImage } from "../utils/markdown";
+import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
 import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods";
@@ -46,6 +46,13 @@ const preprocess_agent = async (namedInputs: {
         const path = MulmoStudioContextMethods.resolveAssetPath(context, beat.image.source.path);
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
+    } else if (beat.image.type === "chart") {
+      function interpolate(template: string, data: Record<string, any>): string {
+        return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
+      }
+      const template = getHTMLFile("chart");
+      const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
+      await renderHTMLToImage(htmlData, imagePath);
     }
   }
   return { path: imagePath, prompt, imageParams, aspectRatio };
