@@ -42,6 +42,11 @@
           "path": "../../assets/audio/local_voice.mp3"
         }
       }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This is a generated image",
+      "imagePrompt": "Blue sky in Hawaii"
     }
   ]
 }
