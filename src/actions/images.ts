@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import { GraphAI, GraphData } from "graphai";
-import type { GraphOptions } from "graphai/lib/type";
+import { GraphAI, GraphAILogger } from "graphai";
+import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
@@ -167,7 +167,7 @@ export const images = async (context: MulmoStudioContext) => {
 
   // We need to get google's auth token only if the google is the text2image provider.
   if (imageAgentInfo.provider === "google") {
-    console.log("google was specified as text2image engine");
+    GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
       imageGoogleAgent: {
@@ -177,7 +177,7 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  console.log(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
+  GraphAILogger.log(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
