@@ -27,7 +27,7 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
   .option("t", {
     alias: "template",
     description: "Template name to use",
-    demandOption: true,
+    demandOption: false,
     choices: availableTemplates,
     type: "string",
   })
