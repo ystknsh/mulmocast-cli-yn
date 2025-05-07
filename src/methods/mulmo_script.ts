@@ -14,7 +14,7 @@ const defaultTextSlideStyles = [
 ];
 
 export type Text2ImageAgentInfo = {
-  provider: Text2ImageProvider,
+  provider: Text2ImageProvider;
   agent: string;
   imageParams: MulmoImageParams;
 };
@@ -49,13 +49,13 @@ export const MulmoScriptMethods = {
     // Notice that we copy imageParams from script and update
     // provider and model appropriately.
     const provider = script.imageParams?.provider ?? "openai";
-    const defaultImageParams:MulmoImageParams = { model: (provider === "openai") ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined };
-    const imageAgentInfo: Text2ImageAgentInfo = {
+    const defaultImageParams: MulmoImageParams = {
+      model: provider === "openai" ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined,
+    };
+    return {
       provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
-      imageParams: { ...defaultImageParams, ...script.imageParams }
+      imageParams: { ...defaultImageParams, ...script.imageParams },
     };
-    console.log(imageAgentInfo.imageParams);
-    return imageAgentInfo;
   },
 };

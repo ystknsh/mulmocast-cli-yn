@@ -16,7 +16,14 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string, imageAgentInfo: Text2ImageAgentInfo }) => {
+const preprocess_agent = async (namedInputs: {
+  context: MulmoStudioContext;
+  beat: MulmoStudioBeat;
+  index: number;
+  suffix: string;
+  imageDirPath: string;
+  imageAgentInfo: Text2ImageAgentInfo;
+}) => {
   const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
@@ -70,7 +77,7 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               suffix: "p",
               imageDirPath: ":imageDirPath",
-              imageAgentInfo: ":imageAgentInfo"
+              imageAgentInfo: ":imageAgentInfo",
             },
           },
           imageGenerator: {
@@ -170,7 +177,7 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  console.log(`text2image: provider=${imageAgentInfo.provider} agent=${imageAgentInfo.agent} model=${imageAgentInfo.imageParams.model}`);
+  console.log(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
