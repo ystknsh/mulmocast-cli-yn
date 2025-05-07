@@ -12,7 +12,15 @@ import { MulmoScriptMethods } from "../methods";
 
 import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { getOutputBGMFilePath, getOutputAudioFilePath, getOutputStudioFilePath, defaultBGMPath, mkdir, writingMessage } from "../utils/file";
+import {
+  getAudioArtifactFilePath,
+  getAudioSegmentDirPath,
+  getAudioCombinedFilePath,
+  getOutputStudioFilePath,
+  defaultBGMPath,
+  mkdir,
+  writingMessage,
+} from "../utils/file";
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -49,7 +57,7 @@ const graph_tts: GraphData = {
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: "${:scratchpadDirPath}/${:beat.audioFile}.mp3", // TODO
+        file: "${:audioSegmentDirPath}/${:beat.audioFile}.mp3", // TODO
       },
       params: {
         voice: ":preprocessor.voiceId",
@@ -65,13 +73,14 @@ const graph_data: GraphData = {
   concurrency: 8,
   nodes: {
     context: {},
-    outputBGMFilePath: {},
-    outputAudioFilePath: {},
+    audioArtifactFilePath: {},
+    audioCombinedFilePath: {},
     outputStudioFilePath: {},
-    scratchpadDirPath: {},
+    audioDirPath: {},
+    audioSegmentDirPath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", script: ":context.studio.script", scratchpadDirPath: ":scratchpadDirPath" },
+      inputs: { rows: ":context.studio.beats", script: ":context.studio.script", audioDirPath: ":audioDirPath", audioSegmentDirPath: ":audioSegmentDirPath" },
       params: {
         rowKey: "beat",
       },
@@ -82,8 +91,8 @@ const graph_data: GraphData = {
       inputs: {
         map: ":map",
         context: ":context",
-        combinedFileName: ":outputAudioFilePath",
-        scratchpadDirPath: ":scratchpadDirPath",
+        combinedFileName: ":audioCombinedFilePath",
+        audioDirPath: ":audioDirPath",
       },
       isResult: true,
     },
@@ -101,8 +110,8 @@ const graph_data: GraphData = {
       },
       inputs: {
         wait: ":combineFiles",
-        voiceFile: ":outputAudioFilePath",
-        outputFile: ":outputBGMFilePath",
+        voiceFile: ":audioCombinedFilePath",
+        outputFile: ":audioArtifactFilePath",
         script: ":context.studio.script",
       },
       isResult: true,
@@ -130,12 +139,13 @@ const agentFilters = [
 
 export const audio = async (context: MulmoStudioContext, concurrency: number) => {
   const { studio, fileDirs } = context;
-  const { outDirPath, scratchpadDirPath } = fileDirs;
-  const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
-  const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
+  const { outDirPath, audioDirPath } = fileDirs;
+  const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
+  const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
+  const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
-  mkdir(scratchpadDirPath);
+  mkdir(audioSegmentDirPath);
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
@@ -151,11 +161,12 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
     { agentFilters },
   );
   graph.injectValue("context", context);
-  graph.injectValue("outputBGMFilePath", outputBGMFilePath);
-  graph.injectValue("outputAudioFilePath", outputAudioFilePath);
+  graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
+  graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
-  graph.injectValue("scratchpadDirPath", scratchpadDirPath);
+  graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
+  graph.injectValue("audioDirPath", audioDirPath);
   await graph.run();
 
-  writingMessage(outputAudioFilePath);
+  writingMessage(audioCombinedFilePath);
 };

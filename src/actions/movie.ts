@@ -2,9 +2,9 @@ import ffmpeg from "fluent-ffmpeg";
 import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoStudioContext } from "../types";
 import { MulmoScriptMethods } from "../methods";
-import { getOutputBGMFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file";
+import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file";
 
-const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoStudio) => {
+const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio) => {
   return new Promise((resolve, reject) => {
     const start = performance.now();
     let command = ffmpeg();
@@ -44,7 +44,7 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
     // Apply the filter complex for concatenation and map audio input
     command
       .complexFilter(filterComplexParts)
-      .input(audioPath) // Add audio input
+      .input(audioArtifactFilePath) // Add audio input
       .outputOptions([
         "-preset veryfast", // Faster encoding
         "-map [v]", // Map the video stream
@@ -83,9 +83,9 @@ const createVideo = (audioPath: string, outputVideoPath: string, studio: MulmoSt
 export const movie = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
   const { outDirPath } = fileDirs;
-  const audioPath = getOutputBGMFilePath(outDirPath, studio.filename);
+  const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
   const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename);
 
-  await createVideo(audioPath, outputVideoPath, studio);
+  await createVideo(audioArtifactFilePath, outputVideoPath, studio);
   writingMessage(outputVideoPath);
 };

@@ -40,7 +40,7 @@ export type FileDirs = {
   baseDirPath: string;
   outDirPath: string;
   imageDirPath: string;
-  scratchpadDirPath: string;
+  audioDirPath: string;
 };
 
 export type MulmoStudioContext = {

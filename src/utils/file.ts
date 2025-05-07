@@ -45,17 +45,20 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
 export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_studio.json");
 };
-export const getOutputBGMFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + "_bgm.mp3");
+export const getAudioSegmentDirPath = (audioDirPath: string, studioFileName: string) => {
+  return path.resolve(audioDirPath, studioFileName);
+};
+export const getAudioSegmentFilePath = (audioDirPath: string, studioFileName: string, fileName: string) => {
+  return path.resolve(getAudioSegmentDirPath(audioDirPath, studioFileName), fileName + ".mp3");
+};
+export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string) => {
+  return path.resolve(audioDirPath, fileName, fileName + ".mp3");
+};
+export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + ".mp3");
 };
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
-};
-export const getOutputAudioFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + ".mp3");
-};
-export const getScratchpadFilePath = (scratchpadDirName: string, fileName: string) => {
-  return path.resolve(scratchpadDirName, fileName + ".mp3");
 };
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");

@@ -18,7 +18,7 @@ const main = async () => {
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
-  const cacheDirPath = getFullPath(baseDirPath, (cache as string) ?? cacheDirName);
+  const cacheDirPath = getFullPath(outDirPath, (cache as string) ?? cacheDirName);
 
   if (verbose) {
     console.log("baseDirPath:", baseDirPath);
