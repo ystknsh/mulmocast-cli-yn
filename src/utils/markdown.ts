@@ -1,15 +1,8 @@
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 
-export const convertMarkdownToImage = async (markdown: string, style: string, outputPath: string) => {
-  // Step 0: Prepare the header
-  const header = `<head><style>${style}</style></head>`;
-
-  // Step 1: Convert Markdown to HTML
-  const body = await marked(markdown);
-  const html = `<htlm>${header}<body>${body}</body></html>`;
-
-  // Step 2: Use Puppeteer to render HTML to an image
+export const renderHTMLToImage = async (html: string, outputPath: string) => {
+  // Use Puppeteer to render HTML to an image
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
@@ -23,5 +16,12 @@ export const convertMarkdownToImage = async (markdown: string, style: string, ou
   await page.screenshot({ path: outputPath });
 
   await browser.close();
-  console.log(`Image saved to ${outputPath}`);
+  console.log(`HTML image rendered to ${outputPath}`);
+};
+
+export const renderMarkdownToImage = async (markdown: string, style: string, outputPath: string) => {
+  const header = `<head><style>${style}</style></head>`;
+  const body = await marked(markdown);
+  const html = `<htlm>${header}<body>${body}</body></html>`;
+  await renderHTMLToImage(html, outputPath);
 };
