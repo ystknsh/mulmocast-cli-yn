@@ -132,7 +132,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const { studio, fileDirs } = context;
   const { outDirPath, scratchpadDirPath } = fileDirs;
   const outputBGMFilePath = getOutputBGMFilePath(outDirPath, studio.filename);
-  const outputAudioFilePath = getOutputAudioFilePath(outDirPath, studio.filename);
+  const outputAudioFilePath = getOutputAudioFilePath(scratchpadDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
   mkdir(scratchpadDirPath);

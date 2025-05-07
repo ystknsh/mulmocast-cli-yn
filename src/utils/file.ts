@@ -51,11 +51,11 @@ export const getOutputBGMFilePath = (outDirPath: string, fileName: string) => {
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
 };
-export const getOutputAudioFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + ".mp3");
+export const getOutputAudioFilePath = (audioDirPath: string, fileName: string) => {
+  return path.resolve(audioDirPath, fileName + ".mp3");
 };
-export const getScratchpadFilePath = (scratchpadDirName: string, fileName: string) => {
-  return path.resolve(scratchpadDirName, fileName + ".mp3");
+export const getScratchpadFilePath = (audioDirPath: string, fileName: string) => {
+  return path.resolve(audioDirPath, fileName + ".mp3");
 };
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
