@@ -72,3 +72,56 @@ schema: [./src/types/schema.ts](./src/types/schema.ts)
 ## Contributing
 
 For developers interested in contributing to this project, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Help
+
+CLI Usage
+
+```
+$ mulmo -h
+mulmo <action> <file>
+
+Run mulmocast
+
+Positionals:
+  action  action to perform
+       [string] [choices: "translate", "audio", "images", "movie", "preprocess"]
+  file    Mulmo Script File                                             [string]
+
+Options:
+      --version        Show version number                             [boolean]
+  -v, --verbose        verbose log         [boolean] [required] [default: false]
+  -o, --outdir         output dir                                       [string]
+  -b, --basedir        base dir                                         [string]
+  -s, --scratchpaddir  scratchpad dir                                   [string]
+  -i, --imagedir       image dir                                        [string]
+      --help           Show help                                       [boolean]
+
+```
+
+```
+$ mulmo-tool -h
+
+mulmo-tool <action>
+
+Run mulmocast tool
+
+Positionals:
+  action  action to perform            [string] [choices: "scripting", "prompt"]
+
+Options:
+      --version      Show version number                               [boolean]
+  -v, --verbose      verbose log           [boolean] [required] [default: false]
+  -o, --outdir       output dir                                         [string]
+  -b, --basedir      base dir                                           [string]
+  -u, --url          URLs to reference (required when not in interactive mode)
+                                                           [array] [default: []]
+  -i, --interactive  Generate script in interactive mode with user prompts
+                                                                       [boolean]
+  -t, --template     Template name to use
+   [string] [choices: "business", "children_book", "coding", "podcast_standard",
+                                                              "sensei_and_taro"]
+  -c, --cache        cache dir                                          [string]
+  -f, --filename     output filename                [string] [default: "script"]
+      --help         Show help                                         [boolean]
+```
