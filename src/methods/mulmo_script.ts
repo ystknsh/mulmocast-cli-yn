@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions } from "../types";
 
 const defaultTextSlideStyles = [
@@ -54,6 +55,7 @@ export const MulmoScriptMethods = {
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
     };
     if (provider === "openai") {
+      console.log("env", process.env.DEFAULT_OPENAI_IMAGE_MODEL);
       imageAgentInfo.defaultModel = "dall-e-3";
     }
     return imageAgentInfo;
