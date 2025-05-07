@@ -32,7 +32,7 @@ export const imageOpenaiAgent: AgentFunction<
     model: model ?? "dall-e-3",
     prompt,
     n: 1,
-    size: size || "1792x1024",
+    size: size || (model === "gpt-image-1")? "1536x1024" : "1792x1024",
   };
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
