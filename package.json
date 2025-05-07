@@ -39,7 +39,7 @@
   },
   "repository": "git+ssh://git@github.com/receptron/mulmocast-cli.git",
   "author": "snakajima",
-  "license": "AGPLV3",
+  "license": "AGPL-3.0-only",
   "bugs": {
     "url": "https://github.com/receptron/mulmocast-cli/issues"
   },
