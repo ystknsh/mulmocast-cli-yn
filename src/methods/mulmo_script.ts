@@ -46,6 +46,8 @@ export const MulmoScriptMethods = {
   },
 
   getImageAgentInfo(script: MulmoScript): Text2ImageAgentInfo {
+    // Notice that we copy imageParams from script and update
+    // provider and model appropriately.
     const provider = script.imageParams?.provider ?? "openai";
     const imageAgentInfo: Text2ImageAgentInfo = {
       provider,
