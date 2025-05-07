@@ -50,11 +50,11 @@ const graph_data: GraphData = {
   nodes: {
     context: {},
     imageDirPath: {},
-    text2imageAgent: {},
+    imageAgentInfo: {},
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -74,7 +74,7 @@ const graph_data: GraphData = {
           },
           imageGenerator: {
             if: ":preprocessor.prompt",
-            agent: ":text2imageAgent",
+            agent: ":imageAgentInfo.agent",
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
@@ -166,9 +166,9 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | undefined> = {
+  const injections: Record<string, { agent: string } | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
-    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
+    imageAgentInfo: MulmoScriptMethods.getImageAgentInfo(studio.script),
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
   };

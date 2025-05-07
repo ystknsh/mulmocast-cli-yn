@@ -41,7 +41,9 @@ export const MulmoScriptMethods = {
     return { ...script.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
 
-  getText2imageAgent(script: MulmoScript): string {
-    return this.getImageProvider(script) === "google" ? "imageGoogleAgent" : "imageOpenaiAgent";
+  getImageAgentInfo(script: MulmoScript): { agent: string } {
+    return {
+      agent: this.getImageProvider(script) === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+    };
   },
 };
