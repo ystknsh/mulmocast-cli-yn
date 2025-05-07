@@ -181,6 +181,8 @@ export const mulmoSpeechParamsSchema = z
   })
   .strict();
 
+export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]);
+
 export const mulmoScriptSchema = z
   .object({
     // global settings
@@ -197,7 +199,7 @@ export const mulmoScriptSchema = z
 
     imageParams: mulmoImageParamsSchema
       .extend({
-        provider: z.string().optional(),
+        provider: text2ImageProviderSchema.optional(),
       })
       .optional(),
 

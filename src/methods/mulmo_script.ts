@@ -1,4 +1,5 @@
-import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions } from "../types";
+import "dotenv/config";
+import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams } from "../types";
 
 const defaultTextSlideStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
@@ -11,6 +12,12 @@ const defaultTextSlideStyles = [
   "td, th { padding: 8px }",
   "tr:nth-child(even) { background-color: #eee }",
 ];
+
+export type Text2ImageAgentInfo = {
+  provider: Text2ImageProvider;
+  agent: string;
+  imageParams: MulmoImageParams;
+};
 
 export const MulmoScriptMethods = {
   getPadding(script: MulmoScript): number {
@@ -28,9 +35,6 @@ export const MulmoScriptMethods = {
   getSpeechProvider(script: MulmoScript): string {
     return script.speechParams?.provider ?? "openai";
   },
-  getImageProvider(script: MulmoScript): string {
-    return script.imageParams?.provider ?? "openai";
-  },
   getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string {
     const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
     // NOTES: Taking advantage of CSS override rule (you can redefine it to override)
@@ -41,7 +45,17 @@ export const MulmoScriptMethods = {
     return { ...script.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
 
-  getText2imageAgent(script: MulmoScript): string {
-    return this.getImageProvider(script) === "google" ? "imageGoogleAgent" : "imageOpenaiAgent";
+  getImageAgentInfo(script: MulmoScript): Text2ImageAgentInfo {
+    // Notice that we copy imageParams from script and update
+    // provider and model appropriately.
+    const provider = script.imageParams?.provider ?? "openai";
+    const defaultImageParams: MulmoImageParams = {
+      model: provider === "openai" ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined,
+    };
+    return {
+      provider,
+      agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      imageParams: { ...defaultImageParams, ...script.imageParams },
+    };
   },
 };

@@ -21,11 +21,16 @@ brew install ffmpeg
 
 Create a `.env` file in your project directory with the following API keys:
 
+### Required
 ```
 OPENAI_API_KEY=your_openai_api_key
-GOOGLE_PROJECT_ID=your_google_project_id # optional for movie, image generation
-NIJIVOICE_API_KEY=your_nijivoice_api_key # optional for movie, audio generation
-BROWSERLESS_API_TOKEN=your_browserless_api_token # optional for scripting from web content
+```
+### Optional
+```
+DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # for the advanced image geneartion model
+GOOGLE_PROJECT_ID=your_google_project_id # for Google's image generation model
+NIJIVOICE_API_KEY=your_nijivoice_api_key # for Nijivoice's TTS model
+BROWSERLESS_API_TOKEN=your_browserless_api_token # to access web in mulmo-tool
 ```
 
 ## Workflow

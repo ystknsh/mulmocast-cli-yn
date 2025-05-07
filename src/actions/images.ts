@@ -10,15 +10,22 @@ import { fileCacheAgentFilter } from "../utils/filters";
 import { renderMarkdownToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
-import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
+import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods";
 
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string }) => {
-  const { context, beat, index, suffix, imageDirPath } = namedInputs;
-  const imageParams = { ...context.studio.script.imageParams, ...beat.imageParams };
+const preprocess_agent = async (namedInputs: {
+  context: MulmoStudioContext;
+  beat: MulmoStudioBeat;
+  index: number;
+  suffix: string;
+  imageDirPath: string;
+  imageAgentInfo: Text2ImageAgentInfo;
+}) => {
+  const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
+  const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
@@ -50,11 +57,11 @@ const graph_data: GraphData = {
   nodes: {
     context: {},
     imageDirPath: {},
-    text2imageAgent: {},
+    imageAgentInfo: {},
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -70,11 +77,12 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               suffix: "p",
               imageDirPath: ":imageDirPath",
+              imageAgentInfo: ":imageAgentInfo",
             },
           },
           imageGenerator: {
             if: ":preprocessor.prompt",
-            agent: ":text2imageAgent",
+            agent: ":imageAgentInfo.agent",
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
@@ -154,8 +162,11 @@ export const images = async (context: MulmoStudioContext) => {
   const options: GraphOptions = {
     agentFilters,
   };
+
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
+
   // We need to get google's auth token only if the google is the text2image provider.
-  if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
+  if (imageAgentInfo.provider === "google") {
     console.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
@@ -166,9 +177,10 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | undefined> = {
+  console.log(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
+  const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
-    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
+    imageAgentInfo,
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
   };
