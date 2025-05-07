@@ -97,7 +97,7 @@ const MulmoTextSlideMediaSchema = z
   })
   .strict();
 
-export const mulmoMediaSchema = z.union([
+export const mulmoImageAssetSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
   MulmoPdfMediaSchema,
@@ -148,7 +148,7 @@ export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema,
     text: z.string(),
-    image: mulmoMediaSchema.optional(),
+    image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),
 
     imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
