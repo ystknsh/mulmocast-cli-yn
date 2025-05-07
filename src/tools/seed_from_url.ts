@@ -6,6 +6,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
 import { readTemplatePrompt, mkdir } from "../utils/file";
+import { browserlessCacheGenerator } from "../utils/filters";
 import { urlsSchema } from "../types/schema";
 import { ScriptingParams } from "../types";
 
@@ -123,17 +124,31 @@ const graphData: GraphData = {
   },
 };
 
-export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename }: ScriptingParams) => {
+export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename, cacheDirPath }: ScriptingParams) => {
   mkdir(outDirPath);
+  mkdir(cacheDirPath);
   const parsedUrls = urlsSchema.parse(urls);
 
-  const graph = new GraphAI(graphData, {
-    ...vanilla,
-    openAIAgent,
-    browserlessAgent,
-    validateMulmoScriptAgent,
-    fileWriteAgent,
-  });
+  const browserlessCache = browserlessCacheGenerator(cacheDirPath);
+  const agentFilters = [
+    {
+      name: "browserlessCache",
+      agent: browserlessCache,
+      nodeIds: ["fetcher"],
+    },
+  ];
+
+  const graph = new GraphAI(
+    graphData,
+    {
+      ...vanilla,
+      openAIAgent,
+      browserlessAgent,
+      validateMulmoScriptAgent,
+      fileWriteAgent,
+    },
+    { agentFilters },
+  );
 
   graph.injectValue("urls", parsedUrls);
   graph.injectValue("prompt", readTemplatePrompt(templateName));
