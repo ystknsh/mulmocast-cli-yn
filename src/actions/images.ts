@@ -1,4 +1,3 @@
-import fs from "fs";
 import dotenv from "dotenv";
 import { GraphAI, GraphData } from "graphai";
 import type { GraphOptions } from "graphai/lib/type";
@@ -6,7 +5,7 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
-import { getOutputStudioFilePath, mkdir } from "../utils/file";
+import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
 import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
@@ -44,8 +43,7 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
       function interpolate(template: string, data: Record<string, any>): string {
         return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
       }
-      const tempatePath = "/Users/satoshi/git/ai/mulmo/assets/html/chart.html";
-      const template = fs.readFileSync(tempatePath, "utf-8");
+      const template = getHTMLFile("chart");
       const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
       await renderHTMLToImage(htmlData, imagePath);
     }
