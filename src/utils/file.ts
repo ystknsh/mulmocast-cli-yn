@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { GraphAILogger } from "graphai";
-import { MulmoScript } from "../types";
+import { MulmoScript, MulmoScriptTemplate } from "../types";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
 import { mulmoScriptTemplateSchema } from "../types/schema";
 
@@ -101,7 +101,7 @@ export const readTemplatePrompt = (templateName: string) => {
   return prompt;
 };
 
-export const getAvailableTemplateNames = (): string[] => {
+export const getAvailableTemplates = (): (MulmoScriptTemplate & { filename: string })[] => {
   const templatesDir = path.resolve(__dirname, "../../assets/templates");
 
   if (!fs.existsSync(templatesDir)) {
@@ -109,7 +109,13 @@ export const getAvailableTemplateNames = (): string[] => {
   }
 
   const files = fs.readdirSync(templatesDir);
-  return files.filter((file) => path.extname(file).toLowerCase() === ".json").map((file) => path.basename(file, ".json"));
+  return files.map((file) => {
+    const template = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
+    return {
+      ...mulmoScriptTemplateSchema.parse(template),
+      filename: file.replace(/\.json$/, ""),
+    };
+  });
 };
 
 export const writingMessage = (filePath: string) => {
