@@ -3,7 +3,7 @@ import { hideBin } from "yargs/helpers";
 import { commonOptions } from "./common";
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
-  .scriptName("mulmocast")
+  .scriptName("mulmo")
   .option("s", {
     alias: "scratchpaddir",
     description: "scratchpad dir",
