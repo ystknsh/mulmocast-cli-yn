@@ -1,11 +1,11 @@
-# mulmo
+# mulmocast
 
 A CLI tool for generating podcast and video content from script files. Automates the process of creating audio, images, and video from structured script files.
 
 ## Installation
 
 ```bash
-npm install -g mulmo
+npm install -g mulmocast
 ```
 
 You'll also need to install ffmpeg:
