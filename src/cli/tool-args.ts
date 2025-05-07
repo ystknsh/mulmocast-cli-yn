@@ -2,11 +2,11 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { commonOptions } from "./common";
 import { GraphAILogger } from "graphai";
-import { getAvailableTemplateNames } from "../utils/file";
+import { getAvailableTemplates } from "../utils/file";
 
 GraphAILogger.setLevelEnabled("error", false);
 
-const availableTemplates = getAvailableTemplateNames();
+const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmocast-tool")
@@ -27,8 +27,8 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
   .option("t", {
     alias: "template",
     description: "Template name to use",
-    demandOption: true,
-    choices: availableTemplates,
+    demandOption: false,
+    choices: availableTemplateNames,
     type: "string",
   })
   .option("f", {

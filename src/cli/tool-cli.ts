@@ -2,16 +2,34 @@
 
 import "dotenv/config";
 import { GraphAILogger } from "graphai";
+import inquirer from "inquirer";
 
 import { args } from "./tool-args";
 import { outDirName } from "../utils/const";
 import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
-import { getBaseDirPath, getFullPath } from "../utils/file";
+import { getAvailableTemplates, getBaseDirPath, getFullPath } from "../utils/file";
 import { createMulmoScriptWithInteractive } from "../tools/seed";
 import { dumpPromptFromTemplate } from "../tools/dump_prompt";
 
+const selectTemplate = async (): Promise<string> => {
+  const availableTemplates = getAvailableTemplates();
+  const answers = await inquirer.prompt([
+    {
+      type: "list",
+      name: "templateName",
+      message: "Select a template to use",
+      choices: availableTemplates.map((t) => ({
+        name: `${t.filename} - ${t.description}`,
+        value: t.filename,
+      })),
+    },
+  ]);
+  return answers.templateName;
+};
+
 const main = async () => {
-  const { o: outdir, t: template, u: urls, b: basedir, action, v: verbose, i: interactive, f: filename } = args;
+  const { o: outdir, u: urls, b: basedir, action, v: verbose, i: interactive, f: filename } = args;
+  let { t: template } = args;
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
@@ -28,6 +46,14 @@ const main = async () => {
     GraphAILogger.setLevelEnabled("error", false);
     GraphAILogger.setLevelEnabled("log", false);
     GraphAILogger.setLevelEnabled("warn", false);
+  }
+
+  // If template is not specified, show the selection prompt
+  if (!template) {
+    template = await selectTemplate();
+    if (verbose) {
+      console.log("Selected template:", template);
+    }
   }
 
   if (action === "scripting") {
