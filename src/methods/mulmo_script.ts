@@ -1,5 +1,6 @@
 import "dotenv/config";
-import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams } from "../types/index.js";
+import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams, Text2SpeechProvider } from "../types/index.js";
+import { text2ImageProviderSchema, text2SpeechProviderSchema } from "../types/schema.js";
 
 const defaultTextSlideStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
@@ -32,8 +33,8 @@ export const MulmoScriptMethods = {
     const size = this.getCanvasSize(script);
     return size.width > size.height ? "16:9" : "9:16";
   },
-  getSpeechProvider(script: MulmoScript): string {
-    return script.speechParams?.provider ?? "openai";
+  getSpeechProvider(script: MulmoScript): Text2SpeechProvider {
+    return text2SpeechProviderSchema.parse(script.speechParams?.provider);
   },
   getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string {
     const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
@@ -48,7 +49,7 @@ export const MulmoScriptMethods = {
   getImageAgentInfo(script: MulmoScript): Text2ImageAgentInfo {
     // Notice that we copy imageParams from script and update
     // provider and model appropriately.
-    const provider = script.imageParams?.provider ?? "openai";
+    const provider = text2ImageProviderSchema.parse(script.imageParams?.provider);
     const defaultImageParams: MulmoImageParams = {
       model: provider === "openai" ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined,
     };

@@ -192,14 +192,16 @@ export const mulmoCastCreditSchema = z
   })
   .strict();
 
+export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice")]).default("openai");
+
 export const mulmoSpeechParamsSchema = z
   .object({
-    provider: z.string().optional(),
+    provider: text2SpeechProviderSchema,
     speakers: speakerDictionarySchema,
   })
   .strict();
 
-export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]);
+export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
 
 export const mulmoScriptSchema = z
   .object({
@@ -217,7 +219,7 @@ export const mulmoScriptSchema = z
 
     imageParams: mulmoImageParamsSchema
       .extend({
-        provider: text2ImageProviderSchema.optional(),
+        provider: text2ImageProviderSchema,
       })
       .optional(),
 
