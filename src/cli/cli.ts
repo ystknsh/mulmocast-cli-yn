@@ -69,7 +69,7 @@ const main = async () => {
   const context = {
     studio,
     fileDirs: files,
-    force,
+    force: Boolean(force),
   };
   if (action === "translate") {
     await translate(context);
