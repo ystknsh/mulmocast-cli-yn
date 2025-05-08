@@ -38,35 +38,29 @@ const combineAudioFilesAgent: AgentFunction<
     return getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
   };
 
-  const promise = new Promise((resolve, reject) => {
-    Promise.all(
-      context.studio.beats.map(async (mulmoBeat: MulmoStudioBeat, index: number) => {
-        const filePath = resolveAudioFilePath(context, mulmoBeat, audioDirPath);
-        const isLast = index === context.studio.beats.length - 2;
-        command.input(filePath);
-        command.input(isLast ? silentLastPath : silentPath);
+  await Promise.all(
+    context.studio.beats.map(async (mulmoBeat: MulmoStudioBeat, index: number) => {
+      const filePath = resolveAudioFilePath(context, mulmoBeat, audioDirPath);
+      const isLast = index === context.studio.beats.length - 2;
+      command.input(filePath);
+      command.input(isLast ? silentLastPath : silentPath);
 
-        // Measure and log the timestamp of each section
-        context.studio.beats[index]["duration"] = await getDuration(filePath, isLast);
-      }),
-    )
-      .then(() => {
-        command
-          .on("end", () => {
-            resolve(0);
-          })
-          .on("error", (err: unknown) => {
-            console.error("Error while combining MP3 files:", err);
-            reject(err);
-          })
-          .mergeToFile(combinedFileName, audioDirPath);
+      // Measure and log the timestamp of each section
+      context.studio.beats[index]["duration"] = await getDuration(filePath, isLast);
+    }),
+  );
+
+  await new Promise((resolve, reject) => {
+    command
+      .on("end", () => {
+        resolve(0);
       })
-      .catch((error) => {
-        reject(error);
-      });
+      .on("error", (err: unknown) => {
+        console.error("Error while combining MP3 files:", err);
+        reject(err);
+      })
+      .mergeToFile(combinedFileName, audioDirPath);
   });
-
-  await promise;
 
   return {
     studio: context.studio,
