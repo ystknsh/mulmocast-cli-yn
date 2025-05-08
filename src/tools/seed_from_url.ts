@@ -5,7 +5,7 @@ import * as vanilla from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
-import { readTemplatePrompt, mkdir } from "../utils/file";
+import { readTemplatePrompt, mkdir, writingMessage } from "../utils/file";
 import { browserlessCacheGenerator } from "../utils/filters";
 import { urlsSchema } from "../types/schema";
 import { ScriptingParams } from "../types";
@@ -157,5 +157,6 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   graph.injectValue("fileName", filename);
   graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
 
-  await graph.run();
+  const result = await graph.run<{path: string}>();
+  writingMessage(result?.writeJSON?.path ?? '');
 };
