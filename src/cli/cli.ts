@@ -16,11 +16,11 @@ import { images } from "../actions/images.js";
 import { audio } from "../actions/audio.js";
 import { movie } from "../actions/movie.js";
 
-import { getBaseDirPath, getFullPath, readMulmoScriptFile } from "../utils/file.js";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile } from "../utils/file.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 
 const isHttp = (fileOrUrl: string) => {
-  return fileOrUrl.startsWith("http");
+  return /^https?:\/\//.test(fileOrUrl);
 };
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, audiodir } = args;
@@ -28,7 +28,7 @@ const getFileObject = () => {
 
   const fileOrUrl = (file as string) ?? "";
   const isHttpPath = isHttp(fileOrUrl);
-  const mulmoFilePath = getFullPath(baseDirPath, isHttpPath ?  "" : fileOrUrl);
+  const mulmoFilePath = getFullPath(baseDirPath, isHttpPath ? "" : fileOrUrl);
   const mulmoFileDirPath = path.dirname(mulmoFilePath);
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
@@ -54,16 +54,12 @@ const main = async () => {
   const readData = await (async () => {
     if (isHttpPath) {
       const url = args.file as string;
-      const res = await fetch(url);
-      if (!res.ok) {
+      const res = await fetchMulmoScriptFile(url, mulmoFileDirPath);
+      if (!res.result) {
         GraphAILogger.info(`HTTP error! ${res.status} ${url}`);
+        process.exit(1);
       }
-      const script = await res.json();
-      return {
-        mulmoData: script,
-        mulmoDataPath: mulmoFileDirPath,
-        fileName: path.parse(url).name,
-      };
+      return res.data;
     } else {
       if (!fs.existsSync(mulmoFilePath)) {
         GraphAILogger.info("ERROR: File not exists " + mulmoFilePath);
@@ -74,7 +70,6 @@ const main = async () => {
   })();
 
   const { mulmoData: mulmoScript, fileName } = readData;
-
   // validate mulmoStudioSchema. skip if __test_invalid__ is true
   try {
     if (!mulmoScript?.__test_invalid__) {
