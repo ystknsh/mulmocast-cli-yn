@@ -88,11 +88,6 @@ MulmoScript is a JSON format to define podcast or video scripts:
 schema: [./src/types/schema.ts](./src/types/schema.ts)
 
 
-## Contributing
-
-For developers interested in contributing to this project, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-
 ## Directory Structure
 
 | Directory         | Description                                                                 |
@@ -156,4 +151,9 @@ Options:
   -f, --filename     output filename                [string] [default: "script"]
       --help         Show help                                         [boolean]
 ```
->>>>>>> 6a44a3d0c8dbda05813470a94ff656d48cef31d9
+
+
+## Contributing
+
+For developers interested in contributing to this project, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
