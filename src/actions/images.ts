@@ -51,7 +51,7 @@ const preprocess_agent = async (namedInputs: {
       }
     } else if (beat.image.type === "chart") {
       const template = getHTMLFile("chart");
-      const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
+      const htmlData = interpolate(template, { title: beat.image.title, width: Math.round(canvasSize.width * 0.625).toString(), chart_data: JSON.stringify(beat.image.chartData) });
       await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image?.type === "mermaid") {
       const template = getHTMLFile("mermaid");
