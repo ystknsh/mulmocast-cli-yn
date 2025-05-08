@@ -103,6 +103,7 @@ const graph_data: GraphData = {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
+              force: ":context.force",
             },
             defaultValue: {},
           },
