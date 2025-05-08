@@ -101,4 +101,23 @@ Run ```yarn run translate {path to the script file}```
 
 ## Create a movie file with the Japanese script
 
-Run ```yarn run movie {path to the script file}``` 
+Run ```yarn run movie {path to the script file}```
+
+
+## Logging Guidelines for Developers
+
+Do **not** use `console.xxx` functions directly.  
+Instead, use `GraphAILogger` to manage user-facing logs and control output based on verbosity flags.
+
+### Log Levels
+
+- Use `GraphAILogger.info` for messages intended to be shown to users.
+- Use `GraphAILogger.log` and `GraphAILogger.error` for developer-level messages — these will only appear when the `-v` (`--verbose`) flag is enabled.
+
+### Why Use `GraphAILogger`
+
+- Allows user-facing logs to be toggled on/off cleanly.
+- Prevents internal logs from interfering with command output or script arguments.
+- Keeps behavior consistent across different CLI tools and environments.
+
+Please ensure you choose the appropriate `GraphAILogger` method based on the log's purpose and expected visibility.
