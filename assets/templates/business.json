@@ -128,6 +128,15 @@
             }
           }
         }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Next, let's look at a diagram of our business process flow. This illustrates the key steps from product development to sales.",
+        "image": {
+          "type": "mermaid",
+          "title": "Business Process Flow",
+          "code": "graph LR\n    A[Market Research] --> B[Product Planning]\n    B --> C[Development]\n    C --> D[Testing]\n    D --> E[Manufacturing]\n    E --> F[Marketing]\n    F --> G[Sales]\n    G --> H[Customer Support]\n    H --> A"
+        }
       }
     ]
   }

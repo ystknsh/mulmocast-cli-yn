@@ -105,6 +105,14 @@ const MulmoChartMediaSchema = z
   })
   .strict();
 
+const MulmoMermaidMediaSchema = z
+  .object({
+    type: z.literal("mermaid"),
+    title: z.string().describe("The title of the diagram"),
+    code: z.string().describe("The code of the mermaid diagram"),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
@@ -114,6 +122,7 @@ export const mulmoImageAssetSchema = z.union([
   MulmoMovieMediaSchema,
   MulmoTextSlideMediaSchema,
   MulmoChartMediaSchema,
+  MulmoMermaidMediaSchema,
 ]);
 
 const MulmoAudioMediaSchema = z
