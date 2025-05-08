@@ -157,6 +157,6 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   graph.injectValue("fileName", filename);
   graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
 
-  const result = await graph.run<{path: string}>();
-  writingMessage(result?.writeJSON?.path ?? '');
+  const result = await graph.run<{ path: string }>();
+  writingMessage(result?.writeJSON?.path ?? "");
 };
