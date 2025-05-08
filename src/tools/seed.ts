@@ -11,6 +11,7 @@ import { browserlessCacheGenerator } from "../utils/filters";
 import { ScriptingParams } from "../types";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
+import { cliLoadingPlugin } from "../utils/plugins";
 
 const agentHeader = "\x1b[34m● \x1b[0m\x1b[1mAgent\x1b[0m:\x1b[0m";
 
@@ -223,6 +224,8 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, cacheDirPat
   ]);
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
+
+  graph.registerCallback(cliLoadingPlugin({ nodeId: "reply", message: "Loading..." }));
 
   console.log(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
