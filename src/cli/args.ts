@@ -4,9 +4,9 @@ import { commonOptions } from "./common.js";
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmo")
-  .option("s", {
-    alias: "scratchpaddir",
-    description: "scratchpad dir",
+  .option("a", {
+    alias: "audiodir",
+    description: "audio dir",
     demandOption: false,
     type: "string",
   })
@@ -15,6 +15,13 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
     description: "image dir",
     demandOption: false,
     type: "string",
+  })
+  .option("f", {
+    alias: "force",
+    description: "force generate",
+    demandOption: false,
+    default: false,
+    type: "boolean",
   })
   .command("$0 <action> <file>", "Run mulmocast", (yargs) => {
     return yargs
