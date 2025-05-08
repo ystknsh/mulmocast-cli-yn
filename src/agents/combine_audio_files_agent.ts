@@ -25,14 +25,23 @@ const combineAudioFilesAgent: AgentFunction<
     });
   };
 
+  const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoStudioBeat, audioDirPath: string): string => {
+    if (mulmoBeat.audio?.type === "audio") {
+      const { source } = mulmoBeat.audio;
+      if (source.kind === "path") {
+        return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
+      }
+      if (source.kind === "url") {
+        return source.url;
+      }
+    }
+    return getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
+  };
+
   const promise = new Promise((resolve, reject) => {
     Promise.all(
       context.studio.beats.map(async (mulmoBeat: MulmoStudioBeat, index: number) => {
-        const audioPath =
-          mulmoBeat.audio?.type === "audio" &&
-          ((mulmoBeat.audio?.source.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.source.path)) ||
-            (mulmoBeat.audio?.source.kind === "url" && mulmoBeat.audio.source.url));
-        const filePath = audioPath || getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
+        const filePath = resolveAudioFilePath(context, mulmoBeat, audioDirPath);
         const isLast = index === context.studio.beats.length - 2;
         command.input(filePath);
         command.input(isLast ? silentLastPath : silentPath);
