@@ -55,7 +55,7 @@ const main = async () => {
     if (isHttpPath) {
       const url = args.file as string;
       const res = await fetchMulmoScriptFile(url, mulmoFileDirPath);
-      if (!res.result) {
+      if (!res.result || !res.data) {
         GraphAILogger.info(`HTTP error! ${res.status} ${url}`);
         process.exit(1);
       }
