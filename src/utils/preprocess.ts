@@ -1,7 +1,7 @@
-import { readMulmoScriptFile, getOutputStudioFilePath } from "./file";
-import { MulmoStudio, MulmoStudioBeat, MulmoScript } from "../types";
-import { text2hash } from "./text_hash";
-import { MulmoScriptMethods } from "../methods";
+import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
+import { MulmoStudio, MulmoStudioBeat, MulmoScript } from "../types/index.js";
+import { text2hash } from "./text_hash.js";
+import { MulmoScriptMethods } from "../methods/index.js";
 
 export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;

@@ -1,6 +1,6 @@
-import zodToJsonSchema from "zod-to-json-schema";
-import { MulmoScriptTemplate } from "../types";
-import { mulmoScriptSchema } from "../types/schema";
+import { zodToJsonSchema } from "zod-to-json-schema";
+import { MulmoScriptTemplate } from "../types/index.js";
+import { mulmoScriptSchema } from "../types/schema.js";
 
 export const MulmoScriptTemplateMethods = {
   getSystemPrompt(template: MulmoScriptTemplate): string {

@@ -13,7 +13,7 @@ import {
   mulmoDimensionSchema,
   mulmoScriptTemplateSchema,
   text2ImageProviderSchema,
-} from "./schema";
+} from "./schema.js";
 import { z } from "zod";
 
 export type LANG = z.infer<typeof langSchema>;

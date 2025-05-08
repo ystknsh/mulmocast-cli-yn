@@ -1,16 +1,17 @@
 import "dotenv/config";
 import { GraphAI, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
-import * as vanilla from "@graphai/vanilla";
+import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
-import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
-import { readTemplatePrompt, mkdir, writingMessage } from "../utils/file";
-import { browserlessCacheGenerator } from "../utils/filters";
-import { urlsSchema } from "../types/schema";
-import { ScriptingParams } from "../types";
-import { cliLoadingPlugin } from "../utils/plugins";
+import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
+import { readTemplatePrompt, mkdir, writingMessage } from "../utils/file.js";
+import { browserlessCacheGenerator } from "../utils/filters.js";
+import { urlsSchema } from "../types/schema.js";
+import { ScriptingParams } from "../types/index.js";
+import { cliLoadingPlugin } from "../utils/plugins.js";
 
+const { default: __, ...vanillaAgents } = agents;
 const graphData: GraphData = {
   version: 0.5,
   // Execute sequentially because the free version of browserless API doesn't support concurrent execution.
@@ -142,7 +143,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   const graph = new GraphAI(
     graphData,
     {
-      ...vanilla,
+      ...vanillaAgents,
       openAIAgent,
       browserlessAgent,
       validateMulmoScriptAgent,

@@ -5,9 +5,11 @@ import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string";
-import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext } from "../types";
-import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file";
+import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
+import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext } from "../types/index.js";
+import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
+
+const { default: __, ...vanillaAgents } = agents;
 
 const translateGraph: GraphData = {
   version: 0.5,
@@ -201,7 +203,7 @@ export const translate = async (context: MulmoStudioContext) => {
 
   assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
 
-  const graph = new GraphAI(translateGraph, { ...agents, fileWriteAgent, openAIAgent }, { agentFilters });
+  const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters });
   graph.injectValue("studio", studio);
   graph.injectValue("defaultLang", defaultLang);
   graph.injectValue("targetLangs", targetLangs);

@@ -1,9 +1,13 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import { MulmoScript, MulmoScriptTemplate } from "../types";
-import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template";
-import { mulmoScriptTemplateSchema } from "../types/schema";
+import { MulmoScript, MulmoScriptTemplate } from "../types/index.js";
+import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
+import { mulmoScriptTemplateSchema } from "../types/schema.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function readMulmoScriptFile<T = MulmoScript>(
   path: string,

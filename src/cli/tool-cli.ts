@@ -3,13 +3,13 @@
 import "dotenv/config";
 import { GraphAILogger } from "graphai";
 
-import { args } from "./tool-args";
-import { outDirName, cacheDirName } from "../utils/const";
-import { createMulmoScriptFromUrl } from "../tools/seed_from_url";
-import { getBaseDirPath, getFullPath } from "../utils/file";
-import { createMulmoScriptWithInteractive } from "../tools/seed";
-import { dumpPromptFromTemplate } from "../tools/dump_prompt";
-import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer";
+import { args } from "./tool-args.js";
+import { outDirName, cacheDirName } from "../utils/const.js";
+import { createMulmoScriptFromUrl } from "../tools/seed_from_url.js";
+import { getBaseDirPath, getFullPath } from "../utils/file.js";
+import { createMulmoScriptWithInteractive } from "../tools/seed.js";
+import { dumpPromptFromTemplate } from "../tools/dump_prompt.js";
+import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer.js";
 
 const main = async () => {
   const { o: outdir, b: basedir, action, v: verbose, i: interactive, f: filename, cache } = args;

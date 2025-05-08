@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { commonOptions } from "./common";
+import { commonOptions } from "./common.js";
 
 export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmo")

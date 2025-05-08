@@ -1,4 +1,4 @@
-import { readTemplatePrompt } from "../utils/file";
+import { readTemplatePrompt } from "../utils/file.js";
 
 export const dumpPromptFromTemplate = async ({ templateName }: { templateName: string }) => {
   const prompt = readTemplatePrompt(templateName);

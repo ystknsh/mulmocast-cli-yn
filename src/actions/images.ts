@@ -4,13 +4,15 @@ import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
-import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file";
-import { fileCacheAgentFilter } from "../utils/filters";
-import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown";
-import imageGoogleAgent from "../agents/image_google_agent";
-import imageOpenaiAgent from "../agents/image_openai_agent";
-import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods";
+import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
+import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file.js";
+import { fileCacheAgentFilter } from "../utils/filters.js";
+import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown.js";
+import imageGoogleAgent from "../agents/image_google_agent.js";
+import imageOpenaiAgent from "../agents/image_openai_agent.js";
+import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods/index.js";
+
+const { default: __, ...vanillaAgents } = agents;
 
 dotenv.config();
 // const openai = new OpenAI();
@@ -191,7 +193,7 @@ export const images = async (context: MulmoStudioContext) => {
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
   };
-  const graph = new GraphAI(graph_data, { ...agents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });

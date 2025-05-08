@@ -1,5 +1,5 @@
 import path from "path";
-import { MulmoStudioContext } from "../types";
+import { MulmoStudioContext } from "../types/index.js";
 
 export const MulmoStudioContextMethods = {
   resolveAssetPath(context: MulmoStudioContext, relativePath: string): string {

@@ -2,6 +2,7 @@
   "name": "mulmocast",
   "version": "0.0.1",
   "description": "",
+  "type": "module",
   "main": "lib/cli/cli.js",
   "bin": {
     "mulmo": "lib/cli/cli.js",
@@ -27,13 +28,13 @@
     "images": "npx tsx ./src/cli/cli.ts images",
     "preprocess": "npx tsx ./src/cli/cli.ts preprocess",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/audio.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
-    "ci_test": "node --test  --require ts-node/register ./test/*/test_*.ts",
+    "ci_test": "node --test --loader=ts-node/esm ./test/*/test_*.ts",
     "lint": "eslint src test",
     "build": "tsc",
     "build_test": "tsc && git checkout -- lib/*",
-    "prompt": "npx ts-node ./src/tools/prompt.ts",
-    "cli": "npx ts-node ./src/cli/cli.ts",
-    "scripting": "npx ts-node ./src/cli/tool-cli.ts scripting",
+    "prompt": "npx tsx ./src/tools/prompt.ts",
+    "cli": "npx tsx ./src/cli/cli.ts",
+    "scripting": "npx tsx ./src/cli/tool-cli.ts scripting",
     "dump_prompt": "npx tsx ./src/cli/tool-cli.ts prompt",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output}/**/*.{ts,json}'"
@@ -75,5 +76,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.32.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
