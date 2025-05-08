@@ -49,6 +49,7 @@ const preprocess_agent = async (namedInputs: {
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
     } else if (beat.image.type === "chart") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function interpolate(template: string, data: Record<string, any>): string {
         return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
       }
