@@ -12,40 +12,46 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
 
-  await Promise.all(context.studio.beats.map(async (mulmoBeat: MulmoStudioBeat, index: number) => {
-    const audioPath =
-      mulmoBeat.audio?.type === "audio" &&
-      ((mulmoBeat.audio?.source.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.source.path)) ||
-        (mulmoBeat.audio?.source.kind === "url" && mulmoBeat.audio.source.url));
-    const filePath = audioPath || getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
-    const isLast = index === context.studio.beats.length - 2;
-    command.input(filePath);
-    command.input(isLast ? silentLastPath : silentPath);
-    // Measure and log the timestamp of each section
-
-    const duration = await new Promise<number>((resolve, reject) => {
-      ffmpeg.ffprobe(filePath, (err, metadata) => {
-        if (err) {
-          console.error("Error while getting metadata:", err);
-          reject(err);
-        } else {
-          resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
-        }
-      });
-    });
-    context.studio.beats[index]["duration"] = duration;
-  }));
-
   const promise = new Promise((resolve, reject) => {
-    command
-      .on("end", () => {
-        resolve(0);
+    Promise.all(
+      context.studio.beats.map(async (mulmoBeat: MulmoStudioBeat, index: number) => {
+        const audioPath =
+          mulmoBeat.audio?.type === "audio" &&
+          ((mulmoBeat.audio?.source.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.source.path)) ||
+            (mulmoBeat.audio?.source.kind === "url" && mulmoBeat.audio.source.url));
+        const filePath = audioPath || getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
+        const isLast = index === context.studio.beats.length - 2;
+        command.input(filePath);
+        command.input(isLast ? silentLastPath : silentPath);
+        // Measure and log the timestamp of each section
+
+        const duration = await new Promise<number>((resolveInner, rejectInner) => {
+          ffmpeg.ffprobe(filePath, (err, metadata) => {
+            if (err) {
+              console.error("Error while getting metadata:", err);
+              rejectInner(err);
+            } else {
+              resolveInner(metadata.format.duration! + (isLast ? 0.8 : 0.3));
+            }
+          });
+        });
+        context.studio.beats[index]["duration"] = duration;
+      }),
+    )
+      .then(() => {
+        command
+          .on("end", () => {
+            resolve(0);
+          })
+          .on("error", (err: unknown) => {
+            console.error("Error while combining MP3 files:", err);
+            reject(err);
+          })
+          .mergeToFile(combinedFileName, audioDirPath);
       })
-      .on("error", (err: unknown) => {
-        console.error("Error while combining MP3 files:", err);
-        reject(err);
-      })
-      .mergeToFile(combinedFileName, audioDirPath);
+      .catch((error) => {
+        reject(error);
+      });
   });
 
   await promise;
