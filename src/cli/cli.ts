@@ -20,7 +20,7 @@ import { getBaseDirPath, getFullPath, readMulmoScriptFile } from "../utils/file.
 import { mulmoScriptSchema } from "../types/schema.js";
 
 const getFileObject = () => {
-  const { basedir, file, outdir, imagedir, scratchpaddir } = args;
+  const { basedir, file, outdir, imagedir, audiodir } = args;
   const baseDirPath = getBaseDirPath(basedir as string);
 
   const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
@@ -28,7 +28,7 @@ const getFileObject = () => {
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
-  const audioDirPath = getFullPath(outDirPath, (scratchpaddir as string) ?? audioDirName); // audio
+  const audioDirPath = getFullPath(outDirPath, (audiodir as string) ?? audioDirName);
 
   return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath };
 };
@@ -49,8 +49,7 @@ const main = async () => {
     process.exit(1);
   }
 
-  // TODO some option process
-  const { action } = args;
+  const { action, force } = args;
 
   const readData = readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
   const { mulmoData: mulmoScript, fileName } = readData;
@@ -70,6 +69,7 @@ const main = async () => {
   const context = {
     studio,
     fileDirs: files,
+    force: Boolean(force),
   };
   if (action === "translate") {
     await translate(context);

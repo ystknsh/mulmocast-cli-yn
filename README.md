@@ -85,7 +85,7 @@ mulmo translate script.json
 ## Cache and Re-run
 When running the same `mulmo` command multiple times, previously generated files are treated as cache. For example, audio or image files will not be regenerated if they already exist.
 
-To force regeneration, delete the old files — including temporary files — under the output directory before re-running the command.
+To force regeneration, delete the old files — including temporary files — under the output directory before re-running the command or use -f (force) option.
 
 If you modify the text or instruction fields in a MulmoScript, mulmo will automatically detect the changes and regenerate the corresponding audio content upon re-run.
 
@@ -125,13 +125,14 @@ Positionals:
   file    Mulmo Script File                                             [string]
 
 Options:
-      --version        Show version number                             [boolean]
-  -v, --verbose        verbose log         [boolean] [required] [default: false]
-  -o, --outdir         output dir                                       [string]
-  -b, --basedir        base dir                                         [string]
-  -s, --scratchpaddir  scratchpad dir                                   [string]
-  -i, --imagedir       image dir                                        [string]
-      --help           Show help                                       [boolean]
+      --version   Show version number                                  [boolean]
+  -v, --verbose   verbose log              [boolean] [required] [default: false]
+  -o, --outdir    output dir                                            [string]
+  -b, --basedir   base dir                                              [string]
+  -a, --audiodir  audio dir                                             [string]
+  -i, --imagedir  image dir                                             [string]
+  -f, --force     force generate                      [boolean] [default: false]
+      --help      Show help                                            [boolean]
 
 ```
 
@@ -158,7 +159,7 @@ Options:
    [string] [choices: "business", "children_book", "coding", "podcast_standard",
                                                               "sensei_and_taro"]
   -c, --cache        cache dir                                          [string]
-  -f, --filename     output filename                [string] [default: "script"]
+  -s, --script       script filename                [string] [default: "script"]
       --help         Show help                                         [boolean]
 ```
 

@@ -9,23 +9,34 @@ import { text2hash } from "./text_hash.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file, text } = namedInputs;
-  try {
-    await fsPromise.access(file);
+  const { file, text, force } = namedInputs;
+
+  const shouldUseCache = async () => {
+    if (force) {
+      return false;
+    }
+    try {
+      await fsPromise.access(file);
+      return true;
+    } catch (__e) {
+      return false;
+    }
+  };
+
+  if (await shouldUseCache()) {
     const elements = file.split("/");
     GraphAILogger.info("cache hit: " + elements[elements.length - 1], text.slice(0, 10));
     return true;
-  } catch (__e) {
-    const output = (await next(context)) as { buffer: Buffer };
-    const buffer = output ? output["buffer"] : undefined;
-    if (buffer) {
-      writingMessage(file);
-      await fsPromise.writeFile(file, buffer);
-      return true;
-    }
-    GraphAILogger.log("no cache, no buffer: " + file);
-    return false;
   }
+  const output = (await next(context)) as { buffer: Buffer };
+  const buffer = output ? output["buffer"] : undefined;
+  if (buffer) {
+    writingMessage(file);
+    await fsPromise.writeFile(file, buffer);
+    return true;
+  }
+  GraphAILogger.log("no cache, no buffer: " + file);
+  return false;
 };
 
 export const browserlessCacheGenerator = (cacheDir: string) => {

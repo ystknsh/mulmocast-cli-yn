@@ -60,6 +60,7 @@ const graph_tts: GraphData = {
       inputs: {
         text: ":beat.text",
         file: "${:audioSegmentDirPath}/${:beat.audioFile}.mp3", // TODO
+        force: ":context.force",
       },
       params: {
         voice: ":preprocessor.voiceId",
@@ -82,7 +83,13 @@ const graph_data: GraphData = {
     audioSegmentDirPath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", script: ":context.studio.script", audioDirPath: ":audioDirPath", audioSegmentDirPath: ":audioSegmentDirPath" },
+      inputs: {
+        rows: ":context.studio.beats",
+        script: ":context.studio.script",
+        audioDirPath: ":audioDirPath",
+        audioSegmentDirPath: ":audioSegmentDirPath",
+        context: ":context",
+      },
       params: {
         rowKey: "beat",
       },

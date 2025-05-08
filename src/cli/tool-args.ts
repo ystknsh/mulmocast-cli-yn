@@ -37,9 +37,9 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
     demandOption: false,
     type: "string",
   })
-  .option("f", {
-    alias: "filename",
-    description: "output filename",
+  .option("s", {
+    alias: "script",
+    description: "script filename",
     demandOption: false,
     default: "script",
     type: "string",
