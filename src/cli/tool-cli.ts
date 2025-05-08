@@ -5,9 +5,9 @@ import { GraphAILogger } from "graphai";
 
 import { args } from "./tool-args.js";
 import { outDirName, cacheDirName } from "../utils/const.js";
-import { createMulmoScriptFromUrl } from "../tools/seed_from_url.js";
+import { createMulmoScriptFromUrl } from "../tools/create_mulmo_script_from_url.js";
 import { getBaseDirPath, getFullPath } from "../utils/file.js";
-import { createMulmoScriptWithInteractive } from "../tools/seed.js";
+import { createMulmoScriptInteractively } from "../tools/create_mulmo_script_interactively.js";
 import { dumpPromptFromTemplate } from "../tools/dump_prompt.js";
 import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer.js";
 
@@ -45,7 +45,7 @@ const main = async () => {
 
   if (action === "scripting") {
     if (interactive) {
-      await createMulmoScriptWithInteractive({ outDirPath, templateName: template, urls, filename, cacheDirPath });
+      await createMulmoScriptInteractively({ outDirPath, templateName: template, urls, filename, cacheDirPath });
     } else {
       urls = await getUrlsIfNeeded(urls);
       await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename, cacheDirPath });
