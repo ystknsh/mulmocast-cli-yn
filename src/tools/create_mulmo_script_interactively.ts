@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { GraphAI } from "graphai";
+import { GraphAILogger, GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
 import { openAIAgent } from "@graphai/openai_agent";
@@ -124,7 +124,7 @@ const graphData = {
           continue: {
             agent: ({ codeBlock, isValid, counter }: { codeBlock: string | undefined; isValid: boolean; counter: number }) => {
               if (counter >= 3) {
-                console.error("\n" + agentHeader + " \x1b[31mFailed to generate a valid script. Please try again.\n");
+                GraphAILogger.info("\n" + agentHeader + " \x1b[31mFailed to generate a valid script. Please try again.\n");
                 return false;
               }
               return !!codeBlock && !isValid;
@@ -188,7 +188,7 @@ const interactiveClarificationPrompt = `If there are any unclear points, be sure
 
 const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
   mkdir(cacheDirPath);
-  console.log(`${agentHeader} Scraping ${urls.length} URLs...\n`);
+  GraphAILogger.info(`${agentHeader} Scraping ${urls.length} URLs...\n`);
 
   const browserlessCache = browserlessCacheGenerator(cacheDirPath);
   const agentFilters = [
@@ -229,6 +229,6 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
 
   graph.registerCallback(cliLoadingPlugin({ nodeId: "reply", message: "Loading..." }));
 
-  console.log(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
+  GraphAILogger.info(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
 };

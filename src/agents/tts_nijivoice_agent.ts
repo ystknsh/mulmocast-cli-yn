@@ -1,4 +1,5 @@
-import { AgentFunction, AgentFunctionInfo, assert } from "graphai";
+import { GraphAILogger, assert } from "graphai";
+import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
 const nijovoiceApiKey = process.env.NIJIVOICE_API_KEY ?? "";
 
@@ -47,7 +48,7 @@ export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) 
         error: voiceJson,
       };
     }
-    console.error(voiceJson);
+    GraphAILogger.info(voiceJson);
     throw new Error("TTS Nijivoice Error");
   } catch (e) {
     if (suppressError) {
@@ -55,7 +56,7 @@ export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs }) 
         error: e,
       };
     }
-    console.error(e);
+    GraphAILogger.info(e);
     throw new Error("TTS Nijivoice Error");
   }
 };

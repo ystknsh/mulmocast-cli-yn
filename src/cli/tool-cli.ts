@@ -21,14 +21,14 @@ const main = async () => {
   const cacheDirPath = getFullPath(outDirPath, (cache as string) ?? cacheDirName);
 
   if (verbose) {
-    console.log("baseDirPath:", baseDirPath);
-    console.log("outDirPath:", outDirPath);
-    console.log("cacheDirPath:", cacheDirPath);
-    console.log("template:", template);
-    console.log("urls:", urls);
-    console.log("action:", action);
-    console.log("interactive:", interactive);
-    console.log("filename:", filename);
+    GraphAILogger.info("baseDirPath:", baseDirPath);
+    GraphAILogger.info("outDirPath:", outDirPath);
+    GraphAILogger.info("cacheDirPath:", cacheDirPath);
+    GraphAILogger.info("template:", template);
+    GraphAILogger.info("urls:", urls);
+    GraphAILogger.info("action:", action);
+    GraphAILogger.info("interactive:", interactive);
+    GraphAILogger.info("filename:", filename);
   } else {
     GraphAILogger.setLevelEnabled("error", false);
     GraphAILogger.setLevelEnabled("log", false);
@@ -39,7 +39,7 @@ const main = async () => {
   if (!template) {
     template = await selectTemplate();
     if (verbose) {
-      console.log("Selected template:", template);
+      GraphAILogger.info("Selected template:", template);
     }
   }
 
@@ -58,6 +58,6 @@ const main = async () => {
 };
 
 main().catch((error) => {
-  console.error("An unexpected error occurred:", error);
+  GraphAILogger.info("An unexpected error occurred:", error);
   process.exit(1);
 });

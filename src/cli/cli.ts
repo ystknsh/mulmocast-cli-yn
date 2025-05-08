@@ -37,7 +37,7 @@ const main = async () => {
   const { mulmoFilePath } = files;
 
   if (args.v) {
-    console.log(files);
+    GraphAILogger.info(files);
   } else {
     GraphAILogger.setLevelEnabled("error", false);
     GraphAILogger.setLevelEnabled("log", false);
@@ -45,7 +45,7 @@ const main = async () => {
   }
 
   if (!fs.existsSync(mulmoFilePath)) {
-    console.error("File not exists");
+    GraphAILogger.info("File not exists");
     process.exit(1);
   }
 
@@ -61,7 +61,7 @@ const main = async () => {
       mulmoScriptSchema.parse(mulmoScript);
     }
   } catch (error) {
-    console.error(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
+    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
     process.exit(1);
   }
 

@@ -27,7 +27,7 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => 
         error: e,
       };
     }
-    console.error(e);
+    GraphAILogger.info(e);
     throw new Error("TTS OpenAI Error");
   }
 };

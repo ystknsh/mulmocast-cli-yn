@@ -37,7 +37,7 @@ export default [
       quotes: "off",
       semi: ["error", "always"],
       "prettier/prettier": "error",
-      "no-console": "warn",
+      "no-console": "error",
     },
     plugins: {
       prettier: prettierPlugin,

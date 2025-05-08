@@ -30,7 +30,7 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
-      console.error(errorMessage);
+      GraphAILogger.info(errorMessage);
       process.exit(1);
     }
     return null;
@@ -70,7 +70,7 @@ export const getTemplateFilePath = (templateName: string) => {
 
 export const mkdir = (dirPath: string) => {
   if (!fs.existsSync(dirPath)) {
-    console.info("mkdir: " + dirPath);
+    GraphAILogger.info("mkdir: " + dirPath);
     fs.mkdirSync(dirPath, { recursive: true });
   }
 };

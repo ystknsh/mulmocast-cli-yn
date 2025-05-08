@@ -1,3 +1,4 @@
+import { GraphAILogger } from "graphai";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -18,7 +19,7 @@ test("test updateMultiLingualTexts not update", async () => {
       const jsonData = JSON.parse(content);
       mulmoScriptSchema.parse(jsonData);
     } catch (e) {
-      console.error(file, e);
+      GraphAILogger.info(file, e);
     }
   });
 });
