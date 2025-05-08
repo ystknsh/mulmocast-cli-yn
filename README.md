@@ -87,6 +87,7 @@ When running the same `mulmo` command multiple times, previously generated files
 
 To force regeneration, delete the old files — including temporary files — under the output directory before re-running the command.
 
+If you modify the text or instruction fields in a MulmoScript, mulmo will automatically detect the changes and regenerate the corresponding audio content upon re-run.
 
 ## MulmoScript Format
 
