@@ -87,6 +87,9 @@ mulmo translate script.json
 MulmoScript is a JSON format to define podcast or video scripts:
 schema: [./src/types/schema.ts](./src/types/schema.ts)
 
+## Sample MulmoScript
+
+https://github.com/receptron/mulmocast-cli/tree/main/scripts
 
 ## Directory Structure
 
