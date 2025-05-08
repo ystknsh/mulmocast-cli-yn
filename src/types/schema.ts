@@ -181,7 +181,7 @@ export const mulmoCanvasDimensionSchema = z
     width: z.number(),
     height: z.number(),
   })
-  .default({ width: 1280, height: 720 })
+  .default({ width: 1280, height: 720 });
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
 
@@ -196,7 +196,7 @@ export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal
 
 export const mulmoSpeechParamsSchema = z
   .object({
-    provider: text2SpeechProviderSchema,
+    provider: text2SpeechProviderSchema, // has default value
     speakers: speakerDictionarySchema,
   })
   .strict();
@@ -211,7 +211,7 @@ export const mulmoScriptSchema = z
     description: z.string().optional(),
     reference: z.string().optional(),
     lang: langSchema.optional(), // default "en"
-    canvasSize: mulmoCanvasDimensionSchema.optional(),
+    canvasSize: mulmoCanvasDimensionSchema, // has default value
 
     beats: z.array(mulmoBeatSchema),
 
@@ -219,7 +219,7 @@ export const mulmoScriptSchema = z
 
     imageParams: mulmoImageParamsSchema
       .extend({
-        provider: text2ImageProviderSchema,
+        provider: text2ImageProviderSchema, // has default value
       })
       .optional(),
 
