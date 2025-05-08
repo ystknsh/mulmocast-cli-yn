@@ -7,7 +7,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown.js";
+import { renderMarkdownToImage, renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
 import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods/index.js";
@@ -49,12 +49,12 @@ const preprocess_agent = async (namedInputs: {
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
     } else if (beat.image.type === "chart") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function interpolate(template: string, data: Record<string, any>): string {
-        return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
-      }
       const template = getHTMLFile("chart");
       const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
+      await renderHTMLToImage(htmlData, imagePath);
+    } else if (beat.image?.type === "mermaid") {
+      const template = getHTMLFile("mermaid");
+      const htmlData = interpolate(template, { title: beat.image.title, diagram_code: beat.image.code });
       await renderHTMLToImage(htmlData, imagePath);
     }
   }

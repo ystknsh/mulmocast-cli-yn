@@ -25,3 +25,7 @@ export const renderMarkdownToImage = async (markdown: string, style: string, out
   const html = `<htlm>${header}<body>${body}</body></html>`;
   await renderHTMLToImage(html, outputPath);
 };
+
+export const interpolate = (template: string, data: Record<string, string>): string => {
+  return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
+};
