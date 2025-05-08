@@ -1,4 +1,5 @@
-import { AgentFunction, AgentFunctionInfo } from "graphai";
+import { GraphAILogger } from "graphai";
+import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file.js";
@@ -16,7 +17,7 @@ const combineAudioFilesAgent: AgentFunction<
     return new Promise<number>((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) {
-          console.error("Error while getting metadata:", err);
+          GraphAILogger.info("Error while getting metadata:", err);
           reject(err);
         } else {
           resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
@@ -56,7 +57,7 @@ const combineAudioFilesAgent: AgentFunction<
         resolve(0);
       })
       .on("error", (err: unknown) => {
-        console.error("Error while combining MP3 files:", err);
+        GraphAILogger.info("Error while combining MP3 files:", err);
         reject(err);
       })
       .mergeToFile(combinedFileName, audioDirPath);

@@ -10,7 +10,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     let command = ffmpeg();
 
     if (studio.beats.some((beat) => !beat.imageFile)) {
-      console.error("beat.imageFile is not set. Please run `yarn run images ${file}` ");
+      GraphAILogger.info("beat.imageFile is not set. Please run `yarn run images ${file}` ");
       return;
     }
 
@@ -72,7 +72,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
       })
       .on("end", () => {
         const end = performance.now();
-        console.log(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
+        GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
         resolve(0);
       })
       .output(outputVideoPath)

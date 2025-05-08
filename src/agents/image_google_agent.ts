@@ -1,4 +1,5 @@
-import { AgentFunction, AgentFunctionInfo } from "graphai";
+import { GraphAILogger } from "graphai";
+import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
 type PredictionResponse = {
   predictions?: {
@@ -57,11 +58,11 @@ async function generateImage(
       }
     } else {
       // console.log(response);
-      console.log("No predictions returned from the API.", responseData, prompt);
+      GraphAILogger.info("No predictions returned from the API.", responseData, prompt);
       return undefined;
     }
   } catch (error) {
-    console.error("Error generating image:", error);
+    GraphAILogger.info("Error generating image:", error);
     throw error;
   }
 }
@@ -90,7 +91,7 @@ export const imageGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
     }
     throw new Error("ERROR: geneateImage returned undefined");
   } catch (error) {
-    console.error("Failed to generate image:", error);
+    GraphAILogger.info("Failed to generate image:", error);
     throw error;
   }
 };

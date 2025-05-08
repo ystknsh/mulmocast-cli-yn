@@ -1,4 +1,5 @@
-import { AgentFunction, AgentFunctionInfo } from "graphai";
+import { GraphAILogger } from "graphai";
+import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoScript } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
@@ -13,14 +14,14 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const promise = new Promise((resolve, reject) => {
     ffmpeg.ffprobe(voiceFile, (err, metadata) => {
       if (err) {
-        console.error("Error getting metadata: " + err.message);
+        GraphAILogger.info("Error getting metadata: " + err.message);
         reject(err);
       }
 
       const speechDuration = metadata.format.duration;
       const padding = MulmoScriptMethods.getPadding(script);
       const totalDuration = (padding * 2) / 1000 + Math.round(speechDuration ?? 0);
-      console.log("totalDucation:", speechDuration, totalDuration);
+      GraphAILogger.log("totalDucation:", speechDuration, totalDuration);
 
       const command = ffmpeg();
       command
@@ -39,7 +40,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
           `[trimmed]afade=t=out:st=${totalDuration - padding / 1000}:d=${padding}`,
         ])
         .on("error", (err) => {
-          console.error("Error: " + err.message);
+          GraphAILogger.info("Error: " + err.message);
           reject(err);
         })
         .on("end", () => {
