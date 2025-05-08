@@ -1,3 +1,3 @@
-export * from "./mulmo_script";
-export * from "./mulmo_script_template";
-export * from "./mulmo_studio_context";
+export * from "./mulmo_script.js";
+export * from "./mulmo_script_template.js";
+export * from "./mulmo_studio_context.js";

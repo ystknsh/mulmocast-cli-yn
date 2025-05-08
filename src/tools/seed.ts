@@ -3,15 +3,17 @@ import { GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
 import { openAIAgent } from "@graphai/openai_agent";
-import * as vanilla from "@graphai/vanilla";
+import * as agents from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { readTemplatePrompt, mkdir } from "../utils/file";
-import { browserlessCacheGenerator } from "../utils/filters";
-import { ScriptingParams } from "../types";
+import { readTemplatePrompt, mkdir } from "../utils/file.js";
+import { browserlessCacheGenerator } from "../utils/filters.js";
+import { ScriptingParams } from "../types/index.js";
 import { browserlessAgent } from "@graphai/browserless_agent";
-import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
-import { cliLoadingPlugin } from "../utils/plugins";
+import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
+import { cliLoadingPlugin } from "../utils/plugins.js";
+
+const { default: __, ...vanillaAgents } = agents;
 
 const agentHeader = "\x1b[34m● \x1b[0m\x1b[1mAgent\x1b[0m:\x1b[0m";
 
@@ -197,7 +199,7 @@ const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
     },
   ];
 
-  const graph = new GraphAI(graphDataForScraping, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent, browserlessAgent }, { agentFilters });
+  const graph = new GraphAI(graphDataForScraping, { ...vanillaAgents, openAIAgent, textInputAgent, fileWriteAgent, browserlessAgent }, { agentFilters });
   graph.injectValue("urls", urls);
 
   const result = (await graph.run()) as { sourceText: { text: string } };
@@ -213,7 +215,7 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, cacheDirPat
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls, cacheDirPath) : "";
 
-  const graph = new GraphAI(graphData, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent, validateMulmoScriptAgent });
+  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, textInputAgent, fileWriteAgent, validateMulmoScriptAgent });
 
   const prompt = readTemplatePrompt(templateName);
   graph.injectValue("messages", [

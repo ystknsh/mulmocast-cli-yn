@@ -1,4 +1,4 @@
-import { splitIntoSentencesJa, recursiveSplitJa } from "../../src/utils/string";
+import { splitIntoSentencesJa, recursiveSplitJa } from "../../src/utils/string.js";
 
 import test from "node:test";
 import assert from "node:assert";

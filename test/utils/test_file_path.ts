@@ -1,4 +1,4 @@
-import { getBaseDirPath, getFullPath } from "../../src/utils/file";
+import { getBaseDirPath, getFullPath } from "../../src/utils/file.js";
 
 import test from "node:test";
 import assert from "node:assert";

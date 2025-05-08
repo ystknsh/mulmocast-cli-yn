@@ -1,8 +1,8 @@
 import ffmpeg from "fluent-ffmpeg";
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoStudioContext } from "../types";
-import { MulmoScriptMethods } from "../methods";
-import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file";
+import { MulmoStudio, MulmoStudioContext } from "../types/index.js";
+import { MulmoScriptMethods } from "../methods/index.js";
+import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
 const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio) => {
   return new Promise((resolve, reject) => {

@@ -1,5 +1,5 @@
 /*
-import { updateMultiLingualTexts } from "../../src/translate";
+import { updateMultiLingualTexts } from "../../src/translate.js";
 
 import test from "node:test";
 import assert from "node:assert";

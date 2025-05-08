@@ -5,19 +5,19 @@ import fs from "fs";
 import path from "path";
 import { GraphAILogger } from "graphai";
 
-import { args } from "./args";
+import { args } from "./args.js";
 
-import { createOrUpdateStudioData } from "../utils/preprocess";
-import { outDirName, imageDirName, audioDirName } from "../utils/const";
-import { MulmoScriptMethods } from "../methods";
+import { createOrUpdateStudioData } from "../utils/preprocess.js";
+import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
+import { MulmoScriptMethods } from "../methods/index.js";
 
-import { translate } from "../actions/translate";
-import { images } from "../actions/images";
-import { audio } from "../actions/audio";
-import { movie } from "../actions/movie";
+import { translate } from "../actions/translate.js";
+import { images } from "../actions/images.js";
+import { audio } from "../actions/audio.js";
+import { movie } from "../actions/movie.js";
 
-import { getBaseDirPath, getFullPath, readMulmoScriptFile } from "../utils/file";
-import { mulmoScriptSchema } from "../types/schema";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile } from "../utils/file.js";
+import { mulmoScriptSchema } from "../types/schema.js";
 
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, scratchpaddir } = args;

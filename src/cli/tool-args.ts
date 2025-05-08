@@ -1,8 +1,8 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { commonOptions } from "./common";
+import { commonOptions } from "./common.js";
 import { GraphAILogger } from "graphai";
-import { getAvailableTemplates } from "../utils/file";
+import { getAvailableTemplates } from "../utils/file.js";
 
 GraphAILogger.setLevelEnabled("error", false);
 

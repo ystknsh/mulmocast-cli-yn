@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams } from "../types";
+import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams } from "../types/index.js";
 
 const defaultTextSlideStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",

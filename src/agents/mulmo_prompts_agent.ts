@@ -1,5 +1,5 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
-import { prompts } from "./prompts_data";
+import { prompts } from "./prompts_data.js";
 
 export const mulmoPromptsAgent: AgentFunction<{ promptKey: keyof typeof prompts }> = async ({ params }) => {
   const { promptKey } = params;

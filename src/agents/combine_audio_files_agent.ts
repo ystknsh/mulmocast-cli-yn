@@ -1,8 +1,8 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types";
-import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file";
-import { MulmoStudioContextMethods } from "../methods";
+import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
+import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file.js";
+import { MulmoStudioContextMethods } from "../methods/index.js";
 
 const combineAudioFilesAgent: AgentFunction<
   null,

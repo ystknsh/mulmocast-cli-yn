@@ -1,6 +1,6 @@
 import type { AgentFunction, AgentFunctionInfo, DefaultConfigData } from "graphai";
-import { mulmoScriptSchema } from "../types/schema";
-import { MulmoScript } from "../types";
+import { mulmoScriptSchema } from "../types/schema.js";
+import { MulmoScript } from "../types/index.js";
 
 interface ValidateMulmoScriptInputs {
   text: string;

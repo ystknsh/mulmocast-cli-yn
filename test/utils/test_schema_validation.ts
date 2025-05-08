@@ -2,8 +2,12 @@ import fs from "fs";
 import path from "path";
 import test from "node:test";
 import assert from "node:assert";
+import { fileURLToPath } from "url";
 import { z } from "zod";
-import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../../src/types/schema";
+import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../../src/types/schema.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Helper function: Validate JSON file
 const validateJsonFile = (filePath: string, schema: z.ZodObject<any>): { isValid: boolean; error?: string } => {

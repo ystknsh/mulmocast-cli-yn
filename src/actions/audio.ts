@@ -3,15 +3,15 @@ import "dotenv/config";
 import { GraphAI } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
-import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent";
-import addBGMAgent from "../agents/add_bgm_agent";
-import combineAudioFilesAgent from "../agents/combine_audio_files_agent";
-import ttsOpenaiAgent from "../agents/tts_openai_agent";
+import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
+import addBGMAgent from "../agents/add_bgm_agent.js";
+import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
+import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { MulmoScriptMethods } from "../methods";
+import { MulmoScriptMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types";
-import { fileCacheAgentFilter } from "../utils/filters";
+import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types/index.js";
+import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
   getAudioSegmentDirPath,
@@ -20,7 +20,9 @@ import {
   defaultBGMPath,
   mkdir,
   writingMessage,
-} from "../utils/file";
+} from "../utils/file.js";
+
+const { default: __, ...vanillaAgents } = agents;
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
@@ -151,7 +153,7 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const graph = new GraphAI(
     graph_data,
     {
-      ...agents,
+      ...vanillaAgents,
       fileWriteAgent,
       ttsOpenaiAgent,
       ttsNijivoiceAgent,

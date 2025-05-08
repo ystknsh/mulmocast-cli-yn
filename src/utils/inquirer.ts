@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { getAvailableTemplates } from "./file";
+import { getAvailableTemplates } from "./file.js";
 
 export const selectTemplate = async (): Promise<string> => {
   const availableTemplates = getAvailableTemplates();
