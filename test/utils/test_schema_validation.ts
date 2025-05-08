@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Helper function: Validate JSON file
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validateJsonFile = (filePath: string, schema: z.ZodObject<any>): { isValid: boolean; error?: string } => {
   try {
     const content = fs.readFileSync(filePath, "utf-8");
