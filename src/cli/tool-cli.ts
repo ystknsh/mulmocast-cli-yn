@@ -12,7 +12,7 @@ import { dumpPromptFromTemplate } from "../tools/dump_prompt.js";
 import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer.js";
 
 const main = async () => {
-  const { o: outdir, b: basedir, action, v: verbose, i: interactive, f: filename, cache } = args;
+  const { o: outdir, b: basedir, action, v: verbose, i: interactive, s: filename, cache } = args;
   let { t: template } = args;
   let { u: urls } = args;
 

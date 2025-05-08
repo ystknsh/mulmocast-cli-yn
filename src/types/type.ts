@@ -46,6 +46,7 @@ export type FileDirs = {
 export type MulmoStudioContext = {
   fileDirs: FileDirs;
   studio: MulmoStudio;
+  force: boolean;
 };
 
 export type ScriptingParams = {
