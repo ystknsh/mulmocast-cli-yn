@@ -52,11 +52,11 @@ const preprocess_agent = async (namedInputs: {
     } else if (beat.image.type === "chart") {
       const template = getHTMLFile("chart");
       const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
-      await renderHTMLToImage(htmlData, imagePath);
+      await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image?.type === "mermaid") {
       const template = getHTMLFile("mermaid");
       const htmlData = interpolate(template, { title: beat.image.title, diagram_code: beat.image.code });
-      await renderHTMLToImage(htmlData, imagePath);
+      await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
     }
   }
   return { path: imagePath, prompt, imageParams, aspectRatio };
