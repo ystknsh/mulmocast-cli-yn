@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { MulmoDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams, Text2SpeechProvider } from "../types/index.js";
-import { text2ImageProviderSchema, text2SpeechProviderSchema } from "../types/schema.js";
+import { MulmoCanvasDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams, Text2SpeechProvider } from "../types/index.js";
+import { text2ImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 
 const defaultTextSlideStyles = [
   "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
@@ -25,8 +25,8 @@ export const MulmoScriptMethods = {
     return script.videoParams?.padding ?? 1000; // msec
   },
 
-  getCanvasSize(script: MulmoScript): MulmoDimension {
-    return script.canvasSize ?? { width: 1280, height: 720 };
+  getCanvasSize(script: MulmoScript): MulmoCanvasDimension {
+    return mulmoCanvasDimensionSchema.parse(script.canvasSize);
   },
   getAspectRatio(script: MulmoScript): string {
     // Google's text2image specific parameter

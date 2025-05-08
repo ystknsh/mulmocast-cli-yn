@@ -33,13 +33,14 @@ const preprocess_agent = async (namedInputs: {
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
 
   if (beat.image) {
+    const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
     if (beat.image.type === "textSlide") {
       const slide = beat.image.slide;
       const markdown: string = `# ${slide.title}\n` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image.type === "markdown") {
       const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
-      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image.type === "image") {
       if (beat.image.source.kind === "url") {
         // undefined prompt indicates "no need to generate image"
@@ -50,12 +51,16 @@ const preprocess_agent = async (namedInputs: {
       }
     } else if (beat.image.type === "chart") {
       const template = getHTMLFile("chart");
-      const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
-      await renderHTMLToImage(htmlData, imagePath);
+      const htmlData = interpolate(template, {
+        title: beat.image.title,
+        width: Math.round(canvasSize.width * 0.625).toString(),
+        chart_data: JSON.stringify(beat.image.chartData),
+      });
+      await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image?.type === "mermaid") {
       const template = getHTMLFile("mermaid");
       const htmlData = interpolate(template, { title: beat.image.title, diagram_code: beat.image.code });
-      await renderHTMLToImage(htmlData, imagePath);
+      await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
     }
   }
   return { path: imagePath, prompt, imageParams, aspectRatio };
