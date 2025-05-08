@@ -82,6 +82,12 @@ mulmo movie script.json
 mulmo translate script.json
 ```
 
+## Cache and Re-run
+When running the same `mulmo` command multiple times, previously generated files are treated as cache. For example, audio or image files will not be regenerated if they already exist.
+
+To force regeneration, delete the old files — including temporary files — under the output directory before re-running the command.
+
+
 ## MulmoScript Format
 
 MulmoScript is a JSON format to define podcast or video scripts:
