@@ -176,12 +176,12 @@ export const mulmoBeatSchema = z
   })
   .strict();
 
-export const mulmoDimensionSchema = z
+export const mulmoCanvasDimensionSchema = z
   .object({
     width: z.number(),
     height: z.number(),
   })
-  .strict();
+  .default({ width: 1280, height: 720 })
 
 // export const voiceMapSchema = z.record(speakerIdSchema, z.string())
 
@@ -211,7 +211,7 @@ export const mulmoScriptSchema = z
     description: z.string().optional(),
     reference: z.string().optional(),
     lang: langSchema.optional(), // default "en"
-    canvasSize: mulmoDimensionSchema.optional(),
+    canvasSize: mulmoCanvasDimensionSchema.optional(),
 
     beats: z.array(mulmoBeatSchema),
 
