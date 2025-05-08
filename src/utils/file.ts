@@ -57,7 +57,7 @@ export const fetchMulmoScriptFile = async (url: string, mulmoFileDirPath: string
       mulmoData: script,
       mulmoDataPath: mulmoFileDirPath,
       fileName: path.parse(url).name,
-    }
+    },
   };
 };
 
