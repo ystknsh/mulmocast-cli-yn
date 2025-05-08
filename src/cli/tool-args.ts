@@ -53,4 +53,5 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
   })
   .strict()
   .help()
+  .alias("help", "h")
   .parseSync();
