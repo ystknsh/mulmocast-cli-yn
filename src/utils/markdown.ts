@@ -2,7 +2,7 @@ import { GraphAILogger } from "graphai";
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 
-export const renderHTMLToImage = async (html: string, outputPath: string) => {
+export const renderHTMLToImage = async (html: string, outputPath: string, width: number, height: number) => {
   // Use Puppeteer to render HTML to an image
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -11,7 +11,7 @@ export const renderHTMLToImage = async (html: string, outputPath: string) => {
   await page.setContent(html);
 
   // Adjust page settings if needed (like width, height, etc.)
-  await page.setViewport({ width: 1200, height: 800 });
+  await page.setViewport({ width, height });
 
   // Step 3: Capture screenshot of the page (which contains the Markdown-rendered HTML)
   await page.screenshot({ path: outputPath });
@@ -20,11 +20,11 @@ export const renderHTMLToImage = async (html: string, outputPath: string) => {
   GraphAILogger.info(`HTML image rendered to ${outputPath}`);
 };
 
-export const renderMarkdownToImage = async (markdown: string, style: string, outputPath: string) => {
+export const renderMarkdownToImage = async (markdown: string, style: string, outputPath: string, width: number, height: number) => {
   const header = `<head><style>${style}</style></head>`;
   const body = await marked(markdown);
   const html = `<htlm>${header}<body>${body}</body></html>`;
-  await renderHTMLToImage(html, outputPath);
+  await renderHTMLToImage(html, outputPath, width, height);
 };
 
 export const interpolate = (template: string, data: Record<string, string>): string => {

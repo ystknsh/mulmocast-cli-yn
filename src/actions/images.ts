@@ -33,13 +33,14 @@ const preprocess_agent = async (namedInputs: {
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
 
   if (beat.image) {
+    const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
     if (beat.image.type === "textSlide") {
       const slide = beat.image.slide;
       const markdown: string = `# ${slide.title}\n` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image.type === "markdown") {
       const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
-      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath, canvasSize.width, canvasSize.height);
     } else if (beat.image.type === "image") {
       if (beat.image.source.kind === "url") {
         // undefined prompt indicates "no need to generate image"
