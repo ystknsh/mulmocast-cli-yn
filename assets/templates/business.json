@@ -1,6 +1,6 @@
 {
   "title": "Business presentation",
-  "description": "Template for children book.",
+  "description": "Template for business presentation.",
   "systemPrompt": "Generate a script for a business presentation of the given topic. Use textSlides or markdown to show slides or use imagePrompt to generate an appropriate image for that page. Use the JSON below as a template. chartData is the data for Chart.js",
   "script": {
     "$mulmocast": {
