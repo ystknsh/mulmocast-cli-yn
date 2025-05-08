@@ -187,7 +187,7 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  GraphAILogger.log(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
+  GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
