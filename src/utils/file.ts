@@ -45,17 +45,20 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
 export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_studio.json");
 };
-export const getOutputBGMFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + "_bgm.mp3");
+export const getAudioSegmentDirPath = (audioDirPath: string, studioFileName: string) => {
+  return path.resolve(audioDirPath, studioFileName);
+};
+export const getAudioSegmentFilePath = (audioDirPath: string, studioFileName: string, fileName: string) => {
+  return path.resolve(getAudioSegmentDirPath(audioDirPath, studioFileName), fileName + ".mp3");
+};
+export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string) => {
+  return path.resolve(audioDirPath, fileName, fileName + ".mp3");
+};
+export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + ".mp3");
 };
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
-};
-export const getOutputAudioFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + ".mp3");
-};
-export const getScratchpadFilePath = (scratchpadDirName: string, fileName: string) => {
-  return path.resolve(scratchpadDirName, fileName + ".mp3");
 };
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
@@ -71,6 +74,11 @@ export const mkdir = (dirPath: string) => {
 export const silentPath = path.resolve(__dirname, "../../assets/audio/silent300.mp3");
 export const silentLastPath = path.resolve(__dirname, "../../assets/audio/silent800.mp3");
 export const defaultBGMPath = path.resolve(__dirname, "../../assets/music/StarsBeyondEx.mp3");
+
+export const getHTMLFile = (filename: string) => {
+  const htmlPath = path.resolve(__dirname, `../../assets/html/${filename}.html`);
+  return fs.readFileSync(htmlPath, "utf-8");
+};
 
 // for cli
 export const getBaseDirPath = (basedir?: string) => {

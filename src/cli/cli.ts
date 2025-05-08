@@ -8,7 +8,7 @@ import { GraphAILogger } from "graphai";
 import { args } from "./args";
 
 import { createOrUpdateStudioData } from "../utils/preprocess";
-import { outDirName, imageDirName, scratchpadDirName } from "../utils/const";
+import { outDirName, imageDirName, audioDirName } from "../utils/const";
 import { MulmoScriptMethods } from "../methods";
 
 import { translate } from "../actions/translate";
@@ -27,10 +27,10 @@ const getFileObject = () => {
   const mulmoFileDirPath = path.dirname(mulmoFilePath);
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
-  const imageDirPath = getFullPath(baseDirPath, (imagedir as string) ?? imageDirName);
-  const scratchpadDirPath = getFullPath(baseDirPath, (scratchpaddir as string) ?? scratchpadDirName);
+  const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
+  const audioDirPath = getFullPath(outDirPath, (scratchpaddir as string) ?? audioDirName); // audio
 
-  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, scratchpadDirPath };
+  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath };
 };
 const main = async () => {
   const files = getFileObject();

@@ -1,24 +1,31 @@
 import dotenv from "dotenv";
-import { GraphAI, GraphData } from "graphai";
-import type { GraphOptions } from "graphai/lib/type";
+import { GraphAI, GraphAILogger } from "graphai";
+import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types";
-import { getOutputStudioFilePath, mkdir } from "../utils/file";
+import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file";
 import { fileCacheAgentFilter } from "../utils/filters";
-import { convertMarkdownToImage } from "../utils/markdown";
+import { renderMarkdownToImage, renderHTMLToImage } from "../utils/markdown";
 import imageGoogleAgent from "../agents/image_google_agent";
 import imageOpenaiAgent from "../agents/image_openai_agent";
-import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods";
+import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods";
 
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoStudioBeat; index: number; suffix: string; imageDirPath: string }) => {
-  const { context, beat, index, suffix, imageDirPath } = namedInputs;
-  const imageParams = { ...context.studio.script.imageParams, ...beat.imageParams };
+const preprocess_agent = async (namedInputs: {
+  context: MulmoStudioContext;
+  beat: MulmoStudioBeat;
+  index: number;
+  suffix: string;
+  imageDirPath: string;
+  imageAgentInfo: Text2ImageAgentInfo;
+}) => {
+  const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
+  const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
@@ -26,11 +33,11 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
   if (beat.image) {
     if (beat.image.type === "textSlide") {
       const slide = beat.image.slide;
-      const markdown: string = `# ${slide.title}` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      const markdown: string = `# ${slide.title}\n` + slide.bullets.map((text) => `- ${text}`).join("\n");
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.image.type === "markdown") {
       const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
-      await convertMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
+      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath);
     } else if (beat.image.type === "image") {
       if (beat.image.source.kind === "url") {
         // undefined prompt indicates "no need to generate image"
@@ -39,6 +46,13 @@ const preprocess_agent = async (namedInputs: { context: MulmoStudioContext; beat
         const path = MulmoStudioContextMethods.resolveAssetPath(context, beat.image.source.path);
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
+    } else if (beat.image.type === "chart") {
+      function interpolate(template: string, data: Record<string, any>): string {
+        return template.replace(/\$\{(.*?)\}/g, (_, key) => data[key.trim()] ?? "");
+      }
+      const template = getHTMLFile("chart");
+      const htmlData = interpolate(template, { title: beat.image.title, chart_data: JSON.stringify(beat.image.chartData) });
+      await renderHTMLToImage(htmlData, imagePath);
     }
   }
   return { path: imagePath, prompt, imageParams, aspectRatio };
@@ -50,11 +64,11 @@ const graph_data: GraphData = {
   nodes: {
     context: {},
     imageDirPath: {},
-    text2imageAgent: {},
+    imageAgentInfo: {},
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", context: ":context", text2imageAgent: ":text2imageAgent", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -70,11 +84,12 @@ const graph_data: GraphData = {
               index: ":__mapIndex",
               suffix: "p",
               imageDirPath: ":imageDirPath",
+              imageAgentInfo: ":imageAgentInfo",
             },
           },
           imageGenerator: {
             if: ":preprocessor.prompt",
-            agent: ":text2imageAgent",
+            agent: ":imageAgentInfo.agent",
             params: {
               model: ":preprocessor.imageParams.model",
               size: ":preprocessor.imageParams.size",
@@ -154,9 +169,12 @@ export const images = async (context: MulmoStudioContext) => {
   const options: GraphOptions = {
     agentFilters,
   };
+
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
+
   // We need to get google's auth token only if the google is the text2image provider.
-  if (MulmoScriptMethods.getImageProvider(studio.script) === "google") {
-    console.log("google was specified as text2image engine");
+  if (imageAgentInfo.provider === "google") {
+    GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
       imageGoogleAgent: {
@@ -166,9 +184,10 @@ export const images = async (context: MulmoStudioContext) => {
     };
   }
 
-  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | undefined> = {
+  GraphAILogger.log(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
+  const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
-    text2imageAgent: MulmoScriptMethods.getText2imageAgent(studio.script),
+    imageAgentInfo,
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
   };

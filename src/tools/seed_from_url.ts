@@ -9,6 +9,7 @@ import { readTemplatePrompt, mkdir } from "../utils/file";
 import { browserlessCacheGenerator } from "../utils/filters";
 import { urlsSchema } from "../types/schema";
 import { ScriptingParams } from "../types";
+import { cliLoadingPlugin } from "../utils/plugins";
 
 const graphData: GraphData = {
   version: 0.5,
@@ -154,6 +155,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   graph.injectValue("prompt", readTemplatePrompt(templateName));
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
+  graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
 
   await graph.run();
 };

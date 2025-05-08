@@ -97,6 +97,14 @@ const MulmoTextSlideMediaSchema = z
   })
   .strict();
 
+const MulmoChartMediaSchema = z
+  .object({
+    type: z.literal("chart"),
+    title: z.string(),
+    chartData: z.record(z.any()),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   MulmoMarkdownMediaSchema,
   MulmoWebMediaSchema,
@@ -105,6 +113,7 @@ export const mulmoImageAssetSchema = z.union([
   MulmoSvgMediaSchema,
   MulmoMovieMediaSchema,
   MulmoTextSlideMediaSchema,
+  MulmoChartMediaSchema,
 ]);
 
 const MulmoAudioMediaSchema = z
@@ -181,6 +190,8 @@ export const mulmoSpeechParamsSchema = z
   })
   .strict();
 
+export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]);
+
 export const mulmoScriptSchema = z
   .object({
     // global settings
@@ -197,7 +208,7 @@ export const mulmoScriptSchema = z
 
     imageParams: mulmoImageParamsSchema
       .extend({
-        provider: z.string().optional(),
+        provider: text2ImageProviderSchema.optional(),
       })
       .optional(),
 

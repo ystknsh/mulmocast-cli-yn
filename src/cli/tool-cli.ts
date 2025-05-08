@@ -18,7 +18,7 @@ const main = async () => {
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
-  const cacheDirPath = getFullPath(baseDirPath, (cache as string) ?? cacheDirName);
+  const cacheDirPath = getFullPath(outDirPath, (cache as string) ?? cacheDirName);
 
   if (verbose) {
     console.log("baseDirPath:", baseDirPath);
@@ -43,15 +43,11 @@ const main = async () => {
     }
   }
 
-  // If urls are not specified, prompt for interactive input
-  if (!interactive) {
-    urls = await getUrlsIfNeeded(urls);
-  }
-
   if (action === "scripting") {
     if (interactive) {
       await createMulmoScriptWithInteractive({ outDirPath, templateName: template, urls, filename, cacheDirPath });
     } else {
+      urls = await getUrlsIfNeeded(urls);
       await createMulmoScriptFromUrl({ urls, templateName: template, outDirPath, filename, cacheDirPath });
     }
   } else if (action === "prompt") {

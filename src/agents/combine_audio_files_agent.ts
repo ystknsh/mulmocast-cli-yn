@@ -1,36 +1,56 @@
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types";
-import { silentPath, silentLastPath, getScratchpadFilePath } from "../utils/file";
+import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file";
 import { MulmoStudioContextMethods } from "../methods";
 
 const combineAudioFilesAgent: AgentFunction<
   null,
   { studio: MulmoStudio },
-  { context: MulmoStudioContext; combinedFileName: string; scratchpadDirPath: string }
+  { context: MulmoStudioContext; combinedFileName: string; audioDirPath: string }
 > = async ({ namedInputs }) => {
-  const { context, combinedFileName, scratchpadDirPath } = namedInputs;
+  const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
-  context.studio.beats.forEach((mulmoBeat: MulmoStudioBeat, index: number) => {
-    const audioPath =
-      mulmoBeat.audio?.type === "audio" &&
-      ((mulmoBeat.audio?.source.kind === "path" && MulmoStudioContextMethods.resolveAssetPath(context, mulmoBeat.audio.source.path)) ||
-        (mulmoBeat.audio?.source.kind === "url" && mulmoBeat.audio.source.url));
-    const filePath = audioPath || getScratchpadFilePath(scratchpadDirPath, mulmoBeat.audioFile ?? "");
-    const isLast = index === context.studio.beats.length - 2;
-    command.input(filePath);
-    command.input(isLast ? silentLastPath : silentPath);
-    // Measure and log the timestamp of each section
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
-      if (err) {
-        console.error("Error while getting metadata:", err);
-      } else {
-        context.studio.beats[index]["duration"] = metadata.format.duration! + (isLast ? 0.8 : 0.3);
-      }
-    });
-  });
 
-  const promise = new Promise((resolve, reject) => {
+  const getDuration = (filePath: string, isLast: boolean) => {
+    return new Promise<number>((resolve, reject) => {
+      ffmpeg.ffprobe(filePath, (err, metadata) => {
+        if (err) {
+          console.error("Error while getting metadata:", err);
+          reject(err);
+        } else {
+          resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
+        }
+      });
+    });
+  };
+
+  const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoStudioBeat, audioDirPath: string): string => {
+    if (mulmoBeat.audio?.type === "audio") {
+      const { source } = mulmoBeat.audio;
+      if (source.kind === "path") {
+        return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
+      }
+      if (source.kind === "url") {
+        return source.url;
+      }
+    }
+    return getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
+  };
+
+  await Promise.all(
+    context.studio.beats.map(async (mulmoBeat: MulmoStudioBeat, index: number) => {
+      const filePath = resolveAudioFilePath(context, mulmoBeat, audioDirPath);
+      const isLast = index === context.studio.beats.length - 2;
+      command.input(filePath);
+      command.input(isLast ? silentLastPath : silentPath);
+
+      // Measure and log the timestamp of each section
+      context.studio.beats[index]["duration"] = await getDuration(filePath, isLast);
+    }),
+  );
+
+  await new Promise((resolve, reject) => {
     command
       .on("end", () => {
         resolve(0);
@@ -39,10 +59,8 @@ const combineAudioFilesAgent: AgentFunction<
         console.error("Error while combining MP3 files:", err);
         reject(err);
       })
-      .mergeToFile(combinedFileName, scratchpadDirPath);
+      .mergeToFile(combinedFileName, audioDirPath);
   });
-
-  await promise;
 
   return {
     studio: context.studio,

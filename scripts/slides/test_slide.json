@@ -100,6 +100,40 @@
           "```"
         ]
       }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This page shows the sales and profits of this company from January 2024 to June 2024.",
+      "image": {
+        "type": "chart",
+        "title": "Sales and Profits (from Jan to June)",
+        "chartData": {
+          "type": "bar",
+          "data": {
+            "labels": ["January", "February", "March", "April", "May", "June"],
+            "datasets": [
+              {
+                "label": "Revenue ($1000s)",
+                "data": [120, 135, 180, 155, 170, 190],
+                "backgroundColor": "rgba(54, 162, 235, 0.5)",
+                "borderColor": "rgba(54, 162, 235, 1)",
+                "borderWidth": 1
+              },
+              {
+                "label": "Profit ($1000s)",
+                "data": [45, 52, 68, 53, 61, 73],
+                "backgroundColor": "rgba(75, 192, 192, 0.5)",
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 1
+              }
+            ]
+          },
+          "options": {
+            "responsive": true,
+            "animation": false
+          }
+        }
+      }
     }
   ]
 }

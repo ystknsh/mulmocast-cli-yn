@@ -10,6 +10,8 @@ import { readTemplatePrompt, mkdir } from "../utils/file";
 import { browserlessCacheGenerator } from "../utils/filters";
 import { ScriptingParams } from "../types";
 import { browserlessAgent } from "@graphai/browserless_agent";
+import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent";
+import { cliLoadingPlugin } from "../utils/plugins";
 
 const agentHeader = "\x1b[34m● \x1b[0m\x1b[1mAgent\x1b[0m:\x1b[0m";
 
@@ -76,7 +78,7 @@ const graphData = {
     },
     messages: {
       value: [],
-      update: ":llm.messages",
+      update: ":reply.llmAgent.messages",
     },
     userInput: {
       agent: "textInputAgent",
@@ -85,21 +87,60 @@ const graphData = {
         required: true,
       },
     },
-    llm: {
-      agent: "openAIAgent",
-      params: {
-        model: "gpt-4o",
-      },
+    reply: {
+      agent: "nestedAgent",
       inputs: {
         messages: ":messages",
         prompt: ":userInput.text",
+      },
+      graph: {
+        loop: {
+          while: ":continue",
+        },
+        nodes: {
+          counter: {
+            value: 0,
+            update: ":counter.add(1)",
+          },
+          llmAgent: {
+            agent: "openAIAgent",
+            params: {
+              model: "gpt-4o",
+            },
+            inputs: {
+              messages: ":messages",
+              prompt: ":prompt",
+            },
+            isResult: true,
+          },
+          validateMulmoScriptAgent: {
+            agent: "validateMulmoScriptAgent",
+            inputs: {
+              text: ":llmAgent.text.codeBlock()",
+            },
+          },
+          continue: {
+            agent: ({ codeBlock, isValid, counter }: { codeBlock: string | undefined; isValid: boolean; counter: number }) => {
+              if (counter >= 3) {
+                console.error("\n" + agentHeader + " \x1b[31mFailed to generate a valid script. Please try again.\n");
+                return false;
+              }
+              return !!codeBlock && !isValid;
+            },
+            inputs: {
+              counter: ":counter",
+              codeBlock: ":llmAgent.text.codeBlock()",
+              isValid: ":validateMulmoScriptAgent.isValid",
+            },
+          },
+        },
       },
     },
     json: {
       agent: "copyAgent",
       inputs: {
-        json: ":llm.text.codeBlock().jsonParse()",
-        text: ":llm.text.codeBlock()",
+        json: ":reply.llmAgent.text.codeBlock().jsonParse()",
+        text: ":reply.llmAgent.text.codeBlock()",
       },
     },
     writeJSON: {
@@ -127,7 +168,7 @@ const graphData = {
       if: ":shouldResponse.result",
       agent: "consoleAgent",
       inputs: {
-        text: "\n" + agentHeader + " ${:llm.text}\n",
+        text: "\n" + agentHeader + " ${:reply.llmAgent.text}\n",
       },
     },
     checkInput: {
@@ -172,7 +213,7 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, cacheDirPat
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls, cacheDirPath) : "";
 
-  const graph = new GraphAI(graphData, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent });
+  const graph = new GraphAI(graphData, { ...vanilla, openAIAgent, textInputAgent, fileWriteAgent, validateMulmoScriptAgent });
 
   const prompt = readTemplatePrompt(templateName);
   graph.injectValue("messages", [
@@ -183,6 +224,8 @@ export const createMulmoScriptWithInteractive = async ({ outDirPath, cacheDirPat
   ]);
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
+
+  graph.registerCallback(cliLoadingPlugin({ nodeId: "reply", message: "Loading..." }));
 
   console.log(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
