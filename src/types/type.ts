@@ -63,3 +63,11 @@ export type ScriptingParams = {
   templateName: string;
   filename: string;
 };
+
+export type ImageProcessorParams = {
+  beat: MulmoStudioBeat;
+  context: MulmoStudioContext;
+  imagePath: string;
+  textSlideStyle: string;
+  canvasSize: MulmoCanvasDimension;
+};

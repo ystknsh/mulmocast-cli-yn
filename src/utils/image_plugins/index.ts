@@ -1,0 +1,7 @@
+import * as pluginTextSlide from "./text_slide.js";
+import * as pluginMarkdown from "./markdown.js";
+import * as pluginImage from "./image.js";
+import * as pluginChart from "./chart.js";
+import * as pluginMermaid from "./mermaid.js";
+
+export const imagePlugins = [pluginTextSlide, pluginMarkdown, pluginImage, pluginChart, pluginMermaid];
