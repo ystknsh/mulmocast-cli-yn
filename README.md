@@ -44,7 +44,7 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # to access web in mulmo-tool
 
 ```
 # Generate script with interactive mode
-mulmo-tool scripting -i -t children_book -o ./ -f story
+mulmo-tool scripting -i -t children_book -o ./ -s story
 ```
 After running this command, you'll create a story script through an interactive conversation with the AI.
 
