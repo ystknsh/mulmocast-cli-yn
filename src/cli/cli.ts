@@ -62,13 +62,12 @@ const main = async () => {
         mulmoData: res.script,
         fileName: path.parse(fileOrUrl).name,
       };
-    } else {
-      if (!fs.existsSync(mulmoFilePath)) {
-        GraphAILogger.info("ERROR: File not exists " + mulmoFilePath);
-        process.exit(1);
-      }
-      return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
     }
+    if (!fs.existsSync(mulmoFilePath)) {
+      GraphAILogger.info("ERROR: File not exists " + mulmoFilePath);
+      process.exit(1);
+    }
+    return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
   })();
 
   const { mulmoData: mulmoScript, fileName } = readData;
@@ -78,7 +77,7 @@ const main = async () => {
       mulmoScriptSchema.parse(mulmoScript);
     }
   } catch (error) {
-    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
+    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
     process.exit(1);
   }
 
