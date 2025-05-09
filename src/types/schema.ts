@@ -215,6 +215,9 @@ export const mulmoPresentationStyleSchema = z.object({
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
   videoParams: videoParamsSchema.optional(),
+
+  // TODO: Switch to showCaptions later
+  omitCaptions: z.boolean().optional(), // default is false
 });
 
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
@@ -224,6 +227,9 @@ export const mulmoScriptSchema = mulmoPresentationStyleSchema
     reference: z.string().optional(),
     lang: langSchema.optional(), // default "en"
     beats: z.array(mulmoBeatSchema),
+
+    // TODO: Delete it later
+    imagePath: z.string().optional(), // for keynote images movie ??
 
     // for debugging
     __test_invalid__: z.boolean().optional(),
