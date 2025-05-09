@@ -267,6 +267,7 @@ export const mulmoStoryboardSceneSchema = z
   .object({
     description: z.string(),
   })
+  .describe("A detailed description of the scene")
   .strict();
 
 export const mulmoStoryboardSchema = z
@@ -274,6 +275,7 @@ export const mulmoStoryboardSchema = z
     title: z.string(),
     scenes: z.array(mulmoStoryboardSceneSchema),
   })
+  .describe("A storyboard for a presentation, a story, a video, etc.")
   .strict();
 
 export const urlsSchema = z.array(z.string().url({ message: "Invalid URL format" }));
