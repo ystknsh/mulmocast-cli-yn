@@ -2,6 +2,8 @@ import "dotenv/config";
 import { GraphAILogger, GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
+import { streamAgentFilterGenerator } from "@graphai/agent_filters";
+
 import { openAIAgent } from "@graphai/openai_agent";
 import * as agents from "@graphai/vanilla";
 
@@ -11,7 +13,7 @@ import { browserlessCacheGenerator } from "../utils/filters.js";
 import { ScriptingParams } from "../types/index.js";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
-import { cliLoadingPlugin } from "../utils/plugins.js";
+// import { cliLoadingPlugin } from "../utils/plugins.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -108,6 +110,7 @@ const graphData = {
             agent: "openAIAgent",
             params: {
               model: "gpt-4o",
+              stream: true,
             },
             inputs: {
               messages: ":messages",
@@ -166,13 +169,6 @@ const graphData = {
         array: [[":json.json", "==", undefined], "&&", [":userInput.text", "!=", "/bye"]],
       },
     },
-    agentResponse: {
-      if: ":shouldResponse.result",
-      agent: "consoleAgent",
-      inputs: {
-        text: "\n" + agentHeader + " ${:reply.llmAgent.text}\n",
-      },
-    },
     checkInput: {
       agent: "compareAgent",
       inputs: { array: [":userInput.text", "!=", "/bye"] },
@@ -215,7 +211,18 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls, cacheDirPath) : "";
 
-  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, textInputAgent, fileWriteAgent, validateMulmoScriptAgent });
+  const streamAgentFilter = streamAgentFilterGenerator((context, data) => {
+    process.stdout.write(String(data));
+  });
+  const agentFilters = [
+    {
+      name: "streamAgentFilter",
+      agent: streamAgentFilter,
+      nodeIds: ["llmAgent"],
+    },
+  ];
+
+  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, textInputAgent, fileWriteAgent, validateMulmoScriptAgent }, { agentFilters });
 
   const prompt = readTemplatePrompt(templateName);
   graph.injectValue("messages", [
@@ -226,8 +233,17 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   ]);
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
-
-  graph.registerCallback(cliLoadingPlugin({ nodeId: "reply", message: "Loading..." }));
+  graph.registerCallback(({ nodeId, state }) => {
+    if (nodeId === "llmAgent") {
+      if (state === "executing") {
+        process.stdout.write(String("\n" + agentHeader + " "));
+      }
+      if (state === "completed") {
+        process.stdout.write("\n\n");
+      }
+    }
+  });
+  // graph.registerCallback(cliLoadingPlugin({ nodeId: "reply", message: "Loading..." }));
 
   GraphAILogger.info(`${agentHeader} Hi! What topic would you like me to generate about?\n`);
   await graph.run();
