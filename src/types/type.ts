@@ -14,6 +14,7 @@ import {
   mulmoScriptTemplateSchema,
   text2ImageProviderSchema,
   text2SpeechProviderSchema,
+  mulmoPresentationStyleSchema,
 } from "./schema.js";
 import { z } from "zod";
 
@@ -28,6 +29,7 @@ export type Text2ImageProvider = z.infer<typeof text2ImageProviderSchema>;
 export type Text2SpeechProvider = z.infer<typeof text2SpeechProviderSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
+export type MulmoPresentationStyle = z.infer<typeof mulmoPresentationStyleSchema>;
 export type MulmoCanvasDimension = z.infer<typeof mulmoCanvasDimensionSchema>;
 
 export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
