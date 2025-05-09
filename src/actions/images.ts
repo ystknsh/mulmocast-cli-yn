@@ -5,12 +5,12 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir, getHTMLFile } from "../utils/file.js";
+import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { renderMarkdownToImage, renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
-import { MulmoScriptMethods, MulmoStudioContextMethods, Text2ImageAgentInfo } from "../methods/index.js";
+import { MulmoScriptMethods, Text2ImageAgentInfo } from "../methods/index.js";
+import { processChart, processMarkdown, processTextSlide, processImage, processMermaid } from "../utils/image_preprocess.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -18,7 +18,7 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
-const preprocess_agent = async (namedInputs: {
+const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
   beat: MulmoStudioBeat;
   index: number;
@@ -31,38 +31,29 @@ const preprocess_agent = async (namedInputs: {
   const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
+  const textSlideStyle = MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat);
 
   if (beat.image) {
     const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
+    const processorParams = { beat, context, imagePath, textSlideStyle, canvasSize };
+
     if (beat.image.type === "textSlide") {
-      const slide = beat.image.slide;
-      const markdown: string = `# ${slide.title}\n` + slide.bullets.map((text) => `- ${text}`).join("\n");
-      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath, canvasSize.width, canvasSize.height);
+      await processTextSlide(processorParams);
     } else if (beat.image.type === "markdown") {
-      const markdown: string = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
-      await renderMarkdownToImage(markdown, MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat), imagePath, canvasSize.width, canvasSize.height);
+      await processMarkdown(processorParams);
     } else if (beat.image.type === "image") {
-      if (beat.image.source.kind === "url") {
-        // undefined prompt indicates "no need to generate image"
-        return { path: beat.image.source.url, prompt: undefined, imageParams, aspectRatio };
-      } else if (beat.image.source.kind === "path") {
-        const path = MulmoStudioContextMethods.resolveAssetPath(context, beat.image.source.path);
+      const path = processImage(processorParams);
+      if (path) {
+        // undefined prompt indicates that image generation is not needed
         return { path, prompt: undefined, imageParams, aspectRatio };
       }
     } else if (beat.image.type === "chart") {
-      const template = getHTMLFile("chart");
-      const htmlData = interpolate(template, {
-        title: beat.image.title,
-        width: Math.round(canvasSize.width * 0.625).toString(),
-        chart_data: JSON.stringify(beat.image.chartData),
-      });
-      await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
-    } else if (beat.image?.type === "mermaid") {
-      const template = getHTMLFile("mermaid");
-      const htmlData = interpolate(template, { title: beat.image.title, diagram_code: beat.image.code });
-      await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
+      await processChart(processorParams);
+    } else if (beat.image.type === "mermaid") {
+      await processMermaid(processorParams);
     }
   }
+
   return { path: imagePath, prompt, imageParams, aspectRatio };
 };
 
@@ -85,7 +76,7 @@ const graph_data: GraphData = {
       graph: {
         nodes: {
           preprocessor: {
-            agent: preprocess_agent,
+            agent: imagePreprocessAgent,
             inputs: {
               context: ":context",
               beat: ":beat",
