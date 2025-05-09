@@ -45,6 +45,21 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
     fileName: parsedPath.name,
   };
 }
+export const fetchMulmoScriptFile = async (url: string) => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      return { result: false, status: res.status };
+    }
+    const script = await res.json();
+    return {
+      result: true,
+      script,
+    };
+  } catch {
+    return { result: false, status: "unknown" };
+  }
+};
 
 export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_studio.json");

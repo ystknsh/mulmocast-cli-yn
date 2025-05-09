@@ -16,25 +16,31 @@ import { images } from "../actions/images.js";
 import { audio } from "../actions/audio.js";
 import { movie } from "../actions/movie.js";
 
-import { getBaseDirPath, getFullPath, readMulmoScriptFile } from "../utils/file.js";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile } from "../utils/file.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 
+const isHttp = (fileOrUrl: string) => {
+  return /^https?:\/\//.test(fileOrUrl);
+};
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, audiodir } = args;
   const baseDirPath = getBaseDirPath(basedir as string);
 
-  const mulmoFilePath = getFullPath(baseDirPath, (file as string) ?? "");
-  const mulmoFileDirPath = path.dirname(mulmoFilePath);
+  const fileOrUrl = (file as string) ?? "";
+  const isHttpPath = isHttp(fileOrUrl);
+
+  const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);
+  const mulmoFileDirPath = path.dirname(isHttpPath ? baseDirPath : mulmoFilePath);
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
   const audioDirPath = getFullPath(outDirPath, (audiodir as string) ?? audioDirName);
 
-  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath };
+  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath, fileOrUrl };
 };
 const main = async () => {
   const files = getFileObject();
-  const { mulmoFilePath } = files;
+  const { mulmoFilePath, isHttpPath, fileOrUrl } = files;
 
   if (args.v) {
     GraphAILogger.info(files);
@@ -44,23 +50,34 @@ const main = async () => {
     GraphAILogger.setLevelEnabled("warn", false);
   }
 
-  if (!fs.existsSync(mulmoFilePath)) {
-    GraphAILogger.info("File not exists");
-    process.exit(1);
-  }
-
   const { action, force } = args;
+  const readData = await (async () => {
+    if (isHttpPath) {
+      const res = await fetchMulmoScriptFile(fileOrUrl);
+      if (!res.result || !res.script) {
+        GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
+        process.exit(1);
+      }
+      return {
+        mulmoData: res.script,
+        fileName: path.parse(fileOrUrl).name,
+      };
+    }
+    if (!fs.existsSync(mulmoFilePath)) {
+      GraphAILogger.info("ERROR: File not exists " + mulmoFilePath);
+      process.exit(1);
+    }
+    return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
+  })();
 
-  const readData = readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
   const { mulmoData: mulmoScript, fileName } = readData;
-
   // validate mulmoStudioSchema. skip if __test_invalid__ is true
   try {
     if (!mulmoScript?.__test_invalid__) {
       mulmoScriptSchema.parse(mulmoScript);
     }
   } catch (error) {
-    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${mulmoFilePath} \n ${error}`);
+    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
     process.exit(1);
   }
 
