@@ -203,33 +203,27 @@ export const mulmoSpeechParamsSchema = z
 
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
 
-export const mulmoScriptSchema = z
-  .object({
-    // global settings
-    $mulmocast: mulmoCastCreditSchema,
+export const mulmoPresentationStyleSchema = z.object({
+  $mulmocast: mulmoCastCreditSchema,
+  canvasSize: mulmoCanvasDimensionSchema, // has default value
+  speechParams: mulmoSpeechParamsSchema,
+  imageParams: mulmoImageParamsSchema
+    .extend({
+      provider: text2ImageProviderSchema, // has default value
+    })
+    .optional(),
+  // for textSlides
+  textSlideParams: textSlideParamsSchema.optional(),
+  videoParams: videoParamsSchema.optional(),
+});
+
+export const mulmoScriptSchema = mulmoPresentationStyleSchema
+  .extend({
     title: z.string(),
     description: z.string().optional(),
     reference: z.string().optional(),
     lang: langSchema.optional(), // default "en"
-    canvasSize: mulmoCanvasDimensionSchema, // has default value
-
     beats: z.array(mulmoBeatSchema),
-
-    speechParams: mulmoSpeechParamsSchema,
-
-    imageParams: mulmoImageParamsSchema
-      .extend({
-        provider: text2ImageProviderSchema, // has default value
-      })
-      .optional(),
-
-    // for textSlides
-    textSlideParams: textSlideParamsSchema.optional(),
-    videoParams: videoParamsSchema.optional(),
-
-    // images: ImageInfo[] // generated
-    imagePath: z.string().optional(), // for keynote images movie ??
-    omitCaptions: z.boolean().optional(), // default is false
 
     // for debugging
     __test_invalid__: z.boolean().optional(),
