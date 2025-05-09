@@ -38,7 +38,6 @@ const imagePreprocessAgent = async (namedInputs: {
     const processorParams = { beat, context, imagePath, textSlideStyle, canvasSize };
 
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
-    console.log(plugin);
     if (plugin) {
       const result = await plugin.process(processorParams);
       if (plugin.imageType === "image" && result) {
