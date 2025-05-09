@@ -63,3 +63,11 @@ export const processMermaid = async (params: ImageProcessorParams) => {
   });
   await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
 };
+
+export const imagePlugins = [
+  { imageType: "textSlide", process: processTextSlide },
+  { imageType: "markdown", process: processMarkdown },
+  { imageType: "image", process: processImage },
+  { imageType: "chart", process: processChart },
+  { imageType: "mermaid", process: processMermaid },
+];

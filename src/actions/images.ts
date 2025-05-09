@@ -10,7 +10,7 @@ import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
 import { MulmoScriptMethods, Text2ImageAgentInfo } from "../methods/index.js";
-import { processChart, processMarkdown, processTextSlide, processImage, processMermaid } from "../utils/image_preprocess.js";
+import { imagePlugins } from "../utils/image_preprocess.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -37,6 +37,16 @@ const imagePreprocessAgent = async (namedInputs: {
     const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
     const processorParams = { beat, context, imagePath, textSlideStyle, canvasSize };
 
+    const plugin = imagePlugins.find((plugin) => plugin.imageType === beat.image.type);
+    console.log(plugin);
+    if (plugin) {
+      const result = await plugin.process(processorParams);
+      if (beat.image.imageType === "image" && result) {
+        // undefined prompt indicates that image generation is not needed
+        return { path, prompt: undefined, imageParams, aspectRatio };
+      }
+    }
+    /*
     if (beat.image.type === "textSlide") {
       await processTextSlide(processorParams);
     } else if (beat.image.type === "markdown") {
@@ -52,6 +62,7 @@ const imagePreprocessAgent = async (namedInputs: {
     } else if (beat.image.type === "mermaid") {
       await processMermaid(processorParams);
     }
+    */
   }
 
   return { path: imagePath, prompt, imageParams, aspectRatio };
