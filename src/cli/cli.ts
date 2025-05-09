@@ -28,18 +28,19 @@ const getFileObject = () => {
 
   const fileOrUrl = (file as string) ?? "";
   const isHttpPath = isHttp(fileOrUrl);
-  const mulmoFilePath = getFullPath(baseDirPath, isHttpPath ? "" : fileOrUrl);
-  const mulmoFileDirPath = path.dirname(mulmoFilePath);
+
+  const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);
+  const mulmoFileDirPath = path.dirname(isHttpPath ? baseDirPath : mulmoFilePath);
 
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
   const audioDirPath = getFullPath(outDirPath, (audiodir as string) ?? audioDirName);
 
-  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath };
+  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath, fileOrUrl };
 };
 const main = async () => {
   const files = getFileObject();
-  const { mulmoFilePath, mulmoFileDirPath, isHttpPath } = files;
+  const { mulmoFilePath, mulmoFileDirPath, isHttpPath, fileOrUrl } = files;
 
   if (args.v) {
     GraphAILogger.info(files);
@@ -50,16 +51,17 @@ const main = async () => {
   }
 
   const { action, force } = args;
-
   const readData = await (async () => {
     if (isHttpPath) {
-      const url = args.file as string;
-      const res = await fetchMulmoScriptFile(url, mulmoFileDirPath);
-      if (!res.result || !res.data) {
-        GraphAILogger.info(`HTTP error! ${res.status} ${url}`);
+      const res = await fetchMulmoScriptFile(fileOrUrl);
+      if (!res.result || !res.script) {
+        GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
         process.exit(1);
       }
-      return res.data;
+      return {
+        mulmoData: res.script,
+        fileName: path.parse(fileOrUrl).name,
+      };
     } else {
       if (!fs.existsSync(mulmoFilePath)) {
         GraphAILogger.info("ERROR: File not exists " + mulmoFilePath);

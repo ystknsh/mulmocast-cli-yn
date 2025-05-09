@@ -45,7 +45,7 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
     fileName: parsedPath.name,
   };
 }
-export const fetchMulmoScriptFile = async (url: string, mulmoFileDirPath: string) => {
+export const fetchMulmoScriptFile = async (url: string) => {
   const res = await fetch(url);
   if (!res.ok) {
     return { result: false, status: res.status };
@@ -53,11 +53,7 @@ export const fetchMulmoScriptFile = async (url: string, mulmoFileDirPath: string
   const script = await res.json();
   return {
     result: true,
-    data: {
-      mulmoData: script,
-      mulmoDataPath: mulmoFileDirPath,
-      fileName: path.parse(url).name,
-    },
+    script,
   };
 };
 
