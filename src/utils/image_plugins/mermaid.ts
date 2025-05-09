@@ -4,7 +4,7 @@ import { renderHTMLToImage, interpolate } from "../markdown.js";
 
 export const imageType = "mermaid";
 
-export const processMermaid = async (params: ImageProcessorParams) => {
+const processMermaid = async (params: ImageProcessorParams) => {
   const { beat, imagePath, canvasSize } = params;
   if (!beat.image || beat.image.type !== "mermaid") return;
 

@@ -1,10 +1,9 @@
 import { ImageProcessorParams } from "../../types/index.js";
-
 import { renderMarkdownToImage } from "../markdown.js";
 
 export const imageType = "markdown";
 
-export const processMarkdown = async (params: ImageProcessorParams) => {
+const processMarkdown = async (params: ImageProcessorParams) => {
   const { beat, imagePath, textSlideStyle, canvasSize } = params;
   if (!beat.image || beat.image.type !== "markdown") return;
 

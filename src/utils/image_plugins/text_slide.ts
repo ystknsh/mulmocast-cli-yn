@@ -4,7 +4,7 @@ import { renderMarkdownToImage } from "../markdown.js";
 
 export const imageType = "textSlide";
 
-export const processTextSlide = async (params: ImageProcessorParams) => {
+const processTextSlide = async (params: ImageProcessorParams) => {
   const { beat, imagePath, textSlideStyle, canvasSize } = params;
   if (!beat.image || beat.image.type !== "textSlide") return;
 

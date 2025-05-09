@@ -4,7 +4,7 @@ import { renderHTMLToImage, interpolate } from "../markdown.js";
 
 export const imageType = "chart";
 
-export const processChart = async (params: ImageProcessorParams) => {
+const processChart = async (params: ImageProcessorParams) => {
   const { beat, imagePath, canvasSize } = params;
   if (!beat.image || beat.image.type !== "chart") return;
 

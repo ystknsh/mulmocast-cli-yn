@@ -10,7 +10,7 @@ import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
 import { MulmoScriptMethods, Text2ImageAgentInfo } from "../methods/index.js";
-import { imagePlugins } from "../utils/image_preprocess.js";
+import { imagePlugins } from "../utils/image_plugins/index.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -40,28 +40,12 @@ const imagePreprocessAgent = async (namedInputs: {
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     if (plugin) {
       const result = await plugin.process(processorParams);
+      // TODO: remove this block
       if (plugin.imageType === "image" && result) {
         // undefined prompt indicates that image generation is not needed
         return { path: result, prompt: undefined, imageParams, aspectRatio };
       }
     }
-    /*
-    if (beat.image.type === "textSlide") {
-      await processTextSlide(processorParams);
-    } else if (beat.image.type === "markdown") {
-      await processMarkdown(processorParams);
-    } else if (beat.image.type === "image") {
-      const path = processImage(processorParams);
-      if (path) {
-        // undefined prompt indicates that image generation is not needed
-        return { path, prompt: undefined, imageParams, aspectRatio };
-      }
-    } else if (beat.image.type === "chart") {
-      await processChart(processorParams);
-    } else if (beat.image.type === "mermaid") {
-      await processMermaid(processorParams);
-    }
-    */
   }
 
   return { path: imagePath, prompt, imageParams, aspectRatio };
