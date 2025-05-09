@@ -5,6 +5,8 @@ import {
   mulmoScriptSchema,
   mulmoStudioSchema,
   mulmoStudioBeatSchema,
+  mulmoStoryboardSchema,
+  mulmoStoryboardSceneSchema,
   speakerDictionarySchema,
   mulmoImageParamsSchema,
   mulmoSpeechParamsSchema,
@@ -29,7 +31,8 @@ export type Text2SpeechProvider = z.infer<typeof text2SpeechProviderSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
 export type MulmoCanvasDimension = z.infer<typeof mulmoCanvasDimensionSchema>;
-
+export type MulmoStoryboardScene = z.infer<typeof mulmoStoryboardSceneSchema>;
+export type MulmoStoryboard = z.infer<typeof mulmoStoryboardSchema>;
 export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
 
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;

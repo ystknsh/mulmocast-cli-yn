@@ -263,4 +263,17 @@ export const mulmoScriptTemplateSchema = z
   })
   .strict();
 
+export const mulmoStoryboardSceneSchema = z
+  .object({
+    description: z.string(),
+  })
+  .strict();
+
+export const mulmoStoryboardSchema = z
+  .object({
+    title: z.string(),
+    scenes: z.array(mulmoStoryboardSceneSchema),
+  })
+  .strict();
+
 export const urlsSchema = z.array(z.string().url({ message: "Invalid URL format" }));
