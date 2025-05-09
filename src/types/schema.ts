@@ -267,7 +267,7 @@ export const mulmoStoryboardSceneSchema = z
   .object({
     description: z.string(),
   })
-  .describe("A detailed description of the scene")
+  .describe("A detailed description of the content of the scene, not the presentation style")
   .strict();
 
 export const mulmoStoryboardSchema = z

@@ -1,50 +1,47 @@
 {
-    "title": "Attention Is All You Need: Introducing the Transformer Architecture",
+    "title": "Attention Is All You Need: The Revolutionary Transformer Architecture",
     "scenes": [
       {
-        "description": "Title slide featuring 'Attention Is All You Need' with an elegant visual of interconnected nodes representing the attention mechanism. Include the authors' names: Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan Gomez, Łukasz Kaiser, and Illia Polosukhin from Google, 2017."
+        "description": "Introduction to the paper and its authors. Highlight that 'Attention Is All You Need' was published in 2017 by eight researchers at Google: Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan Gomez, Łukasz Kaiser, and Illia Polosukhin. Mention that this has become one of the most influential papers in AI history, with over 173,000 citations as of 2025."
       },
       {
-        "description": "The Problem: Before showing the solution, highlight the limitations of previous sequence models. Visual comparison of RNNs and CNNs with their inherent limitations: sequential processing in RNNs causing slow training and difficulty with long-range dependencies, and the need for multiple layers in CNNs to connect distant positions."
+        "description": "The problem the paper addressed. Prior to the Transformer, sequence transduction models like machine translation relied on complex recurrent neural networks (RNNs) or convolutional neural networks (CNNs). These architectures had limitations: RNNs were inherently sequential and couldn't be easily parallelized, while CNNs struggled with capturing long-range dependencies efficiently."
       },
       {
-        "description": "The Big Idea: Introduce the core innovation - using attention mechanisms exclusively and completely removing recurrence and convolutions. Include a simple visual showing how traditional encoder-decoder models evolve into the Transformer architecture."
+        "description": "The key innovation: The Transformer architecture that relies solely on attention mechanisms, completely eliminating recurrence and convolutions. Emphasize that this was a radical departure from previous approaches and changed the trajectory of natural language processing and AI research."
       },
       {
-        "description": "Transformer Architecture Overview: A comprehensive diagram of the complete Transformer architecture showing the encoder stack on the left and decoder stack on the right, with multi-head attention layers, feed-forward networks, and connections between them."
+        "description": "Overview of the Transformer's encoder-decoder structure. The encoder maps an input sequence to a continuous representation, while the decoder generates an output sequence. Both consist of stacks of identical layers, each with multi-head self-attention mechanisms and position-wise feed-forward networks."
       },
       {
-        "description": "Self-Attention Mechanism: Animated explanation of how self-attention works. Show queries, keys, and values being computed, followed by the attention scores calculation, and finally how the output is produced as a weighted sum. Include the formula for scaled dot-product attention."
+        "description": "Deep dive into the self-attention mechanism, the core innovation of the Transformer. Explain how it computes compatibility between queries and keys to derive attention weights for values. Show the formula for scaled dot-product attention: Attention(Q, K, V) = softmax(QK^T/√dk)V. Illustrate how this allows the model to focus on different parts of the input sequence when producing each element of the output."
       },
       {
-        "description": "Multi-Head Attention: Visual showing how a single attention mechanism is expanded into multiple attention heads operating in parallel. Illustrate how different heads can learn to focus on different aspects of the input (like syntax vs. semantics)."
+        "description": "Explanation of multi-head attention, which allows the model to jointly attend to information from different representation subspaces at different positions. Instead of performing a single attention function, the model projects queries, keys, and values multiple times with different learned projections, performs attention on each projection, and concatenates the results."
       },
       {
-        "description": "Positional Encoding: Since the model has no recurrence or convolution, explain how positional information is incorporated. Show the sinusoidal functions used and visualize how they encode position information that the model can learn from."
+        "description": "The importance of positional encoding. Since the Transformer has no recurrence or convolution, it needs additional information about the position of tokens. The paper used sine and cosine functions of different frequencies, allowing the model to learn relative positions and extrapolate to sequence lengths longer than those seen during training."
       },
       {
-        "description": "The Power of Parallelization: Side-by-side comparison showing how RNNs process tokens sequentially vs. how Transformers process all tokens in parallel. Include a graph showing the dramatic speed improvements in training time."
+        "description": "Advantages of the Transformer architecture over RNNs and CNNs: 1) Parallelization - processes all input tokens simultaneously, 2) Constant path length between any two positions for modeling long-range dependencies, 3) Computational efficiency, especially for modern hardware like GPUs and TPUs, 4) Superior performance on sequence modeling tasks."
       },
       {
-        "description": "Capturing Long-Range Dependencies: Visual example showing how self-attention can directly connect any two positions in a sequence regardless of distance. Use a real example from the paper's visualization section showing attention patterns for specific words."
+        "description": "Performance results from the paper. The Transformer achieved state-of-the-art results on machine translation tasks: WMT 2014 English-to-German translation with a BLEU score of 28.4 (improving over previous best results by over 2 BLEU points) and English-to-French translation with a BLEU score of 41.0. It also performed exceptionally well on English constituency parsing."
       },
       {
-        "description": "Results on Machine Translation: Charts showing the Transformer's performance on WMT 2014 English-to-German (28.4 BLEU) and English-to-French (41.0 BLEU) translation tasks compared to previous state-of-the-art models. Emphasize both the quality improvement and reduced training time."
+        "description": "Training efficiency of the Transformer. The model required significantly less training time than previous state-of-the-art approaches. The base model could be trained in about 12 hours on 8 NVIDIA P100 GPUs, while achieving better results than models that took weeks to train."
       },
       {
-        "description": "Versatility Beyond Translation: Show the Transformer's performance on English constituency parsing tasks to demonstrate its applicability to other NLP problems beyond machine translation."
+        "description": "The versatility of the Transformer architecture. Beyond machine translation, the paper showed its effectiveness for English constituency parsing, demonstrating the model's ability to generalize to different tasks with minimal adaptation."
       },
       {
-        "description": "Historical Impact: Timeline from 2017 to 2025 showing key developments based on the Transformer architecture, including BERT, GPT models, Vision Transformers, DALL-E, Stable Diffusion, and other breakthrough systems that built upon this foundation."
+        "description": "Historical impact and legacy of the paper. The Transformer has become the foundation for most modern AI systems including large language models like GPT, BERT, and Claude. It has been applied to domains beyond text, including vision (Vision Transformer), speech recognition, robotics, and multimodal systems. Image and video generators like DALL-E, Stable Diffusion, and Sora all use Transformer-based architectures."
       },
       {
-        "description": "Citation Impact: Visualization showing the paper's citation growth over time, highlighting that it has become one of the top 10 most-cited papers of the 21st century with over 173,000 citations by 2025."
+        "description": "Future directions mentioned in the original paper. The authors expressed excitement about applying the architecture to other tasks and input/output modalities beyond text. They also mentioned exploring local, restricted attention mechanisms to efficiently handle large inputs and outputs, and making generation less sequential."
       },
       {
-        "description": "Key Advantages Summary: Bulleted list recapping the three main advantages of the Transformer: 1) Parallel computation leading to faster training, 2) Better modeling of long-range dependencies, and 3) Overall computational efficiency."
-      },
-      {
-        "description": "Future Directions: Final slide showing how the Transformer concept has expanded beyond text to other domains - vision, speech, multimodal applications, and robotics - representing the foundation of modern AI systems."
+        "description": "Conclusion summarizing the revolutionary impact of the Transformer architecture. It fundamentally changed deep learning approaches to sequence modeling by replacing recurrence and convolution with attention mechanisms, enabling more efficient training, better modeling of dependencies, and superior performance across various tasks. This architecture has become the backbone of the current AI boom."
       }
     ]
   }
