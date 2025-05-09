@@ -37,13 +37,13 @@ const imagePreprocessAgent = async (namedInputs: {
     const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
     const processorParams = { beat, context, imagePath, textSlideStyle, canvasSize };
 
-    const plugin = imagePlugins.find((plugin) => plugin.imageType === beat.image.type);
+    const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     console.log(plugin);
     if (plugin) {
       const result = await plugin.process(processorParams);
-      if (beat.image.imageType === "image" && result) {
+      if (plugin.imageType === "image" && result) {
         // undefined prompt indicates that image generation is not needed
-        return { path, prompt: undefined, imageParams, aspectRatio };
+        return { path: result, prompt: undefined, imageParams, aspectRatio };
       }
     }
     /*
