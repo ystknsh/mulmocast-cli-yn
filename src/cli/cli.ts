@@ -40,7 +40,7 @@ const getFileObject = () => {
 };
 const main = async () => {
   const files = getFileObject();
-  const { mulmoFilePath, mulmoFileDirPath, isHttpPath, fileOrUrl } = files;
+  const { mulmoFilePath, isHttpPath, fileOrUrl } = files;
 
   if (args.v) {
     GraphAILogger.info(files);
