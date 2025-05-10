@@ -41,8 +41,10 @@ const imagePreprocessAgent = async (namedInputs: {
     if (plugin) {
       const result = await plugin.process(processorParams);
       // TODO: remove this block
+      console.log("DEBUG: plugin", plugin.imageType, result);
       if (plugin.imageType === "image" && result) {
         // undefined prompt indicates that image generation is not needed
+        console.log("DEBUG: image", result);
         return { path: result, prompt: undefined, imageParams, aspectRatio };
       }
     }
@@ -61,7 +63,7 @@ const graph_data: GraphData = {
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.script.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",

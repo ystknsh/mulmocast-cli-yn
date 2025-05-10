@@ -49,7 +49,7 @@ const translateGraph: GraphData = {
         version: 0.5,
         nodes: {
           studioBeat: {
-            agent: (namedInputs: { rows:MulmoStudioBeat[], index: number}) => {
+            agent: (namedInputs: { rows: MulmoStudioBeat[]; index: number }) => {
               return namedInputs.rows[namedInputs.index];
             },
             inputs: {
