@@ -39,8 +39,8 @@ const graph_tts: GraphData = {
       },
       inputs: {
         beat: ":beat",
-        script: ":script",
-        speakers: ":script.speechParams.speakers",
+        script: ":studio.script",
+        speakers: ":studio.script.speechParams.speakers",
       },
     },
     ttsAgent: {
@@ -51,7 +51,7 @@ const graph_tts: GraphData = {
         return "ttsOpenaiAgent";
       },
       inputs: {
-        provider: ":script.speechParams.provider",
+        provider: ":studio.script.speechParams.provider",
       },
     },
     tts: {
@@ -85,7 +85,7 @@ const graph_data: GraphData = {
       agent: "mapAgent",
       inputs: {
         rows: ":context.studio.script.beats",
-        script: ":context.studio.script",
+        studio: ":context.studio",
         audioDirPath: ":audioDirPath",
         audioSegmentDirPath: ":audioSegmentDirPath",
         context: ":context",
