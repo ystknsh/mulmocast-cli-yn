@@ -1,7 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio, MulmoStudioContext, MulmoBeat } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoBeat, MulmoStudioBeat } from "../types/index.js";
 import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file.js";
 import { MulmoStudioContextMethods } from "../methods/index.js";
 
@@ -26,7 +26,7 @@ const combineAudioFilesAgent: AgentFunction<
     });
   };
 
-  const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat, audioDirPath: string): string => {
+  const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat, studioBeat: MulmoStudioBeat, audioDirPath: string): string => {
     if (mulmoBeat.audio?.type === "audio") {
       const { source } = mulmoBeat.audio;
       if (source.kind === "path") {
@@ -36,12 +36,12 @@ const combineAudioFilesAgent: AgentFunction<
         return source.url;
       }
     }
-    return getAudioSegmentFilePath(audioDirPath, context.studio.filename, mulmoBeat.audioFile ?? "");
+    return getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile ?? "");
   };
 
   await Promise.all(
     context.studio.script.beats.map(async (mulmoBeat: MulmoBeat, index: number) => {
-      const filePath = resolveAudioFilePath(context, mulmoBeat, audioDirPath);
+      const filePath = resolveAudioFilePath(context, mulmoBeat, context.studio.beats[index], audioDirPath);
       const isLast = index === context.studio.beats.length - 2;
       command.input(filePath);
       command.input(isLast ? silentLastPath : silentPath);
