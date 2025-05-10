@@ -68,7 +68,10 @@
       "image": {
         "type": "mermaid",
         "title": "Transformer's Influence on AI",
-        "code": "graph TD\n    A[Transformer 2017] --> B[BERT]\n    A --> C[GPT Series]\n    A --> D[Claude]\n    A --> E[T5]\n    A --> F[Vision Transformer]\n    A --> G[DALL-E/Stable Diffusion]\n    A --> H[Sora]\n    style A fill:#f9f,stroke:#333,stroke-width:4px"
+        "code": {
+          "kind": "text",
+          "text": "graph TD\n    A[Transformer 2017] --> B[BERT]\n    A --> C[GPT Series]\n    A --> D[Claude]\n    A --> E[T5]\n    A --> F[Vision Transformer]\n    A --> G[DALL-E/Stable Diffusion]\n    A --> H[Sora]\n    style A fill:#f9f,stroke:#333,stroke-width:4px"
+        }
       }
     },
     {
@@ -92,7 +95,10 @@
       "image": {
         "type": "mermaid",
         "title": "RNN Sequential Processing",
-        "code": "graph LR\n    A[Input 1] --> B[RNN Cell]\n    B --> C[Hidden State]\n    C --> D[RNN Cell]\n    E[Input 2] --> D\n    D --> F[Hidden State]\n    F --> G[RNN Cell]\n    H[Input 3] --> G\n    G --> I[Hidden State]\n    style B fill:#f96,stroke:#333,stroke-width:2px\n    style D fill:#f96,stroke:#333,stroke-width:2px\n    style G fill:#f96,stroke:#333,stroke-width:2px\n    style C fill:#69f,stroke:#333,stroke-width:2px\n    style F fill:#69f,stroke:#333,stroke-width:2px\n    style I fill:#69f,stroke:#333,stroke-width:2px"
+        "code": {
+          "kind": "text",
+          "text": "graph LR\n    A[Input 1] --> B[RNN Cell]\n    B --> C[Hidden State]\n    C --> D[RNN Cell]\n    E[Input 2] --> D\n    D --> F[Hidden State]\n    F --> G[RNN Cell]\n    H[Input 3] --> G\n    G --> I[Hidden State]\n    style B fill:#f96,stroke:#333,stroke-width:2px\n    style D fill:#f96,stroke:#333,stroke-width:2px\n    style G fill:#f96,stroke:#333,stroke-width:2px\n    style C fill:#69f,stroke:#333,stroke-width:2px\n    style F fill:#69f,stroke:#333,stroke-width:2px\n    style I fill:#69f,stroke:#333,stroke-width:2px"
+        }
       }
     },
     {
