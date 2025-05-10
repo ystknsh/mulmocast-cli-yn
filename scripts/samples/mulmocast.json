@@ -1,0 +1,27 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "MulmoCast",
+  "speechParams": {
+    "speakers": {
+      "Presenter": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Presenter"
+        }
+      }
+    }
+  },
+  "beats": [
+    {
+      "speaker": "Presenter",
+      "text": "MulmoCast is an AI-native multi-modal presentation tool.",
+      "image": {
+        "type": "mermaid",
+        "title": "MulmoCast",
+        "code": "graph LR\n    A[Market Research] --> B[Product Planning]\n    B --> C[Development]\n    C --> D[Testing]\n    D --> E[Manufacturing]\n    E --> F[Marketing]\n    F --> G[Sales]\n    G --> H[Customer Support]\n    H --> A"
+      }
+    }
+  ]
+}
