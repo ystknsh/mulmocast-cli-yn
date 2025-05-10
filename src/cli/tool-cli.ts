@@ -14,7 +14,7 @@ import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer.js";
 const main = async () => {
   const { o: outdir, b: basedir, action, v: verbose, i: interactive, s: filename, cache } = args;
   let { t: template } = args;
-  let { u: urls } = args;
+  const { u: urls } = args;
   const { llm_model, llm_agent } = args;
 
   const baseDirPath = getBaseDirPath(basedir as string);

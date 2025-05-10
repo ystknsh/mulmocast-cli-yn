@@ -1,11 +1,8 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { commonOptions } from "./common.js";
-import { GraphAILogger } from "graphai";
 import { getAvailableTemplates } from "../utils/file.js";
 import { llmAgents } from "../utils/utils";
-
-// GraphAILogger.setLevelEnabled("error", false);
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 

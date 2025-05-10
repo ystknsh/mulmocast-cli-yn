@@ -6,6 +6,7 @@ import { streamAgentFilterGenerator } from "@graphai/agent_filters";
 
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
+// import anthropicAgent from "../agents/anthropic_agent.js";
 import { geminiAgent } from "@graphai/gemini_agent";
 import { groqAgent } from "@graphai/groq_agent";
 
