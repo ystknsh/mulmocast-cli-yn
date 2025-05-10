@@ -12,7 +12,7 @@ const defaultModels: Record<LLMAgent, string> = {
 export const defaultOpenAIModel = defaultModels["openAIAgent"];
 
 export const llmPair = (_agent?: LLMAgent, _model?: string) => {
-  const agent: LLMAgent = (_agent && llmAgents.includes(_agent ?? "")) ? _agent : "openAIAgent" as const;
+  const agent: LLMAgent = _agent && llmAgents.includes(_agent ?? "") ? _agent : ("openAIAgent" as const);
   const model = _model ?? defaultModels[agent ?? ""];
 
   return { agent, model };
