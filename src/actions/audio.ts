@@ -10,7 +10,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoScript, MulmoBeat, SpeakerDictonary } from "../types/index.js";
+import { MulmoStudioContext, MulmoStudio, MulmoBeat, SpeakerDictonary } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
@@ -30,16 +30,16 @@ const { default: __, ...vanillaAgents } = agents;
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; script: MulmoScript; speakers: SpeakerDictonary }) => {
-        const { beat, script, speakers } = namedInputs;
+      agent: (namedInputs: { beat: MulmoBeat; studio: MulmoStudio; speakers: SpeakerDictonary }) => {
+        const { beat, studio, speakers } = namedInputs;
         return {
           voiceId: speakers[beat.speaker].voiceId,
-          speechOptions: MulmoScriptMethods.getSpeechOptions(script, beat),
+          speechOptions: MulmoScriptMethods.getSpeechOptions(studio.script, beat),
         };
       },
       inputs: {
         beat: ":beat",
-        script: ":studio.script",
+        studio: ":studio",
         speakers: ":studio.script.speechParams.speakers",
       },
     },
