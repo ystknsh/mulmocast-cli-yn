@@ -38,7 +38,8 @@ export const speakerDictionarySchema = z.record(speakerIdSchema, speakerDataSche
 
 const mediaSourceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("url"), url: URLStringSchema }).strict(), // https://example.com/foo.pdf
-  z.object({ kind: z.literal("data"), data: z.string() }).strict(), // base64
+  z.object({ kind: z.literal("base64"), data: z.string() }).strict(), // base64
+  z.object({ kind: z.literal("text"), text: z.string() }).strict(), // plain text
   z.object({ kind: z.literal("path"), path: z.string() }).strict(), // foo.pdf
 ]);
 
@@ -109,7 +110,7 @@ const MulmoMermaidMediaSchema = z
   .object({
     type: z.literal("mermaid"),
     title: z.string().describe("The title of the diagram"),
-    code: z.string().describe("The code of the mermaid diagram"),
+    code: mediaSourceSchema.describe("The code of the mermaid diagram"),
   })
   .strict();
 
