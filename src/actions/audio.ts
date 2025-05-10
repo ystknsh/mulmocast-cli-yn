@@ -30,15 +30,18 @@ const { default: __, ...vanillaAgents } = agents;
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; studio: MulmoStudio; speakers: SpeakerDictonary }) => {
-        const { beat, studio, speakers } = namedInputs;
+      agent: (namedInputs: { beat: MulmoBeat; index: number; studio: MulmoStudio; speakers: SpeakerDictonary }) => {
+        const { beat, index, studio, speakers } = namedInputs;
+        const studioBeat = studio.beats[index];
         return {
+          studioBeat,
           voiceId: speakers[beat.speaker].voiceId,
           speechOptions: MulmoScriptMethods.getSpeechOptions(studio.script, beat),
         };
       },
       inputs: {
         beat: ":beat",
+        index: ":__mapIndex",
         studio: ":studio",
         speakers: ":studio.script.speechParams.speakers",
       },
@@ -59,7 +62,7 @@ const graph_tts: GraphData = {
       agent: ":ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: "${:audioSegmentDirPath}/${:beat.audioFile}.mp3", // TODO
+        file: "${:audioSegmentDirPath}/${:preprocessor.studioBeat.audioFile}.mp3", // TODO
         force: ":context.force",
       },
       params: {
