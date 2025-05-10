@@ -68,7 +68,7 @@ const translateGraph: GraphData = {
                     targetLang: ":targetLang",
                     beat: ":beat",
                     studio: ":studio",
-                    index: ":___index",
+                    index: ":__mapIndex",
                     lang: ":lang",
                     system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
                     prompt: ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"],
