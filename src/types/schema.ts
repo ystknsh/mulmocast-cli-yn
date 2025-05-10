@@ -236,8 +236,8 @@ export const mulmoScriptSchema = mulmoPresentationStyleSchema
   })
   .strict();
 
-export const mulmoStudioBeatSchema = mulmoBeatSchema
-  .extend({
+export const mulmoStudioBeatSchema = z
+  .object({
     multiLingualTexts: multiLingualTextsSchema.optional(),
     hash: z.string().optional(),
     duration: z.number().optional(),

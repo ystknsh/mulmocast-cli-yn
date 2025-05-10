@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
-import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext, MulmoBeat } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 
 const { default: __, ...vanillaAgents } = agents;
@@ -37,7 +37,8 @@ const translateGraph: GraphData = {
       agent: "mapAgent",
       inputs: {
         targetLangs: ":targetLangs",
-        rows: ":studio.beats",
+        studio: ":studio",
+        rows: ":studio.script.beats",
         lang: ":lang",
       },
       params: {
@@ -47,12 +48,23 @@ const translateGraph: GraphData = {
       graph: {
         version: 0.5,
         nodes: {
+          studioBeat: {
+            agent: (namedInputs: { rows: MulmoStudioBeat[]; index: number }) => {
+              return namedInputs.rows[namedInputs.index];
+            },
+            inputs: {
+              index: ":__mapIndex",
+              rows: ":studio.beats",
+            },
+          },
           preprocessBeats: {
             agent: "mapAgent",
             inputs: {
               beat: ":beat",
+              studioBeat: ":studioBeat",
               rows: ":targetLangs",
               lang: ":lang.text",
+              studio: ":studio",
             },
             params: {
               compositeResult: true,
@@ -65,6 +77,7 @@ const translateGraph: GraphData = {
                   inputs: {
                     targetLang: ":targetLang",
                     beat: ":beat",
+                    studioBeat: ":studioBeat",
                     lang: ":lang",
                     system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
                     prompt: ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"],
@@ -143,7 +156,7 @@ const translateGraph: GraphData = {
             isResult: true,
             agent: "mergeObjectAgent",
             inputs: {
-              items: [":beat", { multiLingualTexts: ":mergeLocalizedText" }],
+              items: [":studioBeat", { multiLingualTexts: ":mergeLocalizedText" }],
             },
           },
         },
@@ -163,20 +176,20 @@ const translateGraph: GraphData = {
 const localizedTextCacheAgentFilter: AgentFilterFunction<
   DefaultParamsType,
   DefaultResultData,
-  { targetLang: LANG; beat: MulmoStudioBeat; lang: LANG }
+  { targetLang: LANG; beat: MulmoBeat; studioBeat: MulmoStudioBeat; lang: LANG }
 > = async (context, next) => {
   const { namedInputs } = context;
-  const { targetLang, beat, lang } = namedInputs;
+  const { targetLang, beat, lang, studioBeat } = namedInputs;
 
   // The original text is unchanged and the target language text is present
   if (
-    beat.multiLingualTexts &&
-    beat.multiLingualTexts[lang] &&
-    beat.multiLingualTexts[lang].text === beat.text &&
-    beat.multiLingualTexts[targetLang] &&
-    beat.multiLingualTexts[targetLang].text
+    studioBeat.multiLingualTexts &&
+    studioBeat.multiLingualTexts[lang] &&
+    studioBeat.multiLingualTexts[lang].text === beat.text &&
+    studioBeat.multiLingualTexts[targetLang] &&
+    studioBeat.multiLingualTexts[targetLang].text
   ) {
-    return { text: beat.multiLingualTexts[targetLang].text };
+    return { text: studioBeat.multiLingualTexts[targetLang].text };
   }
   // same language
   if (targetLang === lang) {

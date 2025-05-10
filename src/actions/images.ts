@@ -4,7 +4,7 @@ import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
@@ -20,7 +20,7 @@ import { GoogleAuth } from "google-auth-library";
 
 const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
-  beat: MulmoStudioBeat;
+  beat: MulmoBeat;
   index: number;
   suffix: string;
   imageDirPath: string;
@@ -61,7 +61,7 @@ const graph_data: GraphData = {
     outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.script.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
       isResult: true,
       params: {
         rowKey: "beat",
