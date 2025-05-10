@@ -41,7 +41,7 @@ const imagePreprocessAgent = async (namedInputs: {
     if (plugin) {
       const result = await plugin.process(processorParams);
       // TODO: remove this block
-      if (plugin.imageType === "image" && result) {
+      if ((plugin.imageType === "image" || plugin.imageType === "movie") && result) {
         // undefined prompt indicates that image generation is not needed
         return { path: result, prompt: undefined, imageParams, aspectRatio };
       }
