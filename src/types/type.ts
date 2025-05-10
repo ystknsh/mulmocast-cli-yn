@@ -17,6 +17,12 @@ import {
   text2ImageProviderSchema,
   text2SpeechProviderSchema,
   mulmoPresentationStyleSchema,
+  // for image
+  MulmoMermaidMediaSchema,
+  MulmoTextSlideMediaSchema,
+  MulmoMarkdownMediaSchema,
+  MulmoImageMediaSchema,
+  MulmoChartMediaSchema,
 } from "./schema.js";
 import { z } from "zod";
 
@@ -39,6 +45,13 @@ export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
 
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
 export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
+
+// images
+export type MulmoTextSlideMedia = z.infer<typeof MulmoTextSlideMediaSchema>;
+export type MulmoMarkdownMedia = z.infer<typeof MulmoMarkdownMediaSchema>;
+export type MulmoImageMedia = z.infer<typeof MulmoImageMediaSchema>;
+export type MulmoChartMedia = z.infer<typeof MulmoChartMediaSchema>;
+export type MulmoMermaidMedia = z.infer<typeof MulmoMermaidMediaSchema>;
 
 export type FileDirs = {
   mulmoFilePath: string;

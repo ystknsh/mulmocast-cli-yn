@@ -1,12 +1,13 @@
 import { ImageProcessorParams } from "../../types/index.js";
 import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
+import { isMulmoImageMermaild } from "./type_guards.js";
 
 export const imageType = "mermaid";
 
 const processMermaid = async (params: ImageProcessorParams) => {
   const { beat, imagePath, canvasSize } = params;
-  if (!beat.image || beat.image.type !== "mermaid") return;
+  if (!isMulmoImageMermaild(beat.image)) return;
 
   const template = getHTMLFile("mermaid");
   if (beat.image.code.kind === "text") {
