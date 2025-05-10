@@ -106,7 +106,7 @@ const MulmoChartMediaSchema = z
   })
   .strict();
 
-const MulmoMermaidMediaSchema = z
+export const MulmoMermaidMediaSchema = z
   .object({
     type: z.literal("mermaid"),
     title: z.string().describe("The title of the diagram"),
