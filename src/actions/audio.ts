@@ -84,7 +84,7 @@ const graph_data: GraphData = {
     map: {
       agent: "mapAgent",
       inputs: {
-        rows: ":context.studio.beats",
+        rows: ":context.studio.script.beats",
         script: ":context.studio.script",
         audioDirPath: ":audioDirPath",
         audioSegmentDirPath: ":audioSegmentDirPath",
