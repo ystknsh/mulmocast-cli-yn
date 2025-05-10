@@ -1,7 +1,7 @@
 export const llmAgents = ["openAIAgent", "anthropicAgent", "geminiAgent", "groqAgent"];
 
 const defaultModels = {
-  anthropicAgent: "claude_3.7_sonnet",
+  anthropicAgent: "claude-3-7-sonnet-20250219",
   geminiAgent: "gemini-1.5-flash",
   groqAgent: "llama3-8b-8192",
   openAIAgent: "gpt-4o",
