@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
-import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext, MulmoStudio } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 
 const { default: __, ...vanillaAgents } = agents;
@@ -37,6 +37,7 @@ const translateGraph: GraphData = {
       agent: "mapAgent",
       inputs: {
         targetLangs: ":targetLangs",
+        studio: ":studio",
         rows: ":studio.beats",
         lang: ":lang",
       },
@@ -53,6 +54,7 @@ const translateGraph: GraphData = {
               beat: ":beat",
               rows: ":targetLangs",
               lang: ":lang.text",
+              studio: ":studio",
             },
             params: {
               compositeResult: true,
@@ -65,6 +67,8 @@ const translateGraph: GraphData = {
                   inputs: {
                     targetLang: ":targetLang",
                     beat: ":beat",
+                    studio: ":studio",
+                    index: ":___index",
                     lang: ":lang",
                     system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
                     prompt: ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"],
@@ -163,16 +167,18 @@ const translateGraph: GraphData = {
 const localizedTextCacheAgentFilter: AgentFilterFunction<
   DefaultParamsType,
   DefaultResultData,
-  { targetLang: LANG; beat: MulmoStudioBeat; lang: LANG }
+  { targetLang: LANG; beat: MulmoStudioBeat; studio: MulmoStudio; index: number; lang: LANG }
 > = async (context, next) => {
   const { namedInputs } = context;
-  const { targetLang, beat, lang } = namedInputs;
+  const { targetLang, beat, lang, index, studio } = namedInputs;
+
+  const studioBeat = studio.script.beats[index];
 
   // The original text is unchanged and the target language text is present
   if (
     beat.multiLingualTexts &&
     beat.multiLingualTexts[lang] &&
-    beat.multiLingualTexts[lang].text === beat.text &&
+    beat.multiLingualTexts[lang].text === studioBeat.text &&
     beat.multiLingualTexts[targetLang] &&
     beat.multiLingualTexts[targetLang].text
   ) {
@@ -180,7 +186,7 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
   }
   // same language
   if (targetLang === lang) {
-    return { text: beat.text };
+    return { text: studioBeat.text };
   }
   return await next(context);
 };
