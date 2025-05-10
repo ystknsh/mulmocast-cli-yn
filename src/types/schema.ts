@@ -46,7 +46,7 @@ const mediaSourceSchema = z.discriminatedUnion("kind", [
 // String is easier for AI, string array is easier for human
 const stringOrStringArray = z.union([z.string(), z.array(z.string())]);
 
-const MulmoMarkdownMediaSchema = z
+export const MulmoMarkdownMediaSchema = z
   .object({
     type: z.literal("markdown"),
     markdown: stringOrStringArray,
@@ -67,7 +67,7 @@ const MulmoPdfMediaSchema = z
   })
   .strict();
 
-const MulmoImageMediaSchema = z
+export const MulmoImageMediaSchema = z
   .object({
     type: z.literal("image"),
     source: mediaSourceSchema,
@@ -88,7 +88,7 @@ const MulmoMovieMediaSchema = z
   })
   .strict();
 
-const MulmoTextSlideMediaSchema = z
+export const MulmoTextSlideMediaSchema = z
   .object({
     type: z.literal("textSlide"),
     slide: z.object({
@@ -98,7 +98,7 @@ const MulmoTextSlideMediaSchema = z
   })
   .strict();
 
-const MulmoChartMediaSchema = z
+export const MulmoChartMediaSchema = z
   .object({
     type: z.literal("chart"),
     title: z.string(),
