@@ -5,7 +5,7 @@ import { GraphAILogger } from "graphai";
 import { getAvailableTemplates } from "../utils/file.js";
 import { llmAgents } from "../utils/utils";
 
-GraphAILogger.setLevelEnabled("error", false);
+// GraphAILogger.setLevelEnabled("error", false);
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 
