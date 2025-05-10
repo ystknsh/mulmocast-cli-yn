@@ -74,6 +74,12 @@ const graphData = {
     while: ":continue",
   },
   nodes: {
+    llmAgent: {
+      update: ":llmAgent",
+    },
+    llmModel: {
+      update: ":llmModel",
+    },
     fileName: {
       update: ":fileName",
     },
@@ -82,7 +88,7 @@ const graphData = {
     },
     messages: {
       value: [],
-      update: ":reply.llmAgent.messages",
+      update: ":reply.chatAgent.messages",
     },
     userInput: {
       agent: "textInputAgent",
@@ -96,6 +102,8 @@ const graphData = {
       inputs: {
         messages: ":messages",
         prompt: ":userInput.text",
+        llmAgent: ":llmAgent",
+        llmModel: ":llmModel",
       },
       graph: {
         loop: {
@@ -106,10 +114,10 @@ const graphData = {
             value: 0,
             update: ":counter.add(1)",
           },
-          llmAgent: {
-            agent: "openAIAgent",
+          chatAgent: {
+            agent: ":llmAgent",
             params: {
-              model: "gpt-4o",
+              model: ":llmModel",
               stream: true,
             },
             inputs: {
@@ -121,7 +129,7 @@ const graphData = {
           validateMulmoScriptAgent: {
             agent: "validateMulmoScriptAgent",
             inputs: {
-              text: ":llmAgent.text.codeBlock()",
+              text: ":chatAgent.text.codeBlock()",
             },
           },
           continue: {
@@ -130,11 +138,15 @@ const graphData = {
                 GraphAILogger.info("\n" + agentHeader + " \x1b[31mFailed to generate a valid script. Please try again.\n");
                 return false;
               }
-              return !!codeBlock && !isValid;
+              const result = !!codeBlock && !isValid;
+              if (result) {
+                GraphAILogger.info("\n" + agentHeader + " Generated script was broken. Retry generate a script.");
+              }
+              return result;
             },
             inputs: {
               counter: ":counter",
-              codeBlock: ":llmAgent.text.codeBlock()",
+              codeBlock: ":chatAgent.text.codeBlock()",
               isValid: ":validateMulmoScriptAgent.isValid",
             },
           },
@@ -144,8 +156,8 @@ const graphData = {
     json: {
       agent: "copyAgent",
       inputs: {
-        json: ":reply.llmAgent.text.codeBlock().jsonParse()",
-        text: ":reply.llmAgent.text.codeBlock()",
+        json: ":reply.chatAgent.text.codeBlock().jsonParse()",
+        text: ":reply.chatAgent.text.codeBlock()",
       },
     },
     writeJSON: {
@@ -218,7 +230,7 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
     {
       name: "streamAgentFilter",
       agent: streamAgentFilter,
-      nodeIds: ["llmAgent"],
+      nodeIds: ["chatAgent"],
     },
   ];
 
@@ -233,8 +245,10 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   ]);
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
+  graph.injectValue("llmAgent", "openAIAgent");
+  graph.injectValue("llmModel", "gpt-4o-mini");
   graph.registerCallback(({ nodeId, state }) => {
-    if (nodeId === "llmAgent") {
+    if (nodeId === "chatAgent") {
       if (state === "executing") {
         process.stdout.write(String("\n" + agentHeader + " "));
       }
