@@ -65,7 +65,7 @@ export type ScriptingParams = {
 };
 
 export type ImageProcessorParams = {
-  beat: MulmoStudioBeat;
+  beat: MulmoBeat;
   context: MulmoStudioContext;
   imagePath: string;
   textSlideStyle: string;

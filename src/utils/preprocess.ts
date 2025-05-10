@@ -1,5 +1,5 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
-import { MulmoStudio, MulmoStudioBeat, MulmoScript } from "../types/index.js";
+import { MulmoStudio, MulmoBeat, MulmoScript } from "../types/index.js";
 import { text2hash } from "./text_hash.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 
@@ -42,7 +42,7 @@ export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: str
 
   studio.script = mulmoScript; // update the script
   studio.beats.length = mulmoScript.beats.length; // In case it became shorter
-  mulmoScript.beats.forEach((beat: MulmoStudioBeat, index: number) => {
+  mulmoScript.beats.forEach((beat: MulmoBeat, index: number) => {
     const voiceId = studio.script.speechParams.speakers[beat.speaker].voiceId;
     const speechOptions = MulmoScriptMethods.getSpeechOptions(studio.script, beat);
     const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
