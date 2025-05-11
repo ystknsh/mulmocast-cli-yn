@@ -37,7 +37,7 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = ([".yaml", ".yml"].includes(path.extname(scriptPath)) ? yamlParse(scriptData) : JSON.parse(scriptData)) as T;
+  const script = ([".yaml", ".yml"].includes(path.extname(scriptPath).toLowerCase()) ? yamlParse(scriptData) : JSON.parse(scriptData)) as T;
   const parsedPath = path.parse(scriptPath);
 
   return {
