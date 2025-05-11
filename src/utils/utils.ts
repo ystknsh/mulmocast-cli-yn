@@ -9,11 +9,19 @@ const defaultModels: Record<LLMAgent, string> = {
   openAIAgent: "gpt-4o",
 };
 
+const longMaxTokens: Record<LLMAgent, number> = {
+  anthropicAgent: 8192,
+  geminiAgent: 8192,
+  groqAgent: 4096,
+  openAIAgent: 8192,
+};
+
 export const defaultOpenAIModel = defaultModels["openAIAgent"];
 
 export const llmPair = (_agent?: LLMAgent, _model?: string) => {
   const agent: LLMAgent = _agent && llmAgents.includes(_agent ?? "") ? _agent : ("openAIAgent" as const);
   const model = _model ?? defaultModels[agent ?? ""];
+  const max_tokens = longMaxTokens[agent];
 
-  return { agent, model };
+  return { agent, model, max_tokens };
 };

@@ -85,6 +85,9 @@ const graphData = {
     llmModel: {
       update: ":llmModel",
     },
+    maxTokens: {
+      update: ":maxTokens",
+    },
     fileName: {
       update: ":fileName",
     },
@@ -109,6 +112,7 @@ const graphData = {
         prompt: ":userInput.text",
         llmAgent: ":llmAgent",
         llmModel: ":llmModel",
+        maxTokens: ":maxTokens",
       },
       graph: {
         loop: {
@@ -124,6 +128,7 @@ const graphData = {
             params: {
               model: ":llmModel",
               stream: true,
+              max_tokens: ":maxTokens",
             },
             inputs: {
               messages: ":messages",
@@ -228,8 +233,8 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls, cacheDirPath) : "";
 
-  const { agent, model } = llmPair(llm_agent, llm_model);
-  GraphAILogger.log({ agent, model });
+  const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
+  GraphAILogger.log({ agent, model, max_tokens });
 
   const streamAgentFilter = streamAgentFilterGenerator((context, data) => {
     process.stdout.write(String(data));
@@ -259,6 +264,7 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   graph.injectValue("fileName", filename);
   graph.injectValue("llmAgent", agent);
   graph.injectValue("llmModel", model);
+  graph.injectValue("maxTokens", max_tokens);
   graph.registerCallback(({ nodeId, state }) => {
     if (nodeId === "chatAgent") {
       if (state === "executing") {
