@@ -1,0 +1,16 @@
+{
+  "$mulmocast": { "version": "1.0" },
+  "beats": [
+    {
+      "text": "Hello World.",
+      "image": {
+        "type": "mermaid",
+        "title": "Hello World",
+        "code": {
+          "kind": "text",
+          "text": "flowchart TD\nHello --> World"
+        }
+      }
+    }
+  ]
+}
