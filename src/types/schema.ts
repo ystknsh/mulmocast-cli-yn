@@ -38,14 +38,15 @@ export const speakerDictionarySchema = z.record(speakerIdSchema, speakerDataSche
 
 const mediaSourceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("url"), url: URLStringSchema }).strict(), // https://example.com/foo.pdf
-  z.object({ kind: z.literal("data"), data: z.string() }).strict(), // base64
+  z.object({ kind: z.literal("base64"), data: z.string() }).strict(), // base64
+  z.object({ kind: z.literal("text"), text: z.string() }).strict(), // plain text
   z.object({ kind: z.literal("path"), path: z.string() }).strict(), // foo.pdf
 ]);
 
 // String is easier for AI, string array is easier for human
 const stringOrStringArray = z.union([z.string(), z.array(z.string())]);
 
-const MulmoMarkdownMediaSchema = z
+export const MulmoMarkdownMediaSchema = z
   .object({
     type: z.literal("markdown"),
     markdown: stringOrStringArray,
@@ -66,7 +67,7 @@ const MulmoPdfMediaSchema = z
   })
   .strict();
 
-const MulmoImageMediaSchema = z
+export const MulmoImageMediaSchema = z
   .object({
     type: z.literal("image"),
     source: mediaSourceSchema,
@@ -87,7 +88,7 @@ const MulmoMovieMediaSchema = z
   })
   .strict();
 
-const MulmoTextSlideMediaSchema = z
+export const MulmoTextSlideMediaSchema = z
   .object({
     type: z.literal("textSlide"),
     slide: z.object({
@@ -97,7 +98,7 @@ const MulmoTextSlideMediaSchema = z
   })
   .strict();
 
-const MulmoChartMediaSchema = z
+export const MulmoChartMediaSchema = z
   .object({
     type: z.literal("chart"),
     title: z.string(),
@@ -105,11 +106,11 @@ const MulmoChartMediaSchema = z
   })
   .strict();
 
-const MulmoMermaidMediaSchema = z
+export const MulmoMermaidMediaSchema = z
   .object({
     type: z.literal("mermaid"),
     title: z.string().describe("The title of the diagram"),
-    code: z.string().describe("The code of the mermaid diagram"),
+    code: mediaSourceSchema.describe("The code of the mermaid diagram"),
   })
   .strict();
 
