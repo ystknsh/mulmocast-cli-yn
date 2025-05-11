@@ -166,7 +166,7 @@ export const videoParamsSchema = z
 
 export const mulmoBeatSchema = z
   .object({
-    speaker: speakerIdSchema,
+    speaker: speakerIdSchema.default("Presenter"),
     text: z.string(),
     image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),
@@ -208,7 +208,16 @@ export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal(
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,
   canvasSize: mulmoCanvasDimensionSchema, // has default value
-  speechParams: mulmoSpeechParamsSchema,
+  speechParams: mulmoSpeechParamsSchema.default({
+    speakers: {
+      Presenter: {
+        voiceId: "shimmer",
+        displayName: {
+          en: "Presenter",
+        },
+      },
+    },
+  }),
   imageParams: mulmoImageParamsSchema
     .extend({
       provider: text2ImageProviderSchema, // has default value
@@ -224,7 +233,7 @@ export const mulmoPresentationStyleSchema = z.object({
 
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
   .extend({
-    title: z.string(),
+    title: z.string().optional(),
     description: z.string().optional(),
     reference: z.string().optional(),
     lang: langSchema.optional(), // default "en"
