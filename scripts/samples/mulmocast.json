@@ -21,8 +21,8 @@
         "type": "mermaid",
         "title": "MulmoCast",
         "code": {
-          "kind": "url",
-          "url": "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/scripts/samples/mulmocast.txt"
+          "kind": "path",
+          "path": "./mulmocast.txt"
         }
       }
     }
