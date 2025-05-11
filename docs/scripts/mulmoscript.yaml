@@ -1,0 +1,14 @@
+$mulmocast:
+  version: "1.0"
+beats:
+  - text: |
+      MulmoScript is a scripting language for creating multi-modal presentations.
+      It is a simple language that allows you to create presentations with text, images, audio and video.
+      It plays a key role in MulmoCast, a multi-modal presentation platform.
+    image:
+      type: markdown
+      markdown: "# MulmoScript"
+    textSlideParams:
+      cssStyles: 
+        - "h1 { margin-top: 340px }"
+   
