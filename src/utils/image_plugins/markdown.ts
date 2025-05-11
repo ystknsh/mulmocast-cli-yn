@@ -2,7 +2,6 @@ import { ImageProcessorParams } from "../../types/index.js";
 import { renderMarkdownToImage } from "../markdown.js";
 
 export const imageType = "markdown";
-export const outputMode = "generate";
 
 const processMarkdown = async (params: ImageProcessorParams) => {
   const { beat, imagePath, textSlideStyle, canvasSize } = params;
@@ -10,6 +9,7 @@ const processMarkdown = async (params: ImageProcessorParams) => {
 
   const markdown = Array.isArray(beat.image.markdown) ? beat.image.markdown.join("\n") : beat.image.markdown;
   await renderMarkdownToImage(markdown, textSlideStyle, imagePath, canvasSize.width, canvasSize.height);
+  return imagePath;
 };
 
 export const process = processMarkdown;

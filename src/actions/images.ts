@@ -45,8 +45,7 @@ const imagePreprocessAgent = async (namedInputs: {
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     if (plugin) {
       const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
-      const result = await plugin.process(processorParams);
-      const path = plugin.outputMode === "reference" && result ? result : imagePath;
+      const path = await plugin.process(processorParams);
       // undefined prompt indicates that image generation is not needed
       return { path, ...returnValue };
     }
