@@ -20,6 +20,8 @@ export type Text2ImageAgentInfo = {
   imageParams: MulmoImageParams;
 };
 
+export type BeatMediaType = "movie" | "image";
+
 export const MulmoScriptMethods = {
   getPadding(script: MulmoScript): number {
     return script.videoParams?.padding ?? 1000; // msec
@@ -58,5 +60,8 @@ export const MulmoScriptMethods = {
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
       imageParams: { ...defaultImageParams, ...script.imageParams },
     };
+  },
+  getImageType(_: MulmoScript, beat: MulmoBeat): BeatMediaType {
+    return beat.image?.type == "movie" ? "movie" : "image";
   },
 };

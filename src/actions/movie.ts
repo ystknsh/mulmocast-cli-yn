@@ -24,9 +24,11 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const filterComplexParts: string[] = [];
     studio.beats.forEach((beat, index) => {
       // Resize background image to match canvas dimensions
+      const mediaType = MulmoScriptMethods.getImageType(studio.script, beat);
       const duration = beat.duration! + (index === 0 ? MulmoScriptMethods.getPadding(studio.script) / 1000 : 0);
       const parts =
-        `[${index}:v]loop=loop=-1:size=1:start=0,` +
+        `[${index}:v]` +
+        `${mediaType === "image" ? "loop=loop=-1:size=1:start=0," : ""}` +
         `trim=duration=${duration},` +
         `fps=30,` +
         `setpts=PTS-STARTPTS,` +
