@@ -42,7 +42,8 @@ export const MulmoScriptMethods = {
     const styles = script.textSlideParams?.cssStyles ?? defaultTextSlideStyles;
     // NOTES: Taking advantage of CSS override rule (you can redefine it to override)
     const extraStyles = beat.textSlideParams?.cssStyles ?? [];
-    return [...styles, ...extraStyles].join("\n");
+    // This code allows us to support both string and array of strings for cssStyles
+    return [...[styles], ...[extraStyles]].flat().join("\n");
   },
   getSpeechOptions(script: MulmoScript, beat: MulmoBeat): SpeechOptions | undefined {
     return { ...script.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };

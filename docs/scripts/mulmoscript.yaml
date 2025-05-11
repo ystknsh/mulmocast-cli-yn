@@ -9,6 +9,4 @@ beats:
       type: markdown
       markdown: "# MulmoScript"
     textSlideParams:
-      cssStyles: 
-        - "h1 { margin-top: 340px }"
-   
+      cssStyles: "h1 { margin-top: 340px }"
