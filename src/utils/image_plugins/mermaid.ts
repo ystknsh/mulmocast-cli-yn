@@ -1,4 +1,5 @@
 import { ImageProcessorParams } from "../../types/index.js";
+import { MulmoMediaSourceMethods } from "../../methods/index.js";
 import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
 
@@ -10,10 +11,11 @@ const processMermaid = async (params: ImageProcessorParams) => {
   if (!beat.image || beat.image.type !== imageType) return;
 
   const template = getHTMLFile("mermaid");
-  if (beat.image.code.kind === "text") {
+  const text = await MulmoMediaSourceMethods.getMediaSourceText(beat.image.code);
+  if (text) {
     const htmlData = interpolate(template, {
       title: beat.image.title,
-      diagram_code: beat.image.code.text,
+      diagram_code: text,
     });
     await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
   }

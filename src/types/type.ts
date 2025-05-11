@@ -23,6 +23,7 @@ import {
   mulmoMarkdownMediaSchema,
   mulmoImageMediaSchema,
   mulmoChartMediaSchema,
+  mediaSourceSchema,
 } from "./schema.js";
 import { z } from "zod";
 
@@ -42,7 +43,7 @@ export type MulmoCanvasDimension = z.infer<typeof mulmoCanvasDimensionSchema>;
 export type MulmoStoryboardScene = z.infer<typeof mulmoStoryboardSceneSchema>;
 export type MulmoStoryboard = z.infer<typeof mulmoStoryboardSchema>;
 export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
-
+export type MulmoMediaSource = z.infer<typeof mediaSourceSchema>;
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
 export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
 
