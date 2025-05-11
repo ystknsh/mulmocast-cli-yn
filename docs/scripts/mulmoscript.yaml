@@ -1,0 +1,31 @@
+$mulmocast:
+  version: "1.0"
+beats:
+  - text: |
+      MulmoScript is a scripting language for creating multi-modal presentations.
+      It plays a key role in MulmoCast, a multi-modal presentation platform.
+    image:
+      type: markdown
+      markdown: "# MulmoScript"
+    textSlideParams:
+      cssStyles: "h1 { margin-top: 340px }"
+  - text: |
+      MulmoScript is the equivalent of a movie script. 
+      Based on it, MulmoCast will create videos, podcasts, documents, slideshows, manga, and more.
+    image:
+      type: mermaid
+      title: "Role of MulmoScript"
+      code:
+        kind: text
+        text: |
+          flowchart TD
+          MulmoScript --> MulmoCast["MulmoCast"]
+          MulmoCast --> O_Video("Video") & O_Podcast("Podcast") & O_PDF("PDF Document") & O_Slideshow("Slide-Show") & O_Manga("Manga") & O_SwipeAnime("Swipe Anime")
+          MulmoCast@{ shape: hex}
+          O_Video:::ScriptOutput
+          O_Podcast:::ScriptOutput
+          O_Slideshow:::ScriptOutput
+          O_PDF:::ScriptOutput
+          O_Manga:::ScriptOutput
+          O_SwipeAnime:::ScriptOutput
+          classDef ScriptOutput stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D

@@ -154,7 +154,7 @@ export const mulmoImageParamsSchema = z
 
 export const textSlideParamsSchema = z
   .object({
-    cssStyles: z.array(z.string()),
+    cssStyles: stringOrStringArray,
   })
   .strict();
 
