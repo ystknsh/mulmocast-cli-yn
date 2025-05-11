@@ -24,7 +24,10 @@
           "kind": "path",
           "path": "./mulmocast.txt"
         },
-        "appendix": "style MulmoCast color:#FFFFFF, fill:#AA00FF, stroke:#AA00FF"
+        "appendix": [
+          "style MulmoCast color:#FFFFFF, fill:#AA00FF, stroke:#AA00FF",
+          "style MulmoScript color:#FFFFFF, fill:#00AAFF, stroke:#00AAFF"
+        ]
       }
     }
   ]
