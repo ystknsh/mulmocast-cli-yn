@@ -39,14 +39,14 @@ const imagePreprocessAgent = async (namedInputs: {
   const returnValue = {
     aspectRatio: MulmoScriptMethods.getAspectRatio(context.studio.script),
     imageParams,
-  }
+  };
 
   if (beat.image) {
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     if (plugin) {
       const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
       const result = await plugin.process(processorParams);
-      const path = (plugin.outputMode === "reference" && result) ? result : imagePath;
+      const path = plugin.outputMode === "reference" && result ? result : imagePath;
       // undefined prompt indicates that image generation is not needed
       return { path, ...returnValue };
     }
