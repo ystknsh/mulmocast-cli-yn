@@ -23,7 +23,8 @@
         "code": {
           "kind": "path",
           "path": "./mulmocast.txt"
-        }
+        },
+        "appendix": "style MulmoCast color:#FFFFFF, fill:#AA00FF, stroke:#AA00FF"
       }
     }
   ]
