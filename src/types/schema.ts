@@ -46,49 +46,49 @@ const mediaSourceSchema = z.discriminatedUnion("kind", [
 // String is easier for AI, string array is easier for human
 const stringOrStringArray = z.union([z.string(), z.array(z.string())]);
 
-export const MulmoMarkdownMediaSchema = z
+export const mulmoMarkdownMediaSchema = z
   .object({
     type: z.literal("markdown"),
     markdown: stringOrStringArray,
   })
   .strict();
 
-const MulmoWebMediaSchema = z
+const mulmoWebMediaSchema = z
   .object({
     type: z.literal("web"),
     url: URLStringSchema,
   })
   .strict();
 
-const MulmoPdfMediaSchema = z
+const mulmoPdfMediaSchema = z
   .object({
     type: z.literal("pdf"),
     source: mediaSourceSchema,
   })
   .strict();
 
-export const MulmoImageMediaSchema = z
+export const mulmoImageMediaSchema = z
   .object({
     type: z.literal("image"),
     source: mediaSourceSchema,
   })
   .strict();
 
-const MulmoSvgMediaSchema = z
+const mulmoSvgMediaSchema = z
   .object({
     type: z.literal("svg"),
     source: mediaSourceSchema,
   })
   .strict();
 
-const MulmoMovieMediaSchema = z
+const mulmoMovieMediaSchema = z
   .object({
     type: z.literal("movie"),
     source: mediaSourceSchema,
   })
   .strict();
 
-export const MulmoTextSlideMediaSchema = z
+export const mulmoTextSlideMediaSchema = z
   .object({
     type: z.literal("textSlide"),
     slide: z.object({
@@ -98,7 +98,7 @@ export const MulmoTextSlideMediaSchema = z
   })
   .strict();
 
-export const MulmoChartMediaSchema = z
+export const mulmoChartMediaSchema = z
   .object({
     type: z.literal("chart"),
     title: z.string(),
@@ -106,7 +106,7 @@ export const MulmoChartMediaSchema = z
   })
   .strict();
 
-export const MulmoMermaidMediaSchema = z
+export const mulmoMermaidMediaSchema = z
   .object({
     type: z.literal("mermaid"),
     title: z.string().describe("The title of the diagram"),
@@ -115,32 +115,32 @@ export const MulmoMermaidMediaSchema = z
   .strict();
 
 export const mulmoImageAssetSchema = z.union([
-  MulmoMarkdownMediaSchema,
-  MulmoWebMediaSchema,
-  MulmoPdfMediaSchema,
-  MulmoImageMediaSchema,
-  MulmoSvgMediaSchema,
-  MulmoMovieMediaSchema,
-  MulmoTextSlideMediaSchema,
-  MulmoChartMediaSchema,
-  MulmoMermaidMediaSchema,
+  mulmoMarkdownMediaSchema,
+  mulmoWebMediaSchema,
+  mulmoPdfMediaSchema,
+  mulmoImageMediaSchema,
+  mulmoSvgMediaSchema,
+  mulmoMovieMediaSchema,
+  mulmoTextSlideMediaSchema,
+  mulmoChartMediaSchema,
+  mulmoMermaidMediaSchema,
 ]);
 
-const MulmoAudioMediaSchema = z
+const mulmoAudioMediaSchema = z
   .object({
     type: z.literal("audio"),
     source: mediaSourceSchema,
   })
   .strict();
 
-const MulmoMidiMediaSchema = z
+const mulmoMidiMediaSchema = z
   .object({
     type: z.literal("midi"),
     source: z.string(), // TODO: define it later
   })
   .strict();
 
-export const mulmoAudioAssetSchema = z.union([MulmoAudioMediaSchema, MulmoMidiMediaSchema]);
+export const mulmoAudioAssetSchema = z.union([mulmoAudioMediaSchema, mulmoMidiMediaSchema]);
 
 export const mulmoImageParamsSchema = z
   .object({

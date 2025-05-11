@@ -1,37 +1,37 @@
 import {
   MulmoTextSlideMedia,
-  MulmoTextSlideMediaSchema,
+  mulmoTextSlideMediaSchema,
   MulmoMarkdownMedia,
-  MulmoMarkdownMediaSchema,
+  mulmoMarkdownMediaSchema,
   MulmoImageMedia,
-  MulmoImageMediaSchema,
+  mulmoImageMediaSchema,
   MulmoChartMedia,
-  MulmoChartMediaSchema,
+  mulmoChartMediaSchema,
   MulmoMermaidMedia,
-  MulmoMermaidMediaSchema,
+  mulmoMermaidMediaSchema,
 } from "../../types/index.js";
 
 export const isMulmoImageTextSlide = (value: unknown): value is MulmoTextSlideMedia => {
-  const result = MulmoTextSlideMediaSchema.safeParse(value);
+  const result = mulmoTextSlideMediaSchema.safeParse(value);
   return result.success;
 };
 
 export const isMulmoImageMarkdown = (value: unknown): value is MulmoMarkdownMedia => {
-  const result = MulmoMarkdownMediaSchema.safeParse(value);
+  const result = mulmoMarkdownMediaSchema.safeParse(value);
   return result.success;
 };
 
 export const isMulmoImageImage = (value: unknown): value is MulmoImageMedia => {
-  const result = MulmoImageMediaSchema.safeParse(value);
+  const result = mulmoImageMediaSchema.safeParse(value);
   return result.success;
 };
 
 export const isMulmoImageChart = (value: unknown): value is MulmoChartMedia => {
-  const result = MulmoChartMediaSchema.safeParse(value);
+  const result = mulmoChartMediaSchema.safeParse(value);
   return result.success;
 };
 
 export const isMulmoImageMermaild = (value: unknown): value is MulmoMermaidMedia => {
-  const result = MulmoMermaidMediaSchema.safeParse(value);
+  const result = mulmoMermaidMediaSchema.safeParse(value);
   return result.success;
 };
