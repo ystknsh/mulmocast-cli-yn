@@ -6,7 +6,6 @@ export const MulmoMediaSourceMethods = {
       return mediaSource.text;
     }
     if (mediaSource.kind === "url") {
-      console.log(`Fetching media source: ${mediaSource.url}`);
       const res = await fetch(mediaSource.url);
       if (res.ok) {
         return await res.text();
