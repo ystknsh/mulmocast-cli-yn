@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 import { MulmoScript, MulmoScriptTemplate } from "../types/index.js";
@@ -36,7 +37,7 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = JSON.parse(scriptData) as T;
+  const script = ([".yaml", ".yml"].includes(path.extname(scriptPath)) ? yamlParse(scriptData) : JSON.parse(scriptData)) as T;
   const parsedPath = path.parse(scriptPath);
 
   return {
