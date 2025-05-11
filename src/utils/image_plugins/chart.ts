@@ -3,7 +3,6 @@ import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
 
 export const imageType = "chart";
-export const outputMode = "generate";
 
 const processChart = async (params: ImageProcessorParams) => {
   const { beat, imagePath, canvasSize } = params;
@@ -16,6 +15,7 @@ const processChart = async (params: ImageProcessorParams) => {
     chart_data: JSON.stringify(beat.image.chartData),
   });
   await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
+  return imagePath;
 };
 
 export const process = processChart;

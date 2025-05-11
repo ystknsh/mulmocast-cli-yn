@@ -4,7 +4,6 @@ import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
 
 export const imageType = "mermaid";
-export const outputMode = "generate";
 
 const processMermaid = async (params: ImageProcessorParams) => {
   const { beat, imagePath, canvasSize, context } = params;
@@ -19,6 +18,7 @@ const processMermaid = async (params: ImageProcessorParams) => {
     });
     await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
   }
+  return imagePath;
 };
 
 export const process = processMermaid;
