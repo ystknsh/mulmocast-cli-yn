@@ -210,7 +210,7 @@ export const mulmoPresentationStyleSchema = z.object({
   canvasSize: mulmoCanvasDimensionSchema, // has default value
   speechParams: mulmoSpeechParamsSchema.default({
     speakers: {
-      "Presenter": {
+      Presenter: {
         voiceId: "shimmer",
         displayName: {
           en: "Presenter",

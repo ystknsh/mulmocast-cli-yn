@@ -1,0 +1,4 @@
+{
+  "$mulmocast": { "version": "1.0" },
+  "beats": [{ "text": "Hello World.", "imagePrompt": "A globe with the word 'Hello' on it." }]
+}
