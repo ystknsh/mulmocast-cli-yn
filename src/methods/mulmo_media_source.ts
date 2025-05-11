@@ -1,11 +1,12 @@
 import { MulmoMediaSource } from "../types/index.js";
 
 export const MulmoMediaSourceMethods = {
-  async getMediaSourceText(mediaSource: MulmoMediaSource) {
+  async getText(mediaSource: MulmoMediaSource) {
     if (mediaSource.kind === "text") {
       return mediaSource.text;
     }
     if (mediaSource.kind === "url") {
+      console.log(`Fetching media source: ${mediaSource.url}`);
       const res = await fetch(mediaSource.url);
       if (res.ok) {
         return await res.text();

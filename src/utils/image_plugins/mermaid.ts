@@ -11,7 +11,7 @@ const processMermaid = async (params: ImageProcessorParams) => {
   if (!beat.image || beat.image.type !== imageType) return;
 
   const template = getHTMLFile("mermaid");
-  const text = await MulmoMediaSourceMethods.getMediaSourceText(beat.image.code);
+  const text = await MulmoMediaSourceMethods.getText(beat.image.code);
   if (text) {
     const htmlData = interpolate(template, {
       title: beat.image.title,
