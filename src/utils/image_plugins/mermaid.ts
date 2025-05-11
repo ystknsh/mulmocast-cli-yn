@@ -15,7 +15,7 @@ const processMermaid = async (params: ImageProcessorParams) => {
   if (diagram_code) {
     const htmlData = interpolate(template, {
       title: beat.image.title,
-      diagram_code,
+      diagram_code: `${diagram_code}\n${beat.image.appendix?.join("\n") ?? ""}`,
     });
     await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
   }
