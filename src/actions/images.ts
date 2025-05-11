@@ -4,7 +4,7 @@ import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
@@ -18,6 +18,13 @@ dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
 
+const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
+  return {
+    canvasSize: MulmoScriptMethods.getCanvasSize(script),
+    textSlideStyle: MulmoScriptMethods.getTextSlideStyle(script, beat),
+  };
+};
+
 const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
   beat: MulmoBeat;
@@ -28,27 +35,25 @@ const imagePreprocessAgent = async (namedInputs: {
 }) => {
   const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
-  const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
-  const aspectRatio = MulmoScriptMethods.getAspectRatio(context.studio.script);
-  const textSlideStyle = MulmoScriptMethods.getTextSlideStyle(context.studio.script, beat);
+  const returnValue = {
+    aspectRatio: MulmoScriptMethods.getAspectRatio(context.studio.script),
+    imageParams,
+  };
 
   if (beat.image) {
-    const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
-    const processorParams = { beat, context, imagePath, textSlideStyle, canvasSize };
-
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     if (plugin) {
+      const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
       const result = await plugin.process(processorParams);
-      // TODO: remove this block
-      if (plugin.outputMode === "reference" && result) {
-        // undefined prompt indicates that image generation is not needed
-        return { path: result, prompt: undefined, imageParams, aspectRatio };
-      }
+      const path = plugin.outputMode === "reference" && result ? result : imagePath;
+      // undefined prompt indicates that image generation is not needed
+      return { path, ...returnValue };
     }
   }
 
-  return { path: imagePath, prompt, imageParams, aspectRatio };
+  const prompt = (beat.imagePrompt || beat.text) + "\n" + (imageParams.style || "");
+  return { path: imagePath, prompt, ...returnValue };
 };
 
 const graph_data: GraphData = {
