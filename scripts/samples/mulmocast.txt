@@ -1,34 +1,13 @@
 flowchart TD
-%% Nodes
-    S1(Web Page)
-    S2(PDF)
-    S3(AI Chat)
-    A1(Keynote)
-    A2(Markdown)
-    A3(AI Chat)
-    A4(Powerpoint)
-    A5(storyboard)
-    B(MulmoScript)
-    MS{MulmoCast}
-    E(Video)
-    G(Podcast)
-    I(SlideShow)
-    J(PDF)
-    K(Swipe Anime)
-
-%% Edge connections between nodes
-    S1 --> A5
-    S2 --> A5
-    S3 --> A5
-    A5 --> B
-    A2 --> B
-    A3 --> B
-    A1 --> B 
-    A4 --> B
-    B --> MS
-    MS --> E 
-    MS --> G
-    MS --> I
-    MS --> J
-    MS --> K
-    
+    S_WebPage["Web-Page"] --> MulmoStoryboard["MulmoStoryboard"]
+    S_PDF["PDF"] --> MulmoStoryboard
+    S_AIChat["AI Chat"] --> MulmoStoryboard
+    S_TextEditor["Text-Editor"] --> MulmoStoryboard
+    MulmoStoryboard --> MulmoScript["MulmoScript"]
+    S_Markdown("Markdown") --> MulmoScript
+    S_AIChat2("AI Chat") --> MulmoScript
+    Keynote["Keynote"] --> MulmoScript
+    Powerpoint["Powerpoint"] --> MulmoScript
+    S_TextEditor2("Text-Editor") --> MulmoScript
+    MulmoScript --> MulmoCast{"MulmoCast"}
+    MulmoCast --> O_Video("Video") & O_Podcast("Podcast") & O_Slideshow("Slide-Show") & O_PDF("PDF") & O_SwipeAnime("Swipe Anime")
