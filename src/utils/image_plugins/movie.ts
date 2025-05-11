@@ -2,6 +2,7 @@ import { ImageProcessorParams } from "../../types/index.js";
 import { MulmoStudioContextMethods } from "../../methods/index.js";
 
 export const imageType = "movie";
+export const outputMode = "reference";
 
 const processImage = (params: ImageProcessorParams) => {
   const { beat, context } = params;
