@@ -15,7 +15,13 @@
       }
     }
   },
-  "reference": "Huang, K., & Woo, E. (2025, April 17). Meta Asked Amazon, Microsoft to Help Fund Llama. The Information. https://www.theinformation.com/articles/meta-asked-amazon-microsoft-help-fund-llama?rc=rvvbkr",
+  "references": [
+    {
+      "url": "https://www.theinformation.com/articles/meta-asked-amazon-microsoft-help-fund-llama?rc=rvvbkr",
+      "title": "Meta Asked Amazon, Microsoft to Help Fund Llama",
+      "description": "An article on Meta's efforts to create a funding consortium for its open-source Llama model."
+    }
+  ],
   "lang": "en",
   "beats": [
     {

@@ -10,7 +10,7 @@ const validMulmoScriptJson = JSON.stringify({
   },
   title: "Test Script",
   description: "MulmoScript for testing",
-  reference: "None",
+  references: [],
   lang: "ja",
   beats: [
     {
