@@ -23,6 +23,13 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
     default: false,
     type: "boolean",
   })
+  .option("pdf_mode", {
+    description: "pdf mode",
+    demandOption: false,
+    choices: ["slide", "talk", "grid"] as const,
+    type: "string",
+    default: "slide",
+  })
   .command("$0 <action> <file>", "Run mulmocast", (yargs) => {
     return yargs
       .positional("action", {

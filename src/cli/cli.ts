@@ -51,7 +51,7 @@ const main = async () => {
     GraphAILogger.setLevelEnabled("warn", false);
   }
 
-  const { action, force } = args;
+  const { action, force, pdf_mode } = args;
   const readData = await (async () => {
     if (isHttpPath) {
       const res = await fetchMulmoScriptFile(fileOrUrl);
@@ -105,7 +105,7 @@ const main = async () => {
   }
   if (action === "pdf") {
     // await images(context);
-    await pdf(context);
+    await pdf(context, pdf_mode);
   }
 };
 main();
