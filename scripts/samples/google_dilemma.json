@@ -21,7 +21,13 @@
       }
     }
   },
-  "reference": "OfficeChai.com article on David Sacks' analysis; Alphabet Q1 2025 Earnings Report",
+  "references": [
+    {
+      "url": "https://www.officechain.com/google-s-innovators-dilemma-balancing-search-dominance-with-ai-ambitions/",
+      "title": "Google's Innovator's Dilemma: Balancing Search Dominance with AI Ambitions",
+      "description": "An article on Google's innovator's dilemma by OfficeChain."
+    }
+  ],
   "lang": "en",
   "beats": [
     {

@@ -21,7 +21,13 @@
       }
     }
   },
-  "reference": "Tariffs, Free Trade, Export Controls, H20 & Rare Earth Ban | BG2 w/ Bill Gurley & Brad Gerstner. https://www.youtube.com/watch?v=SPfE5SS7fc0",
+  "references": [
+    {
+      "url": "https://www.youtube.com/watch?v=SPfE5SS7fc0",
+      "title": "Tariffs, Free Trade, Export Controls, H20 & Rare Earth Ban | BG2 w/ Bill Gurley & Brad Gerstner",
+      "description": "A video on the US-China trade war by Bill Gurley and Brad Gerstner."
+    }
+  ],
   "lang": "en",
   "beats": [
     {

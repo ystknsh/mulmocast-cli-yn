@@ -21,7 +21,13 @@
       }
     }
   },
-  "reference": "Tesla 2025 Q1 Earnings Call Webcast; https://ir.tesla.com/#quarterly-disclosure",
+  "references": [
+    {
+      "url": "https://ir.tesla.com/#quarterly-disclosure",
+      "title": "Tesla 2025 Q1 Earnings Call Webcast",
+      "description": "A webcast of Tesla's 2025 Q1 earnings call."
+    }
+  ],
   "lang": "en",
   "beats": [
     {

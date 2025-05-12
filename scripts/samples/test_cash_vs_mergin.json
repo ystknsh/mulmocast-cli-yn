@@ -21,7 +21,13 @@
       }
     }
   },
-  "reference": "Based on financial data and analysis of Tesla's performance through March 2025",
+  "references": [
+    {
+      "url": "https://www.tesla.com/quarterly-disclosure",
+      "title": "Tesla Quarterly Disclosure",
+      "description": "Based on financial data and analysis of Tesla's performance through March 2025"
+    }
+  ],
   "lang": "en",
   "beats": [
     {

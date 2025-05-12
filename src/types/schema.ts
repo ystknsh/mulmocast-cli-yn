@@ -231,11 +231,18 @@ export const mulmoPresentationStyleSchema = z.object({
   omitCaptions: z.boolean().optional(), // default is false
 });
 
+export const mulmoReferenceSchema = z.object({
+  url: URLStringSchema,
+  title: z.string().optional(),
+  description: z.string().optional(),
+  type: z.union([z.literal("article"), z.literal("image"), z.literal("video"), z.literal("audio")]).default("article"),
+});
+
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
   .extend({
     title: z.string().optional(),
     description: z.string().optional(),
-    reference: z.string().optional(),
+    references: z.array(mulmoReferenceSchema).optional(),
     lang: langSchema.optional(), // default "en"
     beats: z.array(mulmoBeatSchema),
 
@@ -277,6 +284,7 @@ export const mulmoScriptTemplateSchema = z
 export const mulmoStoryboardSceneSchema = z
   .object({
     description: z.string(),
+    references: z.array(mulmoReferenceSchema).optional(),
   })
   .describe("A detailed description of the content of the scene, not the presentation style")
   .strict();
@@ -284,6 +292,7 @@ export const mulmoStoryboardSceneSchema = z
 export const mulmoStoryboardSchema = z
   .object({
     title: z.string(),
+    references: z.array(mulmoReferenceSchema).optional(),
     scenes: z.array(mulmoStoryboardSceneSchema),
   })
   .describe("A storyboard for a presentation, a story, a video, etc.")

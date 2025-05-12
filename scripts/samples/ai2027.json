@@ -15,7 +15,13 @@
       }
     }
   },
-  "reference": "AI Futures Project. (2025, April). AI 2027. https://ai-2027.com/",
+  "references": [
+    {
+      "url": "https://ai-2027.com/",
+      "title": "AI-2027",
+      "description": "A detailed scenario predicting the development of artificial superintelligence by 2027-2028."
+    }
+  ],
   "lang": "en",
   "beats": [
     {
