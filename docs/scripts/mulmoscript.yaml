@@ -60,4 +60,27 @@ beats:
           classDef StoryInput stroke-width:1px, stroke-dasharray:none, stroke:#46EDC8, fill:#DEFFF8, color:#378E7A
           classDef ScriptInput stroke-width:1px, stroke-dasharray:none, stroke:#374D7C, fill:#E2EBFF, color:#374D7C
           classDef ScriptOutput stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
+  - text: |
+      MulmoScript is a structured text which can be written either in JSON or YAML.
+    image:
+      type: markdown
+      markdown: |
+        # Hello World in MulmoScript
 
+        YAML
+        ```yaml
+        $mulmocast:
+          version: "1.0"
+          beats:
+            - text: "Hello World."
+        ```
+
+        JSON
+        ```json
+        {
+          "$mulmocast": {
+            "version": "1.0",
+            "beats": [{ "text": "Hello World." }]
+          }
+        }
+        ```
