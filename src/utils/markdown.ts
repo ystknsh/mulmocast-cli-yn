@@ -2,12 +2,12 @@ import { GraphAILogger } from "graphai";
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 
-const isCI = process.env.CI === 'true';
+const isCI = process.env.CI === "true";
 
 export const renderHTMLToImage = async (html: string, outputPath: string, width: number, height: number) => {
   // Use Puppeteer to render HTML to an image
   const browser = await puppeteer.launch({
-    args: isCI ? ['--no-sandbox'] : [],
+    args: isCI ? ["--no-sandbox"] : [],
   });
   const page = await browser.newPage();
 
