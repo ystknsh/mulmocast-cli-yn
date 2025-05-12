@@ -1,20 +1,13 @@
 {
   "title": "Coding presentation",
   "description": "Template for software and coding presentation.",
-  "systemPrompt": "Generate a script for a technical presentation of the given topic. Use markdown with a code block to show some code on a slide. Use the JSON below as a template.",
+  "systemPrompt": "Generate a script for a technical presentation of the given topic. Use markdown with a code block to show some code on a slide. Avoid long coding examples, which may not fit in a single slide. Use the JSON below as a template.",
   "script": {
     "$mulmocast": {
       "version": "1.0",
       "credit": "closing"
     },
     "title": "Sample Title",
-    "canvasSize": {
-      "width": 1536,
-      "height": 1024
-    },
-    "imageParams": {
-      "style": "Style appropriate for software presentation."
-    },
     "speechParams": {
       "speakers": {
         "Presenter": {
@@ -27,19 +20,6 @@
       }
     },
     "lang": "en",
-    "textSlideParams": {
-      "cssStyles": [
-        "body { margin: 40px; margin-top: 60px; color:#333; font-size: 48px }",
-        "h1 { font-size: 60px; text-align: center }",
-        "ul { margin-left: 40px } ",
-        "pre { background: #eeeecc; font-size: 24px; padding:10px }",
-        "p { margin-left: 40px }",
-        "table { font-size: 40px; margin: auto; border: 1px solid gray; border-collapse: collapse }",
-        "th { border-bottom: 1px solid gray }",
-        "td, th { padding: 8px }",
-        "tr:nth-child(even) { background-color: #eee }"
-      ]
-    },
     "beats": [
       {
         "speaker": "Presenter",
@@ -96,6 +76,52 @@
             "| Codecademy Tee    |  False   | 19.99 |",
             "| Codecademy Hoodie |  False   | 42.99 |"
           ]
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Next, let's look at a diagram of our business process flow. This illustrates the key steps from product development to sales.",
+        "image": {
+          "type": "mermaid",
+          "title": "Business Process Flow",
+          "code": {
+            "kind": "text",
+            "text": "graph LR\n    A[Market Research] --> B[Product Planning]\n    B --> C[Development]\n    C --> D[Testing]\n    D --> E[Manufacturing]\n    E --> F[Marketing]\n    F --> G[Sales]\n    G --> H[Customer Support]\n    H --> A"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "This page shows the sales and profits of this company from January 2024 to June 2024.",
+        "image": {
+          "type": "chart",
+          "title": "Sales and Profits (from Jan to June)",
+          "chartData": {
+            "type": "bar",
+            "data": {
+              "labels": ["January", "February", "March", "April", "May", "June"],
+              "datasets": [
+                {
+                  "label": "Revenue ($1000s)",
+                  "data": [120, 135, 180, 155, 170, 190],
+                  "backgroundColor": "rgba(54, 162, 235, 0.5)",
+                  "borderColor": "rgba(54, 162, 235, 1)",
+                  "borderWidth": 1
+                },
+                {
+                  "label": "Profit ($1000s)",
+                  "data": [45, 52, 68, 53, 61, 73],
+                  "backgroundColor": "rgba(75, 192, 192, 0.5)",
+                  "borderColor": "rgba(75, 192, 192, 1)",
+                  "borderWidth": 1
+                }
+              ]
+            },
+            "options": {
+              "responsive": true,
+              "animation": false
+            }
+          }
         }
       }
     ]
