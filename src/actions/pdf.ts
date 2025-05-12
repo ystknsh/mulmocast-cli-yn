@@ -44,29 +44,44 @@ const pdfGrid = async (imageWidth: number, imageHeight: number, imagePaths: stri
       const image = await readImage(imagePath, pdfDoc);
 
       const { width: origWidth, height: origHeight } = image.scale(1);
-      if (isLandscapeImage) {
-        const cellHeight = pageHeight / imagesPerPage;
-        const drawWidth = (pageWidth - xOffset) * 0.5;
-        const scale = drawWidth / origWidth;
-        const drawHeight = origHeight * scale;
+      const pos = (() => {
+        if (isLandscapeImage) {
+          const cellHeight = pageHeight / imagesPerPage;
+          const drawWidth = (pageWidth - xOffset) * 0.5;
+          const scale = drawWidth / origWidth;
+          const drawHeight = origHeight * scale;
 
-        const x = xOffset;
-        const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * 0.5;
-        const pos = {
-          x,
-          y,
-          width: drawWidth,
-          height: drawHeight,
-        };
+          const x = xOffset;
+          const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * 0.5;
+          return {
+            x,
+            y,
+            width: drawWidth,
+            height: drawHeight,
+          };
+        } else {
+          const cellWidth = pageWidth / imagesPerPage;
+          const drawHeight = (pageHeight - xOffset) * 0.5;
+          const scale = drawHeight / origHeight;
+          const drawWidth = origWidth * scale;
 
-        page.drawRectangle({
-          ...pos,
-          borderColor: rgb(0, 0, 0),
-          borderWidth: 1,
-        });
+          const x = pageWidth - (imagesPerPage - i) * cellWidth + (cellWidth - drawWidth) * 0.5;
+          const y = pageHeight - drawHeight - xOffset;
 
-        page.drawImage(image, pos);
-      }
+          return {
+            x,
+            y,
+            width: drawWidth,
+            height: drawHeight,
+          };
+        }
+      })();
+      page.drawRectangle({
+        ...pos,
+        borderColor: rgb(0, 0, 0),
+        borderWidth: 1,
+      });
+      page.drawImage(image, pos);
     }
   }
 };
