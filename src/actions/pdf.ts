@@ -56,6 +56,25 @@ const pdfTalk = async (imageWidth: number, imageHeight: number, imagePaths: stri
   }
 };
 
+const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: number, origWidth: number, origHeight: number) => {
+  if (fitWidth) {
+    const drawWidth = expectWidth;
+    const scale = drawWidth / origWidth;
+    const drawHeight = origHeight * scale;
+    return {
+      drawWidth,
+      drawHeight,
+    };
+  }
+  const drawHeight = expectHeight;
+  const scale = drawHeight / origHeight;
+  const drawWidth = origWidth * scale;
+  return {
+    drawWidth,
+    drawHeight,
+  };
+};
+
 const pdfHandout = async (
   imageWidth: number,
   imageHeight: number,
@@ -76,30 +95,13 @@ const pdfHandout = async (
       const { width: origWidth, height: origHeight } = image.scale(1);
       const originalRatio = origHeight / origWidth;
 
-      const ratio = originalRatio / cellRatio;
+      const fitWidth = originalRatio / cellRatio < 1;
       // console.log({handoutImageRatio, cellRatio, ratio,  imageHeight, origHeight});
       const pos = (() => {
         if (isLandscapeImage) {
           const cellHeight = pageHeight / imagesPerPage - offset;
 
-          const { drawWidth, drawHeight } = (() => {
-            if (ratio < 1) {
-              const drawWidth = (pageWidth - offset) * handoutImageRatio;
-              const scale = drawWidth / origWidth;
-              const drawHeight = origHeight * scale;
-              return {
-                drawWidth,
-                drawHeight,
-              };
-            }
-            const drawHeight = cellHeight - offset;
-            const scale = drawHeight / origHeight;
-            const drawWidth = origWidth * scale;
-            return {
-              drawWidth,
-              drawHeight,
-            };
-          })();
+          const { drawWidth, drawHeight } = drawSize(fitWidth, (pageWidth - offset) * handoutImageRatio, cellHeight - offset, origWidth, origHeight);
 
           const x = offset;
           const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * handoutImageRatio;
@@ -111,18 +113,7 @@ const pdfHandout = async (
           };
         } else {
           const cellWidth = pageWidth / imagesPerPage;
-          const { drawHeight, drawWidth } = (() => {
-            if (ratio < 1) {
-              const drawHeight = (pageHeight - offset) * handoutImageRatio;
-              const scale = drawHeight / origHeight;
-              const drawWidth = origWidth * scale;
-              return { drawHeight, drawWidth };
-            }
-            const drawWidth = cellWidth - offset;
-            const scale = drawWidth / origWidth;
-            const drawHeight = origHeight * scale;
-            return { drawHeight, drawWidth };
-          })();
+          const { drawWidth, drawHeight } = drawSize(fitWidth, cellWidth - offset, (pageHeight - offset) * handoutImageRatio, origWidth, origHeight);
 
           const x = pageWidth - (imagesPerPage - i) * cellWidth + (cellWidth - drawWidth) * handoutImageRatio;
           const y = pageHeight - drawHeight - offset;
