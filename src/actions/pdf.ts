@@ -8,7 +8,7 @@ import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 
-const imagesPerPage = 8;
+const imagesPerPage = 4;
 const offset = 10;
 const handoutImageRatio = 0.5;
 
