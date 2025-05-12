@@ -146,13 +146,15 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
 const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boolean) => {
   // console.log(pdfSize);
   if (pdfSize === "a4") {
-    if (isLandscapeImage !== isRotate) { // xor
+    if (isLandscapeImage !== isRotate) {
+      // xor
       return { width: 841.89, height: 595.28 };
     }
     return { width: 595.28, height: 841.89 };
   }
   // letter
-  if (isLandscapeImage !== isRotate) { // xor
+  if (isLandscapeImage !== isRotate) {
+    // xor
     return { width: 792, height: 612 };
   }
   return { width: 612, height: 792 };
