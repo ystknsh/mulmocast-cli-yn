@@ -55,7 +55,7 @@ const pdfTalk = async (imageWidth: number, imageHeight: number, imagePaths: stri
   }
 };
 
-const pdfGrid = async (imageWidth: number, imageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
+const pdfHandout = async (imageWidth: number, imageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
   const isLandscapeImage = imageWidth > imageHeight;
 
   const pageWidth = imageHeight;
@@ -121,8 +121,8 @@ export const pdf = async (context: MulmoStudioContext, pdf_mode: string) => {
 
   const pdfDoc = await PDFDocument.create();
 
-  if (pdf_mode === "grid") {
-    await pdfGrid(imageWidth, imageHeight, imagePaths, pdfDoc);
+  if (pdf_mode === "handout") {
+    await pdfHandout(imageWidth, imageHeight, imagePaths, pdfDoc);
   }
   if (pdf_mode === "slide") {
     await pdfSlide(imageWidth, imageHeight, imagePaths, pdfDoc);

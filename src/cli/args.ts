@@ -26,7 +26,7 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
   .option("pdf_mode", {
     description: "pdf mode",
     demandOption: false,
-    choices: ["slide", "talk", "grid"] as const,
+    choices: ["slide", "talk", "handout"] as const,
     type: "string",
     default: "slide",
   })
