@@ -61,7 +61,8 @@ beats:
           classDef ScriptInput stroke-width:1px, stroke-dasharray:none, stroke:#374D7C, fill:#E2EBFF, color:#374D7C
           classDef ScriptOutput stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
   - text: |
-      MulmoScript is a structured text which can be written either in JSON or YAML.
+      MulmoScript is a structured data which can be written either in JSON or YAML.
+      Here is an example of a MulmoScript for a simple "Hello World" presentation both in YAML and JSON.
     image:
       type: markdown
       markdown: |
