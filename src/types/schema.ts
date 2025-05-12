@@ -235,6 +235,7 @@ export const mulmoReferenceSchema = z.object({
   url: URLStringSchema,
   title: z.string().optional(),
   description: z.string().optional(),
+  type: z.union([z.literal("article"), z.literal("image"), z.literal("video"), z.literal("audio")]).default("article"),
 });
 
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
@@ -283,6 +284,7 @@ export const mulmoScriptTemplateSchema = z
 export const mulmoStoryboardSceneSchema = z
   .object({
     description: z.string(),
+    references: z.array(mulmoReferenceSchema).optional(),
   })
   .describe("A detailed description of the content of the scene, not the presentation style")
   .strict();
