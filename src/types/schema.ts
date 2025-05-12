@@ -290,6 +290,7 @@ export const mulmoStoryboardSceneSchema = z
 export const mulmoStoryboardSchema = z
   .object({
     title: z.string(),
+    references: z.array(mulmoReferenceSchema).optional(),
     scenes: z.array(mulmoStoryboardSceneSchema),
   })
   .describe("A storyboard for a presentation, a story, a video, etc.")
