@@ -123,6 +123,17 @@
             }
           }
         }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "This is the image of a pingpong ball.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.png"
+          }
+        }
       }
     ]
   }
