@@ -9,7 +9,7 @@ import { MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 
 const imagesPerPage = 4;
-const xOffset = 10;
+const offset = 10;
 
 const readImage = async (imagePath: string, pdfDoc: PDFDocument) => {
   const imageBytes = fs.readFileSync(imagePath);
@@ -30,6 +30,30 @@ const pdfSlide = async (imageWidth: number, imageHeight: number, imagePaths: str
     });
   }
 };
+const pdfTalk = async (imageWidth: number, imageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
+  const targetWidth = imageWidth * 0.7;
+  const targetHeight = imageHeight * 0.7;
+
+  const x = (imageWidth - targetWidth) / 2;
+  const y = imageHeight - targetHeight;
+
+  for (const imagePath of imagePaths) {
+    const image = await readImage(imagePath, pdfDoc);
+    const page = pdfDoc.addPage([imageWidth, imageHeight]);
+    const pos = {
+      x,
+      y,
+      width: targetWidth,
+      height: targetHeight,
+    };
+    page.drawImage(image, pos);
+    page.drawRectangle({
+      ...pos,
+      borderColor: rgb(0, 0, 0),
+      borderWidth: 1,
+    });
+  }
+};
 
 const pdfGrid = async (imageWidth: number, imageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
   const isLandscapeImage = imageWidth > imageHeight;
@@ -44,29 +68,44 @@ const pdfGrid = async (imageWidth: number, imageHeight: number, imagePaths: stri
       const image = await readImage(imagePath, pdfDoc);
 
       const { width: origWidth, height: origHeight } = image.scale(1);
-      if (isLandscapeImage) {
-        const cellHeight = pageHeight / imagesPerPage;
-        const drawWidth = (pageWidth - xOffset) * 0.5;
-        const scale = drawWidth / origWidth;
-        const drawHeight = origHeight * scale;
+      const pos = (() => {
+        if (isLandscapeImage) {
+          const cellHeight = pageHeight / imagesPerPage;
+          const drawWidth = (pageWidth - offset) * 0.5;
+          const scale = drawWidth / origWidth;
+          const drawHeight = origHeight * scale;
 
-        const x = xOffset;
-        const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * 0.5;
-        const pos = {
-          x,
-          y,
-          width: drawWidth,
-          height: drawHeight,
-        };
+          const x = offset;
+          const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * 0.5;
+          return {
+            x,
+            y,
+            width: drawWidth,
+            height: drawHeight,
+          };
+        } else {
+          const cellWidth = pageWidth / imagesPerPage;
+          const drawHeight = (pageHeight - offset) * 0.5;
+          const scale = drawHeight / origHeight;
+          const drawWidth = origWidth * scale;
 
-        page.drawRectangle({
-          ...pos,
-          borderColor: rgb(0, 0, 0),
-          borderWidth: 1,
-        });
+          const x = pageWidth - (imagesPerPage - i) * cellWidth + (cellWidth - drawWidth) * 0.5;
+          const y = pageHeight - drawHeight - offset;
 
-        page.drawImage(image, pos);
-      }
+          return {
+            x,
+            y,
+            width: drawWidth,
+            height: drawHeight,
+          };
+        }
+      })();
+      page.drawRectangle({
+        ...pos,
+        borderColor: rgb(0, 0, 0),
+        borderWidth: 1,
+      });
+      page.drawImage(image, pos);
     }
   }
 };
@@ -87,6 +126,9 @@ export const pdf = async (context: MulmoStudioContext, pdf_mode: string) => {
   }
   if (pdf_mode === "slide") {
     await pdfSlide(imageWidth, imageHeight, imagePaths, pdfDoc);
+  }
+  if (pdf_mode === "talk") {
+    await pdfTalk(imageWidth, imageHeight, imagePaths, pdfDoc);
   }
 
   const pdfBytes = await pdfDoc.save();
