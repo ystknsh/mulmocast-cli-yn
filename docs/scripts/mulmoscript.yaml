@@ -10,8 +10,10 @@ beats:
     textSlideParams:
       cssStyles: "h1 { margin-top: 340px }"
   - text: |
-      MulmoScript is the equivalent of a movie script. 
-      Based on it, MulmoCast will create videos, podcasts, PDF documents, slideshows, manga, and more.
+      MulmoScript is the equivalent of a movie script.
+      Just like a movie director creates a movie from a script, 
+      MulmoCast creates a presentation from a MulmoScript.
+      The presentation can be a video, a podcast, a PDF document, a slide-show, or other formats.
     image:
       type: mermaid
       title: "Role of MulmoScript"
@@ -117,8 +119,6 @@ beats:
   - text: |
         Notice that MulmoCast generates an image as well as the audio.
         It will automatically generate an image based on the text.
-        In this case, it is a simple text, "Hello World.", 
-        so the image is also simple, a text "Hello World." on a dark blue background.
     image:
       type: markdown
       markdown: |
@@ -134,4 +134,30 @@ beats:
           }]
         }
         ```
-
+  - text: |
+        Optionally, you can specify the image prompt for that beat.
+        MulmoCast will generate an image based on the prompt.
+    image:
+      type: markdown
+      markdown: |
+        # Hello World in MulmoScript
+        ### JSON
+        ```json
+        {
+          "$mulmocast": {
+            "version": "1.0",
+          },
+          "beats": [{
+            "text": "Hello World.",
+            "imagePrompt": "A globe with the word 'Hello' on it."
+          }]
+        }
+        ```
+  - text: |
+      This is the generated image with the image prompt, 
+      a globe with the word 'Hello' on it.
+    image:
+      type: image
+      source:
+        kind: url
+        url: https://github.com/receptron/mulmocast-media/raw/refs/heads/main/tutorial/helloworld_prompted.png
