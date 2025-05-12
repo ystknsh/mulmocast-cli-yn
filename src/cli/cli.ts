@@ -15,6 +15,7 @@ import { translate } from "../actions/translate.js";
 import { images } from "../actions/images.js";
 import { audio } from "../actions/audio.js";
 import { movie } from "../actions/movie.js";
+import { pdf } from "../actions/pdf.js";
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile } from "../utils/file.js";
 import { mulmoScriptSchema } from "../types/schema.js";
@@ -101,6 +102,10 @@ const main = async () => {
     await audio(context, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
     await images(context);
     await movie(context);
+  }
+  if (action === "pdf") {
+    await images(context);
+    await pdf(context);
   }
 };
 main();

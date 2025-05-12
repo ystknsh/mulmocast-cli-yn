@@ -27,7 +27,7 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
     return yargs
       .positional("action", {
         describe: "action to perform",
-        choices: ["translate", "audio", "images", "movie", "preprocess"] as const,
+        choices: ["translate", "audio", "images", "movie", "pdf", "preprocess"] as const,
         type: "string",
       })
       .positional("file", {
