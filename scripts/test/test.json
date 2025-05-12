@@ -5,7 +5,13 @@
   },
   "title": "MASAI: A Modular Future for Software Engineering AI",
   "description": "Exploring MASAI, a modular approach for AI agents in software engineering that revolutionizes how complex coding issues are tackled.",
-  "reference": "https://arxiv.org/abs/2406.11638",
+  "references": [
+    {
+      "url": "https://arxiv.org/abs/2406.11638",
+      "title": "MASAI: A Modular Future for Software Engineering AI",
+      "description": "An article on MASAI, a modular approach for AI agents in software engineering."
+    }
+  ],
   "lang": "ja",
   "imageParams": {
     "style": "<style>monochrome"

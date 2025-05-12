@@ -15,7 +15,13 @@
       }
     }
   },
-  "reference": "Agrawal, A. (2024, April). The Economics of Generative AI. Apoorv's notes. https://apoorv03.com/p/the-economics-of-generative-ai",
+  "references": [
+    {
+      "url": "https://apoorv03.com/p/the-economics-of-generative-ai",
+      "title": "The Economics of Generative AI",
+      "description": "A detailed analysis of the economics of generative AI by Apoorv Agrawal."
+    }
+  ],
   "lang": "en",
   "beats": [
     {
