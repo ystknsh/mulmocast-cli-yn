@@ -2,6 +2,8 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { commonOptions } from "./common.js";
 
+import { pdf_modes, pdf_sizes } from "../utils/const.js";
+
 export const args = commonOptions(yargs(hideBin(process.argv)))
   .scriptName("mulmo")
   .option("a", {
@@ -26,9 +28,14 @@ export const args = commonOptions(yargs(hideBin(process.argv)))
   .option("pdf_mode", {
     description: "pdf mode",
     demandOption: false,
-    choices: ["slide", "talk", "handout"] as const,
+    choices: pdf_modes,
     type: "string",
     default: "slide",
+  })
+  .option("pdf_size", {
+    choices: pdf_sizes,
+    default: "letter",
+    describe: "PDF paper size (default: letter for US standard)",
   })
   .command("$0 <action> <file>", "Run mulmocast", (yargs) => {
     return yargs
