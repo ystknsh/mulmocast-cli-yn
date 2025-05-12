@@ -231,11 +231,17 @@ export const mulmoPresentationStyleSchema = z.object({
   omitCaptions: z.boolean().optional(), // default is false
 });
 
+export const mulmoReferenceSchema = z.object({
+  url: URLStringSchema,
+  title: z.string().optional(),
+  description: z.string().optional(),
+});
+
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
   .extend({
     title: z.string().optional(),
     description: z.string().optional(),
-    reference: z.string().optional(),
+    references: z.array(mulmoReferenceSchema).optional(),
     lang: langSchema.optional(), // default "en"
     beats: z.array(mulmoBeatSchema),
 
