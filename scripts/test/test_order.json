@@ -5,90 +5,63 @@
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 1",
-          "# one"
-        ]
+        "markdown": ["# 1", "# one"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 2",
-          "# two"
-        ]
+        "markdown": ["# 2", "# two"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 3",
-          "# three"
-        ]
+        "markdown": ["# 3", "# three"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 4",
-          "# four"
-        ]
+        "markdown": ["# 4", "# four"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 5",
-          "# five"
-        ]
+        "markdown": ["# 5", "# five"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 6",
-          "# six"
-        ]
+        "markdown": ["# 6", "# six"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 7",
-          "# seven"
-        ]
+        "markdown": ["# 7", "# seven"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 8",
-          "# eight"
-        ]
+        "markdown": ["# 8", "# eight"]
       }
     },
     {
       "text": "Hello World.",
       "image": {
         "type": "markdown",
-        "markdown": [
-          "# 9",
-          "# nine"
-        ]
+        "markdown": ["# 9", "# nine"]
       }
     }
   ]

@@ -104,7 +104,7 @@ const main = async () => {
     await movie(context);
   }
   if (action === "pdf") {
-    await images(context);
+    // await images(context);
     await pdf(context);
   }
 };
