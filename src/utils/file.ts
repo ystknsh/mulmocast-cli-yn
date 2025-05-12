@@ -80,6 +80,9 @@ export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) =
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
 };
+export const getOutputPdfFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + ".pdf");
+};
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
 };

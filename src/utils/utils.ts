@@ -25,3 +25,10 @@ export const llmPair = (_agent?: LLMAgent, _model?: string) => {
 
   return { agent, model, max_tokens };
 };
+
+export const chunkArray = <T>(array: T[], size = 3): T[][] => {
+  const chunks = [];
+  const copy = [...array];
+  while (copy.length) chunks.push(copy.splice(0, size));
+  return chunks;
+};
