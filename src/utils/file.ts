@@ -6,6 +6,7 @@ import { GraphAILogger } from "graphai";
 import { MulmoScript, MulmoScriptTemplate } from "../types/index.js";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
+import { PDFMode } from "../types/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,8 +81,8 @@ export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) =
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp4");
 };
-export const getOutputPdfFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + ".pdf");
+export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode) => {
+  return path.resolve(outDirPath, fileName + "_" + pdfMode + ".pdf");
 };
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");

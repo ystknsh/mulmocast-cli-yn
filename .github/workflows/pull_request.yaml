@@ -26,11 +26,19 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
+    - run: sudo apt-get update
+    - run: sudo apt-get install chromium-browser
+    - run: sudo apt-get install -y ca-certificates fonts-liberation libatk-bridge2.0-0 libatk1.0-0 libcups2 libdrm2 libgbm1 libnspr4 libnss3 libxcomposite1 libxdamage1 libxrandr2 xdg-utils wget
     - run: yarn install
     - run: yarn run lint
     - run: yarn run build
     - run: yarn run ci_test
-#    - run: yarn run cli images scripts/test/test_order.json
-#    - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode slide --pdf_size a4
-#    - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode talk --pdf_size a4
-#    - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode handout --pdf_size a4
+    - run: yarn run cli images scripts/test/test_order.json
+    - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode slide --pdf_size a4
+    - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode talk --pdf_size a4
+    - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode handout --pdf_size a4
+    - name: Upload generated media
+      uses: actions/upload-artifact@v4
+      with:
+        name: generatedmedia
+        path: output/

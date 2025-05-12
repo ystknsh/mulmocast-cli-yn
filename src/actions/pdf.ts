@@ -172,7 +172,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   // console.log(pageWidth, pageHeight);
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
 
-  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename);
+  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
 
   const pdfDoc = await PDFDocument.create();
 
