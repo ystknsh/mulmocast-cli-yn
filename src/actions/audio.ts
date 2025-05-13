@@ -67,9 +67,11 @@ const preprocessor = async (namedInputs: { beat: MulmoBeat; index: number; conte
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
   const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
-  studioBeat.audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
-  const audioPath = resolveAudioFilePath(context, beat, studioBeat.audioFile, audioDirPath);
+  const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
+  const audioPath = resolveAudioFilePath(context, beat, audioFile, audioDirPath);
+  console.log(`***_${index}`, audioPath);
   studioBeat.duration = await getDuration(audioPath);
+  studioBeat.audioFile = audioPath;
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
     studioBeat,

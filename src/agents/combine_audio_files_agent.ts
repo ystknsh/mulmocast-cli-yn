@@ -13,25 +13,16 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
 
-  const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat, studioBeat: MulmoStudioBeat, audioDirPath: string): string => {
-    if (mulmoBeat.audio?.type === "audio") {
-      const { source } = mulmoBeat.audio;
-      if (source.kind === "path") {
-        return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
-      }
-      if (source.kind === "url") {
-        return source.url;
-      }
-    }
-    return getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile ?? "");
-  };
-
   await Promise.all(
-    context.studio.script.beats.map(async (mulmoBeat: MulmoBeat, index: number) => {
-      const filePath = resolveAudioFilePath(context, mulmoBeat, context.studio.beats[index], audioDirPath);
+    context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const isLast = index === context.studio.beats.length - 2;
-      command.input(filePath);
-      command.input(isLast ? silentLastPath : silentPath);
+      if (studioBeat.audioFile) {
+        console.log(`###_${index}`, studioBeat.audioFile);
+        command.input(studioBeat.audioFile);
+        command.input(isLast ? silentLastPath : silentPath);
+      } else {
+        console.log("*** missing audio file");
+      }
     }),
   );
 
