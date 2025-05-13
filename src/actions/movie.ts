@@ -4,29 +4,32 @@ import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } 
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
-export const getParts = (index: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
-  return (
-    `[${index}:v]` +
-    [
-      mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
-      `trim=duration=${duration}`,
-      "fps=30",
-      "setpts=PTS-STARTPTS",
-      `scale=${canvasInfo.width}:${canvasInfo.height}`,
-      "setsar=1",
-      "format=yuv420p",
-    ]
-      .filter((a) => a)
-      .join(",") +
-    `[v${index}]`
-  );
+export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
+  const videoId = `v${inputIndex}`;
+  return {
+    videoId,
+    part:
+      `[${inputIndex}:v]` +
+      [
+        mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
+        `trim=duration=${duration}`,
+        "fps=30",
+        "setpts=PTS-STARTPTS",
+        `scale=${canvasInfo.width}:${canvasInfo.height}`,
+        "setsar=1",
+        "format=yuv420p",
+      ]
+        .filter((a) => a)
+        .join(",") +
+      `[${videoId}]`,
+  };
 };
 
-const getOutputOption = (imageCount: number) => {
+const getOutputOption = (audioId: string) => {
   return [
     "-preset veryfast", // Faster encoding
     "-map [v]", // Map the video stream
-    `-map ${imageCount /* + captionCount*/}:a`, // Map the audio stream (audio is the next input after all images)
+    `-map ${audioId}`, // Map the audio stream
     "-c:v h264_videotoolbox", // Set video codec
     "-threads 8",
     "-filter_threads 8",
@@ -43,39 +46,62 @@ const getOutputOption = (imageCount: number) => {
 const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio) => {
   return new Promise((resolve, reject) => {
     const start = performance.now();
-    let command = ffmpeg();
+    const ffmpegContext = {
+      command: ffmpeg(),
+      inputCount: 0,
+      audioId: "",
+    };
+
+    function addInput(input: string) {
+      ffmpegContext.command = ffmpegContext.command.input(input);
+      ffmpegContext.inputCount++;
+      return ffmpegContext.inputCount - 1; // returned the index of the input
+    }
 
     if (studio.beats.some((beat) => !beat.imageFile)) {
       GraphAILogger.info("beat.imageFile is not set. Please run `yarn run images ${file}` ");
       return;
     }
 
-    // Add each image input
-    studio.beats.forEach((beat) => {
-      command = command.input(beat.imageFile!); // HACK
-    });
-    const imageCount = studio.beats.length;
     const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
-
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
-    const filterComplexParts: string[] = studio.beats.map((beat, index) => {
-      // Resize background image to match canvas dimensions
-      const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-      const addPadding = index === 0 || index === imageCount - 1;
-      const duration = beat.duration! + (addPadding ? padding : 0);
-      return getParts(index, mediaType, duration, canvasInfo);
-      // console.log(parts);
-    });
+
+    // Add each image input
+    const images = studio.beats.reduce(
+      (acc, beat, index) => {
+        if (!beat.imageFile || !beat.duration) {
+          throw new Error(`beat.imageFile is not set: index=${index}`);
+        }
+        const inputIndex = addInput(beat.imageFile);
+        const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
+        const addPadding = index === 0 || index === studio.beats.length - 1;
+        const duration = beat.duration + (addPadding ? padding : 0);
+        const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
+        if (mediaType === "movie") {
+          const outputAudioId = `a${inputIndex}`;
+          // const delay = acc.timestamp * 1000;
+          // TODO: add audio from video
+          // acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
+          acc.audioIds.push(outputAudioId);
+        }
+        return { ...acc, timestamp: acc.timestamp + beat.duration!, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
+      },
+      { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
+    );
+    // console.log("*** images", images.audioIds);
+
+    const filterComplexParts = images.parts;
 
     // Concatenate the trimmed images
-    const concatInput = studio.beats.map((_, index) => `[v${index}]`).join("");
-    filterComplexParts.push(`${concatInput}concat=n=${imageCount}:v=1:a=0[v]`);
+    filterComplexParts.push(`${images.videoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
+
+    const audioIndex = addInput(audioArtifactFilePath); // Add audio input
+    ffmpegContext.audioId = `${audioIndex}:a`;
 
     // Apply the filter complex for concatenation and map audio input
-    command
+    ffmpegContext.command
       .complexFilter(filterComplexParts)
-      .input(audioArtifactFilePath) // Add audio input
-      .outputOptions(getOutputOption(imageCount))
+      .outputOptions(getOutputOption(ffmpegContext.audioId))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
       })
