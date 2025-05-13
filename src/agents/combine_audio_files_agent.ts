@@ -12,14 +12,15 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
 
-  const getDuration = (filePath: string, isLast: boolean) => {
+  const getDuration = (filePath: string, isLastGap: boolean) => {
     return new Promise<number>((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) {
           GraphAILogger.info("Error while getting metadata:", err);
           reject(err);
         } else {
-          resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
+          // TODO: Remove hard-coded 0.8 and 0.3
+          resolve(metadata.format.duration! + (isLastGap ? 0.8 : 0.3));
         }
       });
     });
@@ -27,11 +28,11 @@ const combineAudioFilesAgent: AgentFunction<
 
   await Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
-      const isLast = index === context.studio.beats.length - 2;
+      const isLastGap = index === context.studio.beats.length - 2;
       if (studioBeat.audioFile) {
         command.input(studioBeat.audioFile);
-        command.input(isLast ? silentLastPath : silentPath);
-        studioBeat.duration = await getDuration(studioBeat.audioFile, isLast);
+        command.input(isLastGap ? silentLastPath : silentPath);
+        studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
       } else {
         GraphAILogger.error("Missing studioBeat.audioFile:", index);
       }
