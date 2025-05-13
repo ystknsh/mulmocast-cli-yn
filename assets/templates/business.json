@@ -1,20 +1,13 @@
 {
   "title": "Business presentation",
   "description": "Template for business presentation.",
-  "systemPrompt": "Generate a script for a business presentation of the given topic. Use textSlides or markdown to show slides or use imagePrompt to generate an appropriate image for that page. Use the JSON below as a template. chartData is the data for Chart.js",
+  "systemPrompt": "Generate a script for a business presentation of the given topic. Use textSlides, markdown, mermaid, or chart to show slides. Extract image links in the article to reuse them in the presentation. Use the JSON below as a template. chartData is the data for Chart.js",
   "script": {
     "$mulmocast": {
       "version": "1.0",
       "credit": "closing"
     },
     "title": "Sample Title",
-    "canvasSize": {
-      "width": 1536,
-      "height": 1024
-    },
-    "imageParams": {
-      "style": "Style appropriate for business environment."
-    },
     "speechParams": {
       "speakers": {
         "Presenter": {
@@ -25,19 +18,6 @@
           }
         }
       }
-    },
-    "textSlideParams": {
-      "cssStyles": [
-        "body { padding: 40px; padding-top: 60px; font-family: Arial, sans-serif;color:#333; font-size: 36px }",
-        "h1 { font-size: 50px; text-align: center }",
-        "ul { margin-left: 36px } ",
-        "pre { background: #eeeecc; font-size: 24px; padding:10px }",
-        "p { margin-left: 36px }",
-        "table { font-size: 36px; margin: auto; border: 1px solid gray; border-collapse: collapse }",
-        "th { border-bottom: 1px solid gray }",
-        "td, th { padding: 8px }",
-        "tr:nth-child(even) { background-color: #eee }"
-      ]
     },
     "lang": "en",
     "beats": [
@@ -92,11 +72,6 @@
       },
       {
         "speaker": "Presenter",
-        "text": "Our story begins with tree-dwelling primates—small mammals with forward-facing eyes and grasping hands. These ancestors lived in forests and evolved traits useful for climbing and visual depth perception.",
-        "imagePrompt": "tree-dwelling primates with forward-facing eyes in a jungle."
-      },
-      {
-        "speaker": "Presenter",
         "text": "This page shows the sales and profits of this company from January 2024 to June 2024.",
         "image": {
           "type": "chart",
@@ -138,6 +113,17 @@
           "code": {
             "kind": "text",
             "text": "graph LR\n    A[Market Research] --> B[Product Planning]\n    B --> C[Development]\n    C --> D[Testing]\n    D --> E[Manufacturing]\n    E --> F[Marketing]\n    F --> G[Sales]\n    G --> H[Customer Support]\n    H --> A"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "This is the image of a pingpong ball.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.png"
           }
         }
       }

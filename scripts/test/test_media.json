@@ -27,6 +27,17 @@
     },
     {
       "speaker": "Presenter",
+      "text": "This is a remote image.",
+      "image": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-cli/refs/heads/main/assets/images/mulmocast_credit.png"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
       "text": "This is a local movie.",
       "image": {
         "type": "movie",

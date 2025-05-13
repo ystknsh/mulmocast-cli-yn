@@ -25,6 +25,8 @@ import {
   mulmoChartMediaSchema,
   mediaSourceSchema,
 } from "./schema.js";
+import { pdf_modes, pdf_sizes } from "../utils/const.js";
+
 import { z } from "zod";
 
 export type LANG = z.infer<typeof langSchema>;
@@ -87,3 +89,14 @@ export type ImageProcessorParams = {
   textSlideStyle: string;
   canvasSize: MulmoCanvasDimension;
 };
+
+export type PDFMode = (typeof pdf_modes)[number];
+export type PDFSize = (typeof pdf_sizes)[number];
+
+export type Text2ImageAgentInfo = {
+  provider: Text2ImageProvider;
+  agent: string;
+  imageParams: MulmoImageParams;
+};
+
+export type BeatMediaType = "movie" | "image";
