@@ -78,10 +78,16 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const duration = beat.duration + (addPadding ? padding : 0);
         const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
         if (mediaType === "movie") {
-          const outputAudioId = `a${inputIndex}`;
+          const audioId = `a${inputIndex}`;
           const delay = acc.timestamp * 1000;
-          acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
-          acc.audioIds.push(outputAudioId);
+          acc.parts.push(
+            `[${inputIndex}:a]` +
+              `atrim=duration=${duration},` + // Trim to beat duration
+              `adelay=${delay}|${delay},` +
+              `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
+              `[${audioId}]`,
+          );
+          acc.audioIds.push(audioId);
         }
         return { ...acc, timestamp: acc.timestamp + duration, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
       },

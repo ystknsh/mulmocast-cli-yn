@@ -38,7 +38,7 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This is a local movie.",
+      "text": "This is a local movie with audio.",
       "image": {
         "type": "movie",
         "source": {
