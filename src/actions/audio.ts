@@ -20,6 +20,7 @@ import {
   defaultBGMPath,
   mkdir,
   writingMessage,
+  getAudioSegmentFilePath,
 } from "../utils/file.js";
 import { text2hash } from "../utils/utils.js";
 
@@ -35,14 +36,21 @@ const provider_to_agent = {
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary }) => {
-        const { beat, index, context, speakers } = namedInputs;
+      agent: (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
+        const { beat, index, context, speakers, audioDirPath } = namedInputs;
         const studioBeat = context.studio.beats[index];
+
+        const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
+        const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
+        const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
+        studioBeat.audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
+        const audioPath = getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile);
         return {
           ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
           studioBeat,
           voiceId: speakers[beat.speaker].voiceId,
           speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
+          audioPath,
         };
       },
       inputs: {
@@ -50,6 +58,7 @@ const graph_tts: GraphData = {
         index: ":__mapIndex",
         context: ":context",
         speakers: ":studio.script.speechParams.speakers",
+        audioDirPath: ":audioDirPath",
       },
     },
     tts: {
@@ -57,7 +66,7 @@ const graph_tts: GraphData = {
       agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: "${:audioSegmentDirPath}/${:preprocessor.studioBeat.audioFile}.mp3", // TODO
+        file: ":preprocessor.audioPath",
         force: ":context.force",
       },
       params: {
@@ -153,13 +162,6 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
   mkdir(audioSegmentDirPath);
-
-  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
-    const voiceId = studio.script.speechParams.speakers[beat.speaker].voiceId;
-    const speechOptions = MulmoScriptMethods.getSpeechOptions(studio.script, beat);
-    const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
-    studio.beats[index].audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
-  });
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
