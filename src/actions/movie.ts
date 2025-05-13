@@ -4,15 +4,20 @@ import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension } from "../types/
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
-const getParts = (index: number, mediaType: string, duration: number, canvasInfo: MulmoCanvasDimension) => {
+export const getParts = (index: number, mediaType: string, duration: number, canvasInfo: MulmoCanvasDimension) => {
   return (
     `[${index}:v]` +
-    (mediaType === "image" ? "loop=loop=-1:size=1:start=0," : "") +
-    `trim=duration=${duration},` +
-    "fps=30," +
-    "setpts=PTS-STARTPTS," +
-    `scale=${canvasInfo.width}:${canvasInfo.height},` +
-    "setsar=1,format=yuv420p" +
+    [
+      mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
+      `trim=duration=${duration}`,
+      "fps=30",
+      "setpts=PTS-STARTPTS",
+      `scale=${canvasInfo.width}:${canvasInfo.height}`,
+      "setsar=1",
+      "format=yuv420p",
+    ]
+      .filter((a) => a)
+      .join(",") +
     `[v${index}]`
   );
 };
