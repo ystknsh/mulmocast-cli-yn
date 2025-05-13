@@ -21,7 +21,7 @@ import {
   mkdir,
   writingMessage,
 } from "../utils/file.js";
-import { text2hash } from "../utils/text_hash.js";
+import { text2hash } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
