@@ -79,15 +79,16 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
         if (mediaType === "movie") {
           const outputAudioId = `a${inputIndex}`;
-          const delay = acc.time * 1000;
+          // const delay = acc.timestamp * 1000;
+          // TODO: add audio from video
           // acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
           acc.audioIds.push(outputAudioId);
         }
-        return { ...acc, time: acc.time + beat.duration!, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
+        return { ...acc, timestamp: acc.timestamp + beat.duration!, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
       },
-      { time: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
+      { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
     );
-    console.log("*** images", images.audioIds);
+    // console.log("*** images", images.audioIds);
 
     const filterComplexParts = images.parts;
 
