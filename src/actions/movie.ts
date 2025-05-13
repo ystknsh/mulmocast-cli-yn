@@ -4,9 +4,11 @@ import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } 
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
-export const getParts = (index: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
-  return (
-    `[${index}:v]` +
+export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
+  const partId = `v${inputIndex}`;
+  return {
+    partId,
+    part:`[${inputIndex}:v]` +
     [
       mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
       `trim=duration=${duration}`,
@@ -18,8 +20,8 @@ export const getParts = (index: number, mediaType: BeatMediaType, duration: numb
     ]
       .filter((a) => a)
       .join(",") +
-    `[v${index}]`
-  );
+    `[${partId}]`
+  };
 };
 
 const getOutputOption = (audioId: string) => {
@@ -66,15 +68,15 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     // Add each image input
     const images = studio.beats.reduce(
       (acc, beat, index) => {
-        if (!beat.imageFile) {
+        if (!beat.imageFile || !beat.duration) {
           throw new Error(`beat.imageFile is not set: index=${index}`);
         }
         const inputIndex = addInput(beat.imageFile);
         const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
         const addPadding = index === 0 || index === studio.beats.length - 1;
-        const duration = beat.duration! + (addPadding ? padding : 0);
-        const part = getParts(index, mediaType, duration, canvasInfo);
-        return { time: acc.time + beat.duration!, inputIds: [...acc.inputIds, `v${inputIndex}`], parts: [...acc.parts, part] };
+        const duration = beat.duration + (addPadding ? padding : 0);
+        const { partId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
+        return { time: acc.time + beat.duration!, inputIds: [...acc.inputIds, partId], parts: [...acc.parts, part] };
       },
       { time: 0, inputIds: [] as string[], parts: [] as string[] },
     );
