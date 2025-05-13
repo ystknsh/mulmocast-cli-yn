@@ -47,6 +47,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
       command: ffmpeg(),
       inputCount: 0,
     };
+
     function addInput(input: string) {
       ffmpegContext.command = ffmpegContext.command.input(input);
       ffmpegContext.inputCount++;
@@ -59,32 +60,34 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     }
 
     // Add each image input
-    studio.beats.forEach((beat) => {
-      addInput(beat.imageFile!); // HACK
+    studio.beats.forEach((beat, index) => {
+      if (!beat.imageFile) {
+        throw new Error(`beat.imageFile is not set: index=${index}`);
+      }
+      addInput(beat.imageFile);
     });
-    const imageCount = studio.beats.length;
+
     const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
 
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
     const filterComplexParts: string[] = studio.beats.map((beat, index) => {
       // Resize background image to match canvas dimensions
       const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-      const addPadding = index === 0 || index === imageCount - 1;
+      const addPadding = index === 0 || index === studio.beats.length - 1;
       const duration = beat.duration! + (addPadding ? padding : 0);
       return getParts(index, mediaType, duration, canvasInfo);
-      // console.log(parts);
     });
 
     // Concatenate the trimmed images
     const concatInput = studio.beats.map((_, index) => `[v${index}]`).join("");
-    filterComplexParts.push(`${concatInput}concat=n=${imageCount}:v=1:a=0[v]`);
+    filterComplexParts.push(`${concatInput}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
 
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
       .complexFilter(filterComplexParts)
-      .outputOptions(getOutputOption(imageCount))
+      .outputOptions(getOutputOption(audioIndex))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
       })
