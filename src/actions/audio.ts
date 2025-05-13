@@ -70,7 +70,7 @@ const preprocessor = async (namedInputs: { beat: MulmoBeat; index: number; conte
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
   const audioPath = resolveAudioFilePath(context, beat, audioFile, audioDirPath);
   console.log(`***_${index}`, audioPath);
-  studioBeat.duration = await getDuration(audioPath);
+  // studioBeat.duration = await getDuration(audioPath);
   studioBeat.audioFile = audioPath;
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
