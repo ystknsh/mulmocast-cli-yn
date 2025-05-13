@@ -8,7 +8,7 @@ import addBGMAgent from "../agents/add_bgm_agent.js";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
 import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { MulmoScriptMethods } from "../methods/index.js";
+import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
 import { MulmoStudioContext, MulmoBeat, SpeakerDictonary } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
@@ -33,26 +33,42 @@ const provider_to_agent = {
   openai: "ttsOpenaiAgent",
 };
 
+const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
+  if (beat.audio?.type === "audio") {
+    const { source } = beat.audio;
+    if (source.kind === "path") {
+      return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
+    }
+    if (source.kind === "url") {
+      return source.url;
+    }
+    throw new Error("Invalid audio source");
+  }
+  return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
+};
+
+const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
+  const { beat, index, context, speakers, audioDirPath } = namedInputs;
+  const studioBeat = context.studio.beats[index];
+  const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
+  const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
+  const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
+  const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
+  const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
+  studioBeat.audioFile = audioPath;
+  return {
+    ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
+    studioBeat,
+    voiceId: speakers[beat.speaker].voiceId,
+    speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
+    audioPath,
+  };
+};
+
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
-        const { beat, index, context, speakers, audioDirPath } = namedInputs;
-        const studioBeat = context.studio.beats[index];
-
-        const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
-        const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
-        const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
-        studioBeat.audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
-        const audioPath = getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile);
-        return {
-          ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
-          studioBeat,
-          voiceId: speakers[beat.speaker].voiceId,
-          speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
-          audioPath,
-        };
-      },
+      agent: preprocessor,
       inputs: {
         beat: ":beat",
         index: ":__mapIndex",

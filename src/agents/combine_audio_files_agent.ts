@@ -1,9 +1,8 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio, MulmoStudioContext, MulmoBeat, MulmoStudioBeat } from "../types/index.js";
-import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file.js";
-import { MulmoStudioContextMethods } from "../methods/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
+import { silentPath, silentLastPath } from "../utils/file.js";
 
 const combineAudioFilesAgent: AgentFunction<
   null,
@@ -13,41 +12,30 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
 
-  const getDuration = (filePath: string, isLast: boolean) => {
+  const getDuration = (filePath: string, isLastGap: boolean) => {
     return new Promise<number>((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) {
           GraphAILogger.info("Error while getting metadata:", err);
           reject(err);
         } else {
-          resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
+          // TODO: Remove hard-coded 0.8 and 0.3
+          resolve(metadata.format.duration! + (isLastGap ? 0.8 : 0.3));
         }
       });
     });
   };
 
-  const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat, studioBeat: MulmoStudioBeat, audioDirPath: string): string => {
-    if (mulmoBeat.audio?.type === "audio") {
-      const { source } = mulmoBeat.audio;
-      if (source.kind === "path") {
-        return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
-      }
-      if (source.kind === "url") {
-        return source.url;
-      }
-    }
-    return getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile ?? "");
-  };
-
   await Promise.all(
-    context.studio.script.beats.map(async (mulmoBeat: MulmoBeat, index: number) => {
-      const filePath = resolveAudioFilePath(context, mulmoBeat, context.studio.beats[index], audioDirPath);
-      const isLast = index === context.studio.beats.length - 2;
-      command.input(filePath);
-      command.input(isLast ? silentLastPath : silentPath);
-
-      // Measure and log the timestamp of each section
-      context.studio.beats[index].duration = await getDuration(filePath, isLast);
+    context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
+      const isLastGap = index === context.studio.beats.length - 2;
+      if (studioBeat.audioFile) {
+        command.input(studioBeat.audioFile);
+        command.input(isLastGap ? silentLastPath : silentPath);
+        studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
+      } else {
+        GraphAILogger.error("Missing studioBeat.audioFile:", index);
+      }
     }),
   );
 
