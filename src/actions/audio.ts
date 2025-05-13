@@ -61,7 +61,7 @@ const resolveAudioFilePath = (context: MulmoStudioContext, beat: MulmoBeat, audi
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
-const preprocessor = async (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
+const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
   const { beat, index, context, speakers, audioDirPath } = namedInputs;
   const studioBeat = context.studio.beats[index];
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;

@@ -5,6 +5,19 @@ import { MulmoStudio, MulmoStudioContext, MulmoBeat, MulmoStudioBeat } from "../
 import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file.js";
 import { MulmoStudioContextMethods } from "../methods/index.js";
 
+const getDuration = (filePath: string, isLast: boolean) => {
+  return new Promise<number>((resolve, reject) => {
+    ffmpeg.ffprobe(filePath, (err, metadata) => {
+      if (err) {
+        GraphAILogger.info("Error while getting metadata:", err);
+        reject(err);
+      } else {
+        resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
+      }
+    });
+  });
+};
+
 const combineAudioFilesAgent: AgentFunction<
   null,
   { studio: MulmoStudio },
