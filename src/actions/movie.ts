@@ -5,9 +5,9 @@ import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
 export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
-  const partId = `v${inputIndex}`;
+  const videoId = `v${inputIndex}`;
   return {
-    partId,
+    videoId,
     part:
       `[${inputIndex}:v]` +
       [
@@ -21,7 +21,7 @@ export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: 
       ]
         .filter((a) => a)
         .join(",") +
-      `[${partId}]`,
+      `[${videoId}]`,
   };
 };
 
@@ -76,17 +76,23 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
         const addPadding = index === 0 || index === studio.beats.length - 1;
         const duration = beat.duration + (addPadding ? padding : 0);
-        const { partId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
-        return { time: acc.time + beat.duration!, inputIds: [...acc.inputIds, partId], parts: [...acc.parts, part] };
+        const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
+        if (mediaType === "movie") {
+          const outputAudioId = `a${inputIndex}`;
+          const delay = acc.time * 1000;
+          // acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
+          acc.audioIds.push(outputAudioId);
+        }
+        return { ...acc, time: acc.time + beat.duration!, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
       },
-      { time: 0, inputIds: [] as string[], parts: [] as string[] },
+      { time: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
     );
-    //console.log("*** images", images);
+    console.log("*** images", images.audioIds);
 
     const filterComplexParts = images.parts;
 
     // Concatenate the trimmed images
-    filterComplexParts.push(`${images.inputIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
+    filterComplexParts.push(`${images.videoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
     ffmpegContext.audioId = `${audioIndex}:a`;
