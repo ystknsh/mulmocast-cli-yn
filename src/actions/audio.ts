@@ -10,7 +10,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoBeat, SpeakerDictonary } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
@@ -47,8 +47,8 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
-const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
-  const { beat, index, context, speakers, audioDirPath } = namedInputs;
+const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; audioDirPath: string }) => {
+  const { beat, index, context, audioDirPath } = namedInputs;
   const studioBeat = context.studio.beats[index];
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
@@ -59,8 +59,8 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
     studioBeat,
-    voiceId: speakers[beat.speaker].voiceId,
-    speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
+    voiceId,
+    speechOptions,
     audioPath,
   };
 };
@@ -73,7 +73,6 @@ const graph_tts: GraphData = {
         beat: ":beat",
         index: ":__mapIndex",
         context: ":context",
-        speakers: ":studio.script.speechParams.speakers",
         audioDirPath: ":audioDirPath",
       },
     },
