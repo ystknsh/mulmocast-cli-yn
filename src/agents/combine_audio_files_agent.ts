@@ -47,7 +47,7 @@ const combineAudioFilesAgent: AgentFunction<
       command.input(isLast ? silentLastPath : silentPath);
 
       // Measure and log the timestamp of each section
-      context.studio.beats[index]["duration"] = await getDuration(filePath, isLast);
+      context.studio.beats[index].duration = await getDuration(filePath, isLast);
     }),
   );
 

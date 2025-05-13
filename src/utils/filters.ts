@@ -5,7 +5,7 @@ import fsPromise from "fs/promises";
 import type { AgentFilterFunction } from "graphai";
 import { GraphAILogger } from "graphai";
 import { writingMessage } from "./file.js";
-import { text2hash } from "./text_hash.js";
+import { text2hash } from "./utils.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
