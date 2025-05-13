@@ -46,6 +46,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const ffmpegContext = {
       command: ffmpeg(),
       inputCount: 0,
+      audioId: "",
     };
 
     function addInput(input: string) {
@@ -85,11 +86,12 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     filterComplexParts.push(`${concatInput}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
+    ffmpegContext.audioId = `${audioIndex}:a`;
 
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
       .complexFilter(filterComplexParts)
-      .outputOptions(getOutputOption(`${audioIndex}:a`))
+      .outputOptions(getOutputOption(ffmpegContext.audioId))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
       })
