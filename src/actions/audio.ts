@@ -27,6 +27,10 @@ const { default: __, ...vanillaAgents } = agents;
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
+const provider_to_agent = {
+  nijivoice: "ttsNijivoiceAgent",
+  openai: "ttsOpenaiAgent",
+};
 
 const graph_tts: GraphData = {
   nodes: {
@@ -35,6 +39,7 @@ const graph_tts: GraphData = {
         const { beat, index, context, speakers } = namedInputs;
         const studioBeat = context.studio.beats[index];
         return {
+          ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
           studioBeat,
           voiceId: speakers[beat.speaker].voiceId,
           speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
@@ -47,20 +52,9 @@ const graph_tts: GraphData = {
         speakers: ":studio.script.speechParams.speakers",
       },
     },
-    ttsAgent: {
-      agent: (namedInputs: { provider: string }) => {
-        if (namedInputs.provider === "nijivoice") {
-          return "ttsNijivoiceAgent";
-        }
-        return "ttsOpenaiAgent";
-      },
-      inputs: {
-        provider: ":studio.script.speechParams.provider",
-      },
-    },
     tts: {
       unless: ":beat.audio",
-      agent: ":ttsAgent",
+      agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":beat.text",
         file: "${:audioSegmentDirPath}/${:preprocessor.studioBeat.audioFile}.mp3", // TODO
