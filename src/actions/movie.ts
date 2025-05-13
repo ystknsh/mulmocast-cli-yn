@@ -67,7 +67,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
 
     // Add each image input
-    const images = studio.beats.reduce(
+    const partsFromBeats = studio.beats.reduce(
       (acc, beat, index) => {
         if (!beat.imageFile || !beat.duration) {
           throw new Error(`beat.imageFile is not set: index=${index}`);
@@ -90,10 +90,10 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     );
     // console.log("*** images", images.audioIds);
 
-    const filterComplexParts = images.parts;
+    const filterComplexParts = partsFromBeats.parts;
 
     // Concatenate the trimmed images
-    filterComplexParts.push(`${images.videoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
+    filterComplexParts.push(`${partsFromBeats.videoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
     ffmpegContext.audioId = `${audioIndex}:a`;
