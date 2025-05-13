@@ -21,6 +21,7 @@ import {
   mkdir,
   writingMessage,
 } from "../utils/file.js";
+import { text2hash } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -158,6 +159,13 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
   mkdir(audioSegmentDirPath);
+
+  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
+    const voiceId = studio.script.speechParams.speakers[beat.speaker].voiceId;
+    const speechOptions = MulmoScriptMethods.getSpeechOptions(studio.script, beat);
+    const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
+    studio.beats[index].audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
+  });
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(

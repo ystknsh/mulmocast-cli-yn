@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 export const llmAgents = ["openAIAgent", "anthropicAgent", "geminiAgent", "groqAgent"];
 
 type LLMAgent = (typeof llmAgents)[number];
@@ -31,4 +33,8 @@ export const chunkArray = <T>(array: T[], size = 3): T[][] => {
   const copy = [...array];
   while (copy.length) chunks.push(copy.splice(0, size));
   return chunks;
+};
+
+export const text2hash = (input: string): string => {
+  return crypto.createHash("sha256").update(input).digest("hex");
 };
