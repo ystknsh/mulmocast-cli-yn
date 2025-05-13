@@ -36,6 +36,7 @@ export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: str
         },
       },
     });
+    studio.beats.push({});
   }
 
   studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
