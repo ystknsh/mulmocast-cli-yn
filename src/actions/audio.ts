@@ -10,7 +10,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoStudio, MulmoBeat, SpeakerDictonary } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, SpeakerDictonary } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
@@ -20,6 +20,7 @@ import {
   defaultBGMPath,
   mkdir,
   writingMessage,
+  getAudioSegmentFilePath,
 } from "../utils/file.js";
 import { text2hash } from "../utils/utils.js";
 
@@ -27,43 +28,45 @@ const { default: __, ...vanillaAgents } = agents;
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
+const provider_to_agent = {
+  nijivoice: "ttsNijivoiceAgent",
+  openai: "ttsOpenaiAgent",
+};
 
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; index: number; studio: MulmoStudio; speakers: SpeakerDictonary }) => {
-        const { beat, index, studio, speakers } = namedInputs;
-        const studioBeat = studio.beats[index];
+      agent: (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
+        const { beat, index, context, speakers, audioDirPath } = namedInputs;
+        const studioBeat = context.studio.beats[index];
+
+        const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
+        const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
+        const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
+        studioBeat.audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
+        const audioPath = getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile);
         return {
+          ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
           studioBeat,
           voiceId: speakers[beat.speaker].voiceId,
-          speechOptions: MulmoScriptMethods.getSpeechOptions(studio.script, beat),
+          speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
+          audioPath,
         };
       },
       inputs: {
         beat: ":beat",
         index: ":__mapIndex",
-        studio: ":studio",
+        context: ":context",
         speakers: ":studio.script.speechParams.speakers",
-      },
-    },
-    ttsAgent: {
-      agent: (namedInputs: { provider: string }) => {
-        if (namedInputs.provider === "nijivoice") {
-          return "ttsNijivoiceAgent";
-        }
-        return "ttsOpenaiAgent";
-      },
-      inputs: {
-        provider: ":studio.script.speechParams.provider",
+        audioDirPath: ":audioDirPath",
       },
     },
     tts: {
       unless: ":beat.audio",
-      agent: ":ttsAgent",
+      agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":beat.text",
-        file: "${:audioSegmentDirPath}/${:preprocessor.studioBeat.audioFile}.mp3", // TODO
+        file: ":preprocessor.audioPath",
         force: ":context.force",
       },
       params: {
@@ -159,13 +162,6 @@ export const audio = async (context: MulmoStudioContext, concurrency: number) =>
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
   mkdir(outDirPath);
   mkdir(audioSegmentDirPath);
-
-  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
-    const voiceId = studio.script.speechParams.speakers[beat.speaker].voiceId;
-    const speechOptions = MulmoScriptMethods.getSpeechOptions(studio.script, beat);
-    const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
-    studio.beats[index].audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
-  });
 
   graph_data.concurrency = concurrency;
   const graph = new GraphAI(
