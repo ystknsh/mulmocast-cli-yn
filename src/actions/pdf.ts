@@ -46,13 +46,19 @@ const pdfSlide = async (pageWidth: number, pageHeight: number, imagePaths: strin
     });
   }
 };
-const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
-  const targetWidth = pageWidth * 0.7;
-  const targetHeight = pageHeight * 0.7 - offset;
+
+const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument) => {
+  const imageRatio = 0.7;
+  const textMargin = 20;
+  const textY = textMargin + (pageHeight * (1 - imageRatio)) / 2;
+
+  const targetWidth = pageWidth - offset;
+  const targetHeight = pageHeight * imageRatio - offset;
 
   const cellRatio = targetHeight / targetWidth;
 
-  for (const imagePath of imagePaths) {
+  for (const [index, imagePath] of imagePaths.entries()) {
+    const text = texts[index];
     const image = await readImage(imagePath, pdfDoc);
 
     const { width: origWidth, height: origHeight } = image.scale(1);
@@ -75,6 +81,13 @@ const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string
       ...pos,
       borderColor: rgb(0, 0, 0),
       borderWidth: 1,
+    });
+    page.drawText(text, {
+      x: textMargin,
+      y: textY,
+      size: 24,
+      color: rgb(0, 0, 0),
+      maxWidth: pageWidth - 2 * textMargin,
     });
   }
 };
@@ -177,6 +190,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   const { width: pageWidth, height: pageHeight } = outputSize(pdfSize, isLandscapeImage, isRotate);
 
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
+  const texts = studio.script.beats.map((beat) => beat.text);
 
   const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
 
@@ -189,7 +203,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
     await pdfSlide(pageWidth, pageHeight, imagePaths, pdfDoc);
   }
   if (pdfMode === "talk") {
-    await pdfTalk(pageWidth, pageHeight, imagePaths, pdfDoc);
+    await pdfTalk(pageWidth, pageHeight, imagePaths, texts, pdfDoc);
   }
 
   const pdfBytes = await pdfDoc.save();
