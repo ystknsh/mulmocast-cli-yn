@@ -30,12 +30,11 @@ const combineAudioFilesAgent: AgentFunction<
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const isLast = index === context.studio.beats.length - 2;
       if (studioBeat.audioFile) {
-        console.log(`###_${index}`, studioBeat.audioFile);
         command.input(studioBeat.audioFile);
         command.input(isLast ? silentLastPath : silentPath);
         studioBeat.duration = await getDuration(studioBeat.audioFile, isLast);
       } else {
-        console.log("*** missing audio file");
+        GraphAILogger.error("Missing studioBeat.audioFile:", index);
       }
     }),
   );

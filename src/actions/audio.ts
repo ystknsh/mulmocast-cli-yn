@@ -57,6 +57,7 @@ const resolveAudioFilePath = (context: MulmoStudioContext, beat: MulmoBeat, audi
     if (source.kind === "url") {
       return source.url;
     }
+    throw new Error("Invalid audio source");
   }
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
@@ -69,7 +70,6 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
   const audioPath = resolveAudioFilePath(context, beat, audioFile, audioDirPath);
-  console.log(`***_${index}`, audioPath);
   // studioBeat.duration = await getDuration(audioPath);
   studioBeat.audioFile = audioPath;
   return {
