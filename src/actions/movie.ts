@@ -83,9 +83,9 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
           acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
           acc.audioIds.push(outputAudioId);
         }
-        return { ...acc, timestamp: acc.timestamp + beat.duration!, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
+        return { ...acc, timestamp: acc.timestamp + duration, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
       },
-      { timestamp: 0.3, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
+      { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
     );
     // console.log("*** images", images.audioIds);
 
@@ -100,8 +100,11 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     if (partsFromBeats.audioIds.length > 0) {
       const mainAudioId = "mainaudio";
       const compositeAudioId = "composite";
+      const audioIds = partsFromBeats.audioIds.map((id) => `[${id}]`).join("");
       filterComplexParts.push(`[${ffmpegContext.audioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
-      filterComplexParts.push(`[${mainAudioId}][${partsFromBeats.audioIds[0]}]amix=inputs=2:duration=first:dropout_transition=2[${compositeAudioId}]`);
+      filterComplexParts.push(
+        `[${mainAudioId}]${audioIds}amix=inputs=${partsFromBeats.audioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
+      );
       ffmpegContext.audioId = `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
     }
 
