@@ -35,6 +35,10 @@ export const chunkArray = <T>(array: T[], size = 3): T[][] => {
   return chunks;
 };
 
+export const isHttp = (fileOrUrl: string) => {
+  return /^https?:\/\//.test(fileOrUrl);
+};
+
 export const text2hash = (input: string): string => {
   return crypto.createHash("sha256").update(input).digest("hex");
 };

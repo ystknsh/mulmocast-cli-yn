@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { rgb, PDFDocument } from "pdf-lib";
 
-import { chunkArray } from "../utils/utils.js";
+import { chunkArray, isHttp } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
 
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
@@ -13,7 +13,15 @@ const offset = 10;
 const handoutImageRatio = 0.5;
 
 const readImage = async (imagePath: string, pdfDoc: PDFDocument) => {
-  const imageBytes = fs.readFileSync(imagePath);
+  const imageBytes = await (async () => {
+    if (isHttp(imagePath)) {
+      const res = await fetch(imagePath);
+      const arrayBuffer = await res.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    }
+    return fs.readFileSync(imagePath);
+  })();
+
   const ext = path.extname(imagePath).toLowerCase();
 
   return ext === ".jpg" || ext === ".jpeg" ? await pdfDoc.embedJpg(imageBytes) : await pdfDoc.embedPng(imageBytes);
@@ -38,13 +46,19 @@ const pdfSlide = async (pageWidth: number, pageHeight: number, imagePaths: strin
     });
   }
 };
-const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
-  const targetWidth = pageWidth * 0.7;
-  const targetHeight = pageHeight * 0.7 - offset;
+
+const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument) => {
+  const imageRatio = 0.7;
+  const textMargin = 20;
+  const textY = textMargin + (pageHeight * (1 - imageRatio)) / 2;
+
+  const targetWidth = pageWidth - offset;
+  const targetHeight = pageHeight * imageRatio - offset;
 
   const cellRatio = targetHeight / targetWidth;
 
-  for (const imagePath of imagePaths) {
+  for (const [index, imagePath] of imagePaths.entries()) {
+    const text = texts[index];
     const image = await readImage(imagePath, pdfDoc);
 
     const { width: origWidth, height: origHeight } = image.scale(1);
@@ -67,6 +81,13 @@ const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string
       ...pos,
       borderColor: rgb(0, 0, 0),
       borderWidth: 1,
+    });
+    page.drawText(text, {
+      x: textMargin,
+      y: textY,
+      size: 24,
+      color: rgb(0, 0, 0),
+      maxWidth: pageWidth - 2 * textMargin,
     });
   }
 };
@@ -147,14 +168,12 @@ const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boole
   // console.log(pdfSize);
   if (pdfSize === "a4") {
     if (isLandscapeImage !== isRotate) {
-      // xor
       return { width: 841.89, height: 595.28 };
     }
     return { width: 595.28, height: 841.89 };
   }
   // letter
   if (isLandscapeImage !== isRotate) {
-    // xor
     return { width: 792, height: 612 };
   }
   return { width: 612, height: 792 };
@@ -169,8 +188,9 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
 
   const isRotate = pdfMode === "handout";
   const { width: pageWidth, height: pageHeight } = outputSize(pdfSize, isLandscapeImage, isRotate);
-  // console.log(pageWidth, pageHeight);
+
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
+  const texts = studio.script.beats.map((beat) => beat.text);
 
   const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
 
@@ -183,7 +203,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
     await pdfSlide(pageWidth, pageHeight, imagePaths, pdfDoc);
   }
   if (pdfMode === "talk") {
-    await pdfTalk(pageWidth, pageHeight, imagePaths, pdfDoc);
+    await pdfTalk(pageWidth, pageHeight, imagePaths, texts, pdfDoc);
   }
 
   const pdfBytes = await pdfDoc.save();
