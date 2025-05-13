@@ -79,14 +79,13 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
         if (mediaType === "movie") {
           const outputAudioId = `a${inputIndex}`;
-          // const delay = acc.timestamp * 1000;
-          // TODO: add audio from video
-          // acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
+          const delay = acc.timestamp * 1000;
+          acc.parts.push(`[${inputIndex}:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${outputAudioId}]`);
           acc.audioIds.push(outputAudioId);
         }
         return { ...acc, timestamp: acc.timestamp + beat.duration!, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
       },
-      { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
+      { timestamp: 0.3, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
     );
     // console.log("*** images", images.audioIds);
 
@@ -99,11 +98,11 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     ffmpegContext.audioId = `${audioIndex}:a`;
 
     if (partsFromBeats.audioIds.length > 0) {
-      const delay = 2 * 1000;
-      filterComplexParts.push(`[2:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a2]`); // Process main audio
-      filterComplexParts.push(`[${ffmpegContext.audioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[mainaudio]`);
-      filterComplexParts.push(`[mainaudio][a2]amix=inputs=2:duration=first:dropout_transition=2[composite]`);
-      ffmpegContext.audioId = "[composite]"; // notice that we need to use [mainaudio] instead of mainaudio
+      const mainAudioId = "mainaudio";
+      const compositeAudioId = "composite";
+      filterComplexParts.push(`[${ffmpegContext.audioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
+      filterComplexParts.push(`[${mainAudioId}][${partsFromBeats.audioIds[0]}]amix=inputs=2:duration=first:dropout_transition=2[${compositeAudioId}]`);
+      ffmpegContext.audioId = `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
     }
 
     // Apply the filter complex for concatenation and map audio input
