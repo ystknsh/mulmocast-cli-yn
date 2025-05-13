@@ -99,8 +99,11 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     ffmpegContext.audioId = `${audioIndex}:a`;
 
     if (partsFromBeats.audioIds.length > 0) {
+      const delay = 2 * 1000;
+      filterComplexParts.push(`[2:a]adelay=${delay}|${delay},aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a2]`); // Process main audio
       filterComplexParts.push(`[${ffmpegContext.audioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[mainaudio]`);
-      ffmpegContext.audioId = "[mainaudio]"; // notice that we need to use [mainaudio] instead of mainaudio
+      filterComplexParts.push(`[mainaudio][a2]amix=inputs=2:duration=first:dropout_transition=2[composite]`);
+      ffmpegContext.audioId = "[composite]"; // notice that we need to use [mainaudio] instead of mainaudio
     }
 
     // Apply the filter complex for concatenation and map audio input
