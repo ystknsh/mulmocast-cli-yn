@@ -22,11 +22,11 @@ export const getParts = (index: number, mediaType: BeatMediaType, duration: numb
   );
 };
 
-const getOutputOption = (audioIndex: number) => {
+const getOutputOption = (audioId: string) => {
   return [
     "-preset veryfast", // Faster encoding
     "-map [v]", // Map the video stream
-    `-map ${audioIndex}:a`, // Map the audio stream
+    `-map ${audioId}`, // Map the audio stream
     "-c:v h264_videotoolbox", // Set video codec
     "-threads 8",
     "-filter_threads 8",
@@ -89,7 +89,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
       .complexFilter(filterComplexParts)
-      .outputOptions(getOutputOption(audioIndex))
+      .outputOptions(getOutputOption(`${audioIndex}:a`))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
       })
