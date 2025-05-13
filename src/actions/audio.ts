@@ -8,7 +8,7 @@ import addBGMAgent from "../agents/add_bgm_agent.js";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
 import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
+import { MulmoScriptMethods } from "../methods/index.js";
 
 import { MulmoStudioContext, MulmoBeat, SpeakerDictonary } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
@@ -21,6 +21,7 @@ import {
   mkdir,
   writingMessage,
   getAudioSegmentFilePath,
+  resolveMediaSource,
 } from "../utils/file.js";
 import { text2hash } from "../utils/utils.js";
 
@@ -35,12 +36,9 @@ const provider_to_agent = {
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
   if (beat.audio?.type === "audio") {
-    const { source } = beat.audio;
-    if (source.kind === "path") {
-      return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
-    }
-    if (source.kind === "url") {
-      return source.url;
+    const path = resolveMediaSource(beat.audio.source, context);
+    if (path) {
+      return path;
     }
     throw new Error("Invalid audio source");
   }
