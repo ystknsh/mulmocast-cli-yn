@@ -40,9 +40,9 @@ export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: str
 
   studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
   studio.beats.length = mulmoScript.beats.length; // In case it became shorter
-  mulmoScript.beats.forEach((_beat: MulmoBeat, index: number) => {
-    const beat = mulmoBeatSchema.parse(_beat);
-    studio.script.beats[index] = beat; // filled with default values
+  mulmoScript.beats.forEach((beat: MulmoBeat, index: number) => {
+    // Filling the default values
+    studio.script.beats[index] = mulmoBeatSchema.parse(beat);
   });
   return studio;
 };
