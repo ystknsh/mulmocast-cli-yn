@@ -10,7 +10,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoBeat, SpeakerDictonary } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
