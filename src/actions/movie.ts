@@ -98,6 +98,11 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
     ffmpegContext.audioId = `${audioIndex}:a`;
 
+    if (partsFromBeats.audioIds.length > 0) {
+      filterComplexParts.push(`[${ffmpegContext.audioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[mainaudio]`);
+      ffmpegContext.audioId = "[mainaudio]"; // notice that we need to use [mainaudio] instead of mainaudio
+    }
+
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
       .complexFilter(filterComplexParts)
