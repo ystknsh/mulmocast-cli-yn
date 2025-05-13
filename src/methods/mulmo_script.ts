@@ -1,5 +1,14 @@
 import "dotenv/config";
-import { MulmoCanvasDimension, MulmoScript, MulmoBeat, SpeechOptions, Text2ImageProvider, MulmoImageParams, Text2SpeechProvider } from "../types/index.js";
+import {
+  MulmoCanvasDimension,
+  MulmoScript,
+  MulmoBeat,
+  SpeechOptions,
+  MulmoImageParams,
+  Text2SpeechProvider,
+  Text2ImageAgentInfo,
+  BeatMediaType,
+} from "../types/index.js";
 import { text2ImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 
 const defaultTextSlideStyles = [
@@ -16,14 +25,6 @@ const defaultTextSlideStyles = [
   "td, th { padding: 8px }",
   "tr:nth-child(even) { background-color: #eee }",
 ];
-
-export type Text2ImageAgentInfo = {
-  provider: Text2ImageProvider;
-  agent: string;
-  imageParams: MulmoImageParams;
-};
-
-export type BeatMediaType = "movie" | "image";
 
 export const MulmoScriptMethods = {
   getPadding(script: MulmoScript): number {

@@ -4,12 +4,12 @@ import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
-import { MulmoScriptMethods, Text2ImageAgentInfo } from "../methods/index.js";
+import { MulmoScriptMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
 const { default: __, ...vanillaAgents } = agents;
