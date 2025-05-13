@@ -43,7 +43,15 @@ const getOutputOption = (imageCount: number) => {
 const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio) => {
   return new Promise((resolve, reject) => {
     const start = performance.now();
-    let command = ffmpeg();
+    const ffmpegContext = {
+      command: ffmpeg(),
+      inputCount: 0,
+    };
+    function addInput(input: string) {
+      ffmpegContext.command = ffmpegContext.command.input(input);
+      ffmpegContext.inputCount++;
+      return ffmpegContext.inputCount;
+    }
 
     if (studio.beats.some((beat) => !beat.imageFile)) {
       GraphAILogger.info("beat.imageFile is not set. Please run `yarn run images ${file}` ");
@@ -52,7 +60,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
 
     // Add each image input
     studio.beats.forEach((beat) => {
-      command = command.input(beat.imageFile!); // HACK
+      addInput(beat.imageFile!); // HACK
     });
     const imageCount = studio.beats.length;
     const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
@@ -72,7 +80,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     filterComplexParts.push(`${concatInput}concat=n=${imageCount}:v=1:a=0[v]`);
 
     // Apply the filter complex for concatenation and map audio input
-    command
+    ffmpegContext.command
       .complexFilter(filterComplexParts)
       .input(audioArtifactFilePath) // Add audio input
       .outputOptions(getOutputOption(imageCount))
