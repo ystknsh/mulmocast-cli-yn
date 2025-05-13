@@ -61,15 +61,17 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     }
 
     // Add each image input
-    const concatInput = studio.beats
-      .map((beat, index) => {
+    const images = studio.beats.reduce(
+      (acc, beat, index) => {
         if (!beat.imageFile) {
           throw new Error(`beat.imageFile is not set: index=${index}`);
         }
         const inputIndex = addInput(beat.imageFile);
-        return `[v${inputIndex}]`;
-      })
-      .join("");
+        return { time: acc.time + beat.duration!, inputIds: [...acc.inputIds, `v${inputIndex}`] };
+      },
+      { time: 0, inputIds: [] as string[] },
+    );
+    //console.log("*** images", images);
 
     const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
 
@@ -83,7 +85,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     });
 
     // Concatenate the trimmed images
-    filterComplexParts.push(`${concatInput}concat=n=${studio.beats.length}:v=1:a=0[v]`);
+    filterComplexParts.push(`${images.inputIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
     ffmpegContext.audioId = `${audioIndex}:a`;
