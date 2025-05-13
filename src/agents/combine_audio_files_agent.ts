@@ -13,19 +13,6 @@ const combineAudioFilesAgent: AgentFunction<
   const { context, combinedFileName, audioDirPath } = namedInputs;
   const command = ffmpeg();
 
-  const getDuration = (filePath: string, isLast: boolean) => {
-    return new Promise<number>((resolve, reject) => {
-      ffmpeg.ffprobe(filePath, (err, metadata) => {
-        if (err) {
-          GraphAILogger.info("Error while getting metadata:", err);
-          reject(err);
-        } else {
-          resolve(metadata.format.duration! + (isLast ? 0.8 : 0.3));
-        }
-      });
-    });
-  };
-
   const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat, studioBeat: MulmoStudioBeat, audioDirPath: string): string => {
     if (mulmoBeat.audio?.type === "audio") {
       const { source } = mulmoBeat.audio;
@@ -45,9 +32,6 @@ const combineAudioFilesAgent: AgentFunction<
       const isLast = index === context.studio.beats.length - 2;
       command.input(filePath);
       command.input(isLast ? silentLastPath : silentPath);
-
-      // Measure and log the timestamp of each section
-      context.studio.beats[index].duration = await getDuration(filePath, isLast);
     }),
   );
 
