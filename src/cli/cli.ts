@@ -18,11 +18,9 @@ import { movie } from "../actions/movie.js";
 import { pdf } from "../actions/pdf.js";
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile } from "../utils/file.js";
+import { isHttp } from "../utils/utils.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 
-const isHttp = (fileOrUrl: string) => {
-  return /^https?:\/\//.test(fileOrUrl);
-};
 const getFileObject = () => {
   const { basedir, file, outdir, imagedir, audiodir } = args;
   const baseDirPath = getBaseDirPath(basedir as string);

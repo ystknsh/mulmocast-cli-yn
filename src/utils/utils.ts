@@ -32,3 +32,7 @@ export const chunkArray = <T>(array: T[], size = 3): T[][] => {
   while (copy.length) chunks.push(copy.splice(0, size));
   return chunks;
 };
+
+export const isHttp = (fileOrUrl: string) => {
+  return /^https?:\/\//.test(fileOrUrl);
+};

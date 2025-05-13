@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { rgb, PDFDocument } from "pdf-lib";
 
-import { chunkArray } from "../utils/utils.js";
+import { chunkArray, isHttp } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
 
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
@@ -13,7 +13,15 @@ const offset = 10;
 const handoutImageRatio = 0.5;
 
 const readImage = async (imagePath: string, pdfDoc: PDFDocument) => {
-  const imageBytes = fs.readFileSync(imagePath);
+  const imageBytes = await (async () => {
+    if (isHttp(imagePath)) {
+      const res = await fetch(imagePath);
+      const arrayBuffer = await res.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    }
+    return fs.readFileSync(imagePath);
+  })();
+
   const ext = path.extname(imagePath).toLowerCase();
 
   return ext === ".jpg" || ext === ".jpeg" ? await pdfDoc.embedJpg(imageBytes) : await pdfDoc.embedPng(imageBytes);
@@ -147,14 +155,12 @@ const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boole
   // console.log(pdfSize);
   if (pdfSize === "a4") {
     if (isLandscapeImage !== isRotate) {
-      // xor
       return { width: 841.89, height: 595.28 };
     }
     return { width: 595.28, height: 841.89 };
   }
   // letter
   if (isLandscapeImage !== isRotate) {
-    // xor
     return { width: 792, height: 612 };
   }
   return { width: 612, height: 792 };
@@ -169,7 +175,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
 
   const isRotate = pdfMode === "handout";
   const { width: pageWidth, height: pageHeight } = outputSize(pdfSize, isLandscapeImage, isRotate);
-  // console.log(pageWidth, pageHeight);
+
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
 
   const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
