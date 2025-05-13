@@ -33,7 +33,7 @@ const provider_to_agent = {
   openai: "ttsOpenaiAgent",
 };
 
-const resolveAudioFilePath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
+const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
   if (beat.audio?.type === "audio") {
     const { source } = beat.audio;
     if (source.kind === "path") {
@@ -54,8 +54,7 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
   const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
-  const audioPath = resolveAudioFilePath(context, beat, audioFile, audioDirPath);
-  // studioBeat.duration = await getDuration(audioPath);
+  const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
