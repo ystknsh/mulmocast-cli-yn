@@ -20,6 +20,7 @@ const combineAudioFilesAgent: AgentFunction<
         console.log(`###_${index}`, studioBeat.audioFile);
         command.input(studioBeat.audioFile);
         command.input(isLast ? silentLastPath : silentPath);
+        studioBeat.duration = await getDuration(studioBeat.audioFile, isLast);
       } else {
         console.log("*** missing audio file");
       }
