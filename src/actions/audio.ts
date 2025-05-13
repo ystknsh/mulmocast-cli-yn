@@ -31,19 +31,19 @@ const { default: __, ...vanillaAgents } = agents;
 const graph_tts: GraphData = {
   nodes: {
     preprocessor: {
-      agent: (namedInputs: { beat: MulmoBeat; index: number; studio: MulmoStudio; speakers: SpeakerDictonary }) => {
-        const { beat, index, studio, speakers } = namedInputs;
-        const studioBeat = studio.beats[index];
+      agent: (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary }) => {
+        const { beat, index, context, speakers } = namedInputs;
+        const studioBeat = context.studio.beats[index];
         return {
           studioBeat,
           voiceId: speakers[beat.speaker].voiceId,
-          speechOptions: MulmoScriptMethods.getSpeechOptions(studio.script, beat),
+          speechOptions: MulmoScriptMethods.getSpeechOptions(context.studio.script, beat),
         };
       },
       inputs: {
         beat: ":beat",
         index: ":__mapIndex",
-        studio: ":studio",
+        context: ":context",
         speakers: ":studio.script.speechParams.speakers",
       },
     },
