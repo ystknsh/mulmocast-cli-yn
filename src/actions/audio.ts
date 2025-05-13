@@ -1,6 +1,7 @@
 import "dotenv/config";
+import ffmpeg from "fluent-ffmpeg";
 
-import { GraphAI } from "graphai";
+import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
@@ -33,9 +34,23 @@ const provider_to_agent = {
   openai: "ttsOpenaiAgent",
 };
 
-const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
-  if (mulmoBeat.audio?.type === "audio") {
-    const { source } = mulmoBeat.audio;
+const getDuration = (filePath: string) => {
+  return new Promise<number>((resolve, reject) => {
+    ffmpeg.ffprobe(filePath, (err, metadata) => {
+      if (err) {
+        GraphAILogger.info("Error while getting metadata:", err);
+        reject(err);
+      } else {
+        // TODO: Remove this hard-coded 0.3
+        resolve(metadata.format.duration! + 0.3);
+      }
+    });
+  });
+};
+
+const resolveAudioFilePath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
+  if (beat.audio?.type === "audio") {
+    const { source } = beat.audio;
     if (source.kind === "path") {
       return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
     }
@@ -46,7 +61,7 @@ const resolveAudioFilePath = (context: MulmoStudioContext, mulmoBeat: MulmoBeat,
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
-const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
+const preprocessor = async (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; speakers: SpeakerDictonary; audioDirPath: string }) => {
   const { beat, index, context, speakers, audioDirPath } = namedInputs;
   const studioBeat = context.studio.beats[index];
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
@@ -54,7 +69,7 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
   studioBeat.audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
   const audioPath = resolveAudioFilePath(context, beat, studioBeat.audioFile, audioDirPath);
-  //getAudioSegmentFilePath(audioDirPath, context.studio.filename, studioBeat.audioFile);
+  studioBeat.duration = await getDuration(audioPath);
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
     studioBeat,
