@@ -1,7 +1,5 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema } from "../types/index.js";
-import { text2hash } from "./text_hash.js";
-import { MulmoScriptMethods } from "../methods/index.js";
 
 export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
@@ -45,7 +43,6 @@ export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: str
   mulmoScript.beats.forEach((_beat: MulmoBeat, index: number) => {
     const beat = mulmoBeatSchema.parse(_beat);
     studio.script.beats[index] = beat; // filled with default values
-    studio.beats[index] = studio.beats[index];
   });
   return studio;
 };
