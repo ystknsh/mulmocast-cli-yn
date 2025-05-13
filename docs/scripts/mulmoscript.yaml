@@ -117,8 +117,8 @@ beats:
         kind: url
         url: https://github.com/receptron/mulmocast-media/raw/refs/heads/main/tutorial/helloworld_auto.png
   - text: |
-        Notice that MulmoCast generates an image as well as the audio.
-        It will automatically generate an image based on the text.
+      Notice that MulmoCast generates an image as well as the audio.
+      It will automatically generate an image based on the text.
     image:
       type: markdown
       markdown: |
@@ -135,8 +135,8 @@ beats:
         }
         ```
   - text: |
-        Optionally, you can specify the image prompt for that beat.
-        MulmoCast will generate an image based on the prompt.
+      Optionally, you can specify the image prompt for that beat.
+      MulmoCast will generate an image based on the prompt.
     image:
       type: markdown
       markdown: |

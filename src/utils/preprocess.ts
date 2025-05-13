@@ -10,7 +10,7 @@ export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: str
   const studio: MulmoStudio = currentStudio?.mulmoData ?? {
     script: mulmoScript,
     filename: fileName,
-    beats: Array(mulmoScript.beats.length).fill({}),
+    beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
   };
   if (!studio.beats) {
     studio.beats = [];
