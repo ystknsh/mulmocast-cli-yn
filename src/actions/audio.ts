@@ -1,7 +1,6 @@
 import "dotenv/config";
-import ffmpeg from "fluent-ffmpeg";
 
-import { GraphAI, GraphAILogger } from "graphai";
+import { GraphAI } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
@@ -32,20 +31,6 @@ const { default: __, ...vanillaAgents } = agents;
 const provider_to_agent = {
   nijivoice: "ttsNijivoiceAgent",
   openai: "ttsOpenaiAgent",
-};
-
-const getDuration = (filePath: string) => {
-  return new Promise<number>((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
-      if (err) {
-        GraphAILogger.info("Error while getting metadata:", err);
-        reject(err);
-      } else {
-        // TODO: Remove this hard-coded 0.3
-        resolve(metadata.format.duration! + 0.3);
-      }
-    });
-  });
 };
 
 const resolveAudioFilePath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {

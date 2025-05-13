@@ -1,9 +1,8 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
-import { MulmoStudio, MulmoStudioContext, MulmoBeat, MulmoStudioBeat } from "../types/index.js";
-import { silentPath, silentLastPath, getAudioSegmentFilePath } from "../utils/file.js";
-import { MulmoStudioContextMethods } from "../methods/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
+import { silentPath, silentLastPath } from "../utils/file.js";
 
 const getDuration = (filePath: string, isLast: boolean) => {
   return new Promise<number>((resolve, reject) => {
