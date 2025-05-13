@@ -22,11 +22,11 @@ export const getParts = (index: number, mediaType: BeatMediaType, duration: numb
   );
 };
 
-const getOutputOption = (imageCount: number) => {
+const getOutputOption = (audioIndex: number) => {
   return [
     "-preset veryfast", // Faster encoding
     "-map [v]", // Map the video stream
-    `-map ${imageCount /* + captionCount*/}:a`, // Map the audio stream (audio is the next input after all images)
+    `-map ${audioIndex}:a`, // Map the audio stream
     "-c:v h264_videotoolbox", // Set video codec
     "-threads 8",
     "-filter_threads 8",
@@ -50,7 +50,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     function addInput(input: string) {
       ffmpegContext.command = ffmpegContext.command.input(input);
       ffmpegContext.inputCount++;
-      return ffmpegContext.inputCount;
+      return ffmpegContext.inputCount - 1; // returned the index of the input
     }
 
     if (studio.beats.some((beat) => !beat.imageFile)) {
@@ -79,10 +79,11 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const concatInput = studio.beats.map((_, index) => `[v${index}]`).join("");
     filterComplexParts.push(`${concatInput}concat=n=${imageCount}:v=1:a=0[v]`);
 
+    const audioIndex = addInput(audioArtifactFilePath); // Add audio input
+
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
       .complexFilter(filterComplexParts)
-      .input(audioArtifactFilePath) // Add audio input
       .outputOptions(getOutputOption(imageCount))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
