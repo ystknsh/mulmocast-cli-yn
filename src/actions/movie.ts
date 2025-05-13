@@ -60,6 +60,9 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
       return;
     }
 
+    const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
+    const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
+
     // Add each image input
     const images = studio.beats.reduce(
       (acc, beat, index) => {
@@ -67,22 +70,17 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
           throw new Error(`beat.imageFile is not set: index=${index}`);
         }
         const inputIndex = addInput(beat.imageFile);
-        return { time: acc.time + beat.duration!, inputIds: [...acc.inputIds, `v${inputIndex}`] };
+        const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
+        const addPadding = index === 0 || index === studio.beats.length - 1;
+        const duration = beat.duration! + (addPadding ? padding : 0);
+        const part = getParts(index, mediaType, duration, canvasInfo);
+        return { time: acc.time + beat.duration!, inputIds: [...acc.inputIds, `v${inputIndex}`], parts: [...acc.parts, part] };
       },
-      { time: 0, inputIds: [] as string[] },
+      { time: 0, inputIds: [] as string[], parts: [] as string[] },
     );
     //console.log("*** images", images);
 
-    const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
-
-    const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
-    const filterComplexParts: string[] = studio.beats.map((beat, index) => {
-      // Resize background image to match canvas dimensions
-      const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-      const addPadding = index === 0 || index === studio.beats.length - 1;
-      const duration = beat.duration! + (addPadding ? padding : 0);
-      return getParts(index, mediaType, duration, canvasInfo);
-    });
+    const filterComplexParts = images.parts;
 
     // Concatenate the trimmed images
     filterComplexParts.push(`${images.inputIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
