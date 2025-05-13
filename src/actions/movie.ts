@@ -8,19 +8,20 @@ export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: 
   const partId = `v${inputIndex}`;
   return {
     partId,
-    part:`[${inputIndex}:v]` +
-    [
-      mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
-      `trim=duration=${duration}`,
-      "fps=30",
-      "setpts=PTS-STARTPTS",
-      `scale=${canvasInfo.width}:${canvasInfo.height}`,
-      "setsar=1",
-      "format=yuv420p",
-    ]
-      .filter((a) => a)
-      .join(",") +
-    `[${partId}]`
+    part:
+      `[${inputIndex}:v]` +
+      [
+        mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
+        `trim=duration=${duration}`,
+        "fps=30",
+        "setpts=PTS-STARTPTS",
+        `scale=${canvasInfo.width}:${canvasInfo.height}`,
+        "setsar=1",
+        "format=yuv420p",
+      ]
+        .filter((a) => a)
+        .join(",") +
+      `[${partId}]`,
   };
 };
 
