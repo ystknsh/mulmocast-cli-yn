@@ -1,10 +1,10 @@
 import ffmpeg from "fluent-ffmpeg";
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
-export const getParts = (index: number, mediaType: string, duration: number, canvasInfo: MulmoCanvasDimension) => {
+export const getParts = (index: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   return (
     `[${index}:v]` +
     [
@@ -57,16 +57,14 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const imageCount = studio.beats.length;
     const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
 
-    const filterComplexParts: string[] = [];
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
-    studio.beats.forEach((beat, index) => {
+    const filterComplexParts: string[] = studio.beats.map((beat, index) => {
       // Resize background image to match canvas dimensions
       const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-      const addPadding = index === 0 || index === studio.beats.length - 1;
+      const addPadding = index === 0 || index === imageCount - 1;
       const duration = beat.duration! + (addPadding ? padding : 0);
-      const parts = getParts(index, mediaType, duration, canvasInfo);
+      return getParts(index, mediaType, duration, canvasInfo);
       // console.log(parts);
-      filterComplexParts.push(parts);
     });
 
     // Concatenate the trimmed images
