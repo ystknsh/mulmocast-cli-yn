@@ -1,10 +1,10 @@
 import ffmpeg from "fluent-ffmpeg";
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
-export const getParts = (index: number, mediaType: string, duration: number, canvasInfo: MulmoCanvasDimension) => {
+export const getParts = (index: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   return (
     `[${index}:v]` +
     [
