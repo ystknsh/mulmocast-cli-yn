@@ -1,10 +1,10 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema } from "../types/index.js";
 
-export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
+export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
 
-  mulmoScriptSchema.parse(mulmoScript); // validate
+  const mulmoScript = mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
   // Create or update MulmoStudio file with MulmoScript
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
