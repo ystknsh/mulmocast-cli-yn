@@ -28,7 +28,7 @@
     "images": "npx tsx ./src/cli/cli.ts images",
     "preprocess": "npx tsx ./src/cli/cli.ts preprocess",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/audio.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
-    "ci_test": "node --test --loader=ts-node/esm ./test/*/test_*.ts",
+    "ci_test": "tsx --test ./test/*/test_*.ts",
     "lint": "eslint src test",
     "build": "tsc",
     "build_test": "tsc && git checkout -- lib/*",

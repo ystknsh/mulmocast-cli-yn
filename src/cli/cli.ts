@@ -3,9 +3,10 @@
 import "dotenv/config";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 
-import { args } from "./args.js";
+import { getArgs } from "./args.js";
 
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
@@ -21,8 +22,8 @@ import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile 
 import { isHttp } from "../utils/utils.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 
-const getFileObject = () => {
-  const { basedir, file, outdir, imagedir, audiodir } = args;
+export const getFileObject = (_args: { [x: string]: unknown }) => {
+  const { basedir, file, outdir, imagedir, audiodir } = _args;
   const baseDirPath = getBaseDirPath(basedir as string);
 
   const fileOrUrl = (file as string) ?? "";
@@ -37,8 +38,10 @@ const getFileObject = () => {
 
   return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath, fileOrUrl };
 };
+
 const main = async () => {
-  const files = getFileObject();
+  const args = getArgs();
+  const files = getFileObject(args);
   const { mulmoFilePath, isHttpPath, fileOrUrl } = files;
 
   if (args.v) {
@@ -106,4 +109,8 @@ const main = async () => {
     await pdf(context, pdf_mode, pdf_size);
   }
 };
-main();
+
+const __filename = fileURLToPath(import.meta.url);
+if (process.argv[1] === __filename) {
+  main();
+}
