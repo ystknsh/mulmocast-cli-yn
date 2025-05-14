@@ -1,12 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { rgb, PDFDocument } from "pdf-lib";
+import { rgb, PDFDocument, StandardFonts } from "pdf-lib";
 
 import { chunkArray, isHttp } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
 
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
+
+import { fontSize, textMargin, drawSize, wrapText } from "../utils/pdf.js";
 
 const imagesPerPage = 4;
 const offset = 10;
@@ -49,7 +51,7 @@ const pdfSlide = async (pageWidth: number, pageHeight: number, imagePaths: strin
 
 const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument) => {
   const imageRatio = 0.7;
-  const textMargin = 20;
+  const textMargin = 8;
   const textY = textMargin + (pageHeight * (1 - imageRatio)) / 2;
 
   const targetWidth = pageWidth - offset;
@@ -85,35 +87,17 @@ const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string
     page.drawText(text, {
       x: textMargin,
       y: textY,
-      size: 24,
+      size: 16,
       color: rgb(0, 0, 0),
       maxWidth: pageWidth - 2 * textMargin,
     });
   }
 };
 
-const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: number, origWidth: number, origHeight: number) => {
-  if (fitWidth) {
-    const drawWidth = expectWidth;
-    const scale = drawWidth / origWidth;
-    const drawHeight = origHeight * scale;
-    return {
-      drawWidth,
-      drawHeight,
-    };
-  }
-  const drawHeight = expectHeight;
-  const scale = drawHeight / origHeight;
-  const drawWidth = origWidth * scale;
-  return {
-    drawWidth,
-    drawHeight,
-  };
-};
-
-const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: string[], pdfDoc: PDFDocument, isLandscapeImage: boolean) => {
+const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument, isLandscapeImage: boolean) => {
   const cellRatio = (pageHeight / imagesPerPage - offset) / (pageWidth * handoutImageRatio - offset);
 
+  let index = 0;
   for (const chunkPaths of chunkArray<string>(imagePaths, imagesPerPage)) {
     const page = pdfDoc.addPage([pageWidth, pageHeight]);
     for (let i = 0; i < chunkPaths.length; i++) {
@@ -160,6 +144,49 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
         borderWidth: 1,
       });
       page.drawImage(image, pos);
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+      if (isLandscapeImage) {
+        const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
+
+        for (const [index, line] of lines.entries()) {
+          page.drawText(line, {
+            ...pos,
+            x: pos.x + pos.width + textMargin,
+            y: pos.y + pos.height - fontSize - (fontSize + 2) * index,
+            size: fontSize,
+          });
+        }
+        /*
+        page.drawRectangle({
+          ...pos,
+          x: pos.x +  pos.width ,
+          borderColor: rgb(0, 0, 0),
+          borderWidth: 1,
+          });
+        */
+      } else {
+        const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
+        for (const [index, line] of lines.entries()) {
+          page.drawText(line, {
+            ...pos,
+            x: pos.x,
+            y: textMargin + pos.height - fontSize - (fontSize + textMargin) * index - 2 * textMargin,
+            size: fontSize,
+          });
+        }
+        /*
+        page.drawRectangle({
+          ...pos,
+          x: pos.x,
+          y: textMargin,
+          height: pos.height - 2 * textMargin,
+          borderColor: rgb(0, 0, 0),
+          borderWidth: 1,
+        });
+        */
+      }
+      index = index + 1;
     }
   }
 };
@@ -197,7 +224,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   const pdfDoc = await PDFDocument.create();
 
   if (pdfMode === "handout") {
-    await pdfHandout(pageWidth, pageHeight, imagePaths, pdfDoc, isLandscapeImage);
+    await pdfHandout(pageWidth, pageHeight, imagePaths, texts, pdfDoc, isLandscapeImage);
   }
   if (pdfMode === "slide") {
     await pdfSlide(pageWidth, pageHeight, imagePaths, pdfDoc);

@@ -37,6 +37,9 @@ jobs:
     - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode slide --pdf_size a4
     - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode talk --pdf_size a4
     - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode handout --pdf_size a4
+    - run: yarn run cli pdf scripts/test/test_order_portrait.json --pdf_mode slide --pdf_size a4
+    - run: yarn run cli pdf scripts/test/test_order_portrait.json --pdf_mode talk --pdf_size a4
+    - run: yarn run cli pdf scripts/test/test_order_portrait.json --pdf_mode handout --pdf_size a4
     - name: Upload generated media
       uses: actions/upload-artifact@v4
       with:
