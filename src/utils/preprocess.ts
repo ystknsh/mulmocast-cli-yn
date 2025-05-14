@@ -13,6 +13,27 @@ const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: Mulm
   };
 };
 
+const mulmoCredit = (speaker: string) => {
+  return {
+    speaker,
+    text: "",
+    image: {
+      type: "image",
+      source: {
+        kind: "url",
+        url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png",
+      },
+    },
+    audio: {
+      type: "audio",
+      source: {
+        kind: "url",
+        url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/audio/silent300.mp3",
+      },
+    },
+  };
+};
+
 export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
 
@@ -26,24 +47,7 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: st
 
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
-    mulmoScript.beats.push({
-      speaker: mulmoScript.beats[0].speaker, // First speaker
-      text: "",
-      image: {
-        type: "image",
-        source: {
-          kind: "url",
-          url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png",
-        },
-      },
-      audio: {
-        type: "audio",
-        source: {
-          kind: "url",
-          url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/audio/silent300.mp3",
-        },
-      },
-    });
+    mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker
   }
 
   studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
