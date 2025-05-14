@@ -4,6 +4,9 @@ import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } 
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 
+const isMac = process.platform === "darwin";
+const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
+
 export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
   return {
@@ -30,7 +33,7 @@ const getOutputOption = (audioId: string) => {
     "-preset veryfast", // Faster encoding
     "-map [v]", // Map the video stream
     `-map ${audioId}`, // Map the audio stream
-    "-c:v h264_videotoolbox", // Set video codec
+    `-c:v ${videoCodec}`, // Set video codec
     "-threads 8",
     "-filter_threads 8",
     "-b:v 5M", // bitrate (only for videotoolbox)
