@@ -144,16 +144,9 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
         borderWidth: 1,
       });
       page.drawImage(image, pos);
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
       if (isLandscapeImage) {
-        /*
-        page.drawRectangle({
-          ...pos,
-          x: pos.x +  pos.width ,
-          borderColor: rgb(0, 0, 0),
-          borderWidth: 1,
-          });
-        */
-        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
 
         for (const [index, line] of lines.entries()) {
@@ -164,6 +157,34 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
             size: fontSize,
           });
         }
+        /*
+        page.drawRectangle({
+          ...pos,
+          x: pos.x +  pos.width ,
+          borderColor: rgb(0, 0, 0),
+          borderWidth: 1,
+          });
+        */
+      } else {
+        const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
+        for (const [index, line] of lines.entries()) {
+          page.drawText(line, {
+            ...pos,
+            x: pos.x,
+            y: textMargin + pos.height - fontSize - (fontSize + textMargin) * index - 2 * textMargin,
+            size: fontSize,
+          });
+        }
+        /*
+        page.drawRectangle({
+          ...pos,
+          x: pos.x,
+          y: textMargin,
+          height: pos.height - 2 * textMargin,
+          borderColor: rgb(0, 0, 0),
+          borderWidth: 1,
+        });
+        */
       }
       index = index + 1;
     }
