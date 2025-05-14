@@ -1,5 +1,5 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
-import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema } from "../types/index.js";
+import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
 
 export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
@@ -9,11 +9,15 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: st
   // Create or update MulmoStudio file with MulmoScript
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-  const studio: MulmoStudio = currentStudio?.mulmoData ?? {
-    script: mulmoScript,
-    filename: fileName,
-    beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
-  };
+
+  const studio: MulmoStudio =
+    currentStudio && mulmoStudioSchema.safeParse(currentStudio.mulmoData)
+      ? currentStudio.mulmoData
+      : {
+          script: mulmoScript,
+          filename: fileName,
+          beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
+        };
   if (!studio.beats) {
     studio.beats = [];
   }
