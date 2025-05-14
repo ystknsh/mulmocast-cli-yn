@@ -4,6 +4,8 @@ import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema
 export const createOrUpdateStudioData = (mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
 
+  mulmoScriptSchema.parse(mulmoScript); // validate
+
   // Create or update MulmoStudio file with MulmoScript
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
