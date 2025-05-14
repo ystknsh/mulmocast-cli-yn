@@ -28,7 +28,7 @@ jobs:
         cache: 'yarn'
     - run: sudo apt-get update
     - run: sudo apt-get install chromium-browser
-    - run: sudo apt-get install -y ca-certificates fonts-liberation libatk-bridge2.0-0 libatk1.0-0 libcups2 libdrm2 libgbm1 libnspr4 libnss3 libxcomposite1 libxdamage1 libxrandr2 xdg-utils wget
+    - run: sudo apt-get install -y ca-certificates fonts-liberation libatk-bridge2.0-0 libatk1.0-0 libcups2 libdrm2 libgbm1 libnspr4 libnss3 libxcomposite1 libxdamage1 libxrandr2 xdg-utils wget ffmpeg
     - run: yarn install
     - run: yarn run lint
     - run: yarn run build
