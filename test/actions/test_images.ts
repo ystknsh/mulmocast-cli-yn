@@ -1,5 +1,5 @@
 import test from "node:test";
-import assert from "node:assert";
+// import assert from "node:assert";
 
 import { getFileObject } from "../../src/cli/cli.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
@@ -21,16 +21,16 @@ test("test images", async () => {
     title: "MASAI: A Modular Future for Software Engineering AI",
     description: "Exploring MASAI, a modular approach for AI agents in software engineering that revolutionizes how complex coding issues are tackled.",
     beats: [
-      { text: "" ,
-        "image": {
-          "type": "image",
-        "source": {
-          "kind": "path",
-          "path": "../../assets/images/mulmocast_credit.png"
-        }
-      }
-
-      }
+      {
+        text: "",
+        image: {
+          type: "image",
+          source: {
+            kind: "path",
+            path: "../../assets/images/mulmocast_credit.png",
+          },
+        },
+      },
     ],
   };
   const studio = createOrUpdateStudioData(mulmoScript, "hello", fileDirs);
