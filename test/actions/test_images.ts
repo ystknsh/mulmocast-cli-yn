@@ -22,12 +22,20 @@ test("test images", async () => {
     description: "Exploring MASAI, a modular approach for AI agents in software engineering that revolutionizes how complex coding issues are tackled.",
     beats: [
       {
-        text: "",
+        text: "This is a bulleted list in text slide format.",
         image: {
-          type: "image",
-          source: {
-            kind: "path",
-            path: "../../assets/images/mulmocast_credit.png",
+          type: "textSlide",
+          slide: {
+            title: "Human Evolution",
+            bullets: [
+              "Early Primates",
+              "Hominids and Hominins",
+              "Australopithecus",
+              "Genus Homo Emerges",
+              "Homo erectus and Migration",
+              "Neanderthals and Other Archaic Humans",
+              "Homo sapiens",
+            ],
           },
         },
       },
