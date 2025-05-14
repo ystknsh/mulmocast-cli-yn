@@ -191,3 +191,40 @@ beats:
       source:
         kind: url
         url: https://github.com/receptron/mulmocast-media/raw/refs/heads/main/tutorial/helloworld_ghibli.png
+  - text: |
+      You can change the voice of the speaker, by specifying the voiceId in the speechParams.
+      You may also specify the technology provider, such as "nijivoice" or "openai".
+    image:
+      type: markdown
+      markdown: |
+        # Hello World in MulmoScript
+        ### JSON
+        ```json
+        {
+          "$mulmocast": { "version": "1.0" },
+          "imageParams": {
+            "style": "Ghibli style anime"
+          },
+          "speechParams": {
+            "provider": "nijivoice",
+            "speakers": {
+              "Presenter": {
+                "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62"
+              }
+            }
+          },
+          "beats": [
+            { 
+              "text": "こんにちは、世界の皆さん！",
+              "imagePrompt": "A female model with business suit, holding a globe, saying hello"
+            }
+          ]
+        }        
+        ```
+  - text: |
+      こんにちは、世界の皆さん。
+    image:
+      type: image
+      source:
+        kind: url
+        url: https://github.com/receptron/mulmocast-media/raw/refs/heads/main/tutorial/helloworld_ghibli.png

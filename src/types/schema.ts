@@ -28,7 +28,7 @@ const speakerIdSchema = z.string();
 
 const speakerDataSchema = z
   .object({
-    displayName: z.record(langSchema, z.string()),
+    displayName: z.record(langSchema, z.string()).optional(),
     voiceId: z.string(),
     speechOptions: speechOptionsSchema.optional(),
   })
