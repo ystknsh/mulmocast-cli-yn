@@ -1,4 +1,20 @@
 {
   "$mulmocast": { "version": "1.0" },
-  "beats": [{ "text": "Hello World." }]
+  "imageParams": {
+    "style": "Ghibli style anime"
+  },
+  "speechParams": {
+    "provider": "nijivoice",
+    "speakers": {
+      "Presenter": {
+        "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62"
+      }
+    }
+  },
+  "beats": [
+    {
+      "text": "こんにちは、世界の皆さん！",
+      "imagePrompt": "A female model with business suit, holding a globe, saying hello"
+    }
+  ]
 }
