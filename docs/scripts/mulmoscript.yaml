@@ -194,6 +194,7 @@ beats:
   - text: |
       You can change the voice of the speaker, by specifying the voiceId in the speechParams.
       You may also specify the technology provider, such as "nijivoice" or "openai".
+      Here is an example with a voice from Nijivoice.
     image:
       type: markdown
       markdown: |
@@ -223,6 +224,11 @@ beats:
         ```
   - text: |
       こんにちは、世界の皆さん。
+    audio:
+      type: audio
+      source:
+        kind: url
+        url: https://github.com/receptron/mulmocast-media/raw/refs/heads/main/tutorial/helloworld_nijivoice.mp3
     image:
       type: image
       source:
