@@ -12,11 +12,7 @@ import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 
-import { translate } from "../actions/translate.js";
-import { images } from "../actions/images.js";
-import { audio } from "../actions/audio.js";
-import { movie } from "../actions/movie.js";
-import { pdf } from "../actions/pdf.js";
+import { translate, audio, images, movie, pdf } from "../../src/actions/index.js";
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
