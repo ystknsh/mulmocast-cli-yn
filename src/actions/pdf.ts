@@ -51,7 +51,7 @@ const pdfSlide = async (pageWidth: number, pageHeight: number, imagePaths: strin
 
 const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument) => {
   const imageRatio = 0.7;
-  const textMargin = 20;
+  const textMargin = 8;
   const textY = textMargin + (pageHeight * (1 - imageRatio)) / 2;
 
   const targetWidth = pageWidth - offset;
@@ -87,7 +87,7 @@ const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string
     page.drawText(text, {
       x: textMargin,
       y: textY,
-      size: 24,
+      size: 16,
       color: rgb(0, 0, 0),
       maxWidth: pageWidth - 2 * textMargin,
     });
