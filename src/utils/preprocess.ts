@@ -1,5 +1,17 @@
 import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
-import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema } from "../types/index.js";
+import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
+
+const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
+  const parsed = mulmoStudioSchema.safeParse(currentStudio);
+  if (parsed.success) {
+    return parsed.data;
+  }
+  return {
+    script: mulmoScript,
+    filename: fileName,
+    beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
+  };
+};
 
 export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
   const { outDirPath } = files;
@@ -9,14 +21,8 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: st
   // Create or update MulmoStudio file with MulmoScript
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-  const studio: MulmoStudio = currentStudio?.mulmoData ?? {
-    script: mulmoScript,
-    filename: fileName,
-    beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
-  };
-  if (!studio.beats) {
-    studio.beats = [];
-  }
+
+  const studio: MulmoStudio = rebuildStudio(currentStudio?.mulmoData, mulmoScript, fileName);
 
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
