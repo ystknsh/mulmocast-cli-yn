@@ -234,3 +234,36 @@ beats:
       source:
         kind: url
         url: https://github.com/receptron/mulmocast-media/raw/refs/heads/main/tutorial/helloworld_ghibli.png
+  - text: |
+      It is also possible to create a Powerpoint-like slide deck in MulmoScript.
+      You need to specify the type of the image as "textSlide" and specify the slide property.
+    image:
+      type: markdown
+      markdown: |
+        # Hello World in MulmoScript
+        ### JSON
+        ```json
+        {
+          "$mulmocast": {
+            "version": "1.0",
+          },
+          "beats": [{
+            "text": "Hello World.",
+            "image": {
+              "type": "textSlide",
+              "slide": {
+                "title": "Powerpoint-like Slide Desk",
+                "bullets": ["Something", "Something else", "Something more", "Something even more"]
+              }
+            }
+          }]
+        }
+        ```
+  - text: |
+      Here is an example of a Powerpoint-like slide deck.
+    image:
+      type: textSlide
+      slide:
+        title: "Powerpoint-like Slide Desk"
+        bullets: ["Something", "Something else", "Something more", "Something even more"]
+
