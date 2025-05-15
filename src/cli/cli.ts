@@ -16,7 +16,6 @@ import { translate, audio, images, movie, pdf } from "../../src/actions/index.js
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
-import { mulmoScriptSchema } from "../types/schema.js";
 import { MulmoStudio } from "../types/type.js";
 
 export const getFileObject = (_args: { [x: string]: unknown }) => {
@@ -38,6 +37,22 @@ export const getFileObject = (_args: { [x: string]: unknown }) => {
   return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath, fileOrUrl, outputStudioFilePath, fileName };
 };
 
+const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl: string) => {
+  if (isHttpPath) {
+    const res = await fetchMulmoScriptFile(fileOrUrl);
+    if (!res.result || !res.script) {
+      GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
+      process.exit(1);
+    }
+    return res.script;
+  }
+  if (!fs.existsSync(mulmoFilePath)) {
+    GraphAILogger.info(`ERROR: File not exists ${mulmoFilePath}`);
+    process.exit(1);
+  }
+  return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath).mulmoData;
+};
+
 const main = async () => {
   const args = getArgs();
   const files = getFileObject(args);
@@ -52,35 +67,19 @@ const main = async () => {
   }
 
   const { action, force, pdf_mode, pdf_size } = args;
-  const mulmoScript = await (async () => {
-    if (isHttpPath) {
-      const res = await fetchMulmoScriptFile(fileOrUrl);
-      if (!res.result || !res.script) {
-        GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
-        process.exit(1);
-      }
-      return res.script;
-    }
-    if (!fs.existsSync(mulmoFilePath)) {
-      GraphAILogger.info(`ERROR: File not exists ${mulmoFilePath}`);
-      process.exit(1);
-    }
-    return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath).mulmoData;
-  })();
-
-  // validate mulmoStudioSchema. skip if __test_invalid__ is true
-  try {
-    if (!mulmoScript?.__test_invalid__) {
-      mulmoScriptSchema.parse(mulmoScript);
-    }
-  } catch (error) {
-    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
-    process.exit(1);
-  }
+  const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
 
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-  const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
+  const studio = (() => {
+    try {
+      // validate mulmoStudioSchema. skip if __test_invalid__ is true
+      return createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
+    } catch (error) {
+      GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
+      process.exit(1);
+    }
+  })();
 
   const context = {
     studio,
