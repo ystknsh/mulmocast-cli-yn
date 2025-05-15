@@ -1,4 +1,3 @@
-import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
@@ -34,16 +33,10 @@ const mulmoCredit = (speaker: string) => {
   };
 };
 
-export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
-  const { outDirPath } = files;
-
+export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, currentStudio: MulmoStudio | undefined) => {
   const mulmoScript = mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
-  // Create or update MulmoStudio file with MulmoScript
-  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
-  const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-
-  const studio: MulmoStudio = rebuildStudio(currentStudio?.mulmoData, mulmoScript, fileName);
+  const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
 
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {

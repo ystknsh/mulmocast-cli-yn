@@ -14,15 +14,17 @@ import { MulmoScriptMethods } from "../methods/index.js";
 
 import { translate, audio, images, movie, pdf } from "../../src/actions/index.js";
 
-import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile } from "../utils/file.js";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { mulmoScriptSchema } from "../types/schema.js";
+import { MulmoStudio } from "../types/type.js";
 
 export const getFileObject = (_args: { [x: string]: unknown }) => {
   const { basedir, file, outdir, imagedir, audiodir } = _args;
   const baseDirPath = getBaseDirPath(basedir as string);
 
   const fileOrUrl = (file as string) ?? "";
+  const fileName = path.parse(fileOrUrl).name;
   const isHttpPath = isHttp(fileOrUrl);
 
   const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);
@@ -31,14 +33,15 @@ export const getFileObject = (_args: { [x: string]: unknown }) => {
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
   const audioDirPath = getFullPath(outDirPath, (audiodir as string) ?? audioDirName);
+  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
 
-  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath, fileOrUrl };
+  return { baseDirPath, mulmoFilePath, mulmoFileDirPath, outDirPath, imageDirPath, audioDirPath, isHttpPath, fileOrUrl, outputStudioFilePath, fileName };
 };
 
 const main = async () => {
   const args = getArgs();
   const files = getFileObject(args);
-  const { mulmoFilePath, isHttpPath, fileOrUrl } = files;
+  const { mulmoFilePath, isHttpPath, fileOrUrl, fileName, outputStudioFilePath } = files;
 
   if (args.v) {
     GraphAILogger.info(files);
@@ -58,7 +61,7 @@ const main = async () => {
       }
       return {
         mulmoData: res.script,
-        fileName: path.parse(fileOrUrl).name,
+        fileName,
       };
     }
     if (!fs.existsSync(mulmoFilePath)) {
@@ -68,7 +71,7 @@ const main = async () => {
     return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
   })();
 
-  const { mulmoData: mulmoScript, fileName } = readData;
+  const { mulmoData: mulmoScript } = readData;
   // validate mulmoStudioSchema. skip if __test_invalid__ is true
   try {
     if (!mulmoScript?.__test_invalid__) {
@@ -79,7 +82,9 @@ const main = async () => {
     process.exit(1);
   }
 
-  const studio = createOrUpdateStudioData(mulmoScript, fileName, files);
+  // Create or update MulmoStudio file with MulmoScript
+  const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
+  const studio = createOrUpdateStudioData(mulmoScript, fileName, currentStudio?.mulmoData);
 
   const context = {
     studio,
