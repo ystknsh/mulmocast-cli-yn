@@ -18,16 +18,16 @@ const mulmoCredit = (speaker: string) => {
     speaker,
     text: "",
     image: {
-      type: "image",
+      type: "image" as const ,
       source: {
-        kind: "url",
+        kind: "url" as const ,
         url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png",
       },
     },
     audio: {
-      type: "audio",
+      type: "audio" as const,
       source: {
-        kind: "url",
+        kind: "url" as const,
         url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/audio/silent300.mp3",
       },
     },
