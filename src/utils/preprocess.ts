@@ -34,8 +34,6 @@ const mulmoCredit = (speaker: string) => {
 };
 
 export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, currentStudio: MulmoStudio | undefined) => {
-  // const { outputStudioFilePath } = files;
-
   const mulmoScript = mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
   const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
