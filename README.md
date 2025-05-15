@@ -125,6 +125,9 @@ CLI Usage
 Use this command to generate content (audio, images, movie) from an existing MulmoScript.
 
 ```bash
+mulmo -h
+```
+```bash
 mulmo <action> <file>
 
 Run mulmocast
@@ -148,6 +151,10 @@ Options:
 
 ### `mulmo-tool -h` Output
 Use this command to generate a new MulmoScript from a URL or interactively.
+
+```bash
+mulmo-tool -h
+```
 
 ```bash
 mulmo-tool <action>
