@@ -7,11 +7,11 @@ import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from
 const isMac = process.platform === "darwin";
 const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
 
-export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
+export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
   return {
     videoId,
-    part:
+    videoPart:
       `[${inputIndex}:v]` +
       [
         mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
@@ -25,6 +25,20 @@ export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: 
         .filter((a) => a)
         .join(",") +
       `[${videoId}]`,
+  };
+};
+
+export const getAudioPart = (inputIndex, duration, delay) => {
+  const audioId = `a${inputIndex}`;
+
+  return {
+    audioId,
+    audioPart:
+      `[${inputIndex}:a]` +
+      `atrim=duration=${duration},` + // Trim to beat duration
+      `adelay=${delay}|${delay},` +
+      `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
+      `[${audioId}]`,
   };
 };
 
@@ -79,20 +93,14 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
         const addPadding = index === 0 || index === studio.beats.length - 1;
         const duration = beat.duration + (addPadding ? padding : 0);
-        const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
+        const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
         if (mediaType === "movie") {
-          const audioId = `a${inputIndex}`;
           const delay = acc.timestamp * 1000;
-          acc.parts.push(
-            `[${inputIndex}:a]` +
-              `atrim=duration=${duration},` + // Trim to beat duration
-              `adelay=${delay}|${delay},` +
-              `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
-              `[${audioId}]`,
-          );
+          const { audioId, audioPart } = getAudioPart(inputIndex, duration, delay);
+          acc.parts.push(audioPart);
           acc.audioIds.push(audioId);
         }
-        return { ...acc, timestamp: acc.timestamp + duration, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
+        return { ...acc, timestamp: acc.timestamp + duration, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, videoPart] };
       },
       { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
     );
