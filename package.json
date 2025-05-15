@@ -56,6 +56,7 @@
     "@graphai/openai_agent": "^1.0.5",
     "@graphai/vanilla": "^2.0.1",
     "@graphai/vanilla_node_agents": "^2.0.0",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@types/fluent-ffmpeg": "^2.1.26",
     "canvas": "^3.1.0",
     "dotenv": "^16.4.7",

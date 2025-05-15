@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { rgb, PDFDocument, StandardFonts } from "pdf-lib";
+import { rgb, PDFDocument, StandardFonts, PDFFont } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
 
 import { chunkArray, isHttp } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
@@ -94,7 +95,15 @@ const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string
   }
 };
 
-const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument, isLandscapeImage: boolean) => {
+const pdfHandout = async (
+  pageWidth: number,
+  pageHeight: number,
+  imagePaths: string[],
+  texts: string[],
+  pdfDoc: PDFDocument,
+  font: PDFFont,
+  isLandscapeImage: boolean,
+) => {
   const cellRatio = (pageHeight / imagesPerPage - offset) / (pageWidth * handoutImageRatio - offset);
 
   let index = 0;
@@ -144,7 +153,7 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
         borderWidth: 1,
       });
       page.drawImage(image, pos);
-      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      // const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
       if (isLandscapeImage) {
         const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
@@ -155,6 +164,7 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
             x: pos.x + pos.width + textMargin,
             y: pos.y + pos.height - fontSize - (fontSize + 2) * index,
             size: fontSize,
+            font,
           });
         }
         /*
@@ -173,6 +183,7 @@ const pdfHandout = async (pageWidth: number, pageHeight: number, imagePaths: str
             x: pos.x,
             y: textMargin + pos.height - fontSize - (fontSize + textMargin) * index - 2 * textMargin,
             size: fontSize,
+            font,
           });
         }
         /*
@@ -222,9 +233,12 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
 
   const pdfDoc = await PDFDocument.create();
+  pdfDoc.registerFontkit(fontkit);
+  const fontBytes = fs.readFileSync("assets/font/NotoSansJP-Regular.ttf");
+  const customFont = await pdfDoc.embedFont(fontBytes);
 
   if (pdfMode === "handout") {
-    await pdfHandout(pageWidth, pageHeight, imagePaths, texts, pdfDoc, isLandscapeImage);
+    await pdfHandout(pageWidth, pageHeight, imagePaths, texts, pdfDoc, customFont, isLandscapeImage);
   }
   if (pdfMode === "slide") {
     await pdfSlide(pageWidth, pageHeight, imagePaths, pdfDoc);

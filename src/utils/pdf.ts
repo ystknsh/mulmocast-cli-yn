@@ -21,6 +21,56 @@ export const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: n
   };
 };
 
+const isFullwidth = (char: string) => {
+  const code = char.charCodeAt(0);
+  return (
+    (code >= 0x3000 && code <= 0x9fff) || // CJK, punctuation, kana
+    (code >= 0xff00 && code <= 0xffef) // Fullwidth ASCII
+  );
+};
+
+export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth: number): string[] => {
+  const lines: string[] = [];
+  for (const rawLine of text.split("\n")) {
+    let line = "";
+    let buffer = "";
+
+    const flush = () => {
+      if (line) lines.push(line);
+      line = "";
+    };
+
+    for (let i = 0; i < rawLine.length; i++) {
+      const char = rawLine[i];
+      buffer += char;
+
+      const width = font.widthOfTextAtSize(line + buffer, fontSize);
+      const nextChar = rawLine[i + 1];
+
+      const currentIsFull = isFullwidth(char);
+      const nextIsFull = nextChar && isFullwidth(nextChar);
+
+      const isBreakable = currentIsFull || (!currentIsFull && (char === " " || nextChar === " " || nextIsFull));
+
+      if (width > maxWidth && buffer) {
+        lines.push(line);
+        line = "";
+        buffer = char;
+      }
+
+      if (isBreakable || i === rawLine.length - 1) {
+        line += buffer;
+        buffer = "";
+      }
+    }
+
+    if (line) lines.push(line);
+  }
+
+  return lines;
+};
+
+/*
 export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth: number) => {
   const words = text.split(" ");
   const lines = [];
@@ -40,3 +90,4 @@ export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth
   if (currentLine) lines.push(currentLine);
   return lines;
 };
+*/
