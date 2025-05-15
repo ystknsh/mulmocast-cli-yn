@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { rgb, PDFDocument, StandardFonts, PDFFont } from "pdf-lib";
+import { rgb, PDFDocument, PDFFont } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 
 import { chunkArray, isHttp } from "../utils/utils.js";
@@ -94,7 +94,7 @@ const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string
         y: textY - fontSize - (fontSize + 2) * index,
         size: fontSize,
         color: rgb(0, 0, 0),
-        width: pageWidth - 2 * textMargin,
+        maxWidth: pageWidth - 2 * textMargin,
         font,
       });
     }

@@ -35,11 +35,6 @@ export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth
     let line = "";
     let buffer = "";
 
-    const flush = () => {
-      if (line) lines.push(line);
-      line = "";
-    };
-
     for (let i = 0; i < rawLine.length; i++) {
       const char = rawLine[i];
       buffer += char;
