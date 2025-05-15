@@ -7,11 +7,11 @@ import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from
 const isMac = process.platform === "darwin";
 const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
 
-export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
+export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
   return {
     videoId,
-    part:
+    videoPart:
       `[${inputIndex}:v]` +
       [
         mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
@@ -25,6 +25,20 @@ export const getPart = (inputIndex: number, mediaType: BeatMediaType, duration: 
         .filter((a) => a)
         .join(",") +
       `[${videoId}]`,
+  };
+};
+
+export const getAudioPart = (inputIndex: number, duration: number, delay: number) => {
+  const audioId = `a${inputIndex}`;
+
+  return {
+    audioId,
+    audioPart:
+      `[${inputIndex}:a]` +
+      `atrim=duration=${duration},` + // Trim to beat duration
+      `adelay=${delay}|${delay},` +
+      `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
+      `[${audioId}]`,
   };
 };
 
@@ -70,32 +84,27 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
 
     // Add each image input
-    const partsFromBeats = studio.beats.reduce(
-      (acc, beat, index) => {
-        if (!beat.imageFile || !beat.duration) {
-          throw new Error(`beat.imageFile is not set: index=${index}`);
-        }
-        const inputIndex = addInput(beat.imageFile);
-        const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-        const addPadding = index === 0 || index === studio.beats.length - 1;
-        const duration = beat.duration + (addPadding ? padding : 0);
-        const { videoId, part } = getPart(inputIndex, mediaType, duration, canvasInfo);
-        if (mediaType === "movie") {
-          const audioId = `a${inputIndex}`;
-          const delay = acc.timestamp * 1000;
-          acc.parts.push(
-            `[${inputIndex}:a]` +
-              `atrim=duration=${duration},` + // Trim to beat duration
-              `adelay=${delay}|${delay},` +
-              `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
-              `[${audioId}]`,
-          );
-          acc.audioIds.push(audioId);
-        }
-        return { ...acc, timestamp: acc.timestamp + duration, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, part] };
-      },
-      { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
-    );
+    const partsFromBeats: { videoIds: string[]; parts: string[]; audioIds: string[] } = { videoIds: [], parts: [], audioIds: [] };
+
+    studio.beats.reduce((timestamp, beat, index) => {
+      if (!beat.imageFile || !beat.duration) {
+        throw new Error(`beat.imageFile is not set: index=${index}`);
+      }
+      const inputIndex = addInput(beat.imageFile);
+      const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
+      const headOrTail = index === 0 || index === studio.beats.length - 1;
+      const duration = beat.duration + (headOrTail ? padding : 0);
+      const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
+      partsFromBeats.videoIds.push(videoId);
+      partsFromBeats.parts.push(videoPart);
+
+      if (mediaType === "movie") {
+        const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp * 1000);
+        partsFromBeats.audioIds.push(audioId);
+        partsFromBeats.parts.push(audioPart);
+      }
+      return timestamp + duration;
+    }, 0);
     // console.log("*** images", images.audioIds);
 
     const filterComplexParts = partsFromBeats.parts;
