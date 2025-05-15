@@ -2,6 +2,14 @@
 
 A CLI tool for generating podcast and video content from script files. Automates the process of creating audio, images, and video from structured script files.
 
+## What is MulmoScript?
+
+**MulmoScript** is a simple JSON/YAML format for describing multi-modal content.  
+You can define speakers, text, images, and layout — all in one script.
+
+Sample scripts are available in [./docs/scripts](./docs/scripts).
+See [MulmoScript Format](#mulmoscript-format) for details on the structure.
+
 ## Installation
 
 ```bash
