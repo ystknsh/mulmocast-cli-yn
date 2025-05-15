@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert";
 
 import { getFileObject } from "../../src/cli/cli.js";
+import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -22,4 +23,41 @@ test("test getFileObject", async () => {
     fileName: "hello",
     fileOrUrl: "hello.yaml",
   });
+});
+
+test("test createOrUpdateStudioData", async () => {
+  const studio = createOrUpdateStudioData(
+    {
+      $mulmocast: {
+        version: "1.0",
+        credit: "closing",
+      },
+      beats: [{ text: "hello" }],
+    },
+    {},
+    "",
+  );
+  // console.log(JSON.stringify(ret));
+  const expect = {
+    script: {
+      $mulmocast: { version: "1.0", credit: "closing" },
+      canvasSize: { width: 1280, height: 720 },
+      speechParams: { provider: "openai", speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
+      beats: [
+        { speaker: "Presenter", text: "hello" },
+        {
+          speaker: "Presenter",
+          text: "",
+          image: {
+            type: "image",
+            source: { kind: "url", url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png" },
+          },
+          audio: { type: "audio", source: { kind: "url", url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/audio/silent300.mp3" } },
+        },
+      ],
+    },
+    filename: "",
+    beats: [{}, {}],
+  };
+  assert.deepStrictEqual(studio, expect);
 });

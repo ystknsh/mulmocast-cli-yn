@@ -84,7 +84,7 @@ const main = async () => {
 
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-  const studio = createOrUpdateStudioData(mulmoScript, fileName, currentStudio?.mulmoData);
+  const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
 
   const context = {
     studio,

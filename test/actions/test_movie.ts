@@ -117,7 +117,7 @@ test("test images", async () => {
       },
     ],
   };
-  const studio = createOrUpdateStudioData(mulmoScript, "hello", fileDirs);
+  const studio = createOrUpdateStudioData(mulmoScript, fileDirs, "hello");
   const context = {
     studio,
     fileDirs,
