@@ -28,7 +28,7 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
   };
 };
 
-export const getAudioPart = (inputIndex, duration, delay) => {
+export const getAudioPart = (inputIndex: number, duration: number, delay: number) => {
   const audioId = `a${inputIndex}`;
 
   return {
