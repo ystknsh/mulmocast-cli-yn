@@ -66,7 +66,6 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const ffmpegContext = {
       command: ffmpeg(),
       inputCount: 0,
-      audioId: "",
     };
 
     function addInput(input: string) {
@@ -115,23 +114,24 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const audioIndex = addInput(audioArtifactFilePath); // Add audio input
     const artifactAudioId = `${audioIndex}:a`;
 
-    if (filterComplexAudioIds.length > 0) {
-      const mainAudioId = "mainaudio";
-      const compositeAudioId = "composite";
-      const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
-      filterComplexParts.push(`[${artifactAudioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
-      filterComplexParts.push(
-        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
-      );
-      ffmpegContext.audioId = `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
-    } else {
-      ffmpegContext.audioId = artifactAudioId;
-    }
+    const ffmpegContextAudioId = (() => {
+      if (filterComplexAudioIds.length > 0) {
+        const mainAudioId = "mainaudio";
+        const compositeAudioId = "composite";
+        const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
+        filterComplexParts.push(`[${artifactAudioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
+        filterComplexParts.push(
+          `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
+        );
+        return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
+      }
+      return artifactAudioId;
+    })();
 
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
       .complexFilter(filterComplexParts)
-      .outputOptions(getOutputOption(ffmpegContext.audioId))
+      .outputOptions(getOutputOption(ffmpegContextAudioId))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
       })
