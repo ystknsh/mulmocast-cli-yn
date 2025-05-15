@@ -17,6 +17,7 @@ import { translate, audio, images, movie, pdf } from "../../src/actions/index.js
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { mulmoScriptSchema } from "../types/schema.js";
+import { MulmoStudio } from "../types/type.js";
 
 export const getFileObject = (_args: { [x: string]: unknown }) => {
   const { basedir, file, outdir, imagedir, audiodir } = _args;
@@ -40,7 +41,7 @@ export const getFileObject = (_args: { [x: string]: unknown }) => {
 const main = async () => {
   const args = getArgs();
   const files = getFileObject(args);
-  const { mulmoFilePath, isHttpPath, fileOrUrl, fileName } = files;
+  const { mulmoFilePath, isHttpPath, fileOrUrl, fileName, outputStudioFilePath } = files;
 
   if (args.v) {
     GraphAILogger.info(files);
@@ -81,7 +82,9 @@ const main = async () => {
     process.exit(1);
   }
 
-  const studio = createOrUpdateStudioData(mulmoScript, fileName, files);
+  // Create or update MulmoStudio file with MulmoScript
+  const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
+  const studio = createOrUpdateStudioData(mulmoScript, fileName, currentStudio?.mulmoData);
 
   const context = {
     studio,
