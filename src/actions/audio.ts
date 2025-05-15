@@ -173,12 +173,11 @@ export const audio = async (context: MulmoStudioContext) => {
   const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
   const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
-  const concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
 
   mkdir(outDirPath);
   mkdir(audioSegmentDirPath);
 
-  graph_data.concurrency = concurrency;
+  graph_data.concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
   const graph = new GraphAI(
     graph_data,
     {
