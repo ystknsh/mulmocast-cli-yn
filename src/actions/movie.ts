@@ -84,26 +84,27 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
 
     // Add each image input
-    const partsFromBeats = studio.beats.reduce(
-      (acc, beat, index) => {
-        if (!beat.imageFile || !beat.duration) {
-          throw new Error(`beat.imageFile is not set: index=${index}`);
-        }
-        const inputIndex = addInput(beat.imageFile);
-        const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-        const addPadding = index === 0 || index === studio.beats.length - 1;
-        const duration = beat.duration + (addPadding ? padding : 0);
-        const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
-        if (mediaType === "movie") {
-          const delay = acc.timestamp * 1000;
-          const { audioId, audioPart } = getAudioPart(inputIndex, duration, delay);
-          acc.parts.push(audioPart);
-          acc.audioIds.push(audioId);
-        }
-        return { ...acc, timestamp: acc.timestamp + duration, videoIds: [...acc.videoIds, videoId], parts: [...acc.parts, videoPart] };
-      },
-      { timestamp: 0, videoIds: [] as string[], parts: [] as string[], audioIds: [] as string[] },
-    );
+    const partsFromBeats: { videoIds: string[]; parts: string[]; audioIds: string[] } = { videoIds: [], parts: [], audioIds: [] };
+
+    studio.beats.reduce((timestamp, beat, index) => {
+      if (!beat.imageFile || !beat.duration) {
+        throw new Error(`beat.imageFile is not set: index=${index}`);
+      }
+      const inputIndex = addInput(beat.imageFile);
+      const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
+      const headOrTail = index === 0 || index === studio.beats.length - 1;
+      const duration = beat.duration + (headOrTail ? padding : 0);
+      const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
+      partsFromBeats.videoIds.push(videoId);
+      partsFromBeats.parts.push(videoPart);
+
+      if (mediaType === "movie") {
+        const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp * 1000);
+        partsFromBeats.audioIds.push(audioId);
+        partsFromBeats.parts.push(audioPart);
+      }
+      return timestamp + duration;
+    }, 0);
     // console.log("*** images", images.audioIds);
 
     const filterComplexParts = partsFromBeats.parts;
