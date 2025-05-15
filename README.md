@@ -30,11 +30,11 @@ brew install ffmpeg
 Create a `.env` file in your project directory with the following API keys:
 
 ### Required
-```
+```bash
 OPENAI_API_KEY=your_openai_api_key
 ```
 ### Optional
-```
+```bash
 DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # for the advanced image generation model
 GOOGLE_PROJECT_ID=your_google_project_id # for Google's image generation model
 NIJIVOICE_API_KEY=your_nijivoice_api_key # for Nijivoice's TTS model
@@ -50,13 +50,13 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # to access web in mulmo-tool
 
 ## Quick Start
 
-```
+```bash
 # Generate script with interactive mode
 mulmo-tool scripting -i -t children_book -o ./ -s story
 ```
 After running this command, you'll create a story script through an interactive conversation with the AI.
 
-```
+```bash
 # Generate both audio and images, then combine into video
 mulmo movie {generated_script_file}
 ```
@@ -65,7 +65,7 @@ Replace `{generated_script_file}` with the output file from the previous command
 ## Generate MulmoScript
 
 ```bash
-# Generate script from web content
+# Generate script from web content (requires Browserless API)
 mulmo-tool scripting -u https://example.com
 
 # Generate script with interactive mode
@@ -121,8 +121,13 @@ https://github.com/receptron/mulmocast-cli/tree/main/scripts
 
 CLI Usage
 
+### `mulmo -h` Output
+Use this command to generate content (audio, images, movie) from an existing MulmoScript.
+
+```bash
+mulmo -h
 ```
-$ mulmo -h
+```bash
 mulmo <action> <file>
 
 Run mulmocast
@@ -144,9 +149,14 @@ Options:
 
 ```
 
-```
-$ mulmo-tool -h
+### `mulmo-tool -h` Output
+Use this command to generate a new MulmoScript from a URL or interactively.
 
+```bash
+mulmo-tool -h
+```
+
+```bash
 mulmo-tool <action>
 
 Run mulmocast tool
