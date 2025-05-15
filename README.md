@@ -65,7 +65,7 @@ Replace `{generated_script_file}` with the output file from the previous command
 ## Generate MulmoScript
 
 ```bash
-# Generate script from web content (requires Browserless API)
+# Generate script from web content (requires Browserless API KEY)
 mulmo-tool scripting -u https://example.com
 
 # Generate script with interactive mode
