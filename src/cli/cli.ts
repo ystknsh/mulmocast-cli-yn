@@ -52,26 +52,22 @@ const main = async () => {
   }
 
   const { action, force, pdf_mode, pdf_size } = args;
-  const readData = await (async () => {
+  const mulmoScript = await (async () => {
     if (isHttpPath) {
       const res = await fetchMulmoScriptFile(fileOrUrl);
       if (!res.result || !res.script) {
         GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
         process.exit(1);
       }
-      return {
-        mulmoData: res.script,
-        fileName,
-      };
+      return res.script;
     }
     if (!fs.existsSync(mulmoFilePath)) {
-      GraphAILogger.info("ERROR: File not exists " + mulmoFilePath);
+      GraphAILogger.info(`ERROR: File not exists ${mulmoFilePath}`);
       process.exit(1);
     }
-    return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath);
+    return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath).mulmoData;
   })();
 
-  const { mulmoData: mulmoScript } = readData;
   // validate mulmoStudioSchema. skip if __test_invalid__ is true
   try {
     if (!mulmoScript?.__test_invalid__) {
