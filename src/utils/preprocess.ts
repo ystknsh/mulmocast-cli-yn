@@ -1,4 +1,4 @@
-import { readMulmoScriptFile, getOutputStudioFilePath } from "./file.js";
+import { readMulmoScriptFile } from "./file.js";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
@@ -18,9 +18,9 @@ const mulmoCredit = (speaker: string) => {
     speaker,
     text: "",
     image: {
-      type: "image" as const ,
+      type: "image" as const,
       source: {
-        kind: "url" as const ,
+        kind: "url" as const,
         url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png",
       },
     },
@@ -34,13 +34,12 @@ const mulmoCredit = (speaker: string) => {
   };
 };
 
-export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outDirPath: string }) => {
-  const { outDirPath } = files;
+export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, fileName: string, files: { outputStudioFilePath: string }) => {
+  const { outputStudioFilePath } = files;
 
   const mulmoScript = mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
   // Create or update MulmoStudio file with MulmoScript
-  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
 
   const studio: MulmoStudio = rebuildStudio(currentStudio?.mulmoData, mulmoScript, fileName);

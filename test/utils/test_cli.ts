@@ -17,7 +17,9 @@ test("test getFileObject", async () => {
     outDirPath: path.resolve(__dirname, "../../output/"),
     imageDirPath: path.resolve(__dirname, "../../output/images"),
     audioDirPath: path.resolve(__dirname, "../../output/audio"),
+    outputStudioFilePath: path.resolve(__dirname, "../../output/hello_studio.json"),
     isHttpPath: false,
+    fileName: "hello",
     fileOrUrl: "hello.yaml",
   });
 });
