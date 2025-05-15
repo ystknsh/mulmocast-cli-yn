@@ -10,7 +10,6 @@ import { getArgs } from "./args.js";
 
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
-import { MulmoScriptMethods } from "../methods/index.js";
 
 import { translate, audio, images, movie, pdf } from "../../src/actions/index.js";
 
@@ -90,13 +89,13 @@ const main = async () => {
     await translate(context);
   }
   if (action === "audio") {
-    await audio(context, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
+    await audio(context);
   }
   if (action === "images") {
     await images(context);
   }
   if (action === "movie") {
-    await audio(context, MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8);
+    await audio(context);
     await images(context);
     await movie(context);
   }

@@ -166,13 +166,15 @@ const agentFilters = [
   },
 ];
 
-export const audio = async (context: MulmoStudioContext, concurrency: number) => {
+export const audio = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
   const { outDirPath, audioDirPath } = fileDirs;
   const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
   const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
   const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+  const concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
+
   mkdir(outDirPath);
   mkdir(audioSegmentDirPath);
 
