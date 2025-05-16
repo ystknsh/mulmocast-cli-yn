@@ -1,16 +1,16 @@
-MulmoCast is a multi-modal presentation tool built for the generative AI era.
+MulmoCast is a multi-modal presentation platform built for the generative AI era.
 
-Traditional tools like PowerPoint and Keynote were designed decades ago for human authors. But today, large language models (LLMs) are the ones creating content—and they need a native environment optimized for them.
+Traditional tools like PowerPoint and Keynote were designed decades ago for human authors. But today, large language models (LLMs) are the ones generating content—and they need a native environment optimized for them.
 
 MulmoCast is that environment.
 
-It enables AI to automatically generate and deliver rich, multi-modal presentations—slides, videos, podcasts, documents, comics—using our open presentation language: MulmoScript.
+It empowers AI to automatically create and deliver rich, multi-modal presentations—including slides, videos, podcasts, documents, and comics—using our open presentation language: MulmoScript.
 
-MulmoScript is a JSON-based “presentation language” that allows LLMs to describe presentations in a structured, machine-friendly format. It supports a wide range of formats: bullet points, charts, graphs, images, voiceovers, and videos. Like HTML for the web, MulmoScript enables interoperability and ecosystem growth.
+MulmoScript is a JSON-based presentation language that lets LLMs describe structured, machine-readable presentations. It supports a wide range of elements: bullet points, charts, graphs, images, voiceovers, and videos. Like HTML did for the web, MulmoScript enables interoperability, customization, and ecosystem growth.
 
-MulmoCast can render it into any presentation format, giving end users complete flexibility: they can choose how to experience the content—whether as a slideshow, podcast, video, or document. It even supports multilingual output, tailored for reading or listening.
+MulmoCast renders this content into any format, giving end users complete flexibility in how they consume it—whether as a slideshow, podcast, video, or document. It even supports multilingual output for both reading and listening.
 
-Here is the market oppurtunity for MumoCast.
-- Enterprise communication (training, reporting, client updates)
-- Education (lecture generation, flipped classrooms)
-- Creator economy (video/podcast automation, multilingual publishing)
+Market Opportunity for MulmoCast:
+	•	Enterprise Communication: training, reporting, client updates
+	•	Education: lecture generation, flipped classrooms, AI tutors
+	•	Creator Economy: video/podcast automation, multilingual publishing, scalable storytelling
