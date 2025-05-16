@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
-import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MultiLingualTexts } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 
 const { default: __, ...vanillaAgents } = agents;
@@ -50,7 +50,7 @@ const translateGraph: GraphData = {
         nodes: {
           // for cache
           multiLingual: {
-            agent: (namedInputs: { rows?: { multiLingualTexts: MultiLingualTexts }[]; index: number }) => {
+            agent: (namedInputs: { rows?: MulmoStudioMultiLingualData[]; index: number }) => {
               return (namedInputs.rows && namedInputs.rows[namedInputs.index]) || {};
             },
             inputs: {
@@ -177,7 +177,7 @@ const translateGraph: GraphData = {
 const localizedTextCacheAgentFilter: AgentFilterFunction<
   DefaultParamsType,
   DefaultResultData,
-  { targetLang: LANG; beat: MulmoBeat; multiLingual: { multiLingualTexts: MultiLingualTexts }; lang: LANG }
+  { targetLang: LANG; beat: MulmoBeat; multiLingual: MulmoStudioMultiLingualData; lang: LANG }
 > = async (context, next) => {
   const { namedInputs } = context;
   const { targetLang, beat, lang, multiLingual } = namedInputs;
