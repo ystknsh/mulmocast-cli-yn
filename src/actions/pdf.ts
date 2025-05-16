@@ -27,7 +27,14 @@ const readImage = async (imagePath: string, pdfDoc: PDFDocument) => {
 
   const ext = path.extname(imagePath).toLowerCase();
 
-  return ext === ".jpg" || ext === ".jpeg" ? await pdfDoc.embedJpg(imageBytes) : await pdfDoc.embedPng(imageBytes);
+  if (ext === ".jpg" || ext === ".jpeg") {
+    return await pdfDoc.embedJpg(imageBytes);
+  }
+  if (ext === ".png") {
+    return await pdfDoc.embedPng(imageBytes);
+  }
+  // workaround. TODO: movie, image should convert to png/jpeg image
+  return await pdfDoc.embedPng(fs.readFileSync("assets/images/mulmocast_credit.png"));
 };
 
 const pdfSlide = async (pageWidth: number, pageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
