@@ -159,7 +159,7 @@
       "speaker": "Presenter",
       "text": "This is a tailwind html format.",
       "image": {
-        "type": "tailwind",
+        "type": "html_tailwind",
         "html": [
           "<main class=\"flex-grow\">",
           "  <!-- Hero Section -->",

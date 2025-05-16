@@ -2,9 +2,9 @@ import { ImageProcessorParams } from "../../types/index.js";
 import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
 
-export const imageType = "tailwind";
+export const imageType = "html_tailwind";
 
-const processTailwind = async (params: ImageProcessorParams) => {
+const processHtmlTailwind = async (params: ImageProcessorParams) => {
   const { beat, imagePath, canvasSize } = params;
   if (!beat.image || beat.image.type !== imageType) return;
 
@@ -20,4 +20,4 @@ const processTailwind = async (params: ImageProcessorParams) => {
   return imagePath;
 };
 
-export const process = processTailwind;
+export const process = processHtmlTailwind;
