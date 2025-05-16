@@ -7,6 +7,7 @@ import {
   mulmoStudioBeatSchema,
   mulmoStoryboardSchema,
   mulmoStoryboardSceneSchema,
+  mulmoStudioMultiLingualSchema,
   speakerDictionarySchema,
   mulmoImageParamsSchema,
   mulmoSpeechParamsSchema,
@@ -17,6 +18,7 @@ import {
   text2ImageProviderSchema,
   text2SpeechProviderSchema,
   mulmoPresentationStyleSchema,
+  multiLingualTextsSchema,
   // for image
   mulmoMermaidMediaSchema,
   mulmoTextSlideMediaSchema,
@@ -48,6 +50,8 @@ export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
 export type MulmoMediaSource = z.infer<typeof mediaSourceSchema>;
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
 export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
+export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSchema>;
+export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
 
 // images
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;

@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
-import { LANG, LocalizedText, MulmoStudioBeat, MulmoStudioContext, MulmoBeat } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MultiLingualTexts } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 
 const { default: __, ...vanillaAgents } = agents;
@@ -30,7 +30,7 @@ const translateGraph: GraphData = {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":studio", { beats: ":beatsMap.mergeBeatData" }],
+        items: [":studio", { multiLingual: ":beatsMap.mergeMultiLingualData" }],
       },
     },
     beatsMap: {
@@ -48,20 +48,21 @@ const translateGraph: GraphData = {
       graph: {
         version: 0.5,
         nodes: {
-          studioBeat: {
-            agent: (namedInputs: { rows: MulmoStudioBeat[]; index: number }) => {
-              return namedInputs.rows[namedInputs.index];
+          // for cache
+          multiLingual: {
+            agent: (namedInputs: { rows?: { multiLingualTexts: MultiLingualTexts }[]; index: number }) => {
+              return (namedInputs.rows && namedInputs.rows[namedInputs.index]) || {};
             },
             inputs: {
               index: ":__mapIndex",
-              rows: ":studio.beats",
+              rows: ":studio.multiLingual",
             },
           },
-          preprocessBeats: {
+          preprocessMultiLingual: {
             agent: "mapAgent",
             inputs: {
               beat: ":beat",
-              studioBeat: ":studioBeat",
+              multiLingual: ":multiLingual",
               rows: ":targetLangs",
               lang: ":lang.text",
               studio: ":studio",
@@ -75,10 +76,10 @@ const translateGraph: GraphData = {
               nodes: {
                 localizedTexts: {
                   inputs: {
-                    targetLang: ":targetLang",
-                    beat: ":beat",
-                    studioBeat: ":studioBeat",
-                    lang: ":lang",
+                    targetLang: ":targetLang", // for cache
+                    beat: ":beat", // for cache
+                    multiLingual: ":multiLingual", // for cache
+                    lang: ":lang", // for cache
                     system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
                     prompt: ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"],
                   },
@@ -146,17 +147,17 @@ const translateGraph: GraphData = {
           mergeLocalizedText: {
             agent: "arrayToObjectAgent",
             inputs: {
-              items: ":preprocessBeats.ttsTexts",
+              items: ":preprocessMultiLingual.ttsTexts",
             },
             params: {
               key: "lang",
             },
           },
-          mergeBeatData: {
+          mergeMultiLingualData: {
             isResult: true,
             agent: "mergeObjectAgent",
             inputs: {
-              items: [":studioBeat", { multiLingualTexts: ":mergeLocalizedText" }],
+              items: [":multiLingual", { multiLingualTexts: ":mergeLocalizedText" }],
             },
           },
         },
@@ -176,20 +177,20 @@ const translateGraph: GraphData = {
 const localizedTextCacheAgentFilter: AgentFilterFunction<
   DefaultParamsType,
   DefaultResultData,
-  { targetLang: LANG; beat: MulmoBeat; studioBeat: MulmoStudioBeat; lang: LANG }
+  { targetLang: LANG; beat: MulmoBeat; multiLingual: { multiLingualTexts: MultiLingualTexts }; lang: LANG }
 > = async (context, next) => {
   const { namedInputs } = context;
-  const { targetLang, beat, lang, studioBeat } = namedInputs;
+  const { targetLang, beat, lang, multiLingual } = namedInputs;
 
   // The original text is unchanged and the target language text is present
   if (
-    studioBeat.multiLingualTexts &&
-    studioBeat.multiLingualTexts[lang] &&
-    studioBeat.multiLingualTexts[lang].text === beat.text &&
-    studioBeat.multiLingualTexts[targetLang] &&
-    studioBeat.multiLingualTexts[targetLang].text
+    multiLingual.multiLingualTexts &&
+    multiLingual.multiLingualTexts[lang] &&
+    multiLingual.multiLingualTexts[lang].text === beat.text &&
+    multiLingual.multiLingualTexts[targetLang] &&
+    multiLingual.multiLingualTexts[targetLang].text
   ) {
-    return { text: studioBeat.multiLingualTexts[targetLang].text };
+    return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   // same language
   if (targetLang === lang) {

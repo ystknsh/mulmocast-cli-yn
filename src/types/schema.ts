@@ -271,19 +271,21 @@ export const mulmoStudioBeatSchema = z
   })
   .strict();
 
+export const mulmoStudioMultiLingualSchema = z
+  .array(
+    z.object({
+      multiLingualTexts: multiLingualTextsSchema,
+    }),
+  )
+  .min(1)
+  .optional();
+
 export const mulmoStudioSchema = z
   .object({
     script: mulmoScriptSchema,
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
-    multiLingual: z
-      .array(
-        z.object({
-          multiLingualTexts: multiLingualTextsSchema,
-        }),
-      )
-      .optional()
-      .min(1),
+    multiLingual: mulmoStudioMultiLingualSchema,
   })
   .strict();
 
