@@ -267,7 +267,7 @@ beats:
         title: "Powerpoint-like Slide Desk"
         bullets: ["Something", "Something else", "Something more", "Something even more"]
   - text: >
-      MulmoScript can also render a mermaid diagram.
+      It is also possible to create a diagram like this using Mermaid.
     image:
       type: mermaid
       title: "Mermaid of MulmoScript"
@@ -285,3 +285,57 @@ beats:
           O_Manga:::ScriptOutput
           O_SwipeAnime:::ScriptOutput
           classDef ScriptOutput stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
+  - text: >
+      It is also possible to create a chart like this.
+    image:
+      type: chart
+      title: Sales and Profits (from Jan to June)
+      chartData:
+        type: bar
+        data:
+          labels:
+            - January
+            - February
+            - March
+            - April
+            - May
+            - June
+          datasets:
+            - label: Revenue ($1000s)
+              data: [120, 135, 180, 155, 170, 190]
+              backgroundColor: rgba(54, 162, 235, 0.5)
+              borderColor: rgba(54, 162, 235, 1)
+              borderWidth: 1
+            - label: Profit ($1000s)
+              data: [45, 52, 68, 53, 61, 73]
+              backgroundColor: rgba(75, 192, 192, 0.5)
+              borderColor: rgba(75, 192, 192, 1)
+              borderWidth: 1
+        options:
+          responsive: true
+          animation: false
+  - text: >
+      Coding examples like this can be also created in MulmoScript.
+      It uses the markdown format to describe it.
+    image:
+      type: markdown
+      markdown: |
+        # Hello World in MulmoScript
+        ### JSON
+        ```json
+        {
+          "$mulmocast": {
+            "version": "1.0",
+          },
+          "beats": [{
+            "text": "Hello World." 
+          }]
+        }
+        ```
+        ### YAML 
+        ```yaml
+        $mulmocast:
+          version: "1.0"
+        beats:
+          - text: "Hello World."
+        ```
