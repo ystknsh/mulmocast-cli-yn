@@ -1,0 +1,11 @@
+MulmoCast is a multi-modal presentation tool for generative AI era. 
+
+Today's tools like PowerPont and Keynotes were designed decade ago for human authors. But now, large langauges models are the ones creating content--and they need their own native envornment. 
+
+MulmoCast is that environment.  It allows AI to generate and deliver rich, multi-modal presentations, slides, videos, podcasts, documents -- automatically, using our open presentation language: MulmoScript.
+
+MulmoScript is a JSON-based "presentation language" that enables large language models to describe multi-modal presentations in a structured text format.
+
+It allows information to be presented in various formats, including bullet points, graphs, charts, images, voiceovers, and videos.
+
+By introducing this intermediate language, we give users the flexibility to choose how they want to experience the presentation—whether as a slide show, podcast, video, or document. It even supports language customization for reading or listening.
