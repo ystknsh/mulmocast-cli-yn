@@ -3,7 +3,6 @@
 import "dotenv/config";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 
 import { getArgs } from "./args.js";
@@ -104,4 +103,3 @@ export const main = async () => {
     await pdf(context, pdf_mode, pdf_size);
   }
 };
-
