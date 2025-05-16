@@ -10,7 +10,7 @@ MulmoScript is a JSON-based presentation language that lets LLMs describe struct
 
 MulmoCast renders this content into any format, giving end users complete flexibility in how they consume it—whether as a slideshow, podcast, video, or document. It even supports multilingual output for both reading and listening.
 
-Market Opportunity for MulmoCast:
+MulmoCast can be used in many markets, such as follwing:
 	•	Enterprise Communication: training, reporting, client updates
 	•	Education: lecture generation, flipped classrooms, AI tutors
 	•	Creator Economy: video/podcast automation, multilingual publishing, scalable storytelling
