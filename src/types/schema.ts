@@ -244,7 +244,7 @@ export const mulmoScriptSchema = mulmoPresentationStyleSchema
     description: z.string().optional(),
     references: z.array(mulmoReferenceSchema).optional(),
     lang: langSchema.optional(), // default "en"
-    beats: z.array(mulmoBeatSchema),
+    beats: z.array(mulmoBeatSchema).min(1),
 
     // TODO: Delete it later
     imagePath: z.string().optional(), // for keynote images movie ??
@@ -268,7 +268,7 @@ export const mulmoStudioSchema = z
   .object({
     script: mulmoScriptSchema,
     filename: z.string(),
-    beats: z.array(mulmoStudioBeatSchema),
+    beats: z.array(mulmoStudioBeatSchema).min(1),
   })
   .strict();
 

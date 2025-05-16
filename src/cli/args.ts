@@ -4,52 +4,54 @@ import { commonOptions } from "./common.js";
 
 import { pdf_modes, pdf_sizes } from "../utils/const.js";
 
-export const args = commonOptions(yargs(hideBin(process.argv)))
-  .scriptName("mulmo")
-  .option("a", {
-    alias: "audiodir",
-    description: "audio dir",
-    demandOption: false,
-    type: "string",
-  })
-  .option("i", {
-    alias: "imagedir",
-    description: "image dir",
-    demandOption: false,
-    type: "string",
-  })
-  .option("f", {
-    alias: "force",
-    description: "force generate",
-    demandOption: false,
-    default: false,
-    type: "boolean",
-  })
-  .option("pdf_mode", {
-    description: "pdf mode",
-    demandOption: false,
-    choices: pdf_modes,
-    type: "string",
-    default: "slide",
-  })
-  .option("pdf_size", {
-    choices: pdf_sizes,
-    default: "letter",
-    describe: "PDF paper size (default: letter for US standard)",
-  })
-  .command("$0 <action> <file>", "Run mulmocast", (yargs) => {
-    return yargs
-      .positional("action", {
-        describe: "action to perform",
-        choices: ["translate", "audio", "images", "movie", "pdf", "preprocess"] as const,
-        type: "string",
-      })
-      .positional("file", {
-        describe: "Mulmo Script File",
-        type: "string",
-      });
-  })
-  .strict()
-  .help()
-  .alias("help", "h")
-  .parseSync();
+export const getArgs = () => {
+  return commonOptions(yargs(hideBin(process.argv)))
+    .scriptName("mulmo")
+    .option("a", {
+      alias: "audiodir",
+      description: "audio dir",
+      demandOption: false,
+      type: "string",
+    })
+    .option("i", {
+      alias: "imagedir",
+      description: "image dir",
+      demandOption: false,
+      type: "string",
+    })
+    .option("f", {
+      alias: "force",
+      description: "force generate",
+      demandOption: false,
+      default: false,
+      type: "boolean",
+    })
+    .option("pdf_mode", {
+      description: "pdf mode",
+      demandOption: false,
+      choices: pdf_modes,
+      type: "string",
+      default: "slide",
+    })
+    .option("pdf_size", {
+      choices: pdf_sizes,
+      default: "letter",
+      describe: "PDF paper size (default: letter for US standard)",
+    })
+    .command("$0 <action> <file>", "Run mulmocast", (yargs) => {
+      return yargs
+        .positional("action", {
+          describe: "action to perform",
+          choices: ["translate", "audio", "images", "movie", "pdf", "preprocess"] as const,
+          type: "string",
+        })
+        .positional("file", {
+          describe: "Mulmo Script File",
+          type: "string",
+        });
+    })
+    .strict()
+    .help()
+    .alias("help", "h")
+    .parseSync();
+};
