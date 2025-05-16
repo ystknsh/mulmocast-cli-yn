@@ -1,12 +1,11 @@
 import { ImageProcessorParams } from "../../types/index.js";
-import { MulmoMediaSourceMethods } from "../../methods/index.js";
 import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
 
 export const imageType = "tailwind";
 
 const processTailwind = async (params: ImageProcessorParams) => {
-  const { beat, imagePath, canvasSize, context, textSlideStyle } = params;
+  const { beat, imagePath, canvasSize } = params;
   if (!beat.image || beat.image.type !== imageType) return;
 
   const html = Array.isArray(beat.image.html) ? beat.image.html.join("\n") : beat.image.html;
