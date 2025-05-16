@@ -4,5 +4,6 @@ import * as pluginImage from "./image.js";
 import * as pluginChart from "./chart.js";
 import * as pluginMermaid from "./mermaid.js";
 import * as pluginMovie from "./movie.js";
+import * as pluginHtmlTailwind from "./html_tailwind.js";
 
-export const imagePlugins = [pluginTextSlide, pluginMarkdown, pluginImage, pluginChart, pluginMermaid, pluginMovie];
+export const imagePlugins = [pluginTextSlide, pluginMarkdown, pluginImage, pluginChart, pluginMermaid, pluginMovie, pluginHtmlTailwind];

@@ -115,6 +115,13 @@ export const mulmoMermaidMediaSchema = z
   })
   .strict();
 
+export const mulmoHtmlTailwindMediaSchema = z
+  .object({
+    type: z.literal("html_tailwind"),
+    html: stringOrStringArray,
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   mulmoMarkdownMediaSchema,
   mulmoWebMediaSchema,
@@ -125,6 +132,7 @@ export const mulmoImageAssetSchema = z.union([
   mulmoTextSlideMediaSchema,
   mulmoChartMediaSchema,
   mulmoMermaidMediaSchema,
+  mulmoHtmlTailwindMediaSchema,
 ]);
 
 const mulmoAudioMediaSchema = z
