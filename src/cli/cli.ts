@@ -11,7 +11,7 @@ import { getArgs } from "./args.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 
-import { translate, audio, images, movie, pdf } from "../../src/actions/index.js";
+import { translate, audio, images, movie, pdf } from "../actions/index.js";
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
@@ -52,7 +52,7 @@ const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl
   return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath).mulmoData;
 };
 
-const main = async () => {
+export const main = async () => {
   const args = getArgs();
   const files = getFileObject(args);
   const { mulmoFilePath, isHttpPath, fileOrUrl, fileName, outputStudioFilePath } = files;
@@ -105,7 +105,3 @@ const main = async () => {
   }
 };
 
-const __filename = fileURLToPath(import.meta.url);
-if (process.argv[1] === __filename) {
-  main();
-}
