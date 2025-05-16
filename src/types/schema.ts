@@ -276,9 +276,14 @@ export const mulmoStudioSchema = z
     script: mulmoScriptSchema,
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
-    multiLingual: z.object({
-      multiLingualTexts: multiLingualTextsSchema.optional(),
-    }),
+    multiLingual: z
+      .array(
+        z.object({
+          multiLingualTexts: multiLingualTextsSchema,
+        }),
+      )
+      .optional()
+      .min(1),
   })
   .strict();
 
