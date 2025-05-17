@@ -19,3 +19,21 @@
 - beatsごとの音声ファイルは_ja suffixをつける（キャッシュのために）
 - StudioBeatのaudioFile/durationは上書きする（実装が複雑になるので言語ごとにわけない）
 - 生成したmovie, pdf, mp3には _ja suffixをつける
+
+
+## 翻訳の流れ
+1. translateコマンドで翻訳する(ターゲットの複数の言語に翻訳）
+2. 翻訳結果を使って指定した（defaultの）言語のaudio（やpdf）を生成する
+
+## 文言の修正方法
+- オリジナルのtextを変更する場合 -> textを修正して、translate（修正1)
+- 翻訳語の表現を直す場合 -> studio.jsonのmultiLingualを修正してauduo/pdfを走らせる（修正2)
+
+## 翻訳対象言語
+- 複数の言語でoutputしたい場合は、langを変えて２を複数回走らせる
+- translateは対象となるtargetLangs変数（TODO: 可変にする)
+- 翻訳は、translateでまとめてすべての言語に翻訳する
+## 注意点
+- studioを修正しても、オリジナルのtextが更新されてtranslateを走らせると（修正2)が上書きされる
+- 翻訳できる言語は、targetLangs のデータセットに依存する
+- targetLangsの翻訳対象を増やして translateすると、増やした言語以外の翻訳も全て上書きされる
