@@ -55,6 +55,7 @@ const combineAudioFilesAgent: AgentFunction<
   
   await new Promise((resolve, reject) => {
     ffmpegContext.command
+      //.complexFilter(complexFilters)
       .on("end", () => {
         resolve(0);
       })
