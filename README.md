@@ -1,4 +1,4 @@
-# mulmocast
+# Mulmocast
 
 A CLI tool for generating podcast and video content from script files (MulmoScript). Automates the process of creating audio, images, and video from structured MulmoScript files.
 
