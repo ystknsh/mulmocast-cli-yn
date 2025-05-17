@@ -10,6 +10,7 @@ import { browserlessCacheGenerator } from "../utils/filters.js";
 import { urlsSchema } from "../types/schema.js";
 import { ScriptingParams } from "../types/index.js";
 import { cliLoadingPlugin } from "../utils/plugins.js";
+import { graphDataScriptFromUrlPrompt } from "../utils/prompt.js";
 
 const { default: __, ...vanillaAgents } = agents;
 const graphData: GraphData = {
@@ -92,7 +93,7 @@ const graphData: GraphData = {
             inputs: {
               model: "gpt-4o",
               system: ":prompt",
-              prompt: "Please create a script using the information from the following URLs as reference: ${:sourceText.text}",
+              prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
             },
           },
           validateMulmoScriptAgent: {
