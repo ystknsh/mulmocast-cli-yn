@@ -12,6 +12,8 @@ import imageOpenaiAgent from "../agents/image_openai_agent.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
+import { imagePrompt } from "../utils/prompt.js";
+
 const { default: __, ...vanillaAgents } = agents;
 
 dotenv.config();
@@ -51,7 +53,7 @@ const imagePreprocessAgent = async (namedInputs: {
     }
   }
 
-  const prompt = (beat.imagePrompt || `generate image appropriate for the text. text: ${beat.text}`) + "\n" + (imageParams.style || "");
+  const prompt = imagePrompt(beat, imageParams.style);
   return { path: imagePath, prompt, ...returnValue };
 };
 
