@@ -1,0 +1,21 @@
+## multiLingual audio/text
+
+## Prerequisites
+
+- The CLI accepts a `-l` or `--lang` option to specify the language.
+- If the corresponding data exists in `multiLingualTexts`, TTS will use that language.
+
+## Implementation
+
+- Each `beat`'s audio file will have a `_ja` suffix (for caching purposes).
+- The `audioFile` and `duration` fields in `StudioBeat` will be overwritten (not separated by language to keep the implementation simple).
+- The generated `movie`, `pdf`, and `mp3` files will also have a `_ja` suffix.
+
+## 前提
+- cliの-l or --lang optionで言語を指定する
+- multiLingualTextsにそのデータがある場合にその言語でttsを動かす
+
+## 実装
+- beatsごとの音声ファイルは_ja suffixをつける（キャッシュのために）
+- StudioBeatのaudioFile/durationは上書きする（実装が複雑になるので言語ごとにわけない）
+- 生成したmovie, pdf, mp3には _ja suffixをつける

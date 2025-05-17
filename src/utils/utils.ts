@@ -1,4 +1,5 @@
 import * as crypto from "crypto";
+import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 
 export const llmAgents = ["openAIAgent", "anthropicAgent", "geminiAgent", "groqAgent"];
 
@@ -41,4 +42,17 @@ export const isHttp = (fileOrUrl: string) => {
 
 export const text2hash = (input: string): string => {
   return crypto.createHash("sha256").update(input).digest("hex");
+};
+
+export const localizedText = (beat: MulmoBeat, multiLingualData?: MulmoStudioMultiLingualData, lang?: string) => {
+  if (
+    lang &&
+    multiLingualData &&
+    multiLingualData?.multiLingualTexts &&
+    multiLingualData?.multiLingualTexts[lang] &&
+    multiLingualData?.multiLingualTexts[lang].text
+  ) {
+    return multiLingualData?.multiLingualTexts[lang].text;
+  }
+  return beat.text;
 };

@@ -3,7 +3,7 @@ import path from "path";
 import { rgb, PDFDocument, PDFFont } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 
-import { chunkArray, isHttp } from "../utils/utils.js";
+import { chunkArray, isHttp, localizedText } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
 
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
@@ -228,7 +228,8 @@ const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boole
 };
 
 export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
-  const { studio, fileDirs } = context;
+  const { studio, fileDirs, lang } = context;
+  const { multiLingual } = studio;
   const { outDirPath } = fileDirs;
 
   const { width: imageWidth, height: imageHeight } = MulmoScriptMethods.getCanvasSize(studio.script);
@@ -238,9 +239,11 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   const { width: pageWidth, height: pageHeight } = outputSize(pdfSize, isLandscapeImage, isRotate);
 
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
-  const texts = studio.script.beats.map((beat) => beat.text);
+  const texts = studio.script.beats.map((beat, index) => {
+    return localizedText(beat, multiLingual?.[index], lang);
+  });
 
-  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
+  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode, lang);
 
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);

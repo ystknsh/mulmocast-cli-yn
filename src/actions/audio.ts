@@ -23,7 +23,7 @@ import {
   getAudioSegmentFilePath,
   resolveMediaSource,
 } from "../utils/file.js";
-import { text2hash } from "../utils/utils.js";
+import { text2hash, localizedText } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -47,19 +47,25 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
 
 const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; audioDirPath: string }) => {
   const { beat, index, context, audioDirPath } = namedInputs;
+  const { lang } = context;
+  const { multiLingual } = context.studio;
   const studioBeat = context.studio.beats[index];
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
   const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
-  const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}`;
+  const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
+
+  const text = localizedText(beat, multiLingual?.[index], lang);
+
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
     studioBeat,
     voiceId,
     speechOptions,
     audioPath,
+    text,
   };
 };
 
@@ -78,7 +84,7 @@ const graph_tts: GraphData = {
       unless: ":beat.audio",
       agent: ":preprocessor.ttsAgent",
       inputs: {
-        text: ":beat.text",
+        text: ":preprocessor.text",
         file: ":preprocessor.audioPath",
         force: ":context.force",
       },
@@ -105,7 +111,6 @@ const graph_data: GraphData = {
       agent: "mapAgent",
       inputs: {
         rows: ":context.studio.script.beats",
-        studio: ":context.studio",
         audioDirPath: ":audioDirPath",
         audioSegmentDirPath: ":audioSegmentDirPath",
         context: ":context",
@@ -167,11 +172,11 @@ const agentFilters = [
 ];
 
 export const audio = async (context: MulmoStudioContext) => {
-  const { studio, fileDirs } = context;
+  const { studio, fileDirs, lang } = context;
   const { outDirPath, audioDirPath } = fileDirs;
   const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
   const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
-  const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename);
+  const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename, lang);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
 
   mkdir(outDirPath);

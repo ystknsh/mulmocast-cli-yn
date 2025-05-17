@@ -64,7 +64,7 @@ export const main = async () => {
     GraphAILogger.setLevelEnabled("warn", false);
   }
 
-  const { action, force, pdf_mode, pdf_size } = args;
+  const { action, force, pdf_mode, pdf_size, lang } = args;
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
 
   // Create or update MulmoStudio file with MulmoScript
@@ -83,8 +83,9 @@ export const main = async () => {
     studio,
     fileDirs: files,
     force: Boolean(force),
+    lang: lang as string | undefined,
   };
-  if (action === "translate") {
+  if (action === "translate" || lang) {
     await translate(context);
   }
   if (action === "audio") {
