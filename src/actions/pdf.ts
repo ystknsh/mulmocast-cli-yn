@@ -228,7 +228,7 @@ const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boole
 };
 
 export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
-  const { studio, fileDirs } = context;
+  const { studio, fileDirs, lang } = context;
   const { outDirPath } = fileDirs;
 
   const { width: imageWidth, height: imageHeight } = MulmoScriptMethods.getCanvasSize(studio.script);
@@ -240,7 +240,7 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
   const texts = studio.script.beats.map((beat) => beat.text);
 
-  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode);
+  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode, lang);
 
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);

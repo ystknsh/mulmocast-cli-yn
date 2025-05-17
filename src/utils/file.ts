@@ -82,11 +82,17 @@ export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string,
 export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp3");
 };
-export const getOutputVideoFilePath = (outDirPath: string, fileName: string) => {
+export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lang?: string) => {
+  if (lang) {
+    return path.resolve(outDirPath, `${fileName}_${lang}.mp4`);
+  }
   return path.resolve(outDirPath, fileName + ".mp4");
 };
-export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode) => {
-  return path.resolve(outDirPath, fileName + "_" + pdfMode + ".pdf");
+export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode, lang?: string) => {
+  if (lang) {
+    return path.resolve(outDirPath, `${fileName}_${pdfMode}_${lang}.pdf`);
+  }
+  return path.resolve(outDirPath, `${fileName}_${pdfMode}.pdf`);
 };
 export const getTemplateFilePath = (templateName: string) => {
   return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
