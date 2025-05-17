@@ -23,6 +23,9 @@ const graphData: GraphData = {
         rows: ":scenes",
         prompt: ":prompt",
       },
+      params: {
+        compositeResult: true,
+      },
       graph: {
         nodes: {
           llm: {
@@ -46,16 +49,13 @@ const graphData: GraphData = {
         },
       },
     },
-    beatJoin: {
-      agent: ({ array }: { array: { json: unknown[] }[] }) => {
-        return array.map((item) => item.json).flat();
-      },
+    beats: {
+      agent: "arrayFlatAgent",
       inputs: {
-        array: ":script",
+        array: ":script.json",
       },
       isResult: true,
     },
-    // TODO: create script file and write it
   },
 };
 
@@ -68,12 +68,12 @@ const generatePrompt = async (templateName: string, beatsPerScene: number, allSc
   const sampleBeats = template.script?.beats;
 
   return `
-Generate a script for the given scenes, following the structure of the sample script below.
+Generate scripts for the given scenes, following the structure of the sample scripts below.
 \`\`\`JSON
 ${JSON.stringify(sampleBeats)}
 \`\`\`
-For each scene, you must generate exactly ${beatsPerScene} beats.
-The beats should be created considering the overall content of the scenes.
+From the content of each scene, generate exactly ${beatsPerScene} scripts (beats).
+The scripts should be created considering the overall content of the scenes.
 The scenes are as follows:
 \`\`\`
 ${allScenes}
@@ -92,7 +92,7 @@ const storyToScript = async ({ story, beatsPerScene, templateName }: { story: Mu
 
   const result = await graph.run();
   // eslint-disable-next-line no-console
-  console.log(JSON.stringify(result.beatJoin, null, 2));
+  console.log(JSON.stringify(result.beats, null, 2));
 };
 
 const main = async () => {
