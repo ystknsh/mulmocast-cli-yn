@@ -58,7 +58,7 @@ BROWSERLESS_API_TOKEN=your_browserless_api_token # to access web in mulmo-tool
   
 - Step 1-2: Interactive conversation with AI
 
-After running the command, you'll engage in an interactive conversation with the AI to create your story script. The AI will guide you through the process and help shape your content based on your inputs. Once completed, a JSON file (like ⁠`story-1746600802426.json`) will be generated.
+  After running the command, you'll engage in an interactive conversation with the AI to create your story script. The AI will guide you through the process and help shape your content based on your inputs. Once completed, a JSON file (like ⁠`story-1746600802426.json`) will be generated.
 
 ### Step 2: Generate both audio and images, then combine into video
 ```bash
