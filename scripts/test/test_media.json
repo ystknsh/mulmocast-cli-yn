@@ -27,13 +27,14 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This slide has no audio",
+      "text": "",
+      "duration": 0.5,
       "image": {
         "type": "textSlide",
         "slide": {
           "title": "No Audio",
           "bullets": [
-            "1 seconds"
+            "0.5 seconds"
           ]
         }
       }
