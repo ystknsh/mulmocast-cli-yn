@@ -55,7 +55,11 @@ const combineAudioFilesAgent: AgentFunction<
   
   await new Promise((resolve, reject) => {
     ffmpegContext.command
-      //.complexFilter(complexFilters)
+      .complexFilter(complexFilters)
+      .outputOptions(['-map', '[aout]'])
+      .audioCodec('libmp3lame')    // or 'pcm_s16le' for wav
+      .format('mp3')               // or 'wav'
+      .output(combinedFileName)
       .on("end", () => {
         resolve(0);
       })
@@ -63,7 +67,7 @@ const combineAudioFilesAgent: AgentFunction<
         GraphAILogger.info("Error while combining MP3 files:", err);
         reject(err);
       })
-      .mergeToFile(combinedFileName, audioDirPath);
+      .run()
   });
 
   return {
