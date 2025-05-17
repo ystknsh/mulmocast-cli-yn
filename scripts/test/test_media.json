@@ -27,12 +27,36 @@
     },
     {
       "speaker": "Presenter",
+      "text": "",
+      "duration": 0.5,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "No Audio",
+          "bullets": ["0.5 seconds"]
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
       "text": "This is a remote image.",
       "image": {
         "type": "image",
         "source": {
           "kind": "url",
           "url": "https://raw.githubusercontent.com/receptron/mulmocast-cli/refs/heads/main/assets/images/mulmocast_credit.png"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "",
+      "duration": 2,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "No Audio",
+          "bullets": ["2 seconds"]
         }
       }
     },
@@ -65,12 +89,6 @@
         }
       }
     },
-    {
-      "speaker": "Presenter",
-      "text": "This is a generated image",
-      "imagePrompt": "Blue sky in Hawaii"
-    },
-
     {
       "speaker": "Presenter",
       "text": "This is a bulleted list in text slide format.",

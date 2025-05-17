@@ -1,7 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
-import { silentPath, silentLastPath } from "../utils/file.js";
+import { silentLastPath, silentPath, silent60secPath } from "../utils/file.js";
 import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextAddFormattedAudio, ffmPegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
@@ -17,12 +17,16 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         if (studioBeat.audioFile) {
           const audioId = FfmpegContextAddFormattedAudio(ffmpegContext, studioBeat.audioFile);
           const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isLastGap ? silentLastPath : silentPath);
-          // TODO: Remove hard-coded 0.8 and 0.3
+          // TODO: Remove hard-coded 0.8 and 0.3. Make it controllable by the script.
           studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + (isLastGap ? 0.8 : 0.3);
           return [audioId, silentId];
         } else {
-          GraphAILogger.error("Missing studioBeat.audioFile:", index);
-          return [];
+          // NOTE: We come here when the text is empty and no audio property is specified.
+          // TODO: Remove hard-coded 1.0
+          studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
+          GraphAILogger.info(`Missing audio for beat ${index}. Treating it as a silent beat for ${studioBeat.duration} seconds.`);
+          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, silent60secPath, studioBeat.duration);
+          return [silentId];
         }
       }),
     )
