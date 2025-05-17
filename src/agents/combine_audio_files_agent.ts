@@ -35,12 +35,17 @@ const combineAudioFilesAgent: AgentFunction<
     });
   };
 
+  const complexFilters: string[] = [];
   const inputIds = (await Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const isLastGap = index === context.studio.beats.length - 2;
       if (studioBeat.audioFile) {
-        const inputId = `[${addInput(studioBeat.audioFile)}:a]`;
-        const silentInputId = `[${addInput(isLastGap ? silentLastPath : silentPath)}:a]`;
+        const audioIndex = addInput(studioBeat.audioFile);
+        const inputId = `[a${audioIndex}]`;
+        complexFilters.push(`[${audioIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${inputId}`);
+        const silentIndex = addInput(isLastGap ? silentLastPath : silentPath);
+        const silentInputId = `[a${silentIndex}]`;
+        complexFilters.push(`[${silentIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${silentInputId}`);
         studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
         return [inputId, silentInputId];
       } else {
@@ -49,9 +54,8 @@ const combineAudioFilesAgent: AgentFunction<
       }
     }),
   )).flat();
-  const complexFilters: string[] = [];
   complexFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
-  console.log(`complexFilters: ${complexFilters}`);
+  console.log(`complexFilters: ${complexFilters.join("\n")}`);
   
   await new Promise((resolve, reject) => {
     ffmpegContext.command
