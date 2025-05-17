@@ -21,7 +21,7 @@ export const renderHTMLToImage = async (html: string, outputPath: string, width:
     await page.waitForFunction(
       () => {
         const el = document.querySelector(".mermaid");
-        return el && el.dataset.ready === "true";
+        return el && (el as HTMLElement).dataset.ready === "true";
       },
       { timeout: 5000 },
     );
