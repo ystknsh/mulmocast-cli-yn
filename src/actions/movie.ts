@@ -3,7 +3,7 @@ import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
-import { FfmpegContextAddInput, FfmpegContextInit } from "../utils/ffmpeg_utils.js";
+import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio } from "../utils/ffmpeg_utils.js";
 
 const isMac = process.platform === "darwin";
 const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
@@ -110,7 +110,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const mainAudioId = "mainaudio";
         const compositeAudioId = "composite";
         const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
-        ffmpegContext.filterComplex.push(`[${artifactAudioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
+        FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
         ffmpegContext.filterComplex.push(
           `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
         );
