@@ -27,6 +27,19 @@
     },
     {
       "speaker": "Presenter",
+      "text": "This slide has no audio",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "No Audio",
+          "bullets": [
+            "1 seconds"
+          ]
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
       "text": "This is a remote image.",
       "image": {
         "type": "image",
@@ -65,12 +78,6 @@
         }
       }
     },
-    {
-      "speaker": "Presenter",
-      "text": "This is a generated image",
-      "imagePrompt": "Blue sky in Hawaii"
-    },
-
     {
       "speaker": "Presenter",
       "text": "This is a bulleted list in text slide format.",
