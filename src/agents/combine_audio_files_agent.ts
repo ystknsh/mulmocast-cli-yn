@@ -57,8 +57,6 @@ const combineAudioFilesAgent: AgentFunction<
     ffmpegContext.command
       .complexFilter(complexFilters)
       .outputOptions(['-map', '[aout]'])
-      .audioCodec('libmp3lame')    // or 'pcm_s16le' for wav
-      .format('mp3')               // or 'wav'
       .output(combinedFileName)
       .on("end", () => {
         resolve(0);
