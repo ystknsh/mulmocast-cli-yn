@@ -78,7 +78,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   studio.beats.reduce((timestamp, beat, index) => {
     if (!beat.imageFile || !beat.duration) {
-      throw new Error(`beat.imageFile is not set: index=${index}`);
+      throw new Error(`beat.imageFile or beat.duration is not set: index=${index}`);
     }
     const inputIndex = FfmpegContextAddInput(ffmpegContext, beat.imageFile);
     const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);

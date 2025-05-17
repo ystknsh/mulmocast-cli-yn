@@ -34,13 +34,16 @@ const provider_to_agent = {
   openai: "ttsOpenaiAgent",
 };
 
-const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string => {
+const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string | undefined => {
   if (beat.audio?.type === "audio") {
     const path = resolveMediaSource(beat.audio.source, context);
     if (path) {
       return path;
     }
     throw new Error("Invalid audio source");
+  }
+  if (beat.text === "") {
+    return undefined;
   }
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
@@ -57,6 +60,7 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
+  const needsTTS = !beat.audio && audioPath !== "";
 
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
@@ -65,6 +69,7 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
     speechOptions,
     audioPath,
     text,
+    needsTTS,
   };
 };
 
@@ -80,7 +85,7 @@ const graph_tts: GraphData = {
       },
     },
     tts: {
-      unless: ":beat.audio",
+      if: ":preprocessor.needsTTS",
       agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":preprocessor.text",
