@@ -76,7 +76,7 @@ mulmo-tool scripting -u https://example.com
 mulmo-tool scripting -i
 ```
 
-When using the `⁠sensei_and_taro` template, a Nijivoice API key is required:
+When using the `⁠sensei_and_taro` template, a Nijivoice API key is required.
 
 ## Generate content from MulmoScript
 
