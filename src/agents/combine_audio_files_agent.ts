@@ -21,8 +21,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + (isLastGap ? 0.8 : 0.3);
           return [audioId, silentId];
         } else {
-          GraphAILogger.error("Missing studioBeat.audioFile:", index);
-          return [];
+          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, silentPath);
+          studioBeat.duration = 0.3;
+          return [silentId];
         }
       }),
     )

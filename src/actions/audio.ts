@@ -60,7 +60,7 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
-  const needsTTS = !beat.audio && audioPath !== "";
+  const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
