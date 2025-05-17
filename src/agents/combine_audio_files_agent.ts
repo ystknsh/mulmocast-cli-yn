@@ -7,9 +7,9 @@ import { silentPath, silentLastPath } from "../utils/file.js";
 const combineAudioFilesAgent: AgentFunction<
   null,
   { studio: MulmoStudio },
-  { context: MulmoStudioContext; combinedFileName: string; audioDirPath: string }
+  { context: MulmoStudioContext; combinedFileName: string }
 > = async ({ namedInputs }) => {
-  const { context, combinedFileName, audioDirPath } = namedInputs;
+  const { context, combinedFileName } = namedInputs;
   const ffmpegContext = {
     command: ffmpeg(),
     inputCount: 0,
