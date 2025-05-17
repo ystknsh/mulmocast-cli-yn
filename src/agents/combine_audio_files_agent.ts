@@ -4,17 +4,15 @@ import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentPath, silentLastPath } from "../utils/file.js";
 
-const combineAudioFilesAgent: AgentFunction<
-  null,
-  { studio: MulmoStudio },
-  { context: MulmoStudioContext; combinedFileName: string }
-> = async ({ namedInputs }) => {
+const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
+  namedInputs,
+}) => {
   const { context, combinedFileName } = namedInputs;
+
   const ffmpegContext = {
     command: ffmpeg(),
     inputCount: 0,
   };
-
   function addInput(input: string) {
     ffmpegContext.command = ffmpegContext.command.input(input);
     ffmpegContext.inputCount++;
@@ -42,27 +40,28 @@ const combineAudioFilesAgent: AgentFunction<
     return audioId;
   }
 
-  const inputIds = (await Promise.all(
-    context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
-      const isLastGap = index === context.studio.beats.length - 2;
-      if (studioBeat.audioFile) {
-        const audioId = pushFormattedAudio(addInput(studioBeat.audioFile));
-        const silentId = pushFormattedAudio(addInput(isLastGap ? silentLastPath : silentPath));
-        studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
-        return [audioId, silentId];
-      } else {
-        GraphAILogger.error("Missing studioBeat.audioFile:", index);
-        return [];
-      }
-    }),
-  )).flat();
+  const inputIds = (
+    await Promise.all(
+      context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
+        const isLastGap = index === context.studio.beats.length - 2;
+        if (studioBeat.audioFile) {
+          const audioId = pushFormattedAudio(addInput(studioBeat.audioFile));
+          const silentId = pushFormattedAudio(addInput(isLastGap ? silentLastPath : silentPath));
+          studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
+          return [audioId, silentId];
+        } else {
+          GraphAILogger.error("Missing studioBeat.audioFile:", index);
+          return [];
+        }
+      }),
+    )
+  ).flat();
   complexFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
-  console.log(`complexFilters: ${complexFilters.join("\n")}`);
-  
+
   await new Promise((resolve, reject) => {
     ffmpegContext.command
       .complexFilter(complexFilters)
-      .outputOptions(['-map', '[aout]'])
+      .outputOptions(["-map", "[aout]"])
       .output(combinedFileName)
       .on("end", () => {
         resolve(0);
@@ -71,7 +70,7 @@ const combineAudioFilesAgent: AgentFunction<
         GraphAILogger.info("Error while combining MP3 files:", err);
         reject(err);
       })
-      .run()
+      .run();
   });
 
   return {
