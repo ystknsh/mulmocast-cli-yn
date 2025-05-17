@@ -33,7 +33,6 @@
     "lint": "eslint src test",
     "build": "tsc",
     "build_test": "tsc && git checkout -- lib/*",
-    "prompt": "npx tsx ./src/tools/prompt.ts",
     "cli": "npx tsx ./src/cli/run.ts",
     "scripting": "npx tsx ./src/cli/tool-cli.ts scripting",
     "dump_prompt": "npx tsx ./src/cli/tool-cli.ts prompt",
