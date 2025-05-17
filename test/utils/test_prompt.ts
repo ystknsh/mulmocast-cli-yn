@@ -13,5 +13,3 @@ test("test imagePrompt", async () => {
   const res3 = imagePrompt({ text: "Blue sky in Hawaii" }, "Style appropriate for business environment.");
   assert.equal(res3, "generate image appropriate for the text. text: Blue sky in Hawaii\nStyle appropriate for business environment.");
 });
-
-
