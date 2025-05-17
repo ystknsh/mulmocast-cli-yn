@@ -33,9 +33,7 @@
         "type": "textSlide",
         "slide": {
           "title": "No Audio",
-          "bullets": [
-            "0.5 seconds"
-          ]
+          "bullets": ["0.5 seconds"]
         }
       }
     },
@@ -47,6 +45,18 @@
         "source": {
           "kind": "url",
           "url": "https://raw.githubusercontent.com/receptron/mulmocast-cli/refs/heads/main/assets/images/mulmocast_credit.png"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "",
+      "duration": 2,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "No Audio",
+          "bullets": ["2 seconds"]
         }
       }
     },

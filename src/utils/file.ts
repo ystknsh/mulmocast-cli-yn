@@ -107,6 +107,7 @@ export const mkdir = (dirPath: string) => {
 
 export const silentPath = path.resolve(__dirname, "../../assets/audio/silent300.mp3");
 export const silentLastPath = path.resolve(__dirname, "../../assets/audio/silent800.mp3");
+export const silent60secPath = path.resolve(__dirname, "../../assets/audio/silent60sec.mp3");
 export const defaultBGMPath = path.resolve(__dirname, "../../assets/music/StarsBeyondEx.mp3");
 
 export const getHTMLFile = (filename: string) => {
