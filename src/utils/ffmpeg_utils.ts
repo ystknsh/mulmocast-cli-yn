@@ -20,10 +20,14 @@ export const FfmpegContextAddInput = (context: FfmpegContext, input: string) => 
   return context.inputCount - 1; // returned the index of the input
 };
 
+export const FfmpegContextPushFormattedAudio = (context: FfmpegContext, sourceId: string, outputId: string) => {
+  context.filterComplex.push(`${sourceId}aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${outputId}`);
+};
+
 export const FfmpegContextAddFormattedAudio = (context: FfmpegContext, input: string) => {
   const index = FfmpegContextAddInput(context, input);
   const audioId = `[a${index}]`;
-  context.filterComplex.push(`[${index}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${audioId}`);
+  FfmpegContextPushFormattedAudio(context, `[${index}:a]`, audioId);
   return audioId;
 };
 
