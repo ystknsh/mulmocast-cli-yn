@@ -79,10 +79,13 @@ export const main = async () => {
     }
   })();
 
+  const lang = "ja";
+  // const lang = undefined;
   const context = {
     studio,
     fileDirs: files,
     force: Boolean(force),
+    lang,
   };
   if (action === "translate") {
     await translate(context);

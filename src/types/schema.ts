@@ -6,7 +6,7 @@ const URLStringSchema = z.string().url();
 export const localizedTextSchema = z
   .object({
     text: z.string(),
-    lang: z.string(),
+    lang: langSchema,
     // caption: z.string(),
     texts: z.array(z.string()).optional(),
     ttsTexts: z.array(z.string()).optional(),
