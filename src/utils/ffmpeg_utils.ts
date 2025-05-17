@@ -32,7 +32,7 @@ export const FfmpegContextAddFormattedAudio = (context: FfmpegContext, input: st
   return audioId;
 };
 
-export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: string, options: string[] = []) => {
+export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: string, options: string[] = []): Promise<number> => {
   return new Promise((resolve, reject) => {
     context.command
       .complexFilter(context.filterComplex)
