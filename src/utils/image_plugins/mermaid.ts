@@ -17,7 +17,7 @@ const processMermaid = async (params: ImageProcessorParams) => {
       style: textSlideStyle,
       diagram_code: `${diagram_code}\n${beat.image.appendix?.join("\n") ?? ""}`,
     });
-    await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
+    await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, true);
   }
   return imagePath;
 };

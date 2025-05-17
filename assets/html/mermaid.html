@@ -38,6 +38,10 @@
                 useMaxWidth: true
             }
         });
+        document.addEventListener("DOMContentLoaded", () => {
+            mermaid.init(undefined, ".mermaid");
+            document.querySelector(".mermaid").dataset.ready = "true";
+        });
     </script>
 </head>
 <body>
