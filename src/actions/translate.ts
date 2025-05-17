@@ -8,6 +8,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
+import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -80,8 +81,8 @@ const translateGraph: GraphData = {
                     beat: ":beat", // for cache
                     multiLingual: ":multiLingual", // for cache
                     lang: ":lang", // for cache
-                    system: "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).",
-                    prompt: ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"],
+                    system: translateSystemPrompt,
+                    prompt: translatePrompts,
                   },
                   passThrough: {
                     lang: ":targetLang",

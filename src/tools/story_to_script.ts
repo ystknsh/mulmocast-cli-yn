@@ -5,6 +5,7 @@ import { MulmoStoryboard } from "../types/index.js";
 import { GraphAI, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import * as agents from "@graphai/vanilla";
+import { graphDataScriptGeneratePrompt } from "../utils/prompt.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -33,7 +34,7 @@ const graphData: GraphData = {
             inputs: {
               model: "gpt-4o",
               system: ":prompt",
-              prompt: "Please generate a script from the following scenes: ${:row}",
+              prompt: graphDataScriptGeneratePrompt("${:row}"),
             },
           },
           json: {
@@ -59,7 +60,7 @@ const graphData: GraphData = {
   },
 };
 
-// TODO: refactor this part
+// TODO: refactor this part and move to utils/prompt.ts
 const generatePrompt = async (templateName: string, beatsPerScene: number, allScenes: string) => {
   const templatePath = getTemplateFilePath(templateName);
   const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
