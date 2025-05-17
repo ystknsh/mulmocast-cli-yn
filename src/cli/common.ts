@@ -20,5 +20,12 @@ export const commonOptions = (yargs: Argv) => {
       description: "base dir",
       demandOption: false,
       type: "string",
+    })
+    .option("l", {
+      alias: "lang",
+      description: "target language",
+      choices: ["en", "ja"],
+      demandOption: false,
+      type: "string",
     });
 };

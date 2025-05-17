@@ -75,7 +75,7 @@ export type FileDirs = {
 export type MulmoStudioContext = {
   fileDirs: FileDirs;
   studio: MulmoStudio;
-  lang: string;
+  lang?: string;
   force: boolean;
 };
 

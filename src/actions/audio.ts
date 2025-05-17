@@ -23,7 +23,7 @@ import {
   getAudioSegmentFilePath,
   resolveMediaSource,
 } from "../utils/file.js";
-import { text2hash } from "../utils/utils.js";
+import { text2hash, localizedText } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -57,12 +57,7 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
 
-  const text = (() => {
-    if (multiLingual && multiLingual[index]?.multiLingualTexts[lang] && multiLingual[index]?.multiLingualTexts[lang].text) {
-      return multiLingual[index]?.multiLingualTexts[lang].text;
-    }
-    return beat.text;
-  })();
+  const text = localizedText(beat, multiLingual?.[index], lang);
 
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
