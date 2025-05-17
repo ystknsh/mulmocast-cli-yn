@@ -3,14 +3,14 @@ import ffmpeg from "fluent-ffmpeg";
 export type FfmpegContext = {
   command: ffmpeg.FfmpegCommand;
   inputCount: number;
-  complexFilters: string[];
+  audioFilters: string[];
 };
 
 export const FfmpegContextInit = (): FfmpegContext => {
   return {
     command: ffmpeg(),
     inputCount: 0,
-    complexFilters: [],
+    audioFilters: [],
   };
 };
 
@@ -23,7 +23,7 @@ export const FfmpegContextAddInput = (context: FfmpegContext, input: string) => 
 export const FfmpegContextAddFormattedAudio = (context: FfmpegContext, input: string) => {
   const index = FfmpegContextAddInput(context, input);
   const audioId = `[a${index}]`;
-  context.complexFilters.push(`[${index}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${audioId}`);
+  context.audioFilters.push(`[${index}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${audioId}`);
   return audioId;
 };
 

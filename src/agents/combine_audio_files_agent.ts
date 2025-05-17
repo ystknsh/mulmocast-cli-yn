@@ -42,11 +42,11 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }),
     )
   ).flat();
-  ffmpegContext.complexFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
+  ffmpegContext.audioFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
 
   await new Promise((resolve, reject) => {
     ffmpegContext.command
-      .complexFilter(ffmpegContext.complexFilters)
+      .complexFilter(ffmpegContext.audioFilters)
       .outputOptions(["-map", "[aout]"])
       .output(combinedFileName)
       .on("end", () => {
