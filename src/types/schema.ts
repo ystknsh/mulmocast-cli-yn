@@ -264,7 +264,6 @@ export const mulmoScriptSchema = mulmoPresentationStyleSchema
 
 export const mulmoStudioBeatSchema = z
   .object({
-    multiLingualTexts: multiLingualTextsSchema.optional(),
     hash: z.string().optional(),
     duration: z.number().optional(),
     audioFile: z.string().optional(),
@@ -272,11 +271,18 @@ export const mulmoStudioBeatSchema = z
   })
   .strict();
 
+export const mulmoStudioMultiLingualDataSchema = z.object({
+  multiLingualTexts: multiLingualTextsSchema,
+});
+
+export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1).optional();
+
 export const mulmoStudioSchema = z
   .object({
     script: mulmoScriptSchema,
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
+    multiLingual: mulmoStudioMultiLingualSchema,
   })
   .strict();
 
