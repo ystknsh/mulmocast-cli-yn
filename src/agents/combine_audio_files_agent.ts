@@ -3,21 +3,14 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentPath, silentLastPath } from "../utils/file.js";
+import { FfmpegContextInit, FfmpegContextAddInput } from "../utils/ffmpeg_utils.js";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
   const { context, combinedFileName } = namedInputs;
 
-  const ffmpegContext = {
-    command: ffmpeg(),
-    inputCount: 0,
-  };
-  function addInput(input: string) {
-    ffmpegContext.command = ffmpegContext.command.input(input);
-    ffmpegContext.inputCount++;
-    return ffmpegContext.inputCount - 1; // returned the index of the input
-  }
+  const ffmpegContext = FfmpegContextInit();
 
   const getDuration = (filePath: string, isLastGap: boolean) => {
     return new Promise<number>((resolve, reject) => {
@@ -45,8 +38,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
         const isLastGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
-          const audioId = pushFormattedAudio(addInput(studioBeat.audioFile));
-          const silentId = pushFormattedAudio(addInput(isLastGap ? silentLastPath : silentPath));
+          const audioId = pushFormattedAudio(FfmpegContextAddInput(ffmpegContext, studioBeat.audioFile));
+          const silentId = pushFormattedAudio(FfmpegContextAddInput(ffmpegContext, isLastGap ? silentLastPath : silentPath));
           studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
           return [audioId, silentId];
         } else {
