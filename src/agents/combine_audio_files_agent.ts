@@ -36,7 +36,7 @@ const combineAudioFilesAgent: AgentFunction<
   };
 
   const complexFilters: string[] = [];
-  function pushAudioFormat(index: number) {
+  function pushFormattedAudio(index: number) {
     const audioId = `[a${index}]`;
     complexFilters.push(`[${index}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${audioId}`);
     return audioId;
@@ -46,8 +46,9 @@ const combineAudioFilesAgent: AgentFunction<
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const isLastGap = index === context.studio.beats.length - 2;
       if (studioBeat.audioFile) {
-        const audioId = pushAudioFormat(addInput(studioBeat.audioFile));
-        const silentId = pushAudioFormat(addInput(isLastGap ? silentLastPath : silentPath));
+        const audioId = pushFormattedAudio(addInput(studioBeat.audioFile));
+        const silentId = pushFormattedAudio(addInput(isLastGap ? silentLastPath : silentPath));
+        studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
         return [audioId, silentId];
       } else {
         GraphAILogger.error("Missing studioBeat.audioFile:", index);
