@@ -4,7 +4,7 @@ import puppeteer from "puppeteer";
 
 const isCI = process.env.CI === "true";
 
-export const renderHTMLToImage = async (html: string, outputPath: string, width: number, height: number) => {
+export const renderHTMLToImage = async (html: string, outputPath: string, width: number, height: number, isMermaid: boolean = false) => {
   // Use Puppeteer to render HTML to an image
   const browser = await puppeteer.launch({
     args: isCI ? ["--no-sandbox"] : [],
@@ -17,6 +17,15 @@ export const renderHTMLToImage = async (html: string, outputPath: string, width:
   // Adjust page settings if needed (like width, height, etc.)
   await page.setViewport({ width, height });
 
+  if (isMermaid) {
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector(".mermaid");
+        return el && el.dataset.ready === "true";
+      },
+      { timeout: 5000 },
+    );
+  }
   // Step 3: Capture screenshot of the page (which contains the Markdown-rendered HTML)
   await page.screenshot({ path: outputPath });
 
