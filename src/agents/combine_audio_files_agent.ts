@@ -3,7 +3,7 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentPath, silentLastPath } from "../utils/file.js";
-import { FfmpegContextInit, FfmpegContextAddInput } from "../utils/ffmpeg_utils.js";
+import { FfmpegContextInit, FfmpegContextAddInput, FfmpegContextAddFormattedAudio } from "../utils/ffmpeg_utils.js";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
   namedInputs,
@@ -26,20 +26,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     });
   };
 
-  const complexFilters: string[] = [];
-  function pushFormattedAudio(index: number) {
-    const audioId = `[a${index}]`;
-    complexFilters.push(`[${index}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo${audioId}`);
-    return audioId;
-  }
-
   const inputIds = (
     await Promise.all(
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
         const isLastGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
-          const audioId = pushFormattedAudio(FfmpegContextAddInput(ffmpegContext, studioBeat.audioFile));
-          const silentId = pushFormattedAudio(FfmpegContextAddInput(ffmpegContext, isLastGap ? silentLastPath : silentPath));
+          const audioId = FfmpegContextAddFormattedAudio(ffmpegContext, studioBeat.audioFile);
+          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isLastGap ? silentLastPath : silentPath);
           studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
           return [audioId, silentId];
         } else {
@@ -49,11 +42,11 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }),
     )
   ).flat();
-  complexFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
+  ffmpegContext.complexFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
 
   await new Promise((resolve, reject) => {
     ffmpegContext.command
-      .complexFilter(complexFilters)
+      .complexFilter(ffmpegContext.complexFilters)
       .outputOptions(["-map", "[aout]"])
       .output(combinedFileName)
       .on("end", () => {
