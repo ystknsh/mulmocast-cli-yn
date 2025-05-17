@@ -1,4 +1,5 @@
 import ffmpeg from "fluent-ffmpeg";
+import { GraphAILogger } from "graphai";
 
 export type FfmpegContext = {
   command: ffmpeg.FfmpegCommand;
@@ -31,5 +32,25 @@ export const FfmpegContextAddFormattedAudio = (context: FfmpegContext, input: st
   return audioId;
 };
 
-
-
+export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: string, options: string[] = []) => {
+  return new Promise((resolve, reject) => {
+    context.command
+      .complexFilter(context.filterComplex)
+      .outputOptions(options)
+      .output(output)
+      .on("start", (__cmdLine) => {
+        GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
+      })
+      .on("error", (err, stdout, stderr) => {
+        GraphAILogger.error("Error occurred:", err);
+        GraphAILogger.error("FFmpeg stdout:", stdout);
+        GraphAILogger.error("FFmpeg stderr:", stderr);
+        GraphAILogger.info("Video/Audio creation failed. An unexpected error occurred.");
+        reject();
+      })
+      .on("end", () => {
+        resolve(0);
+      })
+      .run();
+  });
+};

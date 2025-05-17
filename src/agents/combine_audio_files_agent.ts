@@ -3,7 +3,7 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import ffmpeg from "fluent-ffmpeg";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentPath, silentLastPath } from "../utils/file.js";
-import { FfmpegContextInit, FfmpegContextAddInput, FfmpegContextAddFormattedAudio } from "../utils/ffmpeg_utils.js";
+import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextAddFormattedAudio } from "../utils/ffmpeg_utils.js";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
   namedInputs,
@@ -44,20 +44,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   ).flat();
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
 
-  await new Promise((resolve, reject) => {
-    ffmpegContext.command
-      .complexFilter(ffmpegContext.filterComplex)
-      .outputOptions(["-map", "[aout]"])
-      .output(combinedFileName)
-      .on("end", () => {
-        resolve(0);
-      })
-      .on("error", (err: unknown) => {
-        GraphAILogger.info("Error while combining MP3 files:", err);
-        reject(err);
-      })
-      .run();
-  });
+  await FfmpegContextGenerateOutput(ffmpegContext, combinedFileName, ["-map", "[aout]"]);
 
   return {
     studio: context.studio,
