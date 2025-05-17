@@ -122,7 +122,6 @@ const graph_data: GraphData = {
     },
     combineFiles: {
       agent: "combineAudioFilesAgent",
-      console: { before: true },
       inputs: {
         map: ":map",
         context: ":context",
