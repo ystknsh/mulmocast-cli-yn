@@ -18,6 +18,7 @@ import { ScriptingParams } from "../types/index.js";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
 import { llmPair } from "../utils/utils.js";
+import { interactiveClarificationPrompt } from "../utils/prompt.js";
 // import { cliLoadingPlugin } from "../utils/plugins.js";
 
 const { default: __, ...vanillaAgents } = agents;
@@ -202,7 +203,6 @@ const graphData = {
   },
 };
 
-const interactiveClarificationPrompt = `If there are any unclear points, be sure to ask the user questions and clarify them before generating the script.`;
 
 const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
   mkdir(cacheDirPath);
