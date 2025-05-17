@@ -35,19 +35,24 @@ const combineAudioFilesAgent: AgentFunction<
     });
   };
 
-  await Promise.all(
+  const inputIds = (await Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const isLastGap = index === context.studio.beats.length - 2;
       if (studioBeat.audioFile) {
-        addInput(studioBeat.audioFile);
-        addInput(isLastGap ? silentLastPath : silentPath);
+        const inputId = `[${addInput(studioBeat.audioFile)}:a]`;
+        const silentInputId = `[${addInput(isLastGap ? silentLastPath : silentPath)}:a]`;
         studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
+        return [inputId, silentInputId];
       } else {
         GraphAILogger.error("Missing studioBeat.audioFile:", index);
+        return [];
       }
     }),
-  );
-
+  )).flat();
+  const complexFilters: string[] = [];
+  complexFilters.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
+  console.log(`complexFilters: ${complexFilters}`);
+  
   await new Promise((resolve, reject) => {
     ffmpegContext.command
       .on("end", () => {
