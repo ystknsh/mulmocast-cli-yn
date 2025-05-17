@@ -54,3 +54,16 @@ export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: stri
       .run();
   });
 };
+
+export const ffmPegGetMediaDuration = (filePath: string) => {
+  return new Promise<number>((resolve, reject) => {
+    ffmpeg.ffprobe(filePath, (err, metadata) => {
+      if (err) {
+        GraphAILogger.info("Error while getting metadata:", err);
+        reject(err);
+      } else {
+        resolve(metadata.format.duration!);
+      }
+    });
+  });
+};
