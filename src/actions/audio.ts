@@ -125,7 +125,6 @@ const graph_data: GraphData = {
         map: ":map",
         context: ":context",
         combinedFileName: ":audioCombinedFilePath",
-        audioDirPath: ":audioDirPath",
       },
       isResult: true,
     },
