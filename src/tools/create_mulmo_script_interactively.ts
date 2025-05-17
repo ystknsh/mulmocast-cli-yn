@@ -18,7 +18,7 @@ import { ScriptingParams } from "../types/index.js";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
 import { llmPair } from "../utils/utils.js";
-import { interactiveClarificationPrompt } from "../utils/prompt.js";
+import { interactiveClarificationPrompt, prefixPrompt } from "../utils/prompt.js";
 // import { cliLoadingPlugin } from "../utils/plugins.js";
 
 const { default: __, ...vanillaAgents } = agents;
@@ -203,7 +203,6 @@ const graphData = {
   },
 };
 
-
 const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
   mkdir(cacheDirPath);
   GraphAILogger.info(`${agentHeader} Scraping ${urls.length} URLs...\n`);
@@ -224,7 +223,6 @@ const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
   if (!result?.sourceText?.text) {
     return "";
   }
-  const prefixPrompt = "Here is the web content that can be used as reference material for the script:";
   return `\n\n${prefixPrompt}\n${result?.sourceText.text}`;
 };
 

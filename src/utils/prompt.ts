@@ -11,6 +11,10 @@ export const graphDataScriptFromUrlPrompt = (sourceTextInput: string) => {
   return `Please create a script using the information from the following URLs as reference: ${sourceTextInput}`;
 };
 
+export const graphDataScriptGeneratePrompt = (scene: string) => {
+  return `Please generate a script from the following scenes: ${scene}`;
+};
+
 export const getMulmoScriptTemplateSystemPrompt = (template: MulmoScriptTemplate) => {
   // script is provided, use it as a script template
   if (template.script) {
@@ -27,3 +31,9 @@ export const getMulmoScriptTemplateSystemPrompt = (template: MulmoScriptTemplate
 };
 
 export const interactiveClarificationPrompt = `If there are any unclear points, be sure to ask the user questions and clarify them before generating the script.`;
+
+export const prefixPrompt = "Here is the web content that can be used as reference material for the script:";
+
+export const translateSystemPrompt = "Please translate the given text into the language specified in language (in locale format, like en, ja, fr, ch).";
+
+export const translatePrompts = ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"];
