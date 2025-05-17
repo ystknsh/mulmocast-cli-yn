@@ -23,6 +23,9 @@ const graphData: GraphData = {
         rows: ":scenes",
         prompt: ":prompt",
       },
+      params: {
+        compositeResult: true,
+      },
       graph: {
         nodes: {
           llm: {
@@ -46,16 +49,13 @@ const graphData: GraphData = {
         },
       },
     },
-    beatJoin: {
-      agent: ({ array }: { array: { json: unknown[] }[] }) => {
-        return array.map((item) => item.json).flat();
-      },
+    beats: {
+      agent: "arrayFlatAgent",
       inputs: {
-        array: ":script",
+        array: ":script.json",
       },
       isResult: true,
     },
-    // TODO: create script file and write it
   },
 };
 
@@ -92,7 +92,7 @@ const storyToScript = async ({ story, beatsPerScene, templateName }: { story: Mu
 
   const result = await graph.run();
   // eslint-disable-next-line no-console
-  console.log(JSON.stringify(result.beatJoin, null, 2));
+  console.log(JSON.stringify(result.beats, null, 2));
 };
 
 const main = async () => {
