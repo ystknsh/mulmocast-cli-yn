@@ -1,3 +1,4 @@
+import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentLastPath, silentPath, silent60secPath } from "../utils/file.js";
@@ -23,6 +24,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           // NOTE: We come here when the text is empty and no audio property is specified.
           // TODO: Remove hard-coded 1.0
           studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
+          GraphAILogger.info(`Missing audio for beat ${index}. Treating it as a silent beat for ${studioBeat.duration} seconds.`);
           const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, silent60secPath, studioBeat.duration);
           return [silentId];
         }

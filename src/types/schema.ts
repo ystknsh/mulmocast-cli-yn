@@ -175,10 +175,10 @@ export const videoParamsSchema = z
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
-    text: z.string(),
+    text: z.string().describe("Text to be spoken. If empty, the audio is not generated."),
     image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),
-    duration: z.number().optional(), // used only when the text is empty
+    duration: z.number().optional().describe("Duration of the beat. Used only when the text is empty"),
 
     imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
