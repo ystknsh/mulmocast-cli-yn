@@ -52,12 +52,12 @@ const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: Mu
   const studioBeat = context.studio.beats[index];
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
-  const hash_string = `${beat.text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
+  const text = localizedText(beat, multiLingual?.[index], lang);
+  const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
 
-  const text = localizedText(beat, multiLingual?.[index], lang);
 
   return {
     ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
