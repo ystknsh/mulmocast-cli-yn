@@ -10,7 +10,16 @@ const combineAudioFilesAgent: AgentFunction<
   { context: MulmoStudioContext; combinedFileName: string; audioDirPath: string }
 > = async ({ namedInputs }) => {
   const { context, combinedFileName, audioDirPath } = namedInputs;
-  const command = ffmpeg();
+  const ffmpegContext = {
+    command: ffmpeg(),
+    inputCount: 0,
+  };
+
+  function addInput(input: string) {
+    ffmpegContext.command = ffmpegContext.command.input(input);
+    ffmpegContext.inputCount++;
+    return ffmpegContext.inputCount - 1; // returned the index of the input
+  }
 
   const getDuration = (filePath: string, isLastGap: boolean) => {
     return new Promise<number>((resolve, reject) => {
@@ -30,8 +39,8 @@ const combineAudioFilesAgent: AgentFunction<
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const isLastGap = index === context.studio.beats.length - 2;
       if (studioBeat.audioFile) {
-        command.input(studioBeat.audioFile);
-        command.input(isLastGap ? silentLastPath : silentPath);
+        addInput(studioBeat.audioFile);
+        addInput(isLastGap ? silentLastPath : silentPath);
         studioBeat.duration = await getDuration(studioBeat.audioFile, isLastGap);
       } else {
         GraphAILogger.error("Missing studioBeat.audioFile:", index);
@@ -40,7 +49,7 @@ const combineAudioFilesAgent: AgentFunction<
   );
 
   await new Promise((resolve, reject) => {
-    command
+    ffmpegContext.command
       .on("end", () => {
         resolve(0);
       })
