@@ -42,7 +42,7 @@ export const getArgs = () => {
       return yargs
         .positional("action", {
           describe: "action to perform",
-          choices: ["translate", "audio", "images", "movie", "pdf", "preprocess"] as const,
+          choices: ["translate", "audio", "images", "movie", "pdf"] as const,
           type: "string",
         })
         .positional("file", {
