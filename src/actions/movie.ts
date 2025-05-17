@@ -75,7 +75,6 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
 
     // Add each image input
-    const filterComplexParts: string[] = [];
     const filterComplexVideoIds: string[] = [];
     const filterComplexAudioIds: string[] = [];
 
@@ -89,19 +88,19 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
       const duration = beat.duration + (headOrTail ? padding : 0);
       const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
       filterComplexVideoIds.push(videoId);
-      filterComplexParts.push(videoPart);
+      ffmpegContext.filterComplex.push(videoPart);
 
       if (mediaType === "movie") {
         const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp * 1000);
         filterComplexAudioIds.push(audioId);
-        filterComplexParts.push(audioPart);
+        ffmpegContext.filterComplex.push(audioPart);
       }
       return timestamp + duration;
     }, 0);
     // console.log("*** images", images.audioIds);
 
     // Concatenate the trimmed images
-    filterComplexParts.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
+    ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
     const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
     const artifactAudioId = `${audioIndex}:a`;
@@ -111,8 +110,8 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
         const mainAudioId = "mainaudio";
         const compositeAudioId = "composite";
         const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
-        filterComplexParts.push(`[${artifactAudioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
-        filterComplexParts.push(
+        ffmpegContext.filterComplex.push(`[${artifactAudioId}]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[${mainAudioId}]`);
+        ffmpegContext.filterComplex.push(
           `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
         );
         return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
@@ -122,7 +121,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
 
     // Apply the filter complex for concatenation and map audio input
     ffmpegContext.command
-      .complexFilter(filterComplexParts)
+      .complexFilter(ffmpegContext.filterComplex)
       .outputOptions(getOutputOption(ffmpegContextAudioId))
       .on("start", (__cmdLine) => {
         GraphAILogger.log("Started FFmpeg ..."); // with command:', cmdLine);
