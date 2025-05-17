@@ -3,6 +3,7 @@ import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
+import { FfmpegContextAddInput, FfmpegContextInit } from "../utils/ffmpeg_utils.js";
 
 const isMac = process.platform === "darwin";
 const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
@@ -63,16 +64,7 @@ const getOutputOption = (audioId: string) => {
 const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio) => {
   return new Promise((resolve, reject) => {
     const start = performance.now();
-    const ffmpegContext = {
-      command: ffmpeg(),
-      inputCount: 0,
-    };
-
-    function addInput(input: string) {
-      ffmpegContext.command = ffmpegContext.command.input(input);
-      ffmpegContext.inputCount++;
-      return ffmpegContext.inputCount - 1; // returned the index of the input
-    }
+    const ffmpegContext = FfmpegContextInit();
 
     if (studio.beats.some((beat) => !beat.imageFile)) {
       GraphAILogger.info("beat.imageFile is not set. Please run `yarn run images ${file}` ");
@@ -91,7 +83,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
       if (!beat.imageFile || !beat.duration) {
         throw new Error(`beat.imageFile is not set: index=${index}`);
       }
-      const inputIndex = addInput(beat.imageFile);
+      const inputIndex = FfmpegContextAddInput(ffmpegContext, beat.imageFile);
       const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
       const headOrTail = index === 0 || index === studio.beats.length - 1;
       const duration = beat.duration + (headOrTail ? padding : 0);
@@ -111,7 +103,7 @@ const createVideo = (audioArtifactFilePath: string, outputVideoPath: string, stu
     // Concatenate the trimmed images
     filterComplexParts.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
 
-    const audioIndex = addInput(audioArtifactFilePath); // Add audio input
+    const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
     const artifactAudioId = `${audioIndex}:a`;
 
     const ffmpegContextAudioId = (() => {
