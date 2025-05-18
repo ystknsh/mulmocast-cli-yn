@@ -1,0 +1,30 @@
+{
+  "title": "American Comic Strips",
+  "description": "Template for Dilbert-style comic strips.",
+  "systemPrompt": "Generate a script for a comic-style presentation of the given topic. Use the JSON below as a template.",
+  "script": {
+    "$mulmocast": {
+      "version": "1.0",
+      "credit": "closing"
+    },
+    "title": "Sample Title",
+    "lang": "en",
+    "canvasSize": {
+      "width": 1536,
+      "height": 1024
+    },
+    "imageParams": {
+      "style": "Style of 1990s American workplace humor. Clean, minimalist line art with muted colors. One character is a nerdy office worker with glasses"
+    },
+    "beats": [
+      {
+        "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time: the Reality Distortion Field. This term has become synonymous with visionary leadership and the ability to accomplish seemingly impossible goals.",
+        "imagePrompt": "A comic strip with a man with a big nose and a big smile, giving a presentation to a group of people."
+      },
+      {
+        "text": "The Reality Distortion Field is a concept that was first introduced by Steve Jobs, the co-founder of Apple. It refers to the ability of a leader to convince people that something is possible, even if it seems impossible.",
+        "imagePrompt": "A comic strips about a man with a very string pursuasion skills."
+      }
+    ]
+  }
+}
