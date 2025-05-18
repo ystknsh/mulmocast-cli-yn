@@ -227,6 +227,6 @@ export const translate = async (context: MulmoStudioContext) => {
 
   const results = await graph.run();
   writingMessage(outputStudioFilePath);
-  context.studio = results.mergeStudioResult
+  context.studio = results.mergeStudioResult;
   // console.log(JSON.stringify(results, null, 2));
 };
