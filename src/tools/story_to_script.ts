@@ -97,15 +97,9 @@ const graphData: GraphData = {
       },
     },
     mergedScript: {
-      agent: ({ beats, scriptInfo }) => {
-        return {
-          ...scriptInfo,
-          beats,
-        };
-      },
+      agent: "mergeObjectAgent",
       inputs: {
-        beats: ":beats.array",
-        scriptInfo: ":scriptInfo.json",
+        items: [":scriptInfo.json", { beats: ":beats.array" }],
       },
     },
     writeJSON: {
