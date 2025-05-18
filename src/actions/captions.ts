@@ -1,5 +1,5 @@
 import { options } from "yargs";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, MulmoBeat } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 
@@ -15,18 +15,18 @@ const graph_data: GraphData = {
       isResult: true,
       params: {
         rowKey: "beat",
-        rowValue: ":context.studio.script.beats[beat]",
+        compositeResult: true,
       },
       graph: {
-        "nodes": {
-          "test": {
-            "agent": "copyAgent",
-            "inputs": {
-              "text": ":beat.text"
+        nodes: {
+          test: {
+            agent: (namedInputs: { beat: MulmoBeat }) => {
+              return namedInputs.beat.text;
             },
-            "console": {
-              "before": true
-            }
+            inputs: {
+              beat: ":beat"
+            },
+            isResult: true
           }
         }
       }
@@ -39,6 +39,7 @@ export const captions = async (context: MulmoStudioContext) => {
   GraphAILogger.info("*** DEBUG: captions:", caption);
   const graph = new GraphAI(graph_data, { ...vanillaAgents });
   graph.injectValue("context", context);
-  await graph.run();
+  const result = await graph.run();
+  GraphAILogger.info("*** DEBUG: captions result:", result.map);
 };
   
