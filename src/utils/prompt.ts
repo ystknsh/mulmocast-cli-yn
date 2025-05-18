@@ -1,4 +1,4 @@
-import { MulmoBeat, MulmoScript, MulmoScriptTemplate } from "../types/index.js";
+import { MulmoBeat, MulmoScript, MulmoScriptTemplate, MulmoStoryboard } from "../types/index.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
@@ -38,7 +38,7 @@ export const translateSystemPrompt = "Please translate the given text into the l
 
 export const translatePrompts = ["## Original Language", ":lang", "", "## Language", ":targetLang", "", "## Target", ":beat.text"];
 
-export const storyToScriptPrompt = ({
+export const sceneToBeatsPrompt = ({
   sampleBeats,
   beatsPerScene,
   allScenes,
@@ -57,5 +57,22 @@ The scenes are as follows:
 \`\`\`
 ${allScenes}
 \`\`\`
+Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`.trim();
+};
+
+export const storyToScriptInfoPrompt = (scriptWithoutBeats: Omit<MulmoScript, "beats">, story: MulmoStoryboard) => {
+  return `Generate script for the given storyboard, following the structure of the sample scripts below.
+Storyboard:
+- title: ${story.title}
+- description: ${story.scenes.map((scene) => scene.description).join("\n")}
+- references: ${story.references?.map((reference) => JSON.stringify(reference)).join("\n")}
+
+Sample script:
+\`\`\`JSON
+${JSON.stringify(scriptWithoutBeats)}
+\`\`\`
+
+Only include keys that exist in the sample script.
+Do not add any keys that are not present in the sample script.
 Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`.trim();
 };
