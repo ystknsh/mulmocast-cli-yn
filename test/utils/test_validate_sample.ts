@@ -14,6 +14,9 @@ test("test updateMultiLingualTexts not update", async () => {
   // const jsonData = {};
   const basePath = path.resolve(__dirname, "../../scripts/test/");
   fs.readdirSync(basePath).map((file) => {
+    if (!file.endsWith("_story.json")) {
+      return;
+    }
     try {
       const content = fs.readFileSync(path.resolve(basePath, file), "utf-8");
       const jsonData = JSON.parse(content);

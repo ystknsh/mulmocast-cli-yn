@@ -11,6 +11,9 @@ import { createMulmoScriptInteractively } from "../tools/create_mulmo_script_int
 import { dumpPromptFromTemplate } from "../tools/dump_prompt.js";
 import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer.js";
 
+import { mulmoScriptSchema } from "../types/schema.js";
+import { zodToJsonSchema } from "zod-to-json-schema";
+
 const main = async () => {
   const { o: outdir, b: basedir, action, v: verbose, i: interactive, s: filename, cache } = args;
   let { t: template } = args;
@@ -54,6 +57,11 @@ const main = async () => {
     }
   } else if (action === "prompt") {
     await dumpPromptFromTemplate({ templateName: template });
+  } else if (action === "schema") {
+    const defaultSchema = zodToJsonSchema(mulmoScriptSchema, {
+      strictUnions: true,
+    });
+    GraphAILogger.info(JSON.stringify(defaultSchema, null, 2));
   } else {
     throw new Error(`Unknown or unsupported action: ${action}`);
   }

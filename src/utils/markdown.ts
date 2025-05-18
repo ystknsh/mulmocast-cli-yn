@@ -23,7 +23,7 @@ export const renderHTMLToImage = async (html: string, outputPath: string, width:
         const el = document.querySelector(".mermaid");
         return el && (el as HTMLElement).dataset.ready === "true";
       },
-      { timeout: 5000 },
+      { timeout: 20000 },
     );
   }
   // Step 3: Capture screenshot of the page (which contains the Markdown-rendered HTML)
