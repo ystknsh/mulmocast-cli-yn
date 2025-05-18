@@ -4,7 +4,14 @@ import puppeteer from "puppeteer";
 
 const isCI = process.env.CI === "true";
 
-export const renderHTMLToImage = async (html: string, outputPath: string, width: number, height: number, isMermaid: boolean = false) => {
+export const renderHTMLToImage = async (
+  html: string,
+  outputPath: string,
+  width: number,
+  height: number,
+  isMermaid: boolean = false,
+  omitBackground: boolean = false,
+) => {
   // Use Puppeteer to render HTML to an image
   const browser = await puppeteer.launch({
     args: isCI ? ["--no-sandbox"] : [],
@@ -27,7 +34,7 @@ export const renderHTMLToImage = async (html: string, outputPath: string, width:
     );
   }
   // Step 3: Capture screenshot of the page (which contains the Markdown-rendered HTML)
-  await page.screenshot({ path: outputPath });
+  await page.screenshot({ path: outputPath, omitBackground: omitBackground });
 
   await browser.close();
   GraphAILogger.info(`HTML image rendered to ${outputPath}`);

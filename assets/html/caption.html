@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      margin: 0;
+      background: transparent;
+    }
+    .container {
+        /* Box styling */
+        width: ${width}px;
+        height: ${height}px;
+        position: relative;
+        margin: 0;
+        box-sizing: border-box;
+        background: transparent;
+      }
+    .bottom-text {
+        /* Text positioned at the bottom */
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        /* Enable text wrapping */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        /* Optional styling */
+        font-family: Arial, sans-serif;
+        font-size: 30px;
+        text-align: center;
+        line-height: 1.4;
+        color: white;
+        text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bottom-text">${caption}</div>
+    </div>
+</body>
+</html>
