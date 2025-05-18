@@ -4,16 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    body{
+      margin: 0;
+      background-color: rgba(0, 0, 0, 0);
+    }
     .container {
         /* Box styling */
-        width: 300px;
-        height: 200px;
+        width: ${width}px;
+        height: ${height}px;
         position: relative;
         margin: 0;
         box-sizing: border-box;
-        background-color: #f5f5f5;
-    }
-    
+        color: blue;
+        background-color: rgba(0, 0, 0, 0);
+      }
     .bottom-text {
         /* Text positioned at the bottom */
         position: absolute;
@@ -31,10 +35,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="bottom-text">
-            This is sample text positioned at the bottom of the box. It will wrap to multiple lines if it exceeds the width of the box.
-            日本語であっても、ちゃんと折り返してくれるかな？
-        </div>
+        <div class="bottom-text">${caption}</div>
     </div>
 </body>
 </html>

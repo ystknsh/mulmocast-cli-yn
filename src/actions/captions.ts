@@ -28,7 +28,11 @@ const graph_data: GraphData = {
               const { canvasSize } = context.studio.script;
               const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
               const template = getHTMLFile("caption");
-              const htmlData = interpolate(template, {});
+              const htmlData = interpolate(template, {
+                caption: beat.text,
+                width: `${canvasSize.width}`,
+                height: `${canvasSize.height}`,
+              });
               await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
               return imagePath;
             },
