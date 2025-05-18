@@ -14,7 +14,7 @@ import { translate, audio, images, movie, pdf } from "../actions/index.js";
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
-import { MulmoStudio } from "../types/type.js";
+import { MulmoStudio, MulmoStudioContext } from "../types/type.js";
 
 export const getFileObject = (_args: { [x: string]: unknown }) => {
   const { basedir, file, outdir, imagedir, audiodir } = _args;
@@ -79,12 +79,12 @@ export const main = async () => {
     }
   })();
 
-  const context = {
+  const context: MulmoStudioContext = {
     studio,
     fileDirs: files,
     force: Boolean(force),
-    lang: lang as string | undefined,
-    caption: caption as string | undefined,
+    lang: lang,
+    caption: caption,
   };
   if (action === "translate" || lang || caption) {
     GraphAILogger.log("run translate");

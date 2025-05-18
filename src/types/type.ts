@@ -77,6 +77,7 @@ export type MulmoStudioContext = {
   studio: MulmoStudio;
   lang?: string;
   force: boolean;
+  caption?: string;
 };
 
 export type ScriptingParams = {
