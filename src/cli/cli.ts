@@ -10,7 +10,7 @@ import { getArgs } from "./args.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 
-import { translate, audio, images, movie, pdf } from "../actions/index.js";
+import { translate, audio, images, movie, pdf, captions } from "../actions/index.js";
 
 import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
@@ -97,6 +97,9 @@ export const main = async () => {
     await images(context);
   }
   if (action === "movie") {
+    if (caption) {
+      await captions(context);
+    }
     await audio(context);
     await images(context);
     await movie(context);
