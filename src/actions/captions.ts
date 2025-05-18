@@ -33,7 +33,7 @@ const graph_data: GraphData = {
                 width: `${canvasSize.width}`,
                 height: `${canvasSize.height}`,
               });
-              await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
+              await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
               return imagePath;
             },
             inputs: {
