@@ -4,10 +4,10 @@ import { openAIAgent } from "@graphai/openai_agent";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
-import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
+import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { readTemplatePrompt, mkdir, writingMessage } from "../utils/file.js";
 import { browserlessCacheGenerator } from "../utils/filters.js";
-import { urlsSchema } from "../types/schema.js";
+import { mulmoScriptSchema, urlsSchema } from "../types/schema.js";
 import { ScriptingParams } from "../types/index.js";
 import { cliLoadingPlugin } from "../utils/plugins.js";
 import { graphDataScriptFromUrlPrompt } from "../utils/prompt.js";
@@ -96,10 +96,11 @@ const graphData: GraphData = {
               prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
             },
           },
-          validateMulmoScriptAgent: {
-            agent: "validateMulmoScriptAgent",
+          validateSchemaAgent: {
+            agent: "validateSchemaAgent",
             inputs: {
               text: ":openAIAgent.text.codeBlock()",
+              schema: mulmoScriptSchema,
             },
             isResult: true,
           },
@@ -108,7 +109,7 @@ const graphData: GraphData = {
               return !isValid && counter < 3;
             },
             inputs: {
-              isValid: ":validateMulmoScriptAgent.isValid",
+              isValid: ":validateSchemaAgent.isValid",
               counter: ":counter",
             },
           },
@@ -116,11 +117,11 @@ const graphData: GraphData = {
       },
     },
     writeJSON: {
-      if: ":mulmoScript.validateMulmoScriptAgent.isValid",
+      if: ":mulmoScript.validateSchemaAgent.isValid",
       agent: "fileWriteAgent",
       inputs: {
         file: "${:outdir}/${:fileName}-${@now}.json",
-        text: ":mulmoScript.validateMulmoScriptAgent.data.toJSON()",
+        text: ":mulmoScript.validateSchemaAgent.data.toJSON()",
       },
       isResult: true,
     },
@@ -147,7 +148,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
       ...vanillaAgents,
       openAIAgent,
       browserlessAgent,
-      validateMulmoScriptAgent,
+      validateSchemaAgent,
       fileWriteAgent,
     },
     { agentFilters },

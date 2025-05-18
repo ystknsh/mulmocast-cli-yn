@@ -14,9 +14,9 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { readTemplatePrompt, mkdir } from "../utils/file.js";
 import { browserlessCacheGenerator } from "../utils/filters.js";
-import { ScriptingParams } from "../types/index.js";
+import { mulmoScriptSchema, ScriptingParams } from "../types/index.js";
 import { browserlessAgent } from "@graphai/browserless_agent";
-import validateMulmoScriptAgent from "../agents/validate_mulmo_script_agent.js";
+import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { llmPair } from "../utils/utils.js";
 import { interactiveClarificationPrompt, prefixPrompt } from "../utils/prompt.js";
 // import { cliLoadingPlugin } from "../utils/plugins.js";
@@ -137,10 +137,11 @@ const graphData = {
             },
             isResult: true,
           },
-          validateMulmoScriptAgent: {
-            agent: "validateMulmoScriptAgent",
+          validateSchemaAgent: {
+            agent: "validateSchemaAgent",
             inputs: {
               text: ":chatAgent.text.codeBlock()",
+              schema: mulmoScriptSchema,
             },
           },
           continue: {
@@ -158,7 +159,7 @@ const graphData = {
             inputs: {
               counter: ":counter",
               codeBlock: ":chatAgent.text.codeBlock()",
-              isValid: ":validateMulmoScriptAgent.isValid",
+              isValid: ":validateSchemaAgent.isValid",
             },
           },
         },
@@ -247,7 +248,7 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
 
   const graph = new GraphAI(
     graphData,
-    { ...vanillaAgents, anthropicAgent, geminiAgent, groqAgent, openAIAgent, textInputAgent, fileWriteAgent, validateMulmoScriptAgent },
+    { ...vanillaAgents, anthropicAgent, geminiAgent, groqAgent, openAIAgent, textInputAgent, fileWriteAgent, validateSchemaAgent },
     { agentFilters },
   );
 
