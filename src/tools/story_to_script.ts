@@ -5,7 +5,7 @@ import { MulmoStoryboard } from "../types/index.js";
 import { GraphAI, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import * as agents from "@graphai/vanilla";
-import { graphDataScriptGeneratePrompt } from "../utils/prompt.js";
+import { graphDataScriptGeneratePrompt, storyToScriptPrompt } from "../utils/prompt.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -60,27 +60,14 @@ const graphData: GraphData = {
   },
 };
 
-// TODO: refactor this part and move to utils/prompt.ts
 const generatePrompt = async (templateName: string, beatsPerScene: number, allScenes: string) => {
   const templatePath = getTemplateFilePath(templateName);
   const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
   const template = mulmoScriptTemplateSchema.parse(rowTemplate);
 
-  const sampleBeats = template.script?.beats;
+  const sampleBeats = template.script?.beats ?? [];
 
-  return `
-Generate scripts for the given scenes, following the structure of the sample scripts below.
-\`\`\`JSON
-${JSON.stringify(sampleBeats)}
-\`\`\`
-From the content of each scene, generate exactly ${beatsPerScene} scripts (beats).
-The scripts should be created considering the overall content of the scenes.
-The scenes are as follows:
-\`\`\`
-${allScenes}
-\`\`\`
-Please provide your response as valid JSON within \`\`\`json code blocks for clarity.
-`.trim();
+  return storyToScriptPrompt({ sampleBeats, beatsPerScene, allScenes });
 };
 
 const storyToScript = async ({ story, beatsPerScene, templateName }: { story: MulmoStoryboard; beatsPerScene: number; templateName: string }) => {
