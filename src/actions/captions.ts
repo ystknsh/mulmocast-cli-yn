@@ -27,9 +27,9 @@ const graph_data: GraphData = {
               const { imageDirPath } = fileDirs;
               const { canvasSize } = context.studio.script;
               const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
-              const template = getHTMLFile("mermaid");
+              const template = getHTMLFile("caption");
               const htmlData = interpolate(template, {});
-              await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, true);
+              await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height);
               return imagePath;
             },
             inputs: {
@@ -47,9 +47,7 @@ const graph_data: GraphData = {
 
 export const captions = async (context: MulmoStudioContext) => {
   const { caption } = context;
-  GraphAILogger.info("*** DEBUG: captions:", caption);
   const graph = new GraphAI(graph_data, { ...vanillaAgents });
   graph.injectValue("context", context);
   const result = await graph.run();
-  GraphAILogger.info("*** DEBUG: captions result:", result.map);
 };
