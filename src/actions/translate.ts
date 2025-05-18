@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
-import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudio } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 
@@ -225,8 +225,10 @@ export const translate = async (context: MulmoStudioContext) => {
   graph.injectValue("outDirPath", outDirPath);
   graph.injectValue("outputStudioFilePath", outputStudioFilePath);
 
-  const results = await graph.run();
+  const results = await graph.run<MulmoStudio>();
   writingMessage(outputStudioFilePath);
-  context.studio = results.mergeStudioResult;
+  if (results.mergeStudioResult) {
+    context.studio = results.mergeStudioResult;
+  }
   // console.log(JSON.stringify(results, null, 2));
 };
