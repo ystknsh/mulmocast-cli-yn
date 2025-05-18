@@ -2,7 +2,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { commonOptions } from "./common.js";
 
-import { pdf_modes, pdf_sizes } from "../utils/const.js";
+import { pdf_modes, pdf_sizes, languages } from "../utils/const.js";
 
 export const getArgs = () => {
   return commonOptions(yargs(hideBin(process.argv)))
@@ -25,6 +25,13 @@ export const getArgs = () => {
       demandOption: false,
       default: false,
       type: "boolean",
+    })
+    .option("c", {
+      alias: "caption",
+      description: "Video captions",
+      choices: languages,
+      demandOption: false,
+      type: "string",
     })
     .option("pdf_mode", {
       description: "pdf mode",

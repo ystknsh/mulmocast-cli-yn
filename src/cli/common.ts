@@ -1,4 +1,5 @@
 import type { Argv } from "yargs";
+import { languages } from "../utils/const.js";
 
 export const commonOptions = (yargs: Argv) => {
   return yargs
@@ -24,7 +25,7 @@ export const commonOptions = (yargs: Argv) => {
     .option("l", {
       alias: "lang",
       description: "target language",
-      choices: ["en", "ja"],
+      choices: languages,
       demandOption: false,
       type: "string",
     });

@@ -33,7 +33,18 @@
 - 複数の言語でoutputしたい場合は、langを変えて２を複数回走らせる
 - translateは対象となるtargetLangs変数（TODO: 可変にする)
 - 翻訳は、translateでまとめてすべての言語に翻訳する
+
 ## 注意点
 - studioを修正しても、オリジナルのtextが更新されてtranslateを走らせると（修正2)が上書きされる
 - 翻訳できる言語は、targetLangs のデータセットに依存する
 - targetLangsの翻訳対象を増やして translateすると、増やした言語以外の翻訳も全て上書きされる
+
+## cli argument
+
+言語が反映される箇所
+
+- -l(--lang)
+  - オーディオの音声(audio)
+  - PDFのテキスト(pdf)
+- --caption
+  -動画のキャプション(未実装）(movie)
