@@ -1,7 +1,8 @@
-import validateMulmoScriptAgent from "../../src/agents/validate_mulmo_script_agent.js";
+import validateSchemaAgent from "../../src/agents/validate_schema_agent.js";
 import test from "node:test";
 import assert from "node:assert";
 import type { GraphAI } from "graphai";
+import { mulmoScriptSchema } from "../../src/types/schema.js";
 
 const validMulmoScriptJson = JSON.stringify({
   $mulmocast: {
@@ -78,20 +79,20 @@ const baseParams = {
   filterParams: {},
 };
 
-test("validateMulmoScriptAgent with valid MulmoScript", async () => {
-  const result = await validateMulmoScriptAgent.agent({
+test("validateSchemaAgent with valid MulmoScript", async () => {
+  const result = await validateSchemaAgent.agent({
     ...baseParams,
-    namedInputs: { text: validMulmoScriptJson },
+    namedInputs: { text: validMulmoScriptJson, schema: mulmoScriptSchema },
   });
   assert(result);
   assert(result.isValid === true);
   assert(result.data !== null);
 });
 
-test("validateMulmoScriptAgent with invalid MulmoScript", async () => {
-  const result = await validateMulmoScriptAgent.agent({
+test("validateSchemaAgent with invalid MulmoScript", async () => {
+  const result = await validateSchemaAgent.agent({
     ...baseParams,
-    namedInputs: { text: invalidMulmoScriptJson },
+    namedInputs: { text: invalidMulmoScriptJson, schema: mulmoScriptSchema },
   });
 
   assert(result);

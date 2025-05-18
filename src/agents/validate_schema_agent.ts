@@ -1,9 +1,11 @@
 import type { AgentFunction, AgentFunctionInfo, DefaultConfigData } from "graphai";
-import { mulmoScriptSchema } from "../types/schema.js";
 import { MulmoScript } from "../types/index.js";
+import { ZodSchema } from "zod";
+import assert from "node:assert";
 
 interface ValidateMulmoScriptInputs {
   text: string;
+  schema: ZodSchema;
 }
 
 interface ValidateMulmoScriptResponse {
@@ -13,16 +15,19 @@ interface ValidateMulmoScriptResponse {
 }
 
 /**
- * MulmoScript JSON validation agent
- * Validates if a JSON string conforms to the MulmoScript schema
+ * Zod schema validation agent
+ * Validates if a JSON string conforms to the Zod schema
  */
-export const validateMulmoScriptAgent: AgentFunction<object, ValidateMulmoScriptResponse, ValidateMulmoScriptInputs, DefaultConfigData> = async ({
+export const validateSchemaAgent: AgentFunction<object, ValidateMulmoScriptResponse, ValidateMulmoScriptInputs, DefaultConfigData> = async ({
   namedInputs,
 }) => {
-  const { text } = namedInputs;
+  const { text, schema } = namedInputs;
+  assert(schema, "schema is required");
+  assert(text, "text is required");
+
   try {
     const jsonData = JSON.parse(text);
-    const parsed = mulmoScriptSchema.parse(jsonData);
+    const parsed = schema.parse(jsonData);
     return {
       isValid: true,
       data: parsed,
@@ -36,14 +41,14 @@ export const validateMulmoScriptAgent: AgentFunction<object, ValidateMulmoScript
 };
 
 const validateMulmoScriptAgentInfo: AgentFunctionInfo = {
-  name: "validateMulmoScriptAgent",
-  agent: validateMulmoScriptAgent,
-  mock: validateMulmoScriptAgent,
+  name: "validateSchemaAgent",
+  agent: validateSchemaAgent,
+  mock: validateSchemaAgent,
   samples: [],
-  description: "Validates if a JSON string conforms to the MulmoScript schema",
+  description: "Validates if a JSON string conforms to the Zod schema",
   category: ["validation"],
   author: "Receptron Team",
-  repository: "https://github.com/receptron/mulmocast-cli/tree/main/src/agents/validate_script_agent.ts",
+  repository: "https://github.com/receptron/mulmocast-cli/tree/main/src/agents/validate_schema_agent.ts",
   license: "MIT",
 };
 
