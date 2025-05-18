@@ -1,5 +1,4 @@
-import { options } from "yargs";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, MulmoBeat } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 
@@ -20,11 +19,17 @@ const graph_data: GraphData = {
       graph: {
         nodes: {
           test: {
-            agent: (namedInputs: { beat: MulmoBeat }) => {
-              return namedInputs.beat.text;
+            agent: (namedInputs: { beat: MulmoBeat, context: MulmoStudioContext, index: number }) => {
+              const { beat, context, index } = namedInputs;
+              const { fileDirs } = namedInputs.context;
+              const { imageDirPath } = fileDirs;
+              const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
+              return imagePath;
             },
             inputs: {
-              beat: ":beat"
+              beat: ":beat",
+              context: ":context",
+              index: ":__mapIndex",
             },
             isResult: true
           }
