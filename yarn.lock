@@ -278,11 +278,6 @@
   resolved "https://registry.npmjs.org/@graphai/llm_utils/-/llm_utils-0.2.0.tgz"
   integrity sha512-8QJxmrbXz2tMPfJVfx0OG4hQzMDLQbs2Mv7sMnYEDbOdZuS11l3kLZeDoA9KGGlts3cT15WjQ/V9tqhT7I24mA==
 
-"@graphai/llm_utils@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@graphai/llm_utils/-/llm_utils-2.0.0.tgz#c0729509eed9b1b4efbbbe33399e5fb9c579f812"
-  integrity sha512-Ub3LxK7zyesQj7Ut3SQQGL9B930kdgATckQVYQA/bqsQ0YJjKiaI3V03uLB5mBXCeI+HidtdN6ODXxPwsTIrYQ==
-
 "@graphai/openai_agent@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@graphai/openai_agent/-/openai_agent-2.0.0.tgz#71aff0dc9e4e85bf93b3c7522e3f93fb7a41b026"
