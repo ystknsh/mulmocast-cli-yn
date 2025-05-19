@@ -17,9 +17,11 @@
         box-sizing: border-box;
         background: transparent;
       }
-    .bottom-text {
+    .caption {
         /* Text positioned at the bottom */
         position: absolute;
+        width: 80%;
+        margin: 0 auto;
         bottom: 10px;
         left: 10px;
         right: 10px;
@@ -28,17 +30,17 @@
         overflow-wrap: break-word;
         /* Optional styling */
         font-family: Arial, sans-serif;
-        font-size: 30px;
+        font-size: 32px;
         text-align: center;
         line-height: 1.4;
         color: white;
-        text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+        text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
     }
   </style>
 </head>
 <body>
     <div class="container">
-        <div class="bottom-text">${caption}</div>
+        <div class="caption">${caption}</div>
     </div>
 </body>
 </html>

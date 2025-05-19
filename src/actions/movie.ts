@@ -60,7 +60,7 @@ const getOutputOption = (audioId: string) => {
   ];
 };
 
-const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio) => {
+const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio, caption: string | undefined) => {
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
@@ -85,8 +85,15 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const headOrTail = index === 0 || index === studio.beats.length - 1;
     const duration = beat.duration + (headOrTail ? padding : 0);
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
-    filterComplexVideoIds.push(videoId);
     ffmpegContext.filterComplex.push(videoPart);
+    if (caption && beat.captionFile) {
+      const captionInputIndex = FfmpegContextAddInput(ffmpegContext, beat.captionFile);
+      const compositeVideoId = `c${index}`;
+      ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
+      filterComplexVideoIds.push(compositeVideoId);
+    } else {
+      filterComplexVideoIds.push(videoId);
+    }
 
     if (mediaType === "movie") {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp * 1000);
@@ -122,11 +129,11 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 };
 
 export const movie = async (context: MulmoStudioContext) => {
-  const { studio, fileDirs } = context;
+  const { studio, fileDirs, caption } = context;
   const { outDirPath } = fileDirs;
   const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
   const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename, context.lang);
 
-  await createVideo(audioArtifactFilePath, outputVideoPath, studio);
+  await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption);
   writingMessage(outputVideoPath);
 };
