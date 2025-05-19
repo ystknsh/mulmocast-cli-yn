@@ -10,29 +10,15 @@ At the core of MulmoCast is **MulmoScript**, a JSON-based intermediate language 
 
 ```mermaid
 flowchart TD
-    S_WebPage["Web-Page"] --> MulmoStoryboard(["MulmoStoryboard"])
-    S_PDF["PDF"] --> MulmoStoryboard
-    S_AIChat["AI Chat"] --> MulmoStoryboard
-    S_TextEditor["Text-Editor"] --> MulmoStoryboard
-    MulmoStoryboard --> MulmoScript(["MulmoScript"])
-    S_Markdown("Markdown") --> MulmoScript
-    S_Keynote("Keynote") --> MulmoScript
-    S_Powerpoint("Powerpoint") --> MulmoScript
-    S_AIChat2("AI Chat") --> MulmoScript
-    S_TextEditor2("Text-Editor") --> MulmoScript
+    S_TextEditor["Creator"] <--> S_AIChat2("LLM")
+    S_AIChat2 --> MulmoScript["MulmoScript"]
     MulmoScript --> MulmoCast["MulmoCast"]
-    MulmoCast --> O_Video("Video") & O_Podcast("Podcast") & O_Slideshow("Slide-Show") & O_PDF("PDF") & O_Manga("Manga") & O_SwipeAnime("Swipe Anime")
+    MulmoCast --> O_Video("Video") & O_Podcast("Podcast") & O_Slideshow("Slideshow") & O_PDF("PDF") & O_Manga("Manga") & O_SwipeAnime("Swipe Anime")
 
-    MulmoCast@{ shape: hex}
-     S_WebPage:::StoryInput
-     S_PDF:::StoryInput
-     S_AIChat:::StoryInput
+    MulmoScript@{ shape: div-proc}
+    MulmoCast@{ shape: trap-t}
      S_TextEditor:::StoryInput
-     S_Markdown:::ScriptInput
-     S_Keynote:::ScriptInput
-     S_Powerpoint:::ScriptInput
      S_AIChat2:::ScriptInput
-     S_TextEditor2:::ScriptInput
      O_Video:::ScriptOutput
      O_Podcast:::ScriptOutput
      O_Slideshow:::ScriptOutput
