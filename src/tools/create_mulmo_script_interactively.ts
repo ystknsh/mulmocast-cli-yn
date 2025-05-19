@@ -2,7 +2,7 @@ import "dotenv/config";
 import { GraphAILogger, GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
-import { streamAgentFilterGenerator } from "@graphai/stream_agent_filters";
+import { consoleStreamDataAgentFilter } from "@graphai/stream_agent_filters/node";
 import type { GraphAILLMStreamData } from "@graphai/llm_utils";
 
 import { openAIAgent } from "@graphai/openai_agent";
@@ -239,17 +239,10 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
   GraphAILogger.log({ agent, model, max_tokens });
 
-  const streamAgentFilter = streamAgentFilterGenerator<GraphAILLMStreamData>((context, data) => {
-    if (data.type === "response.in_progress") {
-      process.stdout.write(String(data.response.output[0].text));
-    } else if (data.type === "response.completed") {
-      process.stdout.write(String("\n"));
-    }
-  });
   const agentFilters = [
     {
-      name: "streamAgentFilter",
-      agent: streamAgentFilter,
+      name: "consoleStreamDataAgentFilter",
+      agent: consoleStreamDataAgentFilter,
       nodeIds: ["chatAgent"],
     },
   ];
