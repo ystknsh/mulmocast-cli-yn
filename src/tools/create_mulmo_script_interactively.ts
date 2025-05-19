@@ -138,6 +138,8 @@ const graphData = {
             isResult: true,
           },
           validateSchemaAgent: {
+            if: ":chatAgent.text.codeBlock()",
+            defaultValue: false,
             agent: "validateSchemaAgent",
             inputs: {
               text: ":chatAgent.text.codeBlock()",
