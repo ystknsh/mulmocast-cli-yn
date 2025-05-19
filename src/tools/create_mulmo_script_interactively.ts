@@ -3,7 +3,7 @@ import { GraphAILogger, GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
 import { streamAgentFilterGenerator } from "@graphai/stream_agent_filters";
-import { GraphAILLMStreamData } from "@graphai/llm_utils";
+import type { GraphAILLMStreamData } from "@graphai/llm_utils";
 
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
