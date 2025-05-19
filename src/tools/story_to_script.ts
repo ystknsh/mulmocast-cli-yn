@@ -12,7 +12,7 @@ import { ZodSchema } from "zod";
 
 const { default: __, ...vanillaAgents } = agents;
 
-const generateScriptWithValidationGraphData = ({ systemPrompt, prompt, schema }: { systemPrompt: string; prompt: string; schema: ZodSchema }) => {
+const createValidatedScriptGraphData = ({ systemPrompt, prompt, schema }: { systemPrompt: string; prompt: string; schema: ZodSchema }) => {
   return {
     loop: {
       while: ":continue",
@@ -90,7 +90,7 @@ const graphData: GraphData = {
               prompt: ":prompt",
               row: ":row",
             },
-            graph: generateScriptWithValidationGraphData({
+            graph: createValidatedScriptGraphData({
               systemPrompt: ":prompt",
               prompt: graphDataScriptGeneratePrompt("${:row}"),
               schema: mulmoScriptSchema.shape.beats,
@@ -121,7 +121,7 @@ const graphData: GraphData = {
       inputs: {
         prompt: ":scriptInfoPrompt",
       },
-      graph: generateScriptWithValidationGraphData({
+      graph: createValidatedScriptGraphData({
         systemPrompt: "",
         prompt: ":prompt",
         schema: mulmoScriptSchema.omit({ beats: true }),
