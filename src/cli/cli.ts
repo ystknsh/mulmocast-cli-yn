@@ -23,7 +23,10 @@ export const getFileObject = (_args: { [x: string]: unknown }) => {
   const { fileOrUrl, fileName } = (() => {
     if (file === "__clipboard") {
       const fileOrUrl = "scripts/test/test_hello.json";
-      const fileName = "foo";
+      const now = new Date();
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      
+      const fileName = `script_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
       return { fileOrUrl, fileName };
     }
     const fileOrUrl = (file as string) ?? "";
