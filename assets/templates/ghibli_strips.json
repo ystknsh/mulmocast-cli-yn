@@ -10,8 +10,8 @@
     "title": "Sample Title",
     "lang": "en",
     "canvasSize": {
-      "width": 1024,
-      "height": 1536
+      "width": 1536,
+      "height": 1024
     },
     "imageParams": {
       "style": "<style>A multi panel comic strips. Ghibli style. The presenter is a young woman with a dark short hair with glasses.</style>"
