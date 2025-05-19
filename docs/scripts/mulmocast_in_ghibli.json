@@ -1,0 +1,70 @@
+{
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
+  "canvasSize": {
+    "width": 1536,
+    "height": 1024
+  },
+  "speechParams": {
+    "provider": "openai",
+    "speakers": {
+      "Presenter": {
+        "displayName": {
+          "en": "Presenter"
+        },
+        "voiceId": "shimmer"
+      }
+    }
+  },
+  "imageParams": {
+    "style": "<style>A multi panel comic strips. Ghibli style. The presenter is a young woman with dark short hair and glasses.</style>",
+    "provider": "openai"
+  },
+  "title": "Introducing MulmoCast: A New Era of Presentations",
+  "references": [],
+  "lang": "en",
+  "beats": [
+    {
+      "speaker": "Presenter",
+      "text": "Hi everyone! Today I’m excited to introduce a brand-new tool designed for a world where humans and AI create together: MulmoCast."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "MulmoCast is a multi-modal presentation tool—reimagined from the ground up for the age of AI. It’s not just for slide decks; it’s built for podcasts, videos, comics, and more."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Traditional tools like PowerPoint and Keynote were built before AI became creative. MulmoCast is different—it’s AI-native, meaning it’s designed with AI as a co-creator."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "At the heart of MulmoCast is something called MulmoScript. Think of it like a screenplay for AI—it tells the AI what to say, show, and animate, across formats."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Here’s the cool part: AI can automatically generate MulmoScript from your notes, documents, or even a conversation. Then it turns that into a podcast, a comic, a narrated video—you name it!"
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Why does this matter? Because the way we consume information is changing. People don’t just sit through slides—they watch, listen, scroll, and interact."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "With MulmoCast, your content meets people where they are—on the train via podcast, in class via slides, or online via video and comics."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "It’s a toolkit for the future of storytelling, where human creativity and AI intelligence combine across every medium."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Whether you're an educator, a marketer, or a curious creator—MulmoCast helps you tell your story in every format, powered by AI."
+    },
+    {
+      "speaker": "Presenter",
+      "text": "MulmoCast isn't just a presentation tool. It's a platform for multi-modal expression in an AI-native world."
+    }
+  ]
+}

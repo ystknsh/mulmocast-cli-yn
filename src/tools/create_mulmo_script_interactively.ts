@@ -2,7 +2,7 @@ import "dotenv/config";
 import { GraphAILogger, GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
-import { consoleStreamDataAgentFilter } from "@graphai/stream_agent_filters/node";
+import { consoleStreamDataAgentFilter } from "@graphai/stream_agent_filter/node";
 
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
