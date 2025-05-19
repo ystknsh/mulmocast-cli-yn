@@ -2,7 +2,7 @@ import "dotenv/config";
 import { GraphAILogger, GraphAI } from "graphai";
 import { textInputAgent } from "@graphai/input_agents";
 
-import { streamAgentFilterGenerator } from "@graphai/agent_filters";
+import { streamAgentFilterGenerator } from "@graphai/stream_agent_filters";
 
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -129,6 +129,7 @@ const graphData = {
             params: {
               model: ":llmModel",
               stream: true,
+              dataStream: true,
               max_tokens: ":maxTokens",
             },
             inputs: {
@@ -237,8 +238,12 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
   GraphAILogger.log({ agent, model, max_tokens });
 
-  const streamAgentFilter = streamAgentFilterGenerator((context, data) => {
-    process.stdout.write(String(data));
+  const streamAgentFilter = streamAgentFilterGenerator<{ type: string; response: { output: { text: string }[] } }>((context, data) => {
+    if (data.type === "response.in_progress") {
+      process.stdout.write(String(data.response.output[0].text));
+    } else if (data.type === "response.completed") {
+      process.stdout.write(String("\n"));
+    }
   });
   const agentFilters = [
     {
