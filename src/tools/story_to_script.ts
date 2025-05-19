@@ -84,7 +84,7 @@ const graphData: GraphData = {
       },
       graph: {
         nodes: {
-          generateScript: {
+          script: {
             agent: "nestedAgent",
             inputs: {
               prompt: ":prompt",
@@ -99,7 +99,7 @@ const graphData: GraphData = {
           json: {
             agent: "copyAgent",
             inputs: {
-              json: ":generateScript.validateSchema.data",
+              json: ":script.validateSchema.data",
             },
             params: {
               namedKey: "json",
