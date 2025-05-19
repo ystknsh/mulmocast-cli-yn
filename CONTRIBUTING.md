@@ -103,6 +103,18 @@ Run ```yarn run translate {path to the script file}```
 
 Run ```yarn run movie {path to the script file}```
 
+## Development Notes
+Parts of the Mulmocast codebase utilize GraphAI technology. For more details about GraphAI, please visit the [GraphAI repository](https://github.com/receptron/graphai).
+
+For example, in [src/actions/images.ts](https://github.com/receptron/mulmocast-cli/blob/main/src/actions/images.ts), we implement GraphAI's `GraphData` to define the data flow for image generation:
+
+```typescript
+const graph_data: GraphData = {
+  // GraphAI data flow definition
+}
+```
+
+The ⁠GraphAILogger used in this project is also a utility provided by the GraphAI framework, as mentioned in the Logging Guidelines section below.
 
 ## Logging Guidelines for Developers
 
