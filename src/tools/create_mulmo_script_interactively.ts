@@ -238,11 +238,11 @@ export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath,
   const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
   GraphAILogger.log({ agent, model, max_tokens });
 
-  const streamAgentFilter = streamAgentFilterGenerator((context, data) => {
+  const streamAgentFilter = streamAgentFilterGenerator<{ type: string; response: { output: { text: string }[] } }>((context, data) => {
     if (data.type === "response.in_progress") {
-      process.stdout.write(String(data.response.output[0].text, null, 2));
+      process.stdout.write(String(data.response.output[0].text));
     } else if (data.type === "response.completed") {
-      console.log("");
+      process.stdout.write(String("\n"));
     }
   });
   const agentFilters = [
