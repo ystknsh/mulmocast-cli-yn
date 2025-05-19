@@ -1,14 +1,59 @@
 import path from "path";
 import { getBaseDirPath, getTemplateFilePath, writingMessage } from "../utils/file.js";
-import { mulmoScriptTemplateSchema, mulmoStoryboardSchema } from "../types/schema.js";
+import { mulmoScriptSchema, mulmoScriptTemplateSchema, mulmoStoryboardSchema } from "../types/schema.js";
 import { MulmoScriptTemplate, MulmoStoryboard } from "../types/index.js";
-import { GraphAI, GraphData } from "graphai";
+import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import * as agents from "@graphai/vanilla";
 import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptInfoPrompt } from "../utils/prompt.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+import validateSchemaAgent from "../agents/validate_schema_agent.js";
+import { ZodSchema } from "zod";
 
 const { default: __, ...vanillaAgents } = agents;
+
+const createValidatedScriptGraphData = ({ systemPrompt, prompt, schema }: { systemPrompt: string; prompt: string; schema: ZodSchema }) => {
+  return {
+    loop: {
+      while: ":continue",
+    },
+    nodes: {
+      counter: {
+        value: 0,
+        update: ":counter.add(1)",
+      },
+      llm: {
+        agent: "openAIAgent",
+        inputs: {
+          model: "gpt-4o",
+          system: systemPrompt,
+          prompt: prompt,
+        },
+      },
+      validateSchema: {
+        agent: "validateSchemaAgent",
+        inputs: {
+          text: ":llm.text.codeBlock()",
+          schema: schema,
+        },
+        isResult: true,
+      },
+      continue: {
+        agent: ({ isValid, counter }: { isValid: boolean; counter: number }) => {
+          if (counter >= 3) {
+            GraphAILogger.error("Failed to generate a valid script. Please try again.");
+            process.exit(1);
+          }
+          return !isValid;
+        },
+        inputs: {
+          counter: ":counter",
+          isValid: ":validateSchema.isValid",
+        },
+      },
+    },
+  };
+};
 
 const graphData: GraphData = {
   version: 0.5,
@@ -39,19 +84,22 @@ const graphData: GraphData = {
       },
       graph: {
         nodes: {
-          // TODO: Validate result
-          llm: {
-            agent: "openAIAgent",
+          script: {
+            agent: "nestedAgent",
             inputs: {
-              model: "gpt-4o",
-              system: ":prompt",
-              prompt: graphDataScriptGeneratePrompt("${:row}"),
+              prompt: ":prompt",
+              row: ":row",
             },
+            graph: createValidatedScriptGraphData({
+              systemPrompt: ":prompt",
+              prompt: graphDataScriptGeneratePrompt("${:row}"),
+              schema: mulmoScriptSchema.shape.beats,
+            }),
           },
           json: {
             agent: "copyAgent",
             inputs: {
-              json: ":llm.text.codeBlock().jsonParse()",
+              json: ":script.validateSchema.data",
             },
             params: {
               namedKey: "json",
@@ -73,33 +121,16 @@ const graphData: GraphData = {
       inputs: {
         prompt: ":scriptInfoPrompt",
       },
-      graph: {
-        // TODO: Validate result
-        nodes: {
-          llm: {
-            agent: "openAIAgent",
-            inputs: {
-              model: "gpt-4o",
-              prompt: ":prompt",
-            },
-          },
-          json: {
-            agent: "copyAgent",
-            inputs: {
-              json: ":llm.text.codeBlock().jsonParse()",
-            },
-            params: {
-              namedKey: "json",
-            },
-            isResult: true,
-          },
-        },
-      },
+      graph: createValidatedScriptGraphData({
+        systemPrompt: "",
+        prompt: ":prompt",
+        schema: mulmoScriptSchema.omit({ beats: true }),
+      }),
     },
     mergedScript: {
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":scriptInfo.json", { beats: ":beats.array" }],
+        items: [":scriptInfo.validateSchema.data", { beats: ":beats.array" }],
       },
     },
     writeJSON: {
@@ -136,7 +167,7 @@ const storyToScript = async ({ story, beatsPerScene, templateName }: { story: Mu
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);
 
-  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, fileWriteAgent });
+  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, fileWriteAgent, validateSchemaAgent });
 
   graph.injectValue("beatsPrompt", beatsPrompt);
   graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);
