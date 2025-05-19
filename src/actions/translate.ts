@@ -183,6 +183,10 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
   const { namedInputs } = context;
   const { targetLang, beat, lang, multiLingual } = namedInputs;
 
+  if (!beat.text) {
+    return { text: "" };
+  }
+
   // The original text is unchanged and the target language text is present
   if (
     multiLingual.multiLingualTexts &&
