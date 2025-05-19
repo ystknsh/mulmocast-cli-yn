@@ -122,4 +122,11 @@ export const main = async () => {
     await images(context);
     await pdf(context, pdf_mode, pdf_size);
   }
+  if (context.studio.script.title) {
+    GraphAILogger.info(context.studio.script.title);
+  }
+  if (context.studio.script.references) {
+    const textOutput = context.studio.script.references.map((reference) => `${reference.title}\n${reference.url}`).join("\n");
+    GraphAILogger.info(textOutput);
+  }
 };
