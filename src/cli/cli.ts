@@ -12,21 +12,25 @@ import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 
 import { translate, audio, images, movie, pdf, captions } from "../actions/index.js";
 
-import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath } from "../utils/file.js";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath, resolveDirPath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { MulmoStudio, MulmoStudioContext } from "../types/type.js";
+import clipboardy from "clipboardy";
 
 export const getFileObject = (_args: { [x: string]: unknown }) => {
   const { basedir, file, outdir, imagedir, audiodir } = _args;
   const baseDirPath = getBaseDirPath(basedir as string);
+  const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
 
   const { fileOrUrl, fileName } = (() => {
     if (file === "__clipboard") {
-      const fileOrUrl = "scripts/test/test_hello.json";
+      // We generate a new unique script file from clipboard text in the output directory
       const now = new Date();
-      const pad = (n: number) => n.toString().padStart(2, '0');
-      
+      const pad = (n: number) => n.toString().padStart(2, "0");
       const fileName = `script_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      const clipboardText = clipboardy.readSync();
+      const fileOrUrl = resolveDirPath(outDirPath, fileName);
+      fs.writeFileSync(fileOrUrl, clipboardText, "utf8");
       return { fileOrUrl, fileName };
     }
     const fileOrUrl = (file as string) ?? "";
@@ -38,7 +42,6 @@ export const getFileObject = (_args: { [x: string]: unknown }) => {
   const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);
   const mulmoFileDirPath = path.dirname(isHttpPath ? baseDirPath : mulmoFilePath);
 
-  const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const imageDirPath = getFullPath(outDirPath, (imagedir as string) ?? imageDirName);
   const audioDirPath = getFullPath(outDirPath, (audiodir as string) ?? audioDirName);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
