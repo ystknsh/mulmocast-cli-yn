@@ -20,8 +20,16 @@ export const getFileObject = (_args: { [x: string]: unknown }) => {
   const { basedir, file, outdir, imagedir, audiodir } = _args;
   const baseDirPath = getBaseDirPath(basedir as string);
 
-  const fileOrUrl = (file as string) ?? "";
-  const fileName = path.parse(fileOrUrl).name;
+  const { fileOrUrl, fileName } = (() => {
+    if (file === "__clipboard") {
+      const fileOrUrl = "scripts/test/test_hello.json";
+      const fileName = "foo";
+      return { fileOrUrl, fileName };
+    }
+    const fileOrUrl = (file as string) ?? "";
+    const fileName = path.parse(fileOrUrl).name;
+    return { fileOrUrl, fileName };
+  })();
   const isHttpPath = isHttp(fileOrUrl);
 
   const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);
