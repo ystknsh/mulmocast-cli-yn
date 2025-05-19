@@ -10,7 +10,7 @@
       "type": "article"
     }
   ],
-"speechParams": {
+  "speechParams": {
     "speakers": {
       "Presenter": {
         "voiceId": "shimmer",
