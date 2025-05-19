@@ -67,6 +67,10 @@ export const fetchMulmoScriptFile = async (url: string) => {
 export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_studio.json");
 };
+export const resolveDirPath = (dirPath: string, studioFileName: string) => {
+  return path.resolve(dirPath, studioFileName);
+};
+// TODO: probably better to just use resolveDirPath instead.
 export const getAudioSegmentDirPath = (audioDirPath: string, studioFileName: string) => {
   return path.resolve(audioDirPath, studioFileName);
 };

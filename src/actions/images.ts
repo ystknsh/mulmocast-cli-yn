@@ -59,7 +59,7 @@ const imagePreprocessAgent = async (namedInputs: {
 
 const graph_data: GraphData = {
   version: 0.5,
-  concurrency: 2,
+  concurrency: 4,
   nodes: {
     context: {},
     imageDirPath: {},

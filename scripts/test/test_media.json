@@ -3,6 +3,13 @@
     "version": "1.0"
   },
   "title": "Media Test",
+  "references": [
+    {
+      "url": "https://www.mulmocast.com",
+      "title": "Mulmocast",
+      "type": "article"
+    }
+  ],
   "speechParams": {
     "speakers": {
       "Presenter": {
