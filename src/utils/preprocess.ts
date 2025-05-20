@@ -9,6 +9,7 @@ const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: Mulm
     script: mulmoScript,
     filename: fileName,
     beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
+    multiLingual: [...Array(mulmoScript.beats.length)].map(() => ({ multiLingualTexts: {} })),
   };
 };
 
@@ -48,6 +49,9 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudi
   mulmoScript.beats.forEach((beat: MulmoBeat, index: number) => {
     // Filling the default values
     studio.script.beats[index] = mulmoBeatSchema.parse(beat);
+    if (!studio.multiLingual[index]) {
+      studio.multiLingual[index] = { multiLingualTexts: {} };
+    }
   });
   return studio;
 };
