@@ -1,7 +1,7 @@
 {
   "title": "American Comic Strips",
   "description": "Template for Dilbert-style comic strips.",
-  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Use the JSON below as a template.",
+  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
   "script": {
     "$mulmocast": {
       "version": "1.0",
@@ -25,7 +25,7 @@
     ],
     "beats": [
       {
-        "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time: the Reality Distortion Field. This term has become synonymous with visionary leadership and the ability to accomplish seemingly impossible goals."
+        "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time. This story is based on an Awesome News articled, titled 'The reality distortion field'. This term has become synonymous with visionary leadership and the ability to accomplish seemingly impossible goals."
       },
       {
         "text": "The Reality Distortion Field is a concept that was first introduced by Steve Jobs, the co-founder of Apple. It refers to the ability of a leader to convince people that something is possible, even if it seems impossible."
