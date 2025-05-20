@@ -1,7 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
-import { silentLastPath, silentPath, silent60secPath } from "../utils/file.js";
+import { silent60secPath } from "../utils/file.js";
 import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmPegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
@@ -26,8 +26,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           })();
           studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + padding;
           if (padding > 0) {
-            const result = FfmpegContextInputFormattedAudio(ffmpegContext, isClosingGap ? silentLastPath : silentPath);
-            return [audioId, result.audioId];
+            ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${padding}[padding_${index}]`);
+            return [audioId, `[padding_${index}]`];
           } else {
             return [audioId];
           }
