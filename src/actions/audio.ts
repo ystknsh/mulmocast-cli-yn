@@ -10,7 +10,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
@@ -48,13 +48,12 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
-const preprocessor = (namedInputs: { beat: MulmoBeat; studioBeat: MulmoStudioBeat, index: number; context: MulmoStudioContext; audioDirPath: string }) => {
-  const { beat, studioBeat, index, context, audioDirPath } = namedInputs;
+const preprocessor = (namedInputs: { beat: MulmoBeat; studioBeat: MulmoStudioBeat; multiLingual: MulmoStudioMultiLingualData,  index: number; context: MulmoStudioContext; audioDirPath: string }) => {
+  const { beat, studioBeat, multiLingual, index, context, audioDirPath } = namedInputs;
   const { lang } = context;
-  const { multiLingual } = context.studio;
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
-  const text = localizedText(beat, multiLingual?.[index], lang);
+  const text = localizedText(beat, multiLingual, lang);
   const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
@@ -79,6 +78,7 @@ const graph_tts: GraphData = {
       inputs: {
         beat: ":beat",
         studioBeat: ":studioBeat",
+        multiLingual: ":multiLingual",
         index: ":__mapIndex",
         context: ":context",
         audioDirPath: ":audioDirPath",
@@ -116,13 +116,14 @@ const graph_data: GraphData = {
       inputs: {
         rows: ":context.studio.script.beats",
         studioBeat: ":context.studio.beats",
+        multiLingual: ":context.studio.multiLingual",
         audioDirPath: ":audioDirPath",
         audioSegmentDirPath: ":audioSegmentDirPath",
         context: ":context",
       },
       params: {
         rowKey: "beat",
-        expandKeys: ["studioBeat"],
+        expandKeys: ["studioBeat", "multiLingual"],
       },
       graph: graph_tts,
     },
