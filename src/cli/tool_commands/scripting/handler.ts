@@ -1,10 +1,10 @@
 import { ToolCliArgs } from "@/src/types/cli_types.js";
 import { getBaseDirPath, getFullPath } from "@/src/utils/file.js";
-import { GraphAILogger } from "graphai";
 import { outDirName, cacheDirName } from "../../../utils/const.js";
 import { getUrlsIfNeeded, selectTemplate } from "@/src/utils/inquirer.js";
 import { createMulmoScriptFromUrl } from "../../../tools/create_mulmo_script_from_url.js";
 import { createMulmoScriptInteractively } from "../../../tools/create_mulmo_script_interactively.js";
+import { setGraphAILogger } from "@/src/utils/cli.js";
 
 export const handler = async (
   argv: ToolCliArgs<{
@@ -31,21 +31,17 @@ export const handler = async (
     template = await selectTemplate();
   }
 
-  if (verbose) {
-    GraphAILogger.info("baseDirPath:", baseDirPath);
-    GraphAILogger.info("outDirPath:", outDirPath);
-    GraphAILogger.info("cacheDirPath:", cacheDirPath);
-    GraphAILogger.info("template:", template);
-    GraphAILogger.info("urls:", urls);
-    GraphAILogger.info("interactive:", interactive);
-    GraphAILogger.info("filename:", filename);
-    GraphAILogger.info("llm_agent:", llm_agent);
-    GraphAILogger.info("llm_model:", llm_model);
-  } else {
-    GraphAILogger.setLevelEnabled("error", false);
-    GraphAILogger.setLevelEnabled("log", false);
-    GraphAILogger.setLevelEnabled("warn", false);
-  }
+  setGraphAILogger(verbose, {
+    baseDirPath,
+    outDirPath,
+    cacheDirPath,
+    template,
+    urls,
+    interactive,
+    filename,
+    llm_agent,
+    llm_model,
+  });
 
   const context = { outDirPath, templateName: template, urls, filename: filename as string, cacheDirPath, llm_model, llm_agent };
 
