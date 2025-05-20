@@ -18,9 +18,7 @@ const cli = yargs(hideBin(process.argv))
     default: false,
     type: "boolean",
   })
-  // TODO: fix type error
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  .command(scriptingCmd as any)
+  .command(scriptingCmd)
   .command(promptCmd)
   .command(schemaCmd)
   .demandCommand()

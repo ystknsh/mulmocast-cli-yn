@@ -11,16 +11,16 @@ export const handler = async (
     o?: string;
     b?: string;
     u?: string[];
-    interactive?: boolean;
-    template?: string;
-    cache?: string;
-    script: string;
+    i?: boolean;
+    t?: string;
+    c?: string;
+    s?: string;
     llm_agent?: string;
     llm_model?: string;
   }>,
 ) => {
-  const { o: outdir, b: basedir, v: verbose, interactive, script: filename, cache, llm_agent, llm_model } = argv;
-  let { template } = argv;
+  const { o: outdir, b: basedir, v: verbose, i: interactive, c: cache, s: filename, llm_agent, llm_model } = argv;
+  let { t: template } = argv;
   const urls = argv.u || [];
 
   const baseDirPath = getBaseDirPath(basedir as string);
@@ -47,7 +47,7 @@ export const handler = async (
     GraphAILogger.setLevelEnabled("warn", false);
   }
 
-  const context = { outDirPath, templateName: template, urls, filename, cacheDirPath, llm_model, llm_agent };
+  const context = { outDirPath, templateName: template, urls, filename: filename as string, cacheDirPath, llm_model, llm_agent };
 
   if (interactive) {
     await createMulmoScriptInteractively(context);
