@@ -59,7 +59,7 @@ export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: stri
   });
 };
 
-export const ffmPegGetMediaDuration = (filePath: string) => {
+export const ffmpegGetMediaDuration = (filePath: string) => {
   return new Promise<number>((resolve, reject) => {
     ffmpeg.ffprobe(filePath, (err, metadata) => {
       if (err) {

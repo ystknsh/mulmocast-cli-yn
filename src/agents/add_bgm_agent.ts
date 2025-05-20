@@ -1,7 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoScript } from "../types/index.js";
-import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextGenerateOutput, ffmPegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextGenerateOutput, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: string; outputFile: string; script: MulmoScript }> = async ({
   namedInputs,
@@ -10,7 +10,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const { voiceFile, outputFile, script } = namedInputs;
   const { musicFile } = params;
 
-  const speechDuration = await ffmPegGetMediaDuration(voiceFile);
+  const speechDuration = await ffmpegGetMediaDuration(voiceFile);
   const introPadding = script.audioParams.introPadding;
   const outroPadding = script.audioParams.outroPadding;
   const totalDuration = speechDuration + introPadding + outroPadding;
