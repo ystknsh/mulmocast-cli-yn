@@ -10,7 +10,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const { context, combinedFileName } = namedInputs;
   const ffmpegContext = FfmpegContextInit();
   const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath);
-  // [a0]asplit=4[a0_0][a0_1][a0_2][a0_3]
+
+  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
   const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);
   ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
 
@@ -36,9 +37,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           }
         } else {
           // NOTE: We come here when the text is empty and no audio property is specified.
-          // TODO: Remove hard-coded 1.0
           studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
-          GraphAILogger.info(`Missing audio for beat ${index}. Treating it as a silent beat for ${studioBeat.duration} seconds.`);
           const silentId = silentIds.pop();
           ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
           return [`[silent_${index}]`];
@@ -47,8 +46,12 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     )
   ).flat();
 
-  // HACK: We must use extra silentId to make ffmpeg work.
+  // HACK: Because the last beat may not use an silent audio, we need to consume it to make ffmpeg happy.
+  if (silentIds.length > 1) {
+    throw new Error("UNEXPECTED: silentIds.length > 1");
+  }
   silentIds.forEach((silentId) => {
+    GraphAILogger.info(`Using extra silentId: ${silentId}`);
     ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}[silent_extra]`);
     inputIds.push("[silent_extra]");
   });
