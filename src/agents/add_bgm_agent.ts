@@ -30,8 +30,10 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   ffmpegContext.filterComplex.push(`[${voiceInputIndex}:a]adelay=${padding}|${padding}, volume=4[voice]`);
   ffmpegContext.filterComplex.push(`[music][voice]amix=inputs=2:duration=longest:dropout_transition=3[amixed]`);
   ffmpegContext.filterComplex.push(`[amixed]atrim=start=0:end=${totalDuration}[trimmed]`);
-  ffmpegContext.filterComplex.push(`[trimmed]afade=t=out:st=${totalDuration - padding / 1000}:d=${padding}[aout]`);
-  await FfmpegContextGenerateOutput(ffmpegContext, outputFile, ["-map", "[aout]"]);
+  const fadeOutDuration = 1.0;
+  const fadeStartTime = totalDuration - fadeOutDuration;
+  ffmpegContext.filterComplex.push(`[trimmed]afade=t=out:st=${fadeStartTime}:d=${fadeOutDuration}[faded]`);
+  await FfmpegContextGenerateOutput(ffmpegContext, outputFile, ["-map", "[faded]"]);
 
   return outputFile;
 };
