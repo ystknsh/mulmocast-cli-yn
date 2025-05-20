@@ -4,8 +4,8 @@ import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
 
-const isMac = process.platform === "darwin";
-const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
+// const isMac = process.platform === "darwin";
+const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
 export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
@@ -44,19 +44,22 @@ export const getAudioPart = (inputIndex: number, duration: number, delay: number
 
 const getOutputOption = (audioId: string) => {
   return [
-    "-preset veryfast", // Faster encoding
+    "-preset medium", // Changed from veryfast to medium for better compression
     "-map [v]", // Map the video stream
     `-map ${audioId}`, // Map the audio stream
     `-c:v ${videoCodec}`, // Set video codec
+    ...(videoCodec === "libx264" ? ["-crf", "26"] : []), // Add CRF for libx264
     "-threads 8",
     "-filter_threads 8",
-    "-b:v 5M", // bitrate (only for videotoolbox)
+    "-b:v 2M", // Reduced from 5M to 2M
     "-bufsize",
-    "10M", // Add buffer size for better quality
+    "4M", // Reduced buffer size
     "-maxrate",
-    "7M", // Maximum bitrate
+    "3M", // Reduced from 7M to 3M
     "-r 30", // Set frame rate
     "-pix_fmt yuv420p", // Set pixel format for better compatibility
+    "-c:a aac", // Audio codec
+    "-b:a 128k", // Audio bitrate
   ];
 };
 
