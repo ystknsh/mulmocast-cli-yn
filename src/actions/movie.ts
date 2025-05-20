@@ -36,7 +36,7 @@ export const getAudioPart = (inputIndex: number, duration: number, delay: number
     audioPart:
       `[${inputIndex}:a]` +
       `atrim=duration=${duration},` + // Trim to beat duration
-      `adelay=${delay}|${delay},` +
+      `adelay=${delay * 1000}|${delay * 1000},` +
       `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
       `[${audioId}]`,
   };
@@ -103,7 +103,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
 
     if (mediaType === "movie") {
-      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp * 1000);
+      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp);
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
