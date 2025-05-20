@@ -4,26 +4,33 @@ import "dotenv/config";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import { GraphAILogger } from "graphai";
+import * as scriptingCmd from "./tool_commands/scripting/index.js";
+import * as promptCmd from "./tool_commands/prompt/index.js";
+import * as schemaCmd from "./tool_commands/schema/index.js";
 
-const cli = yargs(hideBin(process.argv)).scriptName("mulmo-tool").usage("$0 <command> [args]").option("v", {
-  alias: "verbose",
-  describe: "verbose log",
-  demandOption: true,
-  default: false,
-  type: "boolean",
-});
-
-async function main() {
+const cli = yargs(hideBin(process.argv))
+  .scriptName("mulmo-tool")
+  .usage("$0 <command> [args]")
+  .option("v", {
+    alias: "verbose",
+    describe: "verbose log",
+    demandOption: true,
+    default: false,
+    type: "boolean",
+  })
   // TODO: fix type error
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const scriptingCmd = (await import("./tool_commands/scripting/index.js")) as any;
-  const promptCmd = await import("./tool_commands/prompt/index.js");
-  const schemaCmd = await import("./tool_commands/schema/index.js");
+  .command(scriptingCmd as any)
+  .command(promptCmd)
+  .command(schemaCmd)
+  .demandCommand()
+  .strict()
+  .help()
+  .alias("help", "h");
 
-  cli.command(scriptingCmd).command(promptCmd).command(schemaCmd).demandCommand().strict().help().alias("help", "h");
-
+const main = async () => {
   await cli.parseAsync();
-}
+};
 
 main().catch((error) => {
   GraphAILogger.error("An unexpected error occurred:", error);
