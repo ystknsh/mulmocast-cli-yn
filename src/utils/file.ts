@@ -86,11 +86,10 @@ export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string,
 export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp3");
 };
-export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lang?: string) => {
-  if (lang) {
-    return path.resolve(outDirPath, `${fileName}_${lang}.mp4`);
-  }
-  return path.resolve(outDirPath, fileName + ".mp4");
+export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lang?: string, caption?: string) => {
+  const suffix = lang ? `_${lang}` : "";
+  const suffix2 = caption ? `__${caption}` : "";
+  return path.resolve(outDirPath, `${fileName}${suffix}${suffix2}.mp4`);
 };
 export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode, lang?: string) => {
   if (lang) {
