@@ -13,12 +13,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const inputIds = (
     await Promise.all(
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
-        const isLastGap = index === context.studio.beats.length - 2;
+        const isClosingGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
           const audioId = FfmpegContextAddFormattedAudio(ffmpegContext, studioBeat.audioFile);
-          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isLastGap ? silentLastPath : silentPath);
+          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isClosingGap ? silentLastPath : silentPath);
           // TODO: Remove hard-coded 0.8 and 0.3. Make it controllable by the script.
-          studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + (isLastGap ? 0.8 : 0.3);
+          studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) 
+            + (isClosingGap ? context.studio.script.audioParams.closingPadding : context.studio.script.audioParams.padding);
           return [audioId, silentId];
         } else {
           // NOTE: We come here when the text is empty and no audio property is specified.

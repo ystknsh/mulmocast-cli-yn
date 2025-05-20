@@ -81,18 +81,16 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
     const inputIndex = FfmpegContextAddInput(ffmpegContext, beat.imageFile);
     const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-    const padding = (() => {
-      const padding = studio.script.audioParams.padding;
+    const extraPadding = (() => {
+      // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
       if (index === 0) {
-        return studio.script.audioParams.introPadding + padding;
-      } else if (index === studio.beats.length - 2) {
-        return studio.script.audioParams.closingPadding;
+        return studio.script.audioParams.introPadding;
       } else if (index === studio.beats.length - 1) {
         return studio.script.audioParams.outroPadding;
       }
-      return padding;
+      return 0;
     })();
-    const duration = beat.duration + padding;
+    const duration = beat.duration + extraPadding;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && beat.captionFile) {
