@@ -10,6 +10,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const { context, combinedFileName } = namedInputs;
   const ffmpegContext = FfmpegContextInit();
   const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath);
+  // [a0]asplit=4[a0_0][a0_1][a0_2][a0_3]
+  const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);
+  ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
 
   const inputIds = (
     await Promise.all(
@@ -25,7 +28,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           })();
           studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + padding;
           if (padding > 0) {
-            ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${padding}[padding_${index}]`);
+            const silentId = silentIds.pop();
+            ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${padding}[padding_${index}]`);
             return [audioId, `[padding_${index}]`];
           } else {
             return [audioId];
@@ -35,19 +39,19 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           // TODO: Remove hard-coded 1.0
           studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
           GraphAILogger.info(`Missing audio for beat ${index}. Treating it as a silent beat for ${studioBeat.duration} seconds.`);
-          ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
+          const silentId = silentIds.pop();
+          ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
           return [`[silent_${index}]`];
         }
       }),
     )
   ).flat();
 
-  // HACK: If there is only one input, make it sure that we use longSilentId as the input.
-  // Otherwise, ffmpeg will not work.
-  if (inputIds.length === 1) {
-    ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${0.1}[silent_extra]`);
+  // HACK: We must use extra silentId to make ffmpeg work.
+  silentIds.forEach((silentId) => {
+    ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}[silent_extra]`);
     inputIds.push("[silent_extra]");
-  }
+  });
 
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
 
