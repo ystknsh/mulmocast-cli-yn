@@ -70,7 +70,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   }
 
   const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
-  const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
 
   // Add each image input
   const filterComplexVideoIds: string[] = [];
@@ -82,8 +81,18 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
     const inputIndex = FfmpegContextAddInput(ffmpegContext, beat.imageFile);
     const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-    const headOrTail = index === 0 || index === studio.beats.length - 1;
-    const duration = beat.duration + (headOrTail ? padding : 0);
+    const padding = (() => {
+      const padding = studio.script.audioParams.padding;
+      if (index === 0) {
+        return studio.script.audioParams.introPadding + padding;
+      } else if (index === studio.beats.length - 2) {
+        return studio.script.audioParams.closingPadding;
+      } else if (index === studio.beats.length - 1) {
+        return studio.script.audioParams.outroPadding;
+      }
+      return padding;
+    })();
+    const duration = beat.duration + padding;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && beat.captionFile) {

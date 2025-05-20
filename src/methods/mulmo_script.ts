@@ -27,10 +27,6 @@ const defaultTextSlideStyles = [
 ];
 
 export const MulmoScriptMethods = {
-  getPadding(script: MulmoScript): number {
-    return script.videoParams?.padding ?? 1000; // msec
-  },
-
   getCanvasSize(script: MulmoScript): MulmoCanvasDimension {
     return mulmoCanvasDimensionSchema.parse(script.canvasSize);
   },

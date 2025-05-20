@@ -166,11 +166,13 @@ export const textSlideParamsSchema = z
   })
   .strict();
 
+/* TODO: Add something later
 export const videoParamsSchema = z
   .object({
     padding: z.number().optional(), // msec
   })
   .strict();
+*/
 
 export const audioParamsSchema = z
   .object({
@@ -243,7 +245,7 @@ export const mulmoPresentationStyleSchema = z.object({
     .optional(),
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
-  videoParams: videoParamsSchema.optional(),
+  // videoParams: videoParamsSchema.optional(),
   audioParams: audioParamsSchema.default({
     introPadding: 1.0,
     padding: 0.3,

@@ -12,8 +12,8 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const { musicFile } = params;
 
   const speechDuration = await ffmPegGetMediaDuration(voiceFile);
-  const padding = MulmoScriptMethods.getPadding(script);
-  const totalDuration = (padding * 2) / 1000 + Math.round(speechDuration ?? 0);
+  const introPadding = script.audioParams.introPadding;
+  const totalDuration = Math.round(speechDuration ?? 0 + introPadding + script.audioParams.outroPadding);
   GraphAILogger.log("totalDucation:", speechDuration, totalDuration);
 
   const ffmpegContext = FfmpegContextInit();
@@ -21,7 +21,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const voiceInputIndex = FfmpegContextAddInput(ffmpegContext, voiceFile);
   ffmpegContext.filterComplex.push(`[${musicInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=0.2[music]`);
   ffmpegContext.filterComplex.push(
-    `[${voiceInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=2, adelay=${padding}|${padding}[voice]`,
+    `[${voiceInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=2, adelay=${introPadding}|${introPadding}[voice]`,
   );
   ffmpegContext.filterComplex.push(`[music][voice]amix=inputs=2:duration=longest[mixed]`);
   ffmpegContext.filterComplex.push(`[mixed]atrim=start=0:end=${totalDuration}[trimmed]`);
