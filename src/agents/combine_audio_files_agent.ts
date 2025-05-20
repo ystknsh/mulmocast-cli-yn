@@ -9,6 +9,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
 }) => {
   const { context, combinedFileName } = namedInputs;
   const ffmpegContext = FfmpegContextInit();
+  const { audioId: longSilentId } = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath);
 
   const inputIds = (
     await Promise.all(
@@ -35,12 +36,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           // TODO: Remove hard-coded 1.0
           studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
           GraphAILogger.info(`Missing audio for beat ${index}. Treating it as a silent beat for ${studioBeat.duration} seconds.`);
-          const { audioId } = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath, studioBeat.duration);
-          return [audioId];
+          ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
+          return [`[silent_${index}]`];
         }
       }),
     )
   ).flat();
+
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
 
   await FfmpegContextGenerateOutput(ffmpegContext, combinedFileName, ["-map", "[aout]"]);
