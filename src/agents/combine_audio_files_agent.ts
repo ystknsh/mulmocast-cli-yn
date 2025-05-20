@@ -42,6 +42,12 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }),
     )
   ).flat();
+  
+  // Special case: If there is only one input, make it sure that we use longSilentId as the input.
+  if (inputIds.length === 1) {
+    ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${0.1}[silent_extra]`);
+    inputIds.push("[silent_extra]");
+  }
 
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
 
