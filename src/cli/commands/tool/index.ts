@@ -5,7 +5,7 @@ import * as schemaCmd from "./schema/index.js";
 import { Argv } from "yargs";
 
 export const command = "tool <command>";
-export const desc = "Work with tool";
+export const desc = "Generate Mulmo script and other tools";
 
 export const builder = (y: Argv) => y.command(scriptingCmd).command(promptCmd).command(schemaCmd).demandCommand().strict();
 
