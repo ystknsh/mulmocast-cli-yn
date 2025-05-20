@@ -135,7 +135,7 @@ export const movie = async (context: MulmoStudioContext) => {
   const { studio, fileDirs, caption } = context;
   const { outDirPath } = fileDirs;
   const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
-  const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename, context.lang);
+  const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename, context.lang, caption);
 
   await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption);
   writingMessage(outputVideoPath);
