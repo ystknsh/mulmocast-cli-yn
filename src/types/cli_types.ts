@@ -2,9 +2,6 @@ import { Arguments } from "yargs";
 
 export type GlobalOptions = {
   v?: boolean;
-  o?: string;
-  b?: string;
-  l?: string;
 };
 
-export type ToolCliArgs<T> = Arguments<T & GlobalOptions>;
+export type ToolCliArgs<T = object> = Arguments<T & GlobalOptions>;

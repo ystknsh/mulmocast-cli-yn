@@ -8,7 +8,9 @@ import { createMulmoScriptInteractively } from "../../../tools/create_mulmo_scri
 
 export const handler = async (
   argv: ToolCliArgs<{
-    url?: string[];
+    o?: string;
+    b?: string;
+    u?: string[];
     interactive?: boolean;
     template?: string;
     cache?: string;
@@ -19,11 +21,15 @@ export const handler = async (
 ) => {
   const { o: outdir, b: basedir, v: verbose, interactive, script: filename, cache, llm_agent, llm_model } = argv;
   let { template } = argv;
-  const urls = argv.url || [];
+  const urls = argv.u || [];
 
   const baseDirPath = getBaseDirPath(basedir as string);
   const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
   const cacheDirPath = getFullPath(outDirPath, (cache as string) ?? cacheDirName);
+
+  if (!template) {
+    template = await selectTemplate();
+  }
 
   if (verbose) {
     GraphAILogger.info("baseDirPath:", baseDirPath);
@@ -39,10 +45,6 @@ export const handler = async (
     GraphAILogger.setLevelEnabled("error", false);
     GraphAILogger.setLevelEnabled("log", false);
     GraphAILogger.setLevelEnabled("warn", false);
-  }
-
-  if (!template) {
-    template = await selectTemplate();
   }
 
   const context = { outDirPath, templateName: template, urls, filename, cacheDirPath, llm_model, llm_agent };

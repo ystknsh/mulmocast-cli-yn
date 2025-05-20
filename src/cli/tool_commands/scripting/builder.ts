@@ -1,5 +1,4 @@
 import { Argv } from "yargs";
-import { languages } from "../../../utils/const.js";
 import { llmAgents } from "../../../utils/utils.js";
 import { getAvailableTemplates } from "../../../utils/file.js";
 
@@ -16,13 +15,6 @@ export const builder = (yargs: Argv) => {
     .option("b", {
       alias: "basedir",
       description: "base dir",
-      demandOption: false,
-      type: "string",
-    })
-    .option("l", {
-      alias: "lang",
-      description: "target language",
-      choices: languages,
       demandOption: false,
       type: "string",
     })
