@@ -48,7 +48,14 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
-const preprocessor = (namedInputs: { beat: MulmoBeat; studioBeat: MulmoStudioBeat; multiLingual: MulmoStudioMultiLingualData,  index: number; context: MulmoStudioContext; audioDirPath: string }) => {
+const preprocessor = (namedInputs: {
+  beat: MulmoBeat;
+  studioBeat: MulmoStudioBeat;
+  multiLingual: MulmoStudioMultiLingualData;
+  index: number;
+  context: MulmoStudioContext;
+  audioDirPath: string;
+}) => {
   const { beat, studioBeat, multiLingual, index, context, audioDirPath } = namedInputs;
   const { lang } = context;
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
