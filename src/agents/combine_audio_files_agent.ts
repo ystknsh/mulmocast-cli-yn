@@ -51,7 +51,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     throw new Error("UNEXPECTED: silentIds.length > 1");
   }
   silentIds.forEach((silentId) => {
-    GraphAILogger.info(`Using extra silentId: ${silentId}`);
+    GraphAILogger.log(`Using extra silentId: ${silentId}`);
     ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}[silent_extra]`);
     inputIds.push("[silent_extra]");
   });

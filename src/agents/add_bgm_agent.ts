@@ -13,7 +13,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const speechDuration = await ffmPegGetMediaDuration(voiceFile);
   const introPadding = script.audioParams.introPadding;
   const outroPadding = script.audioParams.outroPadding;
-  const totalDuration = Math.round(speechDuration + introPadding + outroPadding);
+  const totalDuration = speechDuration + introPadding + outroPadding;
   GraphAILogger.log("totalDucation:", speechDuration, totalDuration);
 
   const ffmpegContext = FfmpegContextInit();
