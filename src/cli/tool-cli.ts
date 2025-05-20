@@ -31,6 +31,6 @@ const main = async () => {
 };
 
 main().catch((error) => {
-  GraphAILogger.error("An unexpected error occurred:", error);
+  GraphAILogger.info("An unexpected error occurred:", error);
   process.exit(1);
 });
