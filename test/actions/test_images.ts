@@ -1,7 +1,7 @@
 import test from "node:test";
 // import assert from "node:assert";
 
-import { getFileObject } from "../../src/cli/cli.js";
+import { getFileObject } from "../../src/cli/helpers.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
 import { images } from "../../src/actions/images.js";
 
