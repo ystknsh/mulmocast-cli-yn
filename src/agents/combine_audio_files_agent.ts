@@ -9,15 +9,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
 }) => {
   const { context, combinedFileName } = namedInputs;
   const ffmpegContext = FfmpegContextInit();
-  const { audioId: longSilentId } = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath);
+  const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath);
 
   const inputIds = (
     await Promise.all(
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
         const isClosingGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
-          const { audioId } = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
-          // TODO: Remove hard-coded 0.8 and 0.3. Make it controllable by the script.
+          const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
           const padding = (() => {
             if (index === context.studio.beats.length - 1) {
               return 0;
@@ -42,8 +41,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }),
     )
   ).flat();
-  
-  // Special case: If there is only one input, make it sure that we use longSilentId as the input.
+
+  // HACK: If there is only one input, make it sure that we use longSilentId as the input.
+  // Otherwise, ffmpeg will not work.
   if (inputIds.length === 1) {
     ffmpegContext.filterComplex.push(`${longSilentId}atrim=start=0:end=${0.1}[silent_extra]`);
     inputIds.push("[silent_extra]");

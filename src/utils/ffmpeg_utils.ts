@@ -33,7 +33,7 @@ export const FfmpegContextInputFormattedAudio = (context: FfmpegContext, input: 
   const index = FfmpegContextAddInput(context, input);
   const audioId = `[a${index}]`;
   FfmpegContextPushFormattedAudio(context, `[${index}:a]`, audioId, duration);
-  return { index, audioId };
+  return audioId;
 };
 
 export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: string, options: string[] = []): Promise<number> => {
