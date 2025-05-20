@@ -2,7 +2,7 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat } from "../types/index.js";
 import { silentLastPath, silentPath, silent60secPath } from "../utils/file.js";
-import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextAddFormattedAudio, ffmPegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmPegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
   namedInputs,
@@ -15,7 +15,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
         const isClosingGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
-          const audioId = FfmpegContextAddFormattedAudio(ffmpegContext, studioBeat.audioFile);
+          const { audioId } = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
           // TODO: Remove hard-coded 0.8 and 0.3. Make it controllable by the script.
           const padding = (() => {
             if (index === context.studio.beats.length - 1) {
@@ -25,8 +25,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           })();
           studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + padding;
           if (padding > 0) {
-            const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isClosingGap ? silentLastPath : silentPath);
-            return [audioId, silentId];
+            const result = FfmpegContextInputFormattedAudio(ffmpegContext, isClosingGap ? silentLastPath : silentPath);
+            return [audioId, result.audioId];
           } else {
             return [audioId];
           }
@@ -35,8 +35,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           // TODO: Remove hard-coded 1.0
           studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
           GraphAILogger.info(`Missing audio for beat ${index}. Treating it as a silent beat for ${studioBeat.duration} seconds.`);
-          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, silent60secPath, studioBeat.duration);
-          return [silentId];
+          const { audioId } = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath, studioBeat.duration);
+          return [audioId];
         }
       }),
     )
