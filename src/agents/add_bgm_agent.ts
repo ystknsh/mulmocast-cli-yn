@@ -13,7 +13,8 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
 
   const speechDuration = await ffmPegGetMediaDuration(voiceFile);
   const introPadding = script.audioParams.introPadding;
-  const totalDuration = Math.round(speechDuration ?? 0 + introPadding + script.audioParams.outroPadding);
+  const outroPadding = script.audioParams.outroPadding;
+  const totalDuration = Math.round(speechDuration + introPadding + script.audioParams.padding + outroPadding);
   GraphAILogger.log("totalDucation:", speechDuration, totalDuration);
 
   const ffmpegContext = FfmpegContextInit();
@@ -25,9 +26,8 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   );
   ffmpegContext.filterComplex.push(`[music][voice]amix=inputs=2:duration=longest[mixed]`);
   ffmpegContext.filterComplex.push(`[mixed]atrim=start=0:end=${totalDuration}[trimmed]`);
-  const fadeOutDuration = 1.0; // TODO: parameterize it
-  const fadeStartTime = totalDuration - fadeOutDuration;
-  ffmpegContext.filterComplex.push(`[trimmed]afade=t=out:st=${fadeStartTime}:d=${fadeOutDuration}[faded]`);
+  const fadeStartTime = totalDuration - outroPadding;
+  ffmpegContext.filterComplex.push(`[trimmed]afade=t=out:st=${fadeStartTime}:d=${outroPadding}[faded]`);
   await FfmpegContextGenerateOutput(ffmpegContext, outputFile, ["-map", "[faded]"]);
 
   return outputFile;
