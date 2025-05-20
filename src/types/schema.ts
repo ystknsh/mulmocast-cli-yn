@@ -166,9 +166,20 @@ export const textSlideParamsSchema = z
   })
   .strict();
 
+/* TODO: Add something later
 export const videoParamsSchema = z
   .object({
     padding: z.number().optional(), // msec
+  })
+  .strict();
+*/
+
+export const audioParamsSchema = z
+  .object({
+    introPadding: z.number().describe("Padding at the beginning of the audio"), // seconds
+    padding: z.number().describe("Padding between beats"), // seconds
+    closingPadding: z.number().describe("Padding before the last beat"), // seconds
+    outroPadding: z.number().describe("Padding at the end of the audio"), // seconds
   })
   .strict();
 
@@ -234,8 +245,13 @@ export const mulmoPresentationStyleSchema = z.object({
     .optional(),
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
-  videoParams: videoParamsSchema.optional(),
-
+  // videoParams: videoParamsSchema.optional(),
+  audioParams: audioParamsSchema.default({
+    introPadding: 1.0,
+    padding: 0.3,
+    closingPadding: 0.8,
+    outroPadding: 1.0,
+  }),
   // TODO: Switch to showCaptions later
   omitCaptions: z.boolean().optional(), // default is false
 });
