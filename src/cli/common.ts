@@ -3,13 +3,6 @@ import { languages } from "../utils/const.js";
 
 export const commonOptions = (yargs: Argv) => {
   return yargs
-    .option("v", {
-      alias: "verbose",
-      describe: "verbose log",
-      demandOption: true,
-      default: false,
-      type: "boolean",
-    })
     .option("o", {
       alias: "outdir",
       description: "output dir",
@@ -27,6 +20,16 @@ export const commonOptions = (yargs: Argv) => {
       description: "target language",
       choices: languages,
       demandOption: false,
+      type: "string",
+    })
+    .option("f", {
+      alias: "force",
+      describe: "Force regenerate",
+      type: "boolean",
+      default: false,
+    })
+    .positional("file", {
+      describe: "Mulmo Script File",
       type: "string",
     });
 };
