@@ -48,11 +48,10 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
-const preprocessor = (namedInputs: { beat: MulmoBeat; index: number; context: MulmoStudioContext; audioDirPath: string }) => {
-  const { beat, index, context, audioDirPath } = namedInputs;
+const preprocessor = (namedInputs: { beat: MulmoBeat; studioBeat: MulmoStudioBeat, index: number; context: MulmoStudioContext; audioDirPath: string }) => {
+  const { beat, studioBeat, index, context, audioDirPath } = namedInputs;
   const { lang } = context;
   const { multiLingual } = context.studio;
-  const studioBeat = context.studio.beats[index];
   const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
   const text = localizedText(beat, multiLingual?.[index], lang);
@@ -79,6 +78,7 @@ const graph_tts: GraphData = {
       agent: preprocessor,
       inputs: {
         beat: ":beat",
+        studioBeat: ":studioBeat",
         index: ":__mapIndex",
         context: ":context",
         audioDirPath: ":audioDirPath",
@@ -115,12 +115,14 @@ const graph_data: GraphData = {
       agent: "mapAgent",
       inputs: {
         rows: ":context.studio.script.beats",
+        studioBeat: ":context.studio.beats",
         audioDirPath: ":audioDirPath",
         audioSegmentDirPath: ":audioSegmentDirPath",
         context: ":context",
       },
       params: {
         rowKey: "beat",
+        expandKeys: ["studioBeat"],
       },
       graph: graph_tts,
     },
