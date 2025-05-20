@@ -2,7 +2,7 @@ import { mulmoScriptSchema } from "@/src/types/schema.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { GraphAILogger } from "graphai";
 import { ToolCliArgs } from "@/src/types/cli_types.js";
-import { setGraphAILogger } from "@/src/utils/cli.js";
+import { setGraphAILogger } from "@/src/cli/helpers.js";
 
 export const handler = async (argv: ToolCliArgs) => {
   const { v: verbose } = argv;

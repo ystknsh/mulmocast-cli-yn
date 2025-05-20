@@ -1,10 +1,10 @@
 import { ToolCliArgs } from "@/src/types/cli_types.js";
 import { getBaseDirPath, getFullPath } from "@/src/utils/file.js";
-import { outDirName, cacheDirName } from "../../../utils/const.js";
+import { outDirName, cacheDirName } from "../../../../utils/const.js";
 import { getUrlsIfNeeded, selectTemplate } from "@/src/utils/inquirer.js";
-import { createMulmoScriptFromUrl } from "../../../tools/create_mulmo_script_from_url.js";
-import { createMulmoScriptInteractively } from "../../../tools/create_mulmo_script_interactively.js";
-import { setGraphAILogger } from "@/src/utils/cli.js";
+import { createMulmoScriptFromUrl } from "../../../../tools/create_mulmo_script_from_url.js";
+import { createMulmoScriptInteractively } from "../../../../tools/create_mulmo_script_interactively.js";
+import { setGraphAILogger } from "@/src/cli/helpers.js";
 
 export const handler = async (
   argv: ToolCliArgs<{
