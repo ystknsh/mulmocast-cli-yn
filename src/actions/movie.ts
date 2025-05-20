@@ -4,8 +4,8 @@ import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
 
-const isMac = process.platform === "darwin";
-const videoCodec = isMac ? "h264_videotoolbox" : "libx264";
+// const isMac = process.platform === "darwin";
+const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
 export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
