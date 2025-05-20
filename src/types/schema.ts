@@ -277,7 +277,7 @@ export const mulmoStudioMultiLingualDataSchema = z.object({
   multiLingualTexts: multiLingualTextsSchema,
 });
 
-export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1).optional();
+export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1);
 
 export const mulmoStudioSchema = z
   .object({
