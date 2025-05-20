@@ -20,6 +20,12 @@
       }
     }
   },
+  "audioParams": {
+    "introPadding": 0,
+    "padding": 1.0,
+    "closingPadding": 5.0,
+    "outroPadding": 0
+  },
   "beats": [
     {
       "speaker": "Presenter",
