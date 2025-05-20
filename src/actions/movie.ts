@@ -36,7 +36,7 @@ export const getAudioPart = (inputIndex: number, duration: number, delay: number
     audioPart:
       `[${inputIndex}:a]` +
       `atrim=duration=${duration},` + // Trim to beat duration
-      `adelay=${delay}|${delay},` +
+      `adelay=${delay * 1000}|${delay * 1000},` +
       `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
       `[${audioId}]`,
   };
@@ -73,7 +73,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   }
 
   const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
-  const padding = MulmoScriptMethods.getPadding(studio.script) / 1000;
 
   // Add each image input
   const filterComplexVideoIds: string[] = [];
@@ -85,8 +84,16 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
     const inputIndex = FfmpegContextAddInput(ffmpegContext, beat.imageFile);
     const mediaType = MulmoScriptMethods.getImageType(studio.script, studio.script.beats[index]);
-    const headOrTail = index === 0 || index === studio.beats.length - 1;
-    const duration = beat.duration + (headOrTail ? padding : 0);
+    const extraPadding = (() => {
+      // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
+      if (index === 0) {
+        return studio.script.audioParams.introPadding;
+      } else if (index === studio.beats.length - 1) {
+        return studio.script.audioParams.outroPadding;
+      }
+      return 0;
+    })();
+    const duration = beat.duration + extraPadding;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && beat.captionFile) {
@@ -99,7 +106,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
 
     if (mediaType === "movie") {
-      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp * 1000);
+      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp);
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
