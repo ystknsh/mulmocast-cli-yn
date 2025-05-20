@@ -1,73 +1,31 @@
 #!/usr/bin/env node
 
 import "dotenv/config";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
 import { GraphAILogger } from "graphai";
 
-import { args } from "./tool-args.js";
-import { outDirName, cacheDirName } from "../utils/const.js";
-import { createMulmoScriptFromUrl } from "../tools/create_mulmo_script_from_url.js";
-import { getBaseDirPath, getFullPath } from "../utils/file.js";
-import { createMulmoScriptInteractively } from "../tools/create_mulmo_script_interactively.js";
-import { dumpPromptFromTemplate } from "../tools/dump_prompt.js";
-import { getUrlsIfNeeded, selectTemplate } from "../utils/inquirer.js";
+const cli = yargs(hideBin(process.argv)).scriptName("mulmo-tool").usage("$0 <command> [args]").option("v", {
+  alias: "verbose",
+  describe: "verbose log",
+  demandOption: true,
+  default: false,
+  type: "boolean",
+});
 
-import { mulmoScriptSchema } from "../types/schema.js";
-import { zodToJsonSchema } from "zod-to-json-schema";
+async function main() {
+  // TODO: fix type error
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const scriptingCmd = (await import("./tool_commands/scripting/index.js")) as any;
+  const promptCmd = await import("./tool_commands/prompt/index.js");
+  const schemaCmd = await import("./tool_commands/schema/index.js");
 
-const main = async () => {
-  const { o: outdir, b: basedir, action, v: verbose, i: interactive, s: filename, cache } = args;
-  let { t: template } = args;
-  const { u: urls } = args;
-  const { llm_model, llm_agent } = args;
+  cli.command(scriptingCmd).command(promptCmd).command(schemaCmd).demandCommand().strict().help().alias("help", "h");
 
-  const baseDirPath = getBaseDirPath(basedir as string);
-  const outDirPath = getFullPath(baseDirPath, (outdir as string) ?? outDirName);
-  const cacheDirPath = getFullPath(outDirPath, (cache as string) ?? cacheDirName);
-
-  if (verbose) {
-    GraphAILogger.info("baseDirPath:", baseDirPath);
-    GraphAILogger.info("outDirPath:", outDirPath);
-    GraphAILogger.info("cacheDirPath:", cacheDirPath);
-    GraphAILogger.info("template:", template);
-    GraphAILogger.info("urls:", urls);
-    GraphAILogger.info("action:", action);
-    GraphAILogger.info("interactive:", interactive);
-    GraphAILogger.info("filename:", filename);
-  } else {
-    GraphAILogger.setLevelEnabled("error", false);
-    GraphAILogger.setLevelEnabled("log", false);
-    GraphAILogger.setLevelEnabled("warn", false);
-  }
-
-  // If template is not specified, show the selection prompt
-  if (!template) {
-    template = await selectTemplate();
-    if (verbose) {
-      GraphAILogger.info("Selected template:", template);
-    }
-  }
-
-  if (action === "scripting") {
-    const context = { outDirPath, templateName: template, urls, filename, cacheDirPath, llm_model, llm_agent };
-    if (interactive) {
-      await createMulmoScriptInteractively(context);
-    } else {
-      context.urls = await getUrlsIfNeeded(urls);
-      await createMulmoScriptFromUrl(context);
-    }
-  } else if (action === "prompt") {
-    await dumpPromptFromTemplate({ templateName: template });
-  } else if (action === "schema") {
-    const defaultSchema = zodToJsonSchema(mulmoScriptSchema, {
-      strictUnions: true,
-    });
-    GraphAILogger.info(JSON.stringify(defaultSchema, null, 2));
-  } else {
-    throw new Error(`Unknown or unsupported action: ${action}`);
-  }
-};
+  await cli.parseAsync();
+}
 
 main().catch((error) => {
-  GraphAILogger.info("An unexpected error occurred:", error);
+  GraphAILogger.error("An unexpected error occurred:", error);
   process.exit(1);
 });
