@@ -111,11 +111,11 @@ export const main = async () => {
     await images(context);
   }
   if (action === "movie") {
+    await audio(context);
+    await images(context);
     if (caption) {
       await captions(context);
     }
-    await audio(context);
-    await images(context);
     await movie(context);
   }
   if (action === "pdf") {
