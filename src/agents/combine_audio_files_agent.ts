@@ -16,12 +16,20 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         const isClosingGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
           const audioId = FfmpegContextAddFormattedAudio(ffmpegContext, studioBeat.audioFile);
-          const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isClosingGap ? silentLastPath : silentPath);
           // TODO: Remove hard-coded 0.8 and 0.3. Make it controllable by the script.
-          studioBeat.duration =
-            (await ffmPegGetMediaDuration(studioBeat.audioFile)) +
-            (isClosingGap ? context.studio.script.audioParams.closingPadding : context.studio.script.audioParams.padding);
-          return [audioId, silentId];
+          const padding = (() => {
+            if (index === context.studio.beats.length - 1) {
+              return 0;
+            }
+            return isClosingGap ? context.studio.script.audioParams.closingPadding : context.studio.script.audioParams.padding;
+          })();
+          studioBeat.duration = (await ffmPegGetMediaDuration(studioBeat.audioFile)) + padding;
+          if (padding > 0) {
+            const silentId = FfmpegContextAddFormattedAudio(ffmpegContext, isClosingGap ? silentLastPath : silentPath);
+            return [audioId, silentId];
+          } else {
+            return [audioId];
+          }
         } else {
           // NOTE: We come here when the text is empty and no audio property is specified.
           // TODO: Remove hard-coded 1.0
