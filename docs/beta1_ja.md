@@ -1,50 +1,121 @@
-# MulmoCast 0.1.x/Beta：Release Note
+# MulmoCast 0.1.x Beta版 リリースノート
 
-## ベータ版を使う際に、最低限必要なもの
+## ベータ版を使う際に最低限必要なもの
 
-1. MacOS走るパソコン（Linux、Windowsでの動作は未確認です）
+1. macOSが動作するパソコン（※LinuxやWindowsでの動作は未確認）
 2. Terminalアプリでの操作に慣れていること
-3. テキストエディターが使えること（Visual Studio、Emacs、など）
-4. nodeおよびbrewが既にインストールされていること
-5. ChatGPTのアカウントを持つこと(無料のアカウントでも可)
-6. OpenAIの開発者向けのアカウントを持つこと（従量課金のAPIを使います）
+3. テキストエディターが使えること（Visual Studio Code、Emacs など）
+4. Node.jsおよびHomebrew（brew）が既にインストールされていること
+5. ChatGPTのアカウントを持っていること（無料アカウントでも可）
+6. OpenAIの開発者向けアカウントを持っていること（従量課金のAPIを使用）
+
+---
 
 ## 環境設定
 
 ### 必須項目
 
-1. ```npm install -g mulmocast``` で mulmocast をインストール
-2. ```brew install ffmpeg``` で ffmpeg をインストール
-3. OpenAIの[開発者向けのページ](https://platform.openai.com/settings/organization/api-keys)でAPIキーを取得（sk-XXXX という形式）
-3. 作業用のフォルダーを決め、そこに .env というテキストファイルを作り、そこに、```OPENAI_API_KEY=sk-XXXX```の１行を追加（XXXXの部分はアカウントごとに異なります）
+1. ターミナルで以下を実行して、mulmocast をインストール：
 
-### 推奨項目（綺麗な絵を生成するために必要）
-4. OpenAIの開発者向けの[Settings/Organization/General](https://platform.openai.com/settings/organization/general)に、Verificationというセクションがあるので、そこで個人認証をする
-5. 認証後、.envファイルに```DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1```の１行を追加
+   ```bash
+   npm install -g mulmocast
+   ```
+
+2. ffmpeg をインストール：
+
+   ```bash
+   brew install ffmpeg
+   ```
+
+3. OpenAIの[APIキー設定ページ](https://platform.openai.com/settings/organization/api-keys)で、`sk-XXXX` 形式のAPIキーを取得
+
+4. 作業用フォルダーを作成し、その中に `.env` というテキストファイルを作成し、以下の1行を追加：
+
+   ```
+   OPENAI_API_KEY=sk-XXXX
+   ```
+
+   ※`XXXX`はあなたのAPIキーに置き換えてください。
+
+### 推奨項目（綺麗な画像生成のために必要）
+
+5. OpenAIの[Settings > Organization > General](https://platform.openai.com/settings/organization/general)ページの「Verification」セクションで個人認証を行う
+
+6. 認証後、`.env`ファイルに以下の1行を追加：
+
+   ```
+   DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1
+   ```
+
+---
 
 ## コミックスタイルの動画作成
 
+MulmoCastは、ビジネス向けプレゼンからポッドキャストまで、さまざまな形式の（＝マルチ・モーダルな）コンテンツを作るためのツールですが、ここでは、まずコミックスタイルの動画を作る練習をしてみましょう。
+
 ### 基本操作
 
-1. 映像化したいWebページのURLを（クリップボードに）コピー
-2. ChatGPTで新たなチャットセッションをスタートして、そのURLの記事を読むように指示（例："read this article, https://..."）
-3. ターミナル画面に行き、```mulmo prompt -t comic_strips```と入力（必要なプロントが表示されますが、同時にクリップポードにコピーされます）
-4. ChatGPTの画面に戻り、プロンプトをペースト
-5. ChatGPTがスクリプトを生成するのを待ち、完了したらそれをコピー（コピーボタンはスクリプトの右上にあります。
-6. ターミナル画面に戻り、```mulmo movie __clipboard```と入力（アンダーラインは二つ）
+1. 映像化したいWebページのURLをクリップボードにコピー
 
-環境設定が正しく行われていれば、これで動画の生成が始まります。動画の作成には、通常4分ほどかかります。
+2. ChatGPTで新しいチャットを開始し、そのURLを読むように指示（例："Read this article: [https://..."）](https://...%22）)
 
-生成された動画は、ステップ６を実行したフォルダーの中にoutputというフォルダーの中に作られます。ファイル名は、```script_20250521_054059```のように作成した日時から決まります。
+3. ターミナルで以下を実行：
+
+   ```bash
+   mulmo prompt -t comic_strips
+   ```
+
+   ※プロンプトが表示され、同時にクリップボードにコピーされます。
+
+4. ChatGPTの画面に戻り、プロンプトを貼り付け
+
+5. ChatGPTがスクリプトを生成したら、それをコピー（スクリプト右上のコピーボタンを使用）
+
+6. ターミナルに戻り、以下を実行：
+
+   ```bash
+   mulmo movie __clipboard
+   ```
+
+   ※アンダーライン（`__`）は2本です。
+
+動画の生成が開始され、通常4分ほどかかります。生成された動画は、作業フォルダー内の `output` フォルダーに保存されます。ファイル名は作成された日時に基づき、以下のようになります：
+
+```
+script_20250521_054059
+```
+
+---
 
 ## 日本語版の映像の作成
 
-日本語の字幕付きのものを作るには、上の操作で作られた映像のファイルネームを元に、```mulmo movie script_xxxxxxxx_xxxx.json -c ja```とターミナルで入力します（script_xxxxxxxx_xxxの部分は上の操作で作られた動画ファイルの名称を入力します）。outputフォルダーに"__ja"というサフィックス付いた動画ファイルが作成されます（アンダーラインは二つ）。
+上記の手順で生成されたスクリプトファイル名を元に、ターミナルで以下を実行：
 
-音声も日本語に翻訳したものが欲しい場合には、```mulmo movie script_xxxxxxxx_xxxx.json -l ja```と入力します。outputフォルダーに"_ja"というサフィックス付いた動画ファイルが作成されます（アンダーラインは一つ）。
+* **日本語字幕付き映像を作成する場合：**
 
-## ジブリ風のコミック映像作成
+  ```bash
+  mulmo movie script_XXXXXXXX_XXXX.json -c ja
+  ```
 
-ジブリ風のコミック映像を作りたい場合、上の基本操作のステップ３で```mulmo prompt -t ghibli_strips```と入力すると、ジブリ風の映像を作成するためのプロンプトが生成されます。
+  → `output`フォルダーに `__ja` というサフィックスが付いた動画が生成されます（アンダーラインは2本）。
 
-ただし、ジブリ風の画像の生成に関しては、OpenAI側のポリシーが揺れており、日によって、「コンテンツ・ポリシーに反する」という理由で失敗することがあるので、ご了承ください。
+* **日本語音声付き映像を作成する場合：**
+
+  ```bash
+  mulmo movie script_XXXXXXXX_XXXX.json -l ja
+  ```
+
+  → `output`フォルダーに `_ja` というサフィックスが付いた動画が生成されます（アンダーラインは1本）。
+
+---
+
+## ジブリ風のコミック映像を作成したい場合
+
+ステップ3で以下のコマンドを実行すると、ジブリ風映像用のプロンプトが生成されます：
+
+```bash
+mulmo prompt -t ghibli_strips
+```
+
+ただし、OpenAIの画像生成ポリシーにより、ジブリ風画像の生成は「コンテンツポリシーに違反する」として拒否される場合があります。これは、特に著作権保護が疑われるキャラクターに類似していると判断された際に発生します。ご了承ください。
+
