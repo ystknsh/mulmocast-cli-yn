@@ -41,7 +41,7 @@ const createValidatedScriptGraphData = ({ systemPrompt, prompt, schema }: { syst
       continue: {
         agent: ({ isValid, counter }: { isValid: boolean; counter: number }) => {
           if (counter >= 3) {
-            GraphAILogger.error("Failed to generate a valid script. Please try again.");
+            GraphAILogger.info("Failed to generate a valid script. Please try again.");
             process.exit(1);
           }
           return !isValid;
