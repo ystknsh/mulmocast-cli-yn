@@ -15,7 +15,16 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "Title Only",
+          "title": "Title Only"
+        }
+      }
+    },
+    {
+      "text": "",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Title and Subtitle",
           "bullets": []
         }
       }

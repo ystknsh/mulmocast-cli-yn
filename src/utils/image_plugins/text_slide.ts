@@ -8,7 +8,7 @@ const processTextSlide = async (params: ImageProcessorParams) => {
   if (!beat.image || beat.image.type !== imageType) return;
 
   const slide = beat.image.slide;
-  const markdown = `# ${slide.title}\n` + slide.bullets.map((text) => `- ${text}`).join("\n");
+  const markdown = `# ${slide.title}\n` + (slide.bullets ?? []).map((text) => `- ${text}`).join("\n");
   await renderMarkdownToImage(markdown, textSlideStyle, imagePath, canvasSize.width, canvasSize.height);
   return imagePath;
 };
