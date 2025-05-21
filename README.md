@@ -132,16 +132,16 @@ DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # required for high-quality Ghibli-style 
 ```bash
 mulmo-tool scripting -i -t ghibli_strips -o ./ -s story
 ```
-This will initiate an interactive conversation with the AI to create your Ghibli-inspired story. Once completed, a JSON file (like `story-1747834931950.json`) will be generated.
+This will initiate an interactive conversation with the AI to create your Ghibli-inspired story. Once completed, a JSON file (e.g., `story-1747834931950.json`) will be generated.
 
 ### Step 3: Translate the MulmoScript
 ```bash
-mulmo translate {generated_script_file_of_step_2}
+mulmo translate {generated_script_file_from_step_2}
 ```
 
 ### Step 4: Generate video with Japanese subtitles
 ```bash
-mulmo movie {generated_script_file_of_step_2} -c ja
+mulmo movie {generated_script_file_from_step_2} -c ja
 ```
 The `-c ja` flag adds Japanese subtitles to your video.
 
