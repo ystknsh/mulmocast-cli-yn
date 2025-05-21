@@ -145,6 +145,12 @@ mulmo movie {generated_script_file_of_step_2} -c ja
 ```
 The `-c ja` flag adds Japanese subtitles to your video.
 
+When the process completes, the CLI will display the path to your generated video file:
+```bash
+Video created successfully! 14.939 sec
+writing: /Users/username/path/to/output/story-1747834931950__ja.mp4
+```
+
 ## Generate MulmoScript
 
 ```bash
