@@ -1,31 +1,33 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
-import * as textToSpeech from '@google-cloud/text-to-speech';
+import * as textToSpeech from "@google-cloud/text-to-speech";
 
 const client = new textToSpeech.TextToSpeechClient();
 
 export const ttsGoogleAgent: AgentFunction = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
-  const { voice, suppressError } = params;
-
-  console.info("*** DEBUG ***: ttsGoogleAgent", text, voice);
+  const { voice, suppressError, speed } = params;
 
   // Construct the voice request
   const voiceParams: textToSpeech.protos.google.cloud.texttospeech.v1.IVoiceSelectionParams = {
-    languageCode: "en-US",
-    ssmlGender: "FEMALE",
+    languageCode: "en-US", // TODO: Make this configurable
+    ssmlGender: "FEMALE", // TODO: Make this configurable
   };
 
-// Construct the request
-const request: textToSpeech.protos.google.cloud.texttospeech.v1.ISynthesizeSpeechRequest = {
-  input: { text: text },
-  voice: voiceParams,
-  audioConfig: { 
-    audioEncoding: 'MP3',
-    speakingRate: 1.0
-  },
-};
-try {
+  if (voice) {
+    voiceParams.name = voice;
+  }
+
+  // Construct the request
+  const request: textToSpeech.protos.google.cloud.texttospeech.v1.ISynthesizeSpeechRequest = {
+    input: { text: text },
+    voice: voiceParams,
+    audioConfig: {
+      audioEncoding: "MP3",
+      speakingRate: speed || 1.0,
+    },
+  };
+  try {
     // Call the Text-to-Speech API
     const [response] = await client.synthesizeSpeech(request);
     return { buffer: response.audioContent };
