@@ -3,10 +3,15 @@
     "version": "1.0"
   },
   "title": "Layout Test",
+  "audioParams": {
+    "introPadding": 0,
+    "padding": 0.1,
+    "closingPadding": 0,
+    "outroPadding": 0
+  },
   "beats": [
     {
       "text": "",
-      "duration": 0.5,
       "image": {
         "type": "textSlide",
         "slide": {
@@ -17,7 +22,6 @@
     },
     {
       "text": "",
-      "duration": 0.5,
       "image": {
         "type": "textSlide",
         "slide": {
@@ -36,7 +40,6 @@
     },
     {
       "text": "",
-      "duration": 0.5,
       "image": {
         "type": "markdown",
         "markdown": [
@@ -53,7 +56,6 @@
     },
     {
       "text": "",
-      "duration": 0.5,
       "image": {
         "type": "chart",
         "title": "Sales and Profits (from Jan to June)",
@@ -65,14 +67,14 @@
               {
                 "label": "Revenue ($1000s)",
                 "data": [120, 135, 180, 155, 170, 190],
-                "backgroundColor": "rgba(54, 162, 235, 0.5)",
+                "backgroundColor": "rgba(54, 162, 235, 0.1)",
                 "borderColor": "rgba(54, 162, 235, 1)",
                 "borderWidth": 1
               },
               {
                 "label": "Profit ($1000s)",
                 "data": [45, 52, 68, 53, 61, 73],
-                "backgroundColor": "rgba(75, 192, 192, 0.5)",
+                "backgroundColor": "rgba(75, 192, 192, 0.1)",
                 "borderColor": "rgba(75, 192, 192, 1)",
                 "borderWidth": 1
               }
@@ -87,7 +89,6 @@
     },
     {
       "text": "",
-      "duration": 0.5,
       "image": {
         "type": "mermaid",
         "title": "Business Process Flow",
