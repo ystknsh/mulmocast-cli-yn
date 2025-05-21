@@ -2,8 +2,13 @@
   "$mulmocast": {
     "version": "1.0"
   },
-  "voiceParams": {
-    "provider": "google"
+  "speechParams": {
+    "provider": "google",
+    "speakers": {
+      "Presenter": {
+        "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62"
+      }
+    }
   },
   "beats": [
     {

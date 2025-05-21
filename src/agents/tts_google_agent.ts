@@ -6,7 +6,7 @@ export const ttsGoogleAgent: AgentFunction = async ({ namedInputs, params }) => 
   const { apiKey, model, voice, suppressError, instructions } = params;
 
   try {
-    console.log("ttsGoogleAgent", text);
+    console.info("*** DEBUG ***: ttsGoogleAgent", text);
     return { buffer: Buffer.from("Hello, world!") };
   } catch (e) {
     if (suppressError) {
