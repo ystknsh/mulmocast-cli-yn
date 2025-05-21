@@ -18,7 +18,9 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
         `trim=duration=${duration}`,
         "fps=30",
         "setpts=PTS-STARTPTS",
-        `scale=${canvasInfo.width}:${canvasInfo.height}`,
+        `scale=w=${canvasInfo.width}:h=${canvasInfo.height}:force_original_aspect_ratio=decrease`,
+        // In case of the aspect ratio mismatch, we fill the extra space with black color.
+        `pad=${canvasInfo.width}:${canvasInfo.height}:(ow-iw)/2:(oh-ih)/2:color=black`,
         "setsar=1",
         "format=yuv420p",
       ]
