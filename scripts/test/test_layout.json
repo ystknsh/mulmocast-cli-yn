@@ -24,8 +24,8 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "Title and Subtitle",
-          "bullets": []
+          "title": "Title",
+          "subtitle": "Subtitle"
         }
       }
     },

@@ -93,6 +93,7 @@ export const mulmoTextSlideMediaSchema = z
     type: z.literal("textSlide"),
     slide: z.object({
       title: z.string(),
+      subtitle: z.string().optional(),
       bullets: z.array(z.string()).optional(),
     }),
   })
