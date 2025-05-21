@@ -4,9 +4,10 @@
 
 1. MacOS走るパソコン（Linux、Windowsでの動作は未確認です）
 2. Terminalアプリでの操作に慣れていること
-3. nodeおよびbrewが既にインストールされていること
-4. ChatGPTのアカウントを持つこと(無料のアカウントでも可)
-5. OpenAIの開発者向けのアカウントを持つこと
+3. テキストエディターが使えること（Visual Studio、Emacs、など）
+4. nodeおよびbrewが既にインストールされていること
+5. ChatGPTのアカウントを持つこと(無料のアカウントでも可)
+6. OpenAIの開発者向けのアカウントを持つこと（従量課金のAPIを使います）
 
 ## 環境設定
 
@@ -14,11 +15,11 @@
 
 1. ```npm install -g mulmocast``` で mulmocast をインストール
 2. ```brew install ffmpeg``` で ffmpeg をインストール
-3. OpenAIからAPIキーを取得（sk-XXXX という形式）
+3. OpenAIの[開発者向けのページ](https://platform.openai.com/settings/organization/api-keys)でAPIキーを取得（sk-XXXX という形式）
 3. 作業用のフォルダーを決め、そこに .env というテキストファイルを作り、そこに、```OPENAI_API_KEY=sk-XXXX```の１行を追加（XXXXの部分はアカウントごとに異なります）
 
 ### 推奨項目（綺麗な絵を生成するために必要）
-4. OpenAIのSettings/Organization/Generalに、Verificationというセクションがあるので、そこで個人認証をする
+4. OpenAIの開発者向けの[Settings/Organization/General](https://platform.openai.com/settings/organization/general)に、Verificationというセクションがあるので、そこで個人認証をする
 5. 認証後、.envファイルに```DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1```の１行を追加
 
 ## コミックスタイルの動画作成
