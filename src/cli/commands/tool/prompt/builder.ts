@@ -1,5 +1,5 @@
 import { Argv } from "yargs";
-import { getAvailableTemplates } from "@/src/utils/file.js";
+import { getAvailableTemplates } from "../../../../utils/file.js";
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 

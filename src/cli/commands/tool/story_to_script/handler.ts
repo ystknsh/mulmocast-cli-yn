@@ -1,10 +1,10 @@
-import { ToolCliArgs } from "@/src/types/cli_types.js";
-import { selectTemplate } from "@/src/utils/inquirer.js";
-import { setGraphAILogger } from "@/src/cli/helpers.js";
-import { storyToScript } from "@/src/tools/story_to_script.js";
-import { mulmoStoryboardSchema } from "@/src/types/schema.js";
-import { getBaseDirPath, getFullPath, readAndParseJson } from "@/src/utils/file.js";
-import { outDirName } from "@/src/utils/const.js";
+import { ToolCliArgs } from "../../../../types/cli_types.js";
+import { selectTemplate } from "../../../../utils/inquirer.js";
+import { setGraphAILogger } from "../../../../cli/helpers.js";
+import { storyToScript } from "../../../../tools/story_to_script.js";
+import { mulmoStoryboardSchema } from "../../../../types/schema.js";
+import { getBaseDirPath, getFullPath, readAndParseJson } from "../../../../utils/file.js";
+import { outDirName } from "../../../../utils/const.js";
 
 export const handler = async (
   argv: ToolCliArgs<{
