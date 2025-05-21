@@ -1,6 +1,9 @@
 import "dotenv/config";
 import { GraphAI, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
+import { anthropicAgent } from "@graphai/anthropic_agent";
+import { geminiAgent } from "@graphai/gemini_agent";
+import { groqAgent } from "@graphai/groq_agent";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
@@ -11,6 +14,7 @@ import { mulmoScriptSchema, urlsSchema } from "../types/schema.js";
 import { ScriptingParams } from "../types/index.js";
 import { cliLoadingPlugin } from "../utils/plugins.js";
 import { graphDataScriptFromUrlPrompt } from "../utils/prompt.js";
+import { llmPair } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 const graphData: GraphData = {
@@ -29,6 +33,15 @@ const graphData: GraphData = {
     },
     fileName: {
       value: "",
+    },
+    llmAgent: {
+      value: "",
+    },
+    llmModel: {
+      value: "",
+    },
+    maxTokens: {
+      value: 0,
     },
     // get the text content of the urls
     fetchResults: {
@@ -77,6 +90,9 @@ const graphData: GraphData = {
       inputs: {
         sourceText: ":sourceText",
         prompt: ":prompt",
+        llmAgent: ":llmAgent",
+        llmModel: ":llmModel",
+        maxTokens: ":maxTokens",
       },
       graph: {
         loop: {
@@ -88,10 +104,14 @@ const graphData: GraphData = {
             value: 0,
             update: ":counter.add(1)",
           },
-          openAIAgent: {
-            agent: "openAIAgent",
+          llm: {
+            agent: ":llmAgent",
+            params: {
+              model: ":llmModel",
+              system: ":prompt",
+              max_tokens: ":maxTokens",
+            },
             inputs: {
-              model: "gpt-4o",
               system: ":prompt",
               prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
             },
@@ -99,7 +119,7 @@ const graphData: GraphData = {
           validateSchemaAgent: {
             agent: "validateSchemaAgent",
             inputs: {
-              text: ":openAIAgent.text.codeBlock()",
+              text: ":llm.text.codeBlock()",
               schema: mulmoScriptSchema,
             },
             isResult: true,
@@ -128,7 +148,7 @@ const graphData: GraphData = {
   },
 };
 
-export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename, cacheDirPath }: ScriptingParams) => {
+export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename, cacheDirPath, llm_agent, llm_model }: ScriptingParams) => {
   mkdir(outDirPath);
   mkdir(cacheDirPath);
   const parsedUrls = urlsSchema.parse(urls);
@@ -141,12 +161,16 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
       nodeIds: ["fetcher"],
     },
   ];
+  const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
 
   const graph = new GraphAI(
     graphData,
     {
       ...vanillaAgents,
       openAIAgent,
+      anthropicAgent,
+      geminiAgent,
+      groqAgent,
       browserlessAgent,
       validateSchemaAgent,
       fileWriteAgent,
@@ -158,6 +182,9 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   graph.injectValue("prompt", readTemplatePrompt(templateName));
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
+  graph.injectValue("llmAgent", agent);
+  graph.injectValue("llmModel", model);
+  graph.injectValue("maxTokens", max_tokens);
   graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
 
   const result = await graph.run<{ path: string }>();
