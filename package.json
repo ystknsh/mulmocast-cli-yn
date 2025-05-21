@@ -3,10 +3,9 @@
   "version": "0.0.5",
   "description": "",
   "type": "module",
-  "main": "lib/cli/run.js",
+  "main": "lib/cli/bin.js",
   "bin": {
-    "mulmo": "lib/cli/run.js",
-    "mulmo-tool": "lib/cli/tool-cli.js"
+    "mulmo": "lib/cli/bin.js"
   },
   "files": [
     "./lib",
@@ -24,20 +23,21 @@
     "test": "tests"
   },
   "scripts": {
-    "audio": "npx tsx ./src/cli/run.ts audio",
-    "translate": "npx tsx ./src/cli/run.ts translate",
-    "movie": "npx tsx ./src/cli/run.ts movie",
-    "images": "npx tsx ./src/cli/run.ts images",
-    "preprocess": "npx tsx ./src/cli/run.ts preprocess",
+    "audio": "npx tsx ./src/cli/bin.ts audio",
+    "translate": "npx tsx ./src/cli/bin.ts translate",
+    "movie": "npx tsx ./src/cli/bin.ts movie",
+    "images": "npx tsx ./src/cli/bin.ts images",
+    "preprocess": "npx tsx ./src/cli/bin.ts preprocess",
+    "pdf": "npx tsx ./src/cli/bin.ts pdf",
     "test": "rm -f scratchpad/test*.* && npx tsx ./src/audio.ts scripts/test/test.json && npx tsx ./src/images.ts scripts/test/test.json && npx tsx ./src/movie.ts scripts/test/test.json",
     "ci_test": "tsx --test ./test/*/test_*.ts",
     "lint": "eslint src test",
     "build": "tsc",
     "build_test": "tsc && git checkout -- lib/*",
-    "cli": "npx tsx ./src/cli/run.ts",
-    "scripting": "npx tsx ./src/cli/tool-cli.ts scripting",
-    "prompt": "npx tsx ./src/cli/tool-cli.ts prompt",
-    "schema": "npx tsx ./src/cli/tool-cli.ts schema",
+    "cli": "npx tsx ./src/cli/bin.ts",
+    "scripting": "npx tsx ./src/cli/bin.ts tool scripting",
+    "prompt": "npx tsx ./src/cli/bin.ts tool prompt",
+    "schema": "npx tsx ./src/cli/bin.ts tool schema",
     "story_to_script": "npx tsx ./src/tools/story_to_script.ts",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output,docs/scripts}/**/*.{ts,json,yaml}'"

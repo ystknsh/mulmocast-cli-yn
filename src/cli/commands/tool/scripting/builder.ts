@@ -1,6 +1,6 @@
 import { Argv } from "yargs";
-import { llmAgents } from "../../../utils/utils.js";
-import { getAvailableTemplates } from "../../../utils/file.js";
+import { llmAgents } from "../../../../utils/utils.js";
+import { getAvailableTemplates } from "../../../../utils/file.js";
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 
