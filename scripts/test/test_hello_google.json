@@ -1,0 +1,20 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "voiceParams": {
+    "provider": "google"
+  },
+  "beats": [
+    {
+      "text": "Hello Google",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Hello Google",
+          "bullets": ["Hello", "Google"]
+        }
+      }
+    }
+  ]
+}

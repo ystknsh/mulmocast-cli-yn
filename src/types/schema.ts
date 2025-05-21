@@ -214,7 +214,7 @@ export const mulmoCastCreditSchema = z
   })
   .strict();
 
-export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice")]).default("openai");
+export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google")]).default("openai");
 
 export const mulmoSpeechParamsSchema = z
   .object({
