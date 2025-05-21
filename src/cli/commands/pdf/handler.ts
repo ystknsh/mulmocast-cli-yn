@@ -1,6 +1,6 @@
 import { images, pdf } from "../../../actions/index.js";
-import { CliArgs } from "@/src/types/cli_types.js";
-import { initializeContext, runTranslateIfNeeded } from "@/src/cli/helpers.js";
+import { CliArgs } from "../../../types/cli_types.js";
+import { initializeContext, runTranslateIfNeeded } from "../../../cli/helpers.js";
 
 export const handler = async (argv: CliArgs<{ i?: string; pdf_mode: string; pdf_size: string }>) => {
   const context = await initializeContext(argv);

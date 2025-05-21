@@ -1,4 +1,4 @@
-import { ToolCliArgs } from "@/src/types/cli_types.js";
+import { ToolCliArgs } from "../../../types/cli_types.js";
 import * as scriptingCmd from "./scripting/index.js";
 import * as promptCmd from "./prompt/index.js";
 import * as schemaCmd from "./schema/index.js";
