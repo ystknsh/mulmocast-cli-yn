@@ -1,0 +1,25 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "speechParams": {
+    "provider": "google",
+    "speakers": {
+      "Presenter": {
+        "voiceId": "en-US-Studio-O"
+      }
+    }
+  },
+  "beats": [
+    {
+      "text": "Hello Google, Bye Google",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Hello Google",
+          "bullets": ["Hello", "Google"]
+        }
+      }
+    }
+  ]
+}

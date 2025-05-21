@@ -7,6 +7,7 @@ import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
 import addBGMAgent from "../agents/add_bgm_agent.js";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
 import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
+import ttsGoogleAgent from "../agents/tts_google_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods/index.js";
 
@@ -32,6 +33,7 @@ const { default: __, ...vanillaAgents } = agents;
 const provider_to_agent = {
   nijivoice: "ttsNijivoiceAgent",
   openai: "ttsOpenaiAgent",
+  google: "ttsGoogleAgent",
 };
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string | undefined => {
@@ -203,6 +205,7 @@ export const audio = async (context: MulmoStudioContext) => {
       fileWriteAgent,
       ttsOpenaiAgent,
       ttsNijivoiceAgent,
+      ttsGoogleAgent,
       addBGMAgent,
       combineAudioFilesAgent,
     },
