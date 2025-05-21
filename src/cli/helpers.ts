@@ -9,6 +9,7 @@ import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 import type { MulmoStudio } from "../types/type.js";
 import type { MulmoStudioContext } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
+import { translate } from "../actions/translate.js";
 
 export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
   if (verbose) {
@@ -135,4 +136,11 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     lang: argv.l,
     caption: argv.c,
   };
+};
+
+export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
+  if (argv.l || argv.c) {
+    GraphAILogger.log("run translate");
+    await translate(context);
+  }
 };
