@@ -6,9 +6,9 @@ const client = new textToSpeech.TextToSpeechClient();
 
 export const ttsGoogleAgent: AgentFunction = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
-  const { apiKey, model, voice, suppressError, instructions } = params;
+  const { voice, suppressError } = params;
 
-  console.info("*** DEBUG ***: ttsGoogleAgent", text);
+  console.info("*** DEBUG ***: ttsGoogleAgent", text, voice);
 
   // Construct the voice request
   const voiceParams: textToSpeech.protos.google.cloud.texttospeech.v1.IVoiceSelectionParams = {
