@@ -116,15 +116,15 @@ Optionally, you can specify *__clipboard* as the script file name to paste the s
 
 ## Quick Start for Ghibli-Style Animation
 
-[![Watch Ghibli-Style Animation Example](https://img.youtube.com/vi/gz_Oe5p2n3s/0.jpg)](https://www.youtube.com/watch?v=gz_Oe5p2n3s)
+[![Watch Ghibli-Style Animation Example](https://img.youtube.com/vi/gz_Oe5p2n3s/0.jpg)](https://www.youtube.com/watch?v=gz_Oe5p2n3s)  
 *Click the image above to watch an example of what you can create*
 
 ### Step 1: Check/Update Environment Setup
-- Verify your `.env` file contains:
-  ```bash
-  OPENAI_API_KEY=your_openai_api_key
-  DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # required for high-quality Ghibli-style images
-  ```
+Verify your `.env` file contains:
+```bash
+OPENAI_API_KEY=your_openai_api_key
+DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # required for high-quality Ghibli-style images
+```
 
 > **Note:** Ensure your OpenAI organization is verified to access the gpt-image-1 model. Visit https://platform.openai.com/settings/organization/general and complete the "Verifications" section.
 
@@ -136,12 +136,12 @@ This will initiate an interactive conversation with the AI to create your Ghibli
 
 ### Step 3: Translate the MulmoScript
 ```bash
-mulmo translate output/story-1747834931950.json
+mulmo translate {generated_script_file_of_step_2}
 ```
 
 ### Step 4: Generate video with Japanese subtitles
 ```bash
-mulmo movie output/story-1747834931950.json -c ja
+mulmo movie {generated_script_file_of_step_2} -c ja
 ```
 The `-c ja` flag adds Japanese subtitles to your video.
 
