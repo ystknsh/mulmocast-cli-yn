@@ -4,15 +4,33 @@ import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js
 import { MulmoScriptTemplate, MulmoStoryboard } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
+import { anthropicAgent } from "@graphai/anthropic_agent";
+import { geminiAgent } from "@graphai/gemini_agent";
+import { groqAgent } from "@graphai/groq_agent";
 import * as agents from "@graphai/vanilla";
 import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptInfoPrompt } from "../utils/prompt.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
+import { llmPair } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
-const createValidatedScriptGraphData = ({ systemPrompt, prompt, schema }: { systemPrompt: string; prompt: string; schema: ZodSchema }) => {
+const createValidatedScriptGraphData = ({
+  systemPrompt,
+  prompt,
+  schema,
+  llmAgent,
+  llmModel,
+  maxTokens,
+}: {
+  systemPrompt: string;
+  prompt: string;
+  schema: ZodSchema;
+  llmAgent: string;
+  llmModel: string;
+  maxTokens: string;
+}) => {
   return {
     loop: {
       while: ":continue",
@@ -23,11 +41,12 @@ const createValidatedScriptGraphData = ({ systemPrompt, prompt, schema }: { syst
         update: ":counter.add(1)",
       },
       llm: {
-        agent: "openAIAgent",
+        agent: llmAgent,
         inputs: {
-          model: "gpt-4o",
+          model: llmModel,
           system: systemPrompt,
           prompt: prompt,
+          max_tokens: maxTokens,
         },
       },
       validateSchema: {
@@ -73,11 +92,23 @@ const graphData: GraphData = {
     fileName: {
       value: "",
     },
+    llmAgent: {
+      value: "",
+    },
+    llmModel: {
+      value: "",
+    },
+    maxTokens: {
+      value: 0,
+    },
     script: {
       agent: "mapAgent",
       inputs: {
         rows: ":scenes",
         prompt: ":beatsPrompt",
+        llmAgent: ":llmAgent",
+        llmModel: ":llmModel",
+        maxTokens: ":maxTokens",
       },
       params: {
         compositeResult: true,
@@ -89,11 +120,17 @@ const graphData: GraphData = {
             inputs: {
               prompt: ":prompt",
               row: ":row",
+              llmAgent: ":llmAgent",
+              llmModel: ":llmModel",
+              maxTokens: ":maxTokens",
             },
             graph: createValidatedScriptGraphData({
               systemPrompt: ":prompt",
               prompt: graphDataScriptGeneratePrompt("${:row}"),
               schema: mulmoScriptSchema.shape.beats,
+              llmAgent: ":llmAgent",
+              llmModel: ":llmModel",
+              maxTokens: ":maxTokens",
             }),
           },
           json: {
@@ -120,11 +157,17 @@ const graphData: GraphData = {
       agent: "nestedAgent",
       inputs: {
         prompt: ":scriptInfoPrompt",
+        llmAgent: ":llmAgent",
+        llmModel: ":llmModel",
+        maxTokens: ":maxTokens",
       },
       graph: createValidatedScriptGraphData({
         systemPrompt: "",
         prompt: ":prompt",
         schema: mulmoScriptSchema.omit({ beats: true }),
+        llmAgent: ":llmAgent",
+        llmModel: ":llmModel",
+        maxTokens: ":maxTokens",
       }),
     },
     mergedScript: {
@@ -165,27 +208,35 @@ export const storyToScript = async ({
   templateName,
   outdir,
   fileName,
+  llmAgent,
+  llmModel,
 }: {
   story: MulmoStoryboard;
   beatsPerScene: number;
   templateName: string;
   outdir: string;
   fileName: string;
+  llmAgent?: string;
+  llmModel?: string;
 }) => {
   const templatePath = getTemplateFilePath(templateName);
   const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
   const template = mulmoScriptTemplateSchema.parse(rowTemplate);
+  const { agent, model, max_tokens } = llmPair(llmAgent, llmModel);
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);
 
-  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, fileWriteAgent, validateSchemaAgent });
+  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, anthropicAgent, geminiAgent, groqAgent, fileWriteAgent, validateSchemaAgent });
 
   graph.injectValue("beatsPrompt", beatsPrompt);
   graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);
   graph.injectValue("scenes", story.scenes);
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", fileName);
+  graph.injectValue("llmAgent", agent);
+  graph.injectValue("llmModel", model);
+  graph.injectValue("maxTokens", max_tokens);
 
   const result = await graph.run<{ path: string }>();
   writingMessage(result?.writeJSON?.path ?? "");

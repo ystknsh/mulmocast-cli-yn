@@ -1,5 +1,6 @@
 import { Argv } from "yargs";
 import { getAvailableTemplates } from "../../../../utils/file.js";
+import { llmAgents } from "../../../../utils/utils.js";
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 
@@ -36,6 +37,17 @@ export const builder = (yargs: Argv) => {
       demandOption: false,
       default: 3,
       type: "number",
+    })
+    .option("llm_agent", {
+      description: "llm agent",
+      demandOption: false,
+      choices: llmAgents,
+      type: "string",
+    })
+    .option("llm_model", {
+      description: "llm model",
+      demandOption: false,
+      type: "string",
     })
     .positional("file", {
       description: "story file path",

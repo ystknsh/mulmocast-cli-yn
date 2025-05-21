@@ -14,9 +14,11 @@ export const handler = async (
     s?: string;
     beats_per_scene?: number;
     file?: string;
+    llm_agent?: string;
+    llm_model?: string;
   }>,
 ) => {
-  const { v: verbose, s: filename, file, o: outdir, b: basedir, beats_per_scene } = argv;
+  const { v: verbose, s: filename, file, o: outdir, b: basedir, beats_per_scene, llm_agent, llm_model } = argv;
   let { t: template } = argv;
 
   const baseDirPath = getBaseDirPath(basedir as string);
@@ -33,6 +35,8 @@ export const handler = async (
     fileName: filename as string,
     beatsPerScene: beats_per_scene as number,
     storyFilePath: file as string,
+    llmAgent: llm_agent,
+    llmModel: llm_model,
   });
 
   const parsedStory = readAndParseJson(file as string, mulmoStoryboardSchema);
@@ -42,5 +46,7 @@ export const handler = async (
     templateName: template,
     outdir: outDirPath,
     fileName: filename as string,
+    llmAgent: llm_agent,
+    llmModel: llm_model,
   });
 };
