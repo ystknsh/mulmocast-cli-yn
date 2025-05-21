@@ -22,10 +22,10 @@ export const validateSchemaAgent: AgentFunction<object, ValidateMulmoScriptRespo
   namedInputs,
 }) => {
   const { text, schema } = namedInputs;
-  assert(schema, "schema is required");
-  assert(text, "text is required");
-
   try {
+    assert(schema, "schema is required");
+    assert(text, "text is required");
+
     const jsonData = JSON.parse(text);
     const parsed = schema.parse(jsonData);
     return {
