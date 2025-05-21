@@ -1,6 +1,6 @@
 import path from "path";
-import { getBaseDirPath, getTemplateFilePath, writingMessage } from "../utils/file.js";
-import { mulmoScriptSchema, mulmoScriptTemplateSchema, mulmoStoryboardSchema } from "../types/schema.js";
+import { getTemplateFilePath, writingMessage } from "../utils/file.js";
+import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
 import { MulmoScriptTemplate, MulmoStoryboard } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -159,7 +159,19 @@ const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: Mu
   return storyToScriptInfoPrompt(sampleScriptWithoutBeats, story);
 };
 
-const storyToScript = async ({ story, beatsPerScene, templateName }: { story: MulmoStoryboard; beatsPerScene: number; templateName: string }) => {
+export const storyToScript = async ({
+  story,
+  beatsPerScene,
+  templateName,
+  outdir,
+  fileName,
+}: {
+  story: MulmoStoryboard;
+  beatsPerScene: number;
+  templateName: string;
+  outdir: string;
+  fileName: string;
+}) => {
   const templatePath = getTemplateFilePath(templateName);
   const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
   const template = mulmoScriptTemplateSchema.parse(rowTemplate);
@@ -172,23 +184,9 @@ const storyToScript = async ({ story, beatsPerScene, templateName }: { story: Mu
   graph.injectValue("beatsPrompt", beatsPrompt);
   graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);
   graph.injectValue("scenes", story.scenes);
-  // TODO: use cli args
-  graph.injectValue("outdir", path.resolve(process.cwd(), "output"));
-  graph.injectValue("fileName", "script");
+  graph.injectValue("outdir", outdir);
+  graph.injectValue("fileName", fileName);
 
   const result = await graph.run<{ path: string }>();
   writingMessage(result?.writeJSON?.path ?? "");
 };
-
-const main = async () => {
-  const beatsPerScene = 3;
-  const templateName = "business";
-  const storyPath = "./scripts/test/mulmo_story.json";
-
-  const storyRaw = await import(path.resolve(getBaseDirPath(), storyPath), { assert: { type: "json" } }).then((mod) => mod.default);
-  const story = mulmoStoryboardSchema.parse(storyRaw);
-
-  await storyToScript({ story, beatsPerScene, templateName });
-};
-
-main();
