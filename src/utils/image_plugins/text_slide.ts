@@ -8,9 +8,7 @@ const processTextSlide = async (params: ImageProcessorParams) => {
   if (!beat.image || beat.image.type !== imageType) return;
 
   const slide = beat.image.slide;
-  const markdown = `# ${slide.title}\n`
-    + (slide.subtitle ? `## ${slide.subtitle}\n` : "")
-    + (slide.bullets ?? []).map((text) => `- ${text}`).join("\n");
+  const markdown = `# ${slide.title}\n` + (slide.subtitle ? `## ${slide.subtitle}\n` : "") + (slide.bullets ?? []).map((text) => `- ${text}`).join("\n");
   const topMargin = (() => {
     if (slide.bullets?.length && slide.bullets.length > 0) {
       return "";
