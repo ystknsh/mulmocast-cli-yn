@@ -21,31 +21,36 @@ const graph_data: GraphData = {
       },
       graph: {
         nodes: {
-          test: {
+          generateCaption: {
             agent: async (namedInputs: { beat: MulmoBeat; context: MulmoStudioContext; index: number }) => {
               const { beat, context, index } = namedInputs;
-              const { fileDirs } = namedInputs.context;
-              const { caption } = context;
-              const { imageDirPath } = fileDirs;
-              const { canvasSize } = context.studio.script;
-              const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
-              const template = getHTMLFile("caption");
-              const text = (() => {
-                const multiLingual = context.studio.multiLingual;
-                if (caption && multiLingual) {
-                  return multiLingual[index].multiLingualTexts[caption].text;
-                }
-                GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${caption}`);
-                return beat.text;
-              })();
-              const htmlData = interpolate(template, {
-                caption: text,
-                width: `${canvasSize.width}`,
-                height: `${canvasSize.height}`,
-              });
-              await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
-              context.studio.beats[index].captionFile = imagePath;
-              return imagePath;
+              try {
+                MulmoStudioMethods.setBeatSessionState(context.studio, "caption", index, true);
+                const { fileDirs } = namedInputs.context;
+                const { caption } = context;
+                const { imageDirPath } = fileDirs;
+                const { canvasSize } = context.studio.script;
+                const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
+                const template = getHTMLFile("caption");
+                const text = (() => {
+                  const multiLingual = context.studio.multiLingual;
+                  if (caption && multiLingual) {
+                    return multiLingual[index].multiLingualTexts[caption].text;
+                  }
+                  GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${caption}`);
+                  return beat.text;
+                })();
+                const htmlData = interpolate(template, {
+                  caption: text,
+                  width: `${canvasSize.width}`,
+                  height: `${canvasSize.height}`,
+                });
+                await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
+                context.studio.beats[index].captionFile = imagePath;
+                return imagePath;
+              } finally {
+                MulmoStudioMethods.setBeatSessionState(context.studio, "caption", index, false);
+              }
             },
             inputs: {
               beat: ":beat",
