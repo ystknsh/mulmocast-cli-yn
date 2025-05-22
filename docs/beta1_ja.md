@@ -55,6 +55,9 @@
 
 MulmoCastは、ビジネス向けプレゼンからポッドキャストまで、さまざまな形式の（＝マルチ・モーダルな）コンテンツを作るためのツールです。ここでは、まずコミックスタイルの動画を作る練習をしてみましょう。
 
+[![Watch Comic-Style Animation Example](./images/release_note_spotify_and_the_power_of_external_payments_thumnail.jpg)](https://youtu.be/VQVH1w7rY_M)  
+*Click the image above to watch an example of what you can create*
+
 ### 基本操作
 
 1. 映像化したいWebページのURLをクリップボードにコピーします
@@ -86,30 +89,32 @@ MulmoCastは、ビジネス向けプレゼンからポッドキャストまで�
    ```bash
    ./output
    ├── audio
-   │   └── script_20250522_155403 //音声生成の過程で生成された音声 
+   │   └── script_20250522_155403 //音声生成の過程で生成された音声が格納されるフォルダー 
    ├── images
-   │   └── script_20250522_155403 //動画生成の過程で生成された画像
+   │   └── script_20250522_155403 //動画生成の過程で生成された画像が格納されるフォルダー
    ├── script_20250522_155403_studio.json //MulmoScript を元に自動更新されるシステム向けJSONファイル
    ├── script_20250522_155403.json //生成されたMulmoScript（ChatGPT で生成したJSONファイル）
    ├── script_20250522_155403.mp3 //生成された音声
    └── script_20250522_155403.mp4 //生成された動画
    ```
+   
+   以降の説明では、ここで生成される MulmoScript（ファイル名: `script_yyyymmdd_hhmmss.json`、上記の例では、`script_20250522_155403.json`）を指定していきます。
 
 ---
 
 ## 日本語版の映像の作成
 
-上記の手順で生成されたスクリプトファイル名を元に、ターミナルで以下を実行：
+上記の手順で生成されたスクリプトファイル名を元に、ターミナルで以下を実行します：
 
-* **日本語字幕付き映像を作成する場合：**
+- **日本語字幕付き映像を作成する場合：**
 
   ```bash
-  mulmo movie script_XXXXXXXX_XXXX.json -c ja
+  mulmo movie output/script_yyyymmdd_hhmmss.json -c ja
   ```
 
   → `output`フォルダーに `__ja` というサフィックスが付いた動画が生成されます（アンダーラインは2本）。
 
-* **日本語音声付き映像を作成する場合：**
+- **日本語音声付き映像を作成する場合：**
 
   ```bash
   mulmo movie script_XXXXXXXX_XXXX.json -l ja
@@ -121,7 +126,7 @@ MulmoCastは、ビジネス向けプレゼンからポッドキャストまで�
 
 ## ジブリ風のコミック映像を作成したい場合
 
-ステップ3で以下のコマンドを実行すると、ジブリ風映像用のプロンプトが生成されます：
+基本操作ステップ3で以下のコマンドを実行すると、ジブリ風映像用のプロンプトが生成されます：
 
 ```bash
 mulmo prompt -t ghibli_strips
