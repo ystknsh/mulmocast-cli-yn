@@ -18,10 +18,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const inputIds = (
     await Promise.all(
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
+        const beat = context.studio.script.beats[index];
         const isClosingGap = index === context.studio.beats.length - 2;
         if (studioBeat.audioFile) {
           const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
           const padding = (() => {
+            if (beat.audioParams?.padding !== undefined) {
+              return beat.audioParams.padding;
+            }
             if (index === context.studio.beats.length - 1) {
               return 0;
             }
@@ -37,7 +41,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           }
         } else {
           // NOTE: We come here when the text is empty and no audio property is specified.
-          studioBeat.duration = context.studio.script.beats[index].duration ?? 1.0;
+          studioBeat.duration = beat.duration ?? 1.0;
           const silentId = silentIds.pop();
           ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
           return [`[silent_${index}]`];
@@ -46,10 +50,6 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     )
   ).flat();
 
-  // HACK: Because the last beat may not use an silent audio, we need to consume it to make ffmpeg happy.
-  if (silentIds.length > 1) {
-    throw new Error("UNEXPECTED: silentIds.length > 1");
-  }
   silentIds.forEach((silentId) => {
     GraphAILogger.log(`Using extra silentId: ${silentId}`);
     ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}[silent_extra]`);
