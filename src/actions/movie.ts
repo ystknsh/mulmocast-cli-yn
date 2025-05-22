@@ -3,6 +3,7 @@ import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } 
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
@@ -143,11 +144,16 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 };
 
 export const movie = async (context: MulmoStudioContext) => {
-  const { studio, fileDirs, caption } = context;
-  const { outDirPath } = fileDirs;
-  const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
-  const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename, context.lang, caption);
+  MulmoStudioMethods.setSessionState(context.studio, "video", true);
+  try {
+    const { studio, fileDirs, caption } = context;
+    const { outDirPath } = fileDirs;
+    const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
+    const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename, context.lang, caption);
 
-  await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption);
-  writingMessage(outputVideoPath);
+    await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption);
+    writingMessage(outputVideoPath);
+  } finally {
+    MulmoStudioMethods.setSessionState(context.studio, "video", false);
+  }
 };

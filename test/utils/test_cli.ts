@@ -65,6 +65,16 @@ test("test createOrUpdateStudioData", async () => {
     filename: "",
     beats: [{}, {}],
     multiLingual: [{ multiLingualTexts: {} }, { multiLingualTexts: {} }],
+    state: {
+      inSession: {
+        audio: false,
+        image: false,
+        video: false,
+        multiLingual: false,
+        caption: false,
+        pdf: false,
+      },
+    },
   };
   assert.deepStrictEqual(studio, expect);
 });

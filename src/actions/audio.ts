@@ -25,6 +25,7 @@ import {
   resolveMediaSource,
 } from "../utils/file.js";
 import { text2hash, localizedText } from "../utils/utils.js";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -187,37 +188,42 @@ const agentFilters = [
 ];
 
 export const audio = async (context: MulmoStudioContext) => {
-  const { studio, fileDirs, lang } = context;
-  const { outDirPath, audioDirPath } = fileDirs;
-  const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
-  const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
-  const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename, lang);
-  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+  try {
+    MulmoStudioMethods.setSessionState(context.studio, "audio", true);
+    const { studio, fileDirs, lang } = context;
+    const { outDirPath, audioDirPath } = fileDirs;
+    const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
+    const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
+    const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename, lang);
+    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
 
-  mkdir(outDirPath);
-  mkdir(audioSegmentDirPath);
+    mkdir(outDirPath);
+    mkdir(audioSegmentDirPath);
 
-  graph_data.concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
-  const graph = new GraphAI(
-    graph_data,
-    {
-      ...vanillaAgents,
-      fileWriteAgent,
-      ttsOpenaiAgent,
-      ttsNijivoiceAgent,
-      ttsGoogleAgent,
-      addBGMAgent,
-      combineAudioFilesAgent,
-    },
-    { agentFilters },
-  );
-  graph.injectValue("context", context);
-  graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
-  graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
-  graph.injectValue("outputStudioFilePath", outputStudioFilePath);
-  graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
-  graph.injectValue("audioDirPath", audioDirPath);
-  await graph.run();
+    graph_data.concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
+    const graph = new GraphAI(
+      graph_data,
+      {
+        ...vanillaAgents,
+        fileWriteAgent,
+        ttsOpenaiAgent,
+        ttsNijivoiceAgent,
+        ttsGoogleAgent,
+        addBGMAgent,
+        combineAudioFilesAgent,
+      },
+      { agentFilters },
+    );
+    graph.injectValue("context", context);
+    graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
+    graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
+    graph.injectValue("outputStudioFilePath", outputStudioFilePath);
+    graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
+    graph.injectValue("audioDirPath", audioDirPath);
+    await graph.run();
 
-  writingMessage(audioCombinedFilePath);
+    writingMessage(audioCombinedFilePath);
+  } finally {
+    MulmoStudioMethods.setSessionState(context.studio, "audio", false);
+  }
 };

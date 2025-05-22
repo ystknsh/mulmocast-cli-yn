@@ -296,12 +296,33 @@ export const mulmoStudioMultiLingualDataSchema = z.object({
 
 export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1);
 
+export const mulmoSessionStateSchema = z.object({
+  inSession: z.object({
+    audio: z.boolean(),
+    image: z.boolean(),
+    video: z.boolean(),
+    multiLingual: z.boolean(),
+    caption: z.boolean(),
+    pdf: z.boolean(),
+  }),
+});
+
 export const mulmoStudioSchema = z
   .object({
     script: mulmoScriptSchema,
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
     multiLingual: mulmoStudioMultiLingualSchema,
+    state: mulmoSessionStateSchema.default({
+      inSession: {
+        audio: false,
+        image: false,
+        video: false,
+        multiLingual: false,
+        caption: false,
+        pdf: false,
+      },
+    }),
   })
   .strict();
 

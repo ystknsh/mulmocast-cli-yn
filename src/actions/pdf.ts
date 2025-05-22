@@ -10,6 +10,7 @@ import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 
 import { fontSize, textMargin, drawSize, wrapText } from "../utils/pdf.js";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 const imagesPerPage = 4;
 const offset = 10;
@@ -227,7 +228,7 @@ const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boole
   return { width: 612, height: 792 };
 };
 
-export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
+const generatePdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
   const { studio, fileDirs, lang } = context;
   const { multiLingual } = studio;
   const { outDirPath } = fileDirs;
@@ -263,4 +264,13 @@ export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize
   const pdfBytes = await pdfDoc.save();
   fs.writeFileSync(outputPdfPath, pdfBytes);
   writingMessage(outputPdfPath);
+};
+
+export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
+  try {
+    MulmoStudioMethods.setSessionState(context.studio, "pdf", true);
+    await generatePdf(context, pdfMode, pdfSize);
+  } finally {
+    MulmoStudioMethods.setSessionState(context.studio, "pdf", false);
+  }
 };

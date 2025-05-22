@@ -9,6 +9,7 @@ import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/strin
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudio } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -215,24 +216,28 @@ const defaultLang = "en";
 const targetLangs = ["ja", "en"];
 
 export const translate = async (context: MulmoStudioContext) => {
-  const { studio, fileDirs } = context;
-  const { outDirPath } = fileDirs;
-  const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
-  mkdir(outDirPath);
+  try {
+    MulmoStudioMethods.setSessionState(context.studio, "multiLingual", true);
+    const { studio, fileDirs } = context;
+    const { outDirPath } = fileDirs;
+    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+    mkdir(outDirPath);
 
-  assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
+    assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
 
-  const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters });
-  graph.injectValue("studio", studio);
-  graph.injectValue("defaultLang", defaultLang);
-  graph.injectValue("targetLangs", targetLangs);
-  graph.injectValue("outDirPath", outDirPath);
-  graph.injectValue("outputStudioFilePath", outputStudioFilePath);
+    const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters });
+    graph.injectValue("studio", studio);
+    graph.injectValue("defaultLang", defaultLang);
+    graph.injectValue("targetLangs", targetLangs);
+    graph.injectValue("outDirPath", outDirPath);
+    graph.injectValue("outputStudioFilePath", outputStudioFilePath);
 
-  const results = await graph.run<MulmoStudio>();
-  writingMessage(outputStudioFilePath);
-  if (results.mergeStudioResult) {
-    context.studio = results.mergeStudioResult;
+    const results = await graph.run<MulmoStudio>();
+    writingMessage(outputStudioFilePath);
+    if (results.mergeStudioResult) {
+      context.studio = results.mergeStudioResult;
+    }
+  } finally {
+    MulmoStudioMethods.setSessionState(context.studio, "multiLingual", false);
   }
-  // console.log(JSON.stringify(results, null, 2));
 };
