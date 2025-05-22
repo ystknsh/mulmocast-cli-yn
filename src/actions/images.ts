@@ -101,6 +101,9 @@ const graph_data: GraphData = {
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
               force: ":context.force",
+              studio: ":context.studio", // for cache
+              index: ":__mapIndex", // for cache
+              sessionType: "image", // for cache
             },
             defaultValue: {},
           },
