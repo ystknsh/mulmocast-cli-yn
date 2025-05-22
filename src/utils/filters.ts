@@ -10,7 +10,7 @@ import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file, text, force, studio, index, sessionType } = namedInputs;
+  const { file, force, studio, index, sessionType } = namedInputs;
 
   const shouldUseCache = async () => {
     if (force) {
@@ -25,7 +25,6 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
   };
 
   if (await shouldUseCache()) {
-    const elements = file.split("/");
     return true;
   }
   try {

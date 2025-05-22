@@ -1,4 +1,3 @@
-import { GraphAILogger } from "graphai";
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 

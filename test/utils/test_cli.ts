@@ -74,6 +74,12 @@ test("test createOrUpdateStudioData", async () => {
         caption: false,
         pdf: false,
       },
+      inBeatSession: {
+        audio: new Set(),
+        image: new Set(),
+        multiLingual: new Set(),
+        caption: new Set(),
+      },
     },
   };
   assert.deepStrictEqual(studio, expect);

@@ -53,7 +53,7 @@ const imagePreprocessAgent = async (namedInputs: {
         const path = await plugin.process(processorParams);
         // undefined prompt indicates that image generation is not needed
         return { path, ...returnValue };
-        } finally {
+      } finally {
         MulmoStudioMethods.setBeatSessionState(context.studio, "image", index, false);
       }
     }
