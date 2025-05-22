@@ -26,7 +26,6 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
 
   if (await shouldUseCache()) {
     const elements = file.split("/");
-    GraphAILogger.info("cache hit: " + elements[elements.length - 1], text.slice(0, 10));
     return true;
   }
   try {
