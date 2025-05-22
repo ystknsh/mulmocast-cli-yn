@@ -175,10 +175,17 @@ export const videoParamsSchema = z
   .strict();
 */
 
+export const beatAudioParamsSchema = z
+  .object({
+    padding: z.number().optional().describe("Padding between beats"), // seconds
+  })
+  .strict();
+
+// Note: we can't extend beatAudioParamsSchema because it has padding as optional
 export const audioParamsSchema = z
   .object({
-    introPadding: z.number().describe("Padding at the beginning of the audio"), // seconds
     padding: z.number().describe("Padding between beats"), // seconds
+    introPadding: z.number().describe("Padding at the beginning of the audio"), // seconds
     closingPadding: z.number().describe("Padding before the last beat"), // seconds
     outroPadding: z.number().describe("Padding at the end of the audio"), // seconds
   })
@@ -193,6 +200,7 @@ export const mulmoBeatSchema = z
     duration: z.number().optional().describe("Duration of the beat. Used only when the text is empty"),
 
     imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
+    audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
