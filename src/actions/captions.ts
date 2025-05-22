@@ -3,6 +3,7 @@ import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -60,7 +61,14 @@ const graph_data: GraphData = {
 };
 
 export const captions = async (context: MulmoStudioContext) => {
-  const graph = new GraphAI(graph_data, { ...vanillaAgents });
-  graph.injectValue("context", context);
-  await graph.run();
+  try {
+    MulmoStudioMethods.setSessionState(context.studio, "generatingCaption", true);
+    const graph = new GraphAI(graph_data, { ...vanillaAgents });
+    graph.injectValue("context", context);
+    await graph.run();
+  } catch (error) {
+    throw error;
+  } finally {
+    MulmoStudioMethods.setSessionState(context.studio, "generatingCaption", false);
+  }
 };

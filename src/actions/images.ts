@@ -19,6 +19,7 @@ const { default: __, ...vanillaAgents } = agents;
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
   return {
@@ -153,7 +154,7 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-export const images = async (context: MulmoStudioContext) => {
+const generateImages = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
   const { outDirPath, imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
@@ -196,4 +197,15 @@ export const images = async (context: MulmoStudioContext) => {
     graph.injectValue(key, injections[key]);
   });
   await graph.run<{ output: MulmoStudioBeat[] }>();
+};
+
+export const images = async (context: MulmoStudioContext) => {
+  try {
+    MulmoStudioMethods.setSessionState(context.studio, "generatingImage", true);
+    await generateImages(context);
+  } catch (error) {
+    throw error;
+  } finally {
+    MulmoStudioMethods.setSessionState(context.studio, "generatingImage", false);
+  }
 };

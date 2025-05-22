@@ -301,6 +301,7 @@ export const mulmoSessionStateSchema = z.object({
   generatingImage: z.boolean().optional(),
   generatingVideo: z.boolean().optional(),
   generatingMultiLingual: z.boolean().optional(),
+  generatingCaption: z.boolean().optional(),
 });
 
 export const mulmoStudioSchema = z
@@ -314,6 +315,7 @@ export const mulmoStudioSchema = z
       generatingImage: false,
       generatingVideo: false,
       generatingMultiLingual: false,
+      generatingCaption: false,
     }),
   })
   .strict();
