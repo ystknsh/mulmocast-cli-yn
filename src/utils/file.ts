@@ -166,7 +166,7 @@ export const getAvailableTemplates = (): (MulmoScriptTemplate & { filename: stri
 };
 
 export const writingMessage = (filePath: string) => {
-  GraphAILogger.info(`writing: ${filePath}`);
+  GraphAILogger.debug(`writing: ${filePath}`);
 };
 
 export const resolveMediaSource = (source: MulmoMediaSource, context: MulmoStudioContext) => {

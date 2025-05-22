@@ -313,6 +313,12 @@ export const mulmoSessionStateSchema = z.object({
     caption: z.boolean(),
     pdf: z.boolean(),
   }),
+  inBeatSession: z.object({
+    audio: z.set(z.number()),
+    image: z.set(z.number()),
+    multiLingual: z.set(z.number()),
+    caption: z.set(z.number()),
+  }),
 });
 
 export const mulmoStudioSchema = z
@@ -329,6 +335,12 @@ export const mulmoStudioSchema = z
         multiLingual: false,
         caption: false,
         pdf: false,
+      },
+      inBeatSession: {
+        audio: new Set(),
+        image: new Set(),
+        multiLingual: new Set(),
+        caption: new Set(),
       },
     }),
   })

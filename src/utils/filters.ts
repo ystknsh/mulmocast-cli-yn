@@ -6,10 +6,11 @@ import type { AgentFilterFunction } from "graphai";
 import { GraphAILogger } from "graphai";
 import { writingMessage } from "./file.js";
 import { text2hash } from "./utils.js";
+import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file, text, force } = namedInputs;
+  const { file, force, studio, index, sessionType } = namedInputs;
 
   const shouldUseCache = async () => {
     if (force) {
@@ -24,19 +25,22 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
   };
 
   if (await shouldUseCache()) {
-    const elements = file.split("/");
-    GraphAILogger.info("cache hit: " + elements[elements.length - 1], text.slice(0, 10));
     return true;
   }
-  const output = (await next(context)) as { buffer: Buffer };
-  const buffer = output ? output["buffer"] : undefined;
-  if (buffer) {
-    writingMessage(file);
-    await fsPromise.writeFile(file, buffer);
-    return true;
+  try {
+    MulmoStudioMethods.setBeatSessionState(studio, sessionType, index, true);
+    const output = (await next(context)) as { buffer: Buffer };
+    const buffer = output ? output["buffer"] : undefined;
+    if (buffer) {
+      writingMessage(file);
+      await fsPromise.writeFile(file, buffer);
+      return true;
+    }
+    GraphAILogger.log("no cache, no buffer: " + file);
+    return false;
+  } finally {
+    MulmoStudioMethods.setBeatSessionState(studio, sessionType, index, false);
   }
-  GraphAILogger.log("no cache, no buffer: " + file);
-  return false;
 };
 
 export const browserlessCacheGenerator = (cacheDir: string) => {

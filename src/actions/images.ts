@@ -47,10 +47,15 @@ const imagePreprocessAgent = async (namedInputs: {
   if (beat.image) {
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     if (plugin) {
-      const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
-      const path = await plugin.process(processorParams);
-      // undefined prompt indicates that image generation is not needed
-      return { path, ...returnValue };
+      try {
+        MulmoStudioMethods.setBeatSessionState(context.studio, "image", index, true);
+        const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
+        const path = await plugin.process(processorParams);
+        // undefined prompt indicates that image generation is not needed
+        return { path, ...returnValue };
+      } finally {
+        MulmoStudioMethods.setBeatSessionState(context.studio, "image", index, false);
+      }
     }
   }
 
@@ -101,6 +106,9 @@ const graph_data: GraphData = {
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
               force: ":context.force",
+              studio: ":context.studio", // for cache
+              index: ":__mapIndex", // for cache
+              sessionType: "image", // for cache
             },
             defaultValue: {},
           },

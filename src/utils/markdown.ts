@@ -1,4 +1,3 @@
-import { GraphAILogger } from "graphai";
 import { marked } from "marked";
 import puppeteer from "puppeteer";
 
@@ -37,7 +36,6 @@ export const renderHTMLToImage = async (
   await page.screenshot({ path: outputPath, omitBackground: omitBackground });
 
   await browser.close();
-  GraphAILogger.info(`HTML image rendered to ${outputPath}`);
 };
 
 export const renderMarkdownToImage = async (markdown: string, style: string, outputPath: string, width: number, height: number) => {
