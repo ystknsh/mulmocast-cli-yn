@@ -42,6 +42,32 @@
     },
     {
       "speaker": "Presenter",
+      "text": "This beat has a custom audio padding of 0.0 seconds.",
+      "audioParams": {
+        "padding": 0.0
+      },
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Custom Audio Padding 0.0 seconds"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This beat has a custom audio padding of 3.0 seconds.",
+      "audioParams": {
+        "padding": 3.0
+      },
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Custom Audio Padding 3.0 seconds"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
       "text": "",
       "duration": 2,
       "image": {
