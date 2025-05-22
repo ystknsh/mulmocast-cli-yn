@@ -1,6 +1,4 @@
-# MulmoCast 0.1.x Beta版 リリースノート
-
-> **Note:** MulmoCastはマルモキャストと呼びます
+# MulmoCast(マルモキャスト) 0.1.x Beta版 リリースノート
 
 ## ベータ版を使う際に最低限必要なもの
 
@@ -117,7 +115,7 @@ MulmoCastは、ビジネス向けプレゼンからポッドキャストまで�
 - **日本語音声付き映像を作成する場合：**
 
   ```bash
-  mulmo movie script_XXXXXXXX_XXXX.json -l ja
+  mulmo movie script_yyyymmdd_hhmmss.json -l ja
   ```
 
   → `output`フォルダーに `_ja` というサフィックスが付いた動画が生成されます（アンダーラインは1本）。
