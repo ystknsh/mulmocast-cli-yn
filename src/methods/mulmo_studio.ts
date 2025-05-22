@@ -1,7 +1,7 @@
 import { MulmoStudio } from "../types/index.js";
 import { GraphAILogger } from "graphai";
 
-type ChangeType = "generatingAudio" | "generatingImage" | "generatingVideo" | "generatingMultiLingual" | "generatingCaption";
+type ChangeType = "generatingAudio" | "generatingImage" | "generatingVideo" | "generatingMultiLingual" | "generatingCaption" | "generatingPDF";
 
 const notifyStateChange = (studio: MulmoStudio, changeType: ChangeType) => {
   GraphAILogger.info(`*** ${changeType} changed to ${studio.state[changeType]}`);
