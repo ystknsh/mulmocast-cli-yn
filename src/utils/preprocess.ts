@@ -5,12 +5,13 @@ const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: Mulm
   if (parsed.success) {
     return parsed.data;
   }
-  return {
+  // We need to parse it to fill default values
+  return mulmoStudioSchema.parse({
     script: mulmoScript,
     filename: fileName,
     beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
     multiLingual: [...Array(mulmoScript.beats.length)].map(() => ({ multiLingualTexts: {} })),
-  };
+  });
 };
 
 const mulmoCredit = (speaker: string) => {

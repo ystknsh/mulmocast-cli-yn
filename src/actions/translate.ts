@@ -217,7 +217,7 @@ const targetLangs = ["ja", "en"];
 
 export const translate = async (context: MulmoStudioContext) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingMultiLingual", true);
+    MulmoStudioMethods.setSessionState(context.studio, "multiLingual", true);
     const { studio, fileDirs } = context;
     const { outDirPath } = fileDirs;
     const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
@@ -238,6 +238,6 @@ export const translate = async (context: MulmoStudioContext) => {
       context.studio = results.mergeStudioResult;
     }
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingMultiLingual", false);
+    MulmoStudioMethods.setSessionState(context.studio, "multiLingual", false);
   }
 };

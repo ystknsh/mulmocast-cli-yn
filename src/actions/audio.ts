@@ -189,7 +189,7 @@ const agentFilters = [
 
 export const audio = async (context: MulmoStudioContext) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingAudio", true);
+    MulmoStudioMethods.setSessionState(context.studio, "audio", true);
     const { studio, fileDirs, lang } = context;
     const { outDirPath, audioDirPath } = fileDirs;
     const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
@@ -224,6 +224,6 @@ export const audio = async (context: MulmoStudioContext) => {
 
     writingMessage(audioCombinedFilePath);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingAudio", false);
+    MulmoStudioMethods.setSessionState(context.studio, "audio", false);
   }
 };

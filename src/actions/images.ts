@@ -201,9 +201,9 @@ const generateImages = async (context: MulmoStudioContext) => {
 
 export const images = async (context: MulmoStudioContext) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingImage", true);
+    MulmoStudioMethods.setSessionState(context.studio, "image", true);
     await generateImages(context);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingImage", false);
+    MulmoStudioMethods.setSessionState(context.studio, "image", false);
   }
 };

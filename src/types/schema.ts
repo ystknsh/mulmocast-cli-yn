@@ -297,12 +297,14 @@ export const mulmoStudioMultiLingualDataSchema = z.object({
 export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1);
 
 export const mulmoSessionStateSchema = z.object({
-  generatingAudio: z.boolean().optional(),
-  generatingImage: z.boolean().optional(),
-  generatingVideo: z.boolean().optional(),
-  generatingMultiLingual: z.boolean().optional(),
-  generatingCaption: z.boolean().optional(),
-  generatingPDF: z.boolean().optional(),
+  inSession: z.object({
+    audio: z.boolean(),
+    image: z.boolean(),
+    video: z.boolean(),
+    multiLingual: z.boolean(),
+    caption: z.boolean(),
+    pdf: z.boolean(),
+  }),
 });
 
 export const mulmoStudioSchema = z
@@ -312,12 +314,14 @@ export const mulmoStudioSchema = z
     beats: z.array(mulmoStudioBeatSchema).min(1),
     multiLingual: mulmoStudioMultiLingualSchema,
     state: mulmoSessionStateSchema.default({
-      generatingAudio: false,
-      generatingImage: false,
-      generatingVideo: false,
-      generatingMultiLingual: false,
-      generatingCaption: false,
-      generatingPDF: false,
+      inSession: {
+        audio: false,
+        image: false,
+        video: false,
+        multiLingual: false,
+        caption: false,
+        pdf: false,
+      },
     }),
   })
   .strict();

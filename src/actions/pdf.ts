@@ -268,9 +268,9 @@ const generatePdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSiz
 
 export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingPDF", true);
+    MulmoStudioMethods.setSessionState(context.studio, "pdf", true);
     await generatePdf(context, pdfMode, pdfSize);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingPDF", false);
+    MulmoStudioMethods.setSessionState(context.studio, "pdf", false);
   }
 };

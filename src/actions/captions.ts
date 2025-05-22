@@ -62,11 +62,11 @@ const graph_data: GraphData = {
 
 export const captions = async (context: MulmoStudioContext) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingCaption", true);
+    MulmoStudioMethods.setSessionState(context.studio, "caption", true);
     const graph = new GraphAI(graph_data, { ...vanillaAgents });
     graph.injectValue("context", context);
     await graph.run();
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "generatingCaption", false);
+    MulmoStudioMethods.setSessionState(context.studio, "caption", false);
   }
 };

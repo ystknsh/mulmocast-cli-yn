@@ -1,16 +1,16 @@
 import { MulmoStudio } from "../types/index.js";
 import { GraphAILogger } from "graphai";
 
-type ChangeType = "generatingAudio" | "generatingImage" | "generatingVideo" | "generatingMultiLingual" | "generatingCaption" | "generatingPDF";
+type ChangeType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
 
 const notifyStateChange = (studio: MulmoStudio, changeType: ChangeType) => {
-  const prefix = studio.state[changeType] ? "<" : ">";
+  const prefix = studio.state.inSession[changeType] ? "<" : ">";
   GraphAILogger.info(`${prefix} ${changeType}`);
 };
 
 export const MulmoStudioMethods = {
   setSessionState(studio: MulmoStudio, changeType: ChangeType, value: boolean) {
-    studio.state[changeType] = value;
+    studio.state.inSession[changeType] = value;
     notifyStateChange(studio, changeType);
   },
 };
