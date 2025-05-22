@@ -68,6 +68,7 @@ const translateGraph: GraphData = {
               rows: ":targetLangs",
               lang: ":lang.text",
               studio: ":studio",
+              beatIndex: ":__mapIndex",
             },
             params: {
               compositeResult: true,
@@ -82,6 +83,8 @@ const translateGraph: GraphData = {
                     beat: ":beat", // for cache
                     multiLingual: ":multiLingual", // for cache
                     lang: ":lang", // for cache
+                    beatIndex: ":beatIndex", // for cache
+                    studio: ":studio", // for cache
                     system: translateSystemPrompt,
                     prompt: translatePrompts,
                   },
@@ -179,10 +182,10 @@ const translateGraph: GraphData = {
 const localizedTextCacheAgentFilter: AgentFilterFunction<
   DefaultParamsType,
   DefaultResultData,
-  { targetLang: LANG; beat: MulmoBeat; multiLingual: MulmoStudioMultiLingualData; lang: LANG }
+  { studio: MulmoStudio; targetLang: LANG; beat: MulmoBeat; beatIndex: number; multiLingual: MulmoStudioMultiLingualData; lang: LANG }
 > = async (context, next) => {
   const { namedInputs } = context;
-  const { targetLang, beat, lang, multiLingual } = namedInputs;
+  const { studio, targetLang, beat, beatIndex, lang, multiLingual } = namedInputs;
 
   if (!beat.text) {
     return { text: "" };
@@ -202,7 +205,12 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
   if (targetLang === lang) {
     return { text: beat.text };
   }
-  return await next(context);
+  try {
+    MulmoStudioMethods.setBeatSessionState(studio, "multiLingual", beatIndex, true);
+    return await next(context);
+  } finally {
+    MulmoStudioMethods.setBeatSessionState(studio, "multiLingual", beatIndex, false);
+  }
 };
 const agentFilters = [
   {
