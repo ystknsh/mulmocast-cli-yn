@@ -223,8 +223,6 @@ export const audio = async (context: MulmoStudioContext) => {
     await graph.run();
 
     writingMessage(audioCombinedFilePath);
-  } catch (error) {
-    throw error;
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "generatingAudio", false);
   }

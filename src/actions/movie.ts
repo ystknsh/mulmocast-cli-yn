@@ -153,8 +153,6 @@ export const movie = async (context: MulmoStudioContext) => {
 
     await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption);
     writingMessage(outputVideoPath);
-  } catch (error) {
-    throw error;
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "generatingVideo", false);
   }

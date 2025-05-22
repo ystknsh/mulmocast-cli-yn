@@ -66,8 +66,6 @@ export const captions = async (context: MulmoStudioContext) => {
     const graph = new GraphAI(graph_data, { ...vanillaAgents });
     graph.injectValue("context", context);
     await graph.run();
-  } catch (error) {
-    throw error;
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "generatingCaption", false);
   }

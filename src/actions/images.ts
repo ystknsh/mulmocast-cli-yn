@@ -203,8 +203,6 @@ export const images = async (context: MulmoStudioContext) => {
   try {
     MulmoStudioMethods.setSessionState(context.studio, "generatingImage", true);
     await generateImages(context);
-  } catch (error) {
-    throw error;
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "generatingImage", false);
   }

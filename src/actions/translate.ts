@@ -237,8 +237,6 @@ export const translate = async (context: MulmoStudioContext) => {
     if (results.mergeStudioResult) {
       context.studio = results.mergeStudioResult;
     }
-  } catch (error) {
-    throw error;
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "generatingMultiLingual", false);
   }
