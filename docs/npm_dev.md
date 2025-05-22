@@ -42,5 +42,7 @@ Expected output:
 Run a sample script:
 
 ```
-mulmo  movie  docs/scripts/helloworld.yaml
+mulmo movie docs/scripts/helloworld.yaml
+mukmo pdf scripts/test/test_order.json  --pdf_mode handout
+
 ```
