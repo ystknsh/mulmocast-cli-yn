@@ -56,7 +56,7 @@
 MulmoCastは、ビジネス向けプレゼンからポッドキャストまで、さまざまな形式の（＝マルチ・モーダルな）コンテンツを作るためのツールです。ここでは、まずコミックスタイルの動画を作る練習をしてみましょう。
 
 [![Watch Comic-Style Animation Example](./images/release_note_spotify_and_the_power_of_external_payments_thumnail.jpg)](https://youtu.be/VQVH1w7rY_M)  
-*Click the image above to watch an example of what you can create*
+*上の画像をクリックすると、生成される動画例(YouTube)が開きます*
 
 ### 基本操作
 
