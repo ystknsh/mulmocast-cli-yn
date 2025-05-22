@@ -5,12 +5,12 @@ type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "p
 type BeatSessionType = "audio" | "image" | "multiLingual" | "caption";
 
 const notifyStateChange = (studio: MulmoStudio, sessionType: SessionType) => {
-  const prefix = studio.state.inSession[sessionType] ? "<" : ">";
+  const prefix = studio.state.inSession[sessionType] ? "<" : " >";
   GraphAILogger.info(`${prefix} ${sessionType}`);
 };
 
 const notifyBeatStateChange = (studio: MulmoStudio, sessionType: BeatSessionType, index: number) => {
-  const prefix = studio.state.inBeatSession[sessionType].has(index) ? "{" : "}";
+  const prefix = studio.state.inBeatSession[sessionType].has(index) ? "{" : " }";
   GraphAILogger.info(`${prefix} ${sessionType} ${index}`);
 };
 
