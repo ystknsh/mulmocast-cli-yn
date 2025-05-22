@@ -367,7 +367,7 @@ Options:
                          "ghibli_strips", "podcast_standard", "sensei_and_taro"]
   -c, --cache        cache dir                                          [string]
   -s, --script       script filename                [string] [default: "script"]
-      --llm_agent    llm agent
+      --llm          llm
               [string] [choices: "openAIAgent", "anthropicAgent", "geminiAgent",
                                                                     "groqAgent"]
       --llm_model    llm model                                          [string]

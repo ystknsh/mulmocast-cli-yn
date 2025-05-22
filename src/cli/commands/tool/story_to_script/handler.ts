@@ -5,6 +5,7 @@ import { storyToScript } from "../../../../tools/story_to_script.js";
 import { mulmoStoryboardSchema } from "../../../../types/schema.js";
 import { getBaseDirPath, getFullPath, readAndParseJson } from "../../../../utils/file.js";
 import { outDirName } from "../../../../utils/const.js";
+import { LLM } from "../../../../utils/utils.js";
 
 export const handler = async (
   argv: ToolCliArgs<{
@@ -14,11 +15,11 @@ export const handler = async (
     s?: string;
     beats_per_scene?: number;
     file?: string;
-    llm_agent?: string;
+    llm?: LLM;
     llm_model?: string;
   }>,
 ) => {
-  const { v: verbose, s: filename, file, o: outdir, b: basedir, beats_per_scene, llm_agent, llm_model } = argv;
+  const { v: verbose, s: filename, file, o: outdir, b: basedir, beats_per_scene, llm, llm_model } = argv;
   let { t: template } = argv;
 
   const baseDirPath = getBaseDirPath(basedir as string);
@@ -35,7 +36,7 @@ export const handler = async (
     fileName: filename as string,
     beatsPerScene: beats_per_scene as number,
     storyFilePath: file as string,
-    llmAgent: llm_agent,
+    llmAgent: llm,
     llmModel: llm_model,
   });
 
@@ -46,7 +47,7 @@ export const handler = async (
     templateName: template,
     outdir: outDirPath,
     fileName: filename as string,
-    llmAgent: llm_agent,
+    llm,
     llmModel: llm_model,
   });
 };

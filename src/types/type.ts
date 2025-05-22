@@ -29,7 +29,7 @@ import {
   mediaSourceSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes } from "../utils/const.js";
-
+import { LLM } from "../utils/utils.js";
 import { z } from "zod";
 
 export type LANG = z.infer<typeof langSchema>;
@@ -87,7 +87,7 @@ export type ScriptingParams = {
   templateName: string;
   filename: string;
   llm_model?: string;
-  llm_agent?: string;
+  llm?: LLM;
 };
 
 export type ImageProcessorParams = {
