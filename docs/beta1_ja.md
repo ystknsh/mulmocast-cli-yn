@@ -90,9 +90,9 @@ MulmoCastは、ビジネス向けプレゼンからポッドキャストまで�
    ├── images
    │   └── script_20250522_155403 //動画生成の過程で生成された画像
    ├── script_20250522_155403_studio.json //MulmoScript を元に自動更新されるシステム向けJSONファイル
-   ├── script_20250522_155403.json //MulmoScript
+   ├── script_20250522_155403.json //生成されたMulmoScript（ChatGPT で生成したJSONファイル）
    ├── script_20250522_155403.mp3 //生成された音声
-   └── script_20250522_155403.mp4 //生成さらた動画
+   └── script_20250522_155403.mp4 //生成された動画
    ```
 
 ---
