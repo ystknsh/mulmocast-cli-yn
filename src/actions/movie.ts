@@ -138,6 +138,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId));
   const end = performance.now();
   GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
+  GraphAILogger.info(studio.script.title);
+  GraphAILogger.info((studio.script.references ?? []).map((reference) => `${reference.title} (${reference.url})`).join("\n"));
 };
 
 export const movie = async (context: MulmoStudioContext) => {
