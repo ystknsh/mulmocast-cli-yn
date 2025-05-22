@@ -175,52 +175,150 @@ https://github.com/receptron/mulmocast-cli/tree/main/scripts
 
 CLI Usage
 
-### `mulmo -h` Output
-Use this command to generate content (audio, images, movie) from an existing MulmoScript.
 
-```bash
-mulmo -h
+
 ```
-```bash
-mulmo <action> <file>
+mulmo <command> [options]
 
-Run mulmocast
+Commands:
+  mulmo translate <file>  Translate Mulmo script
+  mulmo audio <file>      Generate audio files
+  mulmo images <file>     Generate image files
+  mulmo movie <file>      Generate movie file
+  mulmo pdf <file>        Generate PDF files
+  mulmo tool <command>    Generate Mulmo script and other tools
+
+Options:
+      --version  Show version number                                   [boolean]
+  -v, --verbose  verbose log               [boolean] [required] [default: false]
+  -h, --help     Show help                                             [boolean]
+```
+
+```
+mulmo translate <file>
+
+Translate Mulmo script
 
 Positionals:
-  action  action to perform
-       [string] [choices: "translate", "audio", "images", "movie", "preprocess"]
-  file    Mulmo Script File                                             [string]
+  file  Mulmo Script File                                    [string] [required]
+
+Options:
+      --version  Show version number                                   [boolean]
+  -v, --verbose  verbose log               [boolean] [required] [default: false]
+  -h, --help     Show help                                             [boolean]
+  -o, --outdir   output dir                                             [string]
+  -b, --basedir  base dir                                               [string]
+  -l, --lang     target language                  [string] [choices: "en", "ja"]
+  -f, --force    Force regenerate                     [boolean] [default: false]
+```
+
+```
+mulmo audio <file>
+
+Generate audio files
+
+Positionals:
+  file  Mulmo Script File                                    [string] [required]
 
 Options:
       --version   Show version number                                  [boolean]
   -v, --verbose   verbose log              [boolean] [required] [default: false]
+  -h, --help      Show help                                            [boolean]
   -o, --outdir    output dir                                            [string]
   -b, --basedir   base dir                                              [string]
-  -a, --audiodir  audio dir                                             [string]
-  -i, --imagedir  image dir                                             [string]
-  -f, --force     force generate                      [boolean] [default: false]
-      --help      Show help                                            [boolean]
-
+  -l, --lang      target language                 [string] [choices: "en", "ja"]
+  -f, --force     Force regenerate                    [boolean] [default: false]
+  -a, --audiodir  Audio output directory                                [string]
 ```
 
-### `mulmo-tool -h` Output
-Use this command to generate a new MulmoScript from a URL or interactively.
-
-```bash
-mulmo-tool -h
 ```
+mulmo images <file>
 
-```bash
-mulmo-tool <action>
-
-Run mulmocast tool
+Generate image files
 
 Positionals:
-  action  action to perform            [string] [choices: "scripting", "prompt"]
+  file  Mulmo Script File                                    [string] [required]
+
+Options:
+      --version   Show version number                                  [boolean]
+  -v, --verbose   verbose log              [boolean] [required] [default: false]
+  -h, --help      Show help                                            [boolean]
+  -o, --outdir    output dir                                            [string]
+  -b, --basedir   base dir                                              [string]
+  -l, --lang      target language                 [string] [choices: "en", "ja"]
+  -f, --force     Force regenerate                    [boolean] [default: false]
+  -i, --imagedir  Image output directory                                [string]
+```
+
+```
+mulmo movie <file>
+
+Generate movie file
+
+Positionals:
+  file  Mulmo Script File                                    [string] [required]
+
+Options:
+      --version   Show version number                                  [boolean]
+  -v, --verbose   verbose log              [boolean] [required] [default: false]
+  -h, --help      Show help                                            [boolean]
+  -o, --outdir    output dir                                            [string]
+  -b, --basedir   base dir                                              [string]
+  -l, --lang      target language                 [string] [choices: "en", "ja"]
+  -f, --force     Force regenerate                    [boolean] [default: false]
+  -a, --audiodir  Audio output directory                                [string]
+  -i, --imagedir  Image output directory                                [string]
+  -c, --caption   Video captions                  [string] [choices: "en", "ja"]
+```
+
+```
+mulmo pdf <file>
+
+Generate PDF files
+
+Positionals:
+  file  Mulmo Script File                                    [string] [required]
+
+Options:
+      --version   Show version number                                  [boolean]
+  -v, --verbose   verbose log              [boolean] [required] [default: false]
+  -h, --help      Show help                                            [boolean]
+  -o, --outdir    output dir                                            [string]
+  -b, --basedir   base dir                                              [string]
+  -l, --lang      target language                 [string] [choices: "en", "ja"]
+  -f, --force     Force regenerate                    [boolean] [default: false]
+  -i, --imagedir  Image output directory                                [string]
+      --pdf_mode  PDF mode
+               [string] [choices: "slide", "talk", "handout"] [default: "slide"]
+      --pdf_size  PDF paper size (default: letter)
+                                   [choices: "letter", "a4"] [default: "letter"]
+```
+
+```
+mulmo tool <command>
+
+Generate Mulmo script and other tools
+
+Commands:
+  mulmo tool scripting  Generate mulmocast script
+  mulmo tool prompt     Dump prompt from template
+  mulmo tool schema     Dump mulmocast schema
+
+Options:
+      --version  Show version number                                   [boolean]
+  -v, --verbose  verbose log               [boolean] [required] [default: false]
+  -h, --help     Show help                                             [boolean]
+```
+
+```
+mulmo tool scripting
+
+Generate mulmocast script
 
 Options:
       --version      Show version number                               [boolean]
   -v, --verbose      verbose log           [boolean] [required] [default: false]
+  -h, --help         Show help                                         [boolean]
   -o, --outdir       output dir                                         [string]
   -b, --basedir      base dir                                           [string]
   -u, --url          URLs to reference (required when not in interactive mode)
@@ -228,12 +326,41 @@ Options:
   -i, --interactive  Generate script in interactive mode with user prompts
                                                                        [boolean]
   -t, --template     Template name to use
-   [string] [choices: "business", "children_book", "coding", "podcast_standard",
-                                                              "sensei_and_taro"]
+       [string] [choices: "business", "children_book", "coding", "comic_strips",
+                         "ghibli_strips", "podcast_standard", "sensei_and_taro"]
   -c, --cache        cache dir                                          [string]
   -s, --script       script filename                [string] [default: "script"]
-      --help         Show help                                         [boolean]
+      --llm_agent    llm agent
+              [string] [choices: "openAIAgent", "anthropicAgent", "geminiAgent",
+                                                                    "groqAgent"]
+      --llm_model    llm model                                          [string]
 ```
+
+```
+mulmo tool prompt
+
+Dump prompt from template
+
+Options:
+      --version   Show version number                                  [boolean]
+  -v, --verbose   verbose log              [boolean] [required] [default: false]
+  -h, --help      Show help                                            [boolean]
+  -t, --template  Template name to use
+       [string] [choices: "business", "children_book", "coding", "comic_strips",
+                         "ghibli_strips", "podcast_standard", "sensei_and_taro"]
+```
+
+```
+mulmo tool schema
+
+Dump mulmocast schema
+
+Options:
+      --version  Show version number                                   [boolean]
+  -v, --verbose  verbose log               [boolean] [required] [default: false]
+  -h, --help     Show help                                             [boolean]
+```
+
 
 
 ## Contributing
