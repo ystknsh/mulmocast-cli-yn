@@ -148,7 +148,7 @@ const graphData: GraphData = {
   },
 };
 
-export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename, cacheDirPath, llm_agent, llm_model }: ScriptingParams) => {
+export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename, cacheDirPath, llm, llm_model }: ScriptingParams) => {
   mkdir(outDirPath);
   mkdir(cacheDirPath);
   const parsedUrls = urlsSchema.parse(urls);
@@ -161,7 +161,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
       nodeIds: ["fetcher"],
     },
   ];
-  const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
+  const { agent, model, max_tokens } = llmPair(llm, llm_model);
 
   const graph = new GraphAI(
     graphData,

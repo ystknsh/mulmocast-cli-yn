@@ -230,12 +230,12 @@ const scrapeWebContent = async (urls: string[], cacheDirPath: string) => {
   return `\n\n${prefixPrompt}\n${result?.sourceText.text}`;
 };
 
-export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath, filename, templateName, urls, llm_agent, llm_model }: ScriptingParams) => {
+export const createMulmoScriptInteractively = async ({ outDirPath, cacheDirPath, filename, templateName, urls, llm, llm_model }: ScriptingParams) => {
   mkdir(outDirPath);
   // if urls is not empty, scrape web content and reference it in the prompt
   const webContentPrompt = urls.length > 0 ? await scrapeWebContent(urls, cacheDirPath) : "";
 
-  const { agent, model, max_tokens } = llmPair(llm_agent, llm_model);
+  const { agent, model, max_tokens } = llmPair(llm, llm_model);
   GraphAILogger.log({ agent, model, max_tokens });
 
   const agentFilters = [

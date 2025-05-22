@@ -12,7 +12,7 @@ import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptInfoPro
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
-import { llmPair } from "../utils/utils.js";
+import { LLM, llmPair } from "../utils/utils.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -208,7 +208,7 @@ export const storyToScript = async ({
   templateName,
   outdir,
   fileName,
-  llmAgent,
+  llm,
   llmModel,
 }: {
   story: MulmoStoryboard;
@@ -216,13 +216,13 @@ export const storyToScript = async ({
   templateName: string;
   outdir: string;
   fileName: string;
-  llmAgent?: string;
+  llm?: LLM;
   llmModel?: string;
 }) => {
   const templatePath = getTemplateFilePath(templateName);
   const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
   const template = mulmoScriptTemplateSchema.parse(rowTemplate);
-  const { agent, model, max_tokens } = llmPair(llmAgent, llmModel);
+  const { agent, model, max_tokens } = llmPair(llm, llmModel);
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);

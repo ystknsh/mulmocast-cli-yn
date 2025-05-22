@@ -5,6 +5,7 @@ import { getUrlsIfNeeded, selectTemplate } from "../../../../utils/inquirer.js";
 import { createMulmoScriptFromUrl } from "../../../../tools/create_mulmo_script_from_url.js";
 import { createMulmoScriptInteractively } from "../../../../tools/create_mulmo_script_interactively.js";
 import { setGraphAILogger } from "../../../../cli/helpers.js";
+import { LLM } from "../../../../utils/utils.js";
 
 export const handler = async (
   argv: ToolCliArgs<{
@@ -15,11 +16,11 @@ export const handler = async (
     t?: string;
     c?: string;
     s?: string;
-    llm_agent?: string;
+    llm?: LLM;
     llm_model?: string;
   }>,
 ) => {
-  const { o: outdir, b: basedir, v: verbose, i: interactive, c: cache, s: filename, llm_agent, llm_model } = argv;
+  const { o: outdir, b: basedir, v: verbose, i: interactive, c: cache, s: filename, llm, llm_model } = argv;
   let { t: template } = argv;
   const urls = argv.u || [];
 
@@ -39,11 +40,11 @@ export const handler = async (
     urls,
     interactive,
     filename,
-    llm_agent,
+    llm,
     llm_model,
   });
 
-  const context = { outDirPath, templateName: template, urls, filename: filename as string, cacheDirPath, llm_model, llm_agent };
+  const context = { outDirPath, templateName: template, urls, filename: filename as string, cacheDirPath, llm_model, llm };
 
   if (interactive) {
     await createMulmoScriptInteractively(context);

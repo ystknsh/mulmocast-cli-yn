@@ -1,30 +1,38 @@
 import * as crypto from "crypto";
 import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 
-export const llmAgents = ["openAIAgent", "anthropicAgent", "geminiAgent", "groqAgent"];
+export const llm = ["openAI", "anthropic", "gemini", "groq"] as const;
 
-type LLMAgent = (typeof llmAgents)[number];
+export type LLM = (typeof llm)[number];
 
-const defaultModels: Record<LLMAgent, string> = {
-  anthropicAgent: "claude-3-7-sonnet-20250219",
-  geminiAgent: "gemini-1.5-flash",
-  groqAgent: "llama3-8b-8192",
-  openAIAgent: "gpt-4o",
-};
+export const llmConfig: Record<LLM, { agent: string; defaultModel: string; max_tokens: number }> = {
+  openAI: {
+    agent: "openAIAgent",
+    defaultModel: "gpt-4o",
+    max_tokens: 8192,
+  },
+  anthropic: {
+    agent: "anthropicAgent",
+    defaultModel: "claude-3-7-sonnet-20250219",
+    max_tokens: 8192,
+  },
+  gemini: {
+    agent: "geminiAgent",
+    defaultModel: "gemini-1.5-flash",
+    max_tokens: 8192,
+  },
+  groq: {
+    agent: "groqAgent",
+    defaultModel: "llama3-8b-8192",
+    max_tokens: 4096,
+  },
+} as const;
 
-const longMaxTokens: Record<LLMAgent, number> = {
-  anthropicAgent: 8192,
-  geminiAgent: 8192,
-  groqAgent: 4096,
-  openAIAgent: 8192,
-};
-
-export const defaultOpenAIModel = defaultModels["openAIAgent"];
-
-export const llmPair = (_agent?: LLMAgent, _model?: string) => {
-  const agent: LLMAgent = _agent && llmAgents.includes(_agent ?? "") ? _agent : ("openAIAgent" as const);
-  const model = _model ?? defaultModels[agent ?? ""];
-  const max_tokens = longMaxTokens[agent];
+export const llmPair = (_llm?: LLM, _model?: string) => {
+  const llmKey = _llm ?? "openAI";
+  const agent = llmConfig[llmKey]?.agent ?? llmConfig.openAI.agent;
+  const model = _model ?? llmConfig[llmKey]?.defaultModel ?? llmConfig.openAI.defaultModel;
+  const max_tokens = llmConfig[llmKey]?.max_tokens ?? llmConfig.openAI.max_tokens;
 
   return { agent, model, max_tokens };
 };
