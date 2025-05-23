@@ -26,12 +26,21 @@
   "beats": [
     {
       "speaker": "Presenter",
-      "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time: the Reality Distortion Field. This term has become synonymous with visionary leadership and the ability to accomplish seemingly impossible goals.",
+      "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time: the Reality Distortion Field.",
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "This is the title of this slide",
-          "bullets": []
+          "title": "This is the title of the presentation"
+        }
+      }
+    },
+    {
+      "text": "This is a sample slide, which just displays the title and the presenter's name of this presentation.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "This is the title of the presentation",
+          "subtitle": "Tom Johnson"
         }
       }
     },
@@ -56,7 +65,7 @@
     },
     {
       "speaker": "Presenter",
-      "text": "Our story begins with tree-dwelling primates—small mammals with forward-facing eyes and grasping hands. These ancestors lived in forests and evolved traits useful for climbing and visual depth perception.",
+      "text": "This is a table of items in the store.",
       "image": {
         "type": "markdown",
         "markdown": [
@@ -100,6 +109,36 @@
           "options": {
             "responsive": true,
             "animation": false
+          }
+        }
+      }
+    },
+    {
+      "text": "This is a sample pie chart",
+      "image": {
+        "type": "chart",
+        "title": "A sample pie chart",
+        "chartData": {
+          "type": "pie",
+          "data": {
+            "labels": ["OpenAIと投資家の取り分", "マイクロソフトの取り分"],
+            "datasets": [
+              {
+                "data": [90, 10],
+                "backgroundColor": ["rgba(75, 192, 192, 0.5)", "rgba(54, 162, 235, 0.5)"],
+                "borderColor": ["rgba(75, 192, 192, 1)", "rgba(54, 162, 235, 1)"],
+                "borderWidth": 1
+              }
+            ]
+          },
+          "options": {
+            "responsive": true,
+            "animation": false,
+            "plugins": {
+              "legend": {
+                "position": "bottom"
+              }
+            }
           }
         }
       }
@@ -167,12 +206,12 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This is the image of a pingpong ball.",
+      "text": "This is the image of the future of enterprise applications.",
       "image": {
         "type": "image",
         "source": {
           "kind": "url",
-          "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.png"
+          "url": "https://satoshi.blogs.com/mag2/May2025/enterprise_app.png"
         }
       }
     }
