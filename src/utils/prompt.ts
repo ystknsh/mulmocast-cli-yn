@@ -15,10 +15,10 @@ export const graphDataScriptGeneratePrompt = (scene: string) => {
   return `Please generate a script from the following scenes: ${scene}`;
 };
 
-export const getMulmoScriptTemplateSystemPrompt = (template: MulmoScriptTemplate) => {
+export const getMulmoScriptTemplateSystemPrompt = (template: MulmoScriptTemplate, script?: MulmoScript) => {
   // script is provided, use it as a script template
-  if (template.script) {
-    return `${template.systemPrompt}\n\`\`\`JSON\n${JSON.stringify(template.script)}\n\`\`\``;
+  if (script) {
+    return `${template.systemPrompt}\n\`\`\`JSON\n${JSON.stringify(script)}\n\`\`\``;
   }
 
   // script is not provided, use the default schema

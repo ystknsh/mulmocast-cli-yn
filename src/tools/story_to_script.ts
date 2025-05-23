@@ -1,5 +1,5 @@
 import path from "path";
-import { getTemplateFilePath, writingMessage } from "../utils/file.js";
+import { getTemplateFilePath, readScriptFile, writingMessage } from "../utils/file.js";
 import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
 import { MulmoScriptTemplate, MulmoStoryboard } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
@@ -189,17 +189,18 @@ const graphData: GraphData = {
 
 const generateBeatsPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   const allScenes = story.scenes.map((scene) => scene.description).join("\n");
-  const sampleBeats = template.script?.beats ?? [];
+  const sampleBeats = template.scriptName ? readScriptFile(template.scriptName).beats : [];
   return sceneToBeatsPrompt({ sampleBeats, beatsPerScene, allScenes });
 };
 
 const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: MulmoStoryboard) => {
-  if (!template.script) {
+  if (!template.scriptName) {
     // TODO: use default schema
     throw new Error("script is not provided");
   }
-  const { beats: __, ...sampleScriptWithoutBeats } = template.script;
-  return storyToScriptInfoPrompt(sampleScriptWithoutBeats, story);
+  const script = readScriptFile(template.scriptName);
+  const { beats: __, ...scriptWithoutBeats } = script;
+  return storyToScriptInfoPrompt(scriptWithoutBeats, story);
 };
 
 export const storyToScript = async ({

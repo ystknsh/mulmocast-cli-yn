@@ -351,7 +351,7 @@ export const mulmoScriptTemplateSchema = z
     title: z.string(),
     description: z.string(),
     systemPrompt: z.string(),
-    script: mulmoScriptSchema.optional(),
+    scriptName: z.string().optional(),
   })
   .strict();
 
