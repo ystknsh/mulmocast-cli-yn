@@ -106,14 +106,14 @@ const graphData: GraphData = {
           },
           llm: {
             agent: ":llmAgent",
-            params: {
-              model: ":llmModel",
-              system: ":prompt",
-              max_tokens: ":maxTokens",
-            },
             inputs: {
               system: ":prompt",
               prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
+              params: {
+                model: ":llmModel",
+                system: ":prompt",
+                max_tokens: ":maxTokens",
+              },
             },
           },
           validateSchemaAgent: {

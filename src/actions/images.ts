@@ -95,12 +95,6 @@ const graph_data: GraphData = {
           imageGenerator: {
             if: ":preprocessor.prompt",
             agent: ":imageAgentInfo.agent",
-            params: {
-              model: ":preprocessor.imageParams.model",
-              size: ":preprocessor.imageParams.size",
-              moderation: ":preprocessor.imageParams.moderation",
-              aspectRatio: ":preprocessor.aspectRatio",
-            },
             inputs: {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
@@ -109,6 +103,12 @@ const graph_data: GraphData = {
               studio: ":context.studio", // for cache
               index: ":__mapIndex", // for cache
               sessionType: "image", // for cache
+              params: {
+                model: ":preprocessor.imageParams.model",
+                size: ":preprocessor.imageParams.size",
+                moderation: ":preprocessor.imageParams.moderation",
+                aspectRatio: ":preprocessor.aspectRatio",
+              },
             },
             defaultValue: {},
           },

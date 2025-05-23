@@ -104,11 +104,11 @@ const graph_tts: GraphData = {
         studio: ":context.studio", // for cache
         index: ":__mapIndex", // for cache
         sessionType: "audio", // for cache
-      },
-      params: {
-        voice: ":preprocessor.voiceId",
-        speed: ":preprocessor.speechOptions.speed",
-        instructions: ":preprocessor.speechOptions.instruction",
+        params: {
+          voice: ":preprocessor.voiceId",
+          speed: ":preprocessor.speechOptions.speed",
+          instructions: ":preprocessor.speechOptions.instruction",
+        },
       },
     },
   },
