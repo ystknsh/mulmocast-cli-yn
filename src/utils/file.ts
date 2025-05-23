@@ -142,8 +142,12 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 
 export const readTemplatePrompt = (templateName: string) => {
   const templatePath = getTemplateFilePath(templateName);
-  const scriptData = fs.readFileSync(templatePath, "utf-8");
-  const template = mulmoScriptTemplateSchema.parse(JSON.parse(scriptData));
+  const templateData = fs.readFileSync(templatePath, "utf-8");
+  const filename = path.basename(templatePath);
+  const scriptPath = path.resolve(__dirname, "../../scripts/templates", filename);
+  console.log(scriptPath);
+
+  const template = mulmoScriptTemplateSchema.parse(JSON.parse(templateData));
   const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
   return prompt;
 };
