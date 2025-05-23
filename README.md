@@ -1,5 +1,14 @@
 # MulmoCast: A Multi-Modal Presentation Tool for the AI-Native Era
 
+## Quick Start Guide
+
+If you want to try our beta version, follow the instruction in the release note below.
+
+- [MulmoCast 0.1.x Beta Release Notes](./docs/beta1_en.md)
+- [MulmoCast 0.1.x Beta版 リリースノート](./docs/beta1_ja.md)
+
+## MulmoCast
+
 **MulmoCast** is a next-generation presentation platform, purpose-built for a world where AI and humans collaborate to create and share ideas.
 
 Unlike traditional tools like PowerPoint or Keynote—both designed in the pre-AI era for human creators—MulmoCast is AI-native: reimagined from the ground up to work hand-in-hand with generative AI that understands and produces natural language, images, audio, and video.

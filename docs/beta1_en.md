@@ -1,4 +1,4 @@
-# MulmoCast 0.1.x Beta Release Notes (English Version)
+# MulmoCast 0.1.x Beta Release Notes
 
 ## Before You Begin
 
