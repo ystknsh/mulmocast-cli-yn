@@ -126,15 +126,15 @@ const graphData = {
           },
           chatAgent: {
             agent: ":llmAgent",
-            params: {
-              model: ":llmModel",
-              stream: true,
-              dataStream: true,
-              max_tokens: ":maxTokens",
-            },
             inputs: {
               messages: ":messages",
               prompt: ":prompt",
+              params: {
+                model: ":llmModel",
+                stream: true,
+                dataStream: true,
+                max_tokens: ":maxTokens",
+              },
             },
             isResult: true,
           },
