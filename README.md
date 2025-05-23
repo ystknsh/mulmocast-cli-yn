@@ -7,7 +7,9 @@ If you want to try our beta version, follow the instruction in the release note 
 - [MulmoCast 0.1.x Beta Release Notes](./docs/beta1_en.md)
 - [MulmoCast 0.1.x Beta版 リリースノート](./docs/beta1_ja.md)
 
-## MulmoCast
+## What is MulmoCast?
+
+Note: The video version of ["What is MulmoCast?"](https://x.com/mulmocast/status/1924682345065623719) is available on X, which is created by MulmoCast itself.
 
 **MulmoCast** is a next-generation presentation platform, purpose-built for a world where AI and humans collaborate to create and share ideas.
 
