@@ -6,7 +6,7 @@ import { GraphAILogger } from "graphai";
 import { MulmoScript, MulmoScriptTemplate, MulmoMediaSource, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
 import { MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoScriptTemplateSchema } from "../types/schema.js";
+import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema } from "zod";
 
@@ -143,12 +143,17 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 export const readTemplatePrompt = (templateName: string) => {
   const templatePath = getTemplateFilePath(templateName);
   const templateData = fs.readFileSync(templatePath, "utf-8");
-  const filename = path.basename(templatePath);
-  const scriptPath = path.resolve(__dirname, "../../scripts/templates", filename);
-  console.log(scriptPath);
-
   const template = mulmoScriptTemplateSchema.parse(JSON.parse(templateData));
-  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template);
+
+  const script = (() => {
+    if (template.scriptName) {
+      const scriptPath = path.resolve(__dirname, "../../scripts/templates", template.scriptName);
+      const scriptData = fs.readFileSync(scriptPath, "utf-8");
+      return mulmoScriptSchema.parse(JSON.parse(scriptData));
+    }
+    return undefined;
+  })();
+  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template, script);
   return prompt;
 };
 
