@@ -11,7 +11,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "This is the title of this slide"
+          "title": "This is the title of the presentation"
         }
       }
     },
@@ -20,7 +20,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "This is the title of this slide",
+          "title": "This is the title of the presentation",
           "subtitle": "Tom Johnson"
         }
       }
@@ -30,6 +30,13 @@
       "image": {
         "type": "markdown",
         "markdown": "# Markdown Table Example\n```TypeScript\nconst main = () => {\n  console.log('Hello World')\n}\n```"
+      }
+    },
+    {
+      "text": "Here is two sets of code, side by side",
+      "image": {
+        "type": "markdown",
+        "markdown": "# Hello World in two languages\n<div style=\"display: flex; gap: 16px;\">\n  <pre>// JavaScript example\nfunction greet(name) {\n  console.log(`Hello, ${name}!`);\n}\ngreet(\"World\");\n</pre>\n\n  <pre># Python example\ndef greet(name):\n    print(f\"Hello, {name}!\")\n\ngreet(\"World\")\n</pre>\n</div>"
       }
     },
     {
