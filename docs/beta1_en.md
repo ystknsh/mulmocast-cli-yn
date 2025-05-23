@@ -1,74 +1,147 @@
-Here's the English translation of your release note:
+# MulmoCast 0.1.x Beta Release Notes
+
+## Before You Begin
+
+This document is intended for developers and creators who are familiar with Node.js and using the terminal.
+We're also working on a more user-friendly app version—please stay tuned!
 
 ---
 
-# MulmoCast 0.1.x/Beta: Release Note
+## Minimum Requirements
 
-## Minimum Requirements to Use the Beta Version
+1. A computer running macOS (※Linux and Windows are currently untested)
+2. A text editor (Visual Studio Code, Emacs, Vim, etc.)
+3. Node.js and Homebrew (`brew`) must already be installed
+4. A ChatGPT account (a free account is sufficient)
+5. An OpenAI developer account (API access via pay-as-you-go plan)
 
-1. A computer running macOS (Linux and Windows are currently untested)
-2. Familiarity with using the Terminal app
-3. Ability to use a text editor (e.g., Visual Studio Code, Emacs)
-4. `node` and `brew` already installed
-5. A ChatGPT account (a free account is sufficient)
-6. An OpenAI developer account (uses pay-as-you-go API access)
+---
 
 ## Environment Setup
 
 ### Required Steps
 
-1. Install MulmoCast via: `npm install -g mulmocast`
-2. Install FFmpeg via: `brew install ffmpeg`
-3. Obtain your API key from OpenAI’s [developer settings page](https://platform.openai.com/settings/organization/api-keys) (format: `sk-XXXX`)
-4. Choose a working folder and create a file named `.env` inside it. Add the line `OPENAI_API_KEY=sk-XXXX` (replace XXXX with your actual API key)
+1. Install `mulmocast` globally:
 
-### Recommended Steps (For Better Image Generation)
+   ```bash
+   npm install -g mulmocast
+   ```
 
-5. Visit [Settings/Organization/General](https://platform.openai.com/settings/organization/general) on the OpenAI platform and complete identity verification under the “Verification” section
-6. After verification, add the line `DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1` to your `.env` file
+2. Install `ffmpeg`:
+
+   ```bash
+   brew install ffmpeg
+   ```
+
+3. Visit [OpenAI API Keys page](https://platform.openai.com/settings/organization/api-keys) and retrieve your API key (`sk-XXXX` format)
+
+4. Create a working folder and add a `.env` file with the following line:
+
+   ```
+   OPENAI_API_KEY=sk-XXXX
+   ```
+
+   ※Replace `sk-XXXX` with your actual API key.
+
+### Recommended Steps (For High-Quality Image Generation)
+
+5. Go to [OpenAI Settings > Organization > General](https://platform.openai.com/settings/organization/general) and complete the identity verification
+
+6. After verification, add the following line to your `.env` file:
+
+   ```
+   DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1
+   ```
+
+---
 
 ## Creating Comic-Style Videos
 
+MulmoCast is a tool for creating multi-modal content—from business presentations to podcasts. Let's begin by generating a comic-style video.
+
+[![Watch Comic-Style Animation Example](./images/release_note_spotify_and_the_power_of_external_payments_thumnail.jpg)](https://youtu.be/VQVH1w7rY_M)
+*Click the image to watch an example on YouTube*
+
 ### Basic Workflow
 
-1. Copy the URL of the webpage you want to turn into a video
-2. Start a new chat session in ChatGPT and ask it to read the article (e.g., “read this article, [https://...”](https://...”))
-3. Switch to your terminal and run: `mulmo prompt -t comic_strips`
-   (This will display the necessary prompt and automatically copy it to your clipboard)
-4. Return to ChatGPT and paste the prompt
-5. Wait for ChatGPT to generate the script, then click the copy button on the top right of the script box
-6. Go back to the terminal and run: `mulmo movie __clipboard` (note: two underscores)
+1. Copy the URL of the webpage you want to visualize
 
-If your environment is correctly set up, this will begin video generation. It usually takes about 4 minutes.
+2. Open ChatGPT and instruct it to read the URL (e.g., `"Read this article: https://..."`)
 
-The generated video will be placed in an `output` folder inside your working directory. The filename will look like `script_20250521_054059`, based on the creation timestamp.
+3. Run the following command in your terminal:
 
-## Creating a Japanese Version of the Video
+   ```bash
+   mulmo tool prompt -t comic_strips
+   ```
 
-To create a version with Japanese subtitles, use the filename generated above and run:
+   ※This will output a prompt and copy it to your clipboard.
 
-```bash
-mulmo movie script_xxxxxxxx_xxxx.json -c ja
-```
+4. Paste the prompt into ChatGPT and let it respond to it.
 
-(This uses the filename generated in the previous step; it creates a file with a `__ja` suffix in the `output` folder)
+5. Once ChatGPT generates the script, click the copy button on the top-right corner of the script
 
-To also generate a Japanese voiceover, run:
+6. Back in the terminal, run:
 
-```bash
-mulmo movie script_xxxxxxxx_xxxx.json -l ja
-```
+   ```bash
+   mulmo movie __clipboard
+   ```
 
-(This creates a file with a `_ja` suffix in the `output` folder)
+   ※Note: Two underscores (`__`)
 
-## Creating Ghibli-Style Comic Videos
+   Video generation will begin. It may take a few minutes depending on your machine. The output will be saved in the `output` folder like this:
 
-If you want to make a Ghibli-style comic video, in Step 3 of the basic workflow, run:
+   ```
+   ./output
+   ├── audio
+   │   └── script_20250522_155403
+   ├── images
+   │   └── script_20250522_155403
+   ├── script_20250522_155403_studio.json
+   ├── script_20250522_155403.json
+   ├── script_20250522_155403.mp3
+   └── script_20250522_155403.mp4
+   ```
+
+---
+
+## Creating Japanese-Language Videos
+
+To generate Japanese-localized videos, use the following commands based on your filename (e.g., `script_20250522_155403`):
+
+* **With Japanese subtitles:**
+
+  ```bash
+  mulmo movie output/script_20250522_155403.json -c ja
+  ```
+
+  → Output will have a `__ja` suffix (double underscore)
+
+* **With Japanese voiceover:**
+
+  ```bash
+  mulmo movie script_20250522_155403.json -l ja
+  ```
+
+  → Output will have a `_ja` suffix (single underscore)
+
+---
+
+## Ghibli-Style Comic Videos
+
+To generate a prompt for Ghibli-style visuals, run the following command in step 3 above:
 
 ```bash
 mulmo prompt -t ghibli_strips
 ```
 
-This will generate a prompt tailored for Ghibli-style visuals.
+※Note: Image generation might fail due to OpenAI content policy violations if the visuals resemble copyrighted characters too closely.
 
-**Note:** Due to OpenAI’s shifting content policies, Ghibli-style image generation may occasionally fail with a message saying it violates the content policy. Please be aware of this.
+---
+
+## Business Presentation Videos
+
+To generate business-style visuals, run the following command in step 3 above:
+
+```bash
+mulmo prompt -t business
+```
