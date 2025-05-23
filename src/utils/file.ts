@@ -140,6 +140,12 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
   return path.resolve(file);
 };
 
+export const readScriptFile = (scriptName: string) => {
+  const scriptPath = path.resolve(__dirname, "../../scripts/templates", scriptName);
+  const scriptData = fs.readFileSync(scriptPath, "utf-8");
+  return mulmoScriptSchema.parse(JSON.parse(scriptData));
+};
+
 export const readTemplatePrompt = (templateName: string) => {
   const templatePath = getTemplateFilePath(templateName);
   const templateData = fs.readFileSync(templatePath, "utf-8");
@@ -147,9 +153,7 @@ export const readTemplatePrompt = (templateName: string) => {
 
   const script = (() => {
     if (template.scriptName) {
-      const scriptPath = path.resolve(__dirname, "../../scripts/templates", template.scriptName);
-      const scriptData = fs.readFileSync(scriptPath, "utf-8");
-      return mulmoScriptSchema.parse(JSON.parse(scriptData));
+      return readScriptFile(template.scriptName);
     }
     return undefined;
   })();
