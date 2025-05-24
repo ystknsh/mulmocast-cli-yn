@@ -4,17 +4,6 @@
     "credit": "closing"
   },
   "title": "Sample Title",
-  "speechParams": {
-    "speakers": {
-      "Presenter": {
-        "voiceId": "shimmer",
-        "displayName": {
-          "en": "Presenter",
-          "ja": "語り手"
-        }
-      }
-    }
-  },
   "references": [
     {
       "url": "https://www.somegreatwebsite.com/article/123",
@@ -25,7 +14,6 @@
   "lang": "en",
   "beats": [
     {
-      "speaker": "Presenter",
       "text": "Today we're exploring a fascinating concept that has shaped some of the most innovative companies and leaders of our time: the Reality Distortion Field.",
       "image": {
         "type": "textSlide",
@@ -45,7 +33,6 @@
       }
     },
     {
-      "speaker": "Presenter",
       "text": "The evolution of humans is a complex journey that spans millions of years, shaped by biology, environment, and culture. Here's a high-level summary of the key stages in human evolution",
       "image": {
         "type": "textSlide",
@@ -64,7 +51,6 @@
       }
     },
     {
-      "speaker": "Presenter",
       "text": "This is a table of items in the store.",
       "image": {
         "type": "markdown",
@@ -80,7 +66,6 @@
       }
     },
     {
-      "speaker": "Presenter",
       "text": "This page shows the sales and profits of this company from January 2024 to June 2024.",
       "image": {
         "type": "chart",
@@ -144,7 +129,6 @@
       }
     },
     {
-      "speaker": "Presenter",
       "text": "Next, let's look at a diagram of our business process flow. This illustrates the key steps from product development to sales.",
       "image": {
         "type": "mermaid",
@@ -156,7 +140,6 @@
       }
     },
     {
-      "speaker": "Presenter",
       "text": "This is a tailwind html format.",
       "image": {
         "type": "html_tailwind",
@@ -205,7 +188,6 @@
       }
     },
     {
-      "speaker": "Presenter",
       "text": "This is the image of the future of enterprise applications.",
       "image": {
         "type": "image",
