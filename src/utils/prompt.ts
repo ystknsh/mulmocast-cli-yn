@@ -60,7 +60,7 @@ ${allScenes}
 Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`.trim();
 };
 
-export const storyToScriptInfoPrompt = (script: Omit<MulmoScript, "beats">, story: MulmoStoryboard) => {
+export const storyToScriptInfoPrompt = (scriptWithoutBeats: Omit<MulmoScript, "beats">, story: MulmoStoryboard) => {
   return `Generate script for the given storyboard, following the structure of the sample scripts below.
 Storyboard:
 - title: ${story.title}
@@ -69,7 +69,7 @@ Storyboard:
 
 Sample script:
 \`\`\`JSON
-${JSON.stringify(script)}
+${JSON.stringify(scriptWithoutBeats)}
 \`\`\`
 
 Only include keys that exist in the sample script.
