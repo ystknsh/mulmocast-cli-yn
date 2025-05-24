@@ -1,6 +1,7 @@
 import { Argv } from "yargs";
 import { getAvailableTemplates } from "../../../../utils/file.js";
 import { llm } from "../../../../utils/utils.js";
+import { story_to_script_modes } from "../../../../utils/const.js";
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);
 
@@ -47,6 +48,13 @@ export const builder = (yargs: Argv) => {
     .option("llm_model", {
       description: "llm model",
       demandOption: false,
+      type: "string",
+    })
+    .option("mode", {
+      description: "story to script mode",
+      demandOption: false,
+      choices: Object.values(story_to_script_modes),
+      default: story_to_script_modes.step_wise,
       type: "string",
     })
     .positional("file", {
