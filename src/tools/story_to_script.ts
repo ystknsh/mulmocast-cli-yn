@@ -74,7 +74,7 @@ const createValidatedScriptGraphData = ({
   };
 };
 
-const graphData: GraphData = {
+const stepWiseGraphData: GraphData = {
   version: 0.5,
   nodes: {
     scenes: {
@@ -228,7 +228,7 @@ export const storyToScript = async ({
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);
 
-  const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, anthropicAgent, geminiAgent, groqAgent, fileWriteAgent, validateSchemaAgent });
+  const graph = new GraphAI(stepWiseGraphData, { ...vanillaAgents, openAIAgent, anthropicAgent, geminiAgent, groqAgent, fileWriteAgent, validateSchemaAgent });
 
   graph.injectValue("beatsPrompt", beatsPrompt);
   graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);
