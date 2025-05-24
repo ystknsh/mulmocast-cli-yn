@@ -31,10 +31,21 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
             }
             return isClosingGap ? context.studio.script.audioParams.closingPadding : context.studio.script.audioParams.padding;
           })();
-          studioBeat.duration = (await ffmpegGetMediaDuration(studioBeat.audioFile)) + padding;
-          if (padding > 0) {
+          const audioDuration = await ffmpegGetMediaDuration(studioBeat.audioFile);
+          const totalPadding = await (async () => {
+            if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
+              const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
+              const movieDuration = await ffmpegGetMediaDuration(pathOrUrl);
+              if (movieDuration > audioDuration) {
+                return padding + (movieDuration - audioDuration);
+              }
+            }
+            return padding;
+          })();
+          studioBeat.duration = audioDuration + totalPadding;
+          if (totalPadding > 0) {
             const silentId = silentIds.pop();
-            ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${padding}[padding_${index}]`);
+            ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}[padding_${index}]`);
             return [audioId, `[padding_${index}]`];
           } else {
             return [audioId];
