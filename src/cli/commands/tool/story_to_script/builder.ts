@@ -51,7 +51,7 @@ export const builder = (yargs: Argv) => {
       type: "string",
     })
     .option("mode", {
-      description: "story to script mode",
+      description: "story to script generation mode",
       demandOption: false,
       choices: Object.values(storyToScriptGenerateMode),
       default: storyToScriptGenerateMode.stepWise,
