@@ -6,7 +6,7 @@ import { GraphAILogger } from "graphai";
 import { MulmoScript, MulmoScriptTemplate, MulmoMediaSource, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
 import { MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
+import { mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema } from "zod";
 
