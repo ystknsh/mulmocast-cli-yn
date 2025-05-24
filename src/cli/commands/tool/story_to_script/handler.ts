@@ -6,6 +6,7 @@ import { mulmoStoryboardSchema } from "../../../../types/schema.js";
 import { getBaseDirPath, getFullPath, readAndParseJson } from "../../../../utils/file.js";
 import { outDirName } from "../../../../utils/const.js";
 import { LLM } from "../../../../utils/utils.js";
+import { StoryToScriptGenerateMode } from "../../../../types/type.js";
 
 export const handler = async (
   argv: ToolCliArgs<{
@@ -17,9 +18,10 @@ export const handler = async (
     file?: string;
     llm?: LLM;
     llm_model?: string;
+    mode?: string;
   }>,
 ) => {
-  const { v: verbose, s: filename, file, o: outdir, b: basedir, beats_per_scene, llm, llm_model } = argv;
+  const { v: verbose, s: filename, file, o: outdir, b: basedir, beats_per_scene, llm, llm_model, mode } = argv;
   let { t: template } = argv;
 
   const baseDirPath = getBaseDirPath(basedir as string);
@@ -49,5 +51,6 @@ export const handler = async (
     fileName: filename as string,
     llm,
     llmModel: llm_model,
+    generateMode: mode as StoryToScriptGenerateMode,
   });
 };

@@ -76,3 +76,21 @@ Only include keys that exist in the sample script.
 Do not add any keys that are not present in the sample script.
 Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`.trim();
 };
+
+export const storyToScriptPrompt = (script: MulmoScript, beatsPerScene: number, story: MulmoStoryboard) => {
+  return `Generate script for the given storyboard, following the structure of the sample scripts below.
+Storyboard:
+- title: ${story.title}
+- references: ${story.references?.map((reference) => JSON.stringify(reference)).join("\n")}
+- scenes: ${JSON.stringify(story.scenes)}
+
+Sample script:
+\`\`\`JSON
+${JSON.stringify(script)}
+\`\`\`
+
+Generate exactly ${beatsPerScene} scripts (beats) for each scene.
+Only include keys that exist in the sample script.
+Do not add any keys that are not present in the sample script.
+Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`.trim();
+};
