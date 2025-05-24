@@ -28,7 +28,7 @@ import {
   mulmoChartMediaSchema,
   mediaSourceSchema,
 } from "./schema.js";
-import { pdf_modes, pdf_sizes, story_to_script_modes } from "../utils/const.js";
+import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
 import { LLM } from "../utils/utils.js";
 import { z } from "zod";
 
@@ -109,4 +109,4 @@ export type Text2ImageAgentInfo = {
 
 export type BeatMediaType = "movie" | "image";
 
-export type StoryToScriptGenerateMode = (typeof story_to_script_modes)[keyof typeof story_to_script_modes];
+export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];

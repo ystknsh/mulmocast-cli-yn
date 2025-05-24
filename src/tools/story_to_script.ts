@@ -13,7 +13,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
 import { LLM, llmPair } from "../utils/utils.js";
-import { story_to_script_modes } from "../utils/const.js";
+import { storyToScriptGenerateMode } from "../utils/const.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -300,11 +300,11 @@ export const storyToScript = async ({
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);
   const scriptPrompt = await generateScriptPrompt(template, beatsPerScene, story);
 
-  const graphData = generateMode === story_to_script_modes.step_wise ? stepWiseGraphData : oneStepGraphData;
+  const graphData = generateMode === storyToScriptGenerateMode.stepWise ? stepWiseGraphData : oneStepGraphData;
 
   const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, anthropicAgent, geminiAgent, groqAgent, fileWriteAgent, validateSchemaAgent });
 
-  if (generateMode === story_to_script_modes.step_wise) {
+  if (generateMode === storyToScriptGenerateMode.stepWise) {
     graph.injectValue("scenes", story.scenes);
     graph.injectValue("beatsPrompt", beatsPrompt);
     graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);
