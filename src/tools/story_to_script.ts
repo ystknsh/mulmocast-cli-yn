@@ -1,5 +1,5 @@
 import path from "path";
-import { getTemplateFilePath, readScriptFile, writingMessage } from "../utils/file.js";
+import { getTemplateFilePath, readScriptTemplateFile, writingMessage } from "../utils/file.js";
 import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
 import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
@@ -249,7 +249,7 @@ const oneStepGraphData: GraphData = {
 
 const generateBeatsPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   const allScenes = story.scenes.map((scene) => scene.description).join("\n");
-  const sampleBeats = template.scriptName ? readScriptFile(template.scriptName).beats : [];
+  const sampleBeats = template.scriptName ? readScriptTemplateFile(template.scriptName).beats : [];
   return sceneToBeatsPrompt({ sampleBeats, beatsPerScene, allScenes });
 };
 
@@ -258,7 +258,7 @@ const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: Mu
     // TODO: use default schema
     throw new Error("script is not provided");
   }
-  const script = readScriptFile(template.scriptName);
+  const script = readScriptTemplateFile(template.scriptName);
   const { beats: __, ...scriptWithoutBeats } = script;
   return storyToScriptInfoPrompt(scriptWithoutBeats, story);
 };
@@ -268,7 +268,7 @@ const generateScriptPrompt = async (template: MulmoScriptTemplate, beatsPerScene
     // TODO: use default schema
     throw new Error("script is not provided");
   }
-  const script = readScriptFile(template.scriptName);
+  const script = readScriptTemplateFile(template.scriptName);
   return storyToScriptPrompt(script, beatsPerScene, story);
 };
 
