@@ -8,7 +8,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 import { geminiAgent } from "@graphai/gemini_agent";
 import { groqAgent } from "@graphai/groq_agent";
 import * as agents from "@graphai/vanilla";
-import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptPrompt } from "../utils/prompt.js";
+import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptInfoPrompt, storyToScriptPrompt } from "../utils/prompt.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
@@ -191,9 +191,6 @@ const stepWiseGraphData: GraphData = {
 const oneStepGraphData: GraphData = {
   version: 0.5,
   nodes: {
-    scenes: {
-      value: [],
-    },
     prompt: {
       value: "",
     },
@@ -263,16 +260,16 @@ const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: Mu
   }
   const script = readScriptFile(template.scriptName);
   const { beats: __, ...scriptWithoutBeats } = script;
-  return storyToScriptPrompt(scriptWithoutBeats, story);
+  return storyToScriptInfoPrompt(scriptWithoutBeats, story);
 };
 
-const generateScriptPrompt = async (template: MulmoScriptTemplate, story: MulmoStoryboard) => {
+const generateScriptPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   if (!template.scriptName) {
     // TODO: use default schema
     throw new Error("script is not provided");
   }
   const script = readScriptFile(template.scriptName);
-  return storyToScriptPrompt(script, story);
+  return storyToScriptPrompt(script, beatsPerScene, story);
 };
 
 export const storyToScript = async ({
@@ -301,20 +298,20 @@ export const storyToScript = async ({
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);
-  const scriptPrompt = await generateScriptPrompt(template, story);
+  const scriptPrompt = await generateScriptPrompt(template, beatsPerScene, story);
 
   const graphData = storyToScriptMode === story_to_script_modes.step_wise ? stepWiseGraphData : oneStepGraphData;
 
   const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, anthropicAgent, geminiAgent, groqAgent, fileWriteAgent, validateSchemaAgent });
 
   if (storyToScriptMode === story_to_script_modes.step_wise) {
+    graph.injectValue("scenes", story.scenes);
     graph.injectValue("beatsPrompt", beatsPrompt);
     graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);
   } else {
     graph.injectValue("prompt", scriptPrompt);
   }
 
-  graph.injectValue("scenes", story.scenes);
   graph.injectValue("outdir", outdir);
   graph.injectValue("fileName", fileName);
   graph.injectValue("llmAgent", agent);
