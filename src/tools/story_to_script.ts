@@ -1,7 +1,7 @@
 import path from "path";
 import { getTemplateFilePath, readScriptFile, writingMessage } from "../utils/file.js";
 import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
-import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptMode } from "../types/index.js";
+import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -280,7 +280,7 @@ export const storyToScript = async ({
   fileName,
   llm,
   llmModel,
-  storyToScriptMode,
+  generateMode,
 }: {
   story: MulmoStoryboard;
   beatsPerScene: number;
@@ -289,7 +289,7 @@ export const storyToScript = async ({
   fileName: string;
   llm?: LLM;
   llmModel?: string;
-  storyToScriptMode: StoryToScriptMode;
+  generateMode: StoryToScriptGenerateMode;
 }) => {
   const templatePath = getTemplateFilePath(templateName);
   const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
@@ -300,11 +300,11 @@ export const storyToScript = async ({
   const scriptInfoPrompt = await generateScriptInfoPrompt(template, story);
   const scriptPrompt = await generateScriptPrompt(template, beatsPerScene, story);
 
-  const graphData = storyToScriptMode === story_to_script_modes.step_wise ? stepWiseGraphData : oneStepGraphData;
+  const graphData = generateMode === story_to_script_modes.step_wise ? stepWiseGraphData : oneStepGraphData;
 
   const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, anthropicAgent, geminiAgent, groqAgent, fileWriteAgent, validateSchemaAgent });
 
-  if (storyToScriptMode === story_to_script_modes.step_wise) {
+  if (generateMode === story_to_script_modes.step_wise) {
     graph.injectValue("scenes", story.scenes);
     graph.injectValue("beatsPrompt", beatsPrompt);
     graph.injectValue("scriptInfoPrompt", scriptInfoPrompt);

@@ -109,4 +109,4 @@ export type Text2ImageAgentInfo = {
 
 export type BeatMediaType = "movie" | "image";
 
-export type StoryToScriptMode = (typeof story_to_script_modes)[keyof typeof story_to_script_modes];
+export type StoryToScriptGenerateMode = (typeof story_to_script_modes)[keyof typeof story_to_script_modes];
