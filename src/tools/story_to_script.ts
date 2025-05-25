@@ -1,5 +1,4 @@
-import path from "path";
-import { getTemplateFilePath, readScriptTemplateFile, writingMessage } from "../utils/file.js";
+import { getTemplateFilePath, readAndParseJson, readScriptTemplateFile, writingMessage } from "../utils/file.js";
 import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
 import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
@@ -291,9 +290,7 @@ export const storyToScript = async ({
   llmModel?: string;
   generateMode: StoryToScriptGenerateMode;
 }) => {
-  const templatePath = getTemplateFilePath(templateName);
-  const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
-  const template = mulmoScriptTemplateSchema.parse(rowTemplate);
+  const template = readAndParseJson(getTemplateFilePath(templateName), mulmoScriptTemplateSchema);
   const { agent, model, max_tokens } = llmPair(llm, llmModel);
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
