@@ -1,5 +1,4 @@
-import path from "path";
-import { getTemplateFilePath, readScriptTemplateFile, writingMessage } from "../utils/file.js";
+import { getTemplateFilePath, readAndParseJson, readScriptTemplateFile, writingMessage } from "../utils/file.js";
 import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
 import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
@@ -14,6 +13,7 @@ import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
 import { LLM, llmPair } from "../utils/utils.js";
 import { storyToScriptGenerateMode } from "../utils/const.js";
+import { cliLoadingPlugin } from "../utils/plugins.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -291,9 +291,7 @@ export const storyToScript = async ({
   llmModel?: string;
   generateMode: StoryToScriptGenerateMode;
 }) => {
-  const templatePath = getTemplateFilePath(templateName);
-  const rowTemplate = await import(path.resolve(templatePath), { assert: { type: "json" } }).then((mod) => mod.default);
-  const template = mulmoScriptTemplateSchema.parse(rowTemplate);
+  const template = readAndParseJson(getTemplateFilePath(templateName), mulmoScriptTemplateSchema);
   const { agent, model, max_tokens } = llmPair(llm, llmModel);
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
@@ -317,6 +315,7 @@ export const storyToScript = async ({
   graph.injectValue("llmAgent", agent);
   graph.injectValue("llmModel", model);
   graph.injectValue("maxTokens", max_tokens);
+  graph.registerCallback(cliLoadingPlugin({ nodeId: "script", message: "Generating script..." }));
 
   const result = await graph.run<{ path: string }>();
   writingMessage(result?.writeJSON?.path ?? "");

@@ -385,6 +385,32 @@ Options:
 ```
 
 ```
+mulmo tool story_to_script <file>
+
+Generate Mulmo script from story
+
+Positionals:
+  file  story file path                                      [string] [required]
+
+Options:
+      --version          Show version number                           [boolean]
+  -v, --verbose          verbose log       [boolean] [required] [default: false]
+  -h, --help             Show help                                     [boolean]
+  -o, --outdir           output dir                                     [string]
+  -b, --basedir          base dir                                       [string]
+  -t, --template         Template name to use
+       [string] [choices: "business", "children_book", "coding", "comic_strips",
+                         "ghibli_strips", "podcast_standard", "sensei_and_taro"]
+  -s, --script           script filename            [string] [default: "script"]
+      --beats_per_scene  beats per scene                   [number] [default: 3]
+      --llm              llm
+                     [string] [choices: "openAI", "anthropic", "gemini", "groq"]
+      --llm_model        llm model                                      [string]
+      --mode             story to script generation mode
+              [string] [choices: "step_wise", "one_step"] [default: "step_wise"]
+```
+
+```
 mulmo tool prompt
 
 Dump prompt from template
