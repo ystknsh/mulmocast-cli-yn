@@ -10,24 +10,33 @@ const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
 export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
+
+  const videoFilters = [];
+
+  // Handle different media types
+  if (mediaType === "image") {
+    videoFilters.push("loop=loop=-1:size=1:start=0");
+  } else if (mediaType === "movie") {
+    // For videos, extend with last frame if shorter than required duration
+    // tpad will extend the video by cloning the last frame, then trim will ensure exact duration
+    videoFilters.push(`tpad=stop_mode=clone:stop_duration=${duration * 2}`); // Use 2x duration to ensure coverage
+  }
+
+  // Common filters for all media types
+  videoFilters.push(
+    `trim=duration=${duration}`,
+    "fps=30",
+    "setpts=PTS-STARTPTS",
+    `scale=w=${canvasInfo.width}:h=${canvasInfo.height}:force_original_aspect_ratio=decrease`,
+    // In case of the aspect ratio mismatch, we fill the extra space with black color.
+    `pad=${canvasInfo.width}:${canvasInfo.height}:(ow-iw)/2:(oh-ih)/2:color=black`,
+    "setsar=1",
+    "format=yuv420p",
+  );
+
   return {
     videoId,
-    videoPart:
-      `[${inputIndex}:v]` +
-      [
-        mediaType === "image" ? "loop=loop=-1:size=1:start=0" : "",
-        `trim=duration=${duration}`,
-        "fps=30",
-        "setpts=PTS-STARTPTS",
-        `scale=w=${canvasInfo.width}:h=${canvasInfo.height}:force_original_aspect_ratio=decrease`,
-        // In case of the aspect ratio mismatch, we fill the extra space with black color.
-        `pad=${canvasInfo.width}:${canvasInfo.height}:(ow-iw)/2:(oh-ih)/2:color=black`,
-        "setsar=1",
-        "format=yuv420p",
-      ]
-        .filter((a) => a)
-        .join(",") +
-      `[${videoId}]`,
+    videoPart: `[${inputIndex}:v]` + videoFilters.filter((a) => a).join(",") + `[${videoId}]`,
   };
 };
 
