@@ -95,6 +95,7 @@ const graph_data: GraphData = {
           imageGenerator: {
             if: ":preprocessor.prompt",
             agent: ":imageAgentInfo.agent",
+            retry: 3,
             inputs: {
               prompt: ":preprocessor.prompt",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
