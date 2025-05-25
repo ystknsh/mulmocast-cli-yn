@@ -15,7 +15,7 @@ test("test getVideoParts movie", async () => {
   const { videoPart } = getVideoPart(1, "movie", 200, { width: 100, height: 300 });
   assert.equal(
     videoPart,
-    "[1:v]trim=duration=200,fps=30,setpts=PTS-STARTPTS,scale=w=100:h=300:force_original_aspect_ratio=decrease,pad=100:300:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v1]",
+    "[1:v]tpad=stop_mode=clone:stop_duration=400,trim=duration=200,fps=30,setpts=PTS-STARTPTS,scale=w=100:h=300:force_original_aspect_ratio=decrease,pad=100:300:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v1]",
   );
 });
 
