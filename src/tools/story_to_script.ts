@@ -13,6 +13,7 @@ import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
 import { LLM, llmPair } from "../utils/utils.js";
 import { storyToScriptGenerateMode } from "../utils/const.js";
+import { cliLoadingPlugin } from "../utils/plugins.js";
 
 const { default: __, ...vanillaAgents } = agents;
 
@@ -314,6 +315,7 @@ export const storyToScript = async ({
   graph.injectValue("llmAgent", agent);
   graph.injectValue("llmModel", model);
   graph.injectValue("maxTokens", max_tokens);
+  graph.registerCallback(cliLoadingPlugin({ nodeId: "script", message: "Generating script..." }));
 
   const result = await graph.run<{ path: string }>();
   writingMessage(result?.writeJSON?.path ?? "");
