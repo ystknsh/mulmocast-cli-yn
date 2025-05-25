@@ -1,6 +1,6 @@
 {
   "name": "mulmocast",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "",
   "type": "module",
   "main": "lib/cli/bin.js",
@@ -9,6 +9,7 @@
   },
   "files": [
     "./lib",
+    "./scripts/templates",
     "./assets/music/StarsBeyondEx.mp3",
     "./assets/audio/silent300.mp3",
     "./assets/audio/silent800.mp3",
