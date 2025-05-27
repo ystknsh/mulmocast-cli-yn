@@ -21,12 +21,13 @@ export const imageOpenaiAgent: AgentFunction<
     model: string; // dall-e-3 or gpt-image-1
     size: OpenAIImageSize | null | undefined;
     moderation: OpenAIModeration | null | undefined;
+    images: string[] | null | undefined;
   },
   { buffer: Buffer },
   { prompt: string }
 > = async ({ namedInputs, params }) => {
   const { prompt } = namedInputs;
-  const { apiKey, model, size, moderation } = params;
+  const { apiKey, model, size, moderation, images } = params;
   const openai = new OpenAI({ apiKey });
 
   const imageOptions: OpenAIImageOptions = {
@@ -39,18 +40,19 @@ export const imageOpenaiAgent: AgentFunction<
     imageOptions.moderation = moderation || "auto";
   }
 
-  const imageFiles = ["/Users/satoshi/git/ai/mulmo/tmp/shota_ghibli.png"];
-  const images = await Promise.all(
-    imageFiles.map(async (file) =>
-        await toFile(fs.createReadStream(file), null, {
-            type: "image/png",
-        })
-    ),
-  );
+  console.log("**DEBUG**", (images ?? []).join("\n"));
 
   const response = await (async () => {
-    if (images.length > 0 && (size === "1536x1024" || size === "1024x1536" || size === "1024x1024")) {
-      return await openai.images.edit({ ...imageOptions, size, image: images });
+    if ((images ?? []).length > 0 && (size === "1536x1024" || size === "1024x1536" || size === "1024x1024")) {
+      const imagelist = await Promise.all(
+        (images ?? []).map(async (file) =>
+            await toFile(fs.createReadStream(file), null, {
+                type: "image/png",
+            })
+        ),
+      );
+    
+          return await openai.images.edit({ ...imageOptions, size, image: imagelist });
     } else {
       return await openai.images.generate(imageOptions);
     }

@@ -112,6 +112,7 @@ const graph_data: GraphData = {
                 size: ":preprocessor.imageParams.size",
                 moderation: ":preprocessor.imageParams.moderation",
                 aspectRatio: ":preprocessor.aspectRatio",
+                images: ":preprocessor.images",
               },
             },
             defaultValue: {},
