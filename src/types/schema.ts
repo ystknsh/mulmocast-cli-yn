@@ -206,7 +206,7 @@ export const mulmoBeatSchema = z
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
-    imageNames: z.array(imageIdSchema).optional(), // list of image names to use for the input.
+    imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   })
   .strict();
