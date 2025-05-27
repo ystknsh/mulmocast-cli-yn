@@ -40,9 +40,6 @@ export const imageOpenaiAgent: AgentFunction<
     imageOptions.moderation = moderation || "auto";
   }
 
-  console.log("**DEBUG**", (images ?? []).join("\n"));
-  console.log("**DEBUG**", imageOptions.size);
-
   const response = await (async () => {
     const targetSize = imageOptions.size;
     if ((images ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
@@ -54,7 +51,6 @@ export const imageOpenaiAgent: AgentFunction<
             }),
         ),
       );
-      console.log("***DEBUG***", imagelist.map((i) => i.name).join("\n"));
       return await openai.images.edit({ ...imageOptions, size: targetSize, image: imagelist });
     } else {
       return await openai.images.generate(imageOptions);
