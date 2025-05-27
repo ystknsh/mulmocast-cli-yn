@@ -1,5 +1,6 @@
+import fs from "fs";
 import { AgentFunction, AgentFunctionInfo } from "graphai";
-import OpenAI from "openai";
+import OpenAI, { toFile } from "openai";
 
 // NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
 type OpenAIImageSize = "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256";
@@ -37,7 +38,17 @@ export const imageOpenaiAgent: AgentFunction<
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
   }
-  const response = await openai.images.generate(imageOptions);
+
+  const imageFiles = ["/Users/satoshi/git/ai/mulmo/tmp/shota_ghibli.png"];
+  const images = await Promise.all(
+    imageFiles.map(async (file) =>
+        await toFile(fs.createReadStream(file), null, {
+            type: "image/png",
+        })
+    ),
+  );
+
+  const response = (images.length > 0 && imageOptions.size === "1536x1024") ? await openai.images.edit({ ...imageOptions, size: "1536x1024", image: images }) : await openai.images.generate(imageOptions);
 
   if (!response.data) {
     throw new Error(`response.data is undefined: ${response}`);
