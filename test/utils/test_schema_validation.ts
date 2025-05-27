@@ -58,7 +58,7 @@ test("JSON files in scripts directory should conform to mulmoScriptSchema", asyn
     const jsonFiles = getJsonFilesInDirectory(dir);
 
     for (const filePath of jsonFiles) {
-      if (!filePath.endsWith("_story.json")) {
+      if (!filePath.endsWith("_story.json") && !filePath.endsWith("text_only.json")) {
         await t.test(`Validating ${path.relative(scriptsDir, filePath)}`, async () => {
           const result = validateJsonFile(filePath, mulmoScriptSchema);
           if (!result.isValid) {

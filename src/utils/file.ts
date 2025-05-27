@@ -150,11 +150,13 @@ export const readScriptTemplateFile = (scriptName: string) => {
 export const readTemplatePrompt = (templateName: string) => {
   const templatePath = getTemplateFilePath(templateName);
   const templateData = fs.readFileSync(templatePath, "utf-8");
-  const template = mulmoScriptTemplateSchema.parse(JSON.parse(templateData));
+  // NOTE: We don't want to schema parse the template here to eliminate default values.
+  const template = JSON.parse(templateData);
 
   const script = (() => {
     if (template.scriptName) {
-      return readScriptTemplateFile(template.scriptName);
+      const script = readScriptTemplateFile(template.scriptName);
+      return { ...script, ...(template.presentationStyle ?? {}) };
     }
     return undefined;
   })();
