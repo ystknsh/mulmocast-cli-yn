@@ -352,7 +352,7 @@ export const mulmoScriptTemplateSchema = z
     description: z.string(),
     systemPrompt: z.string(),
     scriptName: z.string().optional(),
-    presentationStyle: mulmoPresentationStyleSchema.optional()
+    presentationStyle: mulmoPresentationStyleSchema.optional(),
   })
   .strict();
 
