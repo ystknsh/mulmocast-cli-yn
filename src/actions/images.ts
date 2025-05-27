@@ -5,7 +5,7 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
+import { getOutputStudioFilePath, mkdir, resolveMediaSource } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
@@ -60,7 +60,12 @@ const imagePreprocessAgent = async (namedInputs: {
   }
 
   const prompt = imagePrompt(beat, imageParams.style);
-  return { path: imagePath, prompt, ...returnValue };
+  const images = (() => {
+    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {}); // use all images if imageNames is not specified
+    const sources = imageNames.map((name) => imageParams.images?.[name]?.source);
+    return sources.filter((source) => source !== undefined).map((source) => resolveMediaSource(source, context));
+  })();
+  return { path: imagePath, prompt, ...returnValue, images };
 };
 
 const graph_data: GraphData = {
@@ -109,6 +114,7 @@ const graph_data: GraphData = {
                 size: ":preprocessor.imageParams.size",
                 moderation: ":preprocessor.imageParams.moderation",
                 aspectRatio: ":preprocessor.aspectRatio",
+                images: ":preprocessor.images",
               },
             },
             defaultValue: {},

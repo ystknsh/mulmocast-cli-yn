@@ -152,12 +152,15 @@ const mulmoMidiMediaSchema = z
 
 export const mulmoAudioAssetSchema = z.union([mulmoAudioMediaSchema, mulmoMidiMediaSchema]);
 
+const imageIdSchema = z.string();
+
 export const mulmoImageParamsSchema = z
   .object({
     model: z.string().optional(), // default: provider specific
     size: z.string().optional(), // default: provider specific
     style: z.string().optional(), // optional image style
     moderation: z.string().optional(), // optional image style
+    images: z.record(imageIdSchema, mulmoImageMediaSchema).optional(),
   })
   .strict();
 
@@ -203,6 +206,7 @@ export const mulmoBeatSchema = z
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
+    imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
     imagePrompt: z.string().optional(), // specified or inserted by preprocessor
   })
   .strict();

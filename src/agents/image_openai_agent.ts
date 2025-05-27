@@ -1,5 +1,6 @@
+import fs from "fs";
 import { AgentFunction, AgentFunctionInfo } from "graphai";
-import OpenAI from "openai";
+import OpenAI, { toFile } from "openai";
 
 // NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
 type OpenAIImageSize = "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256";
@@ -20,12 +21,13 @@ export const imageOpenaiAgent: AgentFunction<
     model: string; // dall-e-3 or gpt-image-1
     size: OpenAIImageSize | null | undefined;
     moderation: OpenAIModeration | null | undefined;
+    images: string[] | null | undefined;
   },
   { buffer: Buffer },
   { prompt: string }
 > = async ({ namedInputs, params }) => {
   const { prompt } = namedInputs;
-  const { apiKey, model, size, moderation } = params;
+  const { apiKey, model, size, moderation, images } = params;
   const openai = new OpenAI({ apiKey });
 
   const imageOptions: OpenAIImageOptions = {
@@ -37,7 +39,23 @@ export const imageOpenaiAgent: AgentFunction<
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
   }
-  const response = await openai.images.generate(imageOptions);
+
+  const response = await (async () => {
+    const targetSize = imageOptions.size;
+    if ((images ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
+      const imagelist = await Promise.all(
+        (images ?? []).map(
+          async (file) =>
+            await toFile(fs.createReadStream(file), null, {
+              type: "image/png", // TODO: Support JPEG as well
+            }),
+        ),
+      );
+      return await openai.images.edit({ ...imageOptions, size: targetSize, image: imagelist });
+    } else {
+      return await openai.images.generate(imageOptions);
+    }
+  })();
 
   if (!response.data) {
     throw new Error(`response.data is undefined: ${response}`);
