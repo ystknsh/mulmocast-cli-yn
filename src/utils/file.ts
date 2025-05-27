@@ -154,7 +154,8 @@ export const readTemplatePrompt = (templateName: string) => {
 
   const script = (() => {
     if (template.scriptName) {
-      return readScriptTemplateFile(template.scriptName);
+      const script = readScriptTemplateFile(template.scriptName);
+      return { ...script, ...(template.presentationStyle ?? {}) };
     }
     return undefined;
   })();
