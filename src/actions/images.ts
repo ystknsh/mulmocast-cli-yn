@@ -61,7 +61,7 @@ const imagePreprocessAgent = async (namedInputs: {
 
   const prompt = imagePrompt(beat, imageParams.style);
   const images = (() => {
-    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {});
+    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {}); // use all images if imageNames is not specified
     const sources = imageNames.map((name) => imageParams.images?.[name]?.source);
     return sources.filter((source) => source !== undefined).map((source) => resolveMediaSource(source, context));
   })();
