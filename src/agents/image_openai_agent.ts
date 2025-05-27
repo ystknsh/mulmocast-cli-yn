@@ -41,23 +41,26 @@ export const imageOpenaiAgent: AgentFunction<
   }
 
   console.log("**DEBUG**", (images ?? []).join("\n"));
+  console.log("**DEBUG**", imageOptions.size);
 
   const response = await (async () => {
-    if ((images ?? []).length > 0 && (size === "1536x1024" || size === "1024x1536" || size === "1024x1024")) {
+    const targetSize = imageOptions.size;
+    if ((images ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
       const imagelist = await Promise.all(
-        (images ?? []).map(async (file) =>
+        (images ?? []).map(
+          async (file) =>
             await toFile(fs.createReadStream(file), null, {
-                type: "image/png",
-            })
+              type: "image/png", // TODO: Support JPEG as well
+            }),
         ),
       );
-    
-          return await openai.images.edit({ ...imageOptions, size, image: imagelist });
+      console.log("***DEBUG***", imagelist.map((i) => i.name).join("\n"));
+      return await openai.images.edit({ ...imageOptions, size: targetSize, image: imagelist });
     } else {
       return await openai.images.generate(imageOptions);
     }
   })();
-  
+
   if (!response.data) {
     throw new Error(`response.data is undefined: ${response}`);
   }
