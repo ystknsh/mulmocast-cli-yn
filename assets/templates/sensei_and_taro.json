@@ -2,5 +2,26 @@
   "title": "Student and Teacher",
   "description": "Interactive discussion between a student and teacher",
   "systemPrompt": "この件について、内容全てを高校生にも分かるように、太郎くん(Student)と先生(Teacher)の会話、という形の台本をArtifactとして作って。ただし要点はしっかりと押さえて。以下に別のトピックに関するサンプルを貼り付けます。このJSONフォーマットに従って。",
+  "presentationStyle": {
+    "$mulmocast": {
+      "version": "1.0",
+      "credit": "closing"
+    },
+    "canvasSize": {
+      "width": 1536,
+      "height": 1024
+    },
+    "imageParams": {
+      "style": "<style>Ghibli style. Student (Taro) is a young teenager with a dark short hair with glasses. Teacher is a middle-aged man with grey hair and moustache.</style>"
+    },
+    "speechParams": {
+      "provider": "nijivoice",
+      "speakers": {
+        "Announcer": { "displayName": { "ja": "アナウンサー" }, "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62" },
+        "Student": { "displayName": { "ja": "太郎" }, "voiceId": "a7619e48-bf6a-4f9f-843f-40485651257f" },
+        "Teacher": { "displayName": { "ja": "先生" }, "voiceId": "bc06c63f-fef6-43b6-92f7-67f919bd5dae" }
+      }
+    }
+  },
   "scriptName": "sensei_and_taro.json"
 }
