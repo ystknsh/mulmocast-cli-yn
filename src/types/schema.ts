@@ -269,7 +269,7 @@ export const mulmoReferenceSchema = z.object({
   url: URLStringSchema,
   title: z.string().optional(),
   description: z.string().optional(),
-  type: z.union([z.literal("article"), z.literal("image"), z.literal("video"), z.literal("audio")]).default("article"),
+  type: z.union([z.literal("article"), z.literal("paper"), z.literal("image"), z.literal("video"), z.literal("audio")]).default("article"),
 });
 
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
