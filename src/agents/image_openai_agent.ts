@@ -48,8 +48,14 @@ export const imageOpenaiAgent: AgentFunction<
     ),
   );
 
-  const response = (images.length > 0 && imageOptions.size === "1536x1024") ? await openai.images.edit({ ...imageOptions, size: "1536x1024", image: images }) : await openai.images.generate(imageOptions);
-
+  const response = await (async () => {
+    if (images.length > 0 && (size === "1536x1024" || size === "1024x1536" || size === "1024x1024")) {
+      return await openai.images.edit({ ...imageOptions, size, image: images });
+    } else {
+      return await openai.images.generate(imageOptions);
+    }
+  })();
+  
   if (!response.data) {
     throw new Error(`response.data is undefined: ${response}`);
   }
