@@ -203,14 +203,14 @@ const generateImages = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
   if (images) {
-    Object.keys(images).forEach((key) => {
+    await Promise.all(Object.keys(images).map(async (key) => {
       const image = images[key];
       if (image.source.kind === "path") {
         imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
       } else if (image.source.kind === "url") {
         imageRefs[key] = image.source.url;
       }
-    }); 
+    }));
   }
   console.log("****DEBUG****", imageRefs);
   process.exit(0);
