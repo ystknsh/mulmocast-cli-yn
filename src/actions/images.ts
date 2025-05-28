@@ -6,7 +6,7 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir, resolveMediaSource } from "../utils/file.js";
+import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
