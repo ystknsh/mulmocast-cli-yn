@@ -9,7 +9,7 @@ import { getOutputStudioFilePath, mkdir, resolveMediaSource } from "../utils/fil
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
-import { MulmoScriptMethods } from "../methods/index.js";
+import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
@@ -199,6 +199,29 @@ const generateImages = async (context: MulmoStudioContext) => {
       },
     };
   }
+
+  const images: Record<string, string> = {};
+  const imageRefs = studio.script.imageParams?.images;
+  if (imageRefs) {
+    Object.keys(imageRefs).forEach((key) => {
+      const imageRef = imageRefs[key];
+      if (imageRef.source.kind === "path") {
+        images[key] = MulmoStudioContextMethods.resolveAssetPath(context, imageRef.source.path);
+      } else if (imageRef.source.kind === "url") {
+        images[key] = imageRef.source.url;
+      }
+    }); 
+  }
+  console.log("****DEBUG****", images);
+  process.exit(0);
+  
+  
+  (() => {
+    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {}); // use all images if imageNames is not specified
+    const sources = imageNames.map((name) => imageParams.images?.[name]?.source);
+    return sources.filter((source) => source !== undefined).map((source) => resolveMediaSource(source, context));
+  })();
+
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
