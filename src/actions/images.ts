@@ -81,7 +81,13 @@ const graph_data: GraphData = {
     imageRefs: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.script.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath", imageRefs: ":imageRefs" },
+      inputs: {
+        rows: ":context.studio.script.beats",
+        context: ":context",
+        imageAgentInfo: ":imageAgentInfo",
+        imageDirPath: ":imageDirPath",
+        imageRefs: ":imageRefs",
+      },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -207,21 +213,23 @@ const generateImages = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
   if (images) {
-    await Promise.all(Object.keys(images).map(async (key) => {
-      const image = images[key];
-      if (image.source.kind === "path") {
-        imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
-      } else if (image.source.kind === "url") {
-        const response = await fetch(image.source.url);
-        if (!response.ok) {
-          throw new Error(`Failed to download image: ${image.source.url}`);
+    await Promise.all(
+      Object.keys(images).map(async (key) => {
+        const image = images[key];
+        if (image.source.kind === "path") {
+          imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+        } else if (image.source.kind === "url") {
+          const response = await fetch(image.source.url);
+          if (!response.ok) {
+            throw new Error(`Failed to download image: ${image.source.url}`);
+          }
+          const buffer = Buffer.from(await response.arrayBuffer());
+          const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.png`;
+          await fs.promises.writeFile(imagePath, buffer);
+          imageRefs[key] = imagePath;
         }
-        const buffer = Buffer.from(await response.arrayBuffer());
-        const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.png`;
-        await fs.promises.writeFile(imagePath, buffer);
-        imageRefs[key] = imagePath;
-      }
-    }));
+      }),
+    );
   }
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);

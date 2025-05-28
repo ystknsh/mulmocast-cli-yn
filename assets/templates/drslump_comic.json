@@ -1,7 +1,7 @@
 {
   "title": "Dr. Slump Style Comic Strips",
   "description": "Template for Dr. Slump-style comic.",
-  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
   "presentationStyle": {
     "$mulmocast": {
       "version": "1.0",
@@ -24,5 +24,5 @@
       }
     }
   },
-  "scriptName": "text_only.json"
+  "scriptName": "image_prompts.json"
 }
