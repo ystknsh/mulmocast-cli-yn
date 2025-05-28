@@ -1,0 +1,27 @@
+{
+  "title": "Dr. Slump Style Comic Strips",
+  "description": "Template for Dr. Slump-style comic.",
+  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+  "presentationStyle": {
+    "$mulmocast": {
+      "version": "1.0",
+      "credit": "closing"
+    },
+    "canvasSize": {
+      "width": 1536,
+      "height": 1024
+    },
+    "imageParams": {
+      "style": "<style>Dragon Ball/Dr. Slump aesthetic.</style>",
+      "images": {
+        "girl": {
+          "source": {
+            "kind": "url",
+            "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/slump_presenter.png"
+          }
+        }
+      }
+    }
+  },
+  "scriptName": "text_only.json"
+}
