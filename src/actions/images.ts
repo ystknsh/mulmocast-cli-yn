@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import fs from "fs";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
@@ -208,7 +209,14 @@ const generateImages = async (context: MulmoStudioContext) => {
       if (image.source.kind === "path") {
         imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
       } else if (image.source.kind === "url") {
-        imageRefs[key] = image.source.url;
+        const response = await fetch(image.source.url);
+        if (!response.ok) {
+          throw new Error(`Failed to download image: ${image.source.url}`);
+        }
+        const buffer = Buffer.from(await response.arrayBuffer());
+        const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.png`;
+        await fs.promises.writeFile(imagePath, buffer);
+        imageRefs[key] = imagePath;
       }
     }));
   }
