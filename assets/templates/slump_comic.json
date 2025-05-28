@@ -15,6 +15,7 @@
       "style": "<style>Dragon Ball/Dr. Slump aesthetic.</style>",
       "images": {
         "girl": {
+          "type": "image",
           "source": {
             "kind": "url",
             "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/slump_presenter.png"
