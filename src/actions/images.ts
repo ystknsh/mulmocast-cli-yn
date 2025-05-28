@@ -36,8 +36,9 @@ const imagePreprocessAgent = async (namedInputs: {
   suffix: string;
   imageDirPath: string;
   imageAgentInfo: Text2ImageAgentInfo;
+  imageRefs: Record<string, string>;
 }) => {
-  const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
+  const { context, beat, index, suffix, imageDirPath, imageAgentInfo, imageRefs } = namedInputs;
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const returnValue = {
@@ -62,9 +63,9 @@ const imagePreprocessAgent = async (namedInputs: {
 
   const prompt = imagePrompt(beat, imageParams.style);
   const images = (() => {
-    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {}); // use all images if imageNames is not specified
-    const sources = imageNames.map((name) => imageParams.images?.[name]?.source);
-    return sources.filter((source) => source !== undefined).map((source) => resolveMediaSource(source, context));
+    const imageNames = beat.imageNames ?? Object.keys(imageRefs); // use all images if imageNames is not specified
+    const sources = imageNames.map((name) => imageRefs[name]);
+    return sources.filter((source) => source !== undefined);
   })();
   return { path: imagePath, prompt, ...returnValue, images };
 };
@@ -77,9 +78,10 @@ const graph_data: GraphData = {
     imageDirPath: {},
     imageAgentInfo: {},
     outputStudioFilePath: {},
+    imageRefs: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.script.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
+      inputs: { rows: ":context.studio.script.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath", imageRefs: ":imageRefs" },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -96,6 +98,7 @@ const graph_data: GraphData = {
               suffix: "p",
               imageDirPath: ":imageDirPath",
               imageAgentInfo: ":imageAgentInfo",
+              imageRefs: ":imageRefs",
             },
           },
           imageGenerator: {
@@ -220,16 +223,6 @@ const generateImages = async (context: MulmoStudioContext) => {
       }
     }));
   }
-  console.log("****DEBUG****", imageRefs);
-  process.exit(0);
-  
-  
-  (() => {
-    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {}); // use all images if imageNames is not specified
-    const sources = imageNames.map((name) => imageParams.images?.[name]?.source);
-    return sources.filter((source) => source !== undefined).map((source) => resolveMediaSource(source, context));
-  })();
-
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
@@ -237,6 +230,7 @@ const generateImages = async (context: MulmoStudioContext) => {
     imageAgentInfo,
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
+    imageRefs,
   };
   const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
