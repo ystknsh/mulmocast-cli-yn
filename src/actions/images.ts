@@ -209,6 +209,12 @@ const generateImages = async (context: MulmoStudioContext) => {
       },
     };
   }
+  if (imageAgentInfo.provider === "openai") {
+    // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
+    // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
+    // gpt-image-1：3,000,000 TPM、150 images per minute
+    graph_data.concurrency = imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
+  }
 
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
