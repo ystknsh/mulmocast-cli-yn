@@ -1,15 +1,16 @@
 import dotenv from "dotenv";
+import fs from "fs";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphOptions, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir, resolveMediaSource } from "../utils/file.js";
+import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
-import { MulmoScriptMethods } from "../methods/index.js";
+import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
@@ -35,8 +36,9 @@ const imagePreprocessAgent = async (namedInputs: {
   suffix: string;
   imageDirPath: string;
   imageAgentInfo: Text2ImageAgentInfo;
+  imageRefs: Record<string, string>;
 }) => {
-  const { context, beat, index, suffix, imageDirPath, imageAgentInfo } = namedInputs;
+  const { context, beat, index, suffix, imageDirPath, imageAgentInfo, imageRefs } = namedInputs;
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const returnValue = {
@@ -61,9 +63,9 @@ const imagePreprocessAgent = async (namedInputs: {
 
   const prompt = imagePrompt(beat, imageParams.style);
   const images = (() => {
-    const imageNames = beat.imageNames ?? Object.keys(imageParams.images ?? {}); // use all images if imageNames is not specified
-    const sources = imageNames.map((name) => imageParams.images?.[name]?.source);
-    return sources.filter((source) => source !== undefined).map((source) => resolveMediaSource(source, context));
+    const imageNames = beat.imageNames ?? Object.keys(imageRefs); // use all images if imageNames is not specified
+    const sources = imageNames.map((name) => imageRefs[name]);
+    return sources.filter((source) => source !== undefined);
   })();
   return { path: imagePath, prompt, ...returnValue, images };
 };
@@ -76,9 +78,16 @@ const graph_data: GraphData = {
     imageDirPath: {},
     imageAgentInfo: {},
     outputStudioFilePath: {},
+    imageRefs: {},
     map: {
       agent: "mapAgent",
-      inputs: { rows: ":context.studio.script.beats", context: ":context", imageAgentInfo: ":imageAgentInfo", imageDirPath: ":imageDirPath" },
+      inputs: {
+        rows: ":context.studio.script.beats",
+        context: ":context",
+        imageAgentInfo: ":imageAgentInfo",
+        imageDirPath: ":imageDirPath",
+        imageRefs: ":imageRefs",
+      },
       isResult: true,
       params: {
         rowKey: "beat",
@@ -95,6 +104,7 @@ const graph_data: GraphData = {
               suffix: "p",
               imageDirPath: ":imageDirPath",
               imageAgentInfo: ":imageAgentInfo",
+              imageRefs: ":imageRefs",
             },
           },
           imageGenerator: {
@@ -200,12 +210,35 @@ const generateImages = async (context: MulmoStudioContext) => {
     };
   }
 
+  const imageRefs: Record<string, string> = {};
+  const images = studio.script.imageParams?.images;
+  if (images) {
+    await Promise.all(
+      Object.keys(images).map(async (key) => {
+        const image = images[key];
+        if (image.source.kind === "path") {
+          imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+        } else if (image.source.kind === "url") {
+          const response = await fetch(image.source.url);
+          if (!response.ok) {
+            throw new Error(`Failed to download image: ${image.source.url}`);
+          }
+          const buffer = Buffer.from(await response.arrayBuffer());
+          const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.png`;
+          await fs.promises.writeFile(imagePath, buffer);
+          imageRefs[key] = imagePath;
+        }
+      }),
+    );
+  }
+
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
+    imageRefs,
   };
   const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
