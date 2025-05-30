@@ -14,6 +14,7 @@ import { GraphAILogger } from "graphai";
 export const main = async () => {
   const cli = yargs(hideBin(process.argv))
     .scriptName("mulmo")
+    .version()
     .usage("$0 <command> [options]")
     .option("v", {
       alias: "verbose",
