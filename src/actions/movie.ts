@@ -40,7 +40,7 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
   };
 };
 
-export const getAudioPart = (inputIndex: number, duration: number, delay: number) => {
+export const getAudioPart = (inputIndex: number, duration: number, delay: number, mixAudio: number) => {
   const audioId = `a${inputIndex}`;
 
   return {
@@ -49,6 +49,7 @@ export const getAudioPart = (inputIndex: number, duration: number, delay: number
       `[${inputIndex}:a]` +
       `atrim=duration=${duration},` + // Trim to beat duration
       `adelay=${delay * 1000}|${delay * 1000},` +
+      `volume=${mixAudio},` + // 👈 add this line
       `aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo` +
       `[${audioId}]`,
   };
@@ -119,7 +120,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
-      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp);
+      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
