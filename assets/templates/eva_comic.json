@@ -20,6 +20,13 @@
             "kind": "url",
             "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/eva_presenter.png"
           }
+        },
+        "optimus": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/optimus.png"
+          }
         }
       }
     }
