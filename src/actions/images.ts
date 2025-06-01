@@ -129,16 +129,31 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
-          movieGenerator: {
-            if: ":beat.moviePrompt",
-            agent: async (namedInputs: { path: string }) => {
-              const { path } = namedInputs;
-              console.log("*** DEBUG *** movieGenerator", path);
-              return { moviePath: path };
+          prepareMovie: {
+            agent: (namedInputs: { imagePath: string; beat: MulmoBeat }) => {
+              const { beat } = namedInputs;
+              if (beat.moviePrompt) {
+                console.log("*** DEBUG *** prepareMovie", beat.moviePrompt);
+                return { movieFile: `__movie_file__ ${beat.moviePrompt}` };
+              }
+              return {};
             },
             inputs: {
               result: ":imageGenerator", // to wait for imageGenerator to finish
-              path: ":preprocessor.path",
+              imagePath: ":preprocessor.path",
+              beat: ":beat",
+            },
+          },
+          movieGenerator: {
+            if: ":prepareMovie.movieFile",
+            agent: async (namedInputs: { moviePath: string }) => {
+              const { moviePath } = namedInputs;
+              console.log("*** DEBUG *** movieGenerator", moviePath);
+              return { moviePath };
+            },
+            inputs: {
+              imagePath: ":preprocessor.path",
+              moviePath: ":prepareMovie.movieFile",
             },
             defaultValue: {},
           },
@@ -154,8 +169,9 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { imageFile: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string, moveFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
+        console.log("*** DEBUG *** mergeResult", array);
         const { studio } = context;
         array.forEach((update, index) => {
           const beat = studio.beats[index];
