@@ -2,6 +2,10 @@
   "$mulmocast": {
     "version": "1.0"
   },
+  "movieParams": {
+    "provider": "google",
+    "model": "veo-2.0-generate-001"
+  },
   "beats": [
     {
       "text": "Image with movie prompt",

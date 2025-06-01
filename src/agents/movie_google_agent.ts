@@ -90,10 +90,12 @@ export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   const projectId = config?.projectId;
   const token = config?.token;
 
-  try {
+  console.log("*** DEBUG *** movieGoogleAgent", projectId, token, config);
+
+    try {
     const buffer = await generateImage(projectId, model, token, prompt, aspectRatio);
     if (buffer) {
-      return { buffer };
+      return { buffer }
     }
     throw new Error("ERROR: geneateImage returned undefined");
   } catch (error) {
