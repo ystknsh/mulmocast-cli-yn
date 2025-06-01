@@ -1,0 +1,18 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "beats": [
+    {
+      "text": "Hello World",
+      "image": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-cli/refs/heads/main/assets/images/mulmocast_credit.png"
+        }
+      },
+      "moviePrompt": "A movie of a cat walking on a street."
+    }
+  ]
+}
