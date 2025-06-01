@@ -129,24 +129,19 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
-          movieGenerator: {
-            agent: async (namedInputs: { path: string }) => {
-              const { path } = namedInputs;
-              console.log("*** DEBUG *** movieGenerator", path);
-              return { imagePath: path };
+          output: {
+            agent: async (namedInputs: { path: string; beat: MulmoBeat }) => {
+              const { path, beat } = namedInputs;
+              if (beat.moviePrompt) {
+                console.log("*** DEBUG *** movieGenerator", path);
+                return { imageFile: path };
+              }
+              return { imageFile: path };
             },
             inputs: {
               result: ":imageGenerator",
+              beat: ":beat",
               path: ":preprocessor.path",
-            },
-          },
-          output: {
-            agent: "copyAgent",
-            inputs: {
-              imagePath: ":movieGenerator.imagePath",
-            },
-            output: {
-              imageFile: ".imagePath",
             },
             isResult: true,
           },
