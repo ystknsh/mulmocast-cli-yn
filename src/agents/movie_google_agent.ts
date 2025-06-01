@@ -78,6 +78,12 @@ export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   config,
 }) => {
   const { prompt } = namedInputs;
+  if (prompt) {
+    console.log("*** DEBUG *** movieGoogleAgent", prompt);
+    const buffer = Buffer.from(prompt);
+    console.log("*** DEBUG *** movieGoogleAgent", buffer);
+    return { buffer };
+  }
   const aspectRatio = params.aspectRatio ?? "16:9";
   const model = params.model ?? "imagen-3.0-fast-generate-001";
   //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID

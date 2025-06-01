@@ -332,6 +332,7 @@ export const mulmoSessionStateSchema = z.object({
   inBeatSession: z.object({
     audio: z.set(z.number()),
     image: z.set(z.number()),
+    movie: z.set(z.number()),
     multiLingual: z.set(z.number()),
     caption: z.set(z.number()),
   }),
@@ -355,6 +356,7 @@ export const mulmoStudioSchema = z
       inBeatSession: {
         audio: new Set(),
         image: new Set(),
+        movie: new Set(),
         multiLingual: new Set(),
         caption: new Set(),
       },

@@ -150,22 +150,30 @@ const graph_data: GraphData = {
           },
           movieGenerator: {
             if: ":prepareMovie.movieFile",
-            agent: async (namedInputs: { moviePath: string }) => {
-              const { moviePath } = namedInputs;
-              console.log("*** DEBUG *** movieGenerator", moviePath);
-              return { moviePath };
-            },
+            agent: "movieGoogleAgent",
             inputs: {
+              prompt: ":beat.moviePrompt",
               imagePath: ":preprocessor.path",
-              moviePath: ":prepareMovie.movieFile",
+              file: ":prepareMovie.movieFile",
+              studio: ":context.studio", // for cache
+              index: ":__mapIndex", // for cache
+              sessionType: "movie", // for cache
+              params: {
+                model: ":preprocessor.imageParams.model",
+                size: ":preprocessor.imageParams.size",
+                moderation: ":preprocessor.imageParams.moderation",
+                aspectRatio: ":preprocessor.aspectRatio",
+                images: ":preprocessor.images",
+              }
             },
             defaultValue: {},
           },
           output: {
             agent: "copyAgent",
             inputs: {
+              onComplete: ":movieGenerator",
               imageFile: ":preprocessor.path",
-              movieFile: ":movieGenerator.moviePath",
+              movieFile: ":prepareMovie.movieFile",
             },
             isResult: true,
           },
@@ -175,7 +183,6 @@ const graph_data: GraphData = {
     mergeResult: {
       agent: (namedInputs: { array: { imageFile: string, moveFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
-        console.log("*** DEBUG *** mergeResult", array);
         const { studio } = context;
         array.forEach((update, index) => {
           const beat = studio.beats[index];
@@ -218,7 +225,7 @@ const generateImages = async (context: MulmoStudioContext) => {
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator"],
+      nodeIds: ["imageGenerator", "movieGenerator"],
     },
   ];
 

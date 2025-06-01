@@ -2,7 +2,7 @@ import { MulmoStudio } from "../types/index.js";
 import { GraphAILogger } from "graphai";
 
 type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
-type BeatSessionType = "audio" | "image" | "multiLingual" | "caption";
+type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie";
 
 const notifyStateChange = (studio: MulmoStudio, sessionType: SessionType) => {
   const prefix = studio.state.inSession[sessionType] ? "<" : " >";
