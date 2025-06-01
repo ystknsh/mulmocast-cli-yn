@@ -209,7 +209,8 @@ export const mulmoBeatSchema = z
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
-    imagePrompt: z.string().optional(), // specified or inserted by preprocessor
+    imagePrompt: z.string().optional(),
+    moviePrompt: z.string().optional(),
   })
   .strict();
 
@@ -239,6 +240,14 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
+export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("google");
+
+export const mulmoMovieParamsSchema = z
+  .object({
+    provider: text2MovieProviderSchema.optional(),
+    model: z.string().optional(), // default: provider specific
+  })
+  .strict();
 
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,
@@ -258,6 +267,7 @@ export const mulmoPresentationStyleSchema = z.object({
       provider: text2ImageProviderSchema, // has default value
     })
     .optional(),
+  movieParams: mulmoMovieParamsSchema.optional(),
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
   // videoParams: videoParamsSchema.optional(),
