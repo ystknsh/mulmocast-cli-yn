@@ -45,8 +45,8 @@ async function generateImage(
 
   const completeResponse = await (async () => {
     while (true) {
-      await sleep(2000);
-      console.log("*** DEBUG *** waiting for response");
+      GraphAILogger.info("...waiting for movie generation...");
+      await sleep(3000);
       const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
         method: "POST",
         headers: {
@@ -113,8 +113,6 @@ export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
   const projectId = config?.projectId;
   const token = config?.token;
-
-  console.log("*** DEBUG *** movieGoogleAgent", projectId, token, config);
 
   try {
     const buffer = await generateImage(projectId, model, token, prompt, aspectRatio);

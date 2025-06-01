@@ -131,8 +131,8 @@ const graph_data: GraphData = {
             defaultValue: {},
           },
           prepareMovie: {
-            agent: (namedInputs: { imagePath: string; beat: MulmoBeat; imageDirPath: string; index: number; suffix: string; context: MulmoStudioContext }) => {
-              const { beat, imageDirPath, index, suffix, context } = namedInputs;
+            agent: (namedInputs: { imagePath: string; beat: MulmoBeat; imageDirPath: string; index: number; context: MulmoStudioContext }) => {
+              const { beat, imageDirPath, index, context } = namedInputs;
               if (beat.moviePrompt) {
                 const movieFile = `${imageDirPath}/${context.studio.filename}/${index}.mov`;
                 return { movieFile };
