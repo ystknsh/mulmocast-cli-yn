@@ -14,7 +14,7 @@ async function generateImage(
   prompt: string,
   aspectRatio: string,
 ): Promise<Buffer | undefined> {
-  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}:predict`;
+  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}:predictLongRunning`;
 
   try {
     // Prepare the payload for the API request
@@ -78,12 +78,14 @@ export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   config,
 }) => {
   const { prompt } = namedInputs;
+  /*
   if (prompt) {
     const buffer = Buffer.from(prompt);
     return { buffer };
   }
+  */
   const aspectRatio = params.aspectRatio ?? "16:9";
-  const model = params.model ?? "imagen-3.0-fast-generate-001";
+  const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";
   //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
   const projectId = config?.projectId;
   const token = config?.token;
