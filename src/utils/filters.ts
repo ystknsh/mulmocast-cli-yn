@@ -11,9 +11,6 @@ import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
   const { file, force, studio, index, sessionType } = namedInputs;
-  if (sessionType === "movie") {
-    console.log("*** DEBUG *** fileCacheAgentFilter", file);
-  }
 
   const shouldUseCache = async () => {
     if (force) {
