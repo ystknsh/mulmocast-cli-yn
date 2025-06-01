@@ -164,7 +164,7 @@ const graph_data: GraphData = {
                 moderation: ":preprocessor.imageParams.moderation",
                 aspectRatio: ":preprocessor.aspectRatio",
                 images: ":preprocessor.images",
-              }
+              },
             },
             defaultValue: {},
           },
@@ -181,7 +181,7 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { imageFile: string, moveFile: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string; moveFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
         array.forEach((update, index) => {

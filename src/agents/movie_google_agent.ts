@@ -1,7 +1,8 @@
-import { GraphAILogger } from "graphai";
+import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
 type PredictionResponse = {
+  done?: boolean;
   predictions?: {
     bytesBase64Encoded?: string;
   }[];
@@ -14,44 +15,62 @@ async function generateImage(
   prompt: string,
   aspectRatio: string,
 ): Promise<Buffer | undefined> {
-  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}:predictLongRunning`;
+  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}`;
 
-  try {
-    // Prepare the payload for the API request
-    const payload = {
-      instances: [
-        {
-          prompt: prompt,
+  // Prepare the payload for the API request
+  const payload = {
+    instances: [
+      {
+        prompt: prompt,
+      },
+    ],
+    parameters: {
+      sampleCount: 1,
+      aspectRatio: aspectRatio,
+      //safetySetting: "block_only_high",
+      durationSeconds: 1,
+    },
+  };
+
+  // Make the API call using fetch
+  const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:predictLongRunning`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+  }
+  const initialResponse: PredictionResponse = await response.json();
+
+  const completeResponse = await (async () => {
+    while (true) {
+      await sleep(2000);
+      console.log("*** DEBUG *** waiting for response");
+      const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-      ],
-      parameters: {
-        sampleCount: 1,
-        aspectRatio: aspectRatio,
-        //safetySetting: "block_only_high",
-        durationSeconds: 3,
-      },
-    };
-    console.log("*** DEBUG *** payload", payload);
-
-    // Make the API call using fetch
-    const response = await fetch(GOOGLE_IMAGEN_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      console.log("*** DEBUG *** response", GOOGLE_IMAGEN_ENDPOINT);
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        body: JSON.stringify(initialResponse),
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      const responseData: PredictionResponse = await response.json();
+      if (responseData.done) {
+        return responseData;
+      }
     }
+  })();
+  console.log("*** DEBUG *** completeResponse", completeResponse);
 
-    const responseData: PredictionResponse = await response.json();
-
-    console.log("*** DEBUG *** responseData", responseData);
-
+  /*
     // Parse and return the generated image URL or data
     const predictions = responseData.predictions;
     if (predictions && predictions.length > 0) {
@@ -70,6 +89,7 @@ async function generateImage(
     GraphAILogger.info("Error generating image:", error);
     throw error;
   }
+  */
 }
 
 export type MovieGoogleConfig = {
@@ -97,10 +117,10 @@ export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
 
   console.log("*** DEBUG *** movieGoogleAgent", projectId, token, config);
 
-    try {
+  try {
     const buffer = await generateImage(projectId, model, token, prompt, aspectRatio);
     if (buffer) {
-      return { buffer }
+      return { buffer };
     }
     throw new Error("ERROR: geneateImage returned undefined");
   } catch (error) {
