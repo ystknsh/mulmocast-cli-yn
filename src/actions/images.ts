@@ -10,6 +10,7 @@ import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
+import movieGoogleAgent from "../agents/movie_google_agent.js";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
@@ -228,11 +229,15 @@ const generateImages = async (context: MulmoStudioContext) => {
   const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
 
   // We need to get google's auth token only if the google is the text2image provider.
-  if (imageAgentInfo.provider === "google") {
+  if (imageAgentInfo.provider === "google" || studio.script.movieParams?.provider === "google") {
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
       imageGoogleAgent: {
+        projectId: process.env.GOOGLE_PROJECT_ID,
+        token,
+      },
+      movieGoogleAgent: {
         projectId: process.env.GOOGLE_PROJECT_ID,
         token,
       },
@@ -275,7 +280,7 @@ const generateImages = async (context: MulmoStudioContext) => {
     imageDirPath,
     imageRefs,
   };
-  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });

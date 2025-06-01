@@ -11,12 +11,14 @@ import {
   mulmoStudioMultiLingualDataSchema,
   speakerDictionarySchema,
   mulmoImageParamsSchema,
+  mulmoMovieParamsSchema,
   mulmoSpeechParamsSchema,
   textSlideParamsSchema,
   speechOptionsSchema,
   mulmoCanvasDimensionSchema,
   mulmoScriptTemplateSchema,
   text2ImageProviderSchema,
+  text2MovieProviderSchema,
   text2SpeechProviderSchema,
   mulmoPresentationStyleSchema,
   multiLingualTextsSchema,
@@ -40,6 +42,7 @@ export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
 export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
 export type TextSlideParams = z.infer<typeof textSlideParamsSchema>;
 export type Text2ImageProvider = z.infer<typeof text2ImageProviderSchema>;
+export type Text2MovieProvider = z.infer<typeof text2MovieProviderSchema>;
 export type Text2SpeechProvider = z.infer<typeof text2SpeechProviderSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 export type MulmoScript = z.infer<typeof mulmoScriptSchema>;
@@ -54,6 +57,7 @@ export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
 export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSchema>;
 export type MulmoStudioMultiLingualData = z.infer<typeof mulmoStudioMultiLingualDataSchema>;
 export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
+export type MulmoMovieParams = z.infer<typeof mulmoMovieParamsSchema>;
 
 // images
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
@@ -105,6 +109,12 @@ export type Text2ImageAgentInfo = {
   provider: Text2ImageProvider;
   agent: string;
   imageParams: MulmoImageParams;
+};
+
+export type Text2MovieAgentInfo = {
+  provider: Text2MovieProvider;
+  agent: string;
+  movieParams: MulmoMovieParams;
 };
 
 export type BeatMediaType = "movie" | "image";
