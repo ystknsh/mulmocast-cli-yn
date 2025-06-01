@@ -8,6 +8,7 @@ export const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: n
     const scale = drawWidth / origWidth;
     const drawHeight = origHeight * scale;
     return {
+      containerWidth: expectWidth,
       drawWidth,
       drawHeight,
     };
@@ -16,6 +17,7 @@ export const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: n
   const scale = drawHeight / origHeight;
   const drawWidth = origWidth * scale;
   return {
+    containerWidth: expectWidth,
     drawWidth,
     drawHeight,
   };
