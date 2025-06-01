@@ -131,17 +131,17 @@ const graph_data: GraphData = {
           },
           movieGenerator: {
             if: ":beat.moviePrompt",
-            agent: async (namedInputs: { image: string }) => {
-              const { image } = namedInputs;
-              console.log("*** DEBUG *** movieGenerator", image);
-              return image;
+            agent: async (namedInputs: { path: string }) => {
+              const { path } = namedInputs;
+              console.log("*** DEBUG *** movieGenerator", path);
+              return { imagePath: path };
             },
             inputs: {
               result: ":imageGenerator",
-              image: ":preprocessor.path",
+              path: ":preprocessor.path",
             },
             defaultValue: {
-              image: ":imageGenerator.image",
+              imagePath: ":preprocessor.path",
             },
           },
           output: {
