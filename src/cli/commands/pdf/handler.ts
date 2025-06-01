@@ -7,7 +7,6 @@ export const handler = async (argv: CliArgs<{ i?: string; pdf_mode: string; pdf_
   await runTranslateIfNeeded(context, argv);
   await images(context);
 
-  // Choose PDF generation engine based on pdf_engine option
   if (argv.pdf_engine === "puppeteer") {
     await pdfPuppeteer(context, argv.pdf_mode, argv.pdf_size);
   } else {

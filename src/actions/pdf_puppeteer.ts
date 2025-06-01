@@ -21,17 +21,16 @@ type PDFOptions = {
   };
 };
 
-const loadImageAsBase64 = async (imagePath: string): Promise<string> => {
-  const imageData = isHttp(imagePath) ? Buffer.from(await (await fetch(imagePath)).arrayBuffer()) : fs.readFileSync(imagePath);
-
-  const ext = path.extname(imagePath).toLowerCase().replace(".", "");
-  const mimeType = ext === "jpg" ? "jpeg" : ext;
-  return `data:image/${mimeType};base64,${imageData.toString("base64")}`;
+const getPdfSize = (pdfSize: PDFSize) => {
+  return pdfSize === "a4" ? "A4" : "Letter";
 };
 
-const loadImageWithFallback = async (imagePath: string): Promise<string> => {
+const loadImage = async (imagePath: string): Promise<string> => {
   try {
-    return await loadImageAsBase64(imagePath);
+    const imageData = isHttp(imagePath) ? Buffer.from(await (await fetch(imagePath)).arrayBuffer()) : fs.readFileSync(imagePath);
+    const ext = path.extname(imagePath).toLowerCase().replace(".", "");
+    const mimeType = ext === "jpg" ? "jpeg" : ext;
+    return `data:image/${mimeType};base64,${imageData.toString("base64")}`;
   } catch (__error) {
     const placeholderData = fs.readFileSync("assets/images/mulmocast_credit.png");
     return `data:image/png;base64,${placeholderData.toString("base64")}`;
@@ -125,8 +124,8 @@ const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pd
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
   const texts = studio.script.beats.map((beat, index) => localizedText(beat, multiLingual?.[index], lang));
 
-  const imageDataUrls = await Promise.all(imagePaths.map(loadImageWithFallback));
-  const pageSize = `${pdfSize === "a4" ? "A4" : "Letter"} ${isLandscapeImage ? "landscape" : "portrait"}`;
+  const imageDataUrls = await Promise.all(imagePaths.map(loadImage));
+  const pageSize = `${getPdfSize(pdfSize)} ${isLandscapeImage ? "landscape" : "portrait"}`;
   const pagesHTML = generatePagesHTML(pdfMode, imageDataUrls, texts);
 
   const template = getHTMLFile(`pdf_${pdfMode}`);
@@ -144,7 +143,7 @@ const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pd
 
 const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode, isLandscapeImage: boolean): PDFOptions => {
   const baseOptions: PDFOptions = {
-    format: pdfSize === "a4" ? "A4" : "Letter",
+    format: getPdfSize(pdfSize),
     margin: {
       top: "0",
       bottom: "0",
