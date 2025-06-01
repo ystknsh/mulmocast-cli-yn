@@ -27,9 +27,11 @@ async function generateImage(
       parameters: {
         sampleCount: 1,
         aspectRatio: aspectRatio,
-        safetySetting: "block_only_high",
+        //safetySetting: "block_only_high",
+        durationSeconds: 3,
       },
     };
+    console.log("*** DEBUG *** payload", payload);
 
     // Make the API call using fetch
     const response = await fetch(GOOGLE_IMAGEN_ENDPOINT, {
@@ -42,10 +44,13 @@ async function generateImage(
     });
 
     if (!response.ok) {
+      console.log("*** DEBUG *** response", GOOGLE_IMAGEN_ENDPOINT);
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
 
     const responseData: PredictionResponse = await response.json();
+
+    console.log("*** DEBUG *** responseData", responseData);
 
     // Parse and return the generated image URL or data
     const predictions = responseData.predictions;
