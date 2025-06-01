@@ -1,13 +1,6 @@
 import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
-type PredictionResponse = {
-  done?: boolean;
-  predictions?: {
-    bytesBase64Encoded?: string;
-  }[];
-};
-
 async function generateImage(
   projectId: string | undefined,
   model: string,
@@ -65,14 +58,17 @@ async function generateImage(
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
-      const responseData: PredictionResponse = await response.json();
+      const responseData = await response.json();
       if (responseData.done) {
-        return responseData;
+        return responseData.response;
       }
     }
   })();
-  console.log("*** DEBUG *** completeResponse", completeResponse);
-
+  const bytesBase64Encoded = completeResponse.videos[0].bytesBase64Encoded;
+  if (bytesBase64Encoded) {
+    return Buffer.from(bytesBase64Encoded, "base64");
+  }
+  return undefined;
   /*
     // Parse and return the generated image URL or data
     const predictions = responseData.predictions;
