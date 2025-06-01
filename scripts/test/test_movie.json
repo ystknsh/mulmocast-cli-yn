@@ -4,19 +4,25 @@
   },
   "movieParams": {
     "provider": "google",
-    "model": "veo-2.0-generate-001"
+    "model": "veo-3.0-generate-preview"
+  },
+  "imageParams": {
+    "style": "Photo realistic, cinematic style.",
+    "images": {
+      "optimus": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/optimus.png"
+        }
+      }
+    }
   },
   "beats": [
     {
       "text": "Image with movie prompt",
-      "image": {
-        "type": "image",
-        "source": {
-          "kind": "url",
-          "url": "https://raw.githubusercontent.com/receptron/mulmocast-cli/refs/heads/main/assets/images/mulmocast_credit.png"
-        }
-      },
-      "moviePrompt": "A movie of a cat walking on a street."
+      "imagePrompt": "巨大なロケット「Starship」が発射台から打ち上がろうとしている様子。空には星と火星が浮かんでいる。",
+      "moviePrompt": "Startship lifts off."
     },
     {
       "text": "Image without movie prompt",

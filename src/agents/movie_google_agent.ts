@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
@@ -6,15 +7,23 @@ async function generateImage(
   model: string,
   token: string | undefined,
   prompt: string,
+  imagePath: string,
   aspectRatio: string,
 ): Promise<Buffer | undefined> {
   const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}`;
 
   // Prepare the payload for the API request
+  const buffer = readFileSync(imagePath);
+  const bytesBase64Encoded = buffer.toString("base64");
+
   const payload = {
     instances: [
       {
         prompt: prompt,
+        image: {
+          bytesBase64Encoded,
+          mimeType: "image/png",
+        },
       },
     ],
     parameters: {
@@ -64,31 +73,11 @@ async function generateImage(
       }
     }
   })();
-  const bytesBase64Encoded = completeResponse.videos[0].bytesBase64Encoded;
-  if (bytesBase64Encoded) {
-    return Buffer.from(bytesBase64Encoded, "base64");
+  const encodedMovie = completeResponse.videos[0].bytesBase64Encoded;
+  if (encodedMovie) {
+    return Buffer.from(encodedMovie, "base64");
   }
   return undefined;
-  /*
-    // Parse and return the generated image URL or data
-    const predictions = responseData.predictions;
-    if (predictions && predictions.length > 0) {
-      const base64Image = predictions[0].bytesBase64Encoded;
-      if (base64Image) {
-        return Buffer.from(base64Image, "base64"); // Decode the base64 image to a buffer
-      } else {
-        throw new Error("No base64-encoded image data returned from the API.");
-      }
-    } else {
-      // console.log(response);
-      GraphAILogger.info("No predictions returned from the API.", responseData, prompt);
-      return undefined;
-    }
-  } catch (error) {
-    GraphAILogger.info("Error generating image:", error);
-    throw error;
-  }
-  */
 }
 
 export type MovieGoogleConfig = {
@@ -96,12 +85,12 @@ export type MovieGoogleConfig = {
   token?: string;
 };
 
-export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string }, MovieGoogleConfig> = async ({
+export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string, imagePath: string }, MovieGoogleConfig> = async ({
   namedInputs,
   params,
   config,
 }) => {
-  const { prompt } = namedInputs;
+  const { prompt, imagePath } = namedInputs;
   /*
   if (prompt) {
     const buffer = Buffer.from(prompt);
@@ -115,7 +104,7 @@ export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: strin
   const token = config?.token;
 
   try {
-    const buffer = await generateImage(projectId, model, token, prompt, aspectRatio);
+    const buffer = await generateImage(projectId, model, token, prompt, imagePath, aspectRatio);
     if (buffer) {
       return { buffer };
     }
