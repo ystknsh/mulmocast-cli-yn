@@ -310,6 +310,7 @@ export const mulmoStudioBeatSchema = z
     duration: z.number().optional(),
     audioFile: z.string().optional(),
     imageFile: z.string().optional(), // path to the image
+    movieFile: z.string().optional(), // path to the movie file
     captionFile: z.string().optional(), // path to the caption image
   })
   .strict();
