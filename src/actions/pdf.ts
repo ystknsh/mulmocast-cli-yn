@@ -187,7 +187,7 @@ const pdfHandout = async (
         for (const [index, line] of lines.entries()) {
           page.drawText(line, {
             ...pos,
-            x: pos.x + pos.containerWidth + textMargin,
+            x: offset + pos.containerWidth + textMargin,
             y: pos.y + pos.height - fontSize - (fontSize + 2) * index,
             size: fontSize,
             font,
