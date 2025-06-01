@@ -130,11 +130,11 @@ const graph_data: GraphData = {
             defaultValue: {},
           },
           prepareMovie: {
-            agent: (namedInputs: { imagePath: string; beat: MulmoBeat }) => {
-              const { beat } = namedInputs;
+            agent: (namedInputs: { imagePath: string; beat: MulmoBeat; imageDirPath: string; index: number; suffix: string; context: MulmoStudioContext }) => {
+              const { beat, imageDirPath, index, suffix, context } = namedInputs;
               if (beat.moviePrompt) {
-                console.log("*** DEBUG *** prepareMovie", beat.moviePrompt);
-                return { movieFile: `__movie_file__ ${beat.moviePrompt}` };
+                const movieFile = `${imageDirPath}/${context.studio.filename}/${index}.mov`;
+                return { movieFile };
               }
               return {};
             },
@@ -142,6 +142,9 @@ const graph_data: GraphData = {
               result: ":imageGenerator", // to wait for imageGenerator to finish
               imagePath: ":preprocessor.path",
               beat: ":beat",
+              imageDirPath: ":imageDirPath",
+              index: ":__mapIndex",
+              context: ":context",
             },
           },
           movieGenerator: {
