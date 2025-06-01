@@ -129,19 +129,24 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
-          output: {
-            agent: async (namedInputs: { path: string; beat: MulmoBeat }) => {
-              const { path, beat } = namedInputs;
-              if (beat.moviePrompt) {
-                console.log("*** DEBUG *** movieGenerator", path);
-                return { imageFile: path };
-              }
-              return { imageFile: path };
+          movieGenerator: {
+            if: ":beat.moviePrompt",
+            agent: async (namedInputs: { path: string }) => {
+              const { path } = namedInputs;
+              console.log("*** DEBUG *** movieGenerator", path);
+              return { moviePath: path };
             },
             inputs: {
-              result: ":imageGenerator",
-              beat: ":beat",
+              result: ":imageGenerator", // to wait for imageGenerator to finish
               path: ":preprocessor.path",
+            },
+            defaultValue: {},
+          },
+          output: {
+            agent: "copyAgent",
+            inputs: {
+              imageFile: ":preprocessor.path",
+              movieFile: ":movieGenerator.moviePath",
             },
             isResult: true,
           },
@@ -151,7 +156,6 @@ const graph_data: GraphData = {
     mergeResult: {
       agent: (namedInputs: { array: { imageFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
-        console.log("*** DEBUG *** mergeResult", array);
         const { studio } = context;
         array.forEach((update, index) => {
           const beat = studio.beats[index];
