@@ -4,7 +4,7 @@
   },
   "beats": [
     {
-      "text": "Hello World",
+      "text": "Image with movie prompt",
       "image": {
         "type": "image",
         "source": {
@@ -13,6 +13,16 @@
         }
       },
       "moviePrompt": "A movie of a cat walking on a street."
+    },
+    {
+      "text": "Image without movie prompt",
+      "image": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-cli/refs/heads/main/assets/images/mulmocast_credit.png"
+        }
+      }
     }
   ]
 }

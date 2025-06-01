@@ -129,6 +129,21 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
+          movieGenerator: {
+            if: ":beat.moviePrompt",
+            agent: async (namedInputs: { image: string }) => {
+              const { image } = namedInputs;
+              console.log("*** DEBUG *** movieGenerator", image);
+              return image;
+            },
+            inputs: {
+              result: ":imageGenerator",
+              image: ":preprocessor.path",
+            },
+            defaultValue: {
+              image: ":imageGenerator.image",
+            },
+          },
           output: {
             agent: "copyAgent",
             inputs: {
