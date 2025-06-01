@@ -28,7 +28,7 @@ async function generateImage(
       sampleCount: 1,
       aspectRatio: aspectRatio,
       //safetySetting: "block_only_high",
-      durationSeconds: 1,
+      durationSeconds: 5,
     },
   };
 
@@ -45,7 +45,10 @@ async function generateImage(
   if (!response.ok) {
     throw new Error(`Error: ${response.status} - ${response.statusText}`);
   }
-  const initialResponse: PredictionResponse = await response.json();
+  const initialResponse = await response.json();
+  const fetchBody = {
+    operationName: initialResponse.name,
+  };
 
   const completeResponse = await (async () => {
     while (true) {
@@ -57,7 +60,7 @@ async function generateImage(
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(initialResponse),
+        body: JSON.stringify(fetchBody),
       });
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`);
