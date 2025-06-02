@@ -40,14 +40,22 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
     return null;
   }
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
-  const script = ([".yaml", ".yml"].includes(path.extname(scriptPath).toLowerCase()) ? yamlParse(scriptData) : JSON.parse(scriptData)) as T;
-  const parsedPath = path.parse(scriptPath);
+  try {
+    const script = ([".yaml", ".yml"].includes(path.extname(scriptPath).toLowerCase()) ? yamlParse(scriptData) : JSON.parse(scriptData)) as T;
+    const parsedPath = path.parse(scriptPath);
 
-  return {
-    mulmoData: script,
-    mulmoDataPath: scriptPath,
-    fileName: parsedPath.name,
-  };
+    return {
+      mulmoData: script,
+      mulmoDataPath: scriptPath,
+      fileName: parsedPath.name,
+    };
+  } catch (__error) {
+    if (errorMessage) {
+      GraphAILogger.info("read file format is broken.")
+      process.exit(1);
+    }
+    return null;
+  }
 }
 export const fetchMulmoScriptFile = async (url: string) => {
   try {
