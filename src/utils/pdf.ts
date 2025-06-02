@@ -53,8 +53,8 @@ export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth
         lines.push(line);
         line = buffer;
         buffer = "";
-      } 
-      
+      }
+
       if (isBreakable || i === rawLine.length - 1) {
         line += buffer;
         buffer = "";
