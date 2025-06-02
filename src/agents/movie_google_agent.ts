@@ -30,7 +30,7 @@ async function generateImage(
       sampleCount: 1,
       aspectRatio: aspectRatio,
       //safetySetting: "block_only_high",
-      durationSeconds: 5,
+      durationSeconds: 8,
     },
   };
 
