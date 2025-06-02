@@ -51,7 +51,7 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
     };
   } catch (__error) {
     if (errorMessage) {
-      GraphAILogger.info("read file format is broken.")
+      GraphAILogger.info("read file format is broken.");
       process.exit(1);
     }
     return null;
