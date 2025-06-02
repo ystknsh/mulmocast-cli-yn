@@ -49,12 +49,12 @@ export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth
 
       const isBreakable = currentIsFull || (!currentIsFull && (char === " " || nextChar === " " || nextIsFull));
 
-      if (width > maxWidth && buffer) {
+      if (width > maxWidth && line) {
         lines.push(line);
-        line = "";
-        buffer = char;
-      }
-
+        line = buffer;
+        buffer = "";
+      } 
+      
       if (isBreakable || i === rawLine.length - 1) {
         line += buffer;
         buffer = "";
