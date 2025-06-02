@@ -119,7 +119,7 @@ To generate Japanese-localized videos, use the following commands based on your 
 * **With Japanese voiceover:**
 
   ```bash
-  mulmo movie script_20250522_155403.json -l ja
+  mulmo movie output/script_20250522_155403.json -l ja
   ```
 
   → Output will have a `_ja` suffix (single underscore)
