@@ -1,5 +1,6 @@
+Testing procedure for npm version up
 
-# update verion
+# 1. update version
 
 Update `package.json` to set the version:
 
@@ -7,30 +8,36 @@ Update `package.json` to set the version:
 "version": "0.x.x-alpha" // or "0.x.x-beta"
 ```
 
-# build
+To check current version, visit npm site:
+[https://www.npmjs.com/package/mulmocast](https://www.npmjs.com/package/mulmocast)
 
-```
+> [!NOTE] 
+> Use `alpha` and `beta` only during testing. Without `alpha` or `beta`, the package will be cached.
+
+# 2. build
+
+```bash
 yarn run build
 ```
 
-# create package
+# 3. create package
 
-```
+```bash
 npm pack
 ```
 
-# install
+# 4. install
 
-```
+```bash
 npm install -g ./mulmocast-0.0.x-alpha.tgz
 ```
 
-# test
+# 5. test
 
-Confirm the version:
+## 5.1. Confirm the version:
 
-```
-$ mulmo --version                           
+```bash
+mulmo --version
 ```
 
 Expected output:
@@ -38,11 +45,21 @@ Expected output:
 ```
 0.0.x-alpha
 ```
+The result should match the version value set in package.json in Step 1.
 
-Run a sample script:
+## 5.2. Run a sample script:
 
+```bash
+mulmo movie docs/scripts/helloworld.yaml -o output/yyyymmdd-test
+mulmo pdf scripts/test/test_order.json  --pdf_mode handout -o output/yyyymmdd-test
 ```
-mulmo movie docs/scripts/helloworld.yaml
-mukmo pdf scripts/test/test_order.json  --pdf_mode handout
 
+# 6. Restore environment
+Install the latest published version from npm to restore your environment:
+
+```bash
+npm install -g mulmocast@latest
+```
+```bash
+npm list -g mulmocast
 ```
