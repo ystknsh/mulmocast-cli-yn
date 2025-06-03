@@ -9,6 +9,7 @@ async function generateImage(
   prompt: string,
   imagePath: string,
   aspectRatio: string,
+  duration: number,
 ): Promise<Buffer | undefined> {
   const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}`;
 
@@ -30,7 +31,7 @@ async function generateImage(
       sampleCount: 1,
       aspectRatio: aspectRatio,
       //safetySetting: "block_only_high",
-      durationSeconds: 8,
+      durationSeconds: duration,
     },
   };
 
@@ -69,6 +70,9 @@ async function generateImage(
       }
       const responseData = await response.json();
       if (responseData.done) {
+        if (responseData.error) {
+          throw new Error(`Error: ${responseData.error.message}`);
+        }
         return responseData.response;
       }
     }
@@ -86,12 +90,12 @@ export type MovieGoogleConfig = {
 };
 
 export const movieGoogleAgent: AgentFunction<
-  { model: string; aspectRatio: string },
+  { model: string; aspectRatio: string; duration?: number },
   { buffer: Buffer },
   { prompt: string; imagePath: string },
   MovieGoogleConfig
 > = async ({ namedInputs, params, config }) => {
-  const { prompt, imagePath } = namedInputs;
+  const { prompt, imagePath, } = namedInputs;
   /*
   if (prompt) {
     const buffer = Buffer.from(prompt);
@@ -100,18 +104,19 @@ export const movieGoogleAgent: AgentFunction<
   */
   const aspectRatio = params.aspectRatio ?? "16:9";
   const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";
+  const duration = params.duration ?? 8;
   //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
   const projectId = config?.projectId;
   const token = config?.token;
 
   try {
-    const buffer = await generateImage(projectId, model, token, prompt, imagePath, aspectRatio);
+    const buffer = await generateImage(projectId, model, token, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
     throw new Error("ERROR: geneateImage returned undefined");
   } catch (error) {
-    GraphAILogger.info("Failed to generate image:", error);
+    GraphAILogger.info("Failed to generate movie:", error);
     throw error;
   }
 };
