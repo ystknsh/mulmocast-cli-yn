@@ -95,7 +95,7 @@ export const movieGoogleAgent: AgentFunction<
   { prompt: string; imagePath: string },
   MovieGoogleConfig
 > = async ({ namedInputs, params, config }) => {
-  const { prompt, imagePath, } = namedInputs;
+  const { prompt, imagePath } = namedInputs;
   /*
   if (prompt) {
     const buffer = Buffer.from(prompt);
