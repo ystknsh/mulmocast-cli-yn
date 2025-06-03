@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { GraphAI } from "graphai";
 import type { GraphData } from "graphai";
-import * as agents from "@graphai/vanilla";
+import vanillaAgents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
 import addBGMAgent from "../agents/add_bgm_agent.js";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
@@ -27,7 +27,7 @@ import {
 import { text2hash, localizedText } from "../utils/utils.js";
 import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
-const { default: __, ...vanillaAgents } = agents;
+// const { default: __, ...vanillaAgents } = agents;
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター

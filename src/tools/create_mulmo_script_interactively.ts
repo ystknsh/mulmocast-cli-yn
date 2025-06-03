@@ -9,7 +9,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 import { geminiAgent } from "@graphai/gemini_agent";
 import { groqAgent } from "@graphai/groq_agent";
 
-import * as agents from "@graphai/vanilla";
+import vanillaAgents from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { readTemplatePrompt, mkdir } from "../utils/file.js";
@@ -21,7 +21,7 @@ import { llmPair } from "../utils/utils.js";
 import { interactiveClarificationPrompt, prefixPrompt } from "../utils/prompt.js";
 // import { cliLoadingPlugin } from "../utils/plugins.js";
 
-const { default: __, ...vanillaAgents } = agents;
+// const { default: __, ...vanillaAgents } = agents;
 
 const agentHeader = "\x1b[34m● \x1b[0m\x1b[1mAgent\x1b[0m:\x1b[0m";
 
