@@ -77,6 +77,7 @@ test("test createOrUpdateStudioData", async () => {
       inBeatSession: {
         audio: new Set(),
         image: new Set(),
+        movie: new Set(),
         multiLingual: new Set(),
         caption: new Set(),
       },
