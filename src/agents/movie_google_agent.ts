@@ -71,6 +71,7 @@ async function generateMovie(
       const responseData = await response.json();
       if (responseData.done) {
         if (responseData.error) {
+          GraphAILogger.info("Prompt: ", prompt);
           throw new Error(`Error: ${responseData.error.message}`);
         }
         if (!responseData.response.videos) {
