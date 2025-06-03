@@ -111,12 +111,6 @@ export type Text2ImageAgentInfo = {
   imageParams: MulmoImageParams;
 };
 
-export type Text2MovieAgentInfo = {
-  provider: Text2MovieProvider;
-  agent: string;
-  movieParams: MulmoMovieParams;
-};
-
 export type BeatMediaType = "movie" | "image";
 
 export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];

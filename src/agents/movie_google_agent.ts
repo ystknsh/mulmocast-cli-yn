@@ -85,11 +85,12 @@ export type MovieGoogleConfig = {
   token?: string;
 };
 
-export const movieGoogleAgent: AgentFunction<{ model: string; aspectRatio: string }, { buffer: Buffer }, { prompt: string, imagePath: string }, MovieGoogleConfig> = async ({
-  namedInputs,
-  params,
-  config,
-}) => {
+export const movieGoogleAgent: AgentFunction<
+  { model: string; aspectRatio: string },
+  { buffer: Buffer },
+  { prompt: string; imagePath: string },
+  MovieGoogleConfig
+> = async ({ namedInputs, params, config }) => {
   const { prompt, imagePath } = namedInputs;
   /*
   if (prompt) {
