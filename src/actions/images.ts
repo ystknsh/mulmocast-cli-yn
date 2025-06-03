@@ -159,7 +159,7 @@ const graph_data: GraphData = {
               index: ":__mapIndex", // for cache
               sessionType: "movie", // for cache
               params: {
-                model: ":beat.movieParams.model",
+                model: ":context.studio.script.movieParams.model",
                 size: ":preprocessor.imageParams.size",
                 moderation: ":preprocessor.imageParams.moderation",
                 aspectRatio: ":preprocessor.aspectRatio",

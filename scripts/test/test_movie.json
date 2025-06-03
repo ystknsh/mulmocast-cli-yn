@@ -3,8 +3,7 @@
     "version": "1.0"
   },
   "movieParams": {
-    "provider": "google",
-    "model": "veo-3.0-generate-preview"
+    "provider": "google"
   },
   "imageParams": {
     "style": "Photo realistic, cinematic style.",
