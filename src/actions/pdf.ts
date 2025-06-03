@@ -135,19 +135,32 @@ const pdfHandout = async (
         if (isLandscapeImage) {
           const cellHeight = pageHeight / imagesPerPage - offset;
 
-          const { drawWidth, drawHeight } = drawSize(fitWidth, (pageWidth - offset) * handoutImageRatio, cellHeight - offset, origWidth, origHeight);
+          const { drawWidth, drawHeight, containerWidth } = drawSize(
+            fitWidth,
+            (pageWidth - offset) * handoutImageRatio,
+            cellHeight - offset,
+            origWidth,
+            origHeight,
+          );
 
-          const x = offset;
+          const x = offset + (containerWidth - drawWidth) / 2;
           const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * handoutImageRatio;
           return {
             x,
             y,
             width: drawWidth,
             height: drawHeight,
+            containerWidth,
           };
         } else {
           const cellWidth = pageWidth / imagesPerPage;
-          const { drawWidth, drawHeight } = drawSize(fitWidth, cellWidth - offset, (pageHeight - offset) * handoutImageRatio, origWidth, origHeight);
+          const { drawWidth, drawHeight, containerWidth } = drawSize(
+            fitWidth,
+            cellWidth - offset,
+            (pageHeight - offset) * handoutImageRatio,
+            origWidth,
+            origHeight,
+          );
 
           const x = pageWidth - (imagesPerPage - i) * cellWidth + (cellWidth - drawWidth) * handoutImageRatio;
           const y = pageHeight - drawHeight - offset;
@@ -157,6 +170,7 @@ const pdfHandout = async (
             y,
             width: drawWidth,
             height: drawHeight,
+            containerWidth,
           };
         }
       })();
@@ -173,7 +187,7 @@ const pdfHandout = async (
         for (const [index, line] of lines.entries()) {
           page.drawText(line, {
             ...pos,
-            x: pos.x + pos.width + textMargin,
+            x: offset + pos.containerWidth + textMargin,
             y: pos.y + pos.height - fontSize - (fontSize + 2) * index,
             size: fontSize,
             font,

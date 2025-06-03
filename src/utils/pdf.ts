@@ -8,6 +8,7 @@ export const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: n
     const scale = drawWidth / origWidth;
     const drawHeight = origHeight * scale;
     return {
+      containerWidth: expectWidth,
       drawWidth,
       drawHeight,
     };
@@ -16,6 +17,7 @@ export const drawSize = (fitWidth: boolean, expectWidth: number, expectHeight: n
   const scale = drawHeight / origHeight;
   const drawWidth = origWidth * scale;
   return {
+    containerWidth: expectWidth,
     drawWidth,
     drawHeight,
   };
@@ -47,10 +49,10 @@ export const wrapText = (text: string, font: PDFFont, fontSize: number, maxWidth
 
       const isBreakable = currentIsFull || (!currentIsFull && (char === " " || nextChar === " " || nextIsFull));
 
-      if (width > maxWidth && buffer) {
+      if (width > maxWidth && line) {
         lines.push(line);
-        line = "";
-        buffer = char;
+        line = buffer;
+        buffer = "";
       }
 
       if (isBreakable || i === rawLine.length - 1) {

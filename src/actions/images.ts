@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphOptions, GraphData } from "graphai";
-import * as agents from "@graphai/vanilla";
+import vanillaAgents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
@@ -16,7 +16,7 @@ import { imagePlugins } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
 
-const { default: __, ...vanillaAgents } = agents;
+// const { default: __, ...vanillaAgents } = agents;
 
 dotenv.config();
 // const openai = new OpenAI();

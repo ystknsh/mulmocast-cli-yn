@@ -2,7 +2,7 @@ import { GraphAILogger } from "graphai";
 import fs from "fs";
 import path from "path";
 import clipboardy from "clipboardy";
-import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath, resolveDirPath } from "../utils/file.js";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath, resolveDirPath, mkdir } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
@@ -50,6 +50,7 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
       const fileName = `script_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
       const clipboardText = clipboardy.readSync();
       const fileOrUrl = resolveDirPath(outDirPath, `${fileName}.json`);
+      mkdir(outDirPath);
       fs.writeFileSync(fileOrUrl, clipboardText, "utf8");
       return { fileOrUrl, fileName };
     }

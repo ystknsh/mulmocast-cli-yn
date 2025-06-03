@@ -119,7 +119,7 @@ To generate Japanese-localized videos, use the following commands based on your 
 * **With Japanese voiceover:**
 
   ```bash
-  mulmo movie script_20250522_155403.json -l ja
+  mulmo movie output/script_20250522_155403.json -l ja
   ```
 
   → Output will have a `_ja` suffix (single underscore)
@@ -131,7 +131,7 @@ To generate Japanese-localized videos, use the following commands based on your 
 To generate a prompt for Ghibli-style visuals, run the following command in step 3 above:
 
 ```bash
-mulmo prompt -t ghibli_strips
+mulmo tool prompt -t ghibli_strips
 ```
 
 ※Note: Image generation might fail due to OpenAI content policy violations if the visuals resemble copyrighted characters too closely.
@@ -143,5 +143,5 @@ mulmo prompt -t ghibli_strips
 To generate business-style visuals, run the following command in step 3 above:
 
 ```bash
-mulmo prompt -t business
+mulmo tool prompt -t business
 ```

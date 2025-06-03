@@ -4,7 +4,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
 import { geminiAgent } from "@graphai/gemini_agent";
 import { groqAgent } from "@graphai/groq_agent";
-import * as agents from "@graphai/vanilla";
+import vanillaAgents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { browserlessAgent } from "@graphai/browserless_agent";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
@@ -16,7 +16,7 @@ import { cliLoadingPlugin } from "../utils/plugins.js";
 import { graphDataScriptFromUrlPrompt } from "../utils/prompt.js";
 import { llmPair } from "../utils/utils.js";
 
-const { default: __, ...vanillaAgents } = agents;
+// const { default: __, ...vanillaAgents } = agents;
 const graphData: GraphData = {
   version: 0.5,
   // Execute sequentially because the free version of browserless API doesn't support concurrent execution.
