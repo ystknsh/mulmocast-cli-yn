@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
-async function generateImage(
+async function generateMovie(
   projectId: string | undefined,
   model: string,
   token: string | undefined,
@@ -110,7 +110,7 @@ export const movieGoogleAgent: AgentFunction<
   const token = config?.token;
 
   try {
-    const buffer = await generateImage(projectId, model, token, prompt, imagePath, aspectRatio, duration);
+    const buffer = await generateMovie(projectId, model, token, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
