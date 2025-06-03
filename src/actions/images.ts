@@ -41,6 +41,10 @@ const imagePreprocessAgent = async (namedInputs: {
 }) => {
   const { context, beat, index, suffix, imageDirPath, imageAgentInfo, imageRefs } = namedInputs;
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
+  if (!imageParams.size) {
+    const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
+    imageParams.size = `${canvasSize.width}x${canvasSize.height}`;
+  }
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const returnValue = {
     aspectRatio: MulmoScriptMethods.getAspectRatio(context.studio.script),
