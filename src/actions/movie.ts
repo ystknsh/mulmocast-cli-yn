@@ -96,8 +96,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     if (!studioBeat.imageFile || !studioBeat.duration) {
       throw new Error(`studioBeat.imageFile or studioBeat.duration is not set: index=${index}`);
     }
-    const inputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.imageFile);
-    const mediaType = MulmoScriptMethods.getImageType(studio.script, beat);
+    const inputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.movieFile ?? studioBeat.imageFile);
+    const mediaType = studioBeat.movieFile ? "movie" : MulmoScriptMethods.getImageType(studio.script, beat);
     const extraPadding = (() => {
       // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
       if (index === 0) {

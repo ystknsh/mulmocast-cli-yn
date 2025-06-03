@@ -10,6 +10,7 @@ import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import imageGoogleAgent from "../agents/image_google_agent.js";
 import imageOpenaiAgent from "../agents/image_openai_agent.js";
+import movieGoogleAgent from "../agents/movie_google_agent.js";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
@@ -129,14 +130,48 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
+          prepareMovie: {
+            agent: (namedInputs: { imagePath: string; beat: MulmoBeat; imageDirPath: string; index: number; context: MulmoStudioContext }) => {
+              const { beat, imageDirPath, index, context } = namedInputs;
+              if (beat.moviePrompt) {
+                const movieFile = `${imageDirPath}/${context.studio.filename}/${index}.mov`;
+                return { movieFile };
+              }
+              return {};
+            },
+            inputs: {
+              result: ":imageGenerator", // to wait for imageGenerator to finish
+              imagePath: ":preprocessor.path",
+              beat: ":beat",
+              imageDirPath: ":imageDirPath",
+              index: ":__mapIndex",
+              context: ":context",
+            },
+          },
+          movieGenerator: {
+            if: ":prepareMovie.movieFile",
+            agent: "movieGoogleAgent",
+            inputs: {
+              prompt: ":beat.moviePrompt",
+              imagePath: ":preprocessor.path",
+              file: ":prepareMovie.movieFile",
+              studio: ":context.studio", // for cache
+              index: ":__mapIndex", // for cache
+              sessionType: "movie", // for cache
+              params: {
+                model: ":context.studio.script.movieParams.model",
+                aspectRatio: ":preprocessor.aspectRatio",
+                duration: ":beat.duration",
+              },
+            },
+            defaultValue: {},
+          },
           output: {
             agent: "copyAgent",
             inputs: {
-              result: ":imageGenerator",
-              image: ":preprocessor.path",
-            },
-            output: {
-              imageFile: ".image",
+              onComplete: ":movieGenerator",
+              imageFile: ":preprocessor.path",
+              movieFile: ":prepareMovie.movieFile",
             },
             isResult: true,
           },
@@ -144,7 +179,7 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { imageFile: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string; moveFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
         array.forEach((update, index) => {
@@ -188,7 +223,7 @@ const generateImages = async (context: MulmoStudioContext) => {
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator"],
+      nodeIds: ["imageGenerator", "movieGenerator"],
     },
   ];
 
@@ -199,11 +234,15 @@ const generateImages = async (context: MulmoStudioContext) => {
   const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
 
   // We need to get google's auth token only if the google is the text2image provider.
-  if (imageAgentInfo.provider === "google") {
+  if (imageAgentInfo.provider === "google" || studio.script.movieParams?.provider === "google") {
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
       imageGoogleAgent: {
+        projectId: process.env.GOOGLE_PROJECT_ID,
+        token,
+      },
+      movieGoogleAgent: {
         projectId: process.env.GOOGLE_PROJECT_ID,
         token,
       },
@@ -246,7 +285,7 @@ const generateImages = async (context: MulmoStudioContext) => {
     imageDirPath,
     imageRefs,
   };
-  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
