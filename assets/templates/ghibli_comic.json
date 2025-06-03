@@ -12,8 +12,17 @@
       "height": 1024
     },
     "imageParams": {
-      "style": "<style>A multi panel comic strips. Ghibli style. The presenter is a young woman with a dark short hair with glasses.</style>"
+      "style": "<style>Ghibli style</style>",
+      "images": {
+        "presenter": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/ghibli_presenter.png"
+          }
+        }
+      }
     }
   },
-  "scriptName": "text_only_template.json"
+  "scriptName": "image_prompts_template.json"
 }
