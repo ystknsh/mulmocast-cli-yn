@@ -73,6 +73,9 @@ async function generateMovie(
         if (responseData.error) {
           throw new Error(`Error: ${responseData.error.message}`);
         }
+        if (!responseData.response.videos) {
+          throw new Error(`No video: ${JSON.stringify(responseData, null, 2)}`);
+        }
         return responseData.response;
       }
     }
