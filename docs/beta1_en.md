@@ -53,6 +53,23 @@ We're also working on a more user-friendly app version—please stay tuned!
    DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1
    ```
 
+### Recommended Steps 2 (BGM Customization)
+To use custom background music, add the following configuration to your `.env` file:
+
+7. Add the following line to your `.env` file:
+
+   ```
+   PATH_BGM={PATH to Audio File}.mp3
+   ```
+
+   ※ Replace `{PATH to Audio File}.mp3` with the actual path to your BGM file.
+   
+   Example: `PATH_BGM=./assets/music/my_bgm.mp3`
+
+   ※ If no BGM file is specified, the default background music will be used.
+
+
+
 ---
 
 ## Creating Comic-Style Videos

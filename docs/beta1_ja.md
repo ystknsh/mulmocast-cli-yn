@@ -49,6 +49,19 @@
    DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1
    ```
 
+### 推奨項目2（BGM変更）
+BGM を変更したい場合は、`⁠.env` ファイルに以下の設定を追加します。
+
+7. `⁠.env` ファイルに以下の1行を追加します：
+   ```
+   PATH_BGM={PATH to Audio File}.mp3
+   ```
+
+   ※ `⁠{PATH to Audio File}.mp3`の部分は、実際に配置したBGMファイルのパスに置き換えてください。
+   例：⁠`PATH_BGM=./assets/music/my_bgm.mp3`
+   
+   ※ BGMファイルが指定されていない場合は、デフォルトのBGMが使用されます。
+
 ---
 
 ## コミックスタイルの動画作成
