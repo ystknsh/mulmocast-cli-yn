@@ -39,6 +39,18 @@ export const main = async () => {
     .demandCommand()
     .strict()
     .help()
+    .showHelpOnFail(false)
+    .fail((msg, err, y) => {
+      // if yargs detect error, show help and exit
+      if (msg) {
+        y.showHelp();
+        GraphAILogger.info("\\n" + msg);
+        process.exit(1);
+      }
+      if (err) {
+        throw err;
+      }
+    })
     .alias("help", "h");
 
   await cli.parseAsync();
