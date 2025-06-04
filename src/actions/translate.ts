@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { GraphAI, assert } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
-import vanillaAgents from "@graphai/vanilla";
+import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
@@ -11,7 +11,7 @@ import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
-// const { default: __, ...vanillaAgents } = agents;
+const vanillaAgents = agents.default ?? agents;
 
 const translateGraph: GraphData = {
   version: 0.5,
