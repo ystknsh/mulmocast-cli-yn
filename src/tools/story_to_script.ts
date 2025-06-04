@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
 import { geminiAgent } from "@graphai/gemini_agent";
 import { groqAgent } from "@graphai/groq_agent";
-import vanillaAgents from "@graphai/vanilla";
+import * as agents from "@graphai/vanilla";
 import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptInfoPrompt, storyToScriptPrompt } from "../utils/prompt.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
@@ -15,7 +15,7 @@ import { LLM, llmPair } from "../utils/utils.js";
 import { storyToScriptGenerateMode } from "../utils/const.js";
 import { cliLoadingPlugin } from "../utils/plugins.js";
 
-// const { default: __, ...vanillaAgents } = agents;
+const vanillaAgents = agents.default ?? agents;
 
 const createValidatedScriptGraphData = ({
   systemPrompt,
