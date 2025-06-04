@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger } from "graphai";
-import type { GraphOptions, GraphData } from "graphai";
+import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
@@ -219,7 +219,7 @@ const googleAuth = async () => {
   return accessToken.token!;
 };
 
-const generateImages = async (context: MulmoStudioContext) => {
+const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   const { studio, fileDirs } = context;
   const { outDirPath, imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
@@ -294,13 +294,18 @@ const generateImages = async (context: MulmoStudioContext) => {
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
+  if (callbacks) {
+    callbacks.forEach((callback) => {
+      graph.registerCallback(callback);
+    });
+  }
   await graph.run<{ output: MulmoStudioBeat[] }>();
 };
 
-export const images = async (context: MulmoStudioContext) => {
+export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioMethods.setSessionState(context.studio, "image", true);
-    await generateImages(context);
+    await generateImages(context, callbacks);
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "image", false);
   }

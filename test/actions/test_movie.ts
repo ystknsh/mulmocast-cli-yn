@@ -123,7 +123,7 @@ test("test images", async () => {
     fileDirs,
     force: false,
   };
-  await audio(context, 8);
+  await audio(context);
   await images(context);
   await movie(context);
 });

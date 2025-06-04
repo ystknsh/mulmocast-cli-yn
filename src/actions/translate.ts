@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { GraphAI, assert } from "graphai";
-import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
+import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
@@ -223,7 +223,7 @@ const agentFilters = [
 const defaultLang = "en";
 const targetLangs = ["ja", "en"];
 
-export const translate = async (context: MulmoStudioContext) => {
+export const translate = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioMethods.setSessionState(context.studio, "multiLingual", true);
     const { studio, fileDirs } = context;
@@ -239,7 +239,11 @@ export const translate = async (context: MulmoStudioContext) => {
     graph.injectValue("targetLangs", targetLangs);
     graph.injectValue("outDirPath", outDirPath);
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
-
+    if (callbacks) {
+      callbacks.forEach((callback) => {
+        graph.registerCallback(callback);
+      });
+    }
     const results = await graph.run<MulmoStudio>();
     writingMessage(outputStudioFilePath);
     if (results.mergeStudioResult) {

@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { GraphAI } from "graphai";
-import type { GraphData } from "graphai";
+import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
 import addBGMAgent from "../agents/add_bgm_agent.js";
@@ -190,7 +190,7 @@ const agentFilters = [
   },
 ];
 
-export const audio = async (context: MulmoStudioContext) => {
+export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioMethods.setSessionState(context.studio, "audio", true);
     const { studio, fileDirs, lang } = context;
@@ -223,6 +223,11 @@ export const audio = async (context: MulmoStudioContext) => {
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
     graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("audioDirPath", audioDirPath);
+    if (callbacks) {
+      callbacks.forEach((callback) => {
+        graph.registerCallback(callback);
+      });
+    }
     await graph.run();
 
     writingMessage(audioCombinedFilePath);
