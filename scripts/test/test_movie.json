@@ -5,6 +5,10 @@
   "movieParams": {
     "provider": "google"
   },
+  "canvasSize": {
+    "width": 720,
+    "height": 1280
+  },
   "imageParams": {
     "style": "Photo realistic, cinematic style.",
     "images": {
