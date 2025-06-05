@@ -3,7 +3,7 @@ import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI, { toFile } from "openai";
 
 // NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
-type OpenAIImageSize = "1792x1024" | "auto" | "1024x1024" | "1536x1024" | "1024x1536" | "256x256";
+type OpenAIImageSize = "1792x1024" | "1024x1792" | "1024x1024" | "1536x1024" | "1024x1536";
 type OpenAIModeration = "low" | "auto";
 type OpenAIImageOptions = {
   model: string;
@@ -19,22 +19,41 @@ export const imageOpenaiAgent: AgentFunction<
   {
     apiKey: string;
     model: string; // dall-e-3 or gpt-image-1
-    size: OpenAIImageSize | null | undefined;
     moderation: OpenAIModeration | null | undefined;
-    images: string[] | null | undefined;
+    canvasSize: { width: number; height: number };
   },
   { buffer: Buffer },
-  { prompt: string }
+  { prompt: string; images: string[] | null | undefined }
 > = async ({ namedInputs, params }) => {
-  const { prompt } = namedInputs;
-  const { apiKey, model, size, moderation, images } = params;
+  const { prompt, images } = namedInputs;
+  const { apiKey, moderation, canvasSize } = params;
+  const model = params.model ?? "dall-e-3";
   const openai = new OpenAI({ apiKey });
+  const size = (() => {
+    if (model === "gpt-image-1") {
+      if (canvasSize.width > canvasSize.height) {
+        return "1536x1024";
+      } else if (canvasSize.width < canvasSize.height) {
+        return "1024x1536";
+      } else {
+        return "1024x1024";
+      }
+    } else {
+      if (canvasSize.width > canvasSize.height) {
+        return "1792x1024";
+      } else if (canvasSize.width < canvasSize.height) {
+        return "1024x1792";
+      } else {
+        return "1024x1024";
+      }
+    }
+  })();
 
   const imageOptions: OpenAIImageOptions = {
-    model: model ?? "dall-e-3",
+    model,
     prompt,
     n: 1,
-    size: size ?? (model === "gpt-image-1" ? "1536x1024" : "1792x1024"),
+    size,
   };
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";

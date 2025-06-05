@@ -80,8 +80,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
-  if (studio.beats.some((beat) => !beat.imageFile)) {
-    GraphAILogger.info("beat.imageFile is not set. Please run `yarn run images ${file}` ");
+  if (studio.beats.some((beat) => !beat.imageFile && !beat.movieFile)) {
+    GraphAILogger.info("beat.imageFile or beat.movieFile is not set. Please run `yarn run images ${file}` ");
     return;
   }
 
@@ -93,10 +93,14 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = studio.script.beats[index];
-    if (!studioBeat.imageFile || !studioBeat.duration) {
-      throw new Error(`studioBeat.imageFile or studioBeat.duration is not set: index=${index}`);
+    const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
+    if (!sourceFile) {
+      throw new Error(`studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
     }
-    const inputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.movieFile ?? studioBeat.imageFile);
+    if (!studioBeat.duration) {
+      throw new Error(`studioBeat.duration is not set: index=${index}`);
+    }
+    const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
     const mediaType = studioBeat.movieFile ? "movie" : MulmoScriptMethods.getImageType(studio.script, beat);
     const extraPadding = (() => {
       // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration

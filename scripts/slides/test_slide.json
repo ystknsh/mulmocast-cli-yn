@@ -26,7 +26,6 @@
   },
   "imageParams": {
     "model": "gpt-image-1",
-    "size": "1536x1024",
     "moderation": "low"
   },
   "beats": [

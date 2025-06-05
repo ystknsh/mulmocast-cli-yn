@@ -30,11 +30,6 @@ export const MulmoScriptMethods = {
   getCanvasSize(script: MulmoScript): MulmoCanvasDimension {
     return mulmoCanvasDimensionSchema.parse(script.canvasSize);
   },
-  getAspectRatio(script: MulmoScript): string {
-    // Google's text2image specific parameter
-    const size = this.getCanvasSize(script);
-    return size.width > size.height ? "16:9" : "9:16";
-  },
   getSpeechProvider(script: MulmoScript): Text2SpeechProvider {
     return text2SpeechProviderSchema.parse(script.speechParams?.provider);
   },

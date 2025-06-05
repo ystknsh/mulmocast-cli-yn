@@ -26,7 +26,6 @@ const validMulmoScriptJson = JSON.stringify({
       },
       imageParams: {
         model: "dall-e-3",
-        size: "1024x1024",
       },
       speechOptions: {
         speed: 1.0,
@@ -54,7 +53,6 @@ const validMulmoScriptJson = JSON.stringify({
   imageParams: {
     model: "dall-e-3",
     provider: "openai",
-    size: "1792x1024",
     style: "natural",
   },
   imagePath: "images/",

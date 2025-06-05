@@ -7,33 +7,36 @@ async function generateMovie(
   model: string,
   token: string | undefined,
   prompt: string,
-  imagePath: string,
+  imagePath: string | undefined,
   aspectRatio: string,
   duration: number,
 ): Promise<Buffer | undefined> {
   const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}`;
 
-  // Prepare the payload for the API request
-  const buffer = readFileSync(imagePath);
-  const bytesBase64Encoded = buffer.toString("base64");
-
   const payload = {
     instances: [
       {
         prompt: prompt,
-        image: {
-          bytesBase64Encoded,
-          mimeType: "image/png",
-        },
+        image: undefined as any,
       },
     ],
     parameters: {
       sampleCount: 1,
       aspectRatio: aspectRatio,
-      //safetySetting: "block_only_high",
+      safetySetting: "block_only_high",
       durationSeconds: duration,
     },
   };
+
+  if (imagePath) {
+    const buffer = readFileSync(imagePath);
+    const bytesBase64Encoded = buffer.toString("base64");
+
+    payload.instances[0].image = {
+      bytesBase64Encoded,
+      mimeType: "image/png",
+    };
+  }
 
   // Make the API call using fetch
   const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:predictLongRunning`, {
@@ -93,23 +96,26 @@ export type MovieGoogleConfig = {
   token?: string;
 };
 
+export const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
+  if (canvasSize.width > canvasSize.height) {
+    return "16:9";
+  } else if (canvasSize.width < canvasSize.height) {
+    return "9:16";
+  } else {
+    return "1:1";
+  }
+};
+
 export const movieGoogleAgent: AgentFunction<
-  { model: string; aspectRatio: string; duration?: number },
+  { model: string; canvasSize: { width: number; height: number }; duration?: number },
   { buffer: Buffer },
-  { prompt: string; imagePath: string },
+  { prompt: string; imagePath?: string },
   MovieGoogleConfig
 > = async ({ namedInputs, params, config }) => {
   const { prompt, imagePath } = namedInputs;
-  /*
-  if (prompt) {
-    const buffer = Buffer.from(prompt);
-    return { buffer };
-  }
-  */
-  const aspectRatio = params.aspectRatio ?? "16:9";
+  const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";
   const duration = params.duration ?? 8;
-  //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
   const projectId = config?.projectId;
   const token = config?.token;
 

@@ -42,14 +42,10 @@ const imagePreprocessAgent = async (namedInputs: {
 }) => {
   const { context, beat, index, suffix, imageDirPath, imageAgentInfo, imageRefs } = namedInputs;
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
-  if (!imageParams.size) {
-    const canvasSize = MulmoScriptMethods.getCanvasSize(context.studio.script);
-    imageParams.size = `${canvasSize.width}x${canvasSize.height}`;
-  }
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const returnValue = {
-    aspectRatio: MulmoScriptMethods.getAspectRatio(context.studio.script),
     imageParams,
+    movieFile: beat.moviePrompt ? `${imageDirPath}/${context.studio.filename}/${index}.mov` : undefined,
   };
 
   if (beat.image) {
@@ -60,20 +56,25 @@ const imagePreprocessAgent = async (namedInputs: {
         const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
         const path = await plugin.process(processorParams);
         // undefined prompt indicates that image generation is not needed
-        return { path, ...returnValue };
+        return { imagePath: path, ...returnValue };
       } finally {
         MulmoStudioMethods.setBeatSessionState(context.studio, "image", index, false);
       }
     }
   }
 
-  const prompt = imagePrompt(beat, imageParams.style);
+  // images for "edit_image"
   const images = (() => {
     const imageNames = beat.imageNames ?? Object.keys(imageRefs); // use all images if imageNames is not specified
     const sources = imageNames.map((name) => imageRefs[name]);
     return sources.filter((source) => source !== undefined);
   })();
-  return { path: imagePath, prompt, ...returnValue, images };
+
+  if (beat.moviePrompt && !beat.imagePrompt) {
+    return { ...returnValue, images }; // no image prompt, only movie prompt
+  }
+  const prompt = imagePrompt(beat, imageParams.style);
+  return { imagePath, prompt, ...returnValue, images };
 };
 
 const graph_data: GraphData = {
@@ -119,54 +120,36 @@ const graph_data: GraphData = {
             retry: 3,
             inputs: {
               prompt: ":preprocessor.prompt",
-              file: ":preprocessor.path", // only for fileCacheAgentFilter
+              images: ":preprocessor.images",
+              file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
-              force: ":context.force",
-              studio: ":context.studio", // for cache
-              index: ":__mapIndex", // for cache
-              sessionType: "image", // for cache
+              force: ":context.force", // only for fileCacheAgentFilter
+              studio: ":context.studio", // for fileCacheAgentFilter
+              index: ":__mapIndex", // for fileCacheAgentFilter
+              sessionType: "image", // for fileCacheAgentFilter
               params: {
                 model: ":preprocessor.imageParams.model",
-                size: ":preprocessor.imageParams.size",
                 moderation: ":preprocessor.imageParams.moderation",
-                aspectRatio: ":preprocessor.aspectRatio",
-                images: ":preprocessor.images",
+                canvasSize: ":context.studio.script.canvasSize",
               },
             },
             defaultValue: {},
           },
-          prepareMovie: {
-            agent: (namedInputs: { imagePath: string; beat: MulmoBeat; imageDirPath: string; index: number; context: MulmoStudioContext }) => {
-              const { beat, imageDirPath, index, context } = namedInputs;
-              if (beat.moviePrompt) {
-                const movieFile = `${imageDirPath}/${context.studio.filename}/${index}.mov`;
-                return { movieFile };
-              }
-              return {};
-            },
-            inputs: {
-              result: ":imageGenerator", // to wait for imageGenerator to finish
-              imagePath: ":preprocessor.path",
-              beat: ":beat",
-              imageDirPath: ":imageDirPath",
-              index: ":__mapIndex",
-              context: ":context",
-            },
-          },
           movieGenerator: {
-            if: ":prepareMovie.movieFile",
+            if: ":preprocessor.movieFile",
             agent: "movieGoogleAgent",
             inputs: {
+              onComplete: ":imageGenerator", // to wait for imageGenerator to finish
               prompt: ":beat.moviePrompt",
-              imagePath: ":preprocessor.path",
-              file: ":prepareMovie.movieFile",
+              imagePath: ":preprocessor.imagePath",
+              file: ":preprocessor.movieFile",
               studio: ":context.studio", // for cache
               index: ":__mapIndex", // for cache
               sessionType: "movie", // for cache
               params: {
                 model: ":context.studio.script.movieParams.model",
-                aspectRatio: ":preprocessor.aspectRatio",
                 duration: ":beat.duration",
+                canvasSize: ":context.studio.script.canvasSize",
               },
             },
             defaultValue: {},
@@ -175,8 +158,8 @@ const graph_data: GraphData = {
             agent: "copyAgent",
             inputs: {
               onComplete: ":movieGenerator",
-              imageFile: ":preprocessor.path",
-              movieFile: ":prepareMovie.movieFile",
+              imageFile: ":preprocessor.imagePath",
+              movieFile: ":preprocessor.movieFile",
             },
             isResult: true,
           },
