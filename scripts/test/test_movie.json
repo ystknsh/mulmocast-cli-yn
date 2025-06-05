@@ -29,7 +29,7 @@
       "duration": 5
     },
     {
-      "text": "Image without only movie prompt",
+      "text": "Image with only movie prompt",
       "moviePrompt": "Startship lifts off.",
       "duration": 5
     }
