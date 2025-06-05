@@ -50,6 +50,7 @@ const imagePreprocessAgent = async (namedInputs: {
   const returnValue = {
     aspectRatio: MulmoScriptMethods.getAspectRatio(context.studio.script),
     imageParams,
+    movieFile: beat.moviePrompt ? `${imageDirPath}/${context.studio.filename}/${index}.mov` : undefined,
   };
 
   if (beat.image) {
@@ -135,31 +136,14 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
-          prepareMovie: {
-            agent: (namedInputs: { imagePath: string; beat: MulmoBeat; imageDirPath: string; index: number; context: MulmoStudioContext }) => {
-              const { beat, imageDirPath, index, context } = namedInputs;
-              if (beat.moviePrompt) {
-                const movieFile = `${imageDirPath}/${context.studio.filename}/${index}.mov`;
-                return { movieFile };
-              }
-              return {};
-            },
-            inputs: {
-              result: ":imageGenerator", // to wait for imageGenerator to finish
-              imagePath: ":preprocessor.path",
-              beat: ":beat",
-              imageDirPath: ":imageDirPath",
-              index: ":__mapIndex",
-              context: ":context",
-            },
-          },
           movieGenerator: {
-            if: ":prepareMovie.movieFile",
+            if: ":preprocessor.movieFile",
             agent: "movieGoogleAgent",
             inputs: {
+              onComplete: ":imageGenerator", // to wait for imageGenerator to finish
               prompt: ":beat.moviePrompt",
               imagePath: ":preprocessor.path",
-              file: ":prepareMovie.movieFile",
+              file: ":preprocessor.movieFile",
               studio: ":context.studio", // for cache
               index: ":__mapIndex", // for cache
               sessionType: "movie", // for cache
@@ -176,7 +160,7 @@ const graph_data: GraphData = {
             inputs: {
               onComplete: ":movieGenerator",
               imageFile: ":preprocessor.path",
-              movieFile: ":prepareMovie.movieFile",
+              movieFile: ":preprocessor.movieFile",
             },
             isResult: true,
           },
