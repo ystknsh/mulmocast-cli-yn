@@ -149,8 +149,8 @@ const graph_data: GraphData = {
               sessionType: "movie", // for cache
               params: {
                 model: ":context.studio.script.movieParams.model",
-                aspectRatio: ":preprocessor.aspectRatio",
                 duration: ":beat.duration",
+                canvasSize: ":context.studio.script.canvasSize",
               },
             },
             defaultValue: {},
