@@ -70,6 +70,9 @@ const imagePreprocessAgent = async (namedInputs: {
     return sources.filter((source) => source !== undefined);
   })();
 
+  if (beat.moviePrompt && !beat.imagePrompt) {
+    return { ...returnValue, images }; // no image prompt, only movie prompt
+  }
   const prompt = imagePrompt(beat, imageParams.style);
   return { imagePath, prompt, ...returnValue, images };
 };
