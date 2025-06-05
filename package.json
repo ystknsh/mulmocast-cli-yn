@@ -69,27 +69,27 @@
     "google-auth-library": "^9.15.1",
     "graphai": "^2.0.5",
     "inquirer": "^12.6.1",
-    "marked": "^15.0.11",
+    "marked": "^15.0.12",
     "ora": "^8.2.0",
     "pdf-lib": "^1.17.1",
-    "puppeteer": "^24.8.1",
+    "puppeteer": "^24.10.0",
     "yaml": "^2.8.0",
     "yargs": "^17.7.2",
-    "zod": "^3.24.4",
+    "zod": "^3.25.51",
     "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
     "@receptron/test_utils": "^2.0.0",
     "@types/fluent-ffmpeg": "^2.1.26",
     "@types/yargs": "^17.0.33",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-prettier": "^5.4.1",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.32.1"
+    "typescript-eslint": "^8.33.1"
   },
   "engines": {
     "node": ">=16.0.0"
