@@ -20,10 +20,10 @@ export const imageOpenaiAgent: AgentFunction<
     apiKey: string;
     model: string; // dall-e-3 or gpt-image-1
     moderation: OpenAIModeration | null | undefined;
-    canvasSize: { width: number, height: number };
+    canvasSize: { width: number; height: number };
   },
   { buffer: Buffer },
-  { prompt: string, images: string[] | null | undefined; }
+  { prompt: string; images: string[] | null | undefined }
 > = async ({ namedInputs, params }) => {
   const { prompt, images } = namedInputs;
   const { apiKey, moderation, canvasSize } = params;

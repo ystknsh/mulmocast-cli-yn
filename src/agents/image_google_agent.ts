@@ -73,11 +73,12 @@ export type ImageGoogleConfig = {
   token?: string;
 };
 
-export const imageGoogleAgent: AgentFunction<{ model: string; canvasSize: { width: number, height: number } }, { buffer: Buffer }, { prompt: string }, ImageGoogleConfig> = async ({
-  namedInputs,
-  params,
-  config,
-}) => {
+export const imageGoogleAgent: AgentFunction<
+  { model: string; canvasSize: { width: number; height: number } },
+  { buffer: Buffer },
+  { prompt: string },
+  ImageGoogleConfig
+> = async ({ namedInputs, params, config }) => {
   const { prompt } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "imagen-3.0-fast-generate-001";
