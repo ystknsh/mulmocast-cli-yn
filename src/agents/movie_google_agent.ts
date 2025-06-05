@@ -110,12 +110,6 @@ export const movieGoogleAgent: AgentFunction<
   MovieGoogleConfig
 > = async ({ namedInputs, params, config }) => {
   const { prompt, imagePath } = namedInputs;
-  /*
-  if (prompt) {
-    const buffer = Buffer.from(prompt);
-    return { buffer };
-  }
-  */
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";
   const duration = params.duration ?? 8;
