@@ -48,7 +48,6 @@ const imagePreprocessAgent = async (namedInputs: {
   }
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const returnValue = {
-    aspectRatio: MulmoScriptMethods.getAspectRatio(context.studio.script),
     imageParams,
     movieFile: beat.moviePrompt ? `${imageDirPath}/${context.studio.filename}/${index}.mov` : undefined,
   };
