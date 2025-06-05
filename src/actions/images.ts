@@ -130,7 +130,7 @@ const graph_data: GraphData = {
                 model: ":preprocessor.imageParams.model",
                 size: ":preprocessor.imageParams.size",
                 moderation: ":preprocessor.imageParams.moderation",
-                aspectRatio: ":preprocessor.aspectRatio",
+                canvasSize: ":context.studio.script.canvasSize",
                 images: ":preprocessor.images",
               },
             },

@@ -11,6 +11,7 @@
   },
   "imageParams": {
     "style": "Photo realistic, cinematic style.",
+    "provider": "google",
     "images": {
       "optimus": {
         "type": "image",
