@@ -159,7 +159,6 @@ const imageIdSchema = z.string();
 export const mulmoImageParamsSchema = z
   .object({
     model: z.string().optional(), // default: provider specific
-    size: z.string().optional(), // default: provider specific
     style: z.string().optional(), // optional image style
     moderation: z.string().optional(), // optional image style
     images: z.record(imageIdSchema, mulmoImageMediaSchema).optional(),
