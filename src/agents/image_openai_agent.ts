@@ -21,13 +21,13 @@ export const imageOpenaiAgent: AgentFunction<
     model: string; // dall-e-3 or gpt-image-1
     size: OpenAIImageSize | null | undefined;
     moderation: OpenAIModeration | null | undefined;
-    images: string[] | null | undefined;
+    canvasSize: { width: number, height: number };
   },
   { buffer: Buffer },
-  { prompt: string }
+  { prompt: string, images: string[] | null | undefined; }
 > = async ({ namedInputs, params }) => {
-  const { prompt } = namedInputs;
-  const { apiKey, model, size, moderation, images } = params;
+  const { prompt, images } = namedInputs;
+  const { apiKey, model, size, moderation, canvasSize } = params;
   const openai = new OpenAI({ apiKey });
 
   const imageOptions: OpenAIImageOptions = {

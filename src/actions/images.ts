@@ -119,18 +119,18 @@ const graph_data: GraphData = {
             retry: 3,
             inputs: {
               prompt: ":preprocessor.prompt",
+              images: ":preprocessor.images",
               file: ":preprocessor.path", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
-              force: ":context.force",
-              studio: ":context.studio", // for cache
-              index: ":__mapIndex", // for cache
-              sessionType: "image", // for cache
+              force: ":context.force", // only for fileCacheAgentFilter
+              studio: ":context.studio", // for fileCacheAgentFilter
+              index: ":__mapIndex", // for fileCacheAgentFilter
+              sessionType: "image", // for fileCacheAgentFilter
               params: {
                 model: ":preprocessor.imageParams.model",
                 size: ":preprocessor.imageParams.size",
                 moderation: ":preprocessor.imageParams.moderation",
                 canvasSize: ":context.studio.script.canvasSize",
-                images: ":preprocessor.images",
               },
             },
             defaultValue: {},
