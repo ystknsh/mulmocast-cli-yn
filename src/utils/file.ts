@@ -13,6 +13,12 @@ import { ZodSchema } from "zod";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let npmRoot = path.resolve(__dirname, "../../");
+
+export const updateNpmRoot = (_npmRoot: string) => {
+  npmRoot = _npmRoot;
+};
+
 export function readMulmoScriptFile<T = MulmoScript>(
   path: string,
   errorMessage: string,
@@ -107,7 +113,7 @@ export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMo
   return path.resolve(outDirPath, `${fileName}_${pdfMode}.pdf`);
 };
 export const getTemplateFilePath = (templateName: string) => {
-  return path.resolve(__dirname, "../../assets/templates/" + templateName + ".json");
+  return path.resolve(npmRoot, "./assets/templates/" + templateName + ".json");
 };
 
 export const mkdir = (dirPath: string) => {
@@ -117,13 +123,13 @@ export const mkdir = (dirPath: string) => {
   }
 };
 
-export const silentPath = path.resolve(__dirname, "../../assets/audio/silent300.mp3");
-export const silentLastPath = path.resolve(__dirname, "../../assets/audio/silent800.mp3");
-export const silent60secPath = path.resolve(__dirname, "../../assets/audio/silent60sec.mp3");
-export const defaultBGMPath = path.resolve(__dirname, "../../assets/music/StarsBeyondEx.mp3");
+export const silentPath = path.resolve(npmRoot, "./assets/audio/silent300.mp3");
+export const silentLastPath = path.resolve(npmRoot, "./assets/audio/silent800.mp3");
+export const silent60secPath = path.resolve(npmRoot, "./assets/audio/silent60sec.mp3");
+export const defaultBGMPath = path.resolve(npmRoot, "./assets/music/StarsBeyondEx.mp3");
 
 export const getHTMLFile = (filename: string) => {
-  const htmlPath = path.resolve(__dirname, `../../assets/html/${filename}.html`);
+  const htmlPath = path.resolve(npmRoot, `./assets/html/${filename}.html`);
   return fs.readFileSync(htmlPath, "utf-8");
 };
 
@@ -149,7 +155,7 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 };
 
 export const readScriptTemplateFile = (scriptName: string) => {
-  const scriptPath = path.resolve(__dirname, "../../scripts/templates", scriptName);
+  const scriptPath = path.resolve(npmRoot, "./scripts/templates", scriptName);
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
   // NOTE: We don't want to schema parse the script here to eliminate default values.
   return JSON.parse(scriptData);
@@ -173,7 +179,7 @@ export const readTemplatePrompt = (templateName: string) => {
 };
 
 export const getAvailableTemplates = (): (MulmoScriptTemplate & { filename: string })[] => {
-  const templatesDir = path.resolve(__dirname, "../../assets/templates");
+  const templatesDir = path.resolve(npmRoot, "./assets/templates");
 
   if (!fs.existsSync(templatesDir)) {
     return [];
