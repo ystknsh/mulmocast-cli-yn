@@ -184,7 +184,7 @@ const graph_data: GraphData = {
       },
     },
     mergeResult: {
-      agent: (namedInputs: { array: { imageFile: string; moveFile: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
         array.forEach((update, index) => {
@@ -199,7 +199,7 @@ const graph_data: GraphData = {
         context: ":context",
       },
     },
-    writeOutout: {
+    writeOutput: {
       // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
