@@ -11,16 +11,7 @@
       "height": 1280
     },
     "imageParams": {
-      "style": "<style>Photo realistic, cinematic.</style>",
-      "images": {
-        "presenter": {
-          "type": "image",
-          "source": {
-            "kind": "url",
-            "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/female_presenter.png"
-          }
-        }
-      }
+      "style": "<style>Photo realistic, cinematic.</style>"
     }
   },
   "scriptName": "movie_prompts_template.json"
