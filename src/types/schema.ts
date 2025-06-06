@@ -199,6 +199,7 @@ export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
     text: z.string().describe("Text to be spoken. If empty, the audio is not generated."),
+    description: z.string().optional(),
     image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),
     duration: z.number().optional().describe("Duration of the beat. Used only when the text is empty"),

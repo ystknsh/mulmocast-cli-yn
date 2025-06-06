@@ -24,6 +24,7 @@ async function generateMovie(
       sampleCount: 1,
       aspectRatio: aspectRatio,
       safetySetting: "block_only_high",
+      personGeneration: "allow_all",
       durationSeconds: duration,
     },
   };
