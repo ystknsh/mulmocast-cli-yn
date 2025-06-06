@@ -17,7 +17,7 @@ async function generateMovie(
     instances: [
       {
         prompt: prompt,
-        image: undefined as any,
+        image: undefined as { bytesBase64Encoded: string; mimeType: string } | undefined,
       },
     ],
     parameters: {
