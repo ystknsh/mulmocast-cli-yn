@@ -90,11 +90,28 @@ Create a `.env` file in your project directory with the following API keys:
 ```bash
 OPENAI_API_KEY=your_openai_api_key
 ```
-### Optional
+
+#### (Optional) For the advanced image generation model
 ```bash
 DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # for the advanced image generation model
-GOOGLE_PROJECT_ID=your_google_project_id # for Google's image generation model
-NIJIVOICE_API_KEY=your_nijivoice_api_key # for Nijivoice's TTS model
+```
+
+#### (Optional) For Google's image generation model
+```bash
+GOOGLE_PROJECT_ID=your_google_project_id
+```
+
+You may also need to take the following steps before running any commands:
+1. Install [gcloud CLI](https://cloud.google.com/sdk/docs/install)
+2. Login by `gcloud auth application-default login`
+
+#### (Optional) For Nijivoice's TTS model
+```bash
+NIJIVOICE_API_KEY=your_nijivoice_api_key
+```
+
+#### (Optional) to access web in mulmo tool
+```bash
 BROWSERLESS_API_TOKEN=your_browserless_api_token # to access web in mulmo tool
 ```
 
