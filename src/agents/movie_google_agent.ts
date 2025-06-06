@@ -49,6 +49,7 @@ async function generateMovie(
   });
 
   if (!response.ok) {
+    GraphAILogger.info("create project on google cloud console and setup the project. More details see readme.");
     throw new Error(`Error: ${response.status} - ${response.statusText}`);
   }
   const initialResponse = await response.json();

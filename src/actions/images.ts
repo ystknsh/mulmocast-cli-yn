@@ -194,12 +194,17 @@ const graph_data: GraphData = {
 };
 
 const googleAuth = async () => {
-  const auth = new GoogleAuth({
-    scopes: ["https://www.googleapis.com/auth/cloud-platform"],
-  });
-  const client = await auth.getClient();
-  const accessToken = await client.getAccessToken();
-  return accessToken.token!;
+  try {
+    const auth = new GoogleAuth({
+      scopes: ["https://www.googleapis.com/auth/cloud-platform"],
+    });
+    const client = await auth.getClient();
+    const accessToken = await client.getAccessToken();
+    return accessToken.token!;
+  } catch (__error) {
+    GraphAILogger.info("install gcloud and run 'gcloud auth application-default login'");
+    process.exit(1);
+  }
 };
 
 const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
