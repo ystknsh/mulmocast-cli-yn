@@ -114,6 +114,17 @@
     },
     {
       "speaker": "Presenter",
+      "text": "This section has longer duration than the audio.",
+      "duration": 10,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Duration 10 seconds"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
       "text": "This is the beat before the closing slide.",
       "image": {
         "type": "textSlide",
