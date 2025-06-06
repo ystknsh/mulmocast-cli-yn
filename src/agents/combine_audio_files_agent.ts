@@ -35,10 +35,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           const totalPadding = await (async () => {
             if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
               const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
+              // NOTE: We respect the duration of the movie, only if the movie is specified as a madia source, NOT generated.
               const movieDuration = await ffmpegGetMediaDuration(pathOrUrl);
               if (movieDuration > audioDuration) {
                 return padding + (movieDuration - audioDuration);
               }
+            } else if (beat.duration && beat.duration > audioDuration) {
+              return padding + (beat.duration - audioDuration);
             }
             return padding;
           })();

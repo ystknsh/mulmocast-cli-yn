@@ -17,13 +17,14 @@ async function generateMovie(
     instances: [
       {
         prompt: prompt,
-        image: undefined as any,
+        image: undefined as { bytesBase64Encoded: string; mimeType: string } | undefined,
       },
     ],
     parameters: {
       sampleCount: 1,
       aspectRatio: aspectRatio,
       safetySetting: "block_only_high",
+      personGeneration: "allow_all",
       durationSeconds: duration,
     },
   };
