@@ -12,6 +12,13 @@
     },
     "imageParams": {
       "style": "<style>Photo realistic, cinematic.</style>"
+    },
+    "audioParams": {
+      "padding": 0.0,
+      "introPadding": 0.0,
+      "closingPadding": 0.0,
+      "outroPadding": 5.0,
+      "bgm": { "kind": "url", "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/bgms/trailer_dramatic.mp3" }
     }
   },
   "scriptName": "movie_prompts_template.json"
