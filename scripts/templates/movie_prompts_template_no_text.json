@@ -17,26 +17,32 @@
   },
   "beats": [
     {
+      "duration": 5.0,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]",
       "moviePrompt": "[MOVIE_PROMPT: A movie prompt for that image.]"
     },
     {
+      "duration": 5.0,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]",
       "moviePrompt": "[MOVIE_PROMPT: A movie prompt for that image.]"
     },
     {
+      "duration": 5.0,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]",
       "moviePrompt": "[MOVIE_PROMPT: A movie prompt for that image.]"
     },
     {
+      "duration": 5.0,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]",
       "moviePrompt": "[MOVIE_PROMPT: A movie prompt for that image.]"
     },
     {
+      "duration": 5.0,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]",
       "moviePrompt": "[MOVIE_PROMPT: A movie prompt for that image.]"
     },
     {
+      "duration": 5.0,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]",
       "moviePrompt": "[MOVIE_PROMPT: A movie prompt for that image.]"
     }
