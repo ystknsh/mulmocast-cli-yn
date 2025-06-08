@@ -21,7 +21,8 @@ export const MulmoMediaSourceMethods = {
     }
     return null;
   },
-  resolve(mediaSource: MulmoMediaSource, context: MulmoStudioContext) {
+  resolve(mediaSource: MulmoMediaSource | undefined, context: MulmoStudioContext) {
+    if (!mediaSource) return null;
     if (mediaSource.kind === "path") {
       return MulmoStudioContextMethods.resolveAssetPath(context, mediaSource.path);
     }
