@@ -192,13 +192,14 @@ export const audioParamsSchema = z
     introPadding: z.number().describe("Padding at the beginning of the audio"), // seconds
     closingPadding: z.number().describe("Padding before the last beat"), // seconds
     outroPadding: z.number().describe("Padding at the end of the audio"), // seconds
+    bgm: mediaSourceSchema.optional(),
   })
   .strict();
 
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
-    text: z.string().describe("Text to be spoken. If empty, the audio is not generated."),
+    text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
     description: z.string().optional(),
     image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),

@@ -22,10 +22,10 @@ import {
   mkdir,
   writingMessage,
   getAudioSegmentFilePath,
-  resolveMediaSource,
 } from "../utils/file.js";
 import { text2hash, localizedText } from "../utils/utils.js";
 import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoMediaSourceMethods } from "../methods/mulmo_media_source.js";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -39,7 +39,7 @@ const provider_to_agent = {
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string | undefined => {
   if (beat.audio?.type === "audio") {
-    const path = resolveMediaSource(beat.audio.source, context);
+    const path = MulmoMediaSourceMethods.resolve(beat.audio.source, context);
     if (path) {
       return path;
     }
@@ -124,6 +124,7 @@ const graph_data: GraphData = {
     outputStudioFilePath: {},
     audioDirPath: {},
     audioSegmentDirPath: {},
+    musicFile: {},
     map: {
       agent: "mapAgent",
       inputs: {
@@ -158,14 +159,14 @@ const graph_data: GraphData = {
     },
     addBGM: {
       agent: "addBGMAgent",
-      params: {
-        musicFile: process.env.PATH_BGM ?? defaultBGMPath,
-      },
       inputs: {
         wait: ":combineFiles",
         voiceFile: ":audioCombinedFilePath",
         outputFile: ":audioArtifactFilePath",
         script: ":context.studio.script",
+        params: {
+          musicFile: ":musicFile",
+        },
       },
       isResult: true,
     },
@@ -223,6 +224,8 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
     graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("audioDirPath", audioDirPath);
+    graph.injectValue("musicFile", MulmoMediaSourceMethods.resolve(studio.script.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath);
+
     if (callbacks) {
       callbacks.forEach((callback) => {
         graph.registerCallback(callback);
