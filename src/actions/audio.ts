@@ -22,10 +22,10 @@ import {
   mkdir,
   writingMessage,
   getAudioSegmentFilePath,
-  resolveMediaSource,
 } from "../utils/file.js";
 import { text2hash, localizedText } from "../utils/utils.js";
 import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoMediaSourceMethods } from "../methods/mulmo_media_source.js";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -39,7 +39,7 @@ const provider_to_agent = {
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string | undefined => {
   if (beat.audio?.type === "audio") {
-    const path = resolveMediaSource(beat.audio.source, context);
+    const path = MulmoMediaSourceMethods.resolve(beat.audio.source, context);
     if (path) {
       return path;
     }

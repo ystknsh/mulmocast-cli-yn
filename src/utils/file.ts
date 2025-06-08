@@ -5,7 +5,6 @@ import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 import { MulmoScript, MulmoScriptTemplate, MulmoMediaSource, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
-import { MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema } from "zod";
@@ -197,16 +196,6 @@ export const getAvailableTemplates = (): (MulmoScriptTemplate & { filename: stri
 
 export const writingMessage = (filePath: string) => {
   GraphAILogger.debug(`writing: ${filePath}`);
-};
-
-export const resolveMediaSource = (source: MulmoMediaSource, context: MulmoStudioContext) => {
-  if (source.kind === "path") {
-    return MulmoStudioContextMethods.resolveAssetPath(context, source.path);
-  }
-  if (source.kind === "url") {
-    return source.url;
-  }
-  return null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
