@@ -124,6 +124,7 @@ const graph_data: GraphData = {
     outputStudioFilePath: {},
     audioDirPath: {},
     audioSegmentDirPath: {},
+    musicFile: {},
     map: {
       agent: "mapAgent",
       inputs: {
@@ -158,14 +159,14 @@ const graph_data: GraphData = {
     },
     addBGM: {
       agent: "addBGMAgent",
-      params: {
-        musicFile: process.env.PATH_BGM ?? defaultBGMPath,
-      },
       inputs: {
         wait: ":combineFiles",
         voiceFile: ":audioCombinedFilePath",
         outputFile: ":audioArtifactFilePath",
         script: ":context.studio.script",
+        params: {
+          musicFile: ":musicFile",
+        },
       },
       isResult: true,
     },
@@ -223,6 +224,8 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
     graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("audioDirPath", audioDirPath);
+    graph.injectValue("musicFile", process.env.PATH_BGM ?? defaultBGMPath);
+    
     if (callbacks) {
       callbacks.forEach((callback) => {
         graph.registerCallback(callback);
