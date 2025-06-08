@@ -1,0 +1,18 @@
+{
+  "title": "Movie Trailer template",
+  "description": "Template for A Movie Trailer.",
+  "systemPrompt": "Generate a script for a movie trailer of the given story. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English.",
+  "presentationStyle": {
+    "$mulmocast": {
+      "version": "1.0"
+    },
+    "canvasSize": {
+      "width": 1280,
+      "height": 720
+    },
+    "imageParams": {
+      "style": "<style>Photo realistic, cinematic.</style>"
+    }
+  },
+  "scriptName": "movie_prompts_template.json"
+}
