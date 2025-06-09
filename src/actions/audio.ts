@@ -8,6 +8,7 @@ import addBGMAgent from "../agents/add_bgm_agent.js";
 import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
 import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import ttsGoogleAgent from "../agents/tts_google_agent.js";
+import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods/index.js";
 
@@ -35,6 +36,7 @@ const provider_to_agent = {
   nijivoice: "ttsNijivoiceAgent",
   openai: "ttsOpenaiAgent",
   google: "ttsGoogleAgent",
+  elevenlabs: "ttsElevenlabsAgent",
 };
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string | undefined => {
@@ -204,7 +206,8 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
 
-    graph_data.concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
+    const provider = MulmoScriptMethods.getSpeechProvider(studio.script);
+    graph_data.concurrency = provider === "nijivoice" || provider === "elevenlabs" ? 1 : 8;
     const graph = new GraphAI(
       graph_data,
       {
@@ -213,6 +216,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
         ttsOpenaiAgent,
         ttsNijivoiceAgent,
         ttsGoogleAgent,
+        ttsElevenlabsAgent,
         addBGMAgent,
         combineAudioFilesAgent,
       },
