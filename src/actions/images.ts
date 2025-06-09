@@ -175,6 +175,12 @@ const graph_data: GraphData = {
           studio.beats[index] = { ...beat, ...update };
         });
         // console.log(namedInputs);
+        studio.beats.forEach((studioBeat, index) => {
+          const beat = studio.script.beats[index];
+          if (beat.image?.type === "beat" && index > 0) {
+            studioBeat.imageFile = studio.beats[index - 1].imageFile;
+          }
+        });
         return { studio };
       },
       inputs: {
