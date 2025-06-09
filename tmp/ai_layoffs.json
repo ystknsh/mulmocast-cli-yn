@@ -1,0 +1,100 @@
+{
+  "title": "The Rise of AI and Its Impact on Employment",
+  "references": [
+    {
+      "url": "https://www.theinformation.com/articles/behind-microsoft-layoffs-automation-efforts-boom",
+      "title": "Behind Microsoft Layoffs, Automation Efforts Boom",
+      "description": "Explores how Microsoft’s internal AI initiatives are reducing the need for human labor",
+      "type": "article"
+    },
+    {
+      "url": "https://fortune.com/2024/02/08/how-many-workers-laid-off-because-of-ai/",
+      "title": "How Many Workers Are Being Laid Off Because of AI?",
+      "description": "Challenger, Gray & Christmas report on AI-driven job cuts in the US",
+      "type": "article"
+    },
+    {
+      "url": "https://www.reuters.com/technology/ai-seen-cutting-worker-numbers-survey-by-staffing-company-adecco-shows-2024-04-05/",
+      "title": "AI Seen Cutting Worker Numbers, Survey Shows",
+      "description": "Adecco/Oxford Economics survey of executives forecasting AI-driven workforce reductions",
+      "type": "article"
+    }
+  ],
+  "scenes": [
+    {
+      "description": "Introduction to the growing influence of AI in corporate operations, particularly in large tech firms. Establishes the context of why AI is a major strategic focus in 2025.",
+      "references": [
+        {
+          "url": "https://tse1.mm.bing.net/th?id=OIP.XgAbqop4LdowuY0MGAL6_QHaE8&pid=Api",
+          "title": "Workflow Automation With Microsoft Power Automate",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "description": "Case study: Microsoft’s recent layoffs. Explains how automation and AI tools, which now generate up to 30% of the company's code, are allowing the company to restructure and reduce headcount.",
+      "references": [
+        {
+          "url": "https://www.theinformation.com/articles/behind-microsoft-layoffs-automation-efforts-boom",
+          "title": "Behind Microsoft Layoffs, Automation Efforts Boom",
+          "type": "article"
+        },
+        {
+          "url": "https://tse2.mm.bing.net/th?id=OIP.JZ6jpvuTjbRTqwLF_S0dNgHaEO&pid=Api",
+          "title": "Microsoft Power Automate 2025",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "description": "Overview of similar trends in other companies: UPS cutting 20,000 jobs due to automation and Meta restructuring teams as AI integration deepens.",
+      "references": [
+        {
+          "url": "https://www.businessinsider.com/recent-company-layoffs-laying-off-workers-2025",
+          "title": "Recent Company Layoffs 2025",
+          "type": "article"
+        },
+        {
+          "url": "https://tse1.mm.bing.net/th?id=OIP.-__EiKQJ8ELMsRYaAVQuJAHaHa&pid=Api",
+          "title": "Tech Layoffs Visual (2025)",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "description": "Survey data: 41% of executives expect AI to reduce workforce needs in the next five years. Discusses broader implications across industries and long-term strategic planning.",
+      "references": [
+        {
+          "url": "https://www.reuters.com/technology/ai-seen-cutting-worker-numbers-survey-by-staffing-company-adecco-shows-2024-04-05/",
+          "title": "AI Seen Cutting Worker Numbers, Survey Shows",
+          "type": "article"
+        },
+        {
+          "url": "https://tse1.mm.bing.net/th?id=OIP.OB_Y7T0-xRVjsREpnPlfDAHaEn&pid=Api",
+          "title": "Azure AI Automation Overview Diagram",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "description": "Discussion of job displacement vs. job creation. Explores the debate around how many roles AI may eliminate vs. new roles it might create in data management, AI oversight, and prompt engineering.",
+      "references": [
+        {
+          "url": "https://tse1.mm.bing.net/th?id=OIP.llPiTr2tmgb5EmGT-FYtCwHaDh&pid=Api",
+          "title": "Automation Strategy with the Automation Kit",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "description": "Conclusion: Balancing innovation with responsibility. Emphasizes the need for reskilling programs, policy intervention, and ethical AI adoption frameworks to protect workers.",
+      "references": [
+        {
+          "url": "https://tse3.mm.bing.net/th?id=OIP.iMAClSEHI7bHJYgvUZqN0gHaGm&pid=Api",
+          "title": "Layoffs 2025 Visual Summary",
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}

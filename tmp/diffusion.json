@@ -1,0 +1,432 @@
+{
+    "$mulmocast": {
+      "version": "1.0",
+      "credit": "closing"
+    },
+    "canvasSize": {
+      "width": 1280,
+      "height": 720
+    },
+    "speechParams": {
+      "provider": "openai",
+      "speakers": {
+        "Presenter": {
+          "displayName": {
+            "en": "Presenter",
+            "ja": "語り手"
+          },
+          "voiceId": "shimmer"
+        }
+      }
+    },
+    "title": "Diffusion Models: The Next Generation of AI Image Generation",
+    "lang": "en",
+    "beats": [
+      {
+        "speaker": "Presenter",
+        "text": "Welcome everyone. Today we're exploring diffusion models, an exciting breakthrough in generative AI that's transforming how we create images, audio, and other media.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Diffusion Models: The Next Generation of AI Image Generation",
+            "bullets": []
+          }
+        },
+        "textSlideParams": {
+          "cssStyles": ["h1 { margin-top: 300px }"]
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Before we dive into diffusion models, let's look at the landscape of generative AI. The field has evolved through several key approaches, each with their strengths and limitations.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Let's quickly review these earlier approaches. GANs produce sharp images but suffer from training instability. VAEs are more stable but often produce blurry results. Flow models are exact but require special architectures. Diffusion models overcome many of these limitations.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Evolution of Generative Models",
+            "bullets": [
+              "GANs: Sharp images but unstable training, mode collapse",
+              "VAEs: Stable but often blurry, rely on surrogate loss",
+              "Flow Models: Exact but require specialized architectures",
+              "Diffusion Models: Stable, high-quality, flexible but traditionally slow"
+            ]
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "So what exactly are diffusion models? They're inspired by non-equilibrium thermodynamics and work by gradually adding noise to data and then learning to reverse this process to generate new samples.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "What are Diffusion Models?",
+            "bullets": [
+              "Inspired by physics (non-equilibrium thermodynamics)",
+              "Define a Markov chain of diffusion steps",
+              "Gradually add random noise to data",
+              "Learn to reverse the process",
+              "Generate high-quality data from pure noise"
+            ]
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "The diffusion process works in two phases: forward and reverse. In the forward diffusion process, we gradually add small amounts of Gaussian noise to an image until it becomes pure noise. In the reverse process, we learn to denoise step by step.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Here's a more detailed look at the forward diffusion process. Starting with a real data sample x₀, we add small amounts of Gaussian noise through T steps. The step sizes are controlled by a variance schedule beta.",
+        "image": {
+          "type": "markdown",
+          "markdown": [
+            "# Forward Diffusion Process",
+            "",
+            "Given a data point sampled from real data distribution $x_0 \\sim q(x)$, we define:",
+            "",
+            "- **Forward process**: Add Gaussian noise over $T$ steps",
+            "- **Step sizes**: Controlled by variance schedule $\\beta_t \\in (0, 1)$",
+            "- **Result**: $x_0$ gradually loses features until $x_T$ becomes isotropic Gaussian",
+            "",
+            "As $T \\to \\infty$, $x_T$ becomes pure random noise - indistinguishable from $\\mathcal{N}(0, I)$"
+          ]
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "The reverse diffusion process is where the magic happens. We train a neural network to learn how to reverse the noise addition steps. This allows us to start with random noise and progressively denoise it to generate a clean sample.",
+        "image": {
+          "type": "markdown",
+          "markdown": [
+            "# Reverse Diffusion Process",
+            "",
+            "- We learn to reverse the forward process: $p_\\theta(x_{t-1} | x_t)$",
+            "- Neural network trained to predict noise component",
+            "- Start with random noise $x_T \\sim \\mathcal{N}(0, I)$",
+            "- Iteratively apply denoising steps",
+            "- Eventually recover clean sample $x_0$"
+          ]
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Here's a visualization of the diffusion process working on real data. You can see how noise is gradually added, and then the process is reversed to recover the original structure.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-example.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Let's look at the business impact of diffusion models. Their incredible quality and flexibility are creating opportunities across multiple industries.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Business Impact of Diffusion Models",
+            "bullets": [
+              "Content Creation: High-quality image and video generation",
+              "Design: Product visualization, architectural rendering",
+              "Marketing: Custom ad creative at scale",
+              "Entertainment: Film, gaming, visual effects",
+              "Healthcare: Medical imaging synthesis and enhancement"
+            ]
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "One major challenge with early diffusion models was their slow sampling speed. A standard diffusion model might need thousands of steps to generate a high-quality image. Several innovations have addressed this issue.",
+        "image": {
+          "type": "mermaid",
+          "title": "Accelerating Diffusion Models",
+          "code": {
+            "kind": "text",
+            "text": "graph TD\n    A[Standard Diffusion Models] -->|Thousands of steps| B[Slow Generation]\n    B --> C{Acceleration Techniques}\n    C -->|Fewer sampling steps| D[DDIM - Denoising Diffusion Implicit Models]\n    C -->|Model distillation| E[Progressive Distillation]\n    C -->|Direct mapping| F[Consistency Models]\n    C -->|Latent space| G[Latent Diffusion Models]\n    D --> H[Faster Generation]\n    E --> H\n    F --> H\n    G --> H"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "DDIM is a particularly important innovation that allows for high-quality generation with far fewer steps. Unlike standard diffusion models that use a stochastic process, DDIM uses a deterministic approach that maintains quality while reducing steps.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDIM-results.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Another key advancement is the Latent Diffusion Model or LDM. By operating in a compressed latent space rather than pixel space, LDMs achieve much faster training and inference while maintaining quality.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/latent-diffusion-arch.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "The evolution of diffusion model architectures has continued to improve performance. The two primary approaches are U-Net and Diffusion Transformers.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Model Architectures",
+            "bullets": [
+              "U-Net: Downsampling + upsampling with skip connections",
+              "ControlNet: Adds conditioning through \"sandwiched\" layers",
+              "Diffusion Transformer (DiT): Operates on latent patches",
+              "Transformer scales better with compute than U-Net"
+            ]
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Consistency Models represent one of the newest advances in diffusion modeling. They can map any point on the diffusion trajectory directly back to the original, enabling one-step generation while maintaining the option for multi-step high-quality generation.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Progressive Distillation is another approach to accelerate diffusion models. It works by distilling a teacher model into a student model that requires half the sampling steps.",
+        "image": {
+          "type": "image",
+          "source": {
+            "kind": "url",
+            "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation.png"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Let's look at how diffusion models have evolved over time, with each innovation improving quality, speed, or both.",
+        "image": {
+          "type": "chart",
+          "title": "Evolution of Diffusion Models (2020-2023)",
+          "chartData": {
+            "type": "line",
+            "data": {
+              "labels": ["2020", "2021", "2022", "2023"],
+              "datasets": [
+                {
+                  "label": "Sample Quality (relative)",
+                  "data": [70, 85, 92, 98],
+                  "backgroundColor": "rgba(54, 162, 235, 0.5)",
+                  "borderColor": "rgba(54, 162, 235, 1)",
+                  "borderWidth": 2,
+                  "tension": 0.3
+                },
+                {
+                  "label": "Sampling Speed (relative)",
+                  "data": [10, 30, 65, 90],
+                  "backgroundColor": "rgba(75, 192, 192, 0.5)",
+                  "borderColor": "rgba(75, 192, 192, 1)",
+                  "borderWidth": 2,
+                  "tension": 0.3
+                }
+              ]
+            },
+            "options": {
+              "responsive": true,
+              "animation": false,
+              "scales": {
+                "y": {
+                  "beginAtZero": true,
+                  "max": 100
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Conditional generation is a powerful capability of diffusion models. By incorporating guidance techniques, we can control what the model generates based on text, class labels, or other inputs.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Conditional Generation Techniques",
+            "bullets": [
+              "Classifier-Guided Diffusion: Uses a separate classifier",
+              "Classifier-Free Guidance: No separate classifier needed",
+              "Text-to-Image: Models like GLIDE, Imagen, Stable Diffusion",
+              "Image-to-Image: Models like ControlNet, Pix2Pix"
+            ]
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "The market for diffusion-based generative AI is growing rapidly. Here's our estimate of the market size by application area based on current adoption trends.",
+        "image": {
+          "type": "chart",
+          "title": "Estimated Market Size by Application (2025)",
+          "chartData": {
+            "type": "pie",
+            "data": {
+              "labels": ["Content Creation", "Marketing/Advertising", "Design/Architecture", "Entertainment/Gaming", "Healthcare/Medical", "Other"],
+              "datasets": [
+                {
+                  "data": [35, 25, 15, 10, 5, 10],
+                  "backgroundColor": [
+                    "rgba(255, 99, 132, 0.7)",
+                    "rgba(54, 162, 235, 0.7)",
+                    "rgba(255, 206, 86, 0.7)",
+                    "rgba(75, 192, 192, 0.7)",
+                    "rgba(153, 102, 255, 0.7)",
+                    "rgba(255, 159, 64, 0.7)"
+                  ],
+                  "borderColor": "rgba(255, 255, 255, 0.7)",
+                  "borderWidth": 1
+                }
+              ]
+            },
+            "options": {
+              "responsive": true,
+              "animation": false
+            }
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Let's compare the advantages and limitations of diffusion models to understand where they excel and what challenges remain.",
+        "image": {
+          "type": "markdown",
+          "markdown": [
+            "# Advantages vs. Limitations",
+            "",
+            "| Advantages | Limitations |",
+            "| :-------- | :---------- |",
+            "| High-quality outputs | Traditionally slow sampling |",
+            "| Training stability | Computationally intensive |",
+            "| Flexible architecture | Complex mathematical foundation |",
+            "| Controllable generation | Challenging to fine-tune |",
+            "| Strong theoretical foundation | Requires large datasets |",
+            "| Works across multiple domains | High VRAM requirements |"
+          ]
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Our company is well-positioned to leverage diffusion models across our product suite. Here's our implementation roadmap for the next year.",
+        "image": {
+          "type": "mermaid",
+          "title": "Diffusion Models Implementation Roadmap",
+          "code": {
+            "kind": "text",
+            "text": "gantt\n    title Diffusion Model Implementation Roadmap\n    dateFormat YYYY-MM\n    section Research\n    Evaluate models           :2025-05, 2025-07\n    Benchmark performance    :2025-06, 2025-08\n    section Development\n    Prototype integration    :2025-07, 2025-09\n    Model fine-tuning        :2025-08, 2025-10\n    section Deployment\n    Alpha release            :2025-10, 2025-11\n    Beta testing             :2025-11, 2025-12\n    section Production\n    Full deployment          :2026-01, 2026-03\n    Monitoring & optimization:2026-02, 2026-04"
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Let's look at how diffusion models compare to other generative approaches across several key metrics. As you can see, diffusion models excel in quality and flexibility, while recent improvements have addressed their speed limitations.",
+        "image": {
+          "type": "chart",
+          "title": "Comparing Generative Models",
+          "chartData": {
+            "type": "radar",
+            "data": {
+              "labels": ["Image Quality", "Training Stability", "Sampling Speed", "Controllability", "Diversity", "Scalability"],
+              "datasets": [
+                {
+                  "label": "Diffusion Models",
+                  "data": [95, 90, 75, 95, 90, 85],
+                  "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                  "borderColor": "rgba(54, 162, 235, 1)",
+                  "borderWidth": 2,
+                  "pointBackgroundColor": "rgba(54, 162, 235, 1)"
+                },
+                {
+                  "label": "GANs",
+                  "data": [85, 60, 95, 70, 70, 65],
+                  "backgroundColor": "rgba(255, 99, 132, 0.2)",
+                  "borderColor": "rgba(255, 99, 132, 1)",
+                  "borderWidth": 2,
+                  "pointBackgroundColor": "rgba(255, 99, 132, 1)"
+                },
+                {
+                  "label": "VAEs",
+                  "data": [70, 90, 90, 75, 80, 75],
+                  "backgroundColor": "rgba(255, 206, 86, 0.2)",
+                  "borderColor": "rgba(255, 206, 86, 1)",
+                  "borderWidth": 2,
+                  "pointBackgroundColor": "rgba(255, 206, 86, 1)"
+                }
+              ]
+            },
+            "options": {
+              "responsive": true,
+              "animation": false,
+              "scales": {
+                "r": {
+                  "beginAtZero": true,
+                  "max": 100
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "In conclusion, diffusion models represent a significant advancement in generative AI. Their combination of quality, stability, and controllability makes them ideal for enterprise applications across multiple sectors.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Key Takeaways",
+            "bullets": [
+              "Diffusion models offer superior image quality and controllability",
+              "Recent advances have dramatically improved sampling speed",
+              "Enterprise applications span multiple industries",
+              "Ongoing research continues to improve performance",
+              "Now is the time to integrate this technology into your workflow"
+            ]
+          }
+        }
+      },
+      {
+        "speaker": "Presenter",
+        "text": "Thank you for your attention. I'm happy to answer any questions about how diffusion models can benefit your specific use cases.",
+        "image": {
+          "type": "textSlide",
+          "slide": {
+            "title": "Questions?",
+            "bullets": []
+          }
+        },
+        "textSlideParams": {
+          "cssStyles": ["h1 { margin-top: 300px }"]
+        }
+      }
+    ]
+  }
