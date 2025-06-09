@@ -34,13 +34,6 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This beat uses the image from the previous beat.",
-      "image": {
-        "type": "beat"
-      }
-    },
-    {
-      "speaker": "Presenter",
       "text": "",
       "duration": 0.5,
       "image": {

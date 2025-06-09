@@ -126,6 +126,7 @@ export const mulmoHtmlTailwindMediaSchema = z
 export const mulmoBeatReferenceMediaSchema = z
   .object({
     type: z.literal("beat"),
+    id: z.string().optional().describe("Specifies the beat to reference."),
   })
   .strict();
 
@@ -207,6 +208,7 @@ export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
     text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
+    id: z.string().optional().describe("Unique identifier for the beat."),
     description: z.string().optional(),
     image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),
