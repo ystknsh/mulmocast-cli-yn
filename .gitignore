@@ -5,3 +5,6 @@ node_modules
 *~
 lib/
 output/
+tmp/
+images/
+scratchpad/
