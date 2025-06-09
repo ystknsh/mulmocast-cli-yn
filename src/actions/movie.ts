@@ -80,9 +80,10 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
-  if (studio.beats.some((beat) => !beat.imageFile && !beat.movieFile)) {
-    GraphAILogger.info("beat.imageFile or beat.movieFile is not set. Please run `yarn run images ${file}` ");
-    return;
+  const missingIndex = studio.beats.findIndex((beat) => !beat.imageFile && !beat.movieFile);
+  if (missingIndex !== -1) {
+    GraphAILogger.info(`ERROR: beat.imageFile or beat.movieFile is not set on beat ${missingIndex}.`);
+    return false;
   }
 
   const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
@@ -156,6 +157,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
   GraphAILogger.info(studio.script.title);
   GraphAILogger.info((studio.script.references ?? []).map((reference) => `${reference.title} (${reference.url})`).join("\n"));
+
+  return true;
 };
 
 export const movie = async (context: MulmoStudioContext) => {
@@ -166,8 +169,9 @@ export const movie = async (context: MulmoStudioContext) => {
     const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
     const outputVideoPath = getOutputVideoFilePath(outDirPath, studio.filename, context.lang, caption);
 
-    await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption);
-    writingMessage(outputVideoPath);
+    if (await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption)) {
+      writingMessage(outputVideoPath);
+    }
   } finally {
     MulmoStudioMethods.setSessionState(context.studio, "video", false);
   }

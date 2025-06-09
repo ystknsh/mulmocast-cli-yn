@@ -170,11 +170,25 @@ const graph_data: GraphData = {
       agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
+        const beatIndexMap: Record<string, number> = {};
         array.forEach((update, index) => {
           const beat = studio.beats[index];
           studio.beats[index] = { ...beat, ...update };
+          const id = studio.script.beats[index].id;
+          if (id) {
+            beatIndexMap[id] = index;
+          }
         });
-        // console.log(namedInputs);
+        studio.beats.forEach((studioBeat, index) => {
+          const beat = studio.script.beats[index];
+          if (beat.image?.type === "beat") {
+            if (beat.image.id && beatIndexMap[beat.image.id] !== undefined) {
+              studioBeat.imageFile = studio.beats[beatIndexMap[beat.image.id]].imageFile;
+            } else if (index > 0) {
+              studioBeat.imageFile = studio.beats[index - 1].imageFile;
+            }
+          }
+        });
         return { studio };
       },
       inputs: {
