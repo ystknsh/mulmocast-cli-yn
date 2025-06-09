@@ -63,7 +63,7 @@ const ttsElevenlabsAgentInfo: AgentFunctionInfo = {
   description: "Eleven Labs TTS agent",
   category: ["tts"],
   author: "Receptron Team",
-  repository: "https://github.com/receptron/graphai-agents/tree/main/tts/tts-elevenlabs-agent",
+  repository: "https://github.com/receptron/mulmocast-cli/",
   license: "MIT",
   environmentVariables: ["ELEVENLABS_API_KEY"],
 };
