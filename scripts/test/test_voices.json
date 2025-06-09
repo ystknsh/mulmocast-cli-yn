@@ -1,0 +1,24 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Voice Test",
+  "speechParams": {
+    "provider": "elevenlabs",
+    "speakers": {
+      "Presenter": { "voiceId": "shimmer" } 
+    }
+  },
+  "beats": [
+    {
+      "speaker": "Presenter",
+      "text": "This is an opening beat.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Opening Beat"
+        }
+      }
+    }
+  ]
+}
