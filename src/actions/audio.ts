@@ -206,7 +206,8 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
 
-    graph_data.concurrency = MulmoScriptMethods.getSpeechProvider(studio.script) === "nijivoice" ? 1 : 8;
+    const provider = MulmoScriptMethods.getSpeechProvider(studio.script);
+    graph_data.concurrency = provider === "nijivoice" || provider === "elevenlabs" ? 1 : 8;
     const graph = new GraphAI(
       graph_data,
       {
