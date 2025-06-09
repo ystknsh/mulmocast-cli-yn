@@ -6,17 +6,39 @@
   "speechParams": {
     "provider": "elevenlabs",
     "speakers": {
-      "Presenter": { "voiceId": "JBFqnCBsd6RMkjVDRZzb" } 
+      "David": { "voiceId": "XjLkpWUlnhS8i7gGz3lZ" },
+      "Felicity": { "voiceId": "aTbnroHRGIomiKpqAQR8" },
+      "Ishibashi": { "voiceId": "Mv8AjrYZCBkdsmDHNwcB" }
     }
   },
   "beats": [
     {
-      "speaker": "Presenter",
-      "text": "This is an opening beat.",
+      "speaker": "David",
+      "text": "I am Davie Castleman, with a clear and crisp middle age professional American voice, powered by ElevenLabs.",
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "Opening Beat"
+          "title": "I am Davie Castleman, a clear and crisp middle aged man, powered by ElevenLabs."
+        }
+      }
+    },
+    {
+      "speaker": "Felicity",
+      "text": "I'm a young British English woman, powered by ElevenLabs.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "I'm a young British English woman."
+        }
+      }
+    },
+    {
+      "speaker": "Ishibashi",
+      "text": "こんにちは、私の名前は石橋です。イレブンラブスの声です。",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "こんにちは、私の名前は石橋です。"
         }
       }
     }
