@@ -6,7 +6,7 @@
   "speechParams": {
     "provider": "elevenlabs",
     "speakers": {
-      "Presenter": { "voiceId": "shimmer" } 
+      "Presenter": { "voiceId": "JBFqnCBsd6RMkjVDRZzb" } 
     }
   },
   "beats": [
