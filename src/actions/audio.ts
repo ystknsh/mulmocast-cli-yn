@@ -61,7 +61,7 @@ const preprocessor = (namedInputs: {
   context: MulmoStudioContext;
   audioDirPath: string;
 }) => {
-  const { beat, studioBeat, multiLingual, index, context, audioDirPath } = namedInputs;
+  const { beat, studioBeat, multiLingual, context, audioDirPath } = namedInputs;
   const { lang } = context;
   const speaker = context.studio.script.speechParams.speakers[beat.speaker];
   const voiceId = speaker.voiceId;
@@ -95,7 +95,6 @@ const graph_tts: GraphData = {
         beat: ":beat",
         studioBeat: ":studioBeat",
         multiLingual: ":multiLingual",
-        index: ":__mapIndex",
         context: ":context",
         audioDirPath: ":audioDirPath",
       },
