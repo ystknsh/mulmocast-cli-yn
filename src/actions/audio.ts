@@ -61,7 +61,7 @@ const preprocessor = (namedInputs: {
   context: MulmoStudioContext;
   audioDirPath: string;
 }) => {
-  const { beat, studioBeat, multiLingual, index, context, audioDirPath } = namedInputs;
+  const { beat, studioBeat, multiLingual, context, audioDirPath } = namedInputs;
   const { lang } = context;
   const speaker = context.studio.script.speechParams.speakers[beat.speaker];
   const voiceId = speaker.voiceId;
@@ -71,7 +71,7 @@ const preprocessor = (namedInputs: {
   // Use speaker-specific provider if available, otherwise fall back to script-level provider
   const provider = speaker.provider ?? context.studio.script.speechParams.provider;
   const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}${provider}`;
-  const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
+  const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
   const needsTTS = !beat.audio && audioPath !== undefined;
@@ -95,7 +95,6 @@ const graph_tts: GraphData = {
         beat: ":beat",
         studioBeat: ":studioBeat",
         multiLingual: ":multiLingual",
-        index: ":__mapIndex",
         context: ":context",
         audioDirPath: ":audioDirPath",
       },
