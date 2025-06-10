@@ -345,23 +345,6 @@ export const mulmoStudioSchema = z
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
     multiLingual: mulmoStudioMultiLingualSchema,
-    state: mulmoSessionStateSchema.default({
-      inSession: {
-        audio: false,
-        image: false,
-        video: false,
-        multiLingual: false,
-        caption: false,
-        pdf: false,
-      },
-      inBeatSession: {
-        audio: {},
-        image: {},
-        movie: {},
-        multiLingual: {},
-        caption: {},
-      },
-    }),
   })
   .strict();
 

@@ -6,11 +6,11 @@ import type { AgentFilterFunction } from "graphai";
 import { GraphAILogger } from "graphai";
 import { writingMessage } from "./file.js";
 import { text2hash } from "./utils.js";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file, force, studio, index, sessionType } = namedInputs;
+  const { file, force, mlumoContext, index, sessionType } = namedInputs;
 
   const shouldUseCache = async () => {
     if (force) {
@@ -28,7 +28,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     return true;
   }
   try {
-    MulmoStudioMethods.setBeatSessionState(studio, sessionType, index, true);
+    MulmoStudioContextMethods.setBeatSessionState(mlumoContext, sessionType, index, true);
     const output = (await next(context)) as { buffer: Buffer };
     const buffer = output ? output["buffer"] : undefined;
     if (buffer) {
@@ -39,7 +39,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     GraphAILogger.log("no cache, no buffer: " + file);
     return false;
   } finally {
-    MulmoStudioMethods.setBeatSessionState(studio, sessionType, index, false);
+    MulmoStudioContextMethods.setBeatSessionState(mlumoContext, sessionType, index, false);
   }
 };
 
