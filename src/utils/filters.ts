@@ -11,7 +11,6 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
   const { file, force, mulmoContext, index, sessionType } = namedInputs;
-  console.log("***DEBUG***", file, force, mulmoContext, index, sessionType);
 
   const shouldUseCache = async () => {
     if (force) {
