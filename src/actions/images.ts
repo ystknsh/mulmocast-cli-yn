@@ -153,12 +153,19 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
+          onComplete: {
+            agent: "copyAgent",
+            inputs: {
+              onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+              imageFile: ":preprocessor.imagePath",
+              movieFile: ":preprocessor.movieFile",
+            },
+          },
           output: {
             agent: "copyAgent",
             inputs: {
-              onComplete: ":movieGenerator",
-              imageFile: ":preprocessor.imagePath",
-              movieFile: ":preprocessor.movieFile",
+              imageFile: ":onComplete.imageFile",
+              movieFile: ":onComplete.movieFile",
             },
             isResult: true,
           },

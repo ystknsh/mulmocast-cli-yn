@@ -107,7 +107,7 @@ const graph_tts: GraphData = {
         text: ":preprocessor.text",
         file: ":preprocessor.audioPath",
         force: ":context.force",
-        studio: ":context.studio", // for cache
+        mulmoContext: ":context", // for cache
         index: ":__mapIndex", // for cache
         sessionType: "audio", // for cache
         params: {
