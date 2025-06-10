@@ -23,7 +23,8 @@ export const MulmoStudioMethods = {
     if (value) {
       studio.state.inBeatSession[sessionType][index] = true;
     } else {
-      studio.state.inBeatSession[sessionType][index] = false;
+      // NOTE: Setting to false causes the parse error in rebuildStudio in preprocess.ts
+      delete studio.state.inBeatSession[sessionType][index];
     }
     notifyBeatStateChange(studio, sessionType, index);
   },
