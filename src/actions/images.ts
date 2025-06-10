@@ -276,7 +276,25 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
             throw new Error(`Failed to download image: ${image.source.url}`);
           }
           const buffer = Buffer.from(await response.arrayBuffer());
-          const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.png`;
+
+          // Detect file extension from Content-Type header or URL
+          const extension = (() => {
+            const contentType = response.headers.get("content-type");
+            if (contentType?.includes("jpeg") || contentType?.includes("jpg")) {
+              return "jpg";
+            } else if (contentType?.includes("png")) {
+              return "png";
+            } else {
+              // Fall back to URL extension
+              const urlExtension = image.source.url.split(".").pop()?.toLowerCase();
+              if (urlExtension && ["jpg", "jpeg", "png"].includes(urlExtension)) {
+                return urlExtension === "jpeg" ? "jpg" : urlExtension;
+              }
+              return "png"; // default
+            }
+          })();
+
+          const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.${extension}`;
           await fs.promises.writeFile(imagePath, buffer);
           imageRefs[key] = imagePath;
         }
