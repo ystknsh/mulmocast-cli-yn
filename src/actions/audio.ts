@@ -83,7 +83,7 @@ const preprocessor = (namedInputs: {
     speechOptions,
     audioPath,
     text,
-    needsTTS
+    needsTTS,
   };
 };
 
