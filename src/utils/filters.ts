@@ -10,7 +10,8 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { namedInputs } = context;
-  const { file, force, mlumoContext, index, sessionType } = namedInputs;
+  const { file, force, mulmoContext, index, sessionType } = namedInputs;
+  console.log("***DEBUG***", file, force, mulmoContext, index, sessionType);
 
   const shouldUseCache = async () => {
     if (force) {
@@ -28,7 +29,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     return true;
   }
   try {
-    MulmoStudioContextMethods.setBeatSessionState(mlumoContext, sessionType, index, true);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, true);
     const output = (await next(context)) as { buffer: Buffer };
     const buffer = output ? output["buffer"] : undefined;
     if (buffer) {
@@ -39,7 +40,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     GraphAILogger.log("no cache, no buffer: " + file);
     return false;
   } finally {
-    MulmoStudioContextMethods.setBeatSessionState(mlumoContext, sessionType, index, false);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, false);
   }
 };
 
