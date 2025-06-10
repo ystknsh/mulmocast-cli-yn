@@ -16,7 +16,6 @@
     }
   },
   "imagePath": "./scripts/samples/images/graphai_intro/\u200EGraphAI_pararel.\u200E",
-  "omitCaptions": true,
   "beats": [
     {
       "speaker": "Host",

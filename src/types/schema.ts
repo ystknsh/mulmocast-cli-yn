@@ -279,8 +279,6 @@ export const mulmoPresentationStyleSchema = z.object({
     closingPadding: 0.8,
     outroPadding: 1.0,
   }),
-  // TODO: Switch to showCaptions later
-  omitCaptions: z.boolean().optional(), // default is false
 });
 
 export const mulmoReferenceSchema = z.object({

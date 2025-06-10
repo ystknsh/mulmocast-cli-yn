@@ -56,7 +56,6 @@ const validMulmoScriptJson = JSON.stringify({
     style: "natural",
   },
   imagePath: "images/",
-  omitCaptions: false,
 });
 
 const invalidMulmoScriptJson = JSON.stringify({
