@@ -124,7 +124,7 @@ test("test images", async () => {
         movie: {},
         multiLingual: {},
         caption: {},
-      },  
+      },
     },
   };
   await images(context);
