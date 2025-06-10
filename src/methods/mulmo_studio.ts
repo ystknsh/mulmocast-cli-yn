@@ -10,7 +10,7 @@ const notifyStateChange = (studio: MulmoStudio, sessionType: SessionType) => {
 };
 
 const notifyBeatStateChange = (studio: MulmoStudio, sessionType: BeatSessionType, index: number) => {
-  const prefix = studio.state.inBeatSession[sessionType].has(index) ? "{" : " }";
+  const prefix = studio.state.inBeatSession[sessionType][index] ? "{" : " }";
   GraphAILogger.info(`${prefix} ${sessionType} ${index}`);
 };
 
@@ -21,9 +21,9 @@ export const MulmoStudioMethods = {
   },
   setBeatSessionState(studio: MulmoStudio, sessionType: BeatSessionType, index: number, value: boolean) {
     if (value) {
-      studio.state.inBeatSession[sessionType].add(index);
+      studio.state.inBeatSession[sessionType][index] = true;
     } else {
-      studio.state.inBeatSession[sessionType].delete(index);
+      studio.state.inBeatSession[sessionType][index] = false;
     }
     notifyBeatStateChange(studio, sessionType, index);
   },
