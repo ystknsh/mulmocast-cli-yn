@@ -63,17 +63,21 @@ const preprocessor = (namedInputs: {
 }) => {
   const { beat, studioBeat, multiLingual, index, context, audioDirPath } = namedInputs;
   const { lang } = context;
-  const voiceId = context.studio.script.speechParams.speakers[beat.speaker].voiceId;
+  const speaker = context.studio.script.speechParams.speakers[beat.speaker];
+  const voiceId = speaker.voiceId;
   const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
   const text = localizedText(beat, multiLingual, lang);
-  const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}`;
+
+  // Use speaker-specific provider if available, otherwise fall back to script-level provider
+  const provider = speaker.provider ?? context.studio.script.speechParams.provider;
+  const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}${provider}`;
   const audioFile = `${context.studio.filename}_${index}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
   studioBeat.audioFile = audioPath;
   const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {
-    ttsAgent: provider_to_agent[context.studio.script.speechParams.provider],
+    ttsAgent: provider_to_agent[provider],
     studioBeat,
     voiceId,
     speechOptions,
@@ -206,8 +210,12 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
 
-    const provider = MulmoScriptMethods.getSpeechProvider(studio.script);
-    graph_data.concurrency = provider === "nijivoice" || provider === "elevenlabs" ? 1 : 8;
+    // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
+    const hasLimitedConcurrencyProvider = Object.values(studio.script.speechParams.speakers).some((speaker) => {
+      const provider = speaker.provider ?? studio.script.speechParams.provider;
+      return provider === "nijivoice" || provider === "elevenlabs";
+    });
+    graph_data.concurrency = hasLimitedConcurrencyProvider ? 1 : 8;
     const graph = new GraphAI(
       graph_data,
       {

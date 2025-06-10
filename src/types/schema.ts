@@ -26,11 +26,14 @@ export const speechOptionsSchema = z
 
 const speakerIdSchema = z.string();
 
+export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google"), z.literal("elevenlabs")]).default("openai");
+
 const speakerDataSchema = z
   .object({
     displayName: z.record(langSchema, z.string()).optional(),
     voiceId: z.string(),
     speechOptions: speechOptionsSchema.optional(),
+    provider: text2SpeechProviderSchema.optional(),
   })
   .strict();
 
@@ -239,8 +242,6 @@ export const mulmoCastCreditSchema = z
     credit: z.literal("closing").optional(),
   })
   .strict();
-
-export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google"), z.literal("elevenlabs")]).default("openai");
 
 export const mulmoSpeechParamsSchema = z
   .object({
