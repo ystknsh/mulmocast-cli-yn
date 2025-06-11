@@ -102,7 +102,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const filterComplexVideoIds: string[] = [];
   const filterComplexAudioIds: string[] = [];
   const beatTimestamps: number[] = [];
-  const videoIds: string[] = [];
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = studio.script.beats[index];
@@ -134,10 +133,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       const compositeVideoId = `c${index}`;
       ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
       filterComplexVideoIds.push(compositeVideoId);
-      videoIds.push(compositeVideoId);
     } else {
       filterComplexVideoIds.push(videoId);
-      videoIds.push(videoId);
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
@@ -149,7 +146,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     return timestamp + duration;
   }, 0);
 
-  assert(videoIds.length === studio.beats.length, "videoIds.length !== studio.beats.length");
+  assert(filterComplexVideoIds.length === studio.beats.length, "videoIds.length !== studio.beats.length");
   assert(beatTimestamps.length === studio.beats.length, "beatTimestamps.length !== studio.beats.length");
 
   // console.log("*** images", images.audioIds);
