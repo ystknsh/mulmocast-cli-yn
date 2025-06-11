@@ -42,20 +42,7 @@ export const getVideoPart = (
     "format=yuv420p",
   );
 
-  // Add fade effects if transition is enabled
-  if (movieParams?.transition?.type === "fade") {
-    const fadeDuration = movieParams.transition.duration ?? 0.5;
-
-    // Add fade-in for beats after the first one
-    if (!isFirstBeat) {
-      videoFilters.push(`fade=t=in:st=0:d=${fadeDuration}`);
-    }
-
-    // Add fade-out for beats before the last one
-    if (!isLastBeat) {
-      videoFilters.push(`fade=t=out:st=${duration - fadeDuration}:d=${fadeDuration}`);
-    }
-  }
+  // Note: Fade effects are now handled in the mixing stage, not individual beats
 
   return {
     videoId,
@@ -78,10 +65,10 @@ export const getAudioPart = (inputIndex: number, duration: number, delay: number
   };
 };
 
-const getOutputOption = (audioId: string) => {
+const getOutputOption = (audioId: string, videoId: string) => {
   return [
     "-preset medium", // Changed from veryfast to medium for better compression
-    "-map [v]", // Map the video stream
+    `-map [${videoId}]`, // Map the video stream
     `-map ${audioId}`, // Map the audio stream
     `-c:v ${videoCodec}`, // Set video codec
     ...(videoCodec === "libx264" ? ["-crf", "26"] : []), // Add CRF for libx264
@@ -114,8 +101,10 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Add each image input
   const filterComplexVideoIds: string[] = [];
   const filterComplexAudioIds: string[] = [];
+  const beatTimestamps: number[] = [];
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
+    beatTimestamps.push(timestamp);
     const beat = studio.script.beats[index];
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
     if (!sourceFile) {
@@ -159,8 +148,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // console.log("*** images", images.audioIds);
 
   // Concatenate the trimmed images
-  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
-
+  const concatVideoId = "concat_video";
+  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[${concatVideoId}]`);
+               
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
 
@@ -177,7 +167,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
     return artifactAudioId;
   })();
-  await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId));
+  await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId, concatVideoId));
   const end = performance.now();
   GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
   GraphAILogger.info(studio.script.title);
