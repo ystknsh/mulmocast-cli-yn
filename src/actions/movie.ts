@@ -150,6 +150,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
   ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[${concatVideoId}]`);
+
+  const mixedVideoId = (() => {
+    if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1) {
+      // TODO: add fade-out for each beat except the last one 
+    }
+    return concatVideoId;
+  })();
                
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
@@ -161,7 +168,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
       FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
       ffmpegContext.filterComplex.push(
-        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
+        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${mixedVideoId}]`,
       );
       return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
     }
