@@ -40,7 +40,7 @@ const ttsOpenaiAgentInfo: AgentFunctionInfo = {
   description: "OpenAI TTS agent",
   category: ["tts"],
   author: "Receptron Team",
-  repository: "https://github.com/receptron/graphai-agents/tree/main/tts/tts-openai-agent",
+  repository: "https://github.com/receptron/mulmocast-cli/",
   license: "MIT",
   environmentVariables: ["OPENAI_API_KEY"],
 };

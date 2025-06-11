@@ -101,9 +101,7 @@ DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # for the advanced image generation model
 GOOGLE_PROJECT_ID=your_google_project_id
 ```
 
-You may also need to take the following steps before running any commands:
-1. Install [gcloud CLI](https://cloud.google.com/sdk/docs/install)
-2. Login by `gcloud auth application-default login`
+See also [pre-requisites for Google's image generation model](./docs/pre-requisites-google.md)
 
 #### (Optional) For Nijivoice's TTS model
 ```bash

@@ -33,6 +33,17 @@ export const MulmoScriptMethods = {
   getSpeechProvider(script: MulmoScript): Text2SpeechProvider {
     return text2SpeechProviderSchema.parse(script.speechParams?.provider);
   },
+  getAllSpeechProviders(script: MulmoScript): Set<Text2SpeechProvider> {
+    const providers = new Set<Text2SpeechProvider>();
+    const defaultProvider = this.getSpeechProvider(script);
+
+    Object.values(script.speechParams.speakers).forEach((speaker) => {
+      const provider = speaker.provider ?? defaultProvider;
+      providers.add(provider);
+    });
+
+    return providers;
+  },
   getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string {
     const styles = script.textSlideParams?.cssStyles ?? [];
     // NOTES: Taking advantage of CSS override rule (you can redefine it to override)

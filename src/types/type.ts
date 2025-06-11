@@ -30,6 +30,7 @@ import {
   mulmoImageMediaSchema,
   mulmoChartMediaSchema,
   mediaSourceSchema,
+  mulmoSessionStateSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
 import { LLM } from "../utils/utils.js";
@@ -67,6 +68,7 @@ export type MulmoMarkdownMedia = z.infer<typeof mulmoMarkdownMediaSchema>;
 export type MulmoImageMedia = z.infer<typeof mulmoImageMediaSchema>;
 export type MulmoChartMedia = z.infer<typeof mulmoChartMediaSchema>;
 export type MulmoMermaidMedia = z.infer<typeof mulmoMermaidMediaSchema>;
+export type MulmoSessionState = z.infer<typeof mulmoSessionStateSchema>;
 
 export type FileDirs = {
   mulmoFilePath: string;
@@ -84,6 +86,7 @@ export type MulmoStudioContext = {
   lang?: string;
   force: boolean;
   caption?: string;
+  sessionState: MulmoSessionState;
 };
 
 export type ScriptingParams = {

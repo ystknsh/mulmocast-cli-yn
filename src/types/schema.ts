@@ -26,11 +26,14 @@ export const speechOptionsSchema = z
 
 const speakerIdSchema = z.string();
 
+export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google"), z.literal("elevenlabs")]).default("openai");
+
 const speakerDataSchema = z
   .object({
     displayName: z.record(langSchema, z.string()).optional(),
     voiceId: z.string(),
     speechOptions: speechOptionsSchema.optional(),
+    provider: text2SpeechProviderSchema.optional(),
   })
   .strict();
 
@@ -123,6 +126,13 @@ export const mulmoHtmlTailwindMediaSchema = z
   })
   .strict();
 
+export const mulmoBeatReferenceMediaSchema = z
+  .object({
+    type: z.literal("beat"),
+    id: z.string().optional().describe("Specifies the beat to reference."),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   mulmoMarkdownMediaSchema,
   mulmoWebMediaSchema,
@@ -136,6 +146,7 @@ export const mulmoImageAssetSchema = z.union([
   mulmoChartMediaSchema,
   mulmoMermaidMediaSchema,
   mulmoHtmlTailwindMediaSchema,
+  mulmoBeatReferenceMediaSchema,
 ]);
 
 const mulmoAudioMediaSchema = z
@@ -171,14 +182,6 @@ export const textSlideParamsSchema = z
   })
   .strict();
 
-/* TODO: Add something later
-export const videoParamsSchema = z
-  .object({
-    padding: z.number().optional(), // msec
-  })
-  .strict();
-*/
-
 export const beatAudioParamsSchema = z
   .object({
     padding: z.number().optional().describe("Padding between beats"), // seconds
@@ -192,13 +195,15 @@ export const audioParamsSchema = z
     introPadding: z.number().describe("Padding at the beginning of the audio"), // seconds
     closingPadding: z.number().describe("Padding before the last beat"), // seconds
     outroPadding: z.number().describe("Padding at the end of the audio"), // seconds
+    bgm: mediaSourceSchema.optional(),
   })
   .strict();
 
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
-    text: z.string().describe("Text to be spoken. If empty, the audio is not generated."),
+    text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
+    id: z.string().optional().describe("Unique identifier for the beat."),
     description: z.string().optional(),
     image: mulmoImageAssetSchema.optional(),
     audio: mulmoAudioAssetSchema.optional(),
@@ -229,8 +234,6 @@ export const mulmoCastCreditSchema = z
     credit: z.literal("closing").optional(),
   })
   .strict();
-
-export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google")]).default("openai");
 
 export const mulmoSpeechParamsSchema = z
   .object({
@@ -270,15 +273,12 @@ export const mulmoPresentationStyleSchema = z.object({
   movieParams: mulmoMovieParamsSchema.optional(),
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
-  // videoParams: videoParamsSchema.optional(),
   audioParams: audioParamsSchema.default({
     introPadding: 1.0,
     padding: 0.3,
     closingPadding: 0.8,
     outroPadding: 1.0,
   }),
-  // TODO: Switch to showCaptions later
-  omitCaptions: z.boolean().optional(), // default is false
 });
 
 export const mulmoReferenceSchema = z.object({
@@ -331,11 +331,11 @@ export const mulmoSessionStateSchema = z.object({
     pdf: z.boolean(),
   }),
   inBeatSession: z.object({
-    audio: z.set(z.number()),
-    image: z.set(z.number()),
-    movie: z.set(z.number()),
-    multiLingual: z.set(z.number()),
-    caption: z.set(z.number()),
+    audio: z.record(z.number().int(), z.boolean()),
+    image: z.record(z.number().int(), z.boolean()),
+    movie: z.record(z.number().int(), z.boolean()),
+    multiLingual: z.record(z.number().int(), z.boolean()),
+    caption: z.record(z.number().int(), z.boolean()),
   }),
 });
 
@@ -345,23 +345,6 @@ export const mulmoStudioSchema = z
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
     multiLingual: mulmoStudioMultiLingualSchema,
-    state: mulmoSessionStateSchema.default({
-      inSession: {
-        audio: false,
-        image: false,
-        video: false,
-        multiLingual: false,
-        caption: false,
-        pdf: false,
-      },
-      inBeatSession: {
-        audio: new Set(),
-        image: new Set(),
-        movie: new Set(),
-        multiLingual: new Set(),
-        caption: new Set(),
-      },
-    }),
   })
   .strict();
 

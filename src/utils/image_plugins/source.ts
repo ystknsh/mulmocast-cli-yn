@@ -1,6 +1,6 @@
 import { GraphAILogger } from "graphai";
 import { ImageProcessorParams } from "../../types/index.js";
-import { resolveMediaSource } from "../../utils/file.js";
+import { MulmoMediaSourceMethods } from "../../methods/mulmo_media_source.js";
 
 type ImageType = "image" | "movie";
 
@@ -9,7 +9,7 @@ export const processSource = (imageType: ImageType) => {
     const { beat, context } = params;
     if (!beat.image || beat.image.type !== imageType) return;
 
-    const path = resolveMediaSource(beat.image.source, context);
+    const path = MulmoMediaSourceMethods.resolve(beat.image.source, context);
     if (path) {
       return path;
     }

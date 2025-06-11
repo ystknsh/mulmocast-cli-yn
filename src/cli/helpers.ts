@@ -136,6 +136,23 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     force: Boolean(argv.f),
     lang: argv.l,
     caption: argv.c,
+    sessionState: {
+      inSession: {
+        audio: false,
+        image: false,
+        video: false,
+        multiLingual: false,
+        caption: false,
+        pdf: false,
+      },
+      inBeatSession: {
+        audio: {},
+        image: {},
+        movie: {},
+        multiLingual: {},
+        caption: {},
+      },
+    },
   };
 };
 

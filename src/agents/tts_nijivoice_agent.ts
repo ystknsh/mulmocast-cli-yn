@@ -68,9 +68,10 @@ const ttsNijivoiceAgentInfo: AgentFunctionInfo = {
   samples: [],
   description: "TTS nijivoice agent",
   category: ["tts"],
-  author: "isamu arimoto",
-  repository: "https://github.com/receptron/graphai/",
+  author: "Receptron Team",
+  repository: "https://github.com/receptron/mulmocast-cli/",
   license: "MIT",
+  environmentVariables: ["NIJIVOICE_API_KEY"],
 };
 
 export default ttsNijivoiceAgentInfo;

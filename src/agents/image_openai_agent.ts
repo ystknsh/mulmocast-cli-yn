@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI, { toFile } from "openai";
 
@@ -63,12 +64,11 @@ export const imageOpenaiAgent: AgentFunction<
     const targetSize = imageOptions.size;
     if ((images ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
       const imagelist = await Promise.all(
-        (images ?? []).map(
-          async (file) =>
-            await toFile(fs.createReadStream(file), null, {
-              type: "image/png", // TODO: Support JPEG as well
-            }),
-        ),
+        (images ?? []).map(async (file) => {
+          const ext = path.extname(file).toLowerCase();
+          const type = ext === ".jpg" || ext === ".jpeg" ? "image/jpeg" : "image/png";
+          return await toFile(fs.createReadStream(file), null, { type });
+        }),
       );
       return await openai.images.edit({ ...imageOptions, size: targetSize, image: imagelist });
     } else {

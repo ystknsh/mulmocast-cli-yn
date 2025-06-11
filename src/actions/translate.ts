@@ -9,21 +9,21 @@ import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/strin
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudio } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const vanillaAgents = agents.default ?? agents;
 
 const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
-    studio: {},
+    context: {},
     defaultLang: {},
     outDirPath: {},
     outputStudioFilePath: {},
     lang: {
       agent: "stringUpdateTextAgent",
       inputs: {
-        newText: ":studio.script.lang",
+        newText: ":context.studio.script.lang",
         oldText: ":defaultLang",
       },
     },
@@ -32,15 +32,15 @@ const translateGraph: GraphData = {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":studio", { multiLingual: ":beatsMap.mergeMultiLingualData" }],
+        items: [":context.studio", { multiLingual: ":beatsMap.mergeMultiLingualData" }],
       },
     },
     beatsMap: {
       agent: "mapAgent",
       inputs: {
         targetLangs: ":targetLangs",
-        studio: ":studio",
-        rows: ":studio.script.beats",
+        context: ":context",
+        rows: ":context.studio.script.beats",
         lang: ":lang",
       },
       params: {
@@ -57,7 +57,7 @@ const translateGraph: GraphData = {
             },
             inputs: {
               index: ":__mapIndex",
-              rows: ":studio.multiLingual",
+              rows: ":context.studio.multiLingual",
             },
           },
           preprocessMultiLingual: {
@@ -67,7 +67,7 @@ const translateGraph: GraphData = {
               multiLingual: ":multiLingual",
               rows: ":targetLangs",
               lang: ":lang.text",
-              studio: ":studio",
+              context: ":context",
               beatIndex: ":__mapIndex",
             },
             params: {
@@ -84,7 +84,7 @@ const translateGraph: GraphData = {
                     multiLingual: ":multiLingual", // for cache
                     lang: ":lang", // for cache
                     beatIndex: ":beatIndex", // for cache
-                    studio: ":studio", // for cache
+                    mulmoContext: ":context", // for cache
                     system: translateSystemPrompt,
                     prompt: translatePrompts,
                   },
@@ -182,10 +182,10 @@ const translateGraph: GraphData = {
 const localizedTextCacheAgentFilter: AgentFilterFunction<
   DefaultParamsType,
   DefaultResultData,
-  { studio: MulmoStudio; targetLang: LANG; beat: MulmoBeat; beatIndex: number; multiLingual: MulmoStudioMultiLingualData; lang: LANG }
+  { mulmoContext: MulmoStudioContext; targetLang: LANG; beat: MulmoBeat; beatIndex: number; multiLingual: MulmoStudioMultiLingualData; lang: LANG }
 > = async (context, next) => {
   const { namedInputs } = context;
-  const { studio, targetLang, beat, beatIndex, lang, multiLingual } = namedInputs;
+  const { mulmoContext, targetLang, beat, beatIndex, lang, multiLingual } = namedInputs;
 
   if (!beat.text) {
     return { text: "" };
@@ -206,10 +206,10 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
     return { text: beat.text };
   }
   try {
-    MulmoStudioMethods.setBeatSessionState(studio, "multiLingual", beatIndex, true);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, true);
     return await next(context);
   } finally {
-    MulmoStudioMethods.setBeatSessionState(studio, "multiLingual", beatIndex, false);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, false);
   }
 };
 const agentFilters = [
@@ -225,7 +225,7 @@ const targetLangs = ["ja", "en"];
 
 export const translate = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "multiLingual", true);
+    MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
     const { studio, fileDirs } = context;
     const { outDirPath } = fileDirs;
     const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
@@ -234,7 +234,7 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
     assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
 
     const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters });
-    graph.injectValue("studio", studio);
+    graph.injectValue("context", context);
     graph.injectValue("defaultLang", defaultLang);
     graph.injectValue("targetLangs", targetLangs);
     graph.injectValue("outDirPath", outDirPath);
@@ -250,6 +250,6 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
       context.studio = results.mergeStudioResult;
     }
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "multiLingual", false);
+    MulmoStudioContextMethods.setSessionState(context, "multiLingual", false);
   }
 };
