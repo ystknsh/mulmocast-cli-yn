@@ -1,4 +1,4 @@
-import { GraphAILogger } from "graphai";
+import { GraphAILogger, assert } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, MulmoMovieParams } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
@@ -102,9 +102,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const filterComplexVideoIds: string[] = [];
   const filterComplexAudioIds: string[] = [];
   const beatTimestamps: number[] = [];
+  const videoIds: string[] = [];
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
-    beatTimestamps.push(timestamp);
     const beat = studio.script.beats[index];
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
     if (!sourceFile) {
@@ -134,8 +134,10 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       const compositeVideoId = `c${index}`;
       ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
       filterComplexVideoIds.push(compositeVideoId);
+      videoIds.push(compositeVideoId);
     } else {
       filterComplexVideoIds.push(videoId);
+      videoIds.push(videoId);
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
@@ -143,8 +145,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
+    beatTimestamps.push(timestamp);
     return timestamp + duration;
   }, 0);
+
+  assert(videoIds.length === studio.beats.length, "videoIds.length !== studio.beats.length");
+  assert(beatTimestamps.length === studio.beats.length, "beatTimestamps.length !== studio.beats.length");
+
   // console.log("*** images", images.audioIds);
 
   // Concatenate the trimmed images
@@ -153,7 +160,44 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   const mixedVideoId = (() => {
     if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1) {
-      // TODO: add fade-out for each beat except the last one 
+      const fadeDuration = studio.script.movieParams.transition.duration ?? 0.5;
+      const fadeVideoId = "fade_video";
+      
+      // Create individual fade-out videos for each beat except the last one
+      const fadeOutIds: string[] = [];
+      
+      for (let i = 0; i < studio.beats.length - 1; i++) {
+        const beat = studio.beats[i];
+        const fadeOutId = `fadeout_${i}`;
+        const sourceVideoId = filterComplexVideoIds[i];
+        
+        // Create fade-out version of the beat
+        const fadeStartTime = duration - fadeDuration;
+        ffmpegContext.filterComplex.push(
+          `[${sourceVideoId}]fade=t=out:st=${fadeStartTime}:d=${fadeDuration}[${fadeOutId}]`
+        );
+        
+        fadeOutIds.push(fadeOutId);
+      }
+      
+      // Mix the fade-out beats on top of the concatenated video
+      if (fadeOutIds.length > 0) {
+        let overlayVideoId = concatVideoId;
+        
+        for (let i = 0; i < fadeOutIds.length; i++) {
+          const duration = studio.beats[i].duration + (i === 0 ? studio.script.audioParams.introPadding : 0);
+          const nextOverlayId = i === fadeOutIds.length - 1 ? fadeVideoId : `overlay_${i}`;
+          
+          ffmpegContext.filterComplex.push(
+            `[${overlayVideoId}][${fadeOutIds[i]}]overlay=enable='between(t,${currentTimestamp},${currentTimestamp + duration})'[${nextOverlayId}]`
+          );
+          
+          overlayVideoId = nextOverlayId;
+          currentTimestamp += duration;
+        }
+        
+        return fadeVideoId;
+      }
     }
     return concatVideoId;
   })();
