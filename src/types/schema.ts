@@ -249,6 +249,12 @@ export const mulmoMovieParamsSchema = z
   .object({
     provider: text2MovieProviderSchema.optional(),
     model: z.string().optional(), // default: provider specific
+    transition: z
+      .object({
+        type: z.enum(["fade"]),
+        duration: z.number().min(0).max(5).default(0.5), // transition duration in seconds
+      })
+      .optional(),
   })
   .strict();
 

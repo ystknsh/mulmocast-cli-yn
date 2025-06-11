@@ -1,5 +1,5 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, MulmoMovieParams } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
@@ -8,7 +8,15 @@ import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
-export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
+export const getVideoPart = (
+  inputIndex: number,
+  mediaType: BeatMediaType,
+  duration: number,
+  canvasInfo: MulmoCanvasDimension,
+  movieParams?: MulmoMovieParams,
+  isLastBeat: boolean = false,
+  isFirstBeat: boolean = false,
+) => {
   const videoId = `v${inputIndex}`;
 
   const videoFilters = [];
@@ -33,6 +41,21 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
     "setsar=1",
     "format=yuv420p",
   );
+
+  // Add fade effects if transition is enabled
+  if (movieParams?.transition?.type === "fade") {
+    const fadeDuration = movieParams.transition.duration ?? 0.5;
+
+    // Add fade-in for beats after the first one
+    if (!isFirstBeat) {
+      videoFilters.push(`fade=t=in:st=0:d=${fadeDuration}`);
+    }
+
+    // Add fade-out for beats before the last one
+    if (!isLastBeat) {
+      videoFilters.push(`fade=t=out:st=${duration - fadeDuration}:d=${fadeDuration}`);
+    }
+  }
 
   return {
     videoId,
@@ -113,7 +136,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       return 0;
     })();
     const duration = studioBeat.duration + extraPadding;
-    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
+    const isLastBeat = index === studio.beats.length - 1;
+    const isFirstBeat = index === 0;
+    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, studio.script.movieParams, isLastBeat, isFirstBeat);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && studioBeat.captionFile) {
       const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
