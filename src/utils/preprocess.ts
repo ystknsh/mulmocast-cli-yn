@@ -1,9 +1,13 @@
+import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
   const parsed = mulmoStudioSchema.safeParse(currentStudio);
   if (parsed.success) {
     return parsed.data;
+  }
+  if (currentStudio) {
+    GraphAILogger.info("currentStudio is invalid", parsed.error);
   }
   // We need to parse it to fill default values
   return mulmoStudioSchema.parse({

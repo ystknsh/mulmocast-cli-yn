@@ -22,7 +22,6 @@ const vanillaAgents = agents.default ?? agents;
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
 
 const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
   return {
@@ -52,13 +51,13 @@ const imagePreprocessAgent = async (namedInputs: {
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
     if (plugin) {
       try {
-        MulmoStudioMethods.setBeatSessionState(context.studio, "image", index, true);
+        MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
         const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
         const path = await plugin.process(processorParams);
         // undefined prompt indicates that image generation is not needed
         return { imagePath: path, ...returnValue };
       } finally {
-        MulmoStudioMethods.setBeatSessionState(context.studio, "image", index, false);
+        MulmoStudioContextMethods.setBeatSessionState(context, "image", index, false);
       }
     }
   }
@@ -124,7 +123,7 @@ const graph_data: GraphData = {
               file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
               text: ":preprocessor.prompt", // only for fileCacheAgentFilter
               force: ":context.force", // only for fileCacheAgentFilter
-              studio: ":context.studio", // for fileCacheAgentFilter
+              mulmoContext: ":context", // for fileCacheAgentFilter
               index: ":__mapIndex", // for fileCacheAgentFilter
               sessionType: "image", // for fileCacheAgentFilter
               params: {
@@ -154,12 +153,19 @@ const graph_data: GraphData = {
             },
             defaultValue: {},
           },
+          onComplete: {
+            agent: "copyAgent",
+            inputs: {
+              onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+              imageFile: ":preprocessor.imagePath",
+              movieFile: ":preprocessor.movieFile",
+            },
+          },
           output: {
             agent: "copyAgent",
             inputs: {
-              onComplete: ":movieGenerator",
-              imageFile: ":preprocessor.imagePath",
-              movieFile: ":preprocessor.movieFile",
+              imageFile: ":onComplete.imageFile",
+              movieFile: ":onComplete.movieFile",
             },
             isResult: true,
           },
@@ -324,9 +330,9 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
 
 export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "image", true);
+    MulmoStudioContextMethods.setSessionState(context, "image", true);
     await generateImages(context, callbacks);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "image", false);
+    MulmoStudioContextMethods.setSessionState(context, "image", false);
   }
 };
