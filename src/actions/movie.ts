@@ -172,14 +172,14 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
         // Create fade-out version of the beat
         const fadeStartTime = beatTimestamps[i + 1];
         ffmpegContext.filterComplex.push(
-          `[${sourceVideoId}]fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${fadeStartTime}/TB[${fadeOutId}]`
+          `[${sourceVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${fadeStartTime}/TB[${fadeOutId}]`
         );
         fadeOutIds.push(fadeOutId);
       }
 
       const overlayVideoId = "overlay_video";
       ffmpegContext.filterComplex.push(
-        `[${concatVideoId}][${fadeOutIds[0]}]overlay=enable='between(t,${beatTimestamps[1]},${beatTimestamps[1] + fadeDuration})'[${overlayVideoId}]`
+        `[${concatVideoId}][${fadeOutIds[0]}]overlay=enable='between(t,${beatTimestamps[1]-0.1},${beatTimestamps[1] + fadeDuration})'[${overlayVideoId}]`
       );
 
       return overlayVideoId;
@@ -199,7 +199,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
       FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
       ffmpegContext.filterComplex.push(
-        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${mixedVideoId}]`,
+        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
       );
       return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
     }
