@@ -25,7 +25,7 @@ import {
   getAudioSegmentFilePath,
 } from "../utils/file.js";
 import { text2hash, localizedText } from "../utils/utils.js";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 import { MulmoMediaSourceMethods } from "../methods/mulmo_media_source.js";
 
 const vanillaAgents = agents.default ?? agents;
@@ -106,7 +106,7 @@ const graph_tts: GraphData = {
         text: ":preprocessor.text",
         file: ":preprocessor.audioPath",
         force: ":context.force",
-        studio: ":context.studio", // for cache
+        mulmoContext: ":context", // for cache
         index: ":__mapIndex", // for cache
         sessionType: "audio", // for cache
         params: {
@@ -198,7 +198,7 @@ const agentFilters = [
 
 export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "audio", true);
+    MulmoStudioContextMethods.setSessionState(context, "audio", true);
     const { studio, fileDirs, lang } = context;
     const { outDirPath, audioDirPath } = fileDirs;
     const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
@@ -246,6 +246,6 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
 
     writingMessage(audioCombinedFilePath);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "audio", false);
+    MulmoStudioContextMethods.setSessionState(context, "audio", false);
   }
 };

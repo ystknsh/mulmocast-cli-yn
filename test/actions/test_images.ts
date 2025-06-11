@@ -109,6 +109,23 @@ test("test images", async () => {
     studio,
     fileDirs,
     force: false,
+    sessionState: {
+      inSession: {
+        audio: false,
+        image: false,
+        video: false,
+        multiLingual: false,
+        caption: false,
+        pdf: false,
+      },
+      inBeatSession: {
+        audio: {},
+        image: {},
+        movie: {},
+        multiLingual: {},
+        caption: {},
+      },
+    },
   };
   await images(context);
 });

@@ -10,7 +10,7 @@ import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 
 import { fontSize, textMargin, drawSize, wrapText } from "../utils/pdf.js";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const imagesPerPage = 4;
 const offset = 10;
@@ -282,9 +282,9 @@ const generatePdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSiz
 
 export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "pdf", true);
+    MulmoStudioContextMethods.setSessionState(context, "pdf", true);
     await generatePdf(context, pdfMode, pdfSize);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "pdf", false);
+    MulmoStudioContextMethods.setSessionState(context, "pdf", false);
   }
 };

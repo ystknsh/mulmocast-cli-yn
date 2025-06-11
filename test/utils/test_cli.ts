@@ -65,23 +65,6 @@ test("test createOrUpdateStudioData", async () => {
     filename: "",
     beats: [{}, {}],
     multiLingual: [{ multiLingualTexts: {} }, { multiLingualTexts: {} }],
-    state: {
-      inSession: {
-        audio: false,
-        image: false,
-        video: false,
-        multiLingual: false,
-        caption: false,
-        pdf: false,
-      },
-      inBeatSession: {
-        audio: new Set(),
-        image: new Set(),
-        movie: new Set(),
-        multiLingual: new Set(),
-        caption: new Set(),
-      },
-    },
   };
   assert.deepStrictEqual(studio, expect);
 });

@@ -3,7 +3,7 @@ import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -25,7 +25,7 @@ const graph_data: GraphData = {
             agent: async (namedInputs: { beat: MulmoBeat; context: MulmoStudioContext; index: number }) => {
               const { beat, context, index } = namedInputs;
               try {
-                MulmoStudioMethods.setBeatSessionState(context.studio, "caption", index, true);
+                MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
                 const { fileDirs } = namedInputs.context;
                 const { caption } = context;
                 const { imageDirPath } = fileDirs;
@@ -49,7 +49,7 @@ const graph_data: GraphData = {
                 context.studio.beats[index].captionFile = imagePath;
                 return imagePath;
               } finally {
-                MulmoStudioMethods.setBeatSessionState(context.studio, "caption", index, false);
+                MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, false);
               }
             },
             inputs: {
@@ -67,11 +67,11 @@ const graph_data: GraphData = {
 
 export const captions = async (context: MulmoStudioContext) => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "caption", true);
+    MulmoStudioContextMethods.setSessionState(context, "caption", true);
     const graph = new GraphAI(graph_data, { ...vanillaAgents });
     graph.injectValue("context", context);
     await graph.run();
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "caption", false);
+    MulmoStudioContextMethods.setSessionState(context, "caption", false);
   }
 };

@@ -331,11 +331,11 @@ export const mulmoSessionStateSchema = z.object({
     pdf: z.boolean(),
   }),
   inBeatSession: z.object({
-    audio: z.set(z.number()),
-    image: z.set(z.number()),
-    movie: z.set(z.number()),
-    multiLingual: z.set(z.number()),
-    caption: z.set(z.number()),
+    audio: z.record(z.number().int(), z.boolean()),
+    image: z.record(z.number().int(), z.boolean()),
+    movie: z.record(z.number().int(), z.boolean()),
+    multiLingual: z.record(z.number().int(), z.boolean()),
+    caption: z.record(z.number().int(), z.boolean()),
   }),
 });
 
@@ -345,23 +345,6 @@ export const mulmoStudioSchema = z
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
     multiLingual: mulmoStudioMultiLingualSchema,
-    state: mulmoSessionStateSchema.default({
-      inSession: {
-        audio: false,
-        image: false,
-        video: false,
-        multiLingual: false,
-        caption: false,
-        pdf: false,
-      },
-      inBeatSession: {
-        audio: new Set(),
-        image: new Set(),
-        movie: new Set(),
-        multiLingual: new Set(),
-        caption: new Set(),
-      },
-    }),
   })
   .strict();
 
