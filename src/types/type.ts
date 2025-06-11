@@ -17,6 +17,7 @@ import {
   speechOptionsSchema,
   mulmoCanvasDimensionSchema,
   mulmoScriptTemplateSchema,
+  mulmoScriptTemplateFileSchema,
   text2ImageProviderSchema,
   text2MovieProviderSchema,
   text2SpeechProviderSchema,
@@ -54,6 +55,7 @@ export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
 export type MulmoMediaSource = z.infer<typeof mediaSourceSchema>;
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
 export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
+export type MulmoScriptTemplateFile = z.infer<typeof mulmoScriptTemplateFileSchema>;
 export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSchema>;
 export type MulmoStudioMultiLingualData = z.infer<typeof mulmoStudioMultiLingualDataSchema>;
 export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;

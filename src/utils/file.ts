@@ -3,7 +3,7 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import { MulmoScript, MulmoScriptTemplate, MulmoMediaSource, MulmoStudioContext } from "../types/index.js";
+import { MulmoScript, MulmoScriptTemplateFile, MulmoMediaSource, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
 import { MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
@@ -178,7 +178,7 @@ export const readTemplatePrompt = (templateName: string) => {
   return prompt;
 };
 
-export const getAvailableTemplates = (): (MulmoScriptTemplate & { filename: string })[] => {
+export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
   const templatesDir = path.resolve(npmRoot, "./assets/templates");
 
   if (!fs.existsSync(templatesDir)) {
