@@ -1,5 +1,6 @@
 import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
-import { GraphAI, GraphAILogger, GraphData } from "graphai";
+import { GraphAI, GraphAILogger } from "graphai";
+import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
@@ -65,11 +66,16 @@ const graph_data: GraphData = {
   },
 };
 
-export const captions = async (context: MulmoStudioContext) => {
+export const captions = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "caption", true);
     const graph = new GraphAI(graph_data, { ...vanillaAgents });
     graph.injectValue("context", context);
+    if (callbacks) {
+      callbacks.forEach((callback) => {
+        graph.registerCallback(callback);
+      });
+    }
     await graph.run();
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "caption", false);
