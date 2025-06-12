@@ -134,7 +134,12 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
       filterComplexVideoIds.push(compositeVideoId);
     } else {
-      filterComplexVideoIds.push(videoId);
+      if (index === 0) {
+        ffmpegContext.filterComplex.push(`[${videoId}]split=2[${videoId}_a][foo_0]`);
+        filterComplexVideoIds.push(`${videoId}_a`);
+      } else {
+        filterComplexVideoIds.push(videoId);
+      }
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
@@ -164,7 +169,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       
       for (let i = 0; i < 1; i++) {
         const fadeOutId = `fadeout_${i}`;
-        const sourceVideoId = filterComplexVideoIds[i];
+        const sourceVideoId = 'foo_0';
 
         // Create fade-out version of the beat
         const fadeStartTime = beatTimestamps[i + 1];
