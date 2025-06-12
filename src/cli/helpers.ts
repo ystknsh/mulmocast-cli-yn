@@ -121,39 +121,37 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-  const studio = (() => {
-    try {
-      // validate mulmoStudioSchema. skip if __test_invalid__ is true
-      return createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
-    } catch (error) {
-      GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
-      process.exit(1);
-    }
-  })();
-  return {
-    studio,
-    fileDirs: files,
-    force: Boolean(argv.f),
-    lang: argv.l,
-    caption: argv.c,
-    sessionState: {
-      inSession: {
-        audio: false,
-        image: false,
-        video: false,
-        multiLingual: false,
-        caption: false,
-        pdf: false,
+  try {
+    // validate mulmoStudioSchema. skip if __test_invalid__ is true
+    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
+    return {
+      studio,
+      fileDirs: files,
+      force: Boolean(argv.f),
+      lang: argv.l,
+      caption: argv.c,
+      sessionState: {
+        inSession: {
+          audio: false,
+          image: false,
+          video: false,
+          multiLingual: false,
+          caption: false,
+          pdf: false,
+        },
+        inBeatSession: {
+          audio: {},
+          image: {},
+          movie: {},
+          multiLingual: {},
+          caption: {},
+        },
       },
-      inBeatSession: {
-        audio: {},
-        image: {},
-        movie: {},
-        multiLingual: {},
-        caption: {},
-      },
-    },
-  };
+    };
+  } catch (error) {
+    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
+    return null;
+  }
 };
 
 export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
