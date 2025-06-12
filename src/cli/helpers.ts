@@ -104,7 +104,7 @@ type InitOptions = {
   c?: string;
 };
 
-export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext> => {
+export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext | null> => {
   const files = getFileObject({
     basedir: argv.b,
     outdir: argv.o,
