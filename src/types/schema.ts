@@ -245,16 +245,16 @@ export const mulmoSpeechParamsSchema = z
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
 export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("google");
 
+export const mulmoTransitionSchema = z.object({
+  type: z.enum(["fade"]),
+  duration: z.number().min(0).max(2).default(0.3), // transition duration in seconds
+});
+
 export const mulmoMovieParamsSchema = z
   .object({
     provider: text2MovieProviderSchema.optional(),
     model: z.string().optional(), // default: provider specific
-    transition: z
-      .object({
-        type: z.enum(["fade"]),
-        duration: z.number().min(0).max(5).default(0.5), // transition duration in seconds
-      })
-      .optional(),
+    transition: mulmoTransitionSchema.optional(),
   })
   .strict();
 

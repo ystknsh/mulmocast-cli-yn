@@ -1,5 +1,5 @@
 import { GraphAILogger, assert } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
@@ -153,19 +153,19 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Add tranditions if needed
   const mixedVideoId = (() => {
     if (studio.script.movieParams?.transition && transitionVideoIds.length > 1) {
-      const fadeDuration = studio.script.movieParams.transition.duration ?? 0.5;
+      const transition = mulmoTransitionSchema.parse(studio.script.movieParams.transition);
 
       return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
-        const transitionStartTime = beatTimestamps[index + 1] - 0.1; // 0.1 is to avoid flickering
+        const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
         const processedVideoId = `${transitionVideoId}_f`;
         // TODO: This mechanism does not work for video beats yet. It works only with image beats.
         // If we can to add other transition types than fade, we need to add them here.
         ffmpegContext.filterComplex.push(
-          `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
+          `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
         );
         const outputId = `${transitionVideoId}_o`;
         ffmpegContext.filterComplex.push(
-          `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + fadeDuration})'[${outputId}]`,
+          `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
         );
         return outputId;
       }, concatVideoId);
