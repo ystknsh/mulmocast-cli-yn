@@ -152,20 +152,22 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const concatVideoId = "concat_video";
   ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[${concatVideoId}]`);
 
+  // Add tranditions if needed
   const mixedVideoId = (() => {
     if (studio.script.movieParams?.transition && overlayVideoIds.length > 1) {
       const fadeDuration = studio.script.movieParams.transition.duration ?? 0.5;
 
-      // Create individual fade-out videos for each beat except the last one
       return overlayVideoIds.reduce((acc, overlayVideoId, index) => {
-        const fadeStartTime = beatTimestamps[index + 1] - 0.1; // 0.1 is to avoid flickering
-        const fadeOutVideoId = `${overlayVideoId}_f`;
+        const transitionStartTime = beatTimestamps[index + 1] - 0.1; // 0.1 is to avoid flickering
+        const processedVideoId = `${overlayVideoId}_f`;
+        // TODO: This mechanism does not work for video beats yet. It works only with image beats.
+        // If we can to add other transition types than fade, we need to add them here.
         ffmpegContext.filterComplex.push(
-          `[${overlayVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${fadeStartTime}/TB[${fadeOutVideoId}]`,
+          `[${overlayVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
         );
         const outputId = `${overlayVideoId}_o`;
         ffmpegContext.filterComplex.push(
-          `[${acc}][${fadeOutVideoId}]overlay=enable='between(t,${fadeStartTime},${fadeStartTime + fadeDuration})'[${outputId}]`,
+          `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + fadeDuration})'[${outputId}]`,
         );
         return outputId;
       }, concatVideoId);
