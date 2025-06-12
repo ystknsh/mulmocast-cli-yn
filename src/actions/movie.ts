@@ -101,6 +101,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Add each image input
   const filterComplexVideoIds: string[] = [];
   const filterComplexAudioIds: string[] = [];
+  const overlayVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
@@ -134,12 +135,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
       filterComplexVideoIds.push(compositeVideoId);
     } else {
-      if (index === 0) {
-        ffmpegContext.filterComplex.push(`[${videoId}]split=2[${videoId}_a][foo_0]`);
-        filterComplexVideoIds.push(`${videoId}_a`);
-      } else {
-        filterComplexVideoIds.push(videoId);
-      }
+      filterComplexVideoIds.push(videoId);
+    }
+    if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1 && index === 0) {
+      const sourceId = filterComplexVideoIds.pop();
+      ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
+      filterComplexVideoIds.push(`${sourceId}_0`);
+      overlayVideoIds.push(`${sourceId}_1`);
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
@@ -169,7 +171,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       
       for (let i = 0; i < 1; i++) {
         const fadeOutId = `fadeout_${i}`;
-        const sourceVideoId = 'foo_0';
+        const sourceVideoId = overlayVideoIds[i];
 
         // Create fade-out version of the beat
         const fadeStartTime = beatTimestamps[i + 1];
