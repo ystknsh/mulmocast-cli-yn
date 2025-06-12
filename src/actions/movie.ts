@@ -91,7 +91,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Add each image input
   const filterComplexVideoIds: string[] = [];
   const filterComplexAudioIds: string[] = [];
-  const overlayVideoIds: string[] = [];
+  const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
@@ -129,7 +129,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       const sourceId = filterComplexVideoIds.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
       filterComplexVideoIds.push(`${sourceId}_0`);
-      overlayVideoIds.push(`${sourceId}_1`);
+      transitionVideoIds.push(`${sourceId}_1`);
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
@@ -152,18 +152,18 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Add tranditions if needed
   const mixedVideoId = (() => {
-    if (studio.script.movieParams?.transition && overlayVideoIds.length > 1) {
+    if (studio.script.movieParams?.transition && transitionVideoIds.length > 1) {
       const fadeDuration = studio.script.movieParams.transition.duration ?? 0.5;
 
-      return overlayVideoIds.reduce((acc, overlayVideoId, index) => {
+      return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
         const transitionStartTime = beatTimestamps[index + 1] - 0.1; // 0.1 is to avoid flickering
-        const processedVideoId = `${overlayVideoId}_f`;
+        const processedVideoId = `${transitionVideoId}_f`;
         // TODO: This mechanism does not work for video beats yet. It works only with image beats.
         // If we can to add other transition types than fade, we need to add them here.
         ffmpegContext.filterComplex.push(
-          `[${overlayVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
+          `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
         );
-        const outputId = `${overlayVideoId}_o`;
+        const outputId = `${transitionVideoId}_o`;
         ffmpegContext.filterComplex.push(
           `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + fadeDuration})'[${outputId}]`,
         );
