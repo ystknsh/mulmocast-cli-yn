@@ -358,6 +358,10 @@ export const mulmoScriptTemplateSchema = z
   })
   .strict();
 
+export const mulmoScriptTemplateFileSchema = mulmoScriptTemplateSchema.extend({
+  filename: z.string(),
+});
+
 export const mulmoStoryboardSceneSchema = z
   .object({
     description: z.string(),
