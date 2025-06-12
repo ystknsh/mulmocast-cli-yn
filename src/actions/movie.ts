@@ -34,8 +34,6 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
     "format=yuv420p",
   );
 
-  // Note: Fade effects are now handled in the mixing stage, not individual beats
-
   return {
     videoId,
     videoPart: `[${inputIndex}:v]` + videoFilters.filter((a) => a).join(",") + `[${videoId}]`,
