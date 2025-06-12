@@ -1,5 +1,5 @@
-import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
+import { GraphAILogger, assert } from "graphai";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
@@ -55,10 +55,10 @@ export const getAudioPart = (inputIndex: number, duration: number, delay: number
   };
 };
 
-const getOutputOption = (audioId: string) => {
+const getOutputOption = (audioId: string, videoId: string) => {
   return [
     "-preset medium", // Changed from veryfast to medium for better compression
-    "-map [v]", // Map the video stream
+    `-map [${videoId}]`, // Map the video stream
     `-map ${audioId}`, // Map the audio stream
     `-c:v ${videoCodec}`, // Set video codec
     ...(videoCodec === "libx264" ? ["-crf", "26"] : []), // Add CRF for libx264
@@ -91,6 +91,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Add each image input
   const filterComplexVideoIds: string[] = [];
   const filterComplexAudioIds: string[] = [];
+  const transitionVideoIds: string[] = [];
+  const beatTimestamps: number[] = [];
 
   studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = studio.script.beats[index];
@@ -123,18 +125,53 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     } else {
       filterComplexVideoIds.push(videoId);
     }
+    if (studio.script.movieParams?.transition && index < studio.beats.length - 1) {
+      const sourceId = filterComplexVideoIds.pop();
+      ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
+      filterComplexVideoIds.push(`${sourceId}_0`);
+      transitionVideoIds.push(`${sourceId}_1`);
+    }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
+    beatTimestamps.push(timestamp);
     return timestamp + duration;
   }, 0);
+
+  assert(filterComplexVideoIds.length === studio.beats.length, "videoIds.length !== studio.beats.length");
+  assert(beatTimestamps.length === studio.beats.length, "beatTimestamps.length !== studio.beats.length");
+
   // console.log("*** images", images.audioIds);
 
   // Concatenate the trimmed images
-  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[v]`);
+  const concatVideoId = "concat_video";
+  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[${concatVideoId}]`);
+
+  // Add tranditions if needed
+  const mixedVideoId = (() => {
+    if (studio.script.movieParams?.transition && transitionVideoIds.length > 1) {
+      const transition = mulmoTransitionSchema.parse(studio.script.movieParams.transition);
+
+      return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
+        const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
+        const processedVideoId = `${transitionVideoId}_f`;
+        // TODO: This mechanism does not work for video beats yet. It works only with image beats.
+        // If we can to add other transition types than fade, we need to add them here.
+        ffmpegContext.filterComplex.push(
+          `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
+        );
+        const outputId = `${transitionVideoId}_o`;
+        ffmpegContext.filterComplex.push(
+          `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
+        );
+        return outputId;
+      }, concatVideoId);
+    }
+    return concatVideoId;
+  })();
 
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
@@ -152,7 +189,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
     return artifactAudioId;
   })();
-  await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId));
+  await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId, mixedVideoId));
   const end = performance.now();
   GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
   GraphAILogger.info(studio.script.title);
