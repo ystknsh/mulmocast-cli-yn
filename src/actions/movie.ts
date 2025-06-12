@@ -131,7 +131,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       filterComplexVideoIds.push(`${sourceId}_0`);
       if (mediaType === "movie") {
         // For movie beats, extract the last frame for transition
-        ffmpegContext.filterComplex.push(`[${sourceId}_1]reverse[${sourceId}_2]`);
+        ffmpegContext.filterComplex.push(`[${sourceId}_1]reverse,select='eq(n\,0)',reverse,trim=duration=${duration},setpts=PTS-STARTPTS[${sourceId}_2]`);
         transitionVideoIds.push(`${sourceId}_2`);
       } else {
         transitionVideoIds.push(`${sourceId}_1`);
@@ -164,7 +164,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
         const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
         const processedVideoId = `${transitionVideoId}_f`;
-        // TODO: This mechanism does not work for video beats yet. It works only with image beats.
         // If we can to add other transition types than fade, we need to add them here.
         ffmpegContext.filterComplex.push(
           `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
@@ -195,6 +194,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
     return artifactAudioId;
   })();
+
+  GraphAILogger.debug("filterComplex", ffmpegContext.filterComplex);
+
   await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId, mixedVideoId));
   const end = performance.now();
   GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);

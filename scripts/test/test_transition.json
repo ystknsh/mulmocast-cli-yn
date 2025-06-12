@@ -6,7 +6,7 @@
   "movieParams": {
     "transition": {
       "type": "fade",
-      "duration": 0.5
+      "duration": 2
     }
   },
   "beats": [
@@ -43,11 +43,11 @@
     },
     {
       "speaker": "Presenter",
-      "duration": 1.0,
+      "text": "This is a text slide.",
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "1.0 second with no Audio"
+          "title": "Text Slide"
         }
       }
     }
