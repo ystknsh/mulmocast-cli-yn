@@ -6,8 +6,7 @@ import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile,
 import { isHttp } from "../utils/utils.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
-import type { MulmoStudio } from "../types/type.js";
-import type { MulmoStudioContext } from "../types/type.js";
+import type { MulmoStudio, MulmoScript, MulmoStudioContext } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
 
@@ -78,20 +77,20 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
   };
 };
 
-export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl: string) => {
+export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl: string): Promise<MulmoScript | null> => {
   if (isHttpPath) {
     const res = await fetchMulmoScriptFile(fileOrUrl);
     if (!res.result || !res.script) {
       GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
-      process.exit(1);
+      return null;
     }
     return res.script;
   }
   if (!fs.existsSync(mulmoFilePath)) {
     GraphAILogger.info(`ERROR: File not exists ${mulmoFilePath}`);
-    process.exit(1);
+    return null;
   }
-  return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath).mulmoData;
+  return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
 };
 
 type InitOptions = {
@@ -119,6 +118,9 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
   });
 
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
+  if (!mulmoScript) {
+    return null;
+  }
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
   try {
