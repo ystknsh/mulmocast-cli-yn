@@ -125,7 +125,7 @@ const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pd
   const texts = studio.script.beats.map((beat, index) => localizedText(beat, multiLingual?.[index], lang));
 
   const imageDataUrls = await Promise.all(imagePaths.map(loadImage));
-  const pageSize = `${getPdfSize(pdfSize)} ${isLandscapeImage ? "landscape" : "portrait"}`;
+  const pageSize = pdfMode === "handout" ? `${getPdfSize(pdfSize)} portrait` : `${getPdfSize(pdfSize)} ${isLandscapeImage ? "landscape" : "portrait"}`;
   const pagesHTML = generatePagesHTML(pdfMode, imageDataUrls, texts);
 
   const template = getHTMLFile(`pdf_${pdfMode}`);
@@ -141,7 +141,7 @@ const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pd
   return interpolate(template, templateData);
 };
 
-const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode, isLandscapeImage: boolean): PDFOptions => {
+const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode): PDFOptions => {
   const baseOptions: PDFOptions = {
     format: getPdfSize(pdfSize),
     margin: {
@@ -152,18 +152,17 @@ const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode, isLandscapeImage: 
     },
   };
 
-  return pdfMode === "handout" && !isLandscapeImage ? { ...baseOptions, landscape: true } : baseOptions;
+  // handout mode always uses portrait orientation
+  return pdfMode === "handout" ? { ...baseOptions, landscape: false } : baseOptions;
 };
 
 const generatePDFWithPuppeteer = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
   const { studio, fileDirs, lang = "en" } = context;
   const { outDirPath } = fileDirs;
-  const { width: imageWidth, height: imageHeight } = MulmoScriptMethods.getCanvasSize(studio.script);
-  const isLandscapeImage = imageWidth > imageHeight;
 
   const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode, lang);
   const html = await generatePDFHTML(context, pdfMode, pdfSize);
-  const pdfOptions = createPDFOptions(pdfSize, pdfMode, isLandscapeImage);
+  const pdfOptions = createPDFOptions(pdfSize, pdfMode);
 
   const browser = await puppeteer.launch({
     args: isCI ? ["--no-sandbox"] : [],
