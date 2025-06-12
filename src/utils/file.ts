@@ -67,7 +67,7 @@ export function readMulmoScriptFile<T = MulmoScript>(
     return null;
   }
 }
-export const fetchMulmoScriptFile = async (url: string) => {
+export const fetchMulmoScriptFile = async (url: string): Promise<{ result: boolean; script?: MulmoScript; status: string | number }> => {
   try {
     const res = await fetch(url);
     if (!res.ok) {
@@ -77,6 +77,7 @@ export const fetchMulmoScriptFile = async (url: string) => {
     return {
       result: true,
       script,
+      status: 200,
     };
   } catch {
     return { result: false, status: "unknown" };
