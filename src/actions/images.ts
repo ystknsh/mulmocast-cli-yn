@@ -221,9 +221,9 @@ const googleAuth = async () => {
     const client = await auth.getClient();
     const accessToken = await client.getAccessToken();
     return accessToken.token!;
-  } catch (__error) {
+  } catch (error) {
     GraphAILogger.info("install gcloud and run 'gcloud auth application-default login'");
-    process.exit(1);
+    throw error;
   }
 };
 
