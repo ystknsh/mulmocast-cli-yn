@@ -35,7 +35,14 @@ export function readMulmoScriptFile<T = MulmoScript>(
   fileName: string;
 } | null;
 
-export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?: string) {
+export function readMulmoScriptFile<T = MulmoScript>(
+  arg2: string,
+  errorMessage?: string,
+): {
+  mulmoData: T;
+  mulmoDataPath: string;
+  fileName: string;
+} | null {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
