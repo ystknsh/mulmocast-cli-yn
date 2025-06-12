@@ -35,12 +35,18 @@ export function readMulmoScriptFile<T = MulmoScript>(
   fileName: string;
 } | null;
 
-export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?: string) {
+export function readMulmoScriptFile<T = MulmoScript>(
+  arg2: string,
+  errorMessage?: string,
+): {
+  mulmoData: T;
+  mulmoDataPath: string;
+  fileName: string;
+} | null {
   const scriptPath = path.resolve(arg2);
   if (!fs.existsSync(scriptPath)) {
     if (errorMessage) {
       GraphAILogger.info(errorMessage);
-      process.exit(1);
     }
     return null;
   }
@@ -57,21 +63,21 @@ export function readMulmoScriptFile<T = MulmoScript>(arg2: string, errorMessage?
   } catch (__error) {
     if (errorMessage) {
       GraphAILogger.info("read file format is broken.");
-      process.exit(1);
     }
     return null;
   }
 }
-export const fetchMulmoScriptFile = async (url: string) => {
+export const fetchMulmoScriptFile = async (url: string): Promise<{ result: boolean; script?: MulmoScript; status: string | number }> => {
   try {
     const res = await fetch(url);
     if (!res.ok) {
       return { result: false, status: res.status };
     }
-    const script = await res.json();
+    const script = (await res.json()) as MulmoScript;
     return {
       result: true,
       script,
+      status: 200,
     };
   } catch {
     return { result: false, status: "unknown" };

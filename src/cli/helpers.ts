@@ -6,8 +6,7 @@ import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile,
 import { isHttp } from "../utils/utils.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
-import type { MulmoStudio } from "../types/type.js";
-import type { MulmoStudioContext } from "../types/type.js";
+import type { MulmoStudio, MulmoScript, MulmoStudioContext } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
 
@@ -78,20 +77,20 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
   };
 };
 
-export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl: string) => {
+export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl: string): Promise<MulmoScript | null> => {
   if (isHttpPath) {
     const res = await fetchMulmoScriptFile(fileOrUrl);
     if (!res.result || !res.script) {
       GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
-      process.exit(1);
+      return null;
     }
     return res.script;
   }
   if (!fs.existsSync(mulmoFilePath)) {
     GraphAILogger.info(`ERROR: File not exists ${mulmoFilePath}`);
-    process.exit(1);
+    return null;
   }
-  return readMulmoScriptFile(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath).mulmoData;
+  return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
 };
 
 type InitOptions = {
@@ -104,7 +103,7 @@ type InitOptions = {
   c?: string;
 };
 
-export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext> => {
+export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext | null> => {
   const files = getFileObject({
     basedir: argv.b,
     outdir: argv.o,
@@ -119,41 +118,42 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
   });
 
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
+  if (!mulmoScript) {
+    return null;
+  }
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-  const studio = (() => {
-    try {
-      // validate mulmoStudioSchema. skip if __test_invalid__ is true
-      return createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
-    } catch (error) {
-      GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
-      process.exit(1);
-    }
-  })();
-  return {
-    studio,
-    fileDirs: files,
-    force: Boolean(argv.f),
-    lang: argv.l,
-    caption: argv.c,
-    sessionState: {
-      inSession: {
-        audio: false,
-        image: false,
-        video: false,
-        multiLingual: false,
-        caption: false,
-        pdf: false,
+  try {
+    // validate mulmoStudioSchema. skip if __test_invalid__ is true
+    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
+    return {
+      studio,
+      fileDirs: files,
+      force: Boolean(argv.f),
+      lang: argv.l,
+      caption: argv.c,
+      sessionState: {
+        inSession: {
+          audio: false,
+          image: false,
+          video: false,
+          multiLingual: false,
+          caption: false,
+          pdf: false,
+        },
+        inBeatSession: {
+          audio: {},
+          image: {},
+          movie: {},
+          multiLingual: {},
+          caption: {},
+        },
       },
-      inBeatSession: {
-        audio: {},
-        image: {},
-        movie: {},
-        multiLingual: {},
-        caption: {},
-      },
-    },
-  };
+    };
+  } catch (error) {
+    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
+    return null;
+  }
 };
 
 export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
