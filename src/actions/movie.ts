@@ -129,7 +129,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       const sourceId = filterComplexVideoIds.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
       filterComplexVideoIds.push(`${sourceId}_0`);
-      transitionVideoIds.push(`${sourceId}_1`);
+      if (mediaType === "movie") {
+        // For movie beats, extract the last frame for transition
+        ffmpegContext.filterComplex.push(`[${sourceId}_1]reverse[${sourceId}_2]`);
+        transitionVideoIds.push(`${sourceId}_2`);
+      } else {
+        transitionVideoIds.push(`${sourceId}_1`);
+      }
     }
 
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
