@@ -137,7 +137,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     } else {
       filterComplexVideoIds.push(videoId);
     }
-    if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1 && index === 0) {
+    if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1 && index < studio.beats.length - 1) {
       const sourceId = filterComplexVideoIds.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
       filterComplexVideoIds.push(`${sourceId}_0`);
@@ -168,14 +168,14 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       
       // Create individual fade-out videos for each beat except the last one
       return overlayVideoIds.reduce((acc, overlayVideoId, index) => {
-        const fadeStartTime = beatTimestamps[index + 1];
+        const fadeStartTime = beatTimestamps[index + 1] - 0.1; // 0.1 is to avoid flickering
         const fadeOutVideoId = `${overlayVideoId}_f`;
         ffmpegContext.filterComplex.push(
           `[${overlayVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${fadeStartTime}/TB[${fadeOutVideoId}]`
         );
         const outputId = `${overlayVideoId}_o`;
         ffmpegContext.filterComplex.push(
-          `[${acc}][${fadeOutVideoId}]overlay=enable='between(t,${beatTimestamps[1]-0.1},${beatTimestamps[1] + fadeDuration})'[${outputId}]`
+          `[${acc}][${fadeOutVideoId}]overlay=enable='between(t,${fadeStartTime},${fadeStartTime + fadeDuration})'[${outputId}]`
         );
         return outputId;
       }, concatVideoId);
