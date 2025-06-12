@@ -47,7 +47,7 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
     }
     throw new Error("Invalid audio source");
   }
-  if (beat.text === "") {
+  if (beat.text === undefined || beat.text === "") {
     return undefined; // It indicates that the audio is not needed.
   }
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
