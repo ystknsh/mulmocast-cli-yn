@@ -1,5 +1,5 @@
 import { GraphAILogger, assert } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, MulmoMovieParams } from "../types/index.js";
+import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
@@ -8,15 +8,7 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
-export const getVideoPart = (
-  inputIndex: number,
-  mediaType: BeatMediaType,
-  duration: number,
-  canvasInfo: MulmoCanvasDimension,
-  movieParams?: MulmoMovieParams,
-  isLastBeat: boolean = false,
-  isFirstBeat: boolean = false,
-) => {
+export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension) => {
   const videoId = `v${inputIndex}`;
 
   const videoFilters = [];
@@ -125,9 +117,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       return 0;
     })();
     const duration = studioBeat.duration + extraPadding;
-    const isLastBeat = index === studio.beats.length - 1;
-    const isFirstBeat = index === 0;
-    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, studio.script.movieParams, isLastBeat, isFirstBeat);
+    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && studioBeat.captionFile) {
       const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
@@ -137,7 +127,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     } else {
       filterComplexVideoIds.push(videoId);
     }
-    if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1 && index < studio.beats.length - 1) {
+    if (studio.script.movieParams?.transition && index < studio.beats.length - 1) {
       const sourceId = filterComplexVideoIds.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
       filterComplexVideoIds.push(`${sourceId}_0`);
@@ -163,19 +153,19 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[${concatVideoId}]`);
 
   const mixedVideoId = (() => {
-    if (studio.script.movieParams?.transition?.type === "fade" && studio.beats.length > 1) {
+    if (studio.script.movieParams?.transition && overlayVideoIds.length > 1) {
       const fadeDuration = studio.script.movieParams.transition.duration ?? 0.5;
-      
+
       // Create individual fade-out videos for each beat except the last one
       return overlayVideoIds.reduce((acc, overlayVideoId, index) => {
         const fadeStartTime = beatTimestamps[index + 1] - 0.1; // 0.1 is to avoid flickering
         const fadeOutVideoId = `${overlayVideoId}_f`;
         ffmpegContext.filterComplex.push(
-          `[${overlayVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${fadeStartTime}/TB[${fadeOutVideoId}]`
+          `[${overlayVideoId}]format=yuva420p,fade=t=out:d=${fadeDuration}:alpha=1,setpts=PTS-STARTPTS+${fadeStartTime}/TB[${fadeOutVideoId}]`,
         );
         const outputId = `${overlayVideoId}_o`;
         ffmpegContext.filterComplex.push(
-          `[${acc}][${fadeOutVideoId}]overlay=enable='between(t,${fadeStartTime},${fadeStartTime + fadeDuration})'[${outputId}]`
+          `[${acc}][${fadeOutVideoId}]overlay=enable='between(t,${fadeStartTime},${fadeStartTime + fadeDuration})'[${outputId}]`,
         );
         return outputId;
       }, concatVideoId);
@@ -183,8 +173,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     return concatVideoId;
   })();
 
-  console.log("*** DEBUG", ffmpegContext.filterComplex);
-               
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
 
