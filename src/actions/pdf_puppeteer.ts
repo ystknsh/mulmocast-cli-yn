@@ -6,7 +6,7 @@ import { MulmoScriptMethods } from "../methods/index.js";
 import { localizedText, isHttp } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage, getHTMLFile } from "../utils/file.js";
 import { interpolate } from "../utils/markdown.js";
-import { MulmoStudioMethods } from "../methods/mulmo_studio.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const isCI = process.env.CI === "true";
 
@@ -185,9 +185,9 @@ const generatePDFWithPuppeteer = async (context: MulmoStudioContext, pdfMode: PD
 
 export const pdfPuppeteer = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
   try {
-    MulmoStudioMethods.setSessionState(context.studio, "pdf", true);
+    MulmoStudioContextMethods.setSessionState(context, "pdf", true);
     await generatePDFWithPuppeteer(context, pdfMode, pdfSize);
   } finally {
-    MulmoStudioMethods.setSessionState(context.studio, "pdf", false);
+    MulmoStudioContextMethods.setSessionState(context, "pdf", false);
   }
 };
