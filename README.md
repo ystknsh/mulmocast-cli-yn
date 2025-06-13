@@ -103,9 +103,13 @@ GOOGLE_PROJECT_ID=your_google_project_id
 
 See also [pre-requisites for Google's image generation model](./docs/pre-requisites-google.md)
 
-#### (Optional) For Nijivoice's TTS model
+#### (Optional) For TTS models
 ```bash
+# For Nijivoice TTS
 NIJIVOICE_API_KEY=your_nijivoice_api_key
+
+# For ElevenLabs TTS
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ```
 
 #### (Optional) to access web in mulmo tool
