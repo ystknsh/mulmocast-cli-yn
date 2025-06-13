@@ -1,289 +1,202 @@
 import fs from "fs";
 import path from "path";
-import { rgb, PDFDocument, PDFFont } from "pdf-lib";
-import fontkit from "@pdf-lib/fontkit";
-
-import { chunkArray, isHttp, localizedText } from "../utils/utils.js";
-import { getOutputPdfFilePath, writingMessage } from "../utils/file.js";
-
+import puppeteer from "puppeteer";
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoScriptMethods } from "../methods/index.js";
-
-import { fontSize, textMargin, drawSize, wrapText } from "../utils/pdf.js";
+import { localizedText, isHttp } from "../utils/utils.js";
+import { getOutputPdfFilePath, writingMessage, getHTMLFile } from "../utils/file.js";
+import { interpolate } from "../utils/markdown.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
-const imagesPerPage = 4;
-const offset = 10;
-const handoutImageRatio = 0.5;
+const isCI = process.env.CI === "true";
 
-const readImage = async (imagePath: string, pdfDoc: PDFDocument) => {
-  const imageBytes = await (async () => {
-    if (isHttp(imagePath)) {
-      const res = await fetch(imagePath);
-      const arrayBuffer = await res.arrayBuffer();
-      return Buffer.from(arrayBuffer);
-    }
-    return fs.readFileSync(imagePath);
-  })();
-
-  const ext = path.extname(imagePath).toLowerCase();
-
-  if (ext === ".jpg" || ext === ".jpeg") {
-    return await pdfDoc.embedJpg(imageBytes);
-  }
-  if (ext === ".png") {
-    return await pdfDoc.embedPng(imageBytes);
-  }
-  // workaround. TODO: movie, image should convert to png/jpeg image
-  return await pdfDoc.embedPng(fs.readFileSync("assets/images/mulmocast_credit.png"));
+type PDFOptions = {
+  format?: "Letter" | "A4";
+  landscape?: boolean;
+  margin?: {
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+  };
 };
 
-const pdfSlide = async (pageWidth: number, pageHeight: number, imagePaths: string[], pdfDoc: PDFDocument) => {
-  const cellRatio = pageHeight / pageWidth;
-  for (const imagePath of imagePaths) {
-    const image = await readImage(imagePath, pdfDoc);
+const getPdfSize = (pdfSize: PDFSize) => {
+  return pdfSize === "a4" ? "A4" : "Letter";
+};
 
-    const { width: origWidth, height: origHeight } = image.scale(1);
-    const originalRatio = origHeight / origWidth;
-    const fitWidth = originalRatio / cellRatio < 1;
-    const { drawWidth, drawHeight } = drawSize(fitWidth, pageWidth, pageHeight, origWidth, origHeight);
-
-    const page = pdfDoc.addPage([pageWidth, pageHeight]);
-    page.drawImage(image, {
-      x: 0,
-      y: 0,
-      width: drawWidth,
-      height: drawHeight,
-    });
+const loadImage = async (imagePath: string): Promise<string> => {
+  try {
+    const imageData = isHttp(imagePath) ? Buffer.from(await (await fetch(imagePath)).arrayBuffer()) : fs.readFileSync(imagePath);
+    const ext = path.extname(imagePath).toLowerCase().replace(".", "");
+    const mimeType = ext === "jpg" ? "jpeg" : ext;
+    return `data:image/${mimeType};base64,${imageData.toString("base64")}`;
+  } catch (__error) {
+    const placeholderData = fs.readFileSync("assets/images/mulmocast_credit.png");
+    return `data:image/png;base64,${placeholderData.toString("base64")}`;
   }
 };
 
-const pdfTalk = async (pageWidth: number, pageHeight: number, imagePaths: string[], texts: string[], pdfDoc: PDFDocument, font: PDFFont) => {
-  const imageRatio = 0.7;
-  const textMargin = 8;
-  const textY = pageHeight * (1 - imageRatio) - textMargin;
+const formatTextAsParagraphs = (text: string): string =>
+  text
+    .split("\n")
+    .map((line) => `<p>${line}</p>`)
+    .join("");
 
-  const targetWidth = pageWidth - offset;
-  const targetHeight = pageHeight * imageRatio - offset;
+const generateSlideHTML = (imageDataUrls: string[]): string =>
+  imageDataUrls
+    .map(
+      (imageUrl) => `
+      <div class="page">
+        <img src="${imageUrl}" alt="">
+      </div>`,
+    )
+    .join("");
 
-  const cellRatio = targetHeight / targetWidth;
+const generateTalkHTML = (imageDataUrls: string[], texts: string[]): string =>
+  imageDataUrls
+    .map(
+      (imageUrl, index) => `
+      <div class="page">
+        <div class="image-container">
+          <img src="${imageUrl}" alt="">
+        </div>
+        <div class="text-container">
+          ${formatTextAsParagraphs(texts[index])}
+        </div>
+      </div>`,
+    )
+    .join("");
 
-  for (const [index, imagePath] of imagePaths.entries()) {
-    const text = texts[index];
-    const image = await readImage(imagePath, pdfDoc);
+const generateHandoutHTML = (imageDataUrls: string[], texts: string[]): string => {
+  const itemsPerPage = 4;
+  const pages: string[] = [];
 
-    const { width: origWidth, height: origHeight } = image.scale(1);
-    const originalRatio = origHeight / origWidth;
-    const fitWidth = originalRatio / cellRatio < 1;
-    const { drawWidth, drawHeight } = drawSize(fitWidth, targetWidth, targetHeight, origWidth, origHeight);
+  for (let i = 0; i < imageDataUrls.length; i += itemsPerPage) {
+    const pageItems = Array.from({ length: itemsPerPage }, (_, j) => {
+      const index = i + j;
+      const hasContent = index < imageDataUrls.length;
 
-    const x = (pageWidth - drawWidth) / 2;
-    const y = pageHeight - drawHeight - offset;
-
-    const page = pdfDoc.addPage([pageWidth, pageHeight]);
-    const pos = {
-      x,
-      y,
-      width: drawWidth,
-      height: drawHeight,
-    };
-    page.drawImage(image, pos);
-    page.drawRectangle({
-      ...pos,
-      borderColor: rgb(0, 0, 0),
-      borderWidth: 1,
-    });
-
-    const lines = wrapText(text, font, fontSize, pageWidth - textMargin * 2);
-
-    for (const [index, line] of lines.entries()) {
-      page.drawText(line, {
-        x: textMargin,
-        y: textY - fontSize - (fontSize + 2) * index,
-        size: fontSize,
-        color: rgb(0, 0, 0),
-        maxWidth: pageWidth - 2 * textMargin,
-        font,
-      });
-    }
-  }
-};
-
-const pdfHandout = async (
-  pageWidth: number,
-  pageHeight: number,
-  imagePaths: string[],
-  texts: string[],
-  pdfDoc: PDFDocument,
-  font: PDFFont,
-  isLandscapeImage: boolean,
-) => {
-  const cellRatio = (pageHeight / imagesPerPage - offset) / (pageWidth * handoutImageRatio - offset);
-
-  let index = 0;
-  for (const chunkPaths of chunkArray<string>(imagePaths, imagesPerPage)) {
-    const page = pdfDoc.addPage([pageWidth, pageHeight]);
-    for (let i = 0; i < chunkPaths.length; i++) {
-      const imagePath = chunkPaths[i];
-      const image = await readImage(imagePath, pdfDoc);
-
-      const { width: origWidth, height: origHeight } = image.scale(1);
-      const originalRatio = origHeight / origWidth;
-
-      const fitWidth = originalRatio / cellRatio < 1;
-      const pos = (() => {
-        if (isLandscapeImage) {
-          const cellHeight = pageHeight / imagesPerPage - offset;
-
-          const { drawWidth, drawHeight, containerWidth } = drawSize(
-            fitWidth,
-            (pageWidth - offset) * handoutImageRatio,
-            cellHeight - offset,
-            origWidth,
-            origHeight,
-          );
-
-          const x = offset + (containerWidth - drawWidth) / 2;
-          const y = pageHeight - (i + 1) * cellHeight + (cellHeight - drawHeight) * handoutImageRatio;
-          return {
-            x,
-            y,
-            width: drawWidth,
-            height: drawHeight,
-            containerWidth,
-          };
-        } else {
-          const cellWidth = pageWidth / imagesPerPage;
-          const { drawWidth, drawHeight, containerWidth } = drawSize(
-            fitWidth,
-            cellWidth - offset,
-            (pageHeight - offset) * handoutImageRatio,
-            origWidth,
-            origHeight,
-          );
-
-          const x = pageWidth - (imagesPerPage - i) * cellWidth + (cellWidth - drawWidth) * handoutImageRatio;
-          const y = pageHeight - drawHeight - offset;
-
-          return {
-            x,
-            y,
-            width: drawWidth,
-            height: drawHeight,
-            containerWidth,
-          };
-        }
-      })();
-      page.drawRectangle({
-        ...pos,
-        borderColor: rgb(0, 0, 0),
-        borderWidth: 1,
-      });
-      page.drawImage(image, pos);
-
-      if (isLandscapeImage) {
-        const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
-
-        for (const [index, line] of lines.entries()) {
-          page.drawText(line, {
-            ...pos,
-            x: offset + pos.containerWidth + textMargin,
-            y: pos.y + pos.height - fontSize - (fontSize + 2) * index,
-            size: fontSize,
-            font,
-          });
-        }
-        /*
-        page.drawRectangle({
-          ...pos,
-          x: pos.x +  pos.width ,
-          borderColor: rgb(0, 0, 0),
-          borderWidth: 1,
-          });
-        */
+      if (hasContent) {
+        return `
+          <div class="handout-item">
+            <div class="handout-image">
+              <img src="${imageDataUrls[index]}" alt="">
+            </div>
+            <div class="handout-text">
+              ${formatTextAsParagraphs(texts[index])}
+            </div>
+          </div>`;
       } else {
-        const lines = wrapText(texts[index], font, fontSize, pos.width - textMargin * 2);
-        for (const [index, line] of lines.entries()) {
-          page.drawText(line, {
-            ...pos,
-            x: pos.x,
-            y: textMargin + pos.height - fontSize - (fontSize + textMargin) * index - 2 * textMargin,
-            size: fontSize,
-            font,
-          });
-        }
-        /*
-        page.drawRectangle({
-          ...pos,
-          x: pos.x,
-          y: textMargin,
-          height: pos.height - 2 * textMargin,
-          borderColor: rgb(0, 0, 0),
-          borderWidth: 1,
-        });
-        */
+        // Empty slot to maintain 4-item grid layout
+        return `
+          <div class="handout-item">
+            <div class="handout-image"></div>
+            <div class="handout-text"></div>
+          </div>`;
       }
-      index = index + 1;
-    }
+    }).join("");
+
+    pages.push(`<div class="page">${pageItems}</div>`);
+  }
+
+  return pages.join("");
+};
+
+const generatePagesHTML = (pdfMode: PDFMode, imageDataUrls: string[], texts: string[]): string => {
+  switch (pdfMode) {
+    case "slide":
+      return generateSlideHTML(imageDataUrls);
+    case "talk":
+      return generateTalkHTML(imageDataUrls, texts);
+    case "handout":
+      return generateHandoutHTML(imageDataUrls, texts);
+    default:
+      return "";
   }
 };
 
-const outputSize = (pdfSize: PDFSize, isLandscapeImage: boolean, isRotate: boolean) => {
-  if (pdfSize === "a4") {
-    if (isLandscapeImage !== isRotate) {
-      return { width: 841.89, height: 595.28 };
-    }
-    return { width: 595.28, height: 841.89 };
-  }
-  // letter
-  if (isLandscapeImage !== isRotate) {
-    return { width: 792, height: 612 };
-  }
-  return { width: 612, height: 792 };
-};
+const getHandoutTemplateData = (isLandscapeImage: boolean): Record<string, string> => ({
+  page_layout: isLandscapeImage ? "flex" : "grid",
+  page_direction: isLandscapeImage ? "flex-direction: column;" : "grid-template-columns: repeat(4, 1fr);",
+  flex_direction: isLandscapeImage ? "row" : "column",
+  image_size: isLandscapeImage ? "width: 45%;" : "height: 60%;",
+  text_size: isLandscapeImage ? "width: 55%;" : "height: 40%;",
+  item_flex: isLandscapeImage ? "flex: 1;" : "",
+});
 
-const generatePdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
-  const { studio, fileDirs, lang } = context;
+const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<string> => {
+  const { studio, lang = "en" } = context;
   const { multiLingual } = studio;
-  const { outDirPath } = fileDirs;
 
   const { width: imageWidth, height: imageHeight } = MulmoScriptMethods.getCanvasSize(studio.script);
   const isLandscapeImage = imageWidth > imageHeight;
 
-  const isRotate = pdfMode === "handout";
-  const { width: pageWidth, height: pageHeight } = outputSize(pdfSize, isLandscapeImage, isRotate);
-
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);
-  const texts = studio.script.beats.map((beat, index) => {
-    return localizedText(beat, multiLingual?.[index], lang);
-  });
+  const texts = studio.script.beats.map((beat, index) => localizedText(beat, multiLingual?.[index], lang));
 
-  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode, lang);
+  const imageDataUrls = await Promise.all(imagePaths.map(loadImage));
+  const pageSize = pdfMode === "handout" ? `${getPdfSize(pdfSize)} portrait` : `${getPdfSize(pdfSize)} ${isLandscapeImage ? "landscape" : "portrait"}`;
+  const pagesHTML = generatePagesHTML(pdfMode, imageDataUrls, texts);
 
-  const pdfDoc = await PDFDocument.create();
-  pdfDoc.registerFontkit(fontkit);
-  const fontBytes = fs.readFileSync("assets/font/NotoSansJP-Regular.ttf");
-  const customFont = await pdfDoc.embedFont(fontBytes);
+  const template = getHTMLFile(`pdf_${pdfMode}`);
+  const baseTemplateData: Record<string, string> = {
+    lang,
+    title: studio.script.title || "MulmoCast PDF",
+    page_size: pageSize,
+    pages: pagesHTML,
+  };
 
-  if (pdfMode === "handout") {
-    await pdfHandout(pageWidth, pageHeight, imagePaths, texts, pdfDoc, customFont, isLandscapeImage);
-  }
-  if (pdfMode === "slide") {
-    await pdfSlide(pageWidth, pageHeight, imagePaths, pdfDoc);
-  }
-  if (pdfMode === "talk") {
-    await pdfTalk(pageWidth, pageHeight, imagePaths, texts, pdfDoc, customFont);
-  }
+  const templateData = pdfMode === "handout" ? { ...baseTemplateData, ...getHandoutTemplateData(isLandscapeImage) } : baseTemplateData;
 
-  const pdfBytes = await pdfDoc.save();
-  fs.writeFileSync(outputPdfPath, pdfBytes);
-  writingMessage(outputPdfPath);
+  return interpolate(template, templateData);
 };
 
-export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize) => {
+const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode): PDFOptions => {
+  const baseOptions: PDFOptions = {
+    format: getPdfSize(pdfSize),
+    margin: {
+      top: "0",
+      bottom: "0",
+      left: "0",
+      right: "0",
+    },
+  };
+
+  // handout mode always uses portrait orientation
+  return pdfMode === "handout" ? { ...baseOptions, landscape: false } : baseOptions;
+};
+
+const generatePDF = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
+  const { studio, fileDirs, lang = "en" } = context;
+  const { outDirPath } = fileDirs;
+
+  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode, lang);
+  const html = await generatePDFHTML(context, pdfMode, pdfSize);
+  const pdfOptions = createPDFOptions(pdfSize, pdfMode);
+
+  const browser = await puppeteer.launch({
+    args: isCI ? ["--no-sandbox"] : [],
+  });
+
+  try {
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
+    await page.pdf({
+      path: outputPdfPath,
+      printBackground: true,
+      ...pdfOptions,
+    });
+    writingMessage(outputPdfPath);
+  } finally {
+    await browser.close();
+  }
+};
+
+export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "pdf", true);
-    await generatePdf(context, pdfMode, pdfSize);
+    await generatePDF(context, pdfMode, pdfSize);
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "pdf", false);
   }
