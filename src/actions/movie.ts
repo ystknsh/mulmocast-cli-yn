@@ -197,7 +197,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     return artifactAudioId;
   })();
 
-  GraphAILogger.debug("filterComplex", ffmpegContext.filterComplex);
+  // GraphAILogger.debug("filterComplex", ffmpegContext.filterComplex);
 
   await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId, mixedVideoId));
   const end = performance.now();

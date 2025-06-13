@@ -20,7 +20,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
         const beat = context.studio.script.beats[index];
         const isClosingGap = index === context.studio.beats.length - 2;
-        const movieDuration = await (async () => {
+        const movieDuration = await (() => {
           if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
             const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
             return ffmpegGetMediaDuration(pathOrUrl);
