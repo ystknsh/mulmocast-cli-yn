@@ -20,6 +20,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
         const beat = context.studio.script.beats[index];
         const isClosingGap = index === context.studio.beats.length - 2;
+        const movieDuration = await (() => {
+          if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
+            const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
+            return ffmpegGetMediaDuration(pathOrUrl);
+          }
+          return 0;
+        })();
         if (studioBeat.audioFile) {
           const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
           const padding = (() => {
@@ -33,13 +40,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           })();
           const audioDuration = await ffmpegGetMediaDuration(studioBeat.audioFile);
           const totalPadding = await (async () => {
-            if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
-              const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
-              // NOTE: We respect the duration of the movie, only if the movie is specified as a madia source, NOT generated.
-              const movieDuration = await ffmpegGetMediaDuration(pathOrUrl);
-              if (movieDuration > audioDuration) {
-                return padding + (movieDuration - audioDuration);
-              }
+            if (movieDuration > 0) {
+              return padding + (movieDuration - audioDuration);
             } else if (beat.duration && beat.duration > audioDuration) {
               return padding + (beat.duration - audioDuration);
             }
@@ -55,7 +57,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           }
         } else {
           // NOTE: We come here when the text is empty and no audio property is specified.
-          studioBeat.duration = beat.duration ?? 1.0;
+          studioBeat.duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
           const silentId = silentIds.pop();
           ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
           return [`[silent_${index}]`];
