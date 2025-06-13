@@ -9,7 +9,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
 }) => {
   const { context, combinedFileName } = namedInputs;
   const ffmpegContext = FfmpegContextInit();
-  const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath);
+  const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
 
   // We cannot reuse longSilentId. We need to explicitly split it for each beat.
   const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);

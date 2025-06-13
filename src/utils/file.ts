@@ -128,10 +128,10 @@ export const mkdir = (dirPath: string) => {
   }
 };
 
-export const silentPath = path.resolve(npmRoot, "./assets/audio/silent300.mp3");
-export const silentLastPath = path.resolve(npmRoot, "./assets/audio/silent800.mp3");
-export const silent60secPath = path.resolve(npmRoot, "./assets/audio/silent60sec.mp3");
-export const defaultBGMPath = path.resolve(npmRoot, "./assets/music/StarsBeyondEx.mp3");
+// export const silentPath = path.resolve(npmRoot, "./assets/audio/silent300.mp3");
+// export const silentLastPath = path.resolve(npmRoot, "./assets/audio/silent800.mp3");
+export const silent60secPath = () => path.resolve(npmRoot, "./assets/audio/silent60sec.mp3");
+export const defaultBGMPath = () => path.resolve(npmRoot, "./assets/music/StarsBeyondEx.mp3");
 
 export const getHTMLFile = (filename: string) => {
   const htmlPath = path.resolve(npmRoot, `./assets/html/${filename}.html`);
