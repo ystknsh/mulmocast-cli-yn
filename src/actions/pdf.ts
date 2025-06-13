@@ -167,11 +167,13 @@ const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode): PDFOptions => {
   return pdfMode === "handout" ? { ...baseOptions, landscape: false } : baseOptions;
 };
 
-const generatePDF = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
+export const pdfFilePath = (context: MulmoStudioContext, pdfMode: PDFMode) => {
   const { studio, fileDirs, lang = "en" } = context;
-  const { outDirPath } = fileDirs;
+  return getOutputPdfFilePath(fileDirs.outDirPath, studio.filename, pdfMode, lang);
+};
 
-  const outputPdfPath = getOutputPdfFilePath(outDirPath, studio.filename, pdfMode, lang);
+const generatePDF = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
+  const outputPdfPath = pdfFilePath(context, pdfMode);
   const html = await generatePDFHTML(context, pdfMode, pdfSize);
   const pdfOptions = createPDFOptions(pdfSize, pdfMode);
 
