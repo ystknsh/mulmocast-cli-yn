@@ -6,7 +6,7 @@
   "movieParams": {
     "transition": {
       "type": "fade",
-      "duration": 2.0
+      "duration": 1.0
     }
   },
   "beats": [
