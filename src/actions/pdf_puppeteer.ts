@@ -73,17 +73,28 @@ const generateHandoutHTML = (imageDataUrls: string[], texts: string[]): string =
   const pages: string[] = [];
 
   for (let i = 0; i < imageDataUrls.length; i += itemsPerPage) {
-    const pageItems = Array.from({ length: Math.min(itemsPerPage, imageDataUrls.length - i) }, (_, j) => {
+    const pageItems = Array.from({ length: itemsPerPage }, (_, j) => {
       const index = i + j;
-      return `
-        <div class="handout-item">
-          <div class="handout-image">
-            <img src="${imageDataUrls[index]}" alt="">
-          </div>
-          <div class="handout-text">
-            ${formatTextAsParagraphs(texts[index])}
-          </div>
-        </div>`;
+      const hasContent = index < imageDataUrls.length;
+
+      if (hasContent) {
+        return `
+          <div class="handout-item">
+            <div class="handout-image">
+              <img src="${imageDataUrls[index]}" alt="">
+            </div>
+            <div class="handout-text">
+              ${formatTextAsParagraphs(texts[index])}
+            </div>
+          </div>`;
+      } else {
+        // Empty slot to maintain 4-item grid layout
+        return `
+          <div class="handout-item">
+            <div class="handout-image"></div>
+            <div class="handout-text"></div>
+          </div>`;
+      }
     }).join("");
 
     pages.push(`<div class="page">${pageItems}</div>`);
