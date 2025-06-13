@@ -336,3 +336,6 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
     MulmoStudioContextMethods.setSessionState(context, "image", false);
   }
 };
+
+// Export imagePreprocessAgent for testing
+export { imagePreprocessAgent };
