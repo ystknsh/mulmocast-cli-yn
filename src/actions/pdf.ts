@@ -167,7 +167,7 @@ const createPDFOptions = (pdfSize: PDFSize, pdfMode: PDFMode): PDFOptions => {
   return pdfMode === "handout" ? { ...baseOptions, landscape: false } : baseOptions;
 };
 
-const generatePDFWithPuppeteer = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
+const generatePDF = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
   const { studio, fileDirs, lang = "en" } = context;
   const { outDirPath } = fileDirs;
 
@@ -193,10 +193,10 @@ const generatePDFWithPuppeteer = async (context: MulmoStudioContext, pdfMode: PD
   }
 };
 
-export const pdfPuppeteer = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
+export const pdf = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<void> => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "pdf", true);
-    await generatePDFWithPuppeteer(context, pdfMode, pdfSize);
+    await generatePDF(context, pdfMode, pdfSize);
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "pdf", false);
   }
