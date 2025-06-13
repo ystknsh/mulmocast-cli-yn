@@ -196,12 +196,18 @@ const agentFilters = [
   },
 ];
 
+export const audioFilePath = (context: MulmoStudioContext) => {
+  const { studio, fileDirs } = context;
+  const { outDirPath } = fileDirs;
+  return getAudioArtifactFilePath(outDirPath, studio.filename);
+};
+
 export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
     const { studio, fileDirs, lang } = context;
     const { outDirPath, audioDirPath } = fileDirs;
-    const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
+    const audioArtifactFilePath = audioFilePath(context);
     const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
     const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename, lang);
     const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
