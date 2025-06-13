@@ -5,8 +5,6 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { MulmoStudioContext, MulmoBeat, Text2ImageAgentInfo } from "../../src/types/index.js";
-import { getFileObject } from "../../src/cli/helpers.js";
-import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -397,7 +395,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
   const imageAgentInfo = createMockImageAgentInfo();
 
   // Test with the first beat that has imagePrompt
-  const beatWithImagePrompt = scriptData.beats.find((beat: any) => beat.imagePrompt);
+  const beatWithImagePrompt = scriptData.beats.find((beat: MulmoBeat) => beat.imagePrompt);
   if (beatWithImagePrompt) {
     const result = await imagePreprocessAgent({
       context,
