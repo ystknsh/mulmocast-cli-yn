@@ -6,7 +6,7 @@
   "movieParams": {
     "transition": {
       "type": "fade",
-      "duration": 0.5
+      "duration": 2.0
     }
   },
   "beats": [
@@ -23,11 +23,11 @@
     },
     {
       "speaker": "Presenter",
-      "duration": 1.0,
+      "duration": 3.0,
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "1.0 second with no Audio"
+          "title": "3.0 second with no Audio"
         }
       }
     },
@@ -43,11 +43,11 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This is a text slide.",
+      "text": "This is a text slide with audio.",
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "Text Slide"
+          "title": "Text Slide with Audio"
         }
       }
     }
