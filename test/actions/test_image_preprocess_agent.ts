@@ -119,7 +119,7 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
     imageRefs: {},
   });
 
-  // Since moviePrompt exists and imagePrompt does NOT exist, 
+  // Since moviePrompt exists and imagePrompt does NOT exist,
   // only imageParams, movieFile, and images are returned
   const expected = {
     imageParams: {
@@ -389,12 +389,12 @@ test("imagePreprocessAgent - with real sample data", async () => {
   // Load real sample script
   const scriptPath = path.join(__dirname, "../../scripts/test/test.json");
   const scriptData = JSON.parse(fs.readFileSync(scriptPath, "utf8"));
-  
+
   const context = createMockContext();
   context.studio.filename = "test";
-  
+
   const imageAgentInfo = createMockImageAgentInfo();
-  
+
   // Test with the first beat that has imagePrompt
   const beatWithImagePrompt = scriptData.beats.find((beat: any) => beat.imagePrompt);
   if (beatWithImagePrompt) {
