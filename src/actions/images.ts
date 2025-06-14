@@ -143,6 +143,7 @@ const graph_data: GraphData = {
               imagePath: ":preprocessor.imagePath",
               file: ":preprocessor.movieFile",
               studio: ":context.studio", // for cache
+              mulmoContext: ":context", // for fileCacheAgentFilter
               index: ":__mapIndex", // for cache
               sessionType: "movie", // for cache
               params: {
