@@ -23,10 +23,6 @@ const getTavilyApiKey = (params: TavilySearchParams, config?: DefaultConfigData)
   return typeof process !== "undefined" ? process?.env?.TAVILY_API_KEY : null;
 };
 
-/**
- * Tavily search agent
- * Performs web search using Tavily API and returns relevant search results
- */
 export const tavilySearchAgent: AgentFunction<TavilySearchParams, TavilySearchResponse, TavilySearchInputs, DefaultConfigData> = async ({
   namedInputs,
   params,
