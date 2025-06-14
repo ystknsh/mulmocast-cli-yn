@@ -1,0 +1,37 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Media Test",
+  "references": [
+    {
+      "url": "https://www.mulmocast.com",
+      "title": "Mulmocast",
+      "type": "article"
+    }
+  ],
+  "speechParams": {
+    "speakers": {
+      "Presenter": {
+        "voiceId": "shimmer",
+        "displayName": {
+          "en": "Presenter"
+        }
+      }
+    }
+  },
+  "beats": [
+    {
+      "speaker": "Presenter",
+      "text": "",
+      "duration": 0.5,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "No Audio test for ci",
+          "bullets": ["0.5 seconds"]
+        }
+      }
+    }
+  ]
+}
