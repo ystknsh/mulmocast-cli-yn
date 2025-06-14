@@ -76,6 +76,81 @@ const imagePreprocessAgent = async (namedInputs: {
   return { imagePath, prompt, ...returnValue, images };
 };
 
+const beat_graph_data = {
+  version: 0.5,
+  concurrency: 4,
+  nodes: {
+    preprocessor: {
+      agent: imagePreprocessAgent,
+      inputs: {
+        context: ":context",
+        beat: ":beat",
+        index: ":__mapIndex",
+        suffix: "p",
+        imageDirPath: ":imageDirPath",
+        imageAgentInfo: ":imageAgentInfo",
+        imageRefs: ":imageRefs",
+      },
+    },
+    imageGenerator: {
+      if: ":preprocessor.prompt",
+      agent: ":imageAgentInfo.agent",
+      retry: 3,
+      inputs: {
+        prompt: ":preprocessor.prompt",
+        images: ":preprocessor.images",
+        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
+        text: ":preprocessor.prompt", // only for fileCacheAgentFilter
+        force: ":context.force", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "image", // for fileCacheAgentFilter
+        params: {
+          model: ":preprocessor.imageParams.model",
+          moderation: ":preprocessor.imageParams.moderation",
+          canvasSize: ":context.studio.script.canvasSize",
+        },
+      },
+      defaultValue: {},
+    },
+    movieGenerator: {
+      if: ":preprocessor.movieFile",
+      agent: "movieGoogleAgent",
+      inputs: {
+        onComplete: ":imageGenerator", // to wait for imageGenerator to finish
+        prompt: ":beat.moviePrompt",
+        imagePath: ":preprocessor.imagePath",
+        file: ":preprocessor.movieFile",
+        studio: ":context.studio", // for cache
+        index: ":__mapIndex", // for cache
+        sessionType: "movie", // for cache
+        params: {
+          model: ":context.studio.script.movieParams.model",
+          duration: ":beat.duration",
+          canvasSize: ":context.studio.script.canvasSize",
+        },
+      },
+      defaultValue: {},
+    },
+    onComplete: {
+      agent: "copyAgent",
+      inputs: {
+        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        imageFile: ":preprocessor.imagePath",
+        movieFile: ":preprocessor.movieFile",
+      },
+    },
+    output: {
+      agent: "copyAgent",
+      inputs: {
+        imageFile: ":onComplete.imageFile",
+        movieFile: ":onComplete.movieFile",
+      },
+      isResult: true,
+    },
+  },
+};
+
 const graph_data: GraphData = {
   version: 0.5,
   concurrency: 4,
@@ -99,78 +174,7 @@ const graph_data: GraphData = {
         rowKey: "beat",
         compositeResult: true,
       },
-      graph: {
-        nodes: {
-          preprocessor: {
-            agent: imagePreprocessAgent,
-            inputs: {
-              context: ":context",
-              beat: ":beat",
-              index: ":__mapIndex",
-              suffix: "p",
-              imageDirPath: ":imageDirPath",
-              imageAgentInfo: ":imageAgentInfo",
-              imageRefs: ":imageRefs",
-            },
-          },
-          imageGenerator: {
-            if: ":preprocessor.prompt",
-            agent: ":imageAgentInfo.agent",
-            retry: 3,
-            inputs: {
-              prompt: ":preprocessor.prompt",
-              images: ":preprocessor.images",
-              file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-              text: ":preprocessor.prompt", // only for fileCacheAgentFilter
-              force: ":context.force", // only for fileCacheAgentFilter
-              mulmoContext: ":context", // for fileCacheAgentFilter
-              index: ":__mapIndex", // for fileCacheAgentFilter
-              sessionType: "image", // for fileCacheAgentFilter
-              params: {
-                model: ":preprocessor.imageParams.model",
-                moderation: ":preprocessor.imageParams.moderation",
-                canvasSize: ":context.studio.script.canvasSize",
-              },
-            },
-            defaultValue: {},
-          },
-          movieGenerator: {
-            if: ":preprocessor.movieFile",
-            agent: "movieGoogleAgent",
-            inputs: {
-              onComplete: ":imageGenerator", // to wait for imageGenerator to finish
-              prompt: ":beat.moviePrompt",
-              imagePath: ":preprocessor.imagePath",
-              file: ":preprocessor.movieFile",
-              studio: ":context.studio", // for cache
-              index: ":__mapIndex", // for cache
-              sessionType: "movie", // for cache
-              params: {
-                model: ":context.studio.script.movieParams.model",
-                duration: ":beat.duration",
-                canvasSize: ":context.studio.script.canvasSize",
-              },
-            },
-            defaultValue: {},
-          },
-          onComplete: {
-            agent: "copyAgent",
-            inputs: {
-              onComplete: ":movieGenerator", // to wait for movieGenerator to finish
-              imageFile: ":preprocessor.imagePath",
-              movieFile: ":preprocessor.movieFile",
-            },
-          },
-          output: {
-            agent: "copyAgent",
-            inputs: {
-              imageFile: ":onComplete.imageFile",
-              movieFile: ":onComplete.movieFile",
-            },
-            isResult: true,
-          },
-        },
-      },
+      graph: beat_graph_data,
     },
     mergeResult: {
       agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
