@@ -133,3 +133,12 @@ Instead, use `GraphAILogger` to manage user-facing logs and control output based
 - Keeps behavior consistent across different CLI tools and environments.
 
 Please ensure you choose the appropriate `GraphAILogger` method based on the log's purpose and expected visibility.
+
+
+## Pull Requests
+
+All pull requests **must pass** lint checks, build, and CI tests before they can be merged.
+
+## Release
+
+In addition to passing the GitHub CI tests, you **must run** `test/release_test.sh` and ensure that **all contents are successfully generated**.
