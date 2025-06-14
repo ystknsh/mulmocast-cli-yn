@@ -276,16 +276,6 @@ export const deepSearch = async () => {
 
   const graph = new GraphAI(graphData, { ...vanillaAgents, openAIAgent, textInputAgent, tavilySearchAgent }, { agentFilters });
 
-  graph.registerCallback(({ nodeId, state }) => {
-    if (nodeId === "chatAgent") {
-      if (state === "executing") {
-        process.stdout.write(String("\n" + agentHeader + " "));
-      }
-      if (state === "completed") {
-        process.stdout.write("\n\n");
-      }
-    }
-  });
   graph.injectValue("maxRetries", 3);
   graph.registerCallback(cliLoadingPlugin({ nodeId: "searchQueryAgent", message: "Generating search queries..." }));
   graph.registerCallback(cliLoadingPlugin({ nodeId: "reflectionAgent", message: "Analyzing search results..." }));
