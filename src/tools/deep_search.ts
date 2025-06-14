@@ -131,7 +131,6 @@ const graphData = {
                   },
                   params: {
                     max_results: 3,
-                    raw_content: "markdown",
                   },
                 },
                 result: {
