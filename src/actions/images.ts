@@ -272,7 +272,7 @@ const graphOption = async (context: MulmoStudioContext) => {
   return options;
 };
 
-const prepareGenerateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
   const { outDirPath, imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
@@ -340,7 +340,7 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   }
 
   const options = await graphOption(context);
-  const injections = await prepareGenerateImages(context, callbacks);
+  const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
@@ -364,7 +364,7 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
 
 export const generateBeatImage = async (index, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   const options = await graphOption(context);
-  const injections = await prepareGenerateImages(context, callbacks);
+  const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(beat_graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     if ("outputStudioFilePath" !== key) {
