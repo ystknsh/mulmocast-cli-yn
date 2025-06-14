@@ -28,11 +28,14 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => 
       };
     }
     GraphAILogger.error(e);
-    if (e.error) {
+    if (e && typeof e === "object" && "error" in e) {
       GraphAILogger.info("tts_openai_agent: ");
       GraphAILogger.info(e.error);
+    } else if (e instanceof Error) {
+      GraphAILogger.info("tts_openai_agent: ");
+      GraphAILogger.info(e.message);
     }
-    throw new Error("TTS OpenAI Error", e.error);
+    throw new Error("TTS OpenAI Error");
   }
 };
 
