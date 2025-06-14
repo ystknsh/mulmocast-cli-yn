@@ -3,15 +3,14 @@ import test from "node:test";
 
 import { getFileObject } from "../../src/cli/helpers.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
-import { images } from "../../src/actions/images.js";
+import { images, generateBeatImage } from "../../src/actions/images.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-test("test images", async () => {
-  // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
+const getContext = () => {
   const fileDirs = getFileObject({ file: "hello.yaml" });
   const mulmoScript = {
     $mulmocast: {
@@ -127,5 +126,17 @@ test("test images", async () => {
       },
     },
   };
+  return context;
+};
+
+test("test images", async () => {
+  // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
+  const context = getContext();
   await images(context);
+});
+
+test("test beat images", async () => {
+  // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
+  const context = getContext();
+  await generateBeatImage(1, context);
 });

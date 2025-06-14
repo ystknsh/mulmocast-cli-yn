@@ -30,7 +30,7 @@ const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
   };
 };
 
-const imagePreprocessAgent = async (namedInputs: {
+export const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
   beat: MulmoBeat;
   index: number;
@@ -80,6 +80,12 @@ const beat_graph_data = {
   version: 0.5,
   concurrency: 4,
   nodes: {
+    context: {},
+    imageDirPath: {},
+    imageAgentInfo: {},
+    imageRefs: {},
+    beat: {},
+    __mapIndex: {},
     preprocessor: {
       agent: imagePreprocessAgent,
       inputs: {
@@ -355,5 +361,21 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
   }
 };
 
-// Export imagePreprocessAgent for testing
-export { imagePreprocessAgent };
+export const generateBeatImage = async (index, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  const options = await graphOption(context);
+  const injections = await prepareGenerateImages(context, callbacks);
+  const graph = new GraphAI(beat_graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  Object.keys(injections).forEach((key: string) => {
+    if ("outputStudioFilePath" !== key) {
+      graph.injectValue(key, injections[key]);
+    }
+  });
+  graph.injectValue("__mapIndex", index);
+  graph.injectValue("beat", context.studio.script.beats[index]);
+  if (callbacks) {
+    callbacks.forEach((callback) => {
+      graph.registerCallback(callback);
+    });
+  }
+  await graph.run<{ output: MulmoStudioBeat[] }>();
+};
