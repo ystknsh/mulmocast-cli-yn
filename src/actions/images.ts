@@ -362,7 +362,7 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
   }
 };
 
-export const generateBeatImage = async (index, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+export const generateBeatImage = async (index: number, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(beat_graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
