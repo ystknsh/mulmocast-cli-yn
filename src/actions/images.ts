@@ -231,11 +231,8 @@ const googleAuth = async () => {
   }
 };
 
-const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  const { studio, fileDirs } = context;
-  const { outDirPath, imageDirPath } = fileDirs;
-  mkdir(`${imageDirPath}/${studio.filename}`);
-
+const graphOption = async (context: MulmoStudioContext) => {
+  const { studio } = context;
   const agentFilters = [
     {
       name: "fileCacheAgentFilter",
@@ -265,12 +262,15 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
       },
     };
   }
-  if (imageAgentInfo.provider === "openai") {
-    // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
-    // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
-    // gpt-image-1：3,000,000 TPM、150 images per minute
-    graph_data.concurrency = imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
-  }
+  return options;
+};
+
+const prepareGenerateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  const { studio, fileDirs } = context;
+  const { outDirPath, imageDirPath } = fileDirs;
+  mkdir(`${imageDirPath}/${studio.filename}`);
+
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
 
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
@@ -320,6 +320,20 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
     imageDirPath,
     imageRefs,
   };
+  return injections;
+};
+
+const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(context.studio.script);
+  if (imageAgentInfo.provider === "openai") {
+    // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
+    // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
+    // gpt-image-1：3,000,000 TPM、150 images per minute
+    graph_data.concurrency = imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
+  }
+
+  const options = await graphOption(context);
+  const injections = await prepareGenerateImages(context, callbacks);
   const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
