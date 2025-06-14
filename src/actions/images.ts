@@ -139,19 +139,16 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
-    onComplete: {
+    output: {
       agent: "copyAgent",
       inputs: {
         onComplete: ":movieGenerator", // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
-    },
-    output: {
-      agent: "copyAgent",
-      inputs: {
-        imageFile: ":onComplete.imageFile",
-        movieFile: ":onComplete.movieFile",
+      output: {
+        imageFile: ".imageFile",
+        movieFile: ".movieFile",
       },
       isResult: true,
     },
