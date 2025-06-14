@@ -101,62 +101,60 @@ const beat_graph_data = {
     imageGenerator: {
       if: ":preprocessor.prompt",
       agent: ":imageAgentInfo.agent",
-            retry: 3,
-            inputs: {
-              prompt: ":preprocessor.prompt",
-              images: ":preprocessor.images",
-              file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-              text: ":preprocessor.prompt", // only for fileCacheAgentFilter
-              force: ":context.force", // only for fileCacheAgentFilter
-              mulmoContext: ":context", // for fileCacheAgentFilter
-              index: ":__mapIndex", // for fileCacheAgentFilter
-              sessionType: "image", // for fileCacheAgentFilter
-              params: {
-                model: ":preprocessor.imageParams.model",
-                moderation: ":preprocessor.imageParams.moderation",
-                canvasSize: ":context.studio.script.canvasSize",
-              },
-            },
-            defaultValue: {},
-          },
-          movieGenerator: {
-            if: ":preprocessor.movieFile",
-            agent: "movieGoogleAgent",
-            inputs: {
-              onComplete: ":imageGenerator", // to wait for imageGenerator to finish
-              prompt: ":beat.moviePrompt",
-              imagePath: ":preprocessor.imagePath",
-              file: ":preprocessor.movieFile",
-              studio: ":context.studio", // for cache
-              mulmoContext: ":context", // for fileCacheAgentFilter
-              index: ":__mapIndex", // for cache
-              sessionType: "movie", // for cache
-              params: {
-                model: ":context.studio.script.movieParams.model",
-                duration: ":beat.duration",
-                canvasSize: ":context.studio.script.canvasSize",
-              },
-            },
-            defaultValue: {},
-          },
-          onComplete: {
-            agent: "copyAgent",
-            inputs: {
-              onComplete: ":movieGenerator", // to wait for movieGenerator to finish
-              imageFile: ":preprocessor.imagePath",
-              movieFile: ":preprocessor.movieFile",
-            },
-          },
-          output: {
-            agent: "copyAgent",
-            inputs: {
-              imageFile: ":onComplete.imageFile",
-              movieFile: ":onComplete.movieFile",
-            },
-            isResult: true,
-          },
+      retry: 3,
+      inputs: {
+        prompt: ":preprocessor.prompt",
+        images: ":preprocessor.images",
+        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
+        text: ":preprocessor.prompt", // only for fileCacheAgentFilter
+        force: ":context.force", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "image", // for fileCacheAgentFilter
+        params: {
+          model: ":preprocessor.imageParams.model",
+          moderation: ":preprocessor.imageParams.moderation",
+          canvasSize: ":context.studio.script.canvasSize",
         },
       },
+      defaultValue: {},
+    },
+    movieGenerator: {
+      if: ":preprocessor.movieFile",
+      agent: "movieGoogleAgent",
+      inputs: {
+        onComplete: ":imageGenerator", // to wait for imageGenerator to finish
+        prompt: ":beat.moviePrompt",
+        imagePath: ":preprocessor.imagePath",
+        file: ":preprocessor.movieFile",
+        studio: ":context.studio", // for cache
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for cache
+        sessionType: "movie", // for cache
+        params: {
+          model: ":context.studio.script.movieParams.model",
+          duration: ":beat.duration",
+          canvasSize: ":context.studio.script.canvasSize",
+        },
+      },
+      defaultValue: {},
+    },
+    onComplete: {
+      agent: "copyAgent",
+      inputs: {
+        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        imageFile: ":preprocessor.imagePath",
+        movieFile: ":preprocessor.movieFile",
+      },
+    },
+    output: {
+      agent: "copyAgent",
+      inputs: {
+        imageFile: ":onComplete.imageFile",
+        movieFile: ":onComplete.movieFile",
+      },
+      isResult: true,
+    },
   },
 };
 
