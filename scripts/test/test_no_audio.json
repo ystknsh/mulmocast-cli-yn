@@ -22,6 +22,7 @@
   },
   "beats": [
     {
+      "id": "first",
       "speaker": "Presenter",
       "text": "",
       "duration": 2,
@@ -31,6 +32,15 @@
           "kind": "path",
           "path": "../../assets/images/mulmocast_credit.png"
         }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "",
+      "duration": 0.5,
+      "image": {
+        "type": "beat",
+        "id": "first"
       }
     },
     {
