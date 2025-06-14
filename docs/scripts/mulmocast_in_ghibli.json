@@ -20,7 +20,16 @@
   },
   "imageParams": {
     "style": "<style>A multi panel comic strips. Ghibli style. The presenter is a young woman with dark short hair and glasses.</style>",
-    "provider": "openai"
+    "provider": "openai",
+    "images": {
+      "presenter": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/ghibli_presenter.png"
+        }
+      }
+    }
   },
   "title": "Introducing MulmoCast: A New Era of Presentations",
   "references": [],
