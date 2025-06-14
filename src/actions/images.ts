@@ -30,7 +30,7 @@ const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
   };
 };
 
-const imagePreprocessAgent = async (namedInputs: {
+export const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
   beat: MulmoBeat;
   index: number;
@@ -76,6 +76,85 @@ const imagePreprocessAgent = async (namedInputs: {
   return { imagePath, prompt, ...returnValue, images };
 };
 
+const beat_graph_data = {
+  version: 0.5,
+  concurrency: 4,
+  nodes: {
+    context: {},
+    imageDirPath: {},
+    imageAgentInfo: {},
+    imageRefs: {},
+    beat: {},
+    __mapIndex: {},
+    preprocessor: {
+      agent: imagePreprocessAgent,
+      inputs: {
+        context: ":context",
+        beat: ":beat",
+        index: ":__mapIndex",
+        suffix: "p",
+        imageDirPath: ":imageDirPath",
+        imageAgentInfo: ":imageAgentInfo",
+        imageRefs: ":imageRefs",
+      },
+    },
+    imageGenerator: {
+      if: ":preprocessor.prompt",
+      agent: ":imageAgentInfo.agent",
+      retry: 3,
+      inputs: {
+        prompt: ":preprocessor.prompt",
+        images: ":preprocessor.images",
+        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
+        text: ":preprocessor.prompt", // only for fileCacheAgentFilter
+        force: ":context.force", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "image", // for fileCacheAgentFilter
+        params: {
+          model: ":preprocessor.imageParams.model",
+          moderation: ":preprocessor.imageParams.moderation",
+          canvasSize: ":context.studio.script.canvasSize",
+        },
+      },
+      defaultValue: {},
+    },
+    movieGenerator: {
+      if: ":preprocessor.movieFile",
+      agent: "movieGoogleAgent",
+      inputs: {
+        onComplete: ":imageGenerator", // to wait for imageGenerator to finish
+        prompt: ":beat.moviePrompt",
+        imagePath: ":preprocessor.imagePath",
+        file: ":preprocessor.movieFile",
+        studio: ":context.studio", // for cache
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for cache
+        sessionType: "movie", // for cache
+        params: {
+          model: ":context.studio.script.movieParams.model",
+          duration: ":beat.duration",
+          canvasSize: ":context.studio.script.canvasSize",
+        },
+      },
+      defaultValue: {},
+    },
+    output: {
+      agent: "copyAgent",
+      inputs: {
+        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        imageFile: ":preprocessor.imagePath",
+        movieFile: ":preprocessor.movieFile",
+      },
+      output: {
+        imageFile: ".imageFile",
+        movieFile: ".movieFile",
+      },
+      isResult: true,
+    },
+  },
+};
+
 const graph_data: GraphData = {
   version: 0.5,
   concurrency: 4,
@@ -99,78 +178,7 @@ const graph_data: GraphData = {
         rowKey: "beat",
         compositeResult: true,
       },
-      graph: {
-        nodes: {
-          preprocessor: {
-            agent: imagePreprocessAgent,
-            inputs: {
-              context: ":context",
-              beat: ":beat",
-              index: ":__mapIndex",
-              suffix: "p",
-              imageDirPath: ":imageDirPath",
-              imageAgentInfo: ":imageAgentInfo",
-              imageRefs: ":imageRefs",
-            },
-          },
-          imageGenerator: {
-            if: ":preprocessor.prompt",
-            agent: ":imageAgentInfo.agent",
-            retry: 3,
-            inputs: {
-              prompt: ":preprocessor.prompt",
-              images: ":preprocessor.images",
-              file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-              text: ":preprocessor.prompt", // only for fileCacheAgentFilter
-              force: ":context.force", // only for fileCacheAgentFilter
-              mulmoContext: ":context", // for fileCacheAgentFilter
-              index: ":__mapIndex", // for fileCacheAgentFilter
-              sessionType: "image", // for fileCacheAgentFilter
-              params: {
-                model: ":preprocessor.imageParams.model",
-                moderation: ":preprocessor.imageParams.moderation",
-                canvasSize: ":context.studio.script.canvasSize",
-              },
-            },
-            defaultValue: {},
-          },
-          movieGenerator: {
-            if: ":preprocessor.movieFile",
-            agent: "movieGoogleAgent",
-            inputs: {
-              onComplete: ":imageGenerator", // to wait for imageGenerator to finish
-              prompt: ":beat.moviePrompt",
-              imagePath: ":preprocessor.imagePath",
-              file: ":preprocessor.movieFile",
-              studio: ":context.studio", // for cache
-              index: ":__mapIndex", // for cache
-              sessionType: "movie", // for cache
-              params: {
-                model: ":context.studio.script.movieParams.model",
-                duration: ":beat.duration",
-                canvasSize: ":context.studio.script.canvasSize",
-              },
-            },
-            defaultValue: {},
-          },
-          onComplete: {
-            agent: "copyAgent",
-            inputs: {
-              onComplete: ":movieGenerator", // to wait for movieGenerator to finish
-              imageFile: ":preprocessor.imagePath",
-              movieFile: ":preprocessor.movieFile",
-            },
-          },
-          output: {
-            agent: "copyAgent",
-            inputs: {
-              imageFile: ":onComplete.imageFile",
-              movieFile: ":onComplete.movieFile",
-            },
-            isResult: true,
-          },
-        },
-      },
+      graph: beat_graph_data,
     },
     mergeResult: {
       agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
@@ -227,11 +235,8 @@ const googleAuth = async () => {
   }
 };
 
-const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  const { studio, fileDirs } = context;
-  const { outDirPath, imageDirPath } = fileDirs;
-  mkdir(`${imageDirPath}/${studio.filename}`);
-
+const graphOption = async (context: MulmoStudioContext) => {
+  const { studio } = context;
   const agentFilters = [
     {
       name: "fileCacheAgentFilter",
@@ -261,12 +266,15 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
       },
     };
   }
-  if (imageAgentInfo.provider === "openai") {
-    // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
-    // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
-    // gpt-image-1：3,000,000 TPM、150 images per minute
-    graph_data.concurrency = imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
-  }
+  return options;
+};
+
+const prepareGenerateImages = async (context: MulmoStudioContext) => {
+  const { studio, fileDirs } = context;
+  const { outDirPath, imageDirPath } = fileDirs;
+  mkdir(`${imageDirPath}/${studio.filename}`);
+
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
 
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
@@ -316,6 +324,20 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
     imageDirPath,
     imageRefs,
   };
+  return injections;
+};
+
+const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(context.studio.script);
+  if (imageAgentInfo.provider === "openai") {
+    // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
+    // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
+    // gpt-image-1：3,000,000 TPM、150 images per minute
+    graph_data.concurrency = imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
+  }
+
+  const options = await graphOption(context);
+  const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
@@ -337,5 +359,21 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
   }
 };
 
-// Export imagePreprocessAgent for testing
-export { imagePreprocessAgent };
+export const generateBeatImage = async (index: number, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  const options = await graphOption(context);
+  const injections = await prepareGenerateImages(context);
+  const graph = new GraphAI(beat_graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  Object.keys(injections).forEach((key: string) => {
+    if ("outputStudioFilePath" !== key) {
+      graph.injectValue(key, injections[key]);
+    }
+  });
+  graph.injectValue("__mapIndex", index);
+  graph.injectValue("beat", context.studio.script.beats[index]);
+  if (callbacks) {
+    callbacks.forEach((callback) => {
+      graph.registerCallback(callback);
+    });
+  }
+  await graph.run<{ output: MulmoStudioBeat[] }>();
+};
