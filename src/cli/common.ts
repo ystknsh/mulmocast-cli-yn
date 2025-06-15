@@ -28,6 +28,11 @@ export const commonOptions = (yargs: Argv) => {
       type: "boolean",
       default: false,
     })
+    .option("dryRun", {
+      describe: "Dry run",
+      type: "boolean",
+      default: false,
+    })
     .positional("file", {
       describe: "Mulmo Script File",
       type: "string",

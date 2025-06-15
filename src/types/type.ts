@@ -84,6 +84,7 @@ export type MulmoStudioContext = {
   fileDirs: FileDirs;
   studio: MulmoStudio;
   lang?: string;
+  dryRun?: boolean;
   force: boolean;
   caption?: string;
   sessionState: MulmoSessionState;
