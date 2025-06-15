@@ -1,14 +1,14 @@
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
 
-export const imageMockAgent: AgentFunction = async () => {
+export const mediaMockAgent: AgentFunction = async () => {
   GraphAILogger.debug("agent dryRun");
   return { buffer: Buffer.from([]) };
 };
 
-const imageMockAgentInfo: AgentFunctionInfo = {
-  name: "imageMockAgent",
-  agent: imageMockAgent,
-  mock: imageMockAgent,
+const mediaMockAgentInfo: AgentFunctionInfo = {
+  name: "mediaMockAgent",
+  agent: mediaMockAgent,
+  mock: mediaMockAgent,
   samples: [],
   description: "Image mock agent",
   category: ["image"],
@@ -18,4 +18,4 @@ const imageMockAgentInfo: AgentFunctionInfo = {
   environmentVariables: [],
 };
 
-export default imageMockAgentInfo;
+export default mediaMockAgentInfo;

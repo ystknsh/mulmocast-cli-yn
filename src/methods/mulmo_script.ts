@@ -64,7 +64,7 @@ export const MulmoScriptMethods = {
     };
     return {
       provider,
-      agent: dryRun ? "mockImageAgent" : provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      agent: dryRun ? "mediaMockAgent" : provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
       imageParams: { ...defaultImageParams, ...script.imageParams },
     };
   },

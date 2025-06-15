@@ -9,7 +9,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mockImageAgent } from "../agents/index.js";
+import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
@@ -323,7 +323,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
     context,
     imageAgentInfo,
     movieAgentInfo: {
-      agent: context.dryRun ? "mockImageAgent" : "movieGoogleAgent",
+      agent: context.dryRun ? "mediaMockAgent" : "movieGoogleAgent",
     },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
@@ -343,7 +343,7 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
 
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mockImageAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
@@ -370,7 +370,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mockImageAgent, fileWriteAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
