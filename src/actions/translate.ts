@@ -168,7 +168,7 @@ const translateGraph: GraphData = {
         },
       },
     },
-    writeOutout: {
+    writeOutput: {
       // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
