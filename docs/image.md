@@ -203,3 +203,26 @@ idはbeatで指定する
   }
 }
 ```
+
+
+# studio.script.imageParams.images
+
+OpenAIで画像処理をするときに画像の一貫性のために参照となる画像を渡せる。
+その画像情報を元に、複数の画像を生成するときに一貫性を保つことができる。
+たとえば昔話の作成時に、登場人物の作画の一貫性をだす。
+
+```
+  "imageParams": {
+    "style": "Photo realistic, cinematic style.",
+    "images": {
+      "optimus": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/optimus.png"
+        }
+      }
+    }
+  }
+```
+
