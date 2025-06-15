@@ -1,5 +1,29 @@
 # FAQ
 
+## Compatibility
+
+### Q: Commands started failing after version upgrade
+
+**A: This is likely caused by `_studio.json` files from CLI version 0.0.11 or earlier.**
+
+**Error example**:
+```json
+currentStudio is invalid ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": ["onComplete"],
+    "path": ["beats", 0],
+    "message": "Unrecognized key(s) in object: 'onComplete'"
+  }
+]
+```
+
+**Cause**: In v0.0.11 and earlier, the internal studio context saved fields that are no longer valid in v0.0.12 (such as `onComplete`).
+
+**Solution**: Delete the corresponding `_studio.json` file and re-run the CLI. A new compatible version will be automatically created.
+
+**What is a `_studio.json` file?**: This is an internal file (e.g., `my_script_studio.json`) automatically created when you run CLI generation. It stores generation metadata like audio durations, image paths, and progress.
+
 ## Multi-language Support
 
 ### Q: Can I add Japanese audio and subtitles to an existing English video?

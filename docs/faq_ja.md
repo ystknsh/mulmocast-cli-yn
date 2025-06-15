@@ -1,5 +1,29 @@
 # FAQ
 
+## 互換性について
+
+### Q: バージョンアップ後にコマンドが失敗するようになりました
+
+**A: CLI バージョン 0.0.11 以前の`_studio.json`ファイルが原因の可能性があります。**
+
+**エラー例**:
+```json
+currentStudio is invalid ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": ["onComplete"],
+    "path": ["beats", 0],
+    "message": "Unrecognized key(s) in object: 'onComplete'"
+  }
+]
+```
+
+**原因**: v0.0.11 以前では、内部のスタジオコンテキストが v0.0.12 では無効となったフィールド（`onComplete`など）を保存していました。
+
+**解決方法**: 対応する`_studio.json`ファイルを削除して、CLIを再実行してください。新しい互換性のあるバージョンが自動的に作成されます。
+
+**`_studio.json`ファイルとは**: CLI 生成を実行すると自動的に作成される内部ファイル（例：`my_script_studio.json`）で、音声の長さ、画像パス、進行状況などの生成メタデータを保存します。
+
 ## 多言語対応について
 
 ### Q: 英語の動画に後から日本語の音声と字幕を追加できますか？
