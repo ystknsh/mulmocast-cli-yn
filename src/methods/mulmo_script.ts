@@ -55,7 +55,7 @@ export const MulmoScriptMethods = {
     return { ...script.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
 
-  getImageAgentInfo(script: MulmoScript): Text2ImageAgentInfo {
+  getImageAgentInfo(script: MulmoScript, dryRun: boolean = false): Text2ImageAgentInfo {
     // Notice that we copy imageParams from script and update
     // provider and model appropriately.
     const provider = text2ImageProviderSchema.parse(script.imageParams?.provider);
@@ -64,7 +64,7 @@ export const MulmoScriptMethods = {
     };
     return {
       provider,
-      agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      agent: dryRun ? "mockImageAgent" : provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
       imageParams: { ...defaultImageParams, ...script.imageParams },
     };
   },

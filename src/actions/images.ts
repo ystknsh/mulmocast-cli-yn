@@ -9,9 +9,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import imageGoogleAgent from "../agents/image_google_agent.js";
-import imageOpenaiAgent from "../agents/image_openai_agent.js";
-import movieGoogleAgent from "../agents/movie_google_agent.js";
+import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mockImageAgent } from "../agents/index.js";
 import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
@@ -83,6 +81,7 @@ const beat_graph_data = {
     context: {},
     imageDirPath: {},
     imageAgentInfo: {},
+    movieAgentInfo: {},
     imageRefs: {},
     beat: {},
     __mapIndex: {},
@@ -121,7 +120,7 @@ const beat_graph_data = {
     },
     movieGenerator: {
       if: ":preprocessor.movieFile",
-      agent: "movieGoogleAgent",
+      agent: ":movieAgentInfo.agent",
       inputs: {
         onComplete: ":imageGenerator", // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
@@ -162,6 +161,7 @@ const graph_data: GraphData = {
     context: {},
     imageDirPath: {},
     imageAgentInfo: {},
+    movieAgentInfo: {},
     outputStudioFilePath: {},
     imageRefs: {},
     map: {
@@ -170,6 +170,7 @@ const graph_data: GraphData = {
         rows: ":context.studio.script.beats",
         context: ":context",
         imageAgentInfo: ":imageAgentInfo",
+        movieAgentInfo: ":movieAgentInfo",
         imageDirPath: ":imageDirPath",
         imageRefs: ":imageRefs",
       },
@@ -181,6 +182,7 @@ const graph_data: GraphData = {
       graph: beat_graph_data,
     },
     mergeResult: {
+      isResult: true,
       agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
@@ -274,7 +276,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const { outDirPath, imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
 
-  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script, context.dryRun);
 
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
@@ -320,6 +322,9 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | undefined> = {
     context,
     imageAgentInfo,
+    movieAgentInfo: {
+      agent: context.dryRun ? "mockImageAgent" : "movieGoogleAgent",
+    },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
     imageRefs,
@@ -338,7 +343,7 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
 
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mockImageAgent, fileWriteAgent }, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
@@ -347,7 +352,8 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
       graph.registerCallback(callback);
     });
   }
-  await graph.run<{ output: MulmoStudioBeat[] }>();
+  const res = await graph.run<{ output: MulmoStudioBeat[] }>();
+  return res.mergeResult;
 };
 
 export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
@@ -362,7 +368,11 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
 export const generateBeatImage = async (index: number, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(beat_graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(
+    beat_graph_data,
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mockImageAgent, fileWriteAgent },
+    options,
+  );
   Object.keys(injections).forEach((key: string) => {
     if ("outputStudioFilePath" !== key) {
       graph.injectValue(key, injections[key]);
