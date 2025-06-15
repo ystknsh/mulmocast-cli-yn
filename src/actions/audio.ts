@@ -37,6 +37,7 @@ const provider_to_agent = {
   openai: "ttsOpenaiAgent",
   google: "ttsGoogleAgent",
   elevenlabs: "ttsElevenlabsAgent",
+  mock: "mediaMockAgent",
 };
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string, audioDirPath: string): string | undefined => {
