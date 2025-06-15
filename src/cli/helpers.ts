@@ -130,7 +130,7 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
       studio,
       fileDirs: files,
       force: Boolean(argv.f),
-      dryRun: true,
+      dryRun: Boolean(argv.dryRun),
       lang: argv.l,
       caption: argv.c,
       sessionState: {
