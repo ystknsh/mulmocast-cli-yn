@@ -248,8 +248,11 @@ const graphOption = async (context: MulmoStudioContext) => {
     },
   ];
 
+  const taskManager = new TaskManager(getConcurrency(context.studio.script));
+
   const options: GraphOptions = {
     agentFilters,
+    taskManager,
   };
 
   const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
@@ -345,8 +348,6 @@ const getConcurrency = (script: MulmoScript) => {
 };
 
 const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  const taskManager = new TaskManager(getConcurrency(context.studio.script));
-
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent }, options);
