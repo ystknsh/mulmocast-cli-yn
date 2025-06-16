@@ -7,11 +7,11 @@ import * as agents from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoScript, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
-import { MulmoScriptMethods, MulmoStudioContextMethods } from "../methods/index.js";
+import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { imagePlugins } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
@@ -23,10 +23,10 @@ dotenv.config();
 import { GoogleAuth } from "google-auth-library";
 import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 
-const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
+const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
   return {
-    canvasSize: MulmoScriptMethods.getCanvasSize(script),
-    textSlideStyle: MulmoScriptMethods.getTextSlideStyle(script, beat),
+    canvasSize: MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle),
+    textSlideStyle: MulmoPresentationStyleMethods.getTextSlideStyle(context.presentationStyle, beat),
   };
 };
 
@@ -52,7 +52,7 @@ export const imagePreprocessAgent = async (namedInputs: {
     if (plugin) {
       try {
         MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
-        const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
+        const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
         const path = await plugin.process(processorParams);
         // undefined prompt indicates that image generation is not needed
         return { imagePath: path, referenceImage: path, ...returnValue };
@@ -263,14 +263,14 @@ const graphOption = async (context: MulmoStudioContext) => {
     },
   ];
 
-  const taskManager = new TaskManager(getConcurrency(context.studio.script));
+  const taskManager = new TaskManager(getConcurrency(context));
 
   const options: GraphOptions = {
     agentFilters,
     taskManager,
   };
 
-  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script);
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
 
   // We need to get google's auth token only if the google is the text2image provider.
   if (imageAgentInfo.provider === "google" || studio.script.movieParams?.provider === "google") {
@@ -295,7 +295,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const { outDirPath, imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
 
-  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(studio.script, context.dryRun);
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
 
   const imageRefs: Record<string, string> = {};
   const images = studio.script.imageParams?.images;
@@ -351,8 +351,8 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   return injections;
 };
 
-const getConcurrency = (script: MulmoScript) => {
-  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(script);
+const getConcurrency = (context: MulmoStudioContext) => {
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   if (imageAgentInfo.provider === "openai") {
     // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
     // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)

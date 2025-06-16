@@ -11,7 +11,7 @@ import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import ttsGoogleAgent from "../agents/tts_google_agent.js";
 import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { MulmoScriptMethods } from "../methods/index.js";
+import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
 import { MulmoStudioContext, MulmoStudio, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
@@ -67,7 +67,7 @@ const preprocessor = (namedInputs: {
   const { lang } = context;
   const speaker = context.studio.script.speechParams.speakers[beat.speaker];
   const voiceId = speaker.voiceId;
-  const speechOptions = MulmoScriptMethods.getSpeechOptions(context.studio.script, beat);
+  const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(context.presentationStyle, beat);
   const text = localizedText(beat, multiLingual, lang);
 
   // Use speaker-specific provider if available, otherwise fall back to script-level provider
