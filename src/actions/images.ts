@@ -133,7 +133,7 @@ const beat_graph_data = {
         index: ":__mapIndex", // for cache
         sessionType: "movie", // for cache
         params: {
-          model: ":context.studio.script.movieParams.model",
+          model: ":context.presentationStyle.movieParams.model",
           duration: ":beat.duration",
           canvasSize: ":context.presentationStyle.canvasSize",
         },
@@ -273,7 +273,7 @@ const graphOption = async (context: MulmoStudioContext) => {
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
 
   // We need to get google's auth token only if the google is the text2image provider.
-  if (imageAgentInfo.provider === "google" || studio.script.movieParams?.provider === "google") {
+  if (imageAgentInfo.provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
     options.config = {
