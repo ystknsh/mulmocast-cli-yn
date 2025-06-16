@@ -246,7 +246,10 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
     graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("audioDirPath", audioDirPath);
-    graph.injectValue("musicFile", MulmoMediaSourceMethods.resolve(context.presentationStyle.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath());
+    graph.injectValue(
+      "musicFile",
+      MulmoMediaSourceMethods.resolve(context.presentationStyle.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath(),
+    );
 
     if (callbacks) {
       callbacks.forEach((callback) => {
