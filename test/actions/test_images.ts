@@ -4,6 +4,7 @@ import test from "node:test";
 import { getFileObject } from "../../src/cli/helpers.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
 import { images, generateBeatImage } from "../../src/actions/images.js";
+import { addSessionProgressCallback } from "../../src/methods/mulmo_studio_context.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -132,6 +133,9 @@ const getContext = () => {
 
 test("test images", async () => {
   // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
+  addSessionProgressCallback((data) => {
+    console.log(data);
+  });
   const context = getContext();
   await images(context);
 });
