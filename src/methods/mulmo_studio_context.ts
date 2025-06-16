@@ -5,14 +5,37 @@ import { GraphAILogger } from "graphai";
 type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
 type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie";
 
+type SessionProgressEvent =
+  | { kind: "session"; sessionType: SessionType; inSession: boolean }
+  | { kind: "beat"; sessionType: BeatSessionType; index: number; inSession: boolean };
+
+type SessionProgressCallback = (change: SessionProgressEvent) => void;
+
+const sessionProgressCallbacks = new Set<SessionProgressCallback>();
+
+export const addSessionProgressCallback = (cb: SessionProgressCallback) => {
+  sessionProgressCallbacks.add(cb);
+};
+export const removeSessionProgressCallback = (cb: SessionProgressCallback) => {
+  sessionProgressCallbacks.delete(cb);
+};
+
 const notifyStateChange = (context: MulmoStudioContext, sessionType: SessionType) => {
-  const prefix = context.sessionState.inSession[sessionType] ? "<" : " >";
+  const inSession = context.sessionState.inSession[sessionType] ?? false;
+  const prefix = inSession ? "<" : " >";
   GraphAILogger.info(`${prefix} ${sessionType}`);
+  for (const callback of sessionProgressCallbacks) {
+    callback({ kind: "session", sessionType, inSession });
+  }
 };
 
 const notifyBeatStateChange = (context: MulmoStudioContext, sessionType: BeatSessionType, index: number) => {
-  const prefix = context.sessionState.inBeatSession[sessionType][index] ? "{" : " }";
+  const inSession = context.sessionState.inBeatSession[sessionType][index] ?? false;
+  const prefix = inSession ? "{" : " }";
   GraphAILogger.info(`${prefix} ${sessionType} ${index}`);
+  for (const callback of sessionProgressCallbacks) {
+    callback({ kind: "beat", sessionType, index, inSession });
+  }
 };
 
 export const MulmoStudioContextMethods = {
