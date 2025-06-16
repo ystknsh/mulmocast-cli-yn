@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import puppeteer from "puppeteer";
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
-import { MulmoScriptMethods } from "../methods/index.js";
+import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { localizedText, isHttp } from "../utils/utils.js";
 import { getOutputPdfFilePath, writingMessage, getHTMLFile } from "../utils/file.js";
 import { interpolate } from "../utils/markdown.js";
@@ -129,7 +129,7 @@ const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pd
   const { studio, lang = "en" } = context;
   const { multiLingual } = studio;
 
-  const { width: imageWidth, height: imageHeight } = MulmoScriptMethods.getCanvasSize(studio.script);
+  const { width: imageWidth, height: imageHeight } = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
   const isLandscapeImage = imageWidth > imageHeight;
 
   const imagePaths = studio.beats.map((beat) => beat.imageFile!);

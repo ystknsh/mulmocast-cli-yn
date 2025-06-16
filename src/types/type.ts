@@ -88,6 +88,7 @@ export type MulmoStudioContext = {
   force: boolean;
   caption?: string;
   sessionState: MulmoSessionState;
+  presentationStyle: MulmoPresentationStyle;
 };
 
 export type ScriptingParams = {

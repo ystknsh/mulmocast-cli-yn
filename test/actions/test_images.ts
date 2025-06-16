@@ -125,6 +125,7 @@ const getContext = () => {
         caption: {},
       },
     },
+    presentationStyle: studio.script,
   };
   return context;
 };

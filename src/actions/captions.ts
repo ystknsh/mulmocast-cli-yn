@@ -30,7 +30,7 @@ const graph_data: GraphData = {
                 const { fileDirs } = namedInputs.context;
                 const { caption } = context;
                 const { imageDirPath } = fileDirs;
-                const { canvasSize } = context.studio.script;
+                const { canvasSize } = context.presentationStyle;
                 const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
                 const template = getHTMLFile("caption");
                 const text = (() => {

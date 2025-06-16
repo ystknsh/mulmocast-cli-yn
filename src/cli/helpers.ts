@@ -150,6 +150,8 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
           caption: {},
         },
       },
+      // TODO: Replace this with optional presentationStyle (--presentationStyle option)
+      presentationStyle: studio.script,
     };
   } catch (error) {
     GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);

@@ -139,6 +139,7 @@ test("test images", async () => {
         caption: {},
       },
     },
+    presentationStyle: studio.script,
   };
   await audio(context);
   await images(context);

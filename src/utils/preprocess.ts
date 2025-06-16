@@ -44,6 +44,7 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudi
 
   const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
 
+  // TODO: Move this code out of this function later
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
     mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker

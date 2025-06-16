@@ -1,6 +1,6 @@
 import { GraphAILogger, assert } from "graphai";
-import { MulmoStudio, MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema } from "../types/index.js";
-import { MulmoScriptMethods } from "../methods/index.js";
+import { MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema } from "../types/index.js";
+import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
@@ -76,17 +76,17 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
-const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, studio: MulmoStudio, caption: string | undefined) => {
+const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, context: MulmoStudioContext, caption: string | undefined) => {
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
-  const missingIndex = studio.beats.findIndex((beat) => !beat.imageFile && !beat.movieFile);
+  const missingIndex = context.studio.beats.findIndex((beat) => !beat.imageFile && !beat.movieFile);
   if (missingIndex !== -1) {
     GraphAILogger.info(`ERROR: beat.imageFile or beat.movieFile is not set on beat ${missingIndex}.`);
     return false;
   }
 
-  const canvasInfo = MulmoScriptMethods.getCanvasSize(studio.script);
+  const canvasInfo = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
 
   // Add each image input
   const filterComplexVideoIds: string[] = [];
@@ -94,8 +94,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
-  studio.beats.reduce((timestamp, studioBeat, index) => {
-    const beat = studio.script.beats[index];
+  context.studio.beats.reduce((timestamp, studioBeat, index) => {
+    const beat = context.studio.script.beats[index];
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
     if (!sourceFile) {
       throw new Error(`studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
@@ -104,13 +104,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       throw new Error(`studioBeat.duration is not set: index=${index}`);
     }
     const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
-    const mediaType = studioBeat.movieFile ? "movie" : MulmoScriptMethods.getImageType(studio.script, beat);
+    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
     const extraPadding = (() => {
       // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
       if (index === 0) {
-        return studio.script.audioParams.introPadding;
-      } else if (index === studio.beats.length - 1) {
-        return studio.script.audioParams.outroPadding;
+        return context.presentationStyle.audioParams.introPadding;
+      } else if (index === context.studio.beats.length - 1) {
+        return context.presentationStyle.audioParams.outroPadding;
       }
       return 0;
     })();
@@ -125,7 +125,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     } else {
       filterComplexVideoIds.push(videoId);
     }
-    if (studio.script.movieParams?.transition && index < studio.beats.length - 1) {
+    if (context.presentationStyle.movieParams?.transition && index < context.studio.beats.length - 1) {
       const sourceId = filterComplexVideoIds.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
       filterComplexVideoIds.push(`${sourceId}_0`);
@@ -149,19 +149,19 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     return timestamp + duration;
   }, 0);
 
-  assert(filterComplexVideoIds.length === studio.beats.length, "videoIds.length !== studio.beats.length");
-  assert(beatTimestamps.length === studio.beats.length, "beatTimestamps.length !== studio.beats.length");
+  assert(filterComplexVideoIds.length === context.studio.beats.length, "videoIds.length !== studio.beats.length");
+  assert(beatTimestamps.length === context.studio.beats.length, "beatTimestamps.length !== studio.beats.length");
 
   // console.log("*** images", images.audioIds);
 
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
-  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${studio.beats.length}:v=1:a=0[${concatVideoId}]`);
+  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${context.studio.beats.length}:v=1:a=0[${concatVideoId}]`);
 
   // Add tranditions if needed
   const mixedVideoId = (() => {
-    if (studio.script.movieParams?.transition && transitionVideoIds.length > 0) {
-      const transition = mulmoTransitionSchema.parse(studio.script.movieParams.transition);
+    if (context.presentationStyle.movieParams?.transition && transitionVideoIds.length > 0) {
+      const transition = mulmoTransitionSchema.parse(context.presentationStyle.movieParams.transition);
 
       return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
         const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
@@ -202,8 +202,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   await FfmpegContextGenerateOutput(ffmpegContext, outputVideoPath, getOutputOption(ffmpegContextAudioId, mixedVideoId));
   const end = performance.now();
   GraphAILogger.info(`Video created successfully! ${Math.round(end - start) / 1000} sec`);
-  GraphAILogger.info(studio.script.title);
-  GraphAILogger.info((studio.script.references ?? []).map((reference) => `${reference.title} (${reference.url})`).join("\n"));
+  GraphAILogger.info(context.studio.script.title);
+  GraphAILogger.info((context.studio.script.references ?? []).map((reference) => `${reference.title} (${reference.url})`).join("\n"));
 
   return true;
 };
@@ -221,7 +221,7 @@ export const movie = async (context: MulmoStudioContext) => {
     const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, studio.filename);
     const outputVideoPath = movieFilePath(context);
 
-    if (await createVideo(audioArtifactFilePath, outputVideoPath, studio, caption)) {
+    if (await createVideo(audioArtifactFilePath, outputVideoPath, context, caption)) {
       writingMessage(outputVideoPath);
     }
   } finally {

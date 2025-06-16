@@ -1,13 +1,13 @@
 import "dotenv/config";
 import {
   MulmoCanvasDimension,
-  MulmoScript,
   MulmoBeat,
   SpeechOptions,
   MulmoImageParams,
   Text2SpeechProvider,
   Text2ImageAgentInfo,
   BeatMediaType,
+  MulmoPresentationStyle,
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 
@@ -26,49 +26,49 @@ const defaultTextSlideStyles = [
   "tr:nth-child(even) { background-color: #eee }",
 ];
 
-export const MulmoScriptMethods = {
-  getCanvasSize(script: MulmoScript): MulmoCanvasDimension {
-    return mulmoCanvasDimensionSchema.parse(script.canvasSize);
+export const MulmoPresentationStyleMethods = {
+  getCanvasSize(presentationStyle: MulmoPresentationStyle): MulmoCanvasDimension {
+    return mulmoCanvasDimensionSchema.parse(presentationStyle.canvasSize);
   },
-  getSpeechProvider(script: MulmoScript): Text2SpeechProvider {
-    return text2SpeechProviderSchema.parse(script.speechParams?.provider);
+  getSpeechProvider(presentationStyle: MulmoPresentationStyle): Text2SpeechProvider {
+    return text2SpeechProviderSchema.parse(presentationStyle.speechParams?.provider);
   },
-  getAllSpeechProviders(script: MulmoScript): Set<Text2SpeechProvider> {
+  getAllSpeechProviders(presentationStyle: MulmoPresentationStyle): Set<Text2SpeechProvider> {
     const providers = new Set<Text2SpeechProvider>();
-    const defaultProvider = this.getSpeechProvider(script);
+    const defaultProvider = this.getSpeechProvider(presentationStyle);
 
-    Object.values(script.speechParams.speakers).forEach((speaker) => {
+    Object.values(presentationStyle.speechParams.speakers).forEach((speaker) => {
       const provider = speaker.provider ?? defaultProvider;
       providers.add(provider);
     });
 
     return providers;
   },
-  getTextSlideStyle(script: MulmoScript, beat: MulmoBeat): string {
-    const styles = script.textSlideParams?.cssStyles ?? [];
+  getTextSlideStyle(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): string {
+    const styles = presentationStyle.textSlideParams?.cssStyles ?? [];
     // NOTES: Taking advantage of CSS override rule (you can redefine it to override)
     const extraStyles = beat.textSlideParams?.cssStyles ?? [];
     // This code allows us to support both string and array of strings for cssStyles
     return [...defaultTextSlideStyles, ...[styles], ...[extraStyles]].flat().join("\n");
   },
-  getSpeechOptions(script: MulmoScript, beat: MulmoBeat): SpeechOptions | undefined {
-    return { ...script.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
+  getSpeechOptions(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeechOptions | undefined {
+    return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
 
-  getImageAgentInfo(script: MulmoScript, dryRun: boolean = false): Text2ImageAgentInfo {
-    // Notice that we copy imageParams from script and update
+  getImageAgentInfo(presentationStyle: MulmoPresentationStyle, dryRun: boolean = false): Text2ImageAgentInfo {
+    // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
-    const provider = text2ImageProviderSchema.parse(script.imageParams?.provider);
+    const provider = text2ImageProviderSchema.parse(presentationStyle.imageParams?.provider);
     const defaultImageParams: MulmoImageParams = {
       model: provider === "openai" ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined,
     };
     return {
       provider,
       agent: dryRun ? "mediaMockAgent" : provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
-      imageParams: { ...defaultImageParams, ...script.imageParams },
+      imageParams: { ...defaultImageParams, ...presentationStyle.imageParams },
     };
   },
-  getImageType(_: MulmoScript, beat: MulmoBeat): BeatMediaType {
+  getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {
     return beat.image?.type == "movie" ? "movie" : "image";
   },
 };
