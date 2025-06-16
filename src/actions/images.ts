@@ -115,7 +115,7 @@ const beat_graph_data = {
         params: {
           model: ":preprocessor.imageParams.model",
           moderation: ":preprocessor.imageParams.moderation",
-          canvasSize: ":context.studio.script.canvasSize",
+          canvasSize: ":context.presentationStyle.canvasSize",
         },
       },
       defaultValue: {},
@@ -135,7 +135,7 @@ const beat_graph_data = {
         params: {
           model: ":context.studio.script.movieParams.model",
           duration: ":beat.duration",
-          canvasSize: ":context.studio.script.canvasSize",
+          canvasSize: ":context.presentationStyle.canvasSize",
         },
       },
       defaultValue: {},
