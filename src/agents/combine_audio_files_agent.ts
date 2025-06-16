@@ -36,7 +36,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
             if (index === context.studio.beats.length - 1) {
               return 0;
             }
-            return isClosingGap ? context.studio.script.audioParams.closingPadding : context.studio.script.audioParams.padding;
+            return isClosingGap ? context.presentationStyle.audioParams.closingPadding : context.presentationStyle.audioParams.padding;
           })();
           const audioDuration = await ffmpegGetMediaDuration(studioBeat.audioFile);
           const totalPadding = await (async () => {

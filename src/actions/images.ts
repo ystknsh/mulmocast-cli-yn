@@ -298,7 +298,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
 
   const imageRefs: Record<string, string> = {};
-  const images = studio.script.imageParams?.images;
+  const images = context.presentationStyle.imageParams?.images;
   if (images) {
     await Promise.all(
       Object.keys(images).map(async (key) => {

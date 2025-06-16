@@ -65,13 +65,13 @@ const preprocessor = (namedInputs: {
 }) => {
   const { beat, studioBeat, multiLingual, context, audioDirPath } = namedInputs;
   const { lang } = context;
-  const speaker = context.studio.script.speechParams.speakers[beat.speaker];
+  const speaker = context.presentationStyle.speechParams.speakers[beat.speaker];
   const voiceId = speaker.voiceId;
   const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(context.presentationStyle, beat);
   const text = localizedText(beat, multiLingual, lang);
 
   // Use speaker-specific provider if available, otherwise fall back to script-level provider
-  const provider = speaker.provider ?? context.studio.script.speechParams.provider;
+  const provider = speaker.provider ?? context.presentationStyle.speechParams.provider;
   const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}${provider}`;
   const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
@@ -204,10 +204,10 @@ export const audioFilePath = (context: MulmoStudioContext) => {
   return getAudioArtifactFilePath(outDirPath, studio.filename);
 };
 
-const getConcurrency = (studio: MulmoStudio) => {
+const getConcurrency = (context: MulmoStudioContext) => {
   // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
-  const hasLimitedConcurrencyProvider = Object.values(studio.script.speechParams.speakers).some((speaker) => {
-    const provider = speaker.provider ?? studio.script.speechParams.provider;
+  const hasLimitedConcurrencyProvider = Object.values(context.presentationStyle.speechParams.speakers).some((speaker) => {
+    const provider = speaker.provider ?? context.presentationStyle.speechParams.provider;
     return provider === "nijivoice" || provider === "elevenlabs";
   });
   return hasLimitedConcurrencyProvider ? 1 : 8;
@@ -225,7 +225,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
 
-    const taskManager = new TaskManager(getConcurrency(studio));
+    const taskManager = new TaskManager(getConcurrency(context));
     const graph = new GraphAI(
       graph_data,
       {
@@ -246,7 +246,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
     graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("audioDirPath", audioDirPath);
-    graph.injectValue("musicFile", MulmoMediaSourceMethods.resolve(studio.script.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath());
+    graph.injectValue("musicFile", MulmoMediaSourceMethods.resolve(context.presentationStyle.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath());
 
     if (callbacks) {
       callbacks.forEach((callback) => {
