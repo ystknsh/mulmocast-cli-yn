@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { GraphAI } from "graphai";
-import { TaskManager } from "graphai/lib/task_manager";
+import { TaskManager } from "graphai/lib/task_manager.js";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
