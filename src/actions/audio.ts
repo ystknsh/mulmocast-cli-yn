@@ -170,7 +170,7 @@ const graph_data: GraphData = {
         wait: ":combineFiles",
         voiceFile: ":audioCombinedFilePath",
         outputFile: ":audioArtifactFilePath",
-        script: ":context.studio.script",
+        context: ":context",
         params: {
           musicFile: ":musicFile",
         },
