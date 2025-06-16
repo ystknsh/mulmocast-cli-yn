@@ -36,7 +36,7 @@ const graphData = {
         userInput: ":userInput.text",
       },
     },
-    deepSearch: {
+    deepResearch: {
       agent: "nestedAgent",
       inputs: {
         userInput: ":userInput.text",
@@ -259,13 +259,13 @@ const graphData = {
     writeResult: {
       agent: "consoleAgent",
       inputs: {
-        text: "\n------Answer------\n\n${:deepSearch.finalAnswer.text}\n",
+        text: "\n------Answer------\n\n${:deepResearch.finalAnswer.text}\n",
       },
     },
   },
 };
 
-export const deepSearch = async () => {
+export const deepResearch = async () => {
   const agentFilters = [
     {
       name: "consoleStreamDataAgentFilter",
@@ -286,4 +286,4 @@ export const deepSearch = async () => {
   await graph.run();
 };
 
-deepSearch();
+deepResearch();

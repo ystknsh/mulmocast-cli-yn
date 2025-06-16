@@ -39,7 +39,7 @@
     "story_to_script": "npx tsx ./src/cli/bin.ts tool story_to_script",
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,draft,ideason,scripts_mag2,proto,test,graphai,output,docs/scripts}/**/*.{ts,json,yaml}'",
-    "deep_search": "npx tsx ./src/tools/deep_search.ts"
+    "deep_research": "npx tsx ./src/tools/deep_research.ts"
   },
   "repository": "git+ssh://git@github.com/receptron/mulmocast-cli.git",
   "author": "snakajima",
