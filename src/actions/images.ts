@@ -21,6 +21,7 @@ const vanillaAgents = agents.default ?? agents;
 dotenv.config();
 // const openai = new OpenAI();
 import { GoogleAuth } from "google-auth-library";
+import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 
 const htmlStyle = (script: MulmoScript, beat: MulmoBeat) => {
   return {
@@ -142,7 +143,7 @@ const beat_graph_data = {
     imageFromMovie: {
       if: ":preprocessor.imageFromMovie",
       agent: async (namedInputs: { movieFile: string, imageFile: string}) => {
-        console.log("***DEBUG*** imageFromMovie", namedInputs);
+        await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
         return { generatedImage: true };
       },
       inputs: {
