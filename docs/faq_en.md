@@ -51,11 +51,11 @@ mulmo movie your_script.json -l ja -c ja
 
 ### Q: What's the difference between `-l ja` and `-c ja` options in `mulmo movie` command?
 
-**A: Both automatically execute translation processing, but each controls different functions.**
+**A: After translating to the specified language, `-l` applies to audio and `-c` applies to subtitles.**
 
-- **`mulmo movie your_script.json -l ja`**: Translation processing + Japanese audio generation
-- **`mulmo movie your_script.json -c ja`**: Translation processing + Japanese subtitle generation
-- **`mulmo movie your_script.json -l ja -c ja`**: Translation processing + both Japanese audio & subtitles
+- **`mulmo movie your_script.json -l ja`**: Translate to Japanese + generate Japanese audio
+- **`mulmo movie your_script.json -c ja`**: Translate to Japanese + generate Japanese subtitles
+- **`mulmo movie your_script.json -l ja -c ja`**: Translate to Japanese + generate both audio & subtitles
 
 ```bash
 # To run translation only
@@ -65,6 +65,8 @@ mulmo translate your_script.json
 ### Q: How can I manually edit translation results?
 
 **A: Edit `multiLingualTexts.ja.text` in `output/your_script_studio.json` file.**
+
+The following example shows Japanese (ja) translation.
 
 ```json
 {
