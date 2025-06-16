@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger } from "graphai";
+import { TaskManager } from "graphai/lib/task_manager.js";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 
@@ -332,14 +333,19 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   return injections;
 };
 
-const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(context.studio.script);
+const getConcurrency = (script: MulmoScript) => {
+  const imageAgentInfo = MulmoScriptMethods.getImageAgentInfo(script);
   if (imageAgentInfo.provider === "openai") {
     // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
     // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
     // gpt-image-1：3,000,000 TPM、150 images per minute
-    graph_data.concurrency = imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
+    return imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
   }
+  return 4;
+};
+
+const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  const taskManager = new TaskManager(getConcurrency(context.studio.script));
 
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
