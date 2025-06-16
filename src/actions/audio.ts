@@ -1,6 +1,7 @@
 import "dotenv/config";
 
 import { GraphAI } from "graphai";
+import { TaskManager } from "graphai/lib/task_manager.js";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import ttsNijivoiceAgent from "../agents/tts_nijivoice_agent.js";
@@ -12,7 +13,7 @@ import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoScriptMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData } from "../types/index.js";
+import { MulmoStudioContext, MulmoStudio, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
@@ -203,6 +204,14 @@ export const audioFilePath = (context: MulmoStudioContext) => {
   return getAudioArtifactFilePath(outDirPath, studio.filename);
 };
 
+const getConcurrency = (studio: MulmoStudio) => {
+  // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
+  const hasLimitedConcurrencyProvider = Object.values(studio.script.speechParams.speakers).some((speaker) => {
+    const provider = speaker.provider ?? studio.script.speechParams.provider;
+    return provider === "nijivoice" || provider === "elevenlabs";
+  });
+  return hasLimitedConcurrencyProvider ? 1 : 8;
+};
 export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
@@ -216,12 +225,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
 
-    // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
-    const hasLimitedConcurrencyProvider = Object.values(studio.script.speechParams.speakers).some((speaker) => {
-      const provider = speaker.provider ?? studio.script.speechParams.provider;
-      return provider === "nijivoice" || provider === "elevenlabs";
-    });
-    graph_data.concurrency = hasLimitedConcurrencyProvider ? 1 : 8;
+    const taskManager = new TaskManager(getConcurrency(studio));
     const graph = new GraphAI(
       graph_data,
       {
@@ -234,7 +238,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
         addBGMAgent,
         combineAudioFilesAgent,
       },
-      { agentFilters },
+      { agentFilters, taskManager },
     );
     graph.injectValue("context", context);
     graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
