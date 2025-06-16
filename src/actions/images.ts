@@ -54,7 +54,7 @@ export const imagePreprocessAgent = async (namedInputs: {
         const processorParams = { beat, context, imagePath, ...htmlStyle(context.studio.script, beat) };
         const path = await plugin.process(processorParams);
         // undefined prompt indicates that image generation is not needed
-        return { imagePath: path, imageReference: path, ...returnValue };
+        return { imagePath: path, referenceImage: path, ...returnValue };
       } finally {
         MulmoStudioContextMethods.setBeatSessionState(context, "image", index, false);
       }
@@ -69,10 +69,10 @@ export const imagePreprocessAgent = async (namedInputs: {
   })();
 
   if (beat.moviePrompt && !beat.imagePrompt) {
-    return { ...returnValue, imagePath, images }; // no image prompt, only movie prompt
+    return { ...returnValue, imagePath, images, imageFromMovie: true }; // no image prompt, only movie prompt
   }
   const prompt = imagePrompt(beat, imageParams.style);
-  return { imagePath, imageReference: imagePath, prompt, ...returnValue, images };
+  return { imagePath, referenceImage: imagePath, prompt, ...returnValue, images };
 };
 
 const beat_graph_data = {
@@ -125,7 +125,7 @@ const beat_graph_data = {
       inputs: {
         onComplete: ":imageGenerator", // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
-        imagePath: ":preprocessor.imageReference",
+        imagePath: ":preprocessor.referenceImage",
         file: ":preprocessor.movieFile",
         studio: ":context.studio", // for cache
         mulmoContext: ":context", // for fileCacheAgentFilter
@@ -139,10 +139,24 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
+    imageFromMovie: {
+      if: ":preprocessor.imageFromMovie",
+      agent: async (namedInputs: { movieFile: string, imageFile: string}) => {
+        console.log("***DEBUG*** imageFromMovie", namedInputs);
+        return { generatedImage: true };
+      },
+      inputs: {
+        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        imageFile: ":preprocessor.imagePath",
+        movieFile: ":preprocessor.movieFile",
+      },
+      defaultValue: { generatedImage: false },
+    },
     output: {
       agent: "copyAgent",
       inputs: {
         onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        onComplete2: ":imageFromMovie", // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
