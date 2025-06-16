@@ -1,5 +1,6 @@
 import test from "node:test";
 // import assert from "node:assert";
+import { GraphAILogger } from "graphai";
 
 import { getFileObject } from "../../src/cli/helpers.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
@@ -134,7 +135,7 @@ const getContext = () => {
 test("test images", async () => {
   // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
   addSessionProgressCallback((data) => {
-    console.log(data);
+    GraphAILogger.info(data);
   });
   const context = getContext();
   await images(context);
