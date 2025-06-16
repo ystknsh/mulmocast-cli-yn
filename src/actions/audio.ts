@@ -243,7 +243,6 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
 
     const taskManager = new TaskManager(getConcurrency(context));
     const graph = new GraphAI(graph_tts, audioAgents, { agentFilters, taskManager });
-    console.log(context);
     graph.injectValue("__mapIndex", index);
     graph.injectValue("beat", context.studio.script.beats[index]);
     graph.injectValue("studioBeat", context.studio.beats[index]);
