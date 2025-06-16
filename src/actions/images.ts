@@ -254,7 +254,6 @@ const googleAuth = async () => {
 };
 
 const graphOption = async (context: MulmoStudioContext) => {
-  const { studio } = context;
   const agentFilters = [
     {
       name: "fileCacheAgentFilter",
