@@ -156,8 +156,7 @@ const beat_graph_data = {
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
-        onComplete2: ":imageFromMovie", // to wait for imageFromMovie to finish
+        onComplete: ":imageFromMovie", // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
