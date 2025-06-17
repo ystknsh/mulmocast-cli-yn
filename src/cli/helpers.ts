@@ -104,13 +104,14 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
   return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
 };
 
-export const getPresentationStyle = (presentationStylePath: string | undefined):MulmoPresentationStyle | null => {
+export const getPresentationStyle = (presentationStylePath: string | undefined): MulmoPresentationStyle | null => {
   if (presentationStylePath) {
     if (!fs.existsSync(presentationStylePath)) {
       GraphAILogger.info(`ERROR: File not exists ${presentationStylePath}`);
       return null;
     }
-    const jsonData = readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
+    const jsonData =
+      readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
     return mulmoPresentationStyleSchema.parse(jsonData);
   }
   return null;
