@@ -8,7 +8,7 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
+import { mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
@@ -177,7 +177,6 @@ const graph_data: GraphData = {
     imageDirPath: {},
     imageAgentInfo: {},
     movieAgentInfo: {},
-    outputStudioFilePath: {},
     imageRefs: {},
     map: {
       agent: "mapAgent",
@@ -225,14 +224,6 @@ const graph_data: GraphData = {
       inputs: {
         array: ":map.output",
         context: ":context",
-      },
-    },
-    writeOutput: {
-      // console: { before: true },
-      agent: "fileWriteAgent",
-      inputs: {
-        file: ":outputStudioFilePath",
-        text: ":mergeResult.studio.toJSON()",
       },
     },
   },
@@ -342,7 +333,6 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
     movieAgentInfo: {
       agent: context.dryRun ? "mediaMockAgent" : "movieGoogleAgent",
     },
-    outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
     imageDirPath,
     imageRefs,
   };
@@ -394,9 +384,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
     options,
   );
   Object.keys(injections).forEach((key: string) => {
-    if ("outputStudioFilePath" !== key) {
-      graph.injectValue(key, injections[key]);
-    }
+    graph.injectValue(key, injections[key]);
   });
   graph.injectValue("__mapIndex", index);
   graph.injectValue("beat", context.studio.script.beats[index]);

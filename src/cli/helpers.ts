@@ -2,7 +2,7 @@ import { GraphAILogger } from "graphai";
 import fs from "fs";
 import path from "path";
 import clipboardy from "clipboardy";
-import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, getOutputStudioFilePath, resolveDirPath, mkdir, getOutputMultilingualFilePath } from "../utils/file.js";
+import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile, resolveDirPath, mkdir, getOutputMultilingualFilePath } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { createStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
