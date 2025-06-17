@@ -42,6 +42,9 @@ export const MulmoStudioContextMethods = {
   resolveAssetPath(context: MulmoStudioContext, relativePath: string): string {
     return path.resolve(context.fileDirs.mulmoFileDirPath, relativePath);
   },
+  getAudioDirPath(context: MulmoStudioContext): string {
+    return context.fileDirs.audioDirPath;
+  },
   setSessionState(context: MulmoStudioContext, sessionType: SessionType, value: boolean) {
     context.sessionState.inSession[sessionType] = value;
     notifyStateChange(context, sessionType);

@@ -8,6 +8,7 @@ import {
   Text2ImageAgentInfo,
   BeatMediaType,
   MulmoPresentationStyle,
+  SpeakerData,
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 
@@ -54,7 +55,17 @@ export const MulmoPresentationStyleMethods = {
   getSpeechOptions(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeechOptions | undefined {
     return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
-
+  getSpeaker(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeakerData {
+    return presentationStyle.speechParams.speakers[beat.speaker];
+  },
+  getProvider(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): Text2SpeechProvider {
+    const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
+    return speaker.provider ?? presentationStyle.speechParams.provider;
+  },
+  getVoiceId(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): string {
+    const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
+    return speaker.voiceId;
+  },
   getImageAgentInfo(presentationStyle: MulmoPresentationStyle, dryRun: boolean = false): Text2ImageAgentInfo {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
