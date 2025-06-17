@@ -95,7 +95,6 @@ const graph_tts: GraphData = {
     studioBeat: {},
     multiLingual: {},
     audioDirPath: {},
-    audioSegmentDirPath: {},
     context: {},
     __mapIndex: {},
     preprocessor: {
@@ -137,7 +136,6 @@ const graph_data: GraphData = {
     audioCombinedFilePath: {},
     outputStudioFilePath: {},
     audioDirPath: {},
-    audioSegmentDirPath: {},
     musicFile: {},
     map: {
       agent: "mapAgent",
@@ -146,7 +144,6 @@ const graph_data: GraphData = {
         studioBeat: ":context.studio.beats",
         multiLingual: ":context.studio.multiLingual",
         audioDirPath: ":audioDirPath",
-        audioSegmentDirPath: ":audioSegmentDirPath",
         context: ":context",
       },
       params: {
@@ -158,7 +155,7 @@ const graph_data: GraphData = {
     combineFiles: {
       agent: "combineAudioFilesAgent",
       inputs: {
-        map: ":map",
+        onComplete: ":map",
         context: ":context",
         combinedFileName: ":audioCombinedFilePath",
       },
@@ -248,7 +245,6 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
     graph.injectValue("studioBeat", context.studio.beats[index]);
     graph.injectValue("multiLingual", context.studio.multiLingual);
     graph.injectValue("audioDirPath", audioDirPath);
-    graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("context", context);
 
     if (callbacks) {
@@ -281,7 +277,6 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
     graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
     graph.injectValue("outputStudioFilePath", outputStudioFilePath);
-    graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
     graph.injectValue("audioDirPath", audioDirPath);
     graph.injectValue(
       "musicFile",
