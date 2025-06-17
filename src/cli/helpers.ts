@@ -34,7 +34,7 @@ export interface FileObject {
   isHttpPath: boolean;
   fileOrUrl: string;
   outputStudioFilePath: string;
-  presentationStyle: string | undefined;
+  presentationStylePath: string | undefined;
   fileName: string;
 }
 
@@ -64,7 +64,8 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
   const imageDirPath = getFullPath(outDirPath, imagedir ?? imageDirName);
   const audioDirPath = getFullPath(outDirPath, audiodir ?? audioDirName);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
-  console.log("***DEBUG***", presentationStyle);
+  const presentationStylePath = presentationStyle ? getFullPath(baseDirPath, presentationStyle) : undefined;
+  console.log("***DEBUG***", presentationStylePath);
   return {
     baseDirPath,
     mulmoFilePath,
@@ -75,7 +76,7 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
     isHttpPath,
     fileOrUrl,
     outputStudioFilePath,
-    presentationStyle,
+    presentationStylePath,
     fileName,
   };
 };
@@ -94,6 +95,14 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
     return null;
   }
   return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
+};
+
+export const fetchPresentationStyle = async (presentationStyle: string): Promise<string | null> => {
+  if (presentationStyle) {
+    const res = await fetchMulmoScriptFile(presentationStyle);
+    return res.script;
+  }
+  return null;
 };
 
 type InitOptions = {
@@ -117,7 +126,7 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     presentationStyle: argv.p,
     file: argv.file ?? "",
   });
-  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath } = files;
+  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath } = files;
 
   setGraphAILogger(argv.v, {
     files,
