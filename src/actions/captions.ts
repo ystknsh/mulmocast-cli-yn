@@ -34,7 +34,7 @@ const graph_data: GraphData = {
                 const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
                 const template = getHTMLFile("caption");
                 const text = (() => {
-                  const multiLingual = context.multiLingual;
+                  const multiLingual = context.studio.multiLingual;
                   if (caption && multiLingual) {
                     return multiLingual[index].multiLingualTexts[caption].text;
                   }
