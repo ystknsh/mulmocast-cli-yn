@@ -281,7 +281,7 @@ const graphOption = async (context: MulmoStudioContext) => {
 
 const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
-  const { outDirPath, imageDirPath } = fileDirs;
+  const { imageDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);

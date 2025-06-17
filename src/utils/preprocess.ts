@@ -1,4 +1,3 @@
-import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
 
 const buildStudio = (mulmoScript: MulmoScript, fileName: string) => {

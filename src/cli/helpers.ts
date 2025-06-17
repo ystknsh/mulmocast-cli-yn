@@ -6,7 +6,7 @@ import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile,
 import { isHttp } from "../utils/utils.js";
 import { createStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
-import type { MulmoStudio, MulmoScript, MulmoStudioContext, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
+import type { MulmoScript, MulmoStudioContext, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
 import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema } from "../types/schema.js";
@@ -117,12 +117,12 @@ export const getPresentationStyle = (presentationStylePath: string | undefined):
 };
 
 export const getMultiLingual = (multilingualFilePath: string): MulmoStudioMultiLingual => {
-    if (fs.existsSync(multilingualFilePath)) {
-      const jsonData =
+  if (fs.existsSync(multilingualFilePath)) {
+    const jsonData =
       readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-      return mulmoStudioMultiLingualSchema.parse(jsonData);
-    }
-    return [];
+    return mulmoStudioMultiLingualSchema.parse(jsonData);
+  }
+  return [];
 };
 
 type InitOptions = {
@@ -186,7 +186,7 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
         },
       },
       presentationStyle: presentationStyle ?? studio.script,
-      multiLingual
+      multiLingual,
     };
   } catch (error) {
     GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
