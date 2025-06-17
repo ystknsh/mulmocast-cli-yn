@@ -43,7 +43,7 @@ export const MulmoStudioContextMethods = {
     return path.resolve(context.fileDirs.mulmoFileDirPath, relativePath);
   },
   getAudioDirPath(context: MulmoStudioContext): string {
-    return context.fileDirs.audioDirPath
+    return context.fileDirs.audioDirPath;
   },
   setSessionState(context: MulmoStudioContext, sessionType: SessionType, value: boolean) {
     context.sessionState.inSession[sessionType] = value;
