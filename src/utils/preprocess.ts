@@ -1,14 +1,7 @@
 import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
 
-const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
-  const parsed = mulmoStudioSchema.safeParse(currentStudio);
-  if (parsed.success) {
-    return parsed.data;
-  }
-  if (currentStudio) {
-    GraphAILogger.info("currentStudio is invalid", parsed.error);
-  }
+const buildStudio = (mulmoScript: MulmoScript, fileName: string) => {
   // We need to parse it to fill default values
   return mulmoStudioSchema.parse({
     script: mulmoScript,
@@ -39,13 +32,11 @@ const mulmoCredit = (speaker: string) => {
   };
 };
 
-export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudio: MulmoStudio | undefined, fileName: string) => {
+export const createStudioData = (_mulmoScript: MulmoScript, fileName: string) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
-  const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
+  const studio: MulmoStudio = buildStudio(mulmoScript, fileName);
 
-  // TODO: Move this code out of this function later
-  // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
     mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker
   }
@@ -55,9 +46,6 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudi
   mulmoScript.beats.forEach((beat: MulmoBeat, index: number) => {
     // Filling the default values
     studio.script.beats[index] = mulmoBeatSchema.parse(beat);
-    if (!studio.multiLingual[index]) {
-      studio.multiLingual[index] = { multiLingualTexts: {} };
-    }
   });
   return studio;
 };
