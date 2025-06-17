@@ -6,7 +6,7 @@ import { getBaseDirPath, getFullPath, readMulmoScriptFile, fetchMulmoScriptFile,
 import { isHttp } from "../utils/utils.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
-import type { MulmoStudio, MulmoScript, MulmoStudioContext } from "../types/type.js";
+import type { MulmoStudio, MulmoScript, MulmoStudioContext, MulmoPresentationStyle } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
 
@@ -97,10 +97,13 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
   return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
 };
 
-export const fetchPresentationStyle = async (presentationStyle: string): Promise<string | null> => {
-  if (presentationStyle) {
-    const res = await fetchMulmoScriptFile(presentationStyle);
-    return res.script;
+export const getPresentationStyle = async (presentationStylePath: string): Promise<MulmoPresentationStyle | null> => {
+  if (presentationStylePath) {
+    if (!fs.existsSync(presentationStylePath)) {
+      GraphAILogger.info(`ERROR: File not exists ${presentationStylePath}`);
+      return null;
+    }
+    return readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
   }
   return null;
 };
