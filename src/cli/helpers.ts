@@ -34,11 +34,12 @@ export interface FileObject {
   isHttpPath: boolean;
   fileOrUrl: string;
   outputStudioFilePath: string;
+  presentationStyle: string | undefined;
   fileName: string;
 }
 
-export const getFileObject = (args: { basedir?: string; outdir?: string; imagedir?: string; audiodir?: string; file: string }): FileObject => {
-  const { basedir, outdir, imagedir, audiodir, file } = args;
+export const getFileObject = (args: { basedir?: string; outdir?: string; imagedir?: string; audiodir?: string; presentationStyle?: string; file: string }): FileObject => {
+  const { basedir, outdir, imagedir, audiodir, file, presentationStyle } = args;
   const baseDirPath = getBaseDirPath(basedir);
   const outDirPath = getFullPath(baseDirPath, outdir ?? outDirName);
   const { fileOrUrl, fileName } = (() => {
@@ -63,6 +64,7 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
   const imageDirPath = getFullPath(outDirPath, imagedir ?? imageDirName);
   const audioDirPath = getFullPath(outDirPath, audiodir ?? audioDirName);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
+  console.log("***DEBUG***", presentationStyle);
   return {
     baseDirPath,
     mulmoFilePath,
@@ -73,6 +75,7 @@ export const getFileObject = (args: { basedir?: string; outdir?: string; imagedi
     isHttpPath,
     fileOrUrl,
     outputStudioFilePath,
+    presentationStyle,
     fileName,
   };
 };
@@ -101,14 +104,17 @@ type InitOptions = {
   file?: string;
   l?: string;
   c?: string;
+  p?: string;
 };
 
 export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext | null> => {
+  console.log("***DEBUG***", argv.p);
   const files = getFileObject({
     basedir: argv.b,
     outdir: argv.o,
     imagedir: argv.i,
     audiodir: argv.a,
+    presentationStyle: argv.p,
     file: argv.file ?? "",
   });
   const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath } = files;

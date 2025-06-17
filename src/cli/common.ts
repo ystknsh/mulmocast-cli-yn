@@ -33,6 +33,12 @@ export const commonOptions = (yargs: Argv) => {
       type: "boolean",
       default: false,
     })
+    .option("p", {
+      alias: "presentationStyle",
+      describe: "Presentation Style",
+      demandOption: false,
+      type: "string",
+    })
     .positional("file", {
       describe: "Mulmo Script File",
       type: "string",
