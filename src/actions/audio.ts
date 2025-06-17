@@ -64,20 +64,24 @@ const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBea
   return { voiceId, provider, speechOptions };
 };
 
+export const getBeatAudioPath = (text, lang, context, beat) => {
+  const { voiceId, provider, speechOptions } = getAudioParam(context.presentationStyle, beat);
+  const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
+  const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
+  return getAudioPath(context, beat, audioFile);
+};
+
 const preprocessor = (namedInputs: {
   beat: MulmoBeat;
   studioBeat: MulmoStudioBeat;
   multiLingual: MulmoStudioMultiLingualData;
-  index: number;
   context: MulmoStudioContext;
 }) => {
   const { beat, studioBeat, multiLingual, context } = namedInputs;
   const { lang, presentationStyle } = context;
   const text = localizedText(beat, multiLingual, lang);
   const { voiceId, provider, speechOptions } = getAudioParam(presentationStyle, beat);
-  const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
-  const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
-  const audioPath = getAudioPath(context, beat, audioFile);
+  const audioPath = getBeatAudioPath(text, lang, context, beat);
 
   studioBeat.audioFile = audioPath;
   const needsTTS = !beat.audio && audioPath !== undefined;
