@@ -10,7 +10,6 @@
   "files": [
     "./lib",
     "./scripts/templates",
-    "./assets/music/StarsBeyondEx.mp3",
     "./assets/audio/silent60sec.mp3",
     "./assets/html/",
     "./assets/templates/"
