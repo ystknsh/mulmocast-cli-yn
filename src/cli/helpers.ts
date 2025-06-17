@@ -9,6 +9,7 @@ import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 import type { MulmoStudio, MulmoScript, MulmoStudioContext, MulmoPresentationStyle } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
+import { mulmoPresentationStyleSchema } from "../types/schema.js";
 
 export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
   if (verbose) {
@@ -110,7 +111,8 @@ export const getPresentationStyle = (presentationStylePath: string | undefined):
       GraphAILogger.info(`ERROR: File not exists ${presentationStylePath}`);
       return null;
     }
-    return readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
+    const jsonData = readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
+    return mulmoPresentationStyleSchema.parse(jsonData);
   }
   return null;
 };
