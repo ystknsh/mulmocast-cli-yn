@@ -74,7 +74,7 @@ const preprocessor = (namedInputs: {
   const text = localizedText(beat, multiLingual, lang);
   const { voiceId, provider, speechOptions } = getAudioParam(presentationStyle, beat);
   const audioPath = getBeatAudioPath(text, context, beat, lang);
-  studioBeat.audioFile = audioPath;
+  studioBeat.audioFile = audioPath; // TODO
   const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {
