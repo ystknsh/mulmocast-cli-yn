@@ -107,8 +107,7 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
 export const getPresentationStyle = (presentationStylePath: string | undefined): MulmoPresentationStyle | null => {
   if (presentationStylePath) {
     if (!fs.existsSync(presentationStylePath)) {
-      GraphAILogger.info(`ERROR: File not exists ${presentationStylePath}`);
-      return null;
+      throw new Error(`ERROR: File not exists ${presentationStylePath}`);
     }
     const jsonData =
       readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
