@@ -13,7 +13,7 @@ import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, MulmoPresentationStyle } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
@@ -55,6 +55,14 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
 };
 
+const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBeat) => {
+  const voiceId = MulmoPresentationStyleMethods.getVoiceId(presentationStyle, beat);
+  // Use speaker-specific provider if available, otherwise fall back to script-level provider
+  const provider = MulmoPresentationStyleMethods.getProvider(presentationStyle, beat);
+  const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(presentationStyle, beat);
+  return { voiceId, provider, speechOptions };
+};
+
 const preprocessor = (namedInputs: {
   beat: MulmoBeat;
   studioBeat: MulmoStudioBeat;
@@ -64,13 +72,9 @@ const preprocessor = (namedInputs: {
   audioDirPath: string;
 }) => {
   const { beat, studioBeat, multiLingual, context, audioDirPath } = namedInputs;
-  const { lang } = context;
+  const { lang, presentationStyle } = context;
   const text = localizedText(beat, multiLingual, lang);
-  const voiceId = MulmoPresentationStyleMethods.getVoiceId(context.presentationStyle, beat);
-  // Use speaker-specific provider if available, otherwise fall back to script-level provider
-  const provider = MulmoPresentationStyleMethods.getProvider(context.presentationStyle, beat);
-  const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(context.presentationStyle, beat);
-
+  const { voiceId, provider, speechOptions } = getAudioParam(presentationStyle, beat);
   const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
   const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
