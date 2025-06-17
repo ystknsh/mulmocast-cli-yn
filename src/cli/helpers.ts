@@ -38,7 +38,14 @@ export interface FileObject {
   fileName: string;
 }
 
-export const getFileObject = (args: { basedir?: string; outdir?: string; imagedir?: string; audiodir?: string; presentationStyle?: string; file: string }): FileObject => {
+export const getFileObject = (args: {
+  basedir?: string;
+  outdir?: string;
+  imagedir?: string;
+  audiodir?: string;
+  presentationStyle?: string;
+  file: string;
+}): FileObject => {
   const { basedir, outdir, imagedir, audiodir, file, presentationStyle } = args;
   const baseDirPath = getBaseDirPath(basedir);
   const outDirPath = getFullPath(baseDirPath, outdir ?? outDirName);
@@ -97,7 +104,7 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
   return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
 };
 
-export const getPresentationStyle = async (presentationStylePath: string): Promise<MulmoPresentationStyle | null> => {
+export const getPresentationStyle = (presentationStylePath: string | undefined):MulmoPresentationStyle | null => {
   if (presentationStylePath) {
     if (!fs.existsSync(presentationStylePath)) {
       GraphAILogger.info(`ERROR: File not exists ${presentationStylePath}`);
@@ -139,6 +146,9 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
   if (!mulmoScript) {
     return null;
   }
+  const presentationStyle = getPresentationStyle(presentationStylePath);
+  console.log("***DEBUG***", presentationStyle);
+
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
   try {
