@@ -8,9 +8,9 @@
     "height": 1536
   },
   "speechParams": {
-    "provider": "nijivoice",
+    "provider": "openai",
     "speakers": {
-      "Presenter": { "voiceId": "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62", "speechOptions": { "speed": 1.5 } }
+      "Presenter": { "voiceId": "shimmer", "speechOptions": { "instruction": "speak very fast" } }
     }
   },
   "imageParams": {
