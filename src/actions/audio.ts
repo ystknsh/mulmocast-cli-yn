@@ -15,7 +15,15 @@ import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, MulmoPresentationStyle } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { getAudioArtifactFilePath, getAudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
+import {
+  getAudioArtifactFilePath,
+  getAudioFilePath,
+  resolveDirPath,
+  defaultBGMPath,
+  mkdir,
+  writingMessage,
+  getOutputMultilingualFilePath,
+} from "../utils/file.js";
 import { text2hash, localizedText } from "../utils/utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 import { MulmoMediaSourceMethods } from "../methods/mulmo_media_source.js";
@@ -131,6 +139,7 @@ const graph_data: GraphData = {
     context: {},
     audioArtifactFilePath: {},
     audioCombinedFilePath: {},
+    outputMultilingualFilePath: {},
     musicFile: {},
     map: {
       agent: "mapAgent",
@@ -252,6 +261,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     const audioArtifactFilePath = audioFilePath(context);
     const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
     const audioCombinedFilePath = getAudioFilePath(audioDirPath, studio.filename, studio.filename, lang);
+    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, studio.filename);
 
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
@@ -261,6 +271,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("context", context);
     graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
     graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
+    graph.injectValue("outputMultilingualFilePath", outputMultilingualFilePath);
     graph.injectValue(
       "musicFile",
       MulmoMediaSourceMethods.resolve(context.presentationStyle.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath(),
