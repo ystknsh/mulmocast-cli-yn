@@ -65,26 +65,27 @@ const preprocessor = (namedInputs: {
 }) => {
   const { beat, studioBeat, multiLingual, context, audioDirPath } = namedInputs;
   const { lang } = context;
-  const speaker = context.presentationStyle.speechParams.speakers[beat.speaker];
+  const text = localizedText(beat, multiLingual, lang);
+  const speaker = MulmoPresentationStyleMethods.getSpeaker(context.presentationStyle, beat);
+  // Use speaker-specific provider if available, otherwise fall back to script-level provider
+  const provider = MulmoPresentationStyleMethods.getProvider(context.presentationStyle, beat);
   const voiceId = speaker.voiceId;
   const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(context.presentationStyle, beat);
-  const text = localizedText(beat, multiLingual, lang);
 
-  // Use speaker-specific provider if available, otherwise fall back to script-level provider
-  const provider = speaker.provider ?? context.presentationStyle.speechParams.provider;
   const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}${provider}`;
   const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
+
   studioBeat.audioFile = audioPath;
   const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {
     ttsAgent: provider_to_agent[provider],
-    studioBeat,
+    text,
     voiceId,
     speechOptions,
     audioPath,
-    text,
+    studioBeat,
     needsTTS,
   };
 };

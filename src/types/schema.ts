@@ -28,7 +28,7 @@ const speakerIdSchema = z.string();
 
 export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google"), z.literal("elevenlabs")]).default("openai");
 
-const speakerDataSchema = z
+export const speakerDataSchema = z
   .object({
     displayName: z.record(langSchema, z.string()).optional(),
     voiceId: z.string(),
