@@ -350,7 +350,6 @@ export const mulmoStudioSchema = z
     script: mulmoScriptSchema,
     filename: z.string(),
     beats: z.array(mulmoStudioBeatSchema).min(1),
-    multiLingual: mulmoStudioMultiLingualSchema,
   })
   .strict();
 
