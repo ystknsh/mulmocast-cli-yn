@@ -122,7 +122,7 @@ export const getMultiLingual = (multilingualFilePath: string): MulmoStudioMultiL
       readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
     return mulmoStudioMultiLingualSchema.parse(jsonData);
   }
-  return [];
+  return [{ multiLingualTexts: {} }];
 };
 
 type InitOptions = {

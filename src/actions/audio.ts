@@ -15,15 +15,7 @@ import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, MulmoPresentationStyle } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import {
-  getAudioArtifactFilePath,
-  getAudioFilePath,
-  resolveDirPath,
-  defaultBGMPath,
-  mkdir,
-  writingMessage,
-  getOutputMultilingualFilePath,
-} from "../utils/file.js";
+import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
 import { text2hash, localizedText } from "../utils/utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 import { MulmoMediaSourceMethods } from "../methods/mulmo_media_source.js";
@@ -139,14 +131,14 @@ const graph_data: GraphData = {
     context: {},
     audioArtifactFilePath: {},
     audioCombinedFilePath: {},
-    outputMultilingualFilePath: {},
+    outputStudioFilePath: {},
     musicFile: {},
     map: {
       agent: "mapAgent",
       inputs: {
         rows: ":context.studio.script.beats",
         studioBeat: ":context.studio.beats",
-        multiLingual: ":context.multiLingual",
+        multiLingual: ":context.studio.multiLingual",
         context: ":context",
       },
       params: {
@@ -163,6 +155,13 @@ const graph_data: GraphData = {
         combinedFileName: ":audioCombinedFilePath",
       },
       isResult: true,
+    },
+    fileWrite: {
+      agent: "fileWriteAgent",
+      inputs: {
+        file: ":outputStudioFilePath",
+        text: ":combineFiles.studio.toJSON()",
+      },
     },
     addBGM: {
       agent: "addBGMAgent",
@@ -235,14 +234,11 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
     mkdir(audioSegmentDirPath);
 
     const taskManager = new TaskManager(getConcurrency(context));
-    console.log("***DEBUG001***", context.multiLingual);
     const graph = new GraphAI(graph_tts, audioAgents, { agentFilters, taskManager });
-    console.log("***DEBUG002***", context.multiLingual);
     graph.injectValue("__mapIndex", index);
     graph.injectValue("beat", context.studio.script.beats[index]);
     graph.injectValue("studioBeat", context.studio.beats[index]);
-    graph.injectValue("multiLingual", context.multiLingual);
-    console.log("***DEBUG2***", context.multiLingual);
+    graph.injectValue("multiLingual", context.studio.multiLingual);
     graph.injectValue("context", context);
 
     if (callbacks) {
@@ -264,8 +260,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     const audioArtifactFilePath = audioFilePath(context);
     const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
     const audioCombinedFilePath = getAudioFilePath(audioDirPath, studio.filename, studio.filename, lang);
-    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, studio.filename);
-    console.log("***DEBUG1***", outputMultilingualFilePath);
+    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
 
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
@@ -275,7 +270,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     graph.injectValue("context", context);
     graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
     graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
-    graph.injectValue("outputMultilingualFilePath", outputMultilingualFilePath);
+    graph.injectValue("outputStudioFilePath", outputStudioFilePath);
     graph.injectValue(
       "musicFile",
       MulmoMediaSourceMethods.resolve(context.presentationStyle.audioParams.bgm, context) ?? process.env.PATH_BGM ?? defaultBGMPath(),
@@ -286,9 +281,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
         graph.registerCallback(callback);
       });
     }
-    console.log("***DEBUG3***", outputMultilingualFilePath);
     await graph.run();
-    console.log("***DEBUG4***", outputMultilingualFilePath);
 
     writingMessage(audioCombinedFilePath);
   } finally {
