@@ -22,6 +22,7 @@ test("test getFileObject", async () => {
     isHttpPath: false,
     fileName: "hello",
     fileOrUrl: "hello.yaml",
+    presentationStylePath: undefined,
   });
 });
 
