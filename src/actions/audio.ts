@@ -137,7 +137,7 @@ const graph_data: GraphData = {
       inputs: {
         rows: ":context.studio.script.beats",
         studioBeat: ":context.studio.beats",
-        multiLingual: ":context.studio.multiLingual",
+        multiLingual: ":context.multiLingual",
         context: ":context",
       },
       params: {

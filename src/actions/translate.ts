@@ -57,7 +57,7 @@ const translateGraph: GraphData = {
             },
             inputs: {
               index: ":__mapIndex",
-              rows: ":context.studio.multiLingual",
+              rows: ":context.multiLingual",
             },
           },
           preprocessMultiLingual: {
