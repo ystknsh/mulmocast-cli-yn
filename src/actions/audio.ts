@@ -91,6 +91,13 @@ const preprocessor = (namedInputs: {
 
 const graph_tts: GraphData = {
   nodes: {
+    beat: {},
+    studioBeat: {},
+    multiLingual: {},
+    audioDirPath: {},
+    audioSegmentDirPath: {},
+    context: {},
+    __mapIndex: {},
     preprocessor: {
       agent: preprocessor,
       inputs: {
@@ -212,6 +219,49 @@ const getConcurrency = (context: MulmoStudioContext) => {
   });
   return hasLimitedConcurrencyProvider ? 1 : 8;
 };
+
+const audioAgents = {
+  ...vanillaAgents,
+  fileWriteAgent,
+  ttsOpenaiAgent,
+  ttsNijivoiceAgent,
+  ttsGoogleAgent,
+  ttsElevenlabsAgent,
+  addBGMAgent,
+  combineAudioFilesAgent,
+};
+
+export const generateBeatAudio = async (index: number, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+  try {
+    MulmoStudioContextMethods.setSessionState(context, "audio", true);
+    const { studio, fileDirs } = context;
+    const { outDirPath, audioDirPath } = fileDirs;
+    const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
+
+    mkdir(outDirPath);
+    mkdir(audioSegmentDirPath);
+
+    const taskManager = new TaskManager(getConcurrency(context));
+    const graph = new GraphAI(graph_tts, audioAgents, { agentFilters, taskManager });
+    graph.injectValue("__mapIndex", index);
+    graph.injectValue("beat", context.studio.script.beats[index]);
+    graph.injectValue("studioBeat", context.studio.beats[index]);
+    graph.injectValue("multiLingual", context.studio.multiLingual);
+    graph.injectValue("audioDirPath", audioDirPath);
+    graph.injectValue("audioSegmentDirPath", audioSegmentDirPath);
+    graph.injectValue("context", context);
+
+    if (callbacks) {
+      callbacks.forEach((callback) => {
+        graph.registerCallback(callback);
+      });
+    }
+    await graph.run();
+  } finally {
+    MulmoStudioContextMethods.setSessionState(context, "audio", false);
+  }
+};
+
 export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
@@ -226,20 +276,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     mkdir(audioSegmentDirPath);
 
     const taskManager = new TaskManager(getConcurrency(context));
-    const graph = new GraphAI(
-      graph_data,
-      {
-        ...vanillaAgents,
-        fileWriteAgent,
-        ttsOpenaiAgent,
-        ttsNijivoiceAgent,
-        ttsGoogleAgent,
-        ttsElevenlabsAgent,
-        addBGMAgent,
-        combineAudioFilesAgent,
-      },
-      { agentFilters, taskManager },
-    );
+    const graph = new GraphAI(graph_data, audioAgents, { agentFilters, taskManager });
     graph.injectValue("context", context);
     graph.injectValue("audioArtifactFilePath", audioArtifactFilePath);
     graph.injectValue("audioCombinedFilePath", audioCombinedFilePath);
