@@ -235,11 +235,14 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
     mkdir(audioSegmentDirPath);
 
     const taskManager = new TaskManager(getConcurrency(context));
+    console.log("***DEBUG001***", context.multiLingual);
     const graph = new GraphAI(graph_tts, audioAgents, { agentFilters, taskManager });
+    console.log("***DEBUG002***", context.multiLingual);
     graph.injectValue("__mapIndex", index);
     graph.injectValue("beat", context.studio.script.beats[index]);
     graph.injectValue("studioBeat", context.studio.beats[index]);
     graph.injectValue("multiLingual", context.multiLingual);
+    console.log("***DEBUG2***", context.multiLingual);
     graph.injectValue("context", context);
 
     if (callbacks) {
@@ -262,6 +265,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
     const audioCombinedFilePath = getAudioFilePath(audioDirPath, studio.filename, studio.filename, lang);
     const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, studio.filename);
+    console.log("***DEBUG1***", outputMultilingualFilePath);
 
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
@@ -282,7 +286,9 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
         graph.registerCallback(callback);
       });
     }
+    console.log("***DEBUG3***", outputMultilingualFilePath);
     await graph.run();
+    console.log("***DEBUG4***", outputMultilingualFilePath);
 
     writingMessage(audioCombinedFilePath);
   } finally {
