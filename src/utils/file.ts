@@ -84,6 +84,9 @@ export const fetchMulmoScriptFile = async (url: string): Promise<{ result: boole
   }
 };
 
+export const getOutputStudioFilePath = (outDirPath: string, fileName: string) => {
+  return path.resolve(outDirPath, fileName + "_studio.json");
+};
 export const getOutputMultilingualFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + "_lang.json");
 };
