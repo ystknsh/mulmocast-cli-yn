@@ -73,7 +73,6 @@ export const getFileObject = (args: {
   const audioDirPath = getFullPath(outDirPath, audiodir ?? audioDirName);
   const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
   const presentationStylePath = presentationStyle ? getFullPath(baseDirPath, presentationStyle) : undefined;
-  console.log("***DEBUG***", presentationStylePath);
   return {
     baseDirPath,
     mulmoFilePath,
@@ -129,7 +128,6 @@ type InitOptions = {
 };
 
 export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext | null> => {
-  console.log("***DEBUG***", argv.p);
   const files = getFileObject({
     basedir: argv.b,
     outdir: argv.o,
@@ -149,7 +147,6 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     return null;
   }
   const presentationStyle = getPresentationStyle(presentationStylePath);
-  console.log("***DEBUG***", presentationStyle);
 
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
