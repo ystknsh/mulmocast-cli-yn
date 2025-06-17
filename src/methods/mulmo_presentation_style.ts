@@ -62,6 +62,10 @@ export const MulmoPresentationStyleMethods = {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.provider ?? presentationStyle.speechParams.provider;
   },
+  getVoiceId(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): string {
+    const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
+    return speaker.voiceId;
+  },
   getImageAgentInfo(presentationStyle: MulmoPresentationStyle, dryRun: boolean = false): Text2ImageAgentInfo {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.

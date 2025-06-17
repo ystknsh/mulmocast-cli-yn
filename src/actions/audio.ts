@@ -66,13 +66,12 @@ const preprocessor = (namedInputs: {
   const { beat, studioBeat, multiLingual, context, audioDirPath } = namedInputs;
   const { lang } = context;
   const text = localizedText(beat, multiLingual, lang);
-  const speaker = MulmoPresentationStyleMethods.getSpeaker(context.presentationStyle, beat);
+  const voiceId = MulmoPresentationStyleMethods.getVoiceId(context.presentationStyle, beat);
   // Use speaker-specific provider if available, otherwise fall back to script-level provider
   const provider = MulmoPresentationStyleMethods.getProvider(context.presentationStyle, beat);
-  const voiceId = speaker.voiceId;
   const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(context.presentationStyle, beat);
 
-  const hash_string = `${text}${voiceId}${speechOptions?.instruction ?? ""}${speechOptions?.speed ?? 1.0}${provider}`;
+  const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
   const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
   const audioPath = getAudioPath(context, beat, audioFile, audioDirPath);
 
