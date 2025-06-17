@@ -6,7 +6,6 @@ const buildStudio = (mulmoScript: MulmoScript, fileName: string) => {
     script: mulmoScript,
     filename: fileName,
     beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
-    multiLingual: [...Array(mulmoScript.beats.length)].map(() => ({ multiLingualTexts: {} })),
   });
 };
 
@@ -34,7 +33,9 @@ const mulmoCredit = (speaker: string) => {
 export const createStudioData = (_mulmoScript: MulmoScript, fileName: string) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
+  console.log("***DEBUG4***", mulmoScript);
   const studio: MulmoStudio = buildStudio(mulmoScript, fileName);
+  console.log("***DEBUG5***", studio);
 
   if (mulmoScript.$mulmocast.credit === "closing") {
     mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker
