@@ -155,7 +155,7 @@ const graph_data: GraphData = {
     combineFiles: {
       agent: "combineAudioFilesAgent",
       inputs: {
-        map: ":map",
+        onComplete: ":map",
         context: ":context",
         combinedFileName: ":audioCombinedFilePath",
       },
