@@ -32,10 +32,7 @@ const mulmoCredit = (speaker: string) => {
 
 export const createStudioData = (_mulmoScript: MulmoScript, fileName: string) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
-
-  console.log("***DEBUG4***", mulmoScript);
   const studio: MulmoStudio = buildStudio(mulmoScript, fileName);
-  console.log("***DEBUG5***", studio);
 
   if (mulmoScript.$mulmocast.credit === "closing") {
     mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker
