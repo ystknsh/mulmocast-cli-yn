@@ -17,9 +17,9 @@ import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import {
   getAudioArtifactFilePath,
-  getAudioSegmentDirPath,
   getAudioCombinedFilePath,
   getOutputStudioFilePath,
+  resolveDirPath,
   defaultBGMPath,
   mkdir,
   writingMessage,
@@ -42,7 +42,6 @@ const provider_to_agent = {
 };
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string): string | undefined => {
-  const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
   if (beat.audio?.type === "audio") {
     const path = MulmoMediaSourceMethods.resolve(beat.audio.source, context);
     if (path) {
@@ -53,7 +52,7 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   if (beat.text === undefined || beat.text === "") {
     return undefined; // It indicates that the audio is not needed.
   }
-  return getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFile);
+  return audioFile;
 };
 
 const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBeat) => {
@@ -65,9 +64,11 @@ const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBea
 };
 
 export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat: MulmoBeat, lang?: string) => {
+  const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
   const { voiceId, provider, speechOptions } = getAudioParam(context.presentationStyle, beat);
   const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
-  const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
+  const audioFileName = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
+  const audioFile = getAudioSegmentFilePath(audioDirPath, context.studio.filename, audioFileName);
   return getAudioPath(context, beat, audioFile);
 };
 
@@ -237,7 +238,7 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
     const { studio, fileDirs } = context;
     const { outDirPath, audioDirPath } = fileDirs;
-    const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
+    const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
 
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
@@ -267,7 +268,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     const { studio, fileDirs, lang } = context;
     const { outDirPath, audioDirPath } = fileDirs;
     const audioArtifactFilePath = audioFilePath(context);
-    const audioSegmentDirPath = getAudioSegmentDirPath(audioDirPath, studio.filename);
+    const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
     const audioCombinedFilePath = getAudioCombinedFilePath(audioDirPath, studio.filename, lang);
     const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
 

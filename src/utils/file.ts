@@ -90,18 +90,14 @@ export const getOutputStudioFilePath = (outDirPath: string, fileName: string) =>
 export const resolveDirPath = (dirPath: string, studioFileName: string) => {
   return path.resolve(dirPath, studioFileName);
 };
-// TODO: probably better to just use resolveDirPath instead.
-export const getAudioSegmentDirPath = (audioDirPath: string, studioFileName: string) => {
-  return path.resolve(audioDirPath, studioFileName);
-};
 export const getAudioSegmentFilePath = (audioDirPath: string, studioFileName: string, fileName: string) => {
-  return path.resolve(getAudioSegmentDirPath(audioDirPath, studioFileName), fileName + ".mp3");
+  return path.resolve(audioDirPath, studioFileName, fileName + ".mp3");
 };
-export const getAudioCombinedFilePath = (audioDirPath: string, fileName: string, lang?: string) => {
+export const getAudioCombinedFilePath = (audioDirPath: string, studioFileName: string, lang?: string) => {
   if (lang) {
-    return path.resolve(audioDirPath, fileName, `${fileName}_${lang}.mp3`);
+    return path.resolve(audioDirPath, studioFileName, `${studioFileName}_${lang}.mp3`);
   }
-  return path.resolve(audioDirPath, fileName, fileName + ".mp3");
+  return path.resolve(audioDirPath, studioFileName, studioFileName + ".mp3");
 };
 export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
   return path.resolve(outDirPath, fileName + ".mp3");
