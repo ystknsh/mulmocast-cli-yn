@@ -64,7 +64,7 @@ const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBea
   return { voiceId, provider, speechOptions };
 };
 
-export const getBeatAudioPath = (text, lang, context, beat) => {
+export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat: MulmoBeat, lang?: string) => {
   const { voiceId, provider, speechOptions } = getAudioParam(context.presentationStyle, beat);
   const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
   const audioFile = `${context.studio.filename}_${text2hash(hash_string)}` + (lang ? `_${lang}` : "");
@@ -81,7 +81,7 @@ const preprocessor = (namedInputs: {
   const { lang, presentationStyle } = context;
   const text = localizedText(beat, multiLingual, lang);
   const { voiceId, provider, speechOptions } = getAudioParam(presentationStyle, beat);
-  const audioPath = getBeatAudioPath(text, lang, context, beat);
+  const audioPath = getBeatAudioPath(text, context, beat, lang);
 
   studioBeat.audioFile = audioPath;
   const needsTTS = !beat.audio && audioPath !== undefined;
