@@ -3,7 +3,8 @@ import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema } from "
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
   const isTest = process.env.NODE_ENV === "test";
-  const parsed = isTest && currentStudio ? mulmoStudioSchema.parse(currentStudio) : mulmoStudioSchema.safeParse(currentStudio);
+  const parsed =
+    isTest && currentStudio ? { data: mulmoStudioSchema.parse(currentStudio), success: true, error: null } : mulmoStudioSchema.safeParse(currentStudio);
   if (parsed.success) {
     return parsed.data;
   }
