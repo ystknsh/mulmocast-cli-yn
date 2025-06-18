@@ -3,8 +3,8 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import { MulmoScript, MulmoScriptTemplateFile } from "../types/index.js";
-import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
+import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext } from "../types/index.js";
+import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema } from "zod";
@@ -93,6 +93,7 @@ export const getOutputMultilingualFilePath = (outDirPath: string, fileName: stri
 export const resolveDirPath = (dirPath: string, studioFileName: string) => {
   return path.resolve(dirPath, studioFileName);
 };
+// audio
 export const getAudioFilePath = (audioDirPath: string, dirName: string, fileName: string, lang?: string) => {
   if (lang) {
     return path.resolve(audioDirPath, dirName, `${fileName}_${lang}.mp3`);
@@ -107,6 +108,22 @@ export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lan
   const suffix2 = caption ? `__${caption}` : "";
   return path.resolve(outDirPath, `${fileName}${suffix}${suffix2}.mp4`);
 };
+// image
+export const imageSuffix = "p";
+export const getBeatPngImagePath = (context: MulmoStudioContext, index: number) => {
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${index}${imageSuffix}.png`;
+};
+export const getBeatMoviePath = (context: MulmoStudioContext, index: number) => {
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${index}.mov`;
+};
+export const getReferenceImagePath = (context: MulmoStudioContext, key: string, extension: string) => {
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${key}.${extension}`;
+};
+
+// pdf
 export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode, lang?: string) => {
   if (lang) {
     return path.resolve(outDirPath, `${fileName}_${pdfMode}_${lang}.pdf`);
