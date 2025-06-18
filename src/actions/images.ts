@@ -16,8 +16,6 @@ import { imagePlugins } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
 
-export const imageSuffix = "p";
-
 const vanillaAgents = agents.default ?? agents;
 
 dotenv.config();
@@ -32,18 +30,22 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
   };
 };
 
+export const getBeatPngImagePath = (context: MulmoStudioContext, index) => {
+  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
+  return `${imageDirPath}/${context.studio.filename}/${index}${imageSuffix}.png`;
+};
+
 export const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
   beat: MulmoBeat;
   index: number;
-  suffix: string;
   imageAgentInfo: Text2ImageAgentInfo;
   imageRefs: Record<string, string>;
 }) => {
-  const { context, beat, index, suffix, imageAgentInfo, imageRefs } = namedInputs;
+  const { context, beat, index, imageAgentInfo, imageRefs } = namedInputs;
   const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
-  const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
+  const imagePath = getBeatPngImagePath(context, index);
   const returnValue = {
     imageParams,
     movieFile: beat.moviePrompt ? `${imageDirPath}/${context.studio.filename}/${index}.mov` : undefined,
@@ -94,7 +96,6 @@ const beat_graph_data = {
         context: ":context",
         beat: ":beat",
         index: ":__mapIndex",
-        suffix: imageSuffix,
         imageAgentInfo: ":imageAgentInfo",
         imageRefs: ":imageRefs",
       },
