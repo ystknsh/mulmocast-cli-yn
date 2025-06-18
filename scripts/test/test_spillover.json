@@ -1,0 +1,27 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Spillover Test",
+  "beats": [
+    {
+      "text": "This is the first beat with a long audio, which exceed the beat duration.",
+      "duration": 2,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "This is the first beat."
+        }
+      }
+    },
+    {
+      "duration": 1,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "This is the second beat."
+        }
+      }
+    }
+  ]
+}

@@ -23,7 +23,8 @@ const getPadding = (context: MulmoStudioContext, beat: MulmoBeat, index: number)
   return isClosingGap ? context.presentationStyle.audioParams.closingPadding : context.presentationStyle.audioParams.padding;
 };
 
-const getTotalPadding = (padding: number, movieDuration: number, audioDuration: number, duration?: number) => {
+const getTotalPadding = (padding: number, movieDuration: number, audioDuration: number, duration?: number, canSpillover: boolean = false) => {
+  console.log("***DEBUG***", audioDuration, duration, canSpillover);
   if (movieDuration > 0) {
     return padding + (movieDuration - audioDuration);
   } else if (duration && duration > audioDuration) {
@@ -67,8 +68,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
       // padding is the amount of audio padding specified in the script.
       const padding = getPadding(context, beat, index);
+      const canSpillover = index < context.studio.beats.length - 1 && (mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration) === 0;
       // totalPadding is the amount of audio padding to be added to the audio file.
-      const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+      const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration, canSpillover);
       beatDurations.push(audioDuration + totalPadding);
       if (totalPadding > 0) {
         const silentId = silentIds.pop();
