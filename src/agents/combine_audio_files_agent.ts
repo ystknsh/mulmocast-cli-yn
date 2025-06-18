@@ -59,7 +59,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const inputIds: string[] = [];
   const beatDurations: number[] = [];
 
-  context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
+  context.studio.beats.reduce((spillover: number, studioBeat: MulmoStudioBeat, index: number) => {
     const beat = context.studio.script.beats[index];
     const { audioDuration, movieDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
@@ -85,7 +85,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration}${paddingId}`);
       inputIds.push(paddingId);
     }
-  });
+    return spillover;
+  }, 0);
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
   // We need to "consume" extra silentIds.
