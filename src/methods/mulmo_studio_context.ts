@@ -48,6 +48,10 @@ export const MulmoStudioContextMethods = {
   getImageDirPath(context: MulmoStudioContext): string {
     return context.fileDirs.imageDirPath;
   },
+  getImageProjectDirPath(context: MulmoStudioContext): string {
+    const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
+    return `${imageDirPath}/${context.studio.filename}`;
+  },
   getOutDirPath(context: MulmoStudioContext): string {
     return context.fileDirs.outDirPath;
   },

@@ -111,17 +111,16 @@ export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lan
 // image
 export const imageSuffix = "p";
 export const getBeatPngImagePath = (context: MulmoStudioContext, index: number) => {
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
-  return `${imageDirPath}/${context.studio.filename}/${index}${imageSuffix}.png`;
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${index}${imageSuffix}.png`;
 };
 export const getBeatMoviePath = (context: MulmoStudioContext, index: number) => {
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
-  return `${imageDirPath}/${context.studio.filename}/${index}.mov`;
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${index}.mov`;
 };
-
 export const getReferenceImagePath = (context: MulmoStudioContext, key: number, extension: string) => {
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
-  return `${imageDirPath}/${context.studio.filename}/${key}.${extension}`;
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${key}.${extension}`;
 };
 
 // pdf

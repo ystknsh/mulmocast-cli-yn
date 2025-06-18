@@ -283,9 +283,9 @@ const graphOption = async (context: MulmoStudioContext) => {
 
 const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const { studio } = context;
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-  mkdir(`${imageDirPath}/${studio.filename}`);
+  mkdir(imageProjectDirPath);
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
 
