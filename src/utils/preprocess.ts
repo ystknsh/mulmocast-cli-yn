@@ -14,7 +14,6 @@ const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: Mulm
     script: mulmoScript,
     filename: fileName,
     beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
-    multiLingual: [...Array(mulmoScript.beats.length)].map(() => ({ multiLingualTexts: {} })),
   });
 };
 
