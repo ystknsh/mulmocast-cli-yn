@@ -87,13 +87,24 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }
     } else {
       // NOTE: We come here when the text is empty and no audio property is specified.
-      const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
+      const beatDuration = (() => {
+        const duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
+        if (!canSpillover && duration < spillover) {
+          return spillover; // We need to consume the spillover here.
+        }
+        return duration;
+      })();
+
       beatDurations.push(beatDuration);
+      if (beatDuration <= spillover) {
+        return spillover - beatDuration;
+      }
+
       const silentId = silentIds.pop();
-      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration}${paddingId}`);
+      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration - spillover}${paddingId}`);
       inputIds.push(paddingId);
     }
-    return spillover;
+    return 0;
   }, 0);
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
