@@ -16,6 +16,8 @@ import { imagePlugins } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
 
+export const imageSuffix = "p";
+
 const vanillaAgents = agents.default ?? agents;
 
 dotenv.config();
@@ -35,11 +37,11 @@ export const imagePreprocessAgent = async (namedInputs: {
   beat: MulmoBeat;
   index: number;
   suffix: string;
-  imageDirPath: string;
   imageAgentInfo: Text2ImageAgentInfo;
   imageRefs: Record<string, string>;
 }) => {
-  const { context, beat, index, suffix, imageDirPath, imageAgentInfo, imageRefs } = namedInputs;
+  const { context, beat, index, suffix, imageAgentInfo, imageRefs } = namedInputs;
+  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = `${imageDirPath}/${context.studio.filename}/${index}${suffix}.png`;
   const returnValue = {
@@ -81,7 +83,6 @@ const beat_graph_data = {
   concurrency: 4,
   nodes: {
     context: {},
-    imageDirPath: {},
     imageAgentInfo: {},
     movieAgentInfo: {},
     imageRefs: {},
@@ -93,8 +94,7 @@ const beat_graph_data = {
         context: ":context",
         beat: ":beat",
         index: ":__mapIndex",
-        suffix: "p",
-        imageDirPath: ":imageDirPath",
+        suffix: imageSuffix,
         imageAgentInfo: ":imageAgentInfo",
         imageRefs: ":imageRefs",
       },
@@ -174,7 +174,6 @@ const graph_data: GraphData = {
   concurrency: 4,
   nodes: {
     context: {},
-    imageDirPath: {},
     imageAgentInfo: {},
     movieAgentInfo: {},
     outputStudioFilePath: {},
@@ -186,7 +185,6 @@ const graph_data: GraphData = {
         context: ":context",
         imageAgentInfo: ":imageAgentInfo",
         movieAgentInfo: ":movieAgentInfo",
-        imageDirPath: ":imageDirPath",
         imageRefs: ":imageRefs",
       },
       isResult: true,
@@ -290,7 +288,8 @@ const graphOption = async (context: MulmoStudioContext) => {
 
 const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const { studio, fileDirs } = context;
-  const { outDirPath, imageDirPath } = fileDirs;
+  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
+  const { outDirPath } = fileDirs;
   mkdir(`${imageDirPath}/${studio.filename}`);
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
@@ -343,7 +342,6 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
       agent: context.dryRun ? "mediaMockAgent" : "movieGoogleAgent",
     },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
-    imageDirPath,
     imageRefs,
   };
   return injections;
