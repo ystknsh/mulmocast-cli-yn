@@ -7,7 +7,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudio } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
+import { getOutputMultilingualFilePath, getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
@@ -19,7 +19,7 @@ const translateGraph: GraphData = {
     context: {},
     defaultLang: {},
     outDirPath: {},
-    outputStudioFilePath: {},
+    outputMultilingualFilePath: {},
     lang: {
       agent: "stringUpdateTextAgent",
       inputs: {
@@ -172,7 +172,7 @@ const translateGraph: GraphData = {
       // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
-        file: ":outputStudioFilePath",
+        file: ":outputMultilingualFilePath",
         text: ":mergeStudioResult.toJSON()",
       },
     },
@@ -228,7 +228,7 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
     const { studio, fileDirs } = context;
     const { outDirPath } = fileDirs;
-    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, studio.filename);
     mkdir(outDirPath);
 
     assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
@@ -238,7 +238,7 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
     graph.injectValue("defaultLang", defaultLang);
     graph.injectValue("targetLangs", targetLangs);
     graph.injectValue("outDirPath", outDirPath);
-    graph.injectValue("outputStudioFilePath", outputStudioFilePath);
+    graph.injectValue("outputMultilingualFilePath", outputMultilingualFilePath);
     if (callbacks) {
       callbacks.forEach((callback) => {
         graph.registerCallback(callback);
