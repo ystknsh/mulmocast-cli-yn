@@ -1,4 +1,4 @@
-import { GraphAILogger } from "graphai";
+import { assert } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
@@ -57,6 +57,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   );
 
   const inputIds: string[] = [];
+  const beatDurations: number[] = [];
+
   context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
     const beat = context.studio.script.beats[index];
     const { audioDuration, movieDuration } = mediaDurations[index];
@@ -67,7 +69,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       const padding = getPadding(context, beat, index);
       // totalPadding is the amount of audio padding to be added to the audio file.
       const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
-      studioBeat.duration = audioDuration + totalPadding; // TODO
+      beatDurations.push(audioDuration + totalPadding);
       if (totalPadding > 0) {
         const silentId = silentIds.pop();
         ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}${paddingId}`);
@@ -77,12 +79,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }
     } else {
       // NOTE: We come here when the text is empty and no audio property is specified.
-      studioBeat.duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0); // TODO
+      const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
+      beatDurations.push(beatDuration);
       const silentId = silentIds.pop();
-      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}${paddingId}`);
+      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration}${paddingId}`);
       inputIds.push(paddingId);
     }
   });
+  assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
   // We need to "consume" extra silentIds.
   silentIds.forEach((silentId, index) => {
@@ -96,7 +100,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   await FfmpegContextGenerateOutput(ffmpegContext, combinedFileName, ["-map", "[aout]"]);
 
   return {
-    studio: context.studio,
+    studio: {
+      ...context.studio,
+      beats: context.studio.beats.map((studioBeat, index) => ({ ...studioBeat, duration: beatDurations[index] })),
+    },
   };
 };
 
