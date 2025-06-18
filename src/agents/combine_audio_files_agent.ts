@@ -43,15 +43,25 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);
   ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
 
+  // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
+  const durations = await Promise.all(context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
+    const beat = context.studio.script.beats[index];
+    const movieDuration = await getMovieDulation(beat);
+    const audioDuration = (studioBeat.audioFile) ? await ffmpegGetMediaDuration(studioBeat.audioFile) : 0;
+    return {
+      movieDuration,
+      audioDuration,
+    };
+  }));
+
   const inputIds = (
     await Promise.all(
-      context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
+      context.studio.beats.map((studioBeat: MulmoStudioBeat, index: number) => {
         const beat = context.studio.script.beats[index];
-        const movieDuration = await getMovieDulation(beat);
+        const { audioDuration, movieDuration } = durations[index];
         if (studioBeat.audioFile) {
           const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
           const padding = getPadding(context, beat, index);
-          const audioDuration = await ffmpegGetMediaDuration(studioBeat.audioFile);
           const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
           studioBeat.duration = audioDuration + totalPadding; // TODO
           if (totalPadding > 0) {
