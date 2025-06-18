@@ -99,12 +99,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
   await FfmpegContextGenerateOutput(ffmpegContext, combinedFileName, ["-map", "[aout]"]);
 
-  return {
+  const result = {
     studio: {
       ...context.studio,
       beats: context.studio.beats.map((studioBeat, index) => ({ ...studioBeat, duration: beatDurations[index] })),
     },
   };
+  context.studio = result.studio; // TODO: removing this breaks test/test_movie.ts
+  return result;
 };
 
 const combineAudioFilesAgentInfo: AgentFunctionInfo = {
