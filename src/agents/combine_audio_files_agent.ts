@@ -29,6 +29,8 @@ const getTotalPadding = (padding: number, movieDuration: number, audioDuration: 
     return padding + (movieDuration - audioDuration);
   } else if (duration && duration > audioDuration) {
     return padding + (duration - audioDuration);
+  } else if (canSpillover && duration && audioDuration > duration) {
+    return duration - audioDuration; // negative value to indicate that there is a spill over.
   }
   return padding;
 };
@@ -61,14 +63,15 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const beatDurations: number[] = [];
 
   context.studio.beats.reduce((spillover: number, studioBeat: MulmoStudioBeat, index: number) => {
+    console.log("***DEBUG***", "spillover", index, spillover);
     const beat = context.studio.script.beats[index];
     const { audioDuration, movieDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
+    const canSpillover = index < context.studio.beats.length - 1 && (mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration) === 0;
     if (studioBeat.audioFile) {
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
       // padding is the amount of audio padding specified in the script.
       const padding = getPadding(context, beat, index);
-      const canSpillover = index < context.studio.beats.length - 1 && (mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration) === 0;
       // totalPadding is the amount of audio padding to be added to the audio file.
       const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration, canSpillover);
       beatDurations.push(audioDuration + totalPadding);
@@ -78,6 +81,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         inputIds.push(audioId, paddingId);
       } else {
         inputIds.push(audioId);
+        if (totalPadding < 0) {
+          return -totalPadding;
+        }
       }
     } else {
       // NOTE: We come here when the text is empty and no audio property is specified.
