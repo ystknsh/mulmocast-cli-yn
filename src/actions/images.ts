@@ -34,6 +34,10 @@ export const getBeatPngImagePath = (context: MulmoStudioContext, index) => {
   const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
   return `${imageDirPath}/${context.studio.filename}/${index}${imageSuffix}.png`;
 };
+export const getBeatMoviePath = (context: MulmoStudioContext, index) => {
+  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
+  return `${imageDirPath}/${context.studio.filename}/${index}.mov`;
+};
 
 export const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
@@ -43,12 +47,11 @@ export const imagePreprocessAgent = async (namedInputs: {
   imageRefs: Record<string, string>;
 }) => {
   const { context, beat, index, imageAgentInfo, imageRefs } = namedInputs;
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = getBeatPngImagePath(context, index);
   const returnValue = {
     imageParams,
-    movieFile: beat.moviePrompt ? `${imageDirPath}/${context.studio.filename}/${index}.mov` : undefined,
+    movieFile: beat.moviePrompt ? getBeatMoviePath(context, index) : undefined,
   };
 
   if (beat.image) {
