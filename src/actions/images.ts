@@ -369,17 +369,18 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
     });
   }
   const res = await graph.run<{ output: MulmoStudioBeat[] }>();
-  return res.mergeResult;
+  return res.mergeResult as unknown as MulmoStudioContext;
 };
 
-export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]): Promise<MulmoStudioContext> => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
     const newContext = await generateImages(context, callbacks);
     MulmoStudioContextMethods.setSessionState(context, "image", false);
     return newContext;
-  } catch (__error) {
+  } catch (error) {
     MulmoStudioContextMethods.setSessionState(context, "image", false);
+    throw error;
   }
 };
 
