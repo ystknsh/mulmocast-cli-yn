@@ -245,7 +245,7 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
       });
     }
     const results = await graph.run<MulmoStudio>();
-    writingMessage(outputStudioFilePath);
+    writingMessage(outputMultilingualFilePath);
     if (results.mergeStudioResult) {
       context.studio = results.mergeStudioResult;
     }
