@@ -44,43 +44,43 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
 
   // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
-  const durations = await Promise.all(context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
-    const beat = context.studio.script.beats[index];
-    const movieDuration = await getMovieDulation(beat);
-    const audioDuration = (studioBeat.audioFile) ? await ffmpegGetMediaDuration(studioBeat.audioFile) : 0;
-    return {
-      movieDuration,
-      audioDuration,
-    };
-  }));
+  const durations = await Promise.all(
+    context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
+      const beat = context.studio.script.beats[index];
+      const movieDuration = await getMovieDulation(beat);
+      const audioDuration = studioBeat.audioFile ? await ffmpegGetMediaDuration(studioBeat.audioFile) : 0;
+      return {
+        movieDuration,
+        audioDuration,
+      };
+    }),
+  );
 
-  const inputIds = (
-    await Promise.all(
-      context.studio.beats.map((studioBeat: MulmoStudioBeat, index: number) => {
-        const beat = context.studio.script.beats[index];
-        const { audioDuration, movieDuration } = durations[index];
-        if (studioBeat.audioFile) {
-          const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
-          const padding = getPadding(context, beat, index);
-          const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
-          studioBeat.duration = audioDuration + totalPadding; // TODO
-          if (totalPadding > 0) {
-            const silentId = silentIds.pop();
-            ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}[padding_${index}]`);
-            return [audioId, `[padding_${index}]`];
-          } else {
-            return [audioId];
-          }
-        } else {
-          // NOTE: We come here when the text is empty and no audio property is specified.
-          studioBeat.duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0); // TODO
+  const inputIds = context.studio.beats
+    .map((studioBeat: MulmoStudioBeat, index: number) => {
+      const beat = context.studio.script.beats[index];
+      const { audioDuration, movieDuration } = durations[index];
+      if (studioBeat.audioFile) {
+        const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
+        const padding = getPadding(context, beat, index);
+        const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+        studioBeat.duration = audioDuration + totalPadding; // TODO
+        if (totalPadding > 0) {
           const silentId = silentIds.pop();
-          ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
-          return [`[silent_${index}]`];
+          ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}[padding_${index}]`);
+          return [audioId, `[padding_${index}]`];
+        } else {
+          return [audioId];
         }
-      }),
-    )
-  ).flat();
+      } else {
+        // NOTE: We come here when the text is empty and no audio property is specified.
+        studioBeat.duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0); // TODO
+        const silentId = silentIds.pop();
+        ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}[silent_${index}]`);
+        return [`[silent_${index}]`];
+      }
+    })
+    .flat();
 
   silentIds.forEach((silentId) => {
     GraphAILogger.log(`Using extra silentId: ${silentId}`);
