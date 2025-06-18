@@ -56,32 +56,31 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     }),
   );
 
-  const inputIds = context.studio.beats
-    .map((studioBeat: MulmoStudioBeat, index: number) => {
-      const beat = context.studio.script.beats[index];
-      const { audioDuration, movieDuration } = durations[index];
-      const paddingId = `[padding_${index}]`;
-      if (studioBeat.audioFile) {
-        const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
-        const padding = getPadding(context, beat, index);
-        const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
-        studioBeat.duration = audioDuration + totalPadding; // TODO
-        if (totalPadding > 0) {
-          const silentId = silentIds.pop();
-          ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}${paddingId}`);
-          return [audioId, paddingId];
-        } else {
-          return [audioId];
-        }
-      } else {
-        // NOTE: We come here when the text is empty and no audio property is specified.
-        studioBeat.duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0); // TODO
+  const inputIds: string[] = [];
+  context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
+    const beat = context.studio.script.beats[index];
+    const { audioDuration, movieDuration } = durations[index];
+    const paddingId = `[padding_${index}]`;
+    if (studioBeat.audioFile) {
+      const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
+      const padding = getPadding(context, beat, index);
+      const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+      studioBeat.duration = audioDuration + totalPadding; // TODO
+      if (totalPadding > 0) {
         const silentId = silentIds.pop();
-        ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}${paddingId}`);
-        return [paddingId];
+        ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}${paddingId}`);
+        inputIds.push(audioId, paddingId);
+      } else {
+        inputIds.push(audioId);
       }
-    })
-    .flat();
+    } else {
+      // NOTE: We come here when the text is empty and no audio property is specified.
+      studioBeat.duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0); // TODO
+      const silentId = silentIds.pop();
+      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${studioBeat.duration}${paddingId}`);
+      inputIds.push(paddingId);
+    }
+  });
 
   silentIds.forEach((silentId) => {
     GraphAILogger.log(`Using extra silentId: ${silentId}`);
