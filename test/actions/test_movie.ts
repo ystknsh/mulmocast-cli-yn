@@ -143,7 +143,7 @@ test("test images", async () => {
     presentationStyle: studio.script,
     multiLingual: [...Array(studio.script.beats.length)].map(() => ({ multiLingualTexts: {} })),
   };
-  await audio(context);
+  const audioContext = await audio(context);
   await images(context);
-  await movie(context);
+  await movie(audioContext);
 });
