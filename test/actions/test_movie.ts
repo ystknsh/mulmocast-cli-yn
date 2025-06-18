@@ -4,7 +4,6 @@ import test from "node:test";
 import { getFileObject } from "../../src/cli/helpers.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
 import { audio, images, movie } from "../../src/actions/index.js";
-import { mulmoScriptSchema } from "mulmocast/lib/types/schema.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
