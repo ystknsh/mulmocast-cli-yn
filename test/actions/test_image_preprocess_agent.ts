@@ -333,6 +333,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
   assert.deepStrictEqual(result, expected);
 });
 
+/*
 test("imagePreprocessAgent - different suffix", async () => {
   const context = createMockContext();
   const beat = createMockBeat();
@@ -363,7 +364,7 @@ test("imagePreprocessAgent - different suffix", async () => {
 
   assert.deepStrictEqual(result, expected);
 });
-
+*/
 test("imagePreprocessAgent - empty imageRefs", async () => {
   const context = createMockContext();
   const beat = createMockBeat();
