@@ -23,6 +23,7 @@ test("test getFileObject", async () => {
     fileName: "hello",
     fileOrUrl: "hello.yaml",
     presentationStylePath: undefined,
+    outputMultilingualFilePath: path.resolve(__dirname, "../../output/hello_lang.json"),
   });
 });
 
@@ -65,7 +66,6 @@ test("test createOrUpdateStudioData", async () => {
     },
     filename: "",
     beats: [{}, {}],
-    multiLingual: [{ multiLingualTexts: {} }, { multiLingualTexts: {} }],
   };
   assert.deepStrictEqual(studio, expect);
 });

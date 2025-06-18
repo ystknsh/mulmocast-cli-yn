@@ -118,13 +118,10 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
 
 export const getMultiLingual = (multilingualFilePath: string, beatsLength: number): MulmoStudioMultiLingual => {
   if (fs.existsSync(multilingualFilePath)) {
-    console.log("***DEBUG1***", multilingualFilePath);
     const jsonData =
       readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-    console.log("***DEBUG2***", jsonData);
     return mulmoStudioMultiLingualSchema.parse(jsonData);
   }
-  console.log("***DEBUG3***", [...Array(beatsLength)].map(() => ({ multiLingualTexts: {} })));
   return [...Array(beatsLength)].map(() => ({ multiLingualTexts: {} }));
 };
 
@@ -172,7 +169,6 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
   }
   const presentationStyle = getPresentationStyle(presentationStylePath);
   const multiLingual = getMultiLingual(outputMultilingualFilePath, mulmoScript.beats.length);
-  console.log("***DEBUG4***", multiLingual);
 
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
