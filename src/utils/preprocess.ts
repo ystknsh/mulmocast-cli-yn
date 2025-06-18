@@ -1,5 +1,5 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoBeat, MulmoScript, mulmoScriptSchema, mulmoBeatSchema, mulmoStudioSchema } from "../types/index.js";
+import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema } from "../types/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
   const parsed = mulmoStudioSchema.safeParse(currentStudio);
@@ -52,12 +52,5 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudi
 
   studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
   studio.beats = studio.script.beats.map((_, index) => studio.beats[index] ?? {});
-  mulmoScript.beats.forEach((beat: MulmoBeat, index: number) => {
-    // Filling the default values
-    studio.script.beats[index] = mulmoBeatSchema.parse(beat);
-    if (!studio.multiLingual[index]) {
-      studio.multiLingual[index] = { multiLingualTexts: {} };
-    }
-  });
   return studio;
 };

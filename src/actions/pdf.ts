@@ -126,8 +126,7 @@ const getHandoutTemplateData = (isLandscapeImage: boolean): Record<string, strin
 });
 
 const generatePDFHTML = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSize: PDFSize): Promise<string> => {
-  const { studio, lang = "en" } = context;
-  const { multiLingual } = studio;
+  const { studio, multiLingual, lang = "en" } = context;
 
   const { width: imageWidth, height: imageHeight } = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
   const isLandscapeImage = imageWidth > imageHeight;

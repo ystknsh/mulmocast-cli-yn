@@ -138,7 +138,7 @@ const graph_data: GraphData = {
       inputs: {
         rows: ":context.studio.script.beats",
         studioBeat: ":context.studio.beats",
-        multiLingual: ":context.studio.multiLingual",
+        multiLingual: ":context.multiLingual",
         context: ":context",
       },
       params: {
@@ -238,7 +238,7 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
     graph.injectValue("__mapIndex", index);
     graph.injectValue("beat", context.studio.script.beats[index]);
     graph.injectValue("studioBeat", context.studio.beats[index]);
-    graph.injectValue("multiLingual", context.studio.multiLingual);
+    graph.injectValue("multiLingual", context.multiLingual);
     graph.injectValue("context", context);
 
     if (callbacks) {
