@@ -3,8 +3,8 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import { MulmoScript, MulmoScriptTemplateFile } from "../types/index.js";
-import { MulmoScriptTemplateMethods } from "../methods/mulmo_script_template.js";
+import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext } from "../types/index.js";
+import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema } from "zod";
@@ -118,7 +118,7 @@ export const getBeatMoviePath = (context: MulmoStudioContext, index: number) => 
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   return `${imageProjectDirPath}/${index}.mov`;
 };
-export const getReferenceImagePath = (context: MulmoStudioContext, key: number, extension: string) => {
+export const getReferenceImagePath = (context: MulmoStudioContext, key: string, extension: string) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   return `${imageProjectDirPath}/${key}.${extension}`;
 };
