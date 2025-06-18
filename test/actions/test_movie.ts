@@ -4,6 +4,7 @@ import test from "node:test";
 import { getFileObject } from "../../src/cli/helpers.js";
 import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
 import { audio, images, movie } from "../../src/actions/index.js";
+import { mulmoScriptSchema } from "mulmocast/lib/types/schema.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -117,6 +118,7 @@ test("test images", async () => {
       },
     ],
   };
+
   const studio = createOrUpdateStudioData(mulmoScript, fileDirs, "hello");
   const context = {
     studio,
@@ -140,7 +142,7 @@ test("test images", async () => {
       },
     },
     presentationStyle: studio.script,
-    multiLingual: [...Array(mulmoScript.beats.length)].map(() => ({ multiLingualTexts: {} })),
+    multiLingual: [...Array(studio.script.beats.length)].map(() => ({ multiLingualTexts: {} })),
   };
   await audio(context);
   await images(context);
