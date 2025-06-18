@@ -1,0 +1,54 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Spillover Test",
+  "beats": [
+    {
+      "text": "This beat has a long audio, which exceeds the beat duration.",
+      "duration": 2,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "1. Duration = 2."
+        }
+      }
+    },
+    {
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "2. Default duration = 1. No spillover."
+        }
+      }
+    },
+    {
+      "text": "This beat has a really long audio, which clearly exceeds the beat duration.",
+      "duration": 1,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "3. Duration = 1."
+        }
+      }
+    },
+    {
+      "duration": 2,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "4. Duration = 2."
+        }
+      }
+    },
+    {
+      "duration": 1,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "5. Duration = 1, but no spillover."
+        }
+      }
+    }
+  ]
+}
