@@ -8,7 +8,7 @@ import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
+import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
@@ -28,15 +28,6 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
     canvasSize: MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle),
     textSlideStyle: MulmoPresentationStyleMethods.getTextSlideStyle(context.presentationStyle, beat),
   };
-};
-
-export const getBeatPngImagePath = (context: MulmoStudioContext, index) => {
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
-  return `${imageDirPath}/${context.studio.filename}/${index}${imageSuffix}.png`;
-};
-export const getBeatMoviePath = (context: MulmoStudioContext, index) => {
-  const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
-  return `${imageDirPath}/${context.studio.filename}/${index}.mov`;
 };
 
 export const imagePreprocessAgent = async (namedInputs: {
@@ -291,9 +282,9 @@ const graphOption = async (context: MulmoStudioContext) => {
 };
 
 const prepareGenerateImages = async (context: MulmoStudioContext) => {
-  const { studio, fileDirs } = context;
+  const { studio } = context;
   const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
-  const { outDirPath } = fileDirs;
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
   mkdir(`${imageDirPath}/${studio.filename}`);
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
@@ -330,7 +321,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
             }
           })();
 
-          const imagePath = `${imageDirPath}/${context.studio.filename}/${key}.${extension}`;
+          const imagePath = getReferenceImagePath(context, key, extension);
           await fs.promises.writeFile(imagePath, buffer);
           imageRefs[key] = imagePath;
         }
