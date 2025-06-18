@@ -281,10 +281,11 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
         graph.registerCallback(callback);
       });
     }
-    await graph.run();
-
+    const result = await graph.run();
     writingMessage(audioCombinedFilePath);
-  } finally {
+    MulmoStudioContextMethods.setSessionState(context, "audio", false);
+    return result.combineFiles;
+  } catch (e) {
     MulmoStudioContextMethods.setSessionState(context, "audio", false);
   }
 };
