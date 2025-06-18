@@ -2,7 +2,9 @@ import { GraphAILogger } from "graphai";
 import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema } from "../types/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
-  const parsed = mulmoStudioSchema.safeParse(currentStudio);
+  const isTest = process.env.NODE_ENV === "test";
+  const parsed =
+    isTest && currentStudio ? { data: mulmoStudioSchema.parse(currentStudio), success: true, error: null } : mulmoStudioSchema.safeParse(currentStudio);
   if (parsed.success) {
     return parsed.data;
   }
