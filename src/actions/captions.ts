@@ -67,17 +67,20 @@ const graph_data: GraphData = {
 };
 
 export const captions = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  try {
-    MulmoStudioContextMethods.setSessionState(context, "caption", true);
-    const graph = new GraphAI(graph_data, { ...vanillaAgents });
-    graph.injectValue("context", context);
-    if (callbacks) {
-      callbacks.forEach((callback) => {
-        graph.registerCallback(callback);
-      });
+  if (context.caption) {
+    try {
+      MulmoStudioContextMethods.setSessionState(context, "caption", true);
+      const graph = new GraphAI(graph_data, { ...vanillaAgents });
+      graph.injectValue("context", context);
+      if (callbacks) {
+        callbacks.forEach((callback) => {
+          graph.registerCallback(callback);
+        });
+      }
+      await graph.run();
+    } finally {
+      MulmoStudioContextMethods.setSessionState(context, "caption", false);
     }
-    await graph.run();
-  } finally {
-    MulmoStudioContextMethods.setSessionState(context, "caption", false);
   }
+  return context;
 };
