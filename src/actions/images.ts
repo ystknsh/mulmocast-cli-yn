@@ -7,7 +7,7 @@ import * as agents from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, MulmoImageParamsImages, Text2ImageAgentInfo } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
@@ -284,14 +284,8 @@ const graphOption = async (context: MulmoStudioContext) => {
   return options;
 };
 
-const prepareGenerateImages = async (context: MulmoStudioContext) => {
-  const { studio } = context;
-  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
-  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-  mkdir(imageProjectDirPath);
-
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
-
+// TODO: unit test
+export const getImageRefs = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
   const images = context.presentationStyle.imageParams?.images;
   if (images) {
@@ -331,6 +325,17 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
       }),
     );
   }
+  return imageRefs;
+};
+const prepareGenerateImages = async (context: MulmoStudioContext) => {
+  const { studio } = context;
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+  mkdir(imageProjectDirPath);
+
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
+
+  const imageRefs = await getImageRefs(context);
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
