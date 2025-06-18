@@ -24,7 +24,6 @@ const getPadding = (context: MulmoStudioContext, beat: MulmoBeat, index: number)
 };
 
 const getTotalPadding = (padding: number, movieDuration: number, audioDuration: number, duration?: number, canSpillover: boolean = false) => {
-  console.log("***DEBUG***", audioDuration, duration, canSpillover);
   if (movieDuration > 0) {
     return padding + (movieDuration - audioDuration);
   } else if (duration && duration > audioDuration) {
@@ -63,11 +62,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const beatDurations: number[] = [];
 
   context.studio.beats.reduce((spillover: number, studioBeat: MulmoStudioBeat, index: number) => {
-    console.log("***DEBUG***", "spillover", index, spillover);
     const beat = context.studio.script.beats[index];
     const { audioDuration, movieDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
-    const canSpillover = index < context.studio.beats.length - 1 && (mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration) === 0;
+    const canSpillover = index < context.studio.beats.length - 1 && mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration === 0;
     if (studioBeat.audioFile) {
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
       // padding is the amount of audio padding specified in the script.
