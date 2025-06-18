@@ -44,7 +44,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
 
   // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
-  const durations = await Promise.all(
+  const mediaDurations = await Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const beat = context.studio.script.beats[index];
       const movieDuration = await getMovieDulation(beat);
@@ -59,11 +59,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const inputIds: string[] = [];
   context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
     const beat = context.studio.script.beats[index];
-    const { audioDuration, movieDuration } = durations[index];
+    const { audioDuration, movieDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
     if (studioBeat.audioFile) {
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
+      // padding is the amount of audio padding specified in the script.
       const padding = getPadding(context, beat, index);
+      // totalPadding is the amount of audio padding to be added to the audio file.
       const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
       studioBeat.duration = audioDuration + totalPadding; // TODO
       if (totalPadding > 0) {
@@ -82,14 +84,15 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     }
   });
 
-  silentIds.forEach((silentId) => {
-    GraphAILogger.log(`Using extra silentId: ${silentId}`);
-    ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}[silent_extra]`);
-    inputIds.push("[silent_extra]");
+  // We need to "consume" extra silentIds.
+  silentIds.forEach((silentId, index) => {
+    const extraId = `[silent_extra_${index}]`;
+    ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}${extraId}`);
+    inputIds.push(extraId);
   });
 
+  // Finally, combine all audio files.
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
-
   await FfmpegContextGenerateOutput(ffmpegContext, combinedFileName, ["-map", "[aout]"]);
 
   return {
