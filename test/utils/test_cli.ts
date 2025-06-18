@@ -36,7 +36,7 @@ test("test createOrUpdateStudioData", async () => {
       },
       beats: [{ text: "hello" }],
     },
-    {},
+    null,
     "",
   );
   // console.log(JSON.stringify(ret));
