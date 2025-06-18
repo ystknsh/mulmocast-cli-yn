@@ -140,6 +140,7 @@ test("test images", async () => {
       },
     },
     presentationStyle: studio.script,
+    multiLingual: [...Array(mulmoScript.beats.length)].map(() => ({ multiLingualTexts: {} })),
   };
   await audio(context);
   await images(context);
