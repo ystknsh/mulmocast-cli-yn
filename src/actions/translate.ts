@@ -6,7 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
-import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudio } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudio, MulmoStudioMultiLingual } from "../types/index.js";
 import { getOutputMultilingualFilePath, getOutputStudioFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
@@ -32,7 +32,7 @@ const translateGraph: GraphData = {
       isResult: true,
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":context.studio", { multiLingual: ":beatsMap.mergeMultiLingualData" }],
+        items: [{ multiLingual: ":beatsMap.mergeMultiLingualData" }],
       },
     },
     beatsMap: {
@@ -173,7 +173,7 @@ const translateGraph: GraphData = {
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputMultilingualFilePath",
-        text: ":mergeStudioResult.toJSON()",
+        text: ":mergeStudioResult.multiLingual.toJSON()",
       },
     },
   },
@@ -244,10 +244,10 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
         graph.registerCallback(callback);
       });
     }
-    const results = await graph.run<MulmoStudio>();
+    const results = await graph.run<{ multiLingual: MulmoStudioMultiLingual }>();
     writingMessage(outputMultilingualFilePath);
     if (results.mergeStudioResult) {
-      context.studio = results.mergeStudioResult;
+      context.multiLingual = results.mergeStudioResult.multiLingual;
     }
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", false);
