@@ -92,6 +92,7 @@ export type MulmoStudioContext = {
   caption?: string;
   sessionState: MulmoSessionState;
   presentationStyle: MulmoPresentationStyle;
+  multiLingual: MulmoStudioMultiLingual;
 };
 
 export type ScriptingParams = {
