@@ -9,9 +9,9 @@ export const handler = async (argv: CliArgs<{ a?: string; i?: string; c?: string
   }
   await runTranslateIfNeeded(context, argv);
   const audioContext = await audio(context);
-  await images(context);
+  const imageContext = await images(audioContext);
   if (context.caption) {
     await captions(context);
   }
-  await movie(audioContext);
+  await movie(imageContext);
 };

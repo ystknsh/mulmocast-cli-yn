@@ -213,7 +213,10 @@ const graph_data: GraphData = {
             }
           }
         });
-        return { studio };
+        return {
+          ...context,
+          studio,
+        };
       },
       inputs: {
         array: ":map.output",
@@ -372,8 +375,10 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
 export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
-    await generateImages(context, callbacks);
-  } finally {
+    const newContext = await generateImages(context, callbacks);
+    MulmoStudioContextMethods.setSessionState(context, "image", false);
+    return newContext;
+  } catch (__error) {
     MulmoStudioContextMethods.setSessionState(context, "image", false);
   }
 };

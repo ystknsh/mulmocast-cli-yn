@@ -285,7 +285,7 @@ export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFun
     writingMessage(audioCombinedFilePath);
     MulmoStudioContextMethods.setSessionState(context, "audio", false);
     return result.combineFiles;
-  } catch (e) {
+  } catch (__error) {
     MulmoStudioContextMethods.setSessionState(context, "audio", false);
   }
 };
