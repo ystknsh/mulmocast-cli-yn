@@ -54,6 +54,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       return {
         movieDuration,
         audioDuration,
+        hasMadia: movieDuration + audioDuration > 0
       };
     }),
   );
@@ -65,7 +66,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     const beat = context.studio.script.beats[index];
     const { audioDuration, movieDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
-    const canSpillover = index < context.studio.beats.length - 1 && mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration === 0;
+    const canSpillover = index < context.studio.beats.length - 1 && !mediaDurations[index + 1].hasMadia;
     if (studioBeat.audioFile) {
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
       // padding is the amount of audio padding specified in the script.
