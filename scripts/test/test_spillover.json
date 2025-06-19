@@ -49,6 +49,31 @@
           "title": "5. Duration = 1, but no spillover."
         }
       }
+    },
+    {
+      "text": "This beat has a really long audio, which is shared among three beats.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "6. No duration."
+        }
+      }
+    },
+    {
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "7. No duration."
+        }
+      }
+    },
+    {
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "8. No duration."
+        }
+      }
     }
   ]
 }
