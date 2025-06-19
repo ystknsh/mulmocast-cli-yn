@@ -55,6 +55,12 @@ export const MulmoStudioContextMethods = {
   getOutDirPath(context: MulmoStudioContext): string {
     return context.fileDirs.outDirPath;
   },
+  getFileName(context: MulmoStudioContext): string {
+    return context.studio.filename;
+  },
+  getCaption(context: MulmoStudioContext): string | undefined {
+    return context.caption;
+  },
   setSessionState(context: MulmoStudioContext, sessionType: SessionType, value: boolean) {
     context.sessionState.inSession[sessionType] = value;
     notifyStateChange(context, sessionType);
