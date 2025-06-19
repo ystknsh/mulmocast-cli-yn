@@ -19,7 +19,9 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const ffmpegContext = FfmpegContextInit();
   const musicInputIndex = FfmpegContextAddInput(ffmpegContext, musicFile);
   const voiceInputIndex = FfmpegContextAddInput(ffmpegContext, voiceFile);
-  ffmpegContext.filterComplex.push(`[${musicInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=${context.presentationStyle.audioParams.bgmVolume}[music]`);
+  ffmpegContext.filterComplex.push(
+    `[${musicInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=${context.presentationStyle.audioParams.bgmVolume}[music]`,
+  );
   ffmpegContext.filterComplex.push(
     `[${voiceInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=${context.presentationStyle.audioParams.audioVolume}, adelay=${introPadding * 1000}|${introPadding * 1000}[voice]`,
   );
