@@ -64,12 +64,17 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
     const mediaDuration = mediaDurations[index];
     // Check if the current beat has media and the next beat does not have media.
-    if (mediaDuration.hasMadia && index < context.studio.beats.length - 1 && !mediaDurations[index + 1].hasMadia) {
+    if (mediaDuration.audioDuration > 0 && index < context.studio.beats.length - 1 && mediaDurations[index + 1].audioDuration === 0) {
       const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMadia; i++) {
+      for (let i = index + 1; i < context.studio.beats.length && mediaDurations[i].audioDuration === 0; i++) {
         group.push(i);
       }
-      console.log("***DEBUG***", group);
+      const specifiedSum = group
+        .map((idx) => context.studio.script.beats[idx].duration)
+        .filter((d) => d !== undefined)
+        .reduce((a, b) => a + b, 0);
+      const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
+      console.log("***DEBUG***", group, specifiedSum, unspecified, mediaDuration.audioDuration);
     }
   });
 
