@@ -90,6 +90,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         durations[durations.length - 1] += mediaDuration.audioDuration - total;
       }
       console.log("***DEBUG0***", group, specifiedSum, unspecified, mediaDuration.audioDuration, durationForUnspecified, durations, total);
+      beatDurations.push(...durations);
     } else {
       const beat = context.studio.script.beats[index];
       if (mediaDuration.audioDuration > 0) {
@@ -99,14 +100,19 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         const totalPadding = getTotalPadding(padding, mediaDuration.movieDuration, mediaDuration.audioDuration, beat.duration, false);
         const beatDuration = mediaDuration.audioDuration + totalPadding;
         console.log("***DEBUG1***", index, beatDuration);
-      } else {
+        beatDurations.push(beatDuration);
+      } else if (beatDurations.length < index + 1) {
         const beatDuration = beat.duration ?? (mediaDuration.movieDuration > 0 ? mediaDuration.movieDuration : 1.0);
         console.log("***DEBUG2***", index, beatDuration);
+        beatDurations.push(beatDuration);
       }
     }
   });
+  assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
+  console.log("***DEBUG***", beatDurations);
 
   const inputIds: string[] = [];
+  beatDurations.length = 0;
 
   context.studio.beats.reduce((spillover: number, studioBeat: MulmoStudioBeat, index: number) => {
     const beat = context.studio.script.beats[index];
