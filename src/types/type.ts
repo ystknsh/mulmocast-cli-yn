@@ -11,6 +11,7 @@ import {
   mulmoStudioMultiLingualDataSchema,
   speakerDictionarySchema,
   mulmoImageParamsSchema,
+  mulmoImageParamsImagesSchema,
   mulmoMovieParamsSchema,
   mulmoSpeechParamsSchema,
   textSlideParamsSchema,
@@ -45,6 +46,7 @@ export type MulmoSpeechParams = z.infer<typeof mulmoSpeechParamsSchema>;
 export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
 export type SpeakerData = z.infer<typeof speakerDataSchema>;
 export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
+export type MulmoImageParamsImages = z.infer<typeof mulmoImageParamsImagesSchema>;
 export type TextSlideParams = z.infer<typeof textSlideParamsSchema>;
 export type Text2ImageProvider = z.infer<typeof text2ImageProviderSchema>;
 export type Text2MovieProvider = z.infer<typeof text2MovieProviderSchema>;

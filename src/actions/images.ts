@@ -284,14 +284,8 @@ const graphOption = async (context: MulmoStudioContext) => {
   return options;
 };
 
-const prepareGenerateImages = async (context: MulmoStudioContext) => {
-  const { studio } = context;
-  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
-  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-  mkdir(imageProjectDirPath);
-
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
-
+// TODO: unit test
+export const getImageRefs = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
   const images = context.presentationStyle.imageParams?.images;
   if (images) {
@@ -331,6 +325,17 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
       }),
     );
   }
+  return imageRefs;
+};
+const prepareGenerateImages = async (context: MulmoStudioContext) => {
+  const { studio } = context;
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+  mkdir(imageProjectDirPath);
+
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
+
+  const imageRefs = await getImageRefs(context);
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
