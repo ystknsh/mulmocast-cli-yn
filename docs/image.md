@@ -12,8 +12,7 @@
 ```json
 {
   image: {
-    type: "image",
-    ....
+    type: "image"
   }
 }
 ```
@@ -251,7 +250,7 @@ idはbeatで指定する
 {
   "text": "This message does not affect image generation.",
   "image": {
-    type: "image",
+    type: "image"
   },
   "moviePrompt": "Use the generated image and this message to generate a movie."
 }
