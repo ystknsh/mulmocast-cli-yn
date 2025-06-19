@@ -73,11 +73,6 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
 }) => {
   const { context, combinedFileName } = namedInputs;
   const ffmpegContext = FfmpegContextInit();
-  const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
-
-  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
-  const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);
-  ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
 
   // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
   const mediaDurations = await getMediaDurations(context);
@@ -132,9 +127,16 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       beatDurations.push(beatDuration);
       mediaDurations[index].silenceDuration = beatDuration;
     }
-    // else { Skip this beat if had no media (!hadMedia)  }
+    // else { Skip this beat if the duration has been already added as a group }
   });
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
+
+  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
+  const silentIds = mediaDurations.filter((md) => md.silenceDuration > 0).map((_, index) => `[ls_${index}]`);
+  if (silentIds.length > 0) {
+    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
+    ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
+  }
 
   const inputIds: string[] = [];
 
@@ -152,12 +154,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     }
   });
 
-  // We need to "consume" extra silentIds.
-  silentIds.forEach((silentId, index) => {
-    const extraId = `[silent_extra_${index}]`;
-    ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${0.01}${extraId}`);
-    inputIds.push(extraId);
-  });
+  assert(silentIds.length === 0, "silentIds.length !== 0");
 
   // Finally, combine all audio files.
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
