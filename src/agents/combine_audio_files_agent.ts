@@ -60,12 +60,12 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
 
   const beatDurations: number[] = [];
 
-  context.studio.script.beats.forEach((beat: MulmoStudioBeat, index: number) => {
+  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
     const { audioDuration, movieDuration } = mediaDurations[index];
     // Check if the current beat has media and the next beat does not have media.
-    if (audioDuration > 0 && index < context.studio.beats.length - 1 && mediaDurations[index + 1].audioDuration === 0) {
+    if (audioDuration > 0 && index < context.studio.beats.length - 1 && !mediaDurations[index + 1].hasMadia) {
       const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && mediaDurations[i].audioDuration === 0; i++) {
+      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMadia; i++) {
         group.push(i);
       }
       const specifiedSum = group
