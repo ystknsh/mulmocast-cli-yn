@@ -192,11 +192,13 @@ export const beatAudioParamsSchema = z
 // Note: we can't extend beatAudioParamsSchema because it has padding as optional
 export const audioParamsSchema = z
   .object({
-    padding: z.number().describe("Padding between beats"), // seconds
-    introPadding: z.number().describe("Padding at the beginning of the audio"), // seconds
-    closingPadding: z.number().describe("Padding before the last beat"), // seconds
-    outroPadding: z.number().describe("Padding at the end of the audio"), // seconds
+    padding: z.number().default(0.3).describe("Padding between beats"), // seconds
+    introPadding: z.number().default(1.0).describe("Padding at the beginning of the audio"), // seconds
+    closingPadding: z.number().default(0.8).describe("Padding before the last beat"), // seconds
+    outroPadding: z.number().default(1.0).describe("Padding at the end of the audio"), // seconds
     bgm: mediaSourceSchema.optional(),
+    bgmVolume: z.number().default(0.2).describe("Volume of the background music"),
+    audioVolume: z.number().default(1.0).describe("Volume of the audio"),
   })
   .strict();
 
@@ -285,6 +287,8 @@ export const mulmoPresentationStyleSchema = z.object({
     padding: 0.3,
     closingPadding: 0.8,
     outroPadding: 1.0,
+    bgmVolume: 0.2,
+    audioVolume: 1.0,
   }),
 });
 

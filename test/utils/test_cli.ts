@@ -50,6 +50,8 @@ test("test createOrUpdateStudioData", async () => {
         introPadding: 1,
         outroPadding: 1,
         padding: 0.3,
+        bgmVolume: 0.2,
+        audioVolume: 1.0,
       },
       beats: [
         { speaker: "Presenter", text: "hello" },
