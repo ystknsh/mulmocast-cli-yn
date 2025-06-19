@@ -76,9 +76,33 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
       const minTotal = 1.0 * unspecified.length;
       const rest = Math.max(mediaDuration.audioDuration - specifiedSum, minTotal);
-      const durationPerBeat = rest / (unspecified.length || 1);
+      const durationForUnspecified = rest / (unspecified.length || 1);
 
-      console.log("***DEBUG***", group, specifiedSum, unspecified, mediaDuration.audioDuration, durationPerBeat, durationPerBeat * unspecified.length);
+      const durations = group.map((idx) => {
+        const duration = context.studio.script.beats[idx].duration;
+        if (duration === undefined) {
+          return durationForUnspecified;
+        }
+        return duration;
+      });
+      const total = durations.reduce((a, b) => a + b, 0);
+      if (total < mediaDuration.audioDuration) {
+        durations[durations.length - 1] += mediaDuration.audioDuration - total;
+      }
+      console.log("***DEBUG0***", group, specifiedSum, unspecified, mediaDuration.audioDuration, durationForUnspecified, durations, total);
+    } else {
+      const beat = context.studio.script.beats[index];
+      if (mediaDuration.audioDuration > 0) {
+        // padding is the amount of audio padding specified in the script.
+        const padding = getPadding(context, beat, index);
+        // totalPadding is the amount of audio padding to be added to the audio file.
+        const totalPadding = getTotalPadding(padding, mediaDuration.movieDuration, mediaDuration.audioDuration, beat.duration, false);
+        const beatDuration = mediaDuration.audioDuration + totalPadding;
+        console.log("***DEBUG1***", index, beatDuration);
+      } else {
+        const beatDuration = beat.duration ?? (mediaDuration.movieDuration > 0 ? mediaDuration.movieDuration : 1.0);
+        console.log("***DEBUG2***", index, beatDuration);
+      }
     }
   });
 
