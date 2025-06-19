@@ -7,8 +7,15 @@
 5. 1か2の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
 
 
-# image.typeの処理
+# 1. image.typeの処理
 
+```json
+{
+  "image": {
+    "type": "image"
+  }
+}
+```
 ### リモートの画像
 ```json
 {
@@ -204,6 +211,52 @@ idはbeatで指定する
 }
 ```
 
+# 2. imagePrompt
+
+```json
+{
+  "text": "This message does not affect image generation.",
+  "imagePrompt": "Generate an image with this message."
+}
+```
+
+3. moviePrompt
+
+```json
+{
+  "text": "This message does not affect image generation.",
+  "moviePrompt": "Generate a movie with this message."
+}
+```
+
+4. no imagePrompt and moviePrompt.
+```json
+{
+  "text": "Generate an image with this message."
+}
+```
+
+5. moviePrompt and (image or imagePrompt)
+
+```json
+{
+  "text": "This message does not affect image generation.",
+  "imagePrompt": "Generate an image with this message.",
+  "moviePrompt": "Use the generated image and this message to generate a movie."
+}
+```
+
+```json
+{
+  "text": "This message does not affect image generation.",
+  "image": {
+    "type": "image"
+  },
+  "moviePrompt": "Use the generated image and this message to generate a movie."
+}
+```
+
+---
 
 # studio.script.imageParams.images
 
