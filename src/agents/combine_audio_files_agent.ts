@@ -119,8 +119,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         }
       }
     } else if (movieDuration > 0) {
+      // This beat has only a movie, not audio.
       assert(beatDurations.length === index, "beatDurations.length !== index");
       beatDurations.push(movieDuration);
+      mediaDurations[index].silenceDuration = movieDuration;
     } else if (beatDurations.length === index) {
       // The current beat has no audio, nor no spilled over audio
       const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
