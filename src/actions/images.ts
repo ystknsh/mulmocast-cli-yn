@@ -328,7 +328,7 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
   return imageRefs;
 };
 const prepareGenerateImages = async (context: MulmoStudioContext) => {
-  const { studio } = context;
+  const fileName = MulmoStudioContextMethods.getFileName(context);
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
   mkdir(imageProjectDirPath);
@@ -344,7 +344,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
     movieAgentInfo: {
       agent: context.dryRun ? "mediaMockAgent" : "movieGoogleAgent",
     },
-    outputStudioFilePath: getOutputStudioFilePath(outDirPath, studio.filename),
+    outputStudioFilePath: getOutputStudioFilePath(outDirPath, fileName),
     imageRefs,
   };
   return injections;
