@@ -60,10 +60,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
 
   const beatDurations: number[] = [];
 
-  context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
-    const mediaDuration = mediaDurations[index];
+  context.studio.script.beats.forEach((beat: MulmoStudioBeat, index: number) => {
+    const { audioDuration, movieDuration } = mediaDurations[index];
     // Check if the current beat has media and the next beat does not have media.
-    if (mediaDuration.audioDuration > 0 && index < context.studio.beats.length - 1 && mediaDurations[index + 1].audioDuration === 0) {
+    if (audioDuration > 0 && index < context.studio.beats.length - 1 && mediaDurations[index + 1].audioDuration === 0) {
       const group = [index];
       for (let i = index + 1; i < context.studio.beats.length && mediaDurations[i].audioDuration === 0; i++) {
         group.push(i);
@@ -74,7 +74,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         .reduce((a, b) => a + b, 0);
       const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
       const minTotal = 1.0 * unspecified.length;
-      const rest = Math.max(mediaDuration.audioDuration - specifiedSum, minTotal);
+      const rest = Math.max(audioDuration - specifiedSum, minTotal);
       const durationForUnspecified = rest / (unspecified.length || 1);
 
       const durations = group.map((idx) => {
@@ -85,31 +85,30 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         return duration;
       });
       const total = durations.reduce((a, b) => a + b, 0);
-      if (total < mediaDuration.audioDuration) {
-        durations[durations.length - 1] += mediaDuration.audioDuration - total;
+      if (total < audioDuration) {
+        durations[durations.length - 1] += audioDuration - total;
       }
-      console.log("***DEBUG0***", group, specifiedSum, unspecified, durations, mediaDuration.audioDuration, total);
+      console.log("***DEBUG0***", group, specifiedSum, unspecified, durations, audioDuration, total);
       beatDurations.push(...durations);
     } else {
-      const beat = context.studio.script.beats[index];
-      if (mediaDuration.audioDuration > 0) {
+      if (audioDuration > 0) {
         // This beat has its own audio
         assert(beatDurations.length === index, "beatDurations.length !== index");
         // padding is the amount of audio padding specified in the script.
         const padding = getPadding(context, beat, index);
         // totalPadding is the amount of audio padding to be added to the audio file.
-        const totalPadding = getTotalPadding(padding, mediaDuration.movieDuration, mediaDuration.audioDuration, beat.duration, false);
-        const beatDuration = mediaDuration.audioDuration + totalPadding;
+        const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+        const beatDuration = audioDuration + totalPadding;
         console.log("***DEBUG1***", index, beatDuration);
         beatDurations.push(beatDuration);
         if (totalPadding > 0) {
           mediaDurations[index].silenceDuration = totalPadding;
         }
-      } else if (mediaDuration.movieDuration > 0) {
-        beatDurations.push(mediaDuration.movieDuration);
+      } else if (movieDuration > 0) {
+        beatDurations.push(movieDuration);
       } else if (beatDurations.length === index) {
         // The current beat has no audio, nor no spilled over audio
-        const beatDuration = beat.duration ?? (mediaDuration.movieDuration > 0 ? mediaDuration.movieDuration : 1.0);
+        const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
         console.log("***DEBUG2***", index, beatDuration);
         beatDurations.push(beatDuration);
         mediaDurations[index].silenceDuration = beatDuration;
