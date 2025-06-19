@@ -198,9 +198,9 @@ const agentFilters = [
 ];
 
 export const audioFilePath = (context: MulmoStudioContext) => {
-  const { studio, fileDirs } = context;
-  const { outDirPath } = fileDirs;
-  return getAudioArtifactFilePath(outDirPath, studio.filename);
+  const fileName = MulmoStudioContextMethods.getFileName(context);
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+  return getAudioArtifactFilePath(outDirPath, fileName);
 };
 
 const getConcurrency = (context: MulmoStudioContext) => {
@@ -226,9 +226,10 @@ const audioAgents = {
 export const generateBeatAudio = async (index: number, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
-    const { studio, fileDirs } = context;
-    const { outDirPath, audioDirPath } = fileDirs;
-    const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
+    const fileName = MulmoStudioContextMethods.getFileName(context);
+    const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
+    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+    const audioSegmentDirPath = resolveDirPath(audioDirPath, fileName);
 
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
@@ -255,12 +256,13 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
 export const audio = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
-    const { studio, fileDirs, lang } = context;
-    const { outDirPath, audioDirPath } = fileDirs;
+    const fileName = MulmoStudioContextMethods.getFileName(context);
+    const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
+    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
     const audioArtifactFilePath = audioFilePath(context);
-    const audioSegmentDirPath = resolveDirPath(audioDirPath, studio.filename);
-    const audioCombinedFilePath = getAudioFilePath(audioDirPath, studio.filename, studio.filename, lang);
-    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, studio.filename);
+    const audioSegmentDirPath = resolveDirPath(audioDirPath, fileName);
+    const audioCombinedFilePath = getAudioFilePath(audioDirPath, fileName, fileName, context.lang);
+    const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
 
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);

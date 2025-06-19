@@ -226,9 +226,9 @@ const targetLangs = ["ja", "en"];
 export const translate = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
-    const { studio, fileDirs } = context;
-    const { outDirPath } = fileDirs;
-    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, studio.filename);
+    const fileName = MulmoStudioContextMethods.getFileName(context);
+    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
     mkdir(outDirPath);
 
     assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
