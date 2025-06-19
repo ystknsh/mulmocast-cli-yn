@@ -1956,10 +1956,10 @@ gopd@^1.2.0:
   resolved "https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz"
   integrity sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
 
-graphai@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/graphai/-/graphai-2.0.6.tgz#ff0e6f7de739bfb109b637a13b72bcb41b32d301"
-  integrity sha512-OOeb0ULF/o2WxuVT4EC6je6IaGJQMVMn/zAwYpTeZf0Mqd33vonUkkSUdADUKWPwM2uJBxPWq+JYys64BISh/Q==
+graphai@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/graphai/-/graphai-2.0.8.tgz#e9c6cbe07cf925b8f3c24ef79b4d442366607f66"
+  integrity sha512-GRUbAPxSXXLKmVYWlW90/1qjoxZ9C2p8ohPwsr564o/VpAdZVQXZMEhbXeqTOfzBf8U25MOH5XwbergrCDGw9Q==
 
 graphemer@^1.4.0:
   version "1.4.0"
