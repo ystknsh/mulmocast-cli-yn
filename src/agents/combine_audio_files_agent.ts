@@ -55,22 +55,25 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         movieDuration,
         audioDuration,
         hasMadia: movieDuration + audioDuration > 0,
-        spillover: false, // will be filled in next loop
       };
     }),
   );
 
+  const beatDurations: number[] = [];
+
   context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
     const mediaDuration = mediaDurations[index];
+    // Check if the current beat has media and the next beat does not have media.
     if (mediaDuration.hasMadia && index < context.studio.beats.length - 1 && !mediaDurations[index + 1].hasMadia) {
-      mediaDuration.spillover = true;
+      const group = [index];
+      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMadia; i++) {
+        group.push(i);
+      }
+      console.log("***DEBUG***", group);
     }
   });
 
-  console.log("***DEBUG***", mediaDurations.map((md) => `${md.spillover}`).join(","));
-
   const inputIds: string[] = [];
-  const beatDurations: number[] = [];
 
   context.studio.beats.reduce((spillover: number, studioBeat: MulmoStudioBeat, index: number) => {
     const beat = context.studio.script.beats[index];
