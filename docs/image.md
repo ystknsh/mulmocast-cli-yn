@@ -216,8 +216,8 @@ idはbeatで指定する
 
 ```json
 {
-  text: "This message does not affect image generation.",
-  imagePrompt: "Generate an image with this message.",
+  "text": "This message does not affect image generation.",
+  "imagePrompt": "Generate an image with this message."
 }
 ```
 
@@ -225,15 +225,15 @@ idはbeatで指定する
 
 ```json
 {
-  text: "This message does not affect image generation.",
-  moviePrompt: "Generate a movie with this message.",
+  "text": "This message does not affect image generation.",
+  "moviePrompt": "Generate a movie with this message."
 }
 ```
 
 4. no imagePrompt and moviePrompt.
 ```json
 {
-  text: "Generate an image with this message.",
+  "text": "Generate an image with this message."
 }
 ```
 
@@ -241,20 +241,19 @@ idはbeatで指定する
 
 ```json
 {
-  text: "This message does not affect image generation.",
-  imagePrompt: "Generate an image with this message,",
-  moviePrompt: "Use the generated image and this message to generate a movie."
+  "text": "This message does not affect image generation.",
+  "imagePrompt": "Generate an image with this message.",
+  "moviePrompt": "Use the generated image and this message to generate a movie."
 }
 ```
 
 ```json
 {
-  text: "This message does not affect image generation.",
-  image: {
+  "text": "This message does not affect image generation.",
+  "image": {
     type: "image",
-    ...
   },
-  moviePrompt: "Use the generated image and this message to generate a movie."
+  "moviePrompt": "Use the generated image and this message to generate a movie."
 }
 ```
 
