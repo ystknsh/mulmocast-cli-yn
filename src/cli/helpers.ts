@@ -168,13 +168,14 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     return null;
   }
   const presentationStyle = getPresentationStyle(presentationStylePath);
-  const multiLingual = getMultiLingual(outputMultilingualFilePath, mulmoScript.beats.length);
 
   // Create or update MulmoStudio file with MulmoScript
   const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
   try {
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
     const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
+    const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
+
     return {
       studio,
       fileDirs: files,
