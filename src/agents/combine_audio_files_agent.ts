@@ -32,19 +32,8 @@ const getTotalPadding = (padding: number, movieDuration: number, audioDuration: 
   return padding;
 };
 
-const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
-  namedInputs,
-}) => {
-  const { context, combinedFileName } = namedInputs;
-  const ffmpegContext = FfmpegContextInit();
-  const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
-
-  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
-  const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);
-  ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
-
-  // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
-  const mediaDurations = await Promise.all(
+const getMediaDurations = (context: MulmoStudioContext) => {
+  return Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const beat = context.studio.script.beats[index];
       const movieDuration = await getMovieDulation(beat);
@@ -57,6 +46,41 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       };
     }),
   );
+};
+
+const getGroupBeatDurations = (context: MulmoStudioContext, group: number[], audioDuration: number) => {
+  const specifiedSum = group
+    .map((idx) => context.studio.script.beats[idx].duration)
+    .filter((d) => d !== undefined)
+    .reduce((a, b) => a + b, 0);
+  const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
+  const minTotal = 1.0 * unspecified.length;
+  const rest = Math.max(audioDuration - specifiedSum, minTotal);
+  const durationForUnspecified = rest / (unspecified.length || 1);
+
+  const durations = group.map((idx) => {
+    const duration = context.studio.script.beats[idx].duration;
+    if (duration === undefined) {
+      return durationForUnspecified;
+    }
+    return duration;
+  });
+  return durations;
+};
+
+const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
+  namedInputs,
+}) => {
+  const { context, combinedFileName } = namedInputs;
+  const ffmpegContext = FfmpegContextInit();
+  const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
+
+  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
+  const silentIds = context.studio.beats.map((_, index) => `[ls_${index}]`);
+  ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
+
+  // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
+  const mediaDurations = await getMediaDurations(context);
 
   const beatDurations: number[] = [];
 
@@ -70,23 +94,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         group.push(i);
       }
       if (group.length > 1) {
+        const durations = getGroupBeatDurations(context, group, audioDuration);
         // Yes, the current beat has spilled over audio.
-        const specifiedSum = group
-          .map((idx) => context.studio.script.beats[idx].duration)
-          .filter((d) => d !== undefined)
-          .reduce((a, b) => a + b, 0);
-        const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
-        const minTotal = 1.0 * unspecified.length;
-        const rest = Math.max(audioDuration - specifiedSum, minTotal);
-        const durationForUnspecified = rest / (unspecified.length || 1);
-
-        const durations = group.map((idx) => {
-          const duration = context.studio.script.beats[idx].duration;
-          if (duration === undefined) {
-            return durationForUnspecified;
-          }
-          return duration;
-        });
         const total = durations.reduce((a, b) => a + b, 0);
         if (total > audioDuration) {
           group.reduce((remaining, idx, iGroup) => {
