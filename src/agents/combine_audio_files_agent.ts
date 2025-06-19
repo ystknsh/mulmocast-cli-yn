@@ -93,6 +93,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     } else {
       const beat = context.studio.script.beats[index];
       if (mediaDuration.audioDuration > 0) {
+        // This beat has its own audio
+        assert(beatDurations.length === index, "beatDurations.length !== index");
         // padding is the amount of audio padding specified in the script.
         const padding = getPadding(context, beat, index);
         // totalPadding is the amount of audio padding to be added to the audio file.
@@ -103,7 +105,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         if (totalPadding > 0) {
           mediaDurations[index].silenceDuration = totalPadding;
         }
-      } else if (beatDurations.length < index + 1) {
+      } else if (mediaDuration.movieDuration > 0) {
+        beatDurations.push(mediaDuration.movieDuration);
+      } else if (beatDurations.length === index) {
+        // The current beat has no audio, nor no spilled over audio
         const beatDuration = beat.duration ?? (mediaDuration.movieDuration > 0 ? mediaDuration.movieDuration : 1.0);
         console.log("***DEBUG2***", index, beatDuration);
         beatDurations.push(beatDuration);
