@@ -197,6 +197,7 @@ export const audioParamsSchema = z
     closingPadding: z.number().default(0.8).describe("Padding before the last beat"), // seconds
     outroPadding: z.number().default(1.0).describe("Padding at the end of the audio"), // seconds
     bgm: mediaSourceSchema.optional(),
+    bgmVolume: z.number().default(0.2).describe("Volume of the background music"),
   })
   .strict();
 
