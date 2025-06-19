@@ -74,7 +74,11 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         .filter((d) => d !== undefined)
         .reduce((a, b) => a + b, 0);
       const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
-      console.log("***DEBUG***", group, specifiedSum, unspecified, mediaDuration.audioDuration);
+      const minTotal = 1.0 * unspecified.length;
+      const rest = Math.max(mediaDuration.audioDuration - specifiedSum, minTotal);
+      const durationPerBeat = rest / (unspecified.length || 1);
+
+      console.log("***DEBUG***", group, specifiedSum, unspecified, mediaDuration.audioDuration, durationPerBeat, durationPerBeat * unspecified.length);
     }
   });
 
