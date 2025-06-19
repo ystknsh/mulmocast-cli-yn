@@ -88,7 +88,17 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           return duration;
         });
         const total = durations.reduce((a, b) => a + b, 0);
-        if (total < audioDuration) {
+        if (total > audioDuration) { 
+          group.reduce((remaining, idx, iGroup) => {
+            console.log("***DEBUG#####***", idx, iGroup, remaining, durations[iGroup]);
+            if (remaining >= durations[iGroup]) {
+              return remaining - durations[iGroup];
+            }
+            mediaDurations[idx].silenceDuration = durations[iGroup] - remaining;
+            return 0;
+          }, audioDuration);
+        } else {
+          // Last beat gets the rest of the audio.
           durations[durations.length - 1] += audioDuration - total;
         }
         console.log("***DEBUG0***", group, specifiedSum, unspecified, durations, audioDuration, total);
@@ -108,6 +118,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         }
       }
     } else if (movieDuration > 0) {
+      assert(beatDurations.length === index, "beatDurations.length !== index");
       beatDurations.push(movieDuration);
     } else if (beatDurations.length === index) {
       // The current beat has no audio, nor no spilled over audio
