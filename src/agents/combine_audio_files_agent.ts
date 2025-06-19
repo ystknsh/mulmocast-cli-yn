@@ -53,6 +53,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         movieDuration,
         audioDuration,
         hasMadia: movieDuration + audioDuration > 0,
+        silenceDuration: 0,
       };
     }),
   );
@@ -99,10 +100,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         const beatDuration = mediaDuration.audioDuration + totalPadding;
         console.log("***DEBUG1***", index, beatDuration);
         beatDurations.push(beatDuration);
+        if (totalPadding > 0) {
+          mediaDurations[index].silenceDuration = totalPadding;
+        }
       } else if (beatDurations.length < index + 1) {
         const beatDuration = beat.duration ?? (mediaDuration.movieDuration > 0 ? mediaDuration.movieDuration : 1.0);
         console.log("***DEBUG2***", index, beatDuration);
         beatDurations.push(beatDuration);
+        mediaDurations[index].silenceDuration = beatDuration;
       }
     }
   });
@@ -112,21 +117,15 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const inputIds: string[] = [];
 
   context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
-    const beatDuration = beatDurations[index];
-    const { audioDuration, } = mediaDurations[index];
+    const { silenceDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
     if (studioBeat.audioFile) {
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
       inputIds.push(audioId);
-      if (beatDuration > audioDuration) {
-        const silentId = silentIds.pop();
-        ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration - audioDuration}${paddingId}`);
-        inputIds.push(paddingId);
-      }
-    } else {
-      // NOTE: We come here when the text is empty and no audio property is specified.
+    }
+    if (silenceDuration > 0) {
       const silentId = silentIds.pop();
-      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration}${paddingId}`);
+      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${silenceDuration}${paddingId}`);
       inputIds.push(paddingId);
     }
   });
