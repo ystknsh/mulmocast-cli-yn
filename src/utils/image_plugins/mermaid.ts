@@ -2,6 +2,7 @@ import { ImageProcessorParams } from "../../types/index.js";
 import { MulmoMediaSourceMethods } from "../../methods/index.js";
 import { getHTMLFile } from "../file.js";
 import { renderHTMLToImage, interpolate } from "../markdown.js";
+import { parrotingImagePath } from "./utils.js";
 
 export const imageType = "mermaid";
 
@@ -23,3 +24,4 @@ const processMermaid = async (params: ImageProcessorParams) => {
 };
 
 export const process = processMermaid;
+export const path = parrotingImagePath;

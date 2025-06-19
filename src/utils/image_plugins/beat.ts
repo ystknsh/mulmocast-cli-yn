@@ -9,3 +9,4 @@ export const processBeatReference = async (__: ImageProcessorParams) => {
 };
 
 export const process = processBeatReference;
+export const path = processBeatReference;

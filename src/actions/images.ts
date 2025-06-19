@@ -47,16 +47,17 @@ export const imagePreprocessAgent = async (namedInputs: {
 
   if (beat.image) {
     const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
-    if (plugin) {
-      try {
-        MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
-        const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
-        const path = await plugin.process(processorParams);
-        // undefined prompt indicates that image generation is not needed
-        return { imagePath: path, referenceImage: path, ...returnValue };
-      } finally {
-        MulmoStudioContextMethods.setBeatSessionState(context, "image", index, false);
-      }
+    if (!plugin) {
+      throw new Error(`invalid beat image type: ${beat.image}`);
+    }
+    try {
+      MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
+      const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
+      const path = await plugin.process(processorParams);
+      // undefined prompt indicates that image generation is not needed
+      return { imagePath: path, referenceImage: path, ...returnValue };
+    } finally {
+      MulmoStudioContextMethods.setBeatSessionState(context, "image", index, false);
     }
   }
 
