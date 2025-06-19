@@ -249,7 +249,7 @@ export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal(
 export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("google");
 
 export const mulmoTransitionSchema = z.object({
-  type: z.enum(["fade"]),
+  type: z.enum(["fade", "slideout_left"]),
   duration: z.number().min(0).max(2).default(0.3), // transition duration in seconds
 });
 

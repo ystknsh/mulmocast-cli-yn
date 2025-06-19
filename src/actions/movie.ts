@@ -166,14 +166,25 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
         const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
         const processedVideoId = `${transitionVideoId}_f`;
-        // If we can to add other transition types than fade, we need to add them here.
-        ffmpegContext.filterComplex.push(
-          `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`,
-        );
+        let transitionFilter;
+        if (transition.type === "fade") {
+          transitionFilter = `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`;
+        } else if (transition.type === "slideout_left") {
+          transitionFilter = `[${transitionVideoId}]format=yuva420p,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`;
+        } else {
+          throw new Error(`Unknown transition type: ${transition.type}`);
+        }
+        ffmpegContext.filterComplex.push(transitionFilter);
         const outputId = `${transitionVideoId}_o`;
-        ffmpegContext.filterComplex.push(
-          `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
-        );
+        if (transition.type === "fade") {
+          ffmpegContext.filterComplex.push(
+            `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
+          );
+        } else if (transition.type === "slideout_left") {
+          ffmpegContext.filterComplex.push(
+            `[${acc}][${processedVideoId}]overlay=x='-(t-${transitionStartTime})*W/${transition.duration}':y=0:enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
+          );
+        }
         return outputId;
       }, concatVideoId);
     }
