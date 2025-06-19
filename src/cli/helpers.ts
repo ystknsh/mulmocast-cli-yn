@@ -124,6 +124,7 @@ export const getMultiLingual = (multilingualFilePath: string, beatsLength: numbe
     while (dataSet.length < beatsLength) {
       dataSet.push({ multiLingualTexts: {} });
     }
+    dataSet.length = beatsLength;
     return dataSet;
   }
   return [...Array(beatsLength)].map(() => ({ multiLingualTexts: {} }));
