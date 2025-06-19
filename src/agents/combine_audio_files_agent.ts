@@ -23,13 +23,11 @@ const getPadding = (context: MulmoStudioContext, beat: MulmoBeat, index: number)
   return isClosingGap ? context.presentationStyle.audioParams.closingPadding : context.presentationStyle.audioParams.padding;
 };
 
-const getTotalPadding = (padding: number, movieDuration: number, audioDuration: number, duration?: number, canSpillover: boolean = false) => {
+const getTotalPadding = (padding: number, movieDuration: number, audioDuration: number, duration?: number) => {
   if (movieDuration > 0) {
     return padding + (movieDuration - audioDuration);
   } else if (duration && duration > audioDuration) {
     return padding + (duration - audioDuration);
-  } else if (canSpillover && duration && audioDuration > duration) {
-    return duration - audioDuration; // negative value to indicate that there is a spill over.
   }
   return padding;
 };
@@ -54,57 +52,95 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       return {
         movieDuration,
         audioDuration,
+        hasMadia: movieDuration + audioDuration > 0,
+        silenceDuration: 0,
       };
     }),
   );
 
-  const inputIds: string[] = [];
   const beatDurations: number[] = [];
 
-  context.studio.beats.reduce((spillover: number, studioBeat: MulmoStudioBeat, index: number) => {
-    const beat = context.studio.script.beats[index];
+  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
     const { audioDuration, movieDuration } = mediaDurations[index];
+    // Check if the current beat has media and the next beat does not have media.
+    if (audioDuration > 0) {
+      // Check if the current beat has spilled over audio.
+      const group = [index];
+      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMadia; i++) {
+        group.push(i);
+      }
+      if (group.length > 1) {
+        // Yes, the current beat has spilled over audio.
+        const specifiedSum = group
+          .map((idx) => context.studio.script.beats[idx].duration)
+          .filter((d) => d !== undefined)
+          .reduce((a, b) => a + b, 0);
+        const unspecified = group.filter((idx) => context.studio.script.beats[idx].duration === undefined);
+        const minTotal = 1.0 * unspecified.length;
+        const rest = Math.max(audioDuration - specifiedSum, minTotal);
+        const durationForUnspecified = rest / (unspecified.length || 1);
+
+        const durations = group.map((idx) => {
+          const duration = context.studio.script.beats[idx].duration;
+          if (duration === undefined) {
+            return durationForUnspecified;
+          }
+          return duration;
+        });
+        const total = durations.reduce((a, b) => a + b, 0);
+        if (total > audioDuration) {
+          group.reduce((remaining, idx, iGroup) => {
+            if (remaining >= durations[iGroup]) {
+              return remaining - durations[iGroup];
+            }
+            mediaDurations[idx].silenceDuration = durations[iGroup] - remaining;
+            return 0;
+          }, audioDuration);
+        } else {
+          // Last beat gets the rest of the audio.
+          durations[durations.length - 1] += audioDuration - total;
+        }
+        beatDurations.push(...durations);
+      } else {
+        // No spilled over audio.
+        assert(beatDurations.length === index, "beatDurations.length !== index");
+        // padding is the amount of audio padding specified in the script.
+        const padding = getPadding(context, beat, index);
+        // totalPadding is the amount of audio padding to be added to the audio file.
+        const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+        const beatDuration = audioDuration + totalPadding;
+        beatDurations.push(beatDuration);
+        if (totalPadding > 0) {
+          mediaDurations[index].silenceDuration = totalPadding;
+        }
+      }
+    } else if (movieDuration > 0) {
+      assert(beatDurations.length === index, "beatDurations.length !== index");
+      beatDurations.push(movieDuration);
+    } else if (beatDurations.length === index) {
+      // The current beat has no audio, nor no spilled over audio
+      const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
+      beatDurations.push(beatDuration);
+      mediaDurations[index].silenceDuration = beatDuration;
+    }
+  });
+  assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
+
+  const inputIds: string[] = [];
+
+  context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
+    const { silenceDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
-    const canSpillover = index < context.studio.beats.length - 1 && mediaDurations[index + 1].movieDuration + mediaDurations[index + 1].audioDuration === 0;
     if (studioBeat.audioFile) {
       const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
-      // padding is the amount of audio padding specified in the script.
-      const padding = getPadding(context, beat, index);
-      // totalPadding is the amount of audio padding to be added to the audio file.
-      const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration, canSpillover);
-      beatDurations.push(audioDuration + totalPadding);
-      if (totalPadding > 0) {
-        const silentId = silentIds.pop();
-        ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${totalPadding}${paddingId}`);
-        inputIds.push(audioId, paddingId);
-      } else {
-        inputIds.push(audioId);
-        if (totalPadding < 0) {
-          return -totalPadding;
-        }
-      }
-    } else {
-      // NOTE: We come here when the text is empty and no audio property is specified.
-      const beatDuration = (() => {
-        const duration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
-        if (!canSpillover && duration < spillover) {
-          return spillover; // We need to consume the spillover here.
-        }
-        return duration;
-      })();
-
-      beatDurations.push(beatDuration);
-      if (beatDuration <= spillover) {
-        return spillover - beatDuration;
-      }
-
+      inputIds.push(audioId);
+    }
+    if (silenceDuration > 0) {
       const silentId = silentIds.pop();
-      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${beatDuration - spillover}${paddingId}`);
+      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${silenceDuration}${paddingId}`);
       inputIds.push(paddingId);
     }
-    return 0;
-  }, 0);
-  assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
+  });
 
   // We need to "consume" extra silentIds.
   silentIds.forEach((silentId, index) => {
