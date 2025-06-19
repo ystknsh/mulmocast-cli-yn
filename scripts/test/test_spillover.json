@@ -10,7 +10,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "1. Duration = 2."
+          "title": "1. Has Text. Duration = 2."
         }
       }
     },
@@ -28,7 +28,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "3. Duration = 1."
+          "title": "3. Has Text. Duration = 1."
         }
       }
     },
@@ -55,7 +55,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "6. No duration."
+          "title": "6. Has Text.No duration."
         }
       }
     },
