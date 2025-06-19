@@ -18,7 +18,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "2. Default duration = 1. No spillover."
+          "title": "2. Default duration = 1. Expected spillover."
         }
       }
     },
@@ -37,7 +37,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "4. Duration = 2."
+          "title": "4. Duration = 2. Expected spillover."
         }
       }
     },
@@ -46,7 +46,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "5. Duration = 1, but no spillover."
+          "title": "5. Duration = 1, Expected spillover."
         }
       }
     },
@@ -55,7 +55,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "6. Has Text.No duration."
+          "title": "6. Has Text. No duration."
         }
       }
     },
@@ -63,7 +63,7 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "7. No duration."
+          "title": "7. No duration. Expected even-split spillover."
         }
       }
     },
@@ -71,7 +71,44 @@
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "8. No duration."
+          "title": "8. No duration. Expected even-split spillover."
+        }
+      }
+    },
+    {
+      "duration": 1.5,
+      "text": "This beat has a short audio.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "9. Has Text. No duration."
+        }
+      }
+    },
+    {
+      "duration": 1,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "10. No duration. Expected some spillover."
+        }
+      }
+    },
+    {
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "11. No duration. Expected no spillover."
+        }
+      }
+    },
+    {
+      "duration": 1,
+      "text": "This beat has a short audio.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "12. Has Text. No duration."
         }
       }
     }
