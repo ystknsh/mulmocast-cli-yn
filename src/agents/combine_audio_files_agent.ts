@@ -88,9 +88,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           return duration;
         });
         const total = durations.reduce((a, b) => a + b, 0);
-        if (total > audioDuration) { 
+        if (total > audioDuration) {
           group.reduce((remaining, idx, iGroup) => {
-            console.log("***DEBUG#####***", idx, iGroup, remaining, durations[iGroup]);
             if (remaining >= durations[iGroup]) {
               return remaining - durations[iGroup];
             }
@@ -101,7 +100,6 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           // Last beat gets the rest of the audio.
           durations[durations.length - 1] += audioDuration - total;
         }
-        console.log("***DEBUG0***", group, specifiedSum, unspecified, durations, audioDuration, total);
         beatDurations.push(...durations);
       } else {
         // No spilled over audio.
@@ -111,7 +109,6 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         // totalPadding is the amount of audio padding to be added to the audio file.
         const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
         const beatDuration = audioDuration + totalPadding;
-        console.log("***DEBUG1***", index, beatDuration);
         beatDurations.push(beatDuration);
         if (totalPadding > 0) {
           mediaDurations[index].silenceDuration = totalPadding;
@@ -123,13 +120,11 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     } else if (beatDurations.length === index) {
       // The current beat has no audio, nor no spilled over audio
       const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
-      console.log("***DEBUG2***", index, beatDuration);
       beatDurations.push(beatDuration);
       mediaDurations[index].silenceDuration = beatDuration;
     }
   });
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
-  console.log("***DEBUG***", beatDurations.map((d) => d.toFixed(2)).join(","));
 
   const inputIds: string[] = [];
 
