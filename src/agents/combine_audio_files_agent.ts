@@ -132,6 +132,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       beatDurations.push(beatDuration);
       mediaDurations[index].silenceDuration = beatDuration;
     }
+    // else { Skip this beat if had no media (!hadMedia)  }
   });
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
