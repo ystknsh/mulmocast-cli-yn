@@ -4,7 +4,7 @@ import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
-import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
+import { MulmoStudioContextMethods, MulmoPresentationStyleMethods } from "../methods/index.js";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -27,10 +27,9 @@ const graph_data: GraphData = {
               const { beat, context, index } = namedInputs;
               try {
                 MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
-                const { fileDirs } = namedInputs.context;
-                const { caption } = context;
-                const { imageDirPath } = fileDirs;
-                const { canvasSize } = context.presentationStyle;
+                const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
+                const caption = MulmoStudioContextMethods.getCaption(context);
+                const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
                 const template = getHTMLFile("caption");
                 const text = (() => {

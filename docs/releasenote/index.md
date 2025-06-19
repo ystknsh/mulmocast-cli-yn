@@ -1,0 +1,129 @@
+# RELEASE NOTE
+
+# v.0.0.17
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.17** brings a game-changing audio feature and significant architectural improvements for better performance and reliability.
+
+- Audio Spillover Support
+  - **Continuous Narration**: Create presentations where narration flows seamlessly across multiple beats - start speaking in one beat and continue through subsequent beats without text
+  - **Precise Timing Control**: Each beat displays for its specified duration while audio continues playing, with the final beat staying visible until narration completes
+  - **Creative Freedom**: Perfect for educational content and storytelling where visuals change while maintaining uninterrupted narration
+
+- Performance & Architecture
+  - **Parallel Processing**: Multiple media files now process simultaneously, significantly reducing generation time for complex projects
+  - **Multilingual Data Separation**: Translation data now stored in separate `{filename}_lang.json` files for better organization
+
+- Others
+  - **Browser Compatibility**: Fixed Node.js dependencies to enable MulmoCast schemas in web browsers
+  - **Improved Test Visibility**: Validation errors now throw immediately during testing for easier debugging
+  - **Enhanced Context Management**: Better state handling throughout the audio generation pipeline
+  - **Code Quality**: Extensive refactoring with extracted helper functions for improved maintainability
+  - **Dependency Updates**: Updated packages for security and compatibility
+
+This release focuses on giving creators more control over audio timing while significantly improving the tool's internal architecture and reliability.
+
+# v.0.0.16
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.16** introduces revolutionary presentation customization and major performance improvements, making content creation more flexible and powerful than ever.
+
+- Revolutionary Presentation Style System
+  - **Independent Style Control**: Use the new `-p` option to apply different visual styles to the same content without editing scripts
+  - **Built-in Anime Templates**: Choose from professional templates inspired by popular anime (Ghibli, AKIRA, One Piece, Ghost in the Shell)
+  - **Mix and Match**: Apply any style to any script - create a Ghibli-style business presentation or an AKIRA-style children's story
+  - **Simple Templates**: `text_only` and `text_and_image` options for clean, minimalist presentations
+
+- Enhanced User Experience
+  - **Real-time Progress Tracking**: New progress callback system shows exactly what's happening during generation
+  - **Faster Processing**: Multiple concurrency improvements for faster image and audio generation
+  - **Smart Image Handling**: Automatically extracts images from videos when needed for PDF generation
+
+- Deep Search (Experimental)
+  - **AI-Powered Research**: Proof-of-concept feature using web search and reflection agents to enhance content research during script generation
+
+- Others
+  - **Translation Bug Fix**: Fixed critical typo that would have broken translation functionality completely
+  - **Video Transitions**: Fixed transition handling for single video segments
+  - **Legal Compliance**: Switched to properly licensed background music for worry-free distribution
+  - **Multilingual FAQ**: Added extensive help documentation in English and Japanese covering workflows, troubleshooting, and upgrade guidance
+  - **Concurrency Overhaul**: System-wide improvements to parallel processing and resource management
+  - **Modular Audio Processing**: Better code organization with individual beat audio processing
+  - **Technical Debt Reduction**: Removed unused code and simplified system components
+
+This release transforms MulmoCast from a content generation tool into a complete creative platform where your imagination is the only limit!
+
+# v.0.0.15
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.15** adds exciting features and improvements to enhance your creative workflows with rich visuals and streamlined production.
+
+- Beat Images & Visual Content
+  - Images in Beats: Attach or auto-generate images directly within each beat (scene), enriching your videos with engaging visuals.
+  - Multiple Image Types Supported: Easily use URLs, local images, slides, markdown content, charts (Chart.js), diagrams (Mermaid), and HTML-based visuals.
+  - Intelligent Image Generation: Automatically creates visuals based on provided prompts or beat text.
+  - Explore these features in detail in the updated documentation ([docs/image.md](https://github.com/receptron/mulmocast-cli/blob/0.0.15/docs/image.md)).
+  - Sample: [test_beats.json](https://github.com/receptron/mulmocast-cli/blob/0.0.15/scripts/test/test_beats.json)
+
+- Smooth Video Transitions
+  - Automatically add smooth transitions between scenes, making your video flow naturally without manual editing.
+  - Sample: [test_transition.json](https://github.com/receptron/mulmocast-cli/blob/0.0.15/scripts/test/test_transition.json)
+
+- PDF Output Improvements
+  - Standardized PDF output on Puppeteer for selectable text and flexible layouts
+  - Enhanced PDF file path handling for better organization
+  - Removed the pdf-engine option in favor of the superior Puppeteer implementation
+
+- Improved Error Messages
+  - Clearer, helpful error messages, especially for audio generation—no more guessing when something goes wrong.
+
+- Release Readiness
+  - Added a release test to verify functionality before publishing a new version. Details: [CONTRIBUTING.md#L144](https://github.com/receptron/mulmocast-cli/blob/0.0.15/CONTRIBUTING.md#L144)
+
+- Other Improvements
+  - Documentation improvements for ElevenLabs setup. Details: [README.md#L111-L112](https://github.com/receptron/mulmocast-cli/blob/0.0.15/README.md#L111-L112)
+  - Enhanced stability with additional automated tests
+  - Minor internal optimizations and typo fixes for smoother operations
+
+Enjoy creating more compelling content effortlessly!
+
+# v.0.0.12
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.12** introduces powerful new features to enhance creative workflows with voice, image, and video generation.
+
+- Customize Background Music
+  - You can now specify your own BGM to play behind narration in generated videos.
+  - Sample: [trailer.json](https://github.com/receptron/mulmocast-cli/blob/0.0.12/assets/templates/trailer.json)
+
+- Ghibli Comic Style Template
+  - Generate whimsical, Ghibli-inspired vertical videos using a ready-made comic-style template.
+  - Template: [ghibli_shorts.json](https://github.com/receptron/mulmocast-cli/blob/0.0.12/assets/templates/ghibli_shorts.json)
+
+- ElevenLabs Voice Support
+  - Use natural, expressive narration with ElevenLabs TTS voices (API key required).
+  - You need to add `ELEVENLABS_API_KEY` to your `.env` file. 
+  - Sample: [test_voices.json](https://github.com/receptron/mulmocast-cli/blob/0.0.12/scripts/test/test_voices.json)
+
+- Mixed TTS Providers
+  - Assign different TTS providers (e.g., OpenAI + ElevenLabs) to different speakers in the same script.
+  - Sample: [test_mixed_providers.json](https://github.com/receptron/mulmocast-cli/blob/0.0.12/scripts/test/test_mixed_providers.json)
+
+- Image Type "beat" 
+  - Supports image type 'beat' to reference the output of earlier beats. Each beat can now have an id and refer to another beat’s image.
+  - Sample: [test_beats.json](https://github.com/receptron/mulmocast-cli/blob/0.0.12/scripts/test/test_beats.json)
+
+- Fade Transitions Between Scenes
+  - Scenes can now fade between images for a smoother, more polished visual flow.
+
+- JPEG Image Support
+  - JPEG images are now supported as inputs alongside PNG for editing or composition.
+
+
+- Other Improvements
+  - Simplified audio filenames (beat index removed)
+  - Fixed rebuildStudio errors and improved error handling
+  - Removed unused code for leaner performance
+
+- Google Image Generation Setup
+  - A new guide explains how to enable Google’s Vertex AI for image generation (linked from README).
