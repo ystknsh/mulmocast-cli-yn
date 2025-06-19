@@ -27,10 +27,9 @@ const graph_data: GraphData = {
               const { beat, context, index } = namedInputs;
               try {
                 MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
-                const { fileDirs } = namedInputs.context;
+                const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
                 const { caption } = context;
-                const { imageDirPath } = fileDirs;
-                const { canvasSize } = context.presentationStyle;
+                const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
                 const template = getHTMLFile("caption");
                 const text = (() => {
