@@ -198,6 +198,7 @@ export const audioParamsSchema = z
     outroPadding: z.number().default(1.0).describe("Padding at the end of the audio"), // seconds
     bgm: mediaSourceSchema.optional(),
     bgmVolume: z.number().default(0.2).describe("Volume of the background music"),
+    audioVolume: z.number().default(1.0).describe("Volume of the audio"),
   })
   .strict();
 
@@ -286,6 +287,8 @@ export const mulmoPresentationStyleSchema = z.object({
     padding: 0.3,
     closingPadding: 0.8,
     outroPadding: 1.0,
+    bgmVolume: 0.2,
+    audioVolume: 1.0,
   }),
 });
 

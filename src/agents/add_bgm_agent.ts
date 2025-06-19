@@ -21,7 +21,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   const voiceInputIndex = FfmpegContextAddInput(ffmpegContext, voiceFile);
   ffmpegContext.filterComplex.push(`[${musicInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=${context.presentationStyle.audioParams.bgmVolume}[music]`);
   ffmpegContext.filterComplex.push(
-    `[${voiceInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=2, adelay=${introPadding * 1000}|${introPadding * 1000}[voice]`,
+    `[${voiceInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=${context.presentationStyle.audioParams.audioVolume}, adelay=${introPadding * 1000}|${introPadding * 1000}[voice]`,
   );
   ffmpegContext.filterComplex.push(`[music][voice]amix=inputs=2:duration=longest[mixed]`);
   ffmpegContext.filterComplex.push(`[mixed]atrim=start=0:end=${totalDuration}[trimmed]`);
