@@ -50,16 +50,9 @@ export const imagePreprocessAgent = async (namedInputs: {
     if (!plugin) {
       throw new Error(`invalid beat image type: ${beat.image}`);
     }
-    try {
-      MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
-      const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
-      await plugin.process(processorParams);
-      const path = plugin.path(processorParams);
-      // undefined prompt indicates that image generation is not needed
-      return { imagePath: path, referenceImage: path, ...returnValue };
-    } finally {
-      MulmoStudioContextMethods.setBeatSessionState(context, "image", index, false);
-    }
+    const path = plugin.path({ beat, context, imagePath, ...htmlStyle(context, beat) });
+    // undefined prompt indicates that image generation is not needed
+    return { imagePath: path, referenceImage: path, ...returnValue };
   }
 
   // images for "edit_image"
@@ -74,6 +67,23 @@ export const imagePreprocessAgent = async (namedInputs: {
   }
   const prompt = imagePrompt(beat, imageParams.style);
   return { imagePath, referenceImage: imagePath, prompt, ...returnValue, images };
+};
+
+export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
+  const { context, beat, index } = namedInputs;
+  const imagePath = getBeatPngImagePath(context, index);
+
+  const plugin = findImagePlugin(beat?.image?.type);
+  if (!plugin) {
+    throw new Error(`invalid beat image type: ${beat.image}`);
+  }
+  try {
+    MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
+    const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
+    await plugin.process(processorParams);
+  } finally {
+    MulmoStudioContextMethods.setBeatSessionState(context, "image", index, false);
+  }
 };
 
 const beat_graph_data = {
@@ -94,6 +104,17 @@ const beat_graph_data = {
         index: ":__mapIndex",
         imageAgentInfo: ":imageAgentInfo",
         imageRefs: ":imageRefs",
+      },
+    },
+    imagePlugin: {
+      if: ":beat.image",
+      defaultValue: {},
+      agent: imagePluginAgent,
+      inputs: {
+        context: ":context",
+        beat: ":beat",
+        index: ":__mapIndex",
+        onComplete: ":preprocessor",
       },
     },
     imageGenerator: {
@@ -121,7 +142,7 @@ const beat_graph_data = {
       if: ":preprocessor.movieFile",
       agent: ":movieAgentInfo.agent",
       inputs: {
-        onComplete: ":imageGenerator", // to wait for imageGenerator to finish
+        onComplete: [":imageGenerator", ":imagePlugin"], // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
         imagePath: ":preprocessor.referenceImage",
         file: ":preprocessor.movieFile",
