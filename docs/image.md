@@ -6,8 +6,30 @@
 4. image プロパティもimagePromptもmoviePromptも設定されていない場合、textからイメージプロンプトを生成し、それを使って画像を生成する
 5. 1か2の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
 
+## Beat画像生成ルール一覧表
 
-# 1. image.typeの処理
+| 条件 | image property | text | imagePrompt | moviePrompt | 画像処理 | 動画処理 | 参照セクション |
+|------|:-----:|:----:|:-----------:|:-----------:|----------|----------|----------------|
+| **1** | ✓ |  |  |  | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
+| **1+5** | ✓ |  |  | ✓ | image.typeプラグイン | 画像+moviePromptで動画生成 | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
+| **2** |  | ✓ | ✓ |  | imagePromptで画像生成 | なし | [2. imagePrompt](#2-imageprompt) |
+| **2+5** |  | ✓ | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePromptで動画生成 | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
+| **3** |  | ✓ |  | ✓ | なし | moviePromptで動画生成 | [3. moviePrompt](#3-movieprompt) |
+| **4** |  | ✓ |  |  | text を imagePrompt として画像生成 | なし | [4. no imagePrompt and moviePrompt](#4-no-imageprompt-and-movieprompt) |
+
+### 表の見方
+- **✓**: 設定されている
+- **条件番号**: 上記ルールの番号に対応
+- **参照セクション**: 対応するbeatデータ例があるセクションへのリンク
+
+### 優先順位
+1. `image`プロパティが最優先
+2. `image`がない場合は`imagePrompt`
+3. `moviePrompt`のみの場合は動画のみ生成
+4. 何もない場合は`text`から自動生成
+5. 画像生成後に`moviePrompt`があれば動画も生成
+
+## 1. image.typeの処理
 
 ```json
 {
@@ -182,14 +204,15 @@
 }
 ```
 
-### beat (前のbeatのimageを使う)
+### beat 
+#### 前のbeatのimageを使う
 ```json
 {
   "type": "beat"
 }
 ```
 
-### beat(id, idで指定されているbeatのimageを使う)
+#### 指定したbeatのimageを使う（id で指定）
 ```json
 {
   "type": "beat",
@@ -197,7 +220,7 @@
 }
 ```
 
-idはbeatで指定する
+id は beat で指定する
 ```json
 {
   "text": "This is the second beat.",
@@ -211,7 +234,8 @@ idはbeatで指定する
 }
 ```
 
-# 2. imagePrompt
+## 各条件での beat データ例 
+### 2. imagePrompt
 
 ```json
 {
@@ -220,7 +244,7 @@ idはbeatで指定する
 }
 ```
 
-3. moviePrompt
+### 3. moviePrompt
 
 ```json
 {
@@ -229,14 +253,14 @@ idはbeatで指定する
 }
 ```
 
-4. no imagePrompt and moviePrompt.
+### 4. no imagePrompt and moviePrompt.
 ```json
 {
   "text": "Generate an image with this message."
 }
 ```
 
-5. moviePrompt and (image or imagePrompt)
+### 5. moviePrompt and (image or imagePrompt)
 
 ```json
 {
@@ -258,13 +282,13 @@ idはbeatで指定する
 
 ---
 
-# studio.script.imageParams.images
+## studio.script.imageParams.images
 
 OpenAIで画像処理をするときに画像の一貫性のために参照となる画像を渡せる。
 その画像情報を元に、複数の画像を生成するときに一貫性を保つことができる。
 たとえば昔話の作成時に、登場人物の作画の一貫性をだす。
 
-```
+```json
   "imageParams": {
     "style": "Photo realistic, cinematic style.",
     "images": {
