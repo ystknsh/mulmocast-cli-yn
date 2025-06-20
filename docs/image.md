@@ -211,8 +211,8 @@ idはbeatで指定する
 }
 ```
 
-## 3. Prompts
-### imagePrompt
+## Prompts
+### 2. imagePrompt
 
 ```json
 {
@@ -221,7 +221,7 @@ idはbeatで指定する
 }
 ```
 
-### moviePrompt
+### 3. moviePrompt
 
 ```json
 {
@@ -230,14 +230,14 @@ idはbeatで指定する
 }
 ```
 
-### imagePrompt and moviePrompt.
+### 4. no imagePrompt and moviePrompt.
 ```json
 {
   "text": "Generate an image with this message."
 }
 ```
 
-### moviePrompt and (image or imagePrompt)
+### 5. moviePrompt and (image or imagePrompt)
 
 ```json
 {
@@ -259,7 +259,7 @@ idはbeatで指定する
 
 ---
 
-## 3. studio.script.imageParams.images
+## studio.script.imageParams.images
 
 OpenAIで画像処理をするときに画像の一貫性のために参照となる画像を渡せる。
 その画像情報を元に、複数の画像を生成するときに一貫性を保つことができる。
