@@ -53,7 +53,8 @@ export const imagePreprocessAgent = async (namedInputs: {
     try {
       MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
       const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
-      const path = await plugin.process(processorParams);
+      await plugin.process(processorParams);
+      const path = plugin.path(processorParams);
       // undefined prompt indicates that image generation is not needed
       return { imagePath: path, referenceImage: path, ...returnValue };
     } finally {
