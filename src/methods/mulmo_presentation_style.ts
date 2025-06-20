@@ -58,10 +58,10 @@ export const MulmoPresentationStyleMethods = {
     return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
   getSpeaker(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeakerData {
-    assert(!!presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!")
-    assert(!!beat?.speaker, "beat.speaker is not set")
-    const speaker = presentationStyle.speechParams.speakers[beat.speaker]; 
-    assert(!!speaker, `speaker is not set: speaker "${beat.speaker}"`)
+    assert(!!presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
+    assert(!!beat?.speaker, "beat.speaker is not set");
+    const speaker = presentationStyle.speechParams.speakers[beat.speaker];
+    assert(!!speaker, `speaker is not set: speaker "${beat.speaker}"`);
     return speaker;
   },
   getProvider(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): Text2SpeechProvider {
