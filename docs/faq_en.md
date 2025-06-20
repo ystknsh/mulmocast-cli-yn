@@ -97,3 +97,27 @@ mulmo movie your_script.json -l ja -c ja
 
 - **Audio generation**: `multiLingualTexts.ja.text`
 - **Subtitle generation**: `multiLingualTexts.ja.text`
+
+## Presentation Styles
+
+### Q: How do I use presentation styles with the `-p` option?
+
+**A: The `-p` option accepts file paths to style JSON files. You can download examples or create your own.**
+
+**Getting style files**:
+- Download example styles from [GitHub](https://github.com/receptron/mulmocast-cli/tree/main/assets/styles)
+- Create your own custom style JSON files
+
+**Usage examples**:
+```bash
+# Downloaded style
+mulmo movie script.json -p ./downloaded-styles/ghibli_style.json
+
+# Project-specific style
+mulmo movie script.json -p ./my-project/custom-style.json
+
+# User-wide style
+mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
+```
+
+**Note**: When installing via `npm install -g mulmocast`, style files are not included. You need to download them separately or create your own.
