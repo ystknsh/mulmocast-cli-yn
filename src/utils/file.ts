@@ -122,6 +122,10 @@ export const getReferenceImagePath = (context: MulmoStudioContext, key: string, 
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   return `${imageProjectDirPath}/${key}.${extension}`;
 };
+export const getCaptionImagePath = (context: MulmoStudioContext, index: number) => {
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${index}_caption.png`;
+};
 
 // pdf
 export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode, lang?: string) => {

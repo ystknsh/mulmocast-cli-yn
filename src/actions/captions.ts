@@ -2,7 +2,7 @@ import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
-import { getHTMLFile } from "../utils/file.js";
+import { getHTMLFile, getCaptionImagePath } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import { MulmoStudioContextMethods, MulmoPresentationStyleMethods } from "../methods/index.js";
 
@@ -27,10 +27,9 @@ const graph_data: GraphData = {
               const { beat, context, index } = namedInputs;
               try {
                 MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
-                const imageDirPath = MulmoStudioContextMethods.getImageDirPath(context);
                 const caption = MulmoStudioContextMethods.getCaption(context);
                 const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
-                const imagePath = `${imageDirPath}/${context.studio.filename}/${index}_caption.png`;
+                const imagePath = getCaptionImagePath(context, index);
                 const template = getHTMLFile("caption");
                 const text = (() => {
                   const multiLingual = context.multiLingual;
