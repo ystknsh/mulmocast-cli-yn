@@ -7,7 +7,7 @@ test("test imagePlugin mermaid", async () => {
   const plugin = findImagePlugin("mermaid");
   assert.equal(plugin.imageType, "mermaid");
 
-  const path = plugin.path({ type: "mermaid", imagePath: "expectImagePath" });
+  const path = plugin.path({ imagePath: "expectImagePath" });
   assert.equal(path, "expectImagePath");
 });
 
@@ -16,7 +16,7 @@ test("test imagePlugin image", async () => {
   assert.equal(plugin.imageType, "image");
 
   const path = plugin.path(
-    { type: "image", imagePath: "expectImagePath", beat: { image: { type: "image", source: { kind: "url", url: "https://example.com" } } } },
+    { imagePath: "expectImagePath", beat: { image: { type: "image", source: { kind: "url", url: "https://example.com" } } } },
     {},
   );
   assert.equal(path, "https://example.com");
