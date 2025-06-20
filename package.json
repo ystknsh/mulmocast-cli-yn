@@ -6,14 +6,12 @@
   "main": "lib/index.js",
   "exports": {
     ".": {
-      "types": {
-        "node":    "./lib/index.d.ts",
-        "browser": "./lib/index.browser.d.ts",
-        "default": "./lib/index.d.ts"
-      },
-      "node":    "./lib/index.js",
-      "browser": "./lib/index.browser.js",
+      "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
+    },
+    "./browser": {
+      "types": "./lib/index.browser.d.ts",
+      "default": "./lib/index.browser.js"
     }
   },
   "bin": {
@@ -26,7 +24,6 @@
     "./assets/html/",
     "./assets/templates/"
   ],
-  "types": "./lib/types/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "tests"
