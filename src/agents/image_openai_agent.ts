@@ -29,7 +29,7 @@ export const imageOpenaiAgent: AgentFunction<
 > = async ({ namedInputs, params }) => {
   const { prompt, images } = namedInputs;
   const { apiKey, moderation, canvasSize } = params;
-  const model = params.model ?? DefaultOpenAIImageModel;
+  const model = params.model ?? defaultOpenAIImageModel;
   const openai = new OpenAI({ apiKey });
   const size = (() => {
     if (model === "gpt-image-1") {
