@@ -12,7 +12,7 @@ import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getRefe
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
-import { imagePlugins } from "../utils/image_plugins/index.js";
+import { findImagePlugin } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
 
@@ -46,7 +46,7 @@ export const imagePreprocessAgent = async (namedInputs: {
   };
 
   if (beat.image) {
-    const plugin = imagePlugins.find((plugin) => plugin.imageType === beat?.image?.type);
+    const plugin = findImagePlugin(beat?.image?.type);
     if (!plugin) {
       throw new Error(`invalid beat image type: ${beat.image}`);
     }
