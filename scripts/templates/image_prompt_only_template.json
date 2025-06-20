@@ -6,27 +6,21 @@
   "title": "[TITLE: Brief, engaging title for the topic]",
   "beats": [
     {
-      "duration": 5,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]"
     },
     {
-      "duration": 5,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]"
     },
     {
-      "duration": 5,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]"
     },
     {
-      "duration": 5,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]"
     },
     {
-      "duration": 5,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]"
     },
     {
-      "duration": 5,
       "imagePrompt": "[IMAGE_PROMPT: A prompt for the image to be generated for this beat.]"
     }
   ]
