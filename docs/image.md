@@ -9,12 +9,12 @@
 ## Beat画像生成ルール一覧表
 
 | 条件 | image property | text | imagePrompt | moviePrompt | 画像処理 | 動画処理 | 参照セクション |
-|------|-------|------|-------------|-------------|----------|----------|----------------|
+|------|:-----:|:----:|:-----------:|:-----------:|----------|----------|----------------|
 | **1** | ✓ |  |  |  | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
-| **1+5** | ✓ |  |  | ✓ | image.typeプラグイン | 生成画像+moviePrompt | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
+| **1+5** | ✓ |  |  | ✓ | image.typeプラグイン | 画像+moviePromptで動画生成 | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
 | **2** |  | ✓ | ✓ |  | imagePromptで画像生成 | なし | [2. imagePrompt](#2-imageprompt) |
-| **2+5** |  | ✓ | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePrompt | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
-| **3** |  | ✓ |  | ✓ | なし | moviePromptのみ | [3. moviePrompt](#3-movieprompt) |
+| **2+5** |  | ✓ | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePromptで動画生成 | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
+| **3** |  | ✓ |  | ✓ | なし | moviePromptで動画生成 | [3. moviePrompt](#3-movieprompt) |
 | **4** |  | ✓ |  |  | text を imagePrompt として画像生成 | なし | [4. no imagePrompt and moviePrompt](#4-no-imageprompt-and-movieprompt) |
 
 ### 表の見方
