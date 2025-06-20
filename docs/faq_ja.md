@@ -97,3 +97,27 @@ mulmo movie your_script.json -l ja -c ja
 
 - **音声生成**: `multiLingualTexts.ja.text`
 - **字幕生成**: `multiLingualTexts.ja.text`
+
+## プレゼンテーションスタイル
+
+### Q: `-p` オプションでプレゼンテーションスタイルを使うにはどうすればよいですか？
+
+**A: `-p` オプションはスタイルJSONファイルへのファイルパスを受け取ります。サンプルをダウンロードするか、独自のスタイルを作成できます。**
+
+**スタイルファイルの入手方法**:
+- [GitHub](https://github.com/receptron/mulmocast-cli/tree/main/assets/styles)からサンプルスタイルをダウンロード
+- 独自のカスタムスタイルJSONファイルを作成
+
+**使用例**:
+```bash
+# ダウンロードしたスタイル
+mulmo movie script.json -p ./downloaded-styles/ghibli_style.json
+
+# プロジェクト固有のスタイル
+mulmo movie script.json -p ./my-project/custom-style.json
+
+# ユーザー共通スタイル
+mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
+```
+
+**注意**: `npm install -g mulmocast`でインストールした場合、スタイルファイルは含まれません。別途ダウンロードするか、独自に作成する必要があります。

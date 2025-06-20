@@ -29,7 +29,11 @@ This release focuses on giving creators more control over audio timing while sig
 **MulmoCast CLI v0.0.16** introduces revolutionary presentation customization and major performance improvements, making content creation more flexible and powerful than ever.
 
 - Revolutionary Presentation Style System
-  - **Independent Style Control**: Use the new `-p` option to apply different visual styles to the same content without editing scripts
+  - **Independent Style Control**: Use the new `-p` option with file paths to apply different visual styles to the same content without editing scripts
+    - Download example styles from [GitHub](https://github.com/receptron/mulmocast-cli/tree/main/assets/styles) or **create your own**
+    - Examples:
+      - `-p ./downloaded-styles/style.json`
+      - `-p ./my-project/custom-style.json`
   - **Built-in Anime Templates**: Choose from professional templates inspired by popular anime (Ghibli, AKIRA, One Piece, Ghost in the Shell)
   - **Mix and Match**: Apply any style to any script - create a Ghibli-style business presentation or an AKIRA-style children's story
   - **Simple Templates**: `text_only` and `text_and_image` options for clean, minimalist presentations

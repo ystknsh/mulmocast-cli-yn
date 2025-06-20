@@ -288,14 +288,16 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -a, --audiodir  Audio output directory                                [string]
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+      --dryRun             Dry run                    [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -a, --audiodir           Audio output directory                       [string]
 ```
 
 ```
@@ -307,14 +309,16 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -i, --imagedir  Image output directory                                [string]
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+      --dryRun             Dry run                    [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -i, --imagedir           Image output directory                       [string]
 ```
 
 ```
@@ -326,16 +330,18 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -a, --audiodir  Audio output directory                                [string]
-  -i, --imagedir  Image output directory                                [string]
-  -c, --caption   Video captions                  [string] [choices: "en", "ja"]
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+      --dryRun             Dry run                    [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -a, --audiodir           Audio output directory                       [string]
+  -i, --imagedir           Image output directory                       [string]
+  -c, --caption            Video captions         [string] [choices: "en", "ja"]
 ```
 
 ```
@@ -347,17 +353,19 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -i, --imagedir  Image output directory                                [string]
-      --pdf_mode  PDF mode
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+      --dryRun             Dry run                    [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -i, --imagedir           Image output directory                       [string]
+      --pdf_mode           PDF mode
                [string] [choices: "slide", "talk", "handout"] [default: "slide"]
-      --pdf_size  PDF paper size (default: letter)
+      --pdf_size           PDF paper size (default: letter)
                                    [choices: "letter", "a4"] [default: "letter"]
 ```
 
