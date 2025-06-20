@@ -15,6 +15,7 @@ import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../met
 import { findImagePlugin } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
+import { defaultOpenAIImageModel } from "../utils/const.js";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -381,7 +382,7 @@ const getConcurrency = (context: MulmoStudioContext) => {
     // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
     // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
     // gpt-image-1：3,000,000 TPM、150 images per minute
-    return imageAgentInfo.imageParams.model === "dall-e-3" ? 4 : 16;
+    return imageAgentInfo.imageParams.model === defaultOpenAIImageModel ? 4 : 16;
   }
   return 4;
 };
