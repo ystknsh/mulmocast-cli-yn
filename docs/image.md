@@ -7,7 +7,7 @@
 5. 1か2の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
 
 
-# 1. image.typeの処理
+## 1. image.typeの処理
 
 ```json
 {
@@ -211,7 +211,8 @@ idはbeatで指定する
 }
 ```
 
-# 2. imagePrompt
+## 3. Prompts
+### imagePrompt
 
 ```json
 {
@@ -220,7 +221,7 @@ idはbeatで指定する
 }
 ```
 
-3. moviePrompt
+### moviePrompt
 
 ```json
 {
@@ -229,14 +230,14 @@ idはbeatで指定する
 }
 ```
 
-4. no imagePrompt and moviePrompt.
+### imagePrompt and moviePrompt.
 ```json
 {
   "text": "Generate an image with this message."
 }
 ```
 
-5. moviePrompt and (image or imagePrompt)
+### moviePrompt and (image or imagePrompt)
 
 ```json
 {
@@ -258,7 +259,7 @@ idはbeatで指定する
 
 ---
 
-# studio.script.imageParams.images
+## 3. studio.script.imageParams.images
 
 OpenAIで画像処理をするときに画像の一貫性のために参照となる画像を渡せる。
 その画像情報を元に、複数の画像を生成するときに一貫性を保つことができる。
