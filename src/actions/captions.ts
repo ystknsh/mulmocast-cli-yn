@@ -2,7 +2,7 @@ import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
-import { getHTMLFile } from "../utils/file.js";
+import { getHTMLFile, getCaptionImagePath } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import { MulmoStudioContextMethods, MulmoPresentationStyleMethods } from "../methods/index.js";
 
