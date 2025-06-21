@@ -361,12 +361,14 @@ OpenAIで画像処理をするときに画像の一貫性のために参照と�
 }
 ```
 
-**imageNames省略時（全員登場）**:
+**imageNames省略時（全員登場）**:  
+
+imageNamesを省略すると、定義されたすべての登場人物が参照される。  
+
 ```json
 {
   "text": "教室の全体的な様子",
   "imagePrompt": "General classroom scene"
-  // imageNamesを省略すると、定義されたすべての登場人物が参照される
 }
 ```
 
