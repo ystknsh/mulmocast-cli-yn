@@ -128,7 +128,7 @@ export const movieGoogleAgent: AgentFunction<
     }
     throw new Error("ERROR: geneateImage returned undefined");
   } catch (error) {
-    GraphAILogger.info("Failed to generate movie:", error);
+    GraphAILogger.info("Failed to generate movie:", (error as Error).message);
     throw error;
   }
 };

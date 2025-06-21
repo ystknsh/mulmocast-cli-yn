@@ -123,7 +123,7 @@ const beat_graph_data = {
     imageGenerator: {
       if: ":preprocessor.prompt",
       agent: ":imageAgentInfo.agent",
-      retry: 3,
+      retry: 2,
       inputs: {
         prompt: ":preprocessor.prompt",
         images: ":preprocessor.images",
