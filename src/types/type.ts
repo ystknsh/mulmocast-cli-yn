@@ -127,3 +127,12 @@ export type Text2ImageAgentInfo = {
 export type BeatMediaType = "movie" | "image";
 
 export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];
+
+export type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
+export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie";
+
+export type SessionProgressEvent =
+  | { kind: "session"; sessionType: SessionType; inSession: boolean }
+  | { kind: "beat"; sessionType: BeatSessionType; index: number; inSession: boolean };
+
+export type SessionProgressCallback = (change: SessionProgressEvent) => void;
