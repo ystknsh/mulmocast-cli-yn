@@ -2,3 +2,4 @@
 
 export * from "./types/schema.js";
 export * from "./agents/validate_schema_agent.js";
+export * from "./types/index.js";
