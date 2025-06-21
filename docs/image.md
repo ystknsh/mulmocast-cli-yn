@@ -303,3 +303,77 @@ OpenAIで画像処理をするときに画像の一貫性のために参照と�
   }
 ```
 
+## beat.imageNames による登場人物コントロール
+
+`beat.imageNames`は、**登場人物のコントロールに使うため**の機能です。`imageParams.images`で定義された登場人物の中から、そのbeatに登場する人物を選択的に指定できます。先生と生徒の会話であれば、先生だけが写る場面、生徒だけが写る場面を分けることが可能になります。
+
+### 設定例
+
+プレゼンテーションスタイルで複数の登場人物を定義：
+```json
+{
+  "imageParams": {
+    "style": "Anime style, classroom setting",
+    "images": {
+      "teacher": {
+        "source": {
+          "kind": "path",
+          "path": "characters/teacher.png"
+        }
+      },
+      "student": {
+        "source": {
+          "kind": "url", 
+          "url": "https://example.com/characters/student.jpg"
+        }
+      }
+    }
+  }
+}
+```
+
+### beat での使用例
+
+**先生だけが写る場面**:
+```json
+{
+  "text": "先生が授業を始めます",
+  "imagePrompt": "Teacher starting the lesson",
+  "imageNames": ["teacher"]
+}
+```
+
+**生徒だけが写る場面**:
+```json
+{
+  "text": "生徒が質問をします",
+  "imagePrompt": "Student raising hand to ask question", 
+  "imageNames": ["student"]
+}
+```
+
+**両方が写る場面**:
+```json
+{
+  "text": "先生と生徒が会話しています",
+  "imagePrompt": "Teacher and student having conversation",
+  "imageNames": ["teacher", "student"]
+}
+```
+
+**imageNames省略時（全員登場）**:
+```json
+{
+  "text": "教室の全体的な様子",
+  "imagePrompt": "General classroom scene"
+  // imageNamesを省略すると、定義されたすべての登場人物が参照される
+}
+```
+
+### 処理の流れ
+
+1. **前処理**: `context.presentationStyle.imageParams?.images`で定義された画像（jpg/png）をurl/pathからダウンロード・保存してimageRefを作成
+2. **画像agent処理**: 
+   - `beat.imageNames`がある場合: imageRefの中で、`beat.imageNames`（nameのarray）に一致する画像のみを選択
+   - `beat.imageNames`がない場合: すべてのimageRefを選択
+3. **OpenAI画像生成**: 選択された参照画像とプロンプトを`openai.images.edit()`に送信
