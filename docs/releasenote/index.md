@@ -1,5 +1,60 @@
 # RELEASE NOTE
 
+# v.0.0.20
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.20** enhances library integration and documentation clarity while introducing artistic new creative possibilities.
+
+- Library Integration & Packaging
+  - **Fixed TypeScript Integration**: Resolved critical type errors when importing MulmoCast as a library dependency
+  - **Browser Compatibility**: Eliminated `https-proxy-agent` errors and improved cross-environment support
+  - **Extended Agent Access**: Made agents directory available for comprehensive API integration in external projects
+
+- New Creative Features
+  - **Ghibli Image-Only Template**: Beautiful new template combining Studio Ghibli aesthetic with image-only presentations
+
+- Documentation & User Experience
+  - **Documentation Updates**: Clarified `-p` option usage and added multilingual FAQ sections
+
+This focused release resolves critical packaging issues while making custom presentation styles more accessible to creators.
+
+# v.0.0.19
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.19** introduces sophisticated audio mixing controls and creative new presentation features, making multimedia content creation more professional and dynamic.
+
+- Audio Mastery & Mixing Controls
+  - **Independent Volume Controls**: Separate `bgmVolume` (default: 0.2) and `audioVolume` (default: 1.0) settings for professional audio balance
+  - **Music Video Creation**: New workflow to disable BGM and sync all visuals to a single audio track - perfect for promotional content
+  - **Enhanced Spillover**: Intelligent time distribution across beats when durations aren't specified, maintaining minimum 1-second visibility
+
+- Visual Effects & Transitions
+  - **Slideout Left Transition**: Dynamic new transition where slides exit stage left, creating engaging progression and flow
+  - **Image-Only Templates**: New template for purely visual presentations without text - ideal for photo essays and portfolios
+
+- Architecture & Developer Experience
+  - **Image Plugin System**: Split image processing into modular `preprocessor` and `imagePlugin` agents for better extensibility
+  - **Context Method Refactoring**: Centralized access patterns through `MulmoStudioContextMethods` for improved maintainability
+  - **Enhanced Documentation**: Comprehensive `image.md` updates with detailed prompt interaction examples and generation rules table
+
+- Bug Fixes & Improvements
+  - **Multilingual Sync**: Fixed array length mismatches between multilingual data and beats
+  - **Movie-Only Beat Timing**: Resolved duration calculation issues for video-only content
+  - **Browser Compatibility**: Proper exports configuration for web-based tools and applications
+  - **Security Updates**: Patched vulnerabilities in dependencies for improved security posture
+
+This release empowers creators with professional-grade audio control while strengthening the platform's technical foundation for future innovations.
+
+# v.0.0.18
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.18** - Bug fixes and stability improvements
+
+- **Multilingual Fix**: Fixed timing issues in multilingual presentations
+- **Code Improvements**: Internal refactoring for better maintainability
+- **Documentation**: Enhanced release notes process
+- **Dependencies**: Updated GraphAI to v2.0.8
+
 # v.0.0.17
 ## RELEASE NOTE
 
