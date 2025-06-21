@@ -41,7 +41,7 @@ const getMediaDurations = (context: MulmoStudioContext) => {
       return {
         movieDuration,
         audioDuration,
-        hasMadia: movieDuration + audioDuration > 0,
+        hasMedia: movieDuration + audioDuration > 0,
         silenceDuration: 0,
       };
     }),
@@ -85,7 +85,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
       const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMadia; i++) {
+      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
         group.push(i);
       }
       if (group.length > 1) {
