@@ -121,3 +121,65 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 ```
 
 **Note**: When installing via `npm install -g mulmocast`, style files are not included. You need to download them separately or create your own.
+
+## Text-to-Speech (TTS) Configuration
+
+### Q: How do I change the TTS engine?
+
+**A: TTS providers can be specified in two ways.**
+
+**Available providers**:
+- `openai` (default)
+- `nijivoice` 
+- `elevenlabs`
+- `google`
+
+#### Method 1: Specify TTS provider globally
+```json
+{
+  "speechParams": {
+    "provider": "elevenlabs",
+    "speakers": {
+      "narrator": {
+        "voiceId": "your-voice-id"
+      }
+    }
+  }
+}
+```
+
+**Reference**: See [test_voices.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_voices.json#L7) for concrete configuration examples.
+
+#### Method 2: Specify TTS provider per speaker
+```json
+{
+  "speechParams": {
+    "provider": "openai",
+    "speakers": {
+      "narrator": {
+        "provider": "elevenlabs",
+        "voiceId": "voice-id-1"
+      },
+      "assistant": {
+        "provider": "nijivoice", 
+        "voiceId": "voice-id-2"
+      }
+    }
+  }
+}
+```
+Speaker-specific settings take priority; if not specified, the global setting is used.
+
+**Environment variables setup**:
+When using each provider, set the corresponding API key in your `.env` file. See [Configuration](../README.md#configuration) for details.
+
+## Troubleshooting
+
+### Q: Getting 429 error during image generation
+```
+An unexpected error occurred: RateLimitError: 429 {"message":null,"type":"image_generation_user_error","param":null,"code":null}
+```
+
+**A: This is caused by OpenAI API rate limits. For optimal experience, we recommend upgrading to Tier 2 or higher.**
+
+Since ChatGPT Plus and OpenAI API are separate services, please consider upgrading to a developer plan for API usage. See [OpenAI Usage Tiers](https://platform.openai.com/docs/guides/rate-limits) for details.
