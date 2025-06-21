@@ -1,15 +1,6 @@
 import path from "path";
-import { MulmoStudioContext } from "../types/index.js";
+import { BeatSessionType, MulmoStudioContext, SessionProgressCallback, SessionType } from "../types/index.js";
 import { GraphAILogger } from "graphai";
-
-type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
-type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie";
-
-type SessionProgressEvent =
-  | { kind: "session"; sessionType: SessionType; inSession: boolean }
-  | { kind: "beat"; sessionType: BeatSessionType; index: number; inSession: boolean };
-
-type SessionProgressCallback = (change: SessionProgressEvent) => void;
 
 const sessionProgressCallbacks = new Set<SessionProgressCallback>();
 
