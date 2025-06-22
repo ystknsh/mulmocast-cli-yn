@@ -5,6 +5,7 @@ import { TaskManager } from "graphai/lib/task_manager.js";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
+import { anthropicAgent } from "@graphai/anthropic_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
@@ -135,8 +136,13 @@ const beat_graph_data = {
     },
     htmlImageAgent: {
       if: ":preprocessor.htmlPrompt",
+      console: { before: true, after: true },
       defaultValue: {},
-      agent: "openAIAgent",
+      // agent: "openAIAgent",
+      agent: "anthropicAgent",
+      params: {
+        mode: "claude-3-7-sonnet-20250219",
+      },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
         system: [
@@ -152,9 +158,8 @@ const beat_graph_data = {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
-      // console: { before: true, after: true },
       inputs: {
-        html: ":htmlImageAgent.text.codeBlock()",
+        html: ":htmlImageAgent.text",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
@@ -433,7 +438,7 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
@@ -465,7 +470,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
