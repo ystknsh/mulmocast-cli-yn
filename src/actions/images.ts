@@ -468,7 +468,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
