@@ -4,10 +4,11 @@ import { GraphAI, GraphAILogger } from "graphai";
 import { TaskManager } from "graphai/lib/task_manager.js";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
+import { openAIAgent } from "@graphai/openai_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo, MulmoCanvasDimension } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
@@ -16,6 +17,8 @@ import { findImagePlugin } from "../utils/image_plugins/index.js";
 
 import { imagePrompt } from "../utils/prompt.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
+
+import { renderHTMLToImage } from "../utils/markdown.js";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -56,6 +59,11 @@ export const imagePreprocessAgent = async (namedInputs: {
     return { imagePath: path, referenceImage: path, ...returnValue };
   }
 
+  if (beat.htmlPrompt) {
+    const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
+    return { imagePath, htmlPrompt };
+  }
+
   // images for "edit_image"
   const images = (() => {
     const imageNames = beat.imageNames ?? Object.keys(imageRefs); // use all images if imageNames is not specified
@@ -89,6 +97,11 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
   }
 };
 
+const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension }) => {
+  const { html, file, canvasSize } = namedInputs;
+  await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
+};
+
 const beat_graph_data = {
   version: 0.5,
   concurrency: 4,
@@ -120,6 +133,35 @@ const beat_graph_data = {
         onComplete: ":preprocessor",
       },
     },
+    htmlImageAgent: {
+      if: ":preprocessor.htmlPrompt",
+      defaultValue: {},
+      agent: "openAIAgent",
+      inputs: {
+        prompt: ":preprocessor.htmlPrompt",
+        system: [
+          "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
+          "If charts are needed, use Chart.js to present them in a clean and visually appealing way.",
+          "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
+          "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
+          "If data is provided, use it effectively to populate the slide.",
+        ],
+      },
+    },
+    htmlImageGenerator: {
+      if: ":preprocessor.htmlPrompt",
+      defaultValue: {},
+      agent: htmlImageGeneratorAgent,
+      // console: { before: true, after: true },
+      inputs: {
+        html: ":htmlImageAgent.text.codeBlock()",
+        canvasSize: ":context.presentationStyle.canvasSize",
+        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "image", // for fileCacheAgentFilter
+      },
+    },
     imageGenerator: {
       if: ":preprocessor.prompt",
       agent: ":imageAgentInfo.agent",
@@ -128,7 +170,6 @@ const beat_graph_data = {
         prompt: ":preprocessor.prompt",
         images: ":preprocessor.images",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        text: ":preprocessor.prompt", // only for fileCacheAgentFilter
         force: ":context.force", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
         index: ":__mapIndex", // for fileCacheAgentFilter
@@ -177,7 +218,7 @@ const beat_graph_data = {
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: ":imageFromMovie", // to wait for imageFromMovie to finish
+        onComplete: [":imageFromMovie", ":htmlImageGenerator"], // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
@@ -279,7 +320,7 @@ const graphOption = async (context: MulmoStudioContext) => {
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator", "movieGenerator"],
+      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator"],
     },
   ];
 
@@ -390,7 +431,11 @@ const getConcurrency = (context: MulmoStudioContext) => {
 const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
   const options = await graphOption(context);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(graph_data, { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent }, options);
+  const graph = new GraphAI(
+    graph_data,
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    options,
+  );
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
@@ -420,7 +465,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
