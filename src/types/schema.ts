@@ -202,6 +202,15 @@ export const audioParamsSchema = z
   })
   .strict();
 
+export const htmlPromptParamsSchema = z
+  .object({
+    systemPrompt: z.string().default("").optional(),
+    prompt: z.string().default(""),
+    data: z.any().optional(),
+    images: z.record(z.any()).optional(),
+  })
+  .strict();
+
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
@@ -219,6 +228,7 @@ export const mulmoBeatSchema = z
     imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
     imagePrompt: z.string().optional(),
     moviePrompt: z.string().optional(),
+    htmlPrompt: htmlPromptParamsSchema.optional(),
   })
   .strict();
 
