@@ -8,7 +8,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo, MulmoCanvasDimension } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
@@ -61,7 +61,7 @@ export const imagePreprocessAgent = async (namedInputs: {
 
   if (beat.htmlPrompt) {
     const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
-    return { imagePath, htmlPrompt, imagePath };
+    return { imagePath, htmlPrompt };
   }
 
   // images for "edit_image"
@@ -97,9 +97,8 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
   }
 };
 
-const htmlImageGeneratorAgent = async (namedInputs: { beat: MulmoBeat; canvasSize: any }) => {
-  const { beat, html, canvasSize, file } = namedInputs;
-  // canvasSize
+const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension }) => {
+  const { html, file, canvasSize } = namedInputs;
   await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
 };
 
@@ -136,6 +135,7 @@ const beat_graph_data = {
     },
     htmlImageAgent: {
       if: ":preprocessor.htmlPrompt",
+      defaultValue: {},
       agent: "openAIAgent",
       inputs: {
         beat: ":beat",
@@ -151,6 +151,7 @@ const beat_graph_data = {
     },
     htmlImageGenerator: {
       if: ":preprocessor.htmlPrompt",
+      defaultValue: {},
       agent: htmlImageGeneratorAgent,
       // console: { before: true, after: true },
       inputs: {
@@ -158,6 +159,9 @@ const beat_graph_data = {
         html: ":htmlImageAgent.text.codeBlock()",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "image", // for fileCacheAgentFilter
       },
     },
     imageGenerator: {
@@ -168,7 +172,7 @@ const beat_graph_data = {
         prompt: ":preprocessor.prompt",
         images: ":preprocessor.images",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        text: ":preprocessor.prompt", // only for fileCacheAgentFilter
+        text: ":preprocessor.prompt", // only for fileCacheAgentFilter ( no longer used)
         force: ":context.force", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
         index: ":__mapIndex", // for fileCacheAgentFilter
@@ -217,7 +221,7 @@ const beat_graph_data = {
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: ":imageFromMovie", // to wait for imageFromMovie to finish
+        onComplete: [":imageFromMovie", ":htmlImageGenerator"], // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
@@ -319,7 +323,7 @@ const graphOption = async (context: MulmoStudioContext) => {
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator", "movieGenerator"],
+      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator"],
     },
   ];
 
