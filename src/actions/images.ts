@@ -138,7 +138,6 @@ const beat_graph_data = {
       defaultValue: {},
       agent: "openAIAgent",
       inputs: {
-        beat: ":beat",
         prompt: ":preprocessor.htmlPrompt",
         system: [
           "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
@@ -155,7 +154,6 @@ const beat_graph_data = {
       agent: htmlImageGeneratorAgent,
       // console: { before: true, after: true },
       inputs: {
-        beat: ":htmlImageAgent",
         html: ":htmlImageAgent.text.codeBlock()",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
@@ -172,7 +170,6 @@ const beat_graph_data = {
         prompt: ":preprocessor.prompt",
         images: ":preprocessor.images",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        text: ":preprocessor.prompt", // only for fileCacheAgentFilter ( no longer used)
         force: ":context.force", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
         index: ":__mapIndex", // for fileCacheAgentFilter
