@@ -17,7 +17,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   GraphAILogger.log("totalDucation:", speechDuration, totalDuration);
 
   const ffmpegContext = FfmpegContextInit();
-  const musicInputIndex = FfmpegContextAddInput(ffmpegContext, musicFile);
+  const musicInputIndex = FfmpegContextAddInput(ffmpegContext, musicFile, ["-stream_loop", "-1"]);
   const voiceInputIndex = FfmpegContextAddInput(ffmpegContext, voiceFile);
   ffmpegContext.filterComplex.push(
     `[${musicInputIndex}:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo, volume=${context.presentationStyle.audioParams.bgmVolume}[music]`,
