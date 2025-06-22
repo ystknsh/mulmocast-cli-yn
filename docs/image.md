@@ -5,18 +5,19 @@
 3. image プロパティが設置されておらず、imagePromptが設定されていれば、そのプロンプトで画像を生成する。
 4. moviePromptのみが設定されている場合、画像は生成せず、そのプロンプトだけで動画を生成する
 5. image プロパティもimagePromptもmoviePromptも設定されていない場合、textからイメージプロンプトを生成し、それを使って画像を生成する
-6. 1か2の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
+6. 1か3の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
 
 ## Beat画像生成ルール一覧表
 
-| 条件 | image property | text | imagePrompt | moviePrompt | 画像処理 | 動画処理 | 参照セクション |
-|------|:-----:|:----:|:-----------:|:-----------:|----------|----------|----------------|
-| **1** | ✓ |  |  |  | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
-| **1+6** | ✓ |  |  | ✓ | image.typeプラグイン | 画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
-| **3** |  | ✓ | ✓ |  | imagePromptで画像生成 | なし | [2. imagePrompt](#3-imageprompt) |
-| **3+6** |  | ✓ | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
-| **4** |  | ✓ |  | ✓ | なし | moviePromptで動画生成 | [3. moviePrompt](#4-movieprompt) |
-| **5** |  | ✓ |  |  | text を imagePrompt として画像生成 | なし | [5. no imagePrompt and moviePrompt](#5-no-imageprompt-and-movieprompt) |
+| 条件 | image property | text | htmlPrompt | imagePrompt | moviePrompt | 画像処理 | 動画処理 | 参照セクション |
+|------|:-----:|:----:|:----------:|:-----------:|:-----------:|----------|----------|----------------|
+| **1** | ✓ |  |  |  |  | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
+| **1+6** | ✓ |  |  |  | ✓ | image.typeプラグイン | 画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
+| **2** |  | ✓ | ✓ |  |  | htmlPromptでHTML生成→画像化 | なし | [2. htmlPrompt](#2-htmlprompt) |
+| **3** |  | ✓ |  | ✓ |  | imagePromptで画像生成 | なし | [3. imagePrompt](#3-imageprompt) |
+| **3+6** |  | ✓ |  | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
+| **4** |  | ✓ |  |  | ✓ | なし | moviePromptで動画生成 | [4. moviePrompt](#4-movieprompt) |
+| **5** |  | ✓ |  |  |  | text を imagePrompt として画像生成 | なし | [5. no imagePrompt and moviePrompt](#5-no-imageprompt-and-movieprompt) |
 
 ### 表の見方
 - **✓**: 設定されている
