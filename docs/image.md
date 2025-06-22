@@ -1,21 +1,22 @@
 # 画像生成ルール
 
 1. image プロパティが設置されていれば、image.type で決まる plugin に画像の生成・取得は任せる
-2. image プロパティが設置されておらず、imagePromptが設定されていれば、そのプロンプトで画像を生成する。
-3. moviePromptのみが設定されている場合、画像は生成せず、そのプロンプトだけで動画を生成する
-4. image プロパティもimagePromptもmoviePromptも設定されていない場合、textからイメージプロンプトを生成し、それを使って画像を生成する
-5. 1か2の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
+2. image プロパティが設置されておらず、htmlPromptが設定されている場合、そのプロンプトでhtmlを生成し、画像を生成する
+3. image プロパティが設置されておらず、imagePromptが設定されていれば、そのプロンプトで画像を生成する。
+4. moviePromptのみが設定されている場合、画像は生成せず、そのプロンプトだけで動画を生成する
+5. image プロパティもimagePromptもmoviePromptも設定されていない場合、textからイメージプロンプトを生成し、それを使って画像を生成する
+6. 1か2の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
 
 ## Beat画像生成ルール一覧表
 
 | 条件 | image property | text | imagePrompt | moviePrompt | 画像処理 | 動画処理 | 参照セクション |
 |------|:-----:|:----:|:-----------:|:-----------:|----------|----------|----------------|
 | **1** | ✓ |  |  |  | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
-| **1+5** | ✓ |  |  | ✓ | image.typeプラグイン | 画像+moviePromptで動画生成 | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
-| **2** |  | ✓ | ✓ |  | imagePromptで画像生成 | なし | [2. imagePrompt](#2-imageprompt) |
-| **2+5** |  | ✓ | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePromptで動画生成 | [5. moviePrompt and (image or imagePrompt)](#5-movieprompt-and-image-or-imageprompt) |
-| **3** |  | ✓ |  | ✓ | なし | moviePromptで動画生成 | [3. moviePrompt](#3-movieprompt) |
-| **4** |  | ✓ |  |  | text を imagePrompt として画像生成 | なし | [4. no imagePrompt and moviePrompt](#4-no-imageprompt-and-movieprompt) |
+| **1+6** | ✓ |  |  | ✓ | image.typeプラグイン | 画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
+| **3** |  | ✓ | ✓ |  | imagePromptで画像生成 | なし | [2. imagePrompt](#3-imageprompt) |
+| **3+6** |  | ✓ | ✓ | ✓ | imagePromptで画像生成 | 生成画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
+| **4** |  | ✓ |  | ✓ | なし | moviePromptで動画生成 | [3. moviePrompt](#4-movieprompt) |
+| **5** |  | ✓ |  |  | text を imagePrompt として画像生成 | なし | [5. no imagePrompt and moviePrompt](#5-no-imageprompt-and-movieprompt) |
 
 ### 表の見方
 - **✓**: 設定されている
@@ -24,10 +25,11 @@
 
 ### 優先順位
 1. `image`プロパティが最優先
-2. `image`がない場合は`imagePrompt`
-3. `moviePrompt`のみの場合は動画のみ生成
-4. 何もない場合は`text`から自動生成
-5. 画像生成後に`moviePrompt`があれば動画も生成
+2. `image`がない場合は`htmlPrompt`
+3. `image`がない場合は`imagePrompt`
+4. `moviePrompt`のみの場合は動画のみ生成
+5. 何もない場合は`text`から自動生成
+6. 画像生成後に`moviePrompt`があれば動画も生成
 
 ## 1. image.typeの処理
 
@@ -234,8 +236,30 @@ id は beat で指定する
 }
 ```
 
-## 各条件での beat データ例 
+## 各条件での beat データ例
+
 ### 2. imagePrompt
+```json
+{
+  "htmlPrompt": {
+    "prompt": "This slide presents the declining birthrate and fertility rate in Japan. Visualize the trend and explain the potential social impact.",
+    "data": [
+      { "year": 2000, "births": 1190000, "fertility_rate": 1.36 },
+      { "year": 2020, "births": 841000, "fertility_rate": 1.34 }
+    ]
+  }
+}
+```
+
+```json
+{
+  "htmlPrompt": {
+    "prompt": "Explain the risks of increasing digital dependency for a country. Focus on issues like economic vulnerability, foreign technology reliance, and loss of competitiveness."
+  }
+}
+```
+
+### 3. imagePrompt
 
 ```json
 {
@@ -244,7 +268,7 @@ id は beat で指定する
 }
 ```
 
-### 3. moviePrompt
+### 4. moviePrompt
 
 ```json
 {
@@ -253,14 +277,14 @@ id は beat で指定する
 }
 ```
 
-### 4. no imagePrompt and moviePrompt.
+### 5. no imagePrompt and moviePrompt.
 ```json
 {
   "text": "Generate an image with this message."
 }
 ```
 
-### 5. moviePrompt and (image or imagePrompt)
+### 6. moviePrompt and (image or imagePrompt)
 
 ```json
 {
