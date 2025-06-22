@@ -15,8 +15,12 @@ export const FfmpegContextInit = (): FfmpegContext => {
   };
 };
 
-export const FfmpegContextAddInput = (context: FfmpegContext, input: string) => {
-  context.command.input(input);
+export const FfmpegContextAddInput = (context: FfmpegContext, input: string, inputOptions?: string[]) => {
+  if (inputOptions) {
+    context.command.input(input).inputOptions(inputOptions);
+  } else {
+    context.command.input(input);
+  }
   context.inputCount++;
   return context.inputCount - 1; // returned the index of the input
 };
