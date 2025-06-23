@@ -11,7 +11,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo, MulmoCanvasDimension } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
+import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { findImagePlugin } from "../utils/image_plugins/index.js";
 
@@ -406,12 +406,25 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 
   const imageRefs = await getImageRefs(context);
 
+  // Determine movie agent based on provider
+  const getMovieAgent = () => {
+    if (context.dryRun) return "mediaMockAgent";
+    const provider = context.presentationStyle.movieParams?.provider ?? "google";
+    switch (provider) {
+      case "replicate":
+        return "movieReplicateAgent";
+      case "google":
+      default:
+        return "movieGoogleAgent";
+    }
+  };
+
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
     context,
     imageAgentInfo,
     movieAgentInfo: {
-      agent: context.dryRun ? "mediaMockAgent" : "movieGoogleAgent",
+      agent: getMovieAgent(),
     },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, fileName),
     imageRefs,
@@ -435,7 +448,7 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
@@ -467,7 +480,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {

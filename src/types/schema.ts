@@ -267,7 +267,7 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
-export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("google");
+export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google"), z.literal("replicate")]).default("google");
 
 export const mulmoTransitionSchema = z.object({
   type: z.enum(["fade", "slideout_left"]),
