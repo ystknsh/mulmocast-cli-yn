@@ -20,9 +20,11 @@ async function generateMovie(
     auth: apiToken,
   });
 
-  const input: any = {
+  const input = {
     prompt: prompt,
     duration: duration,
+    image: undefined as string | undefined,
+    start_image: undefined as string | undefined,
     // resolution: "720p", // only for bytedance/seedance-1-lite
     // fps: 24, // only for bytedance/seedance-1-lite
     // aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite
@@ -43,12 +45,11 @@ async function generateMovie(
   }
 
   try {
-    GraphAILogger.info("Starting Replicate movie generation...");
     const output = await replicate.run(model ?? "bytedance/seedance-1-lite", { input });
 
     // Download the generated video
     if (output && typeof output === "object" && "url" in output) {
-      const videoUrl = (output as any).url();
+      const videoUrl = (output.url as () => string)();
       const videoResponse = await fetch(videoUrl);
 
       if (!videoResponse.ok) {
