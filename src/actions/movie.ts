@@ -1,5 +1,5 @@
 import { GraphAILogger, assert } from "graphai";
-import { MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema, MulmoFillOption } from "../types/index.js";
+import { MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema, MulmoFillOption, mulmoFillOptionSchema } from "../types/index.js";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
@@ -8,15 +8,8 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
-export const getVideoPart = (
-  inputIndex: number,
-  mediaType: BeatMediaType,
-  duration: number,
-  canvasInfo: MulmoCanvasDimension,
-  fillOption?: MulmoFillOption,
-) => {
+export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension, fillOption: MulmoFillOption) => {
   const videoId = `v${inputIndex}`;
-  const fillStyle = fillOption?.style || "aspectFit";
 
   const videoFilters = [];
 
@@ -33,7 +26,7 @@ export const getVideoPart = (
   videoFilters.push(`trim=duration=${duration}`, "fps=30", "setpts=PTS-STARTPTS");
 
   // Apply scaling based on fill option
-  if (fillStyle === "aspectFill") {
+  if (fillOption.style === "aspectFill") {
     // For aspect fill: scale to fill the canvas completely, cropping if necessary
     videoFilters.push(
       `scale=w=${canvasInfo.width}:h=${canvasInfo.height}:force_original_aspect_ratio=increase`,
@@ -135,7 +128,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     // Get fillOption from merged imageParams (global + beat-specific)
     const globalFillOption = context.presentationStyle.imageParams?.fillOption;
     const beatFillOption = beat.imageParams?.fillOption;
-    const defaultFillOption: MulmoFillOption = { style: "aspectFit" };
+    const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption);
