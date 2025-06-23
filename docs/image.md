@@ -239,7 +239,7 @@ id は beat で指定する
 
 ## 各条件での beat データ例
 
-### 2. imagePrompt
+### 2. htmlPrompt
 ```json
 {
   "htmlPrompt": {
