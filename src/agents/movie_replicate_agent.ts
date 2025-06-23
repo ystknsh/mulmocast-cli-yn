@@ -4,13 +4,14 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
 async function generateMovie(
+  model: `${string}/${string}` | undefined,
   prompt: string,
   imagePath: string | undefined,
   aspectRatio: string,
   duration: number,
 ): Promise<Buffer | undefined> {
   const apiToken = process.env.REPLICATE_API_TOKEN;
-  
+
   if (!apiToken) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
   }
@@ -20,46 +21,50 @@ async function generateMovie(
   });
 
   const input: any = {
-    fps: 24,
     prompt: prompt,
     duration: duration,
-    resolution: "720p",
-    aspect_ratio: aspectRatio,
-    camera_fixed: false,
+    // resolution: "720p", // only for bytedance/seedance-1-lite
+    // fps: 24, // only for bytedance/seedance-1-lite
+    // aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite
+    // camera_fixed: false, // only for bytedance/seedance-1-lite
+    // mode: "standard" // only for kwaivgi/kling-v2.1
+    // negative_prompt: "" // only for kwaivgi/kling-v2.1
   };
 
   // Add image if provided (for image-to-video generation)
   if (imagePath) {
     const buffer = readFileSync(imagePath);
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-    input.image = base64Image;
+    if (model === "kwaivgi/kling-v2.1") {
+      input.start_image = base64Image;
+    } else {
+      input.image = base64Image;
+    }
   }
 
   try {
     GraphAILogger.info("Starting Replicate movie generation...");
-    const output = await replicate.run("bytedance/seedance-1-lite", { input });
-    
+    const output = await replicate.run(model ?? "bytedance/seedance-1-lite", { input });
+
     // Download the generated video
-    if (output && typeof output === 'object' && 'url' in output) {
+    if (output && typeof output === "object" && "url" in output) {
       const videoUrl = (output as any).url();
       const videoResponse = await fetch(videoUrl);
-      
+
       if (!videoResponse.ok) {
         throw new Error(`Error downloading video: ${videoResponse.status} - ${videoResponse.statusText}`);
       }
-      
+
       const arrayBuffer = await videoResponse.arrayBuffer();
       return Buffer.from(arrayBuffer);
     }
-    
+
     return undefined;
   } catch (error) {
     GraphAILogger.info("Replicate generation error:", error);
     throw error;
   }
 }
-
-export type MovieReplicateConfig = {};
 
 export const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
   if (canvasSize.width > canvasSize.height) {
@@ -74,15 +79,14 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
 export const movieReplicateAgent: AgentFunction<
   { model: string; canvasSize: { width: number; height: number }; duration?: number },
   { buffer: Buffer },
-  { prompt: string; imagePath?: string },
-  MovieReplicateConfig
+  { prompt: string; imagePath?: string }
 > = async ({ namedInputs, params }) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const duration = params.duration ?? 5;
 
   try {
-    const buffer = await generateMovie(prompt, imagePath, aspectRatio, duration);
+    const buffer = await generateMovie(params.model as `${string}/${string}` | undefined, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
