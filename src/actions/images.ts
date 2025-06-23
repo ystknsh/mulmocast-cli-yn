@@ -63,7 +63,7 @@ export const imagePreprocessAgent = async (namedInputs: {
     const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
     const htmlSystemPrompt = [
       "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
-      `The canvas size is ${context.presentationStyle.canvasSize.width}x${context.presentationStyle.canvasSize.height}. Make sure the HTML fits within the canvas.`,
+      `The view port size is ${context.presentationStyle.canvasSize.width}x${context.presentationStyle.canvasSize.height}. Make sure the HTML fits within the view port.`,
       "If charts are needed, use Chart.js to present them in a clean and visually appealing way.",
       "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
       "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
