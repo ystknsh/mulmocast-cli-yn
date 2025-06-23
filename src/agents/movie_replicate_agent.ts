@@ -11,7 +11,6 @@ async function generateMovie(
   aspectRatio: string,
   duration: number,
 ): Promise<Buffer | undefined> {
-
   const replicate = new Replicate({
     auth: apiKey,
   });
