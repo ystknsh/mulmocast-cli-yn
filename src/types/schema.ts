@@ -180,7 +180,6 @@ export const mulmoImageParamsSchema = z
     style: z.string().optional(), // optional image style
     moderation: z.string().optional(), // optional image style
     images: mulmoImageParamsImagesSchema.optional(),
-    fillOption: mulmoFillOptionSchema.optional(),
   })
   .strict();
 
@@ -230,6 +229,11 @@ export const mulmoBeatSchema = z
 
     imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
+    movieParams: z
+      .object({
+        fillOption: mulmoFillOptionSchema,
+      })
+      .optional(),
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
@@ -275,6 +279,7 @@ export const mulmoMovieParamsSchema = z
     provider: text2MovieProviderSchema.optional(),
     model: z.string().optional(), // default: provider specific
     transition: mulmoTransitionSchema.optional(),
+    fillOption: mulmoFillOptionSchema.optional(),
   })
   .strict();
 

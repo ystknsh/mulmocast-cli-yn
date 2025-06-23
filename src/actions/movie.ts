@@ -126,8 +126,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const duration = studioBeat.duration + extraPadding;
 
     // Get fillOption from merged imageParams (global + beat-specific)
-    const globalFillOption = context.presentationStyle.imageParams?.fillOption;
-    const beatFillOption = beat.imageParams?.fillOption;
+    const globalFillOption = context.presentationStyle.movieParams?.fillOption;
+    const beatFillOption = beat.movieParams?.fillOption;
     const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
