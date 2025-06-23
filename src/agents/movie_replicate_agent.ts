@@ -5,19 +5,15 @@ import Replicate from "replicate";
 
 async function generateMovie(
   model: `${string}/${string}` | undefined,
+  apiKey: string,
   prompt: string,
   imagePath: string | undefined,
   aspectRatio: string,
   duration: number,
 ): Promise<Buffer | undefined> {
-  const apiToken = process.env.REPLICATE_API_TOKEN;
-
-  if (!apiToken) {
-    throw new Error("REPLICATE_API_TOKEN environment variable is required");
-  }
 
   const replicate = new Replicate({
-    auth: apiToken,
+    auth: apiKey,
   });
 
   const input = {
@@ -25,9 +21,9 @@ async function generateMovie(
     duration: duration,
     image: undefined as string | undefined,
     start_image: undefined as string | undefined,
+    aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite
     // resolution: "720p", // only for bytedance/seedance-1-lite
     // fps: 24, // only for bytedance/seedance-1-lite
-    // aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite
     // camera_fixed: false, // only for bytedance/seedance-1-lite
     // mode: "standard" // only for kwaivgi/kling-v2.1
     // negative_prompt: "" // only for kwaivgi/kling-v2.1
@@ -77,17 +73,27 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
   }
 };
 
+export type MovieReplicateConfig = {
+  apiKey?: string;
+};
+
 export const movieReplicateAgent: AgentFunction<
   { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number },
   { buffer: Buffer },
-  { prompt: string; imagePath?: string }
-> = async ({ namedInputs, params }) => {
+  { prompt: string; imagePath?: string },
+  MovieReplicateConfig
+> = async ({ namedInputs, params, config }) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const duration = params.duration ?? 5;
+  const apiKey = config?.apiKey ?? process.env.REPLICATE_API_TOKEN;
+
+  if (!apiKey) {
+    throw new Error("REPLICATE_API_TOKEN environment variable is required");
+  }
 
   try {
-    const buffer = await generateMovie(params.model, prompt, imagePath, aspectRatio, duration);
+    const buffer = await generateMovie(params.model, apiKey, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
