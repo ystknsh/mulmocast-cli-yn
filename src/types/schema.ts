@@ -168,12 +168,19 @@ export const mulmoAudioAssetSchema = z.union([mulmoAudioMediaSchema, mulmoMidiMe
 const imageIdSchema = z.string();
 
 export const mulmoImageParamsImagesSchema = z.record(imageIdSchema, mulmoImageMediaSchema);
+export const mulmoFillOptionSchema = z
+  .object({
+    style: z.enum(["aspectFit", "aspectFill"]).default("aspectFit"),
+  })
+  .describe("How to handle aspect ratio differences between image and canvas");
+
 export const mulmoImageParamsSchema = z
   .object({
     model: z.string().optional(), // default: provider specific
     style: z.string().optional(), // optional image style
     moderation: z.string().optional(), // optional image style
     images: mulmoImageParamsImagesSchema.optional(),
+    fillOption: mulmoFillOptionSchema.optional(),
   })
   .strict();
 
