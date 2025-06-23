@@ -68,3 +68,9 @@ export const localizedText = (beat: MulmoBeat, multiLingualData?: MulmoStudioMul
 export const sleep = async (milliseconds: number) => {
   return await new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
+
+export function userAssert(condition: boolean, message: string): asserts condition {
+  if (!condition) {
+    throw new Error(message);
+  }
+}
