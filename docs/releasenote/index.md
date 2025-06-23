@@ -1,5 +1,46 @@
 # RELEASE NOTE
 
+# v.0.0.22
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.22** introduces AI-powered HTML slide generation and ensures continuous background music in longer presentations.
+
+- New Features
+  - **HTML Prompt Support**: Generate data-rich slides using AI-powered HTML generation ([documentation](https://github.com/receptron/mulmocast-cli/blob/0.0.22/docs/image.md#2-htmlprompt))
+  - **Data Visualization**: Create charts and infographics with automatic Tailwind CSS and Chart.js integration
+  - **Complex Layouts**: Build sophisticated slide designs that were previously difficult with image generation
+
+- Audio Enhancement
+  - **BGM Looping**: Background music now loops seamlessly for videos longer than the music duration (contributed by @asuhacoder)
+  - **Continuous Audio**: No more silent BGM sections in extended presentations
+
+- Documentation
+  - **Updated Image Guide**: Comprehensive documentation for the new htmlPrompt feature
+  - **Usage Examples**: Added data visualization and text-based slide examples
+
+This release empowers creators with advanced data presentation capabilities while ensuring professional audio throughout their content.
+
+# v.0.0.21
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.21** focuses on documentation clarity and error handling improvements for a better developer and creator experience.
+
+- Documentation & Guides
+  - **Character Control Documentation**: Added comprehensive guide for `beat.imageNames` feature to control character appearances
+  - **Audio Spillover Guide**: New documentation explaining how to share narration across multiple beats
+  - **FAQ Enhancements**: Added TTS configuration methods and 429 error troubleshooting guides
+  - **Historical Release Notes**: Completed documentation for versions 0.0.18-0.0.20
+
+- Error Handling & User Experience
+  - **Content Policy Visibility**: Clearer error messages when generation fails due to safety reasons
+  - **Reduced Retry Attempts**: Optimized image generation retries from 3 to 2 attempts
+
+- Code Quality
+  - **Type Organization**: Refactored session types to centralized location
+  - **Bug Fixes**: Fixed typo in audio combination agent
+
+This maintenance release strengthens MulmoCast's foundation through better documentation and clearer communication with users.
+
 # v.0.0.20
 ## RELEASE NOTE
 
