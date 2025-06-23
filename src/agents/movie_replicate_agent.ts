@@ -78,7 +78,7 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
 };
 
 export const movieReplicateAgent: AgentFunction<
-  { model: string; canvasSize: { width: number; height: number }; duration?: number },
+  { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number },
   { buffer: Buffer },
   { prompt: string; imagePath?: string }
 > = async ({ namedInputs, params }) => {
@@ -87,7 +87,7 @@ export const movieReplicateAgent: AgentFunction<
   const duration = params.duration ?? 5;
 
   try {
-    const buffer = await generateMovie(params.model as `${string}/${string}` | undefined, prompt, imagePath, aspectRatio, duration);
+    const buffer = await generateMovie(params.model, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
