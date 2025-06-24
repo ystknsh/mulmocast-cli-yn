@@ -17,6 +17,56 @@ import { graphDataScriptFromUrlPrompt } from "../utils/prompt.js";
 import { llmPair } from "../utils/utils.js";
 
 const vanillaAgents = agents.default ?? agents;
+
+const graphMulmoScript: GraphData = {
+  version: 0.5,
+  loop: {
+    // If the script is not valid and the counter is less than 3, continue the loop
+    while: ":continue",
+  },
+  nodes: {
+    sourceText: {},
+    systemPrompt: {},
+    llmAgent: {},
+    llmModel: {},
+    maxTokens: {},
+    counter: {
+      value: 0,
+      update: ":counter.add(1)",
+    },
+    llm: {
+      agent: ":llmAgent",
+      console: {before: true},
+      inputs: {
+        system: ":systemPrompt",
+        prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
+        params: {
+          model: ":llmModel",
+          system: ":systemPrompt",
+          max_tokens: ":maxTokens",
+        },
+      },
+    },
+    validateSchemaAgent: {
+      agent: "validateSchemaAgent",
+      inputs: {
+        text: ":llm.text.codeBlock()",
+        schema: mulmoScriptSchema,
+      },
+      isResult: true,
+    },
+    continue: {
+      agent: ({ isValid, counter }) => {
+        return !isValid && counter < 3;
+      },
+      inputs: {
+        isValid: ":validateSchemaAgent.isValid",
+        counter: ":counter",
+      },
+    },
+  },
+};
+
 const graphData: GraphData = {
   version: 0.5,
   // Execute sequentially because the free version of browserless API doesn't support concurrent execution.
@@ -25,7 +75,7 @@ const graphData: GraphData = {
     urls: {
       value: [],
     },
-    prompt: {
+    systemPrompt: {
       value: "",
     },
     outdir: {
@@ -89,52 +139,12 @@ const graphData: GraphData = {
       agent: "nestedAgent",
       inputs: {
         sourceText: ":sourceText",
-        prompt: ":prompt",
+        systemPrompt: ":systemPrompt",
         llmAgent: ":llmAgent",
         llmModel: ":llmModel",
         maxTokens: ":maxTokens",
       },
-      graph: {
-        loop: {
-          // If the script is not valid and the counter is less than 3, continue the loop
-          while: ":continue",
-        },
-        nodes: {
-          counter: {
-            value: 0,
-            update: ":counter.add(1)",
-          },
-          llm: {
-            agent: ":llmAgent",
-            inputs: {
-              system: ":prompt",
-              prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
-              params: {
-                model: ":llmModel",
-                system: ":prompt",
-                max_tokens: ":maxTokens",
-              },
-            },
-          },
-          validateSchemaAgent: {
-            agent: "validateSchemaAgent",
-            inputs: {
-              text: ":llm.text.codeBlock()",
-              schema: mulmoScriptSchema,
-            },
-            isResult: true,
-          },
-          continue: {
-            agent: ({ isValid, counter }) => {
-              return !isValid && counter < 3;
-            },
-            inputs: {
-              isValid: ":validateSchemaAgent.isValid",
-              counter: ":counter",
-            },
-          },
-        },
-      },
+      graph: graphMulmoScript,
     },
     writeJSON: {
       if: ":mulmoScript.validateSchemaAgent.isValid",
@@ -179,7 +189,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   );
 
   graph.injectValue("urls", parsedUrls);
-  graph.injectValue("prompt", readTemplatePrompt(templateName));
+  graph.injectValue("systemPrompt", readTemplatePrompt(templateName));
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
   graph.injectValue("llmAgent", agent);
