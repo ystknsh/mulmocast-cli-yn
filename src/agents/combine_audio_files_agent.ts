@@ -136,7 +136,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   // We cannot reuse longSilentId. We need to explicitly split it for each beat.
   const silentIds = mediaDurations.filter((md) => md.silenceDuration > 0).map((_, index) => `[ls_${index}]`);
   if (silentIds.length > 0) {
-    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
+    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath(), undefined, ["-stream_loop", "-1"]);
     ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
   }
 
