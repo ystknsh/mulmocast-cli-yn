@@ -433,6 +433,9 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 };
 
 const getConcurrency = (context: MulmoStudioContext) => {
+  if (context.presentationStyle.movieParams?.provider === "replicate") {
+    return 4;
+  }
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   if (imageAgentInfo.provider === "openai") {
     // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
