@@ -7,6 +7,9 @@
   "imageParams": {
     "style": "<style>Matrix and Ghost in the Shell style</style>"
   },
+  "audioParams": {
+    "bgmVolume": 0.0
+  },
   "beats": [
     {
       "audio": {

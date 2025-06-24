@@ -1,4 +1,4 @@
-import { assert } from "graphai";
+import { assert, GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
@@ -157,6 +157,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   });
 
   assert(silentIds.length === 0, "silentIds.length !== 0");
+
+  GraphAILogger.log("filterComplex:", ffmpegContext.filterComplex.join("\n"));
 
   // Finally, combine all audio files.
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
