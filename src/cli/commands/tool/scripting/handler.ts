@@ -30,7 +30,11 @@ export const handler = async (
   const cacheDirPath = getFullPath(outDirPath, (cache as string) ?? cacheDirName);
 
   if (!template) {
-    template = await selectTemplate();
+    if (interactive) {
+      template = await selectTemplate();
+    } else {
+      template = "business";
+    }
   }
 
   setGraphAILogger(verbose, {
