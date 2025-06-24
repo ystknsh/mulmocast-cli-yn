@@ -4,6 +4,10 @@
     "credit": "closing"
   },
   "title": "Vibe the Code",
+  "canvasSize": {
+    "width": 1536,
+    "height": 1024
+  },
   "imageParams": {
     "style": "<style>Matrix and Ghost in the Shell style</style>"
   },
