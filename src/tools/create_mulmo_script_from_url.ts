@@ -37,7 +37,7 @@ const graphMulmoScript: GraphData = {
     },
     llm: {
       agent: ":llmAgent",
-      console: { before: true },
+      // console: { before: true },
       inputs: {
         system: ":systemPrompt",
         prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
@@ -186,7 +186,7 @@ const graphDataText: GraphData = {
     // generate the mulmo script
     mulmoScript: {
       agent: "nestedAgent",
-      console: { before: true },
+      // console: { before: true },
       inputs: {
         sourceText: ":sourceText",
         systemPrompt: ":systemPrompt",
@@ -251,10 +251,7 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   writingMessage(result?.writeJSON?.path ?? "");
 };
 
-export const createMulmoScriptFromFile = async (
-  fileName: string,
-  { urls, templateName, outDirPath, filename, cacheDirPath, llm, llm_model }: ScriptingParams,
-) => {
+export const createMulmoScriptFromFile = async (fileName: string, { templateName, outDirPath, filename, cacheDirPath, llm, llm_model }: ScriptingParams) => {
   mkdir(outDirPath);
   mkdir(cacheDirPath);
 
