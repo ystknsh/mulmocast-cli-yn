@@ -111,7 +111,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         // padding is the amount of audio padding specified in the script.
         const padding = getPadding(context, beat, index);
         // totalPadding is the amount of audio padding to be added to the audio file.
-        const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+        const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
         const beatDuration = audioDuration + totalPadding;
         beatDurations.push(beatDuration);
         if (totalPadding > 0) {
