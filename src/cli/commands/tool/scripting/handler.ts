@@ -14,14 +14,14 @@ export const handler = async (
     u?: string[];
     i?: boolean;
     t?: string;
-    f?: string;
+    "input-file"?: string;
     c?: string;
     s?: string;
     llm?: LLM;
     llm_model?: string;
   }>,
 ) => {
-  const { o: outdir, b: basedir, f: inputFile, v: verbose, i: interactive, c: cache, s: filename, llm, llm_model } = argv;
+  const { o: outdir, b: basedir, "input-file": inputFile, v: verbose, i: interactive, c: cache, s: filename, llm, llm_model } = argv;
   let { t: template } = argv;
   const urls = argv.u || [];
 

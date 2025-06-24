@@ -26,11 +26,9 @@ export const builder = (yargs: Argv) => {
       type: "array",
       string: true,
     })
-    .option("f", {
-      alias: "inputFile",
+    .option("input-file", {
       description: "input file name",
       demandOption: false,
-      default: [],
       type: "string",
     })
     .option("i", {
