@@ -15,6 +15,7 @@ import { ScriptingParams } from "../types/index.js";
 import { cliLoadingPlugin } from "../utils/plugins.js";
 import { graphDataScriptFromUrlPrompt } from "../utils/prompt.js";
 import { llmPair } from "../utils/utils.js";
+import { readFileSync } from "fs";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -36,7 +37,7 @@ const graphMulmoScript: GraphData = {
     },
     llm: {
       agent: ":llmAgent",
-      console: {before: true},
+      console: { before: true },
       inputs: {
         system: ":systemPrompt",
         prompt: graphDataScriptFromUrlPrompt("${:sourceText.text}"),
@@ -158,6 +159,55 @@ const graphData: GraphData = {
   },
 };
 
+const graphDataText: GraphData = {
+  version: 0.5,
+  // Execute sequentially because the free version of browserless API doesn't support concurrent execution.
+  concurrency: 1,
+  nodes: {
+    systemPrompt: {
+      value: "",
+    },
+    outdir: {
+      value: "",
+    },
+    fileName: {
+      value: "",
+    },
+    llmAgent: {
+      value: "",
+    },
+    llmModel: {
+      value: "",
+    },
+    maxTokens: {
+      value: 0,
+    },
+    sourceText: {},
+    // generate the mulmo script
+    mulmoScript: {
+      agent: "nestedAgent",
+      console: { before: true },
+      inputs: {
+        sourceText: ":sourceText",
+        systemPrompt: ":systemPrompt",
+        llmAgent: ":llmAgent",
+        llmModel: ":llmModel",
+        maxTokens: ":maxTokens",
+      },
+      graph: graphMulmoScript,
+    },
+    writeJSON: {
+      if: ":mulmoScript.validateSchemaAgent.isValid",
+      agent: "fileWriteAgent",
+      inputs: {
+        file: "${:outdir}/${:fileName}-${@now}.json",
+        text: ":mulmoScript.validateSchemaAgent.data.toJSON()",
+      },
+      isResult: true,
+    },
+  },
+};
+
 export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath, filename, cacheDirPath, llm, llm_model }: ScriptingParams) => {
   mkdir(outDirPath);
   mkdir(cacheDirPath);
@@ -189,6 +239,39 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   );
 
   graph.injectValue("urls", parsedUrls);
+  graph.injectValue("systemPrompt", readTemplatePrompt(templateName));
+  graph.injectValue("outdir", outDirPath);
+  graph.injectValue("fileName", filename);
+  graph.injectValue("llmAgent", agent);
+  graph.injectValue("llmModel", model);
+  graph.injectValue("maxTokens", max_tokens);
+  graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
+
+  const result = await graph.run<{ path: string }>();
+  writingMessage(result?.writeJSON?.path ?? "");
+};
+
+export const createMulmoScriptFromFile = async (
+  fileName: string,
+  { urls, templateName, outDirPath, filename, cacheDirPath, llm, llm_model }: ScriptingParams,
+) => {
+  mkdir(outDirPath);
+  mkdir(cacheDirPath);
+
+  const text = readFileSync(fileName, "utf-8");
+  const { agent, model, max_tokens } = llmPair(llm, llm_model);
+
+  const graph = new GraphAI(graphDataText, {
+    ...vanillaAgents,
+    openAIAgent,
+    anthropicAgent,
+    geminiAgent,
+    groqAgent,
+    validateSchemaAgent,
+    fileWriteAgent,
+  });
+
+  graph.injectValue("sourceText", { text });
   graph.injectValue("systemPrompt", readTemplatePrompt(templateName));
   graph.injectValue("outdir", outDirPath);
   graph.injectValue("fileName", filename);
