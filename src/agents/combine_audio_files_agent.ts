@@ -92,7 +92,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
         // Yes, the current beat has spilled over audio.
         const beatsTotalDuration = groupBeatsDurations.reduce((a, b) => a + b, 0);
-        if (beatsTotalDuration > audioDuration) {
+        if (beatsTotalDuration > audioDuration + 0.01) {
+          // 0.01 is a tolerance to avoid floating point precision issues
           group.reduce((remaining, idx, iGroup) => {
             if (remaining >= groupBeatsDurations[iGroup]) {
               return remaining - groupBeatsDurations[iGroup];
@@ -102,7 +103,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           }, audioDuration);
         } else {
           // Last beat gets the rest of the audio.
-          groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
+          if (audioDuration > beatsTotalDuration) {
+            groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
+          }
         }
         beatDurations.push(...groupBeatsDurations);
       } else {
