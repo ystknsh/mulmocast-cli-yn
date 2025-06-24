@@ -10,6 +10,9 @@
   "audioParams": {
     "bgmVolume": 0.0
   },
+  "movieParams": {
+    "provider": "replicate"
+  },
   "beats": [
     {
       "audio": {
@@ -19,11 +22,18 @@
           "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/vibe001.mp3"
         }
       },
-      "imagePrompt": "A lone coder walking through a neon-lit alley, holographic code floating around, cyberpunk atmosphere"
+      "imagePrompt": "A lone coder walking through a neon-lit alley, holographic code floating around, cyberpunk atmosphere",
+      "moviePrompt": "Camera slowly pans behind the walking coder as holograms flicker and code pulses through the air"
     },
-    { "imagePrompt": "Close-up of cyberpunk sunglasses reflecting scrolling green code, matrix aesthetic" },
-    { "imagePrompt": "Liquid metal hand reaching toward a glowing holographic terminal, dark background" },
-    { "imagePrompt": "Futuristic city skyline at night with translucent AI faces hovering in the clouds" },
+    {
+      "imagePrompt": "Close-up of cyberpunk sunglasses reflecting scrolling green code, matrix aesthetic",
+      "moviePrompt": "Reflection in the glasses animates with scrolling matrix-style code while the camera slowly zooms in"
+    },
+    {
+      "imagePrompt": "Liquid metal hand reaching toward a glowing holographic terminal, dark background",
+      "moviePrompt": "The hand stretches and ripples like mercury, reaching for a swirling, responsive hologram"
+    },
+     { "imagePrompt": "Futuristic city skyline at night with translucent AI faces hovering in the clouds" },
     { "imagePrompt": "Neural network glowing like tree roots inside a transparent human skull" },
     { "imagePrompt": "Human silhouette surrounded by spinning AI-generated schematics and neon wires" },
     { "imagePrompt": "Hooded figure dissolving into vertical lines of green matrix-style code" },
