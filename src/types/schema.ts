@@ -195,6 +195,12 @@ export const beatAudioParamsSchema = z
   })
   .strict();
 
+export const mulmoHtmlImageParamsSchema = z
+  .object({
+    model: z.string().optional(), // default: provider specific
+  })
+  .strict();
+
 // Note: we can't extend beatAudioParamsSchema because it has padding as optional
 export const audioParamsSchema = z
   .object({
@@ -234,6 +240,7 @@ export const mulmoBeatSchema = z
         fillOption: mulmoFillOptionSchema,
       })
       .optional(),
+    htmlImageParams: mulmoHtmlImageParamsSchema.optional(),
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
@@ -267,6 +274,7 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
+export const text2HtmlImageProviderSchema = z.union([z.literal("openai"), z.literal("anthropic")]).default("openai");
 export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google"), z.literal("replicate")]).default("google");
 
 export const mulmoTransitionSchema = z.object({
@@ -302,6 +310,11 @@ export const mulmoPresentationStyleSchema = z.object({
     })
     .optional(),
   movieParams: mulmoMovieParamsSchema.optional(),
+  htmlImageParams: mulmoHtmlImageParamsSchema
+    .extend({
+      provider: text2HtmlImageProviderSchema,
+    })
+    .optional(),
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
   audioParams: audioParamsSchema.default({

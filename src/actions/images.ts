@@ -5,6 +5,7 @@ import { TaskManager } from "graphai/lib/task_manager.js";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
+import { anthropicAgent } from "@graphai/anthropic_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
@@ -23,7 +24,7 @@ import { renderHTMLToImage } from "../utils/markdown.js";
 const vanillaAgents = agents.default ?? agents;
 
 dotenv.config();
-// const openai = new OpenAI();
+
 import { GoogleAuth } from "google-auth-library";
 import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 
@@ -116,6 +117,7 @@ const beat_graph_data = {
   nodes: {
     context: {},
     imageAgentInfo: {},
+    htmlImageAgentInfo: {},
     movieAgentInfo: {},
     imageRefs: {},
     beat: {},
@@ -144,7 +146,10 @@ const beat_graph_data = {
     htmlImageAgent: {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
-      agent: "openAIAgent",
+      agent: ":htmlImageAgentInfo.agent",
+      params: {
+        mode: ":htmlImageAgentInfo.model",
+      },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
         system: ":preprocessor.htmlSystemPrompt",
@@ -154,9 +159,8 @@ const beat_graph_data = {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
-      // console: { before: true, after: true },
       inputs: {
-        html: ":htmlImageAgent.text.codeBlock()",
+        html: ":htmlImageAgent.text.codeBlockOrRaw()",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
@@ -239,6 +243,7 @@ const graph_data: GraphData = {
   nodes: {
     context: {},
     imageAgentInfo: {},
+    htmlImageAgentInfo: {},
     movieAgentInfo: {},
     outputStudioFilePath: {},
     imageRefs: {},
@@ -248,6 +253,7 @@ const graph_data: GraphData = {
         rows: ":context.studio.script.beats",
         context: ":context",
         imageAgentInfo: ":imageAgentInfo",
+        htmlImageAgentInfo: ":htmlImageAgentInfo",
         movieAgentInfo: ":movieAgentInfo",
         imageRefs: ":imageRefs",
       },
@@ -293,7 +299,6 @@ const graph_data: GraphData = {
       },
     },
     writeOutput: {
-      // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputStudioFilePath",
@@ -403,6 +408,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   mkdir(imageProjectDirPath);
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
+  const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
 
   const imageRefs = await getImageRefs(context);
 
@@ -423,6 +429,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
     context,
     imageAgentInfo,
+    htmlImageAgentInfo,
     movieAgentInfo: {
       agent: getMovieAgent(),
     },
@@ -451,7 +458,17 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    {
+      ...vanillaAgents,
+      imageGoogleAgent,
+      movieGoogleAgent,
+      movieReplicateAgent,
+      imageOpenaiAgent,
+      mediaMockAgent,
+      fileWriteAgent,
+      openAIAgent,
+      anthropicAgent,
+    },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
@@ -483,7 +500,17 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent },
+    {
+      ...vanillaAgents,
+      imageGoogleAgent,
+      movieGoogleAgent,
+      movieReplicateAgent,
+      imageOpenaiAgent,
+      mediaMockAgent,
+      fileWriteAgent,
+      openAIAgent,
+      anthropicAgent,
+    },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
