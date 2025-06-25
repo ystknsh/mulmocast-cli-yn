@@ -105,8 +105,8 @@ export const mulmoTextSlideMediaSchema = z
 export const mulmoCaptionParamsSchema = z
   .object({
     lang: langSchema.optional(),
-    textColor: z.string().default("#FFFFFF"),
-    backgroundColor: z.string().default("#000000"),
+    color: z.string().default("#FFFFFF"),
+    background: z.string().default("rgba(0, 0, 0, 0.4)"),
     fontSize: z.number().default(16),
     fontFamily: z.string().default("Arial"),
     fontWeight: z.string().default("normal"),
