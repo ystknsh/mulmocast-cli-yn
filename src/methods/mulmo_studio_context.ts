@@ -50,7 +50,7 @@ export const MulmoStudioContextMethods = {
     return context.studio.filename;
   },
   getCaption(context: MulmoStudioContext): string | undefined {
-    return context.caption;
+    return context.studio.script.captionParams?.lang;
   },
   setSessionState(context: MulmoStudioContext, sessionType: SessionType, value: boolean) {
     context.sessionState.inSession[sessionType] = value;
