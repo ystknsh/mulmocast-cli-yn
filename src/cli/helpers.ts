@@ -183,7 +183,6 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     const caption = argv.c;
     if (caption && studio.script.captionParams === undefined) {
       const captionParams = mulmoCaptionParamsSchema.parse({
-        useText: true,
         lang: caption,
       });
       studio.script.captionParams = captionParams;
