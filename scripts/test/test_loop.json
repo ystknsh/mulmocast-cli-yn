@@ -12,112 +12,12 @@
   "title": "Loop Test",
   "beats": [
     {
-      "duration": 20,
+      "duration": 200,
       "text": "This beat has a long duration.",
       "image": {
         "type": "textSlide",
         "slide": {
-          "title": "1. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "2. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "3. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "4. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "5. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "6. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "7. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "8. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "9. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "10. Duration = 20"
-        }
-      }
-    },
-    {
-      "duration": 20,
-      "text": "This beat has a long duration.",
-      "image": {
-        "type": "textSlide",
-        "slide": {
-          "title": "11. Duration = 20"
+          "title": "Duration = 200"
         }
       }
     },

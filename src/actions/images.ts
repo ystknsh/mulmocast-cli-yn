@@ -12,7 +12,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo, MulmoCanvasDimension } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, mediaMockAgent } from "../agents/index.js";
+import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { findImagePlugin } from "../utils/image_plugins/index.js";
 
@@ -62,7 +62,15 @@ export const imagePreprocessAgent = async (namedInputs: {
 
   if (beat.htmlPrompt) {
     const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
-    return { imagePath, htmlPrompt };
+    const htmlSystemPrompt = [
+      "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
+      `The view port size is ${context.presentationStyle.canvasSize.width}x${context.presentationStyle.canvasSize.height}. Make sure the HTML fits within the view port.`,
+      "If charts are needed, use Chart.js to present them in a clean and visually appealing way.",
+      "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
+      "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
+      "If data is provided, use it effectively to populate the slide.",
+    ];
+    return { imagePath, htmlPrompt, htmlSystemPrompt };
   }
 
   // images for "edit_image"
@@ -145,13 +153,7 @@ const beat_graph_data = {
       },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
-        system: [
-          "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
-          "If charts are needed, use Chart.js to present them in a clean and visually appealing way.",
-          "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
-          "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
-          "If data is provided, use it effectively to populate the slide.",
-        ],
+        system: ":preprocessor.htmlSystemPrompt",
       },
     },
     htmlImageGenerator: {
@@ -409,12 +411,25 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 
   const imageRefs = await getImageRefs(context);
 
+  // Determine movie agent based on provider
+  const getMovieAgent = () => {
+    if (context.dryRun) return "mediaMockAgent";
+    const provider = context.presentationStyle.movieParams?.provider ?? "google";
+    switch (provider) {
+      case "replicate":
+        return "movieReplicateAgent";
+      case "google":
+      default:
+        return "movieGoogleAgent";
+    }
+  };
+
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
     context,
     imageAgentInfo,
     movieAgentInfo: {
-      agent: context.dryRun ? "mediaMockAgent" : "movieGoogleAgent",
+      agent: getMovieAgent(),
     },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, fileName),
     imageRefs,
@@ -423,6 +438,9 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 };
 
 const getConcurrency = (context: MulmoStudioContext) => {
+  if (context.presentationStyle.movieParams?.provider === "replicate") {
+    return 4;
+  }
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   if (imageAgentInfo.provider === "openai") {
     // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
@@ -438,7 +456,7 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
@@ -470,7 +488,7 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
+    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
     options,
   );
   Object.keys(injections).forEach((key: string) => {

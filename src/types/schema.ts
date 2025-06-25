@@ -168,6 +168,12 @@ export const mulmoAudioAssetSchema = z.union([mulmoAudioMediaSchema, mulmoMidiMe
 const imageIdSchema = z.string();
 
 export const mulmoImageParamsImagesSchema = z.record(imageIdSchema, mulmoImageMediaSchema);
+export const mulmoFillOptionSchema = z
+  .object({
+    style: z.enum(["aspectFit", "aspectFill"]).default("aspectFit"),
+  })
+  .describe("How to handle aspect ratio differences between image and canvas");
+
 export const mulmoImageParamsSchema = z
   .object({
     model: z.string().optional(), // default: provider specific
@@ -223,6 +229,11 @@ export const mulmoBeatSchema = z
 
     imageParams: mulmoImageParamsSchema.optional(), // beat specific parameters
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
+    movieParams: z
+      .object({
+        fillOption: mulmoFillOptionSchema,
+      })
+      .optional(),
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
     imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
@@ -256,7 +267,7 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
-export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("google");
+export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google"), z.literal("replicate")]).default("google");
 
 export const mulmoTransitionSchema = z.object({
   type: z.enum(["fade", "slideout_left"]),
@@ -268,6 +279,7 @@ export const mulmoMovieParamsSchema = z
     provider: text2MovieProviderSchema.optional(),
     model: z.string().optional(), // default: provider specific
     transition: mulmoTransitionSchema.optional(),
+    fillOption: mulmoFillOptionSchema.optional(),
   })
   .strict();
 
