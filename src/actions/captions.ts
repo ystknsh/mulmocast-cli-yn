@@ -45,6 +45,8 @@ const graph_data: GraphData = {
                   height: `${canvasSize.height}`,
                   color: captionParams.color,
                   background: captionParams.background,
+                  fontSize: captionParams.fontSize,
+                  textAlign: captionParams.textAlign,
                 });
                 await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
                 context.studio.beats[index].captionFile = imagePath;
