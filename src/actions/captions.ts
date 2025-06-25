@@ -27,16 +27,16 @@ const graph_data: GraphData = {
               const { beat, context, index } = namedInputs;
               try {
                 MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
-                const caption = MulmoStudioContextMethods.getCaption(context);
+                const captionParams = { ...context.studio.script.captionParams, ...beat.captionParams };
                 const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = getCaptionImagePath(context, index);
                 const template = getHTMLFile("caption");
                 const text = (() => {
                   const multiLingual = context.multiLingual;
-                  if (caption && multiLingual) {
-                    return multiLingual[index].multiLingualTexts[caption].text;
+                  if (captionParams.lang && multiLingual) {
+                    return multiLingual[index].multiLingualTexts[captionParams.lang].text;
                   }
-                  GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${caption}`);
+                  GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${captionParams.lang}`);
                   return beat.text;
                 })();
                 const htmlData = interpolate(template, {
