@@ -1,4 +1,5 @@
 import "dotenv/config";
+import path from "path";
 import { GraphAI, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -251,11 +252,15 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   writingMessage(result?.writeJSON?.path ?? "");
 };
 
-export const createMulmoScriptFromFile = async (fileName: string, { templateName, outDirPath, filename, cacheDirPath, llm, llm_model }: ScriptingParams) => {
+export const createMulmoScriptFromFile = async (
+  fileName: string,
+  { templateName, outDirPath, filename, cacheDirPath, llm, llm_model, verbose }: ScriptingParams,
+) => {
   mkdir(outDirPath);
   mkdir(cacheDirPath);
+  const filePath = path.resolve(process.cwd(), fileName);
 
-  const text = readFileSync(fileName, "utf-8");
+  const text = readFileSync(filePath, "utf-8");
   const { agent, model, max_tokens } = llmPair(llm, llm_model);
 
   const graph = new GraphAI(graphDataText, {
@@ -275,8 +280,9 @@ export const createMulmoScriptFromFile = async (fileName: string, { templateName
   graph.injectValue("llmAgent", agent);
   graph.injectValue("llmModel", model);
   graph.injectValue("maxTokens", max_tokens);
-  graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
-
+  if (!verbose) {
+    graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
+  }
   const result = await graph.run<{ path: string }>();
   writingMessage(result?.writeJSON?.path ?? "");
 };

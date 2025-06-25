@@ -50,7 +50,7 @@ export const handler = async (
     llm_model,
   });
 
-  const context = { outDirPath, templateName: template, urls, filename: filename as string, cacheDirPath, llm_model, llm };
+  const context = { outDirPath, templateName: template, urls, filename: filename as string, cacheDirPath, llm_model, llm, verbose };
 
   if (interactive) {
     await createMulmoScriptInteractively(context);
