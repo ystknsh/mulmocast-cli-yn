@@ -1,4 +1,4 @@
-import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, mulmoCaptionParamsSchema } from "../types/index.js";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
@@ -27,7 +27,7 @@ const graph_data: GraphData = {
               const { beat, context, index } = namedInputs;
               try {
                 MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
-                const captionParams = { ...context.studio.script.captionParams, ...beat.captionParams };
+                const captionParams = mulmoCaptionParamsSchema.parse({ ...context.studio.script.captionParams, ...beat.captionParams });
                 const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = getCaptionImagePath(context, index);
                 const template = getHTMLFile("caption");
