@@ -195,7 +195,6 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
       force: Boolean(argv.f),
       dryRun: Boolean(argv.dryRun),
       lang: argv.l,
-      caption: argv.c,
       sessionState: {
         inSession: {
           audio: false,

@@ -95,7 +95,6 @@ export type MulmoStudioContext = {
   lang?: string;
   dryRun?: boolean;
   force: boolean;
-  caption?: string;
   sessionState: MulmoSessionState;
   presentationStyle: MulmoPresentationStyle;
   multiLingual: MulmoStudioMultiLingual;
