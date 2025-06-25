@@ -102,6 +102,19 @@ export const mulmoTextSlideMediaSchema = z
   })
   .strict();
 
+export const mulmoCaptionParamsSchema = z
+  .object({
+    useText: z.boolean().default(false),
+    textColor: z.string().default("#FFFFFF"),
+    backgroundColor: z.string().default("#000000"),
+    fontSize: z.number().default(16),
+    fontFamily: z.string().default("Arial"),
+    fontWeight: z.string().default("normal"),
+    textAlign: z.string().default("left"),
+    textDecoration: z.string().default("none"),
+  })
+  .strict();
+
 export const mulmoChartMediaSchema = z
   .object({
     type: z.literal("chart"),
@@ -243,6 +256,7 @@ export const mulmoBeatSchema = z
     htmlImageParams: mulmoHtmlImageParamsSchema.optional(),
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
+    captionParams: mulmoCaptionParamsSchema.optional(),
     imageNames: z.array(imageIdSchema).optional(), // list of image names to use for image generation. The default is all images in the imageParams.images.
     imagePrompt: z.string().optional(),
     moviePrompt: z.string().optional(),
@@ -317,6 +331,7 @@ export const mulmoPresentationStyleSchema = z.object({
     .optional(),
   // for textSlides
   textSlideParams: textSlideParamsSchema.optional(),
+  captionParams: mulmoCaptionParamsSchema.optional(),
   audioParams: audioParamsSchema.default({
     introPadding: 1.0,
     padding: 0.3,
