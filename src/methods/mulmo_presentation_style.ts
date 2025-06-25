@@ -89,6 +89,11 @@ export const MulmoPresentationStyleMethods = {
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
     const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
     const agent = provider === "anthropic" ? "anthropicAgent" : "openAIAgent";
+    const model = presentationStyle.htmlImageParams?.model
+      ? presentationStyle.htmlImageParams?.model
+      : provider === "anthropic"
+        ? "claude-3-7-sonnet-20250219"
+        : "gpt-4o-mini";
     return {
       provider,
       agent,

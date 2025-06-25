@@ -4,7 +4,8 @@
     "credit": "closing"
   },
   "htmlImageParams": {
-    "provider": "anthropic"
+    "provider": "anthropic",
+    "model": "claude-3-7-sonnet-20250219"
   },
   "title": "Sample Title",
   "references": [

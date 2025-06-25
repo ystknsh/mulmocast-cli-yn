@@ -24,7 +24,7 @@ import { renderHTMLToImage } from "../utils/markdown.js";
 const vanillaAgents = agents.default ?? agents;
 
 dotenv.config();
-// const openai = new OpenAI();
+
 import { GoogleAuth } from "google-auth-library";
 import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 
@@ -145,12 +145,10 @@ const beat_graph_data = {
     },
     htmlImageAgent: {
       if: ":preprocessor.htmlPrompt",
-      console: { before: true, after: true },
       defaultValue: {},
-      // agent: "openAIAgent",
       agent: ":htmlImageAgentInfo.agent",
       params: {
-        mode: "claude-3-7-sonnet-20250219",
+        mode: ":htmlImageAgentInfo.model",
       },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
@@ -162,7 +160,7 @@ const beat_graph_data = {
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
       inputs: {
-        html: ":htmlImageAgent.text",
+        html: ":htmlImageAgent.text.codeBlockOrRaw()",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
@@ -301,7 +299,6 @@ const graph_data: GraphData = {
       },
     },
     writeOutput: {
-      // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputStudioFilePath",
