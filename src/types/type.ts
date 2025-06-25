@@ -131,6 +131,7 @@ export type Text2ImageAgentInfo = {
 export type Text2HtmlAgentInfo = {
   provider: Text2HtmlImageProvider;
   agent: string;
+  model: string;
 };
 
 export type BeatMediaType = "movie" | "image";

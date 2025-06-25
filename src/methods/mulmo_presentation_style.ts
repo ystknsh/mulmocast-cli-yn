@@ -97,6 +97,7 @@ export const MulmoPresentationStyleMethods = {
     return {
       provider,
       agent,
+      model,
     };
   },
   getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {
