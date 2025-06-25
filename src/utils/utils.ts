@@ -83,12 +83,38 @@ export const settings2GraphAIConfig = (settings?: Record<string, string>): Confi
       config.openAIAgent = {
         apiKey: settings.OPENAI_API_KEY,
       };
+      config.ttsOpenaiAgent = {
+        apiKey: settings.OPENAI_API_KEY,
+      };
+      config.imageOpenaiAgent = {
+        apiKey: settings.OPENAI_API_KEY,
+      };
+    }
+    if (settings.ANTHROPIC_API_TOKEN) {
+      config.anthropicAgent = {
+        apiKey: settings.ANTHROPIC_API_TOKEN,
+      };
     }
     if (settings.REPLICATE_API_TOKEN) {
       config.movieReplicateAgent = {
         apiKey: settings.REPLICATE_API_TOKEN,
       };
     }
+    if (settings.NIJIVOICE_API_KEY) {
+      config.ttsNijivoiceAgent = {
+        apiKey: settings.NIJIVOICE_API_KEY,
+      };
+    }
+    if (settings.ELEVENLABS_API_KEY) {
+      config.ttsElevenlabsAgent = {
+        apiKey: settings.ELEVENLABS_API_KEY,
+      };
+    }
+    // TODO
+    // browserlessAgent
+    // ttsGoogleAgent
+    // geminiAgent, groqAgent for tool
+    // TAVILY_API_KEY ( for deep research)
   }
   return config;
 };
