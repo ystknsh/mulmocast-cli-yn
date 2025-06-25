@@ -7,6 +7,7 @@ import {
   MulmoImageParams,
   Text2SpeechProvider,
   Text2ImageAgentInfo,
+  Text2HtmlAgentInfo,
   BeatMediaType,
   MulmoPresentationStyle,
   SpeakerData,

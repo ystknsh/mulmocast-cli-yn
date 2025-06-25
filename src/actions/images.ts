@@ -412,7 +412,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
   const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
-  console.log(htmlImageAgentInfo);
+
   const imageRefs = await getImageRefs(context);
 
   // Determine movie agent based on provider
