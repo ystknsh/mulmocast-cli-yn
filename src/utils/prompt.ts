@@ -1,4 +1,4 @@
-import { MulmoBeat, MulmoScript, MulmoScriptTemplate, MulmoStoryboard } from "../types/index.js";
+import { MulmoBeat, MulmoScript, MulmoScriptTemplate, MulmoStoryboard, MulmoCanvasDimension } from "../types/index.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
