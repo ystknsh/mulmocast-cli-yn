@@ -180,12 +180,11 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
     const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
-    const caption = argv.c;
-    if (caption && studio.script.captionParams === undefined) {
-      const captionParams = mulmoCaptionParamsSchema.parse({
-        lang: caption,
+    if (argv.c) {
+      studio.script.captionParams = mulmoCaptionParamsSchema.parse({
+        ...(studio.script.captionParams ?? {}),
+        lang: argv.c,
       });
-      studio.script.captionParams = captionParams;
     }
 
     return {
