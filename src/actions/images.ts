@@ -117,6 +117,7 @@ const beat_graph_data = {
   nodes: {
     context: {},
     imageAgentInfo: {},
+    htmlImageAgentInfo: {},
     movieAgentInfo: {},
     imageRefs: {},
     beat: {},
@@ -147,7 +148,7 @@ const beat_graph_data = {
       console: { before: true, after: true },
       defaultValue: {},
       // agent: "openAIAgent",
-      agent: "anthropicAgent",
+      agent: ":htmlImageAgentInfo.agent",
       params: {
         mode: "claude-3-7-sonnet-20250219",
       },
@@ -244,6 +245,7 @@ const graph_data: GraphData = {
   nodes: {
     context: {},
     imageAgentInfo: {},
+    htmlImageAgentInfo: {},
     movieAgentInfo: {},
     outputStudioFilePath: {},
     imageRefs: {},
@@ -253,6 +255,7 @@ const graph_data: GraphData = {
         rows: ":context.studio.script.beats",
         context: ":context",
         imageAgentInfo: ":imageAgentInfo",
+        htmlImageAgentInfo: ":htmlImageAgentInfo",
         movieAgentInfo: ":movieAgentInfo",
         imageRefs: ":imageRefs",
       },
@@ -408,7 +411,8 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   mkdir(imageProjectDirPath);
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
-
+  const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
+  console.log(htmlImageAgentInfo);
   const imageRefs = await getImageRefs(context);
 
   // Determine movie agent based on provider
@@ -428,6 +432,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
     context,
     imageAgentInfo,
+    htmlImageAgentInfo,
     movieAgentInfo: {
       agent: getMovieAgent(),
     },

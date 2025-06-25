@@ -22,6 +22,7 @@ import {
   mulmoScriptTemplateSchema,
   mulmoScriptTemplateFileSchema,
   text2ImageProviderSchema,
+  text2HtmlImageProviderSchema,
   text2MovieProviderSchema,
   text2SpeechProviderSchema,
   mulmoPresentationStyleSchema,
@@ -51,6 +52,7 @@ export type MulmoImageParamsImages = z.infer<typeof mulmoImageParamsImagesSchema
 export type MulmoFillOption = z.infer<typeof mulmoFillOptionSchema>;
 export type TextSlideParams = z.infer<typeof textSlideParamsSchema>;
 export type Text2ImageProvider = z.infer<typeof text2ImageProviderSchema>;
+export type Text2HtmlImageProvider = z.infer<typeof text2HtmlImageProviderSchema>;
 export type Text2MovieProvider = z.infer<typeof text2MovieProviderSchema>;
 export type Text2SpeechProvider = z.infer<typeof text2SpeechProviderSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
@@ -124,6 +126,11 @@ export type Text2ImageAgentInfo = {
   provider: Text2ImageProvider;
   agent: string;
   imageParams: MulmoImageParams;
+};
+
+export type Text2HtmlAgentInfo = {
+  provider: Text2HtmlImageProvider;
+  agent: string;
 };
 
 export type BeatMediaType = "movie" | "image";

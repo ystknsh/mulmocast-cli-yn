@@ -11,7 +11,7 @@ import {
   MulmoPresentationStyle,
   SpeakerData,
 } from "../types/index.js";
-import { text2ImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
+import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
 
 const defaultTextSlideStyles = [
@@ -83,6 +83,14 @@ export const MulmoPresentationStyleMethods = {
       provider,
       agent: dryRun ? "mediaMockAgent" : provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
       imageParams: { ...defaultImageParams, ...presentationStyle.imageParams },
+    };
+  },
+  getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
+    const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
+    const agent = provider === "anthropic" ? "anthropicAgent" : "openAIAgent";
+    return {
+      provider,
+      agent,
     };
   },
   getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {
