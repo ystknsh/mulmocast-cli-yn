@@ -65,7 +65,7 @@ const graph_data: GraphData = {
 };
 
 export const captions = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  if (context.caption) {
+  if (MulmoStudioContextMethods.getCaption(context)) {
     try {
       MulmoStudioContextMethods.setSessionState(context, "caption", true);
       const graph = new GraphAI(graph_data, { ...vanillaAgents });

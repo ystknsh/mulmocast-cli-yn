@@ -18,7 +18,7 @@ import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 import type { MulmoStudio, MulmoScript, MulmoStudioContext, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
-import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema } from "../types/schema.js";
+import { mulmoCaptionParamsSchema, mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema } from "../types/schema.js";
 
 export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
   if (verbose) {
@@ -180,6 +180,12 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
     const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
+    if (argv.c) {
+      studio.script.captionParams = mulmoCaptionParamsSchema.parse({
+        ...(studio.script.captionParams ?? {}),
+        lang: argv.c,
+      });
+    }
 
     return {
       studio,
@@ -187,7 +193,6 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
       force: Boolean(argv.f),
       dryRun: Boolean(argv.dryRun),
       lang: argv.l,
-      caption: argv.c,
       sessionState: {
         inSession: {
           audio: false,
@@ -215,7 +220,7 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
 };
 
 export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
-  if (argv.l || argv.c) {
+  if (argv.l || context.studio.script.captionParams?.lang) {
     GraphAILogger.log("run translate");
     await translate(context);
   }
