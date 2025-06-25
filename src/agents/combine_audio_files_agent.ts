@@ -1,4 +1,4 @@
-import { assert } from "graphai";
+import { assert, GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
@@ -92,7 +92,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
         // Yes, the current beat has spilled over audio.
         const beatsTotalDuration = groupBeatsDurations.reduce((a, b) => a + b, 0);
-        if (beatsTotalDuration > audioDuration) {
+        if (beatsTotalDuration > audioDuration + 0.01) {
+          // 0.01 is a tolerance to avoid floating point precision issues
           group.reduce((remaining, idx, iGroup) => {
             if (remaining >= groupBeatsDurations[iGroup]) {
               return remaining - groupBeatsDurations[iGroup];
@@ -102,7 +103,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           }, audioDuration);
         } else {
           // Last beat gets the rest of the audio.
-          groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
+          if (audioDuration > beatsTotalDuration) {
+            groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
+          }
         }
         beatDurations.push(...groupBeatsDurations);
       } else {
@@ -111,7 +114,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         // padding is the amount of audio padding specified in the script.
         const padding = getPadding(context, beat, index);
         // totalPadding is the amount of audio padding to be added to the audio file.
-        const totalPadding = getTotalPadding(padding, movieDuration, audioDuration, beat.duration);
+        const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
         const beatDuration = audioDuration + totalPadding;
         beatDurations.push(beatDuration);
         if (totalPadding > 0) {
@@ -136,7 +139,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   // We cannot reuse longSilentId. We need to explicitly split it for each beat.
   const silentIds = mediaDurations.filter((md) => md.silenceDuration > 0).map((_, index) => `[ls_${index}]`);
   if (silentIds.length > 0) {
-    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath());
+    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath(), undefined, ["-stream_loop", "-1"]);
     ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
   }
 
@@ -157,6 +160,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   });
 
   assert(silentIds.length === 0, "silentIds.length !== 0");
+
+  GraphAILogger.log("filterComplex:", ffmpegContext.filterComplex.join("\n"));
 
   // Finally, combine all audio files.
   ffmpegContext.filterComplex.push(`${inputIds.join("")}concat=n=${inputIds.length}:v=0:a=1[aout]`);
