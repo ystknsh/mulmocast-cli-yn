@@ -85,7 +85,8 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
-const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, context: MulmoStudioContext, caption: string | undefined) => {
+const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, context: MulmoStudioContext) => {
+  const caption = MulmoStudioContextMethods.getCaption(context);
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
@@ -245,13 +246,12 @@ export const movieFilePath = (context: MulmoStudioContext) => {
 export const movie = async (context: MulmoStudioContext) => {
   MulmoStudioContextMethods.setSessionState(context, "video", true);
   try {
-    const caption = MulmoStudioContextMethods.getCaption(context);
     const fileName = MulmoStudioContextMethods.getFileName(context);
     const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
     const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, fileName);
     const outputVideoPath = movieFilePath(context);
 
-    if (await createVideo(audioArtifactFilePath, outputVideoPath, context, caption)) {
+    if (await createVideo(audioArtifactFilePath, outputVideoPath, context)) {
       writingMessage(outputVideoPath);
     }
   } finally {
