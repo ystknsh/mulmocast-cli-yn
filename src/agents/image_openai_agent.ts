@@ -25,10 +25,12 @@ export const imageOpenaiAgent: AgentFunction<
     canvasSize: { width: number; height: number };
   },
   { buffer: Buffer },
-  { prompt: string; images: string[] | null | undefined }
-> = async ({ namedInputs, params }) => {
+  { prompt: string; images: string[] | null | undefined },
+  { apiKey?: string }
+> = async ({ namedInputs, params, config }) => {
   const { prompt, images } = namedInputs;
-  const { apiKey, moderation, canvasSize } = params;
+  const { moderation, canvasSize } = params;
+  const { apiKey } = { ...config };
   const model = params.model ?? defaultOpenAIImageModel;
   const openai = new OpenAI({ apiKey });
   const size = (() => {
