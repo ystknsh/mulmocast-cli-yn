@@ -3,7 +3,10 @@
     "version": "1.0"
   },
   "captionParams": {
-    "lang": "ja"
+    "lang": "ja",
+    "styles": [
+      "color: yellow"
+    ]
   },
   "beats": [
     {
