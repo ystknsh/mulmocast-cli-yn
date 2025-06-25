@@ -1,0 +1,21 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "captionParams": {
+    "useText": true,
+    "lang": "ja"
+  },
+  "beats": [
+    {
+      "text": "Hello World",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Hello World",
+          "bullets": ["Hello", "World"]
+        }
+      }
+    }
+  ]
+}
