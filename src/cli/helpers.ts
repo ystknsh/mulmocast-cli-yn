@@ -18,7 +18,7 @@ import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 import type { MulmoStudio, MulmoScript, MulmoStudioContext, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { translate } from "../actions/translate.js";
-import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema } from "../types/schema.js";
+import { mulmoCaptionParamsSchema, mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema } from "../types/schema.js";
 
 export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
   if (verbose) {
@@ -180,6 +180,14 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
     const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
+    const caption = argv.c;
+    if (caption && studio.script.captionParams === undefined) {
+      const captionParams = mulmoCaptionParamsSchema.parse({
+        useText: true,
+        lang: caption,
+      });
+      studio.script.captionParams = captionParams;
+    }
 
     return {
       studio,
