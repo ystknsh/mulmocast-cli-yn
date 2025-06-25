@@ -1,4 +1,4 @@
-import { MulmoStudioContext, MulmoBeat } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, mulmoCaptionParamsSchema } from "../types/index.js";
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
@@ -27,22 +27,23 @@ const graph_data: GraphData = {
               const { beat, context, index } = namedInputs;
               try {
                 MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
-                const caption = MulmoStudioContextMethods.getCaption(context);
+                const captionParams = mulmoCaptionParamsSchema.parse({ ...context.studio.script.captionParams, ...beat.captionParams });
                 const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = getCaptionImagePath(context, index);
                 const template = getHTMLFile("caption");
                 const text = (() => {
                   const multiLingual = context.multiLingual;
-                  if (caption && multiLingual) {
-                    return multiLingual[index].multiLingualTexts[caption].text;
+                  if (captionParams.lang && multiLingual) {
+                    return multiLingual[index].multiLingualTexts[captionParams.lang].text;
                   }
-                  GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${caption}`);
+                  GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${captionParams.lang}`);
                   return beat.text;
                 })();
                 const htmlData = interpolate(template, {
                   caption: text,
                   width: `${canvasSize.width}`,
                   height: `${canvasSize.height}`,
+                  styles: captionParams.styles.join(";\n"),
                 });
                 await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
                 context.studio.beats[index].captionFile = imagePath;
