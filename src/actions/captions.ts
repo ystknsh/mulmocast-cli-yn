@@ -43,7 +43,7 @@ const graph_data: GraphData = {
                   caption: text,
                   width: `${canvasSize.width}`,
                   height: `${canvasSize.height}`,
-                  styles: captionParams.styles.join(";\n")
+                  styles: captionParams.styles.join(";\n"),
                 });
                 console.log(htmlData);
                 await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
