@@ -456,7 +456,17 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
+    {
+      ...vanillaAgents,
+      imageGoogleAgent,
+      movieGoogleAgent,
+      movieReplicateAgent,
+      imageOpenaiAgent,
+      mediaMockAgent,
+      fileWriteAgent,
+      openAIAgent,
+      anthropicAgent,
+    },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
@@ -488,7 +498,17 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,
-    { ...vanillaAgents, imageGoogleAgent, movieGoogleAgent, movieReplicateAgent, imageOpenaiAgent, mediaMockAgent, fileWriteAgent, openAIAgent, anthropicAgent },
+    {
+      ...vanillaAgents,
+      imageGoogleAgent,
+      movieGoogleAgent,
+      movieReplicateAgent,
+      imageOpenaiAgent,
+      mediaMockAgent,
+      fileWriteAgent,
+      openAIAgent,
+      anthropicAgent,
+    },
     options,
   );
   Object.keys(injections).forEach((key: string) => {
