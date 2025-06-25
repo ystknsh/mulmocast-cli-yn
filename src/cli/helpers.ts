@@ -222,7 +222,7 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
 };
 
 export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
-  if (argv.l || argv.c) {
+  if (argv.l || context.studio.script.captionParams?.lang) {
     GraphAILogger.log("run translate");
     await translate(context);
   }
