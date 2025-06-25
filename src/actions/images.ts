@@ -16,6 +16,7 @@ import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAge
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { findImagePlugin } from "../utils/image_plugins/index.js";
 
+import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
 import { imagePrompt } from "../utils/prompt.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
 
@@ -322,7 +323,7 @@ const googleAuth = async () => {
   }
 };
 
-const graphOption = async (context: MulmoStudioContext) => {
+const graphOption = async (context: MulmoStudioContext, settings?: Record<string, string>) => {
   const agentFilters = [
     {
       name: "fileCacheAgentFilter",
@@ -340,21 +341,23 @@ const graphOption = async (context: MulmoStudioContext) => {
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
 
+  const config = settings2GraphAIConfig(settings);
+
   // We need to get google's auth token only if the google is the text2image provider.
   if (imageAgentInfo.provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
+    userAssert(!!process.env.GOOGLE_PROJECT_ID, "GOOGLE_PROJECT_ID is not set");
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
-    options.config = {
-      imageGoogleAgent: {
-        projectId: process.env.GOOGLE_PROJECT_ID,
-        token,
-      },
-      movieGoogleAgent: {
-        projectId: process.env.GOOGLE_PROJECT_ID,
-        token,
-      },
+    config["imageGoogleAgent"] = {
+      projectId: process.env.GOOGLE_PROJECT_ID,
+      token,
+    };
+    config["movieGoogleAgent"] = {
+      projectId: process.env.GOOGLE_PROJECT_ID,
+      token,
     };
   }
+  options.config = config;
   return options;
 };
 
@@ -453,8 +456,8 @@ const getConcurrency = (context: MulmoStudioContext) => {
   return 4;
 };
 
-const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  const options = await graphOption(context);
+const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
+  const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     graph_data,
@@ -483,10 +486,10 @@ const generateImages = async (context: MulmoStudioContext, callbacks?: CallbackF
   return res.mergeResult as unknown as MulmoStudioContext;
 };
 
-export const images = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]): Promise<MulmoStudioContext> => {
+export const images = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]): Promise<MulmoStudioContext> => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
-    const newContext = await generateImages(context, callbacks);
+    const newContext = await generateImages(context, settings, callbacks);
     MulmoStudioContextMethods.setSessionState(context, "image", false);
     return newContext;
   } catch (error) {
@@ -495,8 +498,8 @@ export const images = async (context: MulmoStudioContext, callbacks?: CallbackFu
   }
 };
 
-export const generateBeatImage = async (index: number, context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
-  const options = await graphOption(context);
+export const generateBeatImage = async (index: number, context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
+  const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(
     beat_graph_data,

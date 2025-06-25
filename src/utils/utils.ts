@@ -1,5 +1,6 @@
 import * as crypto from "crypto";
 import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
+import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
 export const llm = ["openAI", "anthropic", "gemini", "groq"] as const;
 
@@ -74,3 +75,20 @@ export function userAssert(condition: boolean, message: string): asserts conditi
     throw new Error(message);
   }
 }
+
+export const settings2GraphAIConfig = (settings?: Record<string, string>): ConfigDataDictionary<DefaultConfigData> => {
+  const config: ConfigDataDictionary<DefaultConfigData> = {};
+  if (settings) {
+    if (settings.OPENAI_API_KEY) {
+      config.openAIAgent = {
+        apiKey: settings.OPENAI_API_KEY,
+      };
+    }
+    if (settings.REPLICATE_API_TOKEN) {
+      config.movieReplicateAgent = {
+        apiKey: settings.REPLICATE_API_TOKEN,
+      };
+    }
+  }
+  return config;
+};
