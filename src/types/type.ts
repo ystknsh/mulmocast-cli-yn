@@ -107,7 +107,7 @@ export type ScriptingParams = {
   filename: string;
   llm_model?: string;
   llm?: LLM;
-  verbose: boolean;
+  verbose?: boolean;
 };
 
 export type ImageProcessorParams = {
