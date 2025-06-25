@@ -47,7 +47,10 @@ const graph_data: GraphData = {
                   background: captionParams.background,
                   fontSize: captionParams.fontSize,
                   textAlign: captionParams.textAlign,
+                  fontFamily: captionParams.fontFamily,
+                  fontWeight: captionParams.fontWeight,
                 });
+                console.log(htmlData);
                 await renderHTMLToImage(htmlData, imagePath, canvasSize.width, canvasSize.height, false, true);
                 context.studio.beats[index].captionFile = imagePath;
                 return imagePath;
