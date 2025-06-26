@@ -144,12 +144,13 @@ const beat_graph_data = {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
       agent: ":htmlImageAgentInfo.agent",
-      params: {
-        mode: ":htmlImageAgentInfo.model",
-      },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
         system: ":preprocessor.htmlImageSystemPrompt",
+        params: {
+          mode: ":htmlImageAgentInfo.model",
+          max_tokens: ":htmlImageAgentInfo.max_tokens",
+        },
       },
     },
     htmlImageGenerator: {
