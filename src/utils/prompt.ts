@@ -154,7 +154,7 @@ export const htmlImageSystemPrompt = (canvasSize: MulmoCanvasDimension) => {
   return [
     "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
     `The view port size is ${canvasSize.width}x${canvasSize.height}. Make sure the HTML fits within the view port.`,
-    "If charts are needed, use Chart.js to present them in a clean and visually appealing way.",
+    "If charts are needed, use Chart.js to present them in a clean and visually appealing way (with animation:false to disable animation).",
     "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
     "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
     "If data is provided, use it effectively to populate the slide.",
