@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { userAssert } from "../utils/utils.js";
+import { userAssert, llmConfig } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
   MulmoBeat,
@@ -88,17 +88,14 @@ export const MulmoPresentationStyleMethods = {
   },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
     const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
-    const agent = provider === "anthropic" ? "anthropicAgent" : "openAIAgent";
-    const model = presentationStyle.htmlImageParams?.model
-      ? presentationStyle.htmlImageParams?.model
-      : provider === "anthropic"
-        ? "claude-3-7-sonnet-20250219"
-        : "gpt-4o-mini";
+    const defaultConfig = llmConfig[provider];
+    const model = presentationStyle.htmlImageParams?.model ? presentationStyle.htmlImageParams?.model : defaultConfig.defaultModel;
+
     return {
       provider,
-      agent,
+      agent: defaultConfig.agent,
       model,
-      max_tokens: 8000,
+      max_tokens: defaultConfig.max_tokens,
     };
   },
   getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {
