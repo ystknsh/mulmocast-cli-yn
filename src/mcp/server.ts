@@ -71,11 +71,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "object",
               description: "Optional generation parameters",
               properties: {
-                basedir: { type: "string", description: "Base directory path" },
-                outdir: { type: "string", description: "Output directory path" },
-                imagedir: { type: "string", description: "Image directory path" },
-                audiodir: { type: "string", description: "Audio directory path" },
-                pdfMode: { type: "string", enum: ["simple", "detailed"], description: "PDF generation mode (for PDF only)" },
+                pdfMode: { type: "string", enum: ["slide", "talk", "handout"], description: "PDF generation mode (for PDF only)" },
                 pdfSize: { type: "string", enum: ["A4", "Letter", "Legal"], description: "PDF page size (for PDF only)" },
                 lang: { type: "string", description: "Language for translation" },
                 caption: { type: "string", description: "Caption language" },
@@ -110,10 +106,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       cmd: "movie" | "pdf";
       mulmoScript: MulmoScript;
       options?: {
-        basedir?: string;
-        outdir?: string;
-        imagedir?: string;
-        audiodir?: string;
         pdfMode?: string;
         pdfSize?: string;
         lang?: string;
@@ -132,16 +124,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
     // Create argv-like object for CLI compatibility
     const argv = {
       file: filePath,
-      b: options.basedir,
-      o: options.outdir,
-      i: options.imagedir,
-      a: options.audiodir,
       l: options.lang,
       c: options.caption,
       f: options.force || false,
       v: options.verbose || false,
-      pdf_mode: options.pdfMode || "simple",
-      pdf_size: options.pdfSize || "A4",
+      pdf_mode: options.pdfMode || "handout",
+      pdf_size: options.pdfSize || "Letter",
       _: [],
       $0: "mcp-server",
     };
@@ -172,7 +160,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       case "pdf":
         // Generate images first, then PDF
         await images(context);
-        await pdf(context, options.pdfMode || "simple", options.pdfSize || "A4");
+        await pdf(context, options.pdfMode || "handout", options.pdfSize || "A4");
         return {
           content: [
             {
