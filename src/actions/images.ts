@@ -100,6 +100,11 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
 
 const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension }) => {
   const { html, file, canvasSize } = namedInputs;
+
+  // Save HTML file
+  const htmlFile = file.replace(/\.[^/.]+$/, ".html");
+  await fs.promises.writeFile(htmlFile, html, "utf8");
+
   await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
 };
 
