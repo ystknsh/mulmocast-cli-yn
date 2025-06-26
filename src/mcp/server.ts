@@ -18,7 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load MulmoScript JSON Schema from file
-const MULMO_SCRIPT_JSON_SCHEMA = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../assets/schemas/mulmo_script.json"), "utf8"));
+const MULMO_SCRIPT_JSON_SCHEMA = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../assets/schemas/html_prompt.json"), "utf8"));
 
 const server = new Server(
   {
