@@ -16,7 +16,7 @@ import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../met
 import { findImagePlugin } from "../utils/image_plugins/index.js";
 
 import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
-import { imagePrompt } from "../utils/prompt.js";
+import { imagePrompt, htmlImageSystemPrompt } from "../utils/prompt.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
 
 import { renderHTMLToImage } from "../utils/markdown.js";
@@ -62,15 +62,7 @@ export const imagePreprocessAgent = async (namedInputs: {
 
   if (beat.htmlPrompt) {
     const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
-    const htmlSystemPrompt = [
-      "Based on the provided information, create a single slide HTML page using Tailwind CSS.",
-      `The view port size is ${context.presentationStyle.canvasSize.width}x${context.presentationStyle.canvasSize.height}. Make sure the HTML fits within the view port.`,
-      "If charts are needed, use Chart.js to present them in a clean and visually appealing way.",
-      "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
-      "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
-      "If data is provided, use it effectively to populate the slide.",
-    ];
-    return { imagePath, htmlPrompt, htmlSystemPrompt };
+    return { imagePath, htmlPrompt, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
   }
 
   // images for "edit_image"
@@ -108,6 +100,11 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
 
 const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension }) => {
   const { html, file, canvasSize } = namedInputs;
+
+  // Save HTML file
+  const htmlFile = file.replace(/\.[^/.]+$/, ".html");
+  await fs.promises.writeFile(htmlFile, html, "utf8");
+
   await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
 };
 
@@ -152,7 +149,7 @@ const beat_graph_data = {
       },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
-        system: ":preprocessor.htmlSystemPrompt",
+        system: ":preprocessor.htmlImageSystemPrompt",
       },
     },
     htmlImageGenerator: {
