@@ -148,7 +148,7 @@ const beat_graph_data = {
         prompt: ":preprocessor.htmlPrompt",
         system: ":preprocessor.htmlImageSystemPrompt",
         params: {
-          mode: ":htmlImageAgentInfo.model",
+          model: ":htmlImageAgentInfo.model",
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
       },
