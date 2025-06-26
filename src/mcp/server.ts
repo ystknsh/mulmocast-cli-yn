@@ -34,9 +34,9 @@ const server = new Server(
 );
 
 // Helper function to save MulmoScript content to output directory
-const saveMulmoScriptToOutput = async (mulmoScript: MulmoScript, basedir?: string, outdir?: string): Promise<string> => {
+const saveMulmoScriptToOutput = async (mulmoScript: MulmoScript): Promise<string> => {
   const baseDirPath = process.cwd();
-  const outputDirPath = path.resolve(baseDirPath, outdir ?? outDirName);
+  const outputDirPath = path.resolve(baseDirPath, outDirName);
 
   // Create timestamp-based filename similar to __clipboard handling
   const fileName = generateTimestampedFileName("mcp_script");
@@ -119,7 +119,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
     const validatedScript = mulmoScriptSchema.parse(mulmoScript);
 
     // Save MulmoScript to output directory
-    const filePath = await saveMulmoScriptToOutput(validatedScript, options.basedir, options.outdir);
+    const filePath = await saveMulmoScriptToOutput(validatedScript);
 
     // Create argv-like object for CLI compatibility
     const argv = {
@@ -160,7 +160,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       case "pdf":
         // Generate images first, then PDF
         await images(context);
-        await pdf(context, options.pdfMode || "handout", options.pdfSize || "A4");
+        await pdf(context, options.pdfMode || "handout", options.pdfSize || "Letter");
         return {
           content: [
             {
