@@ -98,7 +98,7 @@ export const MulmoPresentationStyleMethods = {
       provider,
       agent,
       model,
-      max_tokens: provider === "anthropic" ? 8000 :undefined,
+      max_tokens: provider === "anthropic" ? 8000 : undefined,
     };
   },
   getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {
