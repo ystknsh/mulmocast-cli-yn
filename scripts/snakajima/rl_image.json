@@ -6,9 +6,6 @@
     "width": 1280,
     "height": 720
   },
-  "htmlImageParams": {
-    "provider": "anthropic"
-  },
   "title": "Understanding Reinforcement Learning",
   "description": "An educational video explaining the fundamentals of Reinforcement Learning, its key concepts, algorithms, and real-world applications",
   "lang": "en",
