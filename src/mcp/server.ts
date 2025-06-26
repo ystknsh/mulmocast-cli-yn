@@ -7,10 +7,11 @@ import { CallToolRequestSchema, CallToolRequest, ListToolsRequestSchema } from "
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { GraphAILogger } from "graphai";
 import { audio, images, movie, captions, pdf } from "../actions/index.js";
 import { initializeContext, runTranslateIfNeeded } from "../cli/helpers.js";
 import { outDirName } from "../utils/const.js";
-import { resolveDirPath, mkdir } from "../utils/file.js";
+import { resolveDirPath, mkdir, generateTimestampedFileName } from "../utils/file.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 import type { MulmoScript } from "../types/type.js";
 
@@ -38,9 +39,7 @@ const saveMulmoScriptToOutput = async (mulmoScript: MulmoScript, basedir?: strin
   const outputDirPath = path.resolve(baseDirPath, outdir ?? outDirName);
 
   // Create timestamp-based filename similar to __clipboard handling
-  const now = new Date();
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const fileName = `mcp_script_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+  const fileName = generateTimestampedFileName("mcp_script");
 
   // Ensure output directory exists
   mkdir(outputDirPath);
@@ -204,10 +203,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("MulmoCast MCP Server running on stdio");
+  GraphAILogger.error("MulmoCast MCP Server running on stdio");
 }
 
 main().catch((error) => {
-  console.error("Failed to start MCP server:", error);
+  GraphAILogger.error("Failed to start MCP server:", error);
   process.exit(1);
 });
