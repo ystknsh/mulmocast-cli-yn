@@ -22,6 +22,15 @@
       "additionalProperties": false,
       "default": { "width": 1280, "height": 720 }
     },
+    "htmlImageParams": {
+      "type": "object",
+      "properties": {
+        "provider": { "enum": ["anthropic"] }
+      },
+      "required": ["provider"],
+      "additionalProperties": false,
+      "default": { "provider": "anthropic" }
+    },
     "title": { "type": "string" },
     "description": { "type": "string" },
     "lang": { "type": "string" },
