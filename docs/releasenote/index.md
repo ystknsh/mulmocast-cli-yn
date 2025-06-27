@@ -1,5 +1,19 @@
 # RELEASE NOTE
 
+# v.0.0.24
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.24** introduces flexible caption styling with CSS and includes system improvements.
+
+- New Features
+  - **CSS-Based Caption Styling**: Replace fixed caption properties with flexible CSS styles, supporting animations, shadows, and gradients
+
+- System Improvements
+  - **Centralized API Configuration**: New `settings2GraphAIConfig()` for better multi-provider support
+  - **Code Organization**: Unified import paths and centralized prompt management
+
+This release enables unlimited caption customization through CSS while improving code maintainability.
+
 # v.0.0.23
 ## RELEASE NOTE
 
