@@ -1,5 +1,51 @@
 # RELEASE NOTE
 
+# v.0.0.24
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.24** introduces flexible caption styling with CSS and includes system improvements.
+
+- New Features
+  - **CSS-Based Caption Styling**: Replace fixed caption properties with flexible CSS styles, supporting animations, shadows, and gradients
+
+- System Improvements
+  - **Centralized API Configuration**: New `settings2GraphAIConfig()` for better multi-provider support
+  - **Code Organization**: Unified import paths and centralized prompt management
+
+This release enables unlimited caption customization through CSS while improving code maintainability.
+
+# v.0.0.23
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.23** brings powerful AI video generation, automated content import from URLs, and enhanced creative control for multimedia presentations.
+
+- AI Video Generation
+  - **Replicate Integration**: Generate dynamic videos from text descriptions using state-of-the-art AI models
+  - **Text-to-Movie**: Create video clips directly from text prompts with Replicate API support
+  - **Long Duration Support**: Generate extended content without timeouts or processing limitations
+
+- Content Creation & Import
+  - **URL to Script**: Convert any web page into a MulmoScript presentation automatically
+  - **Web Content Extraction**: Intelligently structure online articles, documentation, or tutorials
+  - **Streamlined Workflow**: Reduce manual effort in content creation
+
+- Creative Enhancements
+  - **Vibe Coding Style**: New music video template perfect for programming tutorials ([sample](https://github.com/receptron/mulmocast-cli/blob/0.0.23/scripts/snakajima/vibe_coding.json))
+  - **Aspect Fill Support**: Professional image and video framing without distortion
+  - **Caption as Style**: Flexible caption control through presentation style system
+  - **Non-Interactive Mode**: Automatic template selection for automated workflows
+
+- AI Provider Expansion
+  - **Anthropic Claude Support**: Use Claude API for HTML image generation
+  - **Provider Flexibility**: Choose between OpenAI, Anthropic, and other providers
+  - **Enhanced AI Capabilities**: Better content understanding and generation
+
+- Others
+  - **Error Fixes**: Improved speaker validation with clear error messages
+  - **Documentation**: Added CLAUDE.md for AI assistance guidelines, updated environment setup docs, fixed header formatting
+
+This release significantly expands MulmoCast's creative possibilities with AI-powered video generation and seamless web content integration.
+
 # v.0.0.22
 ## RELEASE NOTE
 
