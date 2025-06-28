@@ -1,5 +1,5 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema } from "../types/index.js";
+import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
   const isTest = process.env.NODE_ENV === "test";
