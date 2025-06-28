@@ -146,3 +146,29 @@ export type SessionProgressEvent =
   | { kind: "beat"; sessionType: BeatSessionType; index: number; inSession: boolean };
 
 export type SessionProgressCallback = (change: SessionProgressEvent) => void;
+
+export interface FileObject {
+  baseDirPath: string;
+  mulmoFilePath: string;
+  mulmoFileDirPath: string;
+  outDirPath: string;
+  imageDirPath: string;
+  audioDirPath: string;
+  isHttpPath: boolean;
+  fileOrUrl: string;
+  outputStudioFilePath: string;
+  outputMultilingualFilePath: string;
+  presentationStylePath: string | undefined;
+  fileName: string;
+}
+
+export type InitOptions = {
+  b?: string;
+  o?: string;
+  i?: string;
+  a?: string;
+  file?: string;
+  l?: string;
+  c?: string;
+  p?: string;
+};
