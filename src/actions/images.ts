@@ -407,14 +407,13 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
   mkdir(imageProjectDirPath);
 
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, context.dryRun);
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
 
   const imageRefs = await getImageRefs(context);
 
   // Determine movie agent based on provider
   const getMovieAgent = () => {
-    if (context.dryRun) return "mediaMockAgent";
     const provider = context.presentationStyle.movieParams?.provider ?? "google";
     switch (provider) {
       case "replicate":

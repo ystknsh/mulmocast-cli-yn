@@ -28,11 +28,6 @@ export const commonOptions = (yargs: Argv) => {
       type: "boolean",
       default: false,
     })
-    .option("dryRun", {
-      describe: "Dry run",
-      type: "boolean",
-      default: false,
-    })
     .option("p", {
       alias: "presentationStyle",
       describe: "Presentation Style",
