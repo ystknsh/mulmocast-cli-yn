@@ -5,8 +5,6 @@ import clipboardy from "clipboardy";
 import {
   getBaseDirPath,
   getFullPath,
-  readMulmoScriptFile,
-  fetchMulmoScriptFile,
   getOutputStudioFilePath,
   resolveDirPath,
   mkdir,
@@ -14,41 +12,21 @@ import {
   generateTimestampedFileName,
 } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
-import { createOrUpdateStudioData } from "../utils/preprocess.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
-import type { MulmoStudio, MulmoScript, MulmoStudioContext, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
-import type { CliArgs } from "../types/cli_types.js";
-import { translate } from "../actions/translate.js";
-import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema } from "../types/index.js";
 
-export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
-  if (verbose) {
-    if (logValues) {
-      Object.entries(logValues).forEach(([key, value]) => {
-        GraphAILogger.info(`${key}:`, value);
-      });
-    }
-  } else {
-    GraphAILogger.setLevelEnabled("error", false);
-    GraphAILogger.setLevelEnabled("log", false);
-    GraphAILogger.setLevelEnabled("warn", false);
+import { translate } from "../actions/translate.js";
+
+import { initializeContextFromFiles } from "../utils/context.js";
+export { setGraphAILogger } from "../utils/context.js";
+import type { CliArgs } from "../types/cli_types.js";
+import { FileObject, InitOptions, MulmoStudioContext } from "../types/index.js";
+
+export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
+  if (argv.l || context.studio.script.captionParams?.lang) {
+    GraphAILogger.log("run translate");
+    await translate(context);
   }
 };
-
-export interface FileObject {
-  baseDirPath: string;
-  mulmoFilePath: string;
-  mulmoFileDirPath: string;
-  outDirPath: string;
-  imageDirPath: string;
-  audioDirPath: string;
-  isHttpPath: boolean;
-  fileOrUrl: string;
-  outputStudioFilePath: string;
-  outputMultilingualFilePath: string;
-  presentationStylePath: string | undefined;
-  fileName: string;
-}
 
 export const getFileObject = (args: {
   basedir?: string;
@@ -99,79 +77,6 @@ export const getFileObject = (args: {
   };
 };
 
-export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fileOrUrl: string): Promise<MulmoScript | null> => {
-  if (isHttpPath) {
-    const res = await fetchMulmoScriptFile(fileOrUrl);
-    if (!res.result || !res.script) {
-      GraphAILogger.info(`ERROR: HTTP error! ${res.status} ${fileOrUrl}`);
-      return null;
-    }
-    return res.script;
-  }
-  if (!fs.existsSync(mulmoFilePath)) {
-    GraphAILogger.info(`ERROR: File not exists ${mulmoFilePath}`);
-    return null;
-  }
-  return readMulmoScriptFile<MulmoScript>(mulmoFilePath, "ERROR: File does not exist " + mulmoFilePath)?.mulmoData ?? null;
-};
-
-export const getMultiLingual = (multilingualFilePath: string, beatsLength: number): MulmoStudioMultiLingual => {
-  if (fs.existsSync(multilingualFilePath)) {
-    const jsonData =
-      readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-    const dataSet = mulmoStudioMultiLingualSchema.parse(jsonData);
-    while (dataSet.length < beatsLength) {
-      dataSet.push({ multiLingualTexts: {} });
-    }
-    dataSet.length = beatsLength;
-    return dataSet;
-  }
-  return [...Array(beatsLength)].map(() => ({ multiLingualTexts: {} }));
-};
-
-export const getPresentationStyle = (presentationStylePath: string | undefined): MulmoPresentationStyle | null => {
-  if (presentationStylePath) {
-    if (!fs.existsSync(presentationStylePath)) {
-      throw new Error(`ERROR: File not exists ${presentationStylePath}`);
-    }
-    const jsonData =
-      readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
-    return mulmoPresentationStyleSchema.parse(jsonData);
-  }
-  return null;
-};
-
-type InitOptions = {
-  b?: string;
-  o?: string;
-  i?: string;
-  a?: string;
-  file?: string;
-  l?: string;
-  c?: string;
-  p?: string;
-};
-
-const initSessionState = () => {
-  return {
-    inSession: {
-      audio: false,
-      image: false,
-      video: false,
-      multiLingual: false,
-      caption: false,
-      pdf: false,
-    },
-    inBeatSession: {
-      audio: {},
-      image: {},
-      movie: {},
-      multiLingual: {},
-      caption: {},
-    },
-  };
-};
-
 export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext | null> => {
   const files = getFileObject({
     basedir: argv.b,
@@ -181,55 +86,5 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     presentationStyle: argv.p,
     file: argv.file ?? "",
   });
-  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath } = files;
-
-  setGraphAILogger(argv.v, {
-    files,
-  });
-
-  // read mulmoScript, presentationStyle, multiLingual, currentStudio from files
-  const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
-  if (!mulmoScript) {
-    return null;
-  }
-  const presentationStyle = getPresentationStyle(presentationStylePath);
-  const multiLingual = getMultiLingual(outputMultilingualFilePath, mulmoScript.beats.length);
-  // Create or update MulmoStudio file with MulmoScript
-  const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
-
-  try {
-    // validate mulmoStudioSchema. skip if __test_invalid__ is true
-    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, argv.c);
-
-    return buildContext(studio, files, presentationStyle, multiLingual, Boolean(argv.f), argv.l);
-  } catch (error) {
-    GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
-    return null;
-  }
-};
-
-const buildContext = (
-  studio: MulmoStudio,
-  files: FileObject,
-  presentationStyle: MulmoPresentationStyle | null,
-  multiLingual: MulmoStudioMultiLingual,
-  force: boolean,
-  lang: string,
-) => {
-  return {
-    studio,
-    fileDirs: files,
-    force,
-    lang,
-    sessionState: initSessionState(),
-    presentationStyle: presentationStyle ?? studio.script,
-    multiLingual,
-  };
-};
-
-export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
-  if (argv.l || context.studio.script.captionParams?.lang) {
-    GraphAILogger.log("run translate");
-    await translate(context);
-  }
+  return await initializeContextFromFiles(files, Boolean(argv.v), Boolean(argv.f), argv.c, argv.l);
 };
