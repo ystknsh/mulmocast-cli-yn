@@ -173,7 +173,7 @@ DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # required for high-quality Ghibli-style 
 
 ### Step 2: Generate a Ghibli-style MulmoScript
 ```bash
-mulmo tool scripting -i -t ghibli_strips -o ./ -s story
+mulmo tool scripting -i -t ghibli_comic -o ./ -s story
 ```
 This will initiate an interactive conversation with the AI to create your Ghibli-inspired story. Once completed, a JSON file (e.g., `story-1747834931950.json`) will be generated.
 
