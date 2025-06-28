@@ -1,6 +1,6 @@
 {
   "name": "mulmocast",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "",
   "type": "module",
   "main": "lib/index.js",
@@ -70,22 +70,22 @@
     "@graphai/vanilla": "^2.0.4",
     "@graphai/vanilla_node_agents": "^2.0.1",
     "@modelcontextprotocol/sdk": "^1.13.1",
-    "@tavily/core": "^0.5.7",
-    "canvas": "^3.1.0",
+    "@tavily/core": "^0.5.8",
+    "canvas": "^3.1.2",
     "clipboardy": "^4.0.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.0.0",
     "fluent-ffmpeg": "^2.1.3",
     "google-auth-library": "^9.15.1",
     "graphai": "^2.0.9",
-    "inquirer": "^12.6.1",
+    "inquirer": "^12.6.3",
     "marked": "^15.0.12",
     "ora": "^8.2.0",
-    "puppeteer": "^24.10.2",
+    "puppeteer": "^24.11.0",
     "replicate": "^1.0.1",
     "yaml": "^2.8.0",
     "yargs": "^17.7.2",
     "zod": "^3.25.67",
-    "zod-to-json-schema": "^3.24.5"
+    "zod-to-json-schema": "^3.24.6"
   },
   "devDependencies": {
     "@anatine/zod-mock": "^3.14.0",
@@ -93,14 +93,14 @@
     "@receptron/test_utils": "^2.0.0",
     "@types/fluent-ffmpeg": "^2.1.26",
     "@types/yargs": "^17.0.33",
-    "eslint": "^9.29.0",
+    "eslint": "^9.30.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.5.0",
-    "prettier": "^3.3.3",
+    "eslint-plugin-prettier": "^5.5.1",
+    "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.34.1"
+    "typescript-eslint": "^8.35.0"
   },
   "engines": {
     "node": ">=18.0.0"

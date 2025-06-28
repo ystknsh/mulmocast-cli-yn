@@ -240,6 +240,9 @@ id は beat で指定する
 ## 各条件での beat データ例
 
 ### 2. htmlPrompt
+
+Provider/model の設定については [scripts/templates/presentation.json](../scripts/templates/presentation.json) を参考にしてください。
+
 ```json
 {
   "htmlPrompt": {

@@ -103,6 +103,14 @@ GOOGLE_PROJECT_ID=your_google_project_id
 
 See also [pre-requisites for Google's image generation model](./docs/pre-requisites-google.md)
 
+#### (Optional) For AI providers
+```bash
+# For Anthropic Claude (htmlPrompt feature)
+ANTHROPIC_API_TOKEN=your_anthropic_api_token
+```
+
+For htmlPrompt configuration, see [docs/image.md](./docs/image.md#2-htmlprompt).
+
 #### (Optional) For Movie models
 ```bash
 REPLICATE_API_TOKEN=your_replicate_api_key
