@@ -40,7 +40,7 @@ const mulmoCredit = (speaker: string) => {
   };
 };
 
-export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudio: MulmoStudio | undefined, fileName: string) => {
+export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudio: MulmoStudio | undefined, fileName: string, videoCaption?: string) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
   const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
@@ -53,5 +53,13 @@ export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudi
 
   studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
   studio.beats = studio.script.beats.map((_, index) => studio.beats[index] ?? {});
+
+  if (videoCaption) {
+    studio.script.captionParams = mulmoCaptionParamsSchema.parse({
+      ...(studio.script.captionParams ?? {}),
+      lang: videoCaption,
+    });
+  }
+
   return studio;
 };
