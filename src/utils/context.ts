@@ -106,7 +106,7 @@ export const initializeContextFromFiles = async (files: FileObject, verbose: boo
 
   setGraphAILogger(verbose, { files });
 
-  // read mulmoScript, presentationStyle, multiLingual, currentStudio from files
+  // read mulmoScript, presentationStyle, currentStudio from files
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
   if (!mulmoScript) {
     return null;
@@ -118,7 +118,7 @@ export const initializeContextFromFiles = async (files: FileObject, verbose: boo
   try {
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
     const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, caption);
-    const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length); 
+    const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
     return buildContext(studio, files, presentationStyle, multiLingual, force, lang);
   } catch (error) {
