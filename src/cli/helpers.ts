@@ -11,6 +11,7 @@ import {
   resolveDirPath,
   mkdir,
   getOutputMultilingualFilePath,
+  generateTimestampedFileName,
 } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { createOrUpdateStudioData } from "../utils/preprocess.js";
@@ -63,9 +64,7 @@ export const getFileObject = (args: {
   const { fileOrUrl, fileName } = (() => {
     if (file === "__clipboard") {
       // We generate a new unique script file from clipboard text in the output directory
-      const now = new Date();
-      const pad = (n: number) => n.toString().padStart(2, "0");
-      const fileName = `script_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      const fileName = generateTimestampedFileName("script");
       const clipboardText = clipboardy.readSync();
       const fileOrUrl = resolveDirPath(outDirPath, `${fileName}.json`);
       mkdir(outDirPath);

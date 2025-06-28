@@ -227,3 +227,9 @@ export const readAndParseJson = <S extends ZodSchema<any>>(filePath: string, sch
   const json = JSON.parse(fileContent);
   return schema.parse(json);
 };
+
+export const generateTimestampedFileName = (prefix: string) => {
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${prefix}_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+};
