@@ -73,13 +73,13 @@ const buildContext = (
   files: FileObject,
   presentationStyle: MulmoPresentationStyle | null,
   multiLingual: MulmoStudioMultiLingual,
-  force: boolean,
+  force?: boolean,
   lang?: string,
 ) => {
   return {
     studio,
     fileDirs: files,
-    force,
+    force: Boolean(force),
     lang,
     sessionState: initSessionState(),
     presentationStyle: presentationStyle ?? studio.script,
@@ -87,24 +87,8 @@ const buildContext = (
   };
 };
 
-export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
-  if (verbose) {
-    if (logValues) {
-      Object.entries(logValues).forEach(([key, value]) => {
-        GraphAILogger.info(`${key}:`, value);
-      });
-    }
-  } else {
-    GraphAILogger.setLevelEnabled("error", false);
-    GraphAILogger.setLevelEnabled("log", false);
-    GraphAILogger.setLevelEnabled("warn", false);
-  }
-};
-
-export const initializeContextFromFiles = async (files: FileObject, verbose: boolean, force: boolean, caption?: string, lang?: string) => {
+export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, caption?: string, lang?: string) => {
   const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath } = files;
-
-  setGraphAILogger(verbose, { files });
 
   // read mulmoScript, presentationStyle, currentStudio from files
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
@@ -123,6 +107,9 @@ export const initializeContextFromFiles = async (files: FileObject, verbose: boo
     return buildContext(studio, files, presentationStyle, multiLingual, force, lang);
   } catch (error) {
     GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
+    if (raiseError) {
+      throw error;
+    }
     return null;
   }
 };

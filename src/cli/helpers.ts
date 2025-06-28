@@ -17,7 +17,6 @@ import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
 import { translate } from "../actions/translate.js";
 
 import { initializeContextFromFiles } from "../utils/context.js";
-export { setGraphAILogger } from "../utils/context.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { FileObject, InitOptions, MulmoStudioContext } from "../types/index.js";
 
@@ -25,6 +24,20 @@ export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { 
   if (argv.l || context.studio.script.captionParams?.lang) {
     GraphAILogger.log("run translate");
     await translate(context);
+  }
+};
+
+export const setGraphAILogger = (verbose: boolean | undefined, logValues?: Record<string, unknown>) => {
+  if (verbose) {
+    if (logValues) {
+      Object.entries(logValues).forEach(([key, value]) => {
+        GraphAILogger.info(`${key}:`, value);
+      });
+    }
+  } else {
+    GraphAILogger.setLevelEnabled("error", false);
+    GraphAILogger.setLevelEnabled("log", false);
+    GraphAILogger.setLevelEnabled("warn", false);
   }
 };
 
@@ -77,7 +90,7 @@ export const getFileObject = (args: {
   };
 };
 
-export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<MulmoStudioContext | null> => {
+export const initializeContext = async (argv: CliArgs<InitOptions>, raiseError: boolean = false): Promise<MulmoStudioContext | null> => {
   const files = getFileObject({
     basedir: argv.b,
     outdir: argv.o,
@@ -86,5 +99,7 @@ export const initializeContext = async (argv: CliArgs<InitOptions>): Promise<Mul
     presentationStyle: argv.p,
     file: argv.file ?? "",
   });
-  return await initializeContextFromFiles(files, Boolean(argv.v), Boolean(argv.f), argv.c, argv.l);
+  setGraphAILogger(verbose, { files });
+
+  return await initializeContextFromFiles(files, raiseError, Boolean(argv.f), argv.c, argv.l);
 };
