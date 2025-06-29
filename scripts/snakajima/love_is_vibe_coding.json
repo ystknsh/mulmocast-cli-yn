@@ -8,8 +8,10 @@
     "width": 1024,
     "height": 1536
   },
+  "language": "ja",
   "audioParams": {
-    "bgmVolume": 0.0
+    "bgmVolume": 0.0,
+    "suppressSpeech": true
   },
   "imageParams": {
     "style": "<style>アニメ「君の名は」風</style>",

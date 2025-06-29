@@ -39,7 +39,7 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
     }
     throw new Error("Invalid audio source");
   }
-  if (beat.text === undefined || beat.text === "") {
+  if (beat.text === undefined || beat.text === "" || context.studio.script.audioParams.suppressSpeech) {
     return undefined; // It indicates that the audio is not needed.
   }
   return audioFile;

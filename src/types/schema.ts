@@ -218,6 +218,7 @@ export const audioParamsSchema = z
     bgm: mediaSourceSchema.optional(),
     bgmVolume: z.number().default(0.2).describe("Volume of the background music"),
     audioVolume: z.number().default(1.0).describe("Volume of the audio"),
+    suppressSpeech: z.boolean().default(false).describe("Suppress speech generation"),
   })
   .strict();
 
