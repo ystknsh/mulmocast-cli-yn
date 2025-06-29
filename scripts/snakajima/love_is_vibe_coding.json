@@ -8,7 +8,7 @@
     "width": 1024,
     "height": 1536
   },
-  "language": "ja",
+  "lang": "ja",
   "audioParams": {
     "bgmVolume": 0.0,
     "suppressSpeech": true
