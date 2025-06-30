@@ -7,6 +7,10 @@ export type FfmpegContext = {
   filterComplex: string[];
 };
 
+export const setFfmpegPath = (ffmpegPath: string) => {
+  ffmpeg.setFfmpegPath(ffmpegPath!);
+};
+
 export const FfmpegContextInit = (): FfmpegContext => {
   return {
     command: ffmpeg(),
