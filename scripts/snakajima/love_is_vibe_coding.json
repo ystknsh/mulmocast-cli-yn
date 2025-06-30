@@ -53,7 +53,8 @@
     {
       "text": "昨日の夢がまだ醒めない",
       "duration": 5.69,
-      "imagePrompt": "A surreal dreamscape fading into a waking bedroom, soft blur between reality and imagination"
+      "imagePrompt": "A surreal dreamscape fading into a waking bedroom, soft blur between reality and imagination.",
+      "imageNames": []
     },
     {
       "text": "ポットの音に耳をすませば",
@@ -83,9 +84,9 @@
     {
       "text": "僕はなぜか　立ち止まる",
       "duration": 5.69,
-      "imagePrompt": "A lone figure standing still in the middle of the crosswalk, long shadows from the evening sun"
+      "imagePrompt": "A lone figure standing still in the middle of the crosswalk, long shadows from the evening sun",
+      "imageNames": []
     },
-
     {
       "text": "恋はバイブコーディング",
       "duration": 2.845,
@@ -129,7 +130,7 @@
     {
       "text": "沈黙が　うまく話す夜",
       "duration": 7.11,
-      "imagePrompt": "A nighttime scene in a bedroom with warm lamplight, a quiet pair sitting in silence, deep atmosphere"
+      "imagePrompt": "A nighttime scene on a hill, a quiet pair sitting in silence, watching the city lights below"
     },
     {
       "text": "紙の地図をたたんでしまい",
@@ -144,7 +145,8 @@
     {
       "text": "行き先も　理屈も捨てて",
       "duration": 2.845,
-      "imagePrompt": "A person walking barefoot on a misty forest path, no signs, only nature"
+      "imagePrompt": "A person walking barefoot on a misty forest path, no signs, only nature",
+      "imageNames": []
     },
     {
       "text": "ただ君の声　呼んでいた",
@@ -169,7 +171,7 @@
     {
       "text": "夢のなかで君が笑う",
       "duration": 5.69,
-      "imagePrompt": "A dreamy meadow under twilight with a ghostly smiling figure fading into the light"
+      "imagePrompt": "A dreamy meadow under twilight with a ghostly figure fading into the light"
     },
     {
       "text": "ログも取れずに　消えていく",
