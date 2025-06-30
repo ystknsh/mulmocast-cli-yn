@@ -18,6 +18,7 @@
     "padding": 0.0
   },
   "captionParams": {
+    "lang": "ja",
     "styles": [
       "font-size: 64px",
       "width: 90%",
