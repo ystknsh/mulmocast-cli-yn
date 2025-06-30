@@ -19,7 +19,10 @@
   },
   "captionParams": {
     "styles": [
-      "font-size: 64px;"
+      "font-size: 64px",
+      "width: 90%",
+      "padding-left: 5%",
+      "padding-right: 5%"
     ]
   },
   "imageParams": {
