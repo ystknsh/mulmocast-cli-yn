@@ -136,22 +136,17 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-/*
 test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
     text: undefined,
     moviePrompt: "Generate a movie of this scene",
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 2,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -193,7 +188,6 @@ test("imagePreprocessAgent - with imageNames", async () => {
   const beat = createMockBeat({
     imageNames: ["image1", "image2"],
   });
-  const imageAgentInfo = createMockImageAgentInfo();
   const imageRefs = {
     image1: "/path/to/image1.png",
     image2: "/path/to/image2.png",
@@ -204,9 +198,6 @@ test("imagePreprocessAgent - with imageNames", async () => {
     context,
     beat,
     index: 7,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs,
   });
 
@@ -222,11 +213,21 @@ test("imagePreprocessAgent - with imageNames", async () => {
     },
     movieFile: undefined,
     images: ["/path/to/image1.png", "/path/to/image2.png"],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
 });
 
+/*
 test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () => {
   const context = createMockContext();
   const beat = createMockBeat();
