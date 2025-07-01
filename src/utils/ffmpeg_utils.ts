@@ -11,6 +11,10 @@ export const setFfmpegPath = (ffmpegPath: string) => {
   ffmpeg.setFfmpegPath(ffmpegPath!);
 };
 
+export const setFfprobePath = (ffprobePath: string) => {
+  ffmpeg.setFfprobePath(ffprobePath!);
+};
+
 export const FfmpegContextInit = (): FfmpegContext => {
   return {
     command: ffmpeg(),
