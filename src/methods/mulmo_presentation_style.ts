@@ -74,20 +74,21 @@ export const MulmoPresentationStyleMethods = {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.voiceId;
   },
-  getText2ImageProvider(imageParams?: MulmoImageParams): Text2ImageProvider {
-    return text2ImageProviderSchema.parse(imageParams?.provider);
+  getText2ImageProvider(provider: Text2ImageProvider | undefined): Text2ImageProvider {
+    return text2ImageProviderSchema.parse(provider);
   },
   getImageAgentInfo(presentationStyle: MulmoPresentationStyle, beat?: MulmoBeat): Text2ImageAgentInfo {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
-    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(presentationStyle.imageParams);
+    const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
+    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider);
     const defaultImageParams: MulmoImageParams = {
       provider,
       model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
     };
     return {
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
-      imageParams: { ...defaultImageParams, ...presentationStyle.imageParams },
+      imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {

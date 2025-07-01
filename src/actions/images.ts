@@ -8,7 +8,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Text2ImageAgentInfo, MulmoCanvasDimension } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, MulmoCanvasDimension } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
@@ -35,14 +35,9 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
   };
 };
 
-export const imagePreprocessAgent = async (namedInputs: {
-  context: MulmoStudioContext;
-  beat: MulmoBeat;
-  index: number;
-  imageRefs: Record<string, string>;
-}) => {
+export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number; imageRefs: Record<string, string> }) => {
   const { context, beat, index, imageRefs } = namedInputs;
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = getBeatPngImagePath(context, index);
   const returnValue = {
@@ -332,7 +327,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
     taskManager,
   };
 
-  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams);
+  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams?.provider);
 
   const config = settings2GraphAIConfig(settings);
 
@@ -403,7 +398,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
   mkdir(imageProjectDirPath);
 
-  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams);
+  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams?.provider);
   const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
 
   const imageRefs = await getImageRefs(context);
@@ -421,7 +416,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   };
 
   GraphAILogger.info(`text2image: provider=${provider} model=${context.presentationStyle.imageParams?.model}`);
-  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> |undefined> = {
+  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> | undefined> = {
     context,
     htmlImageAgentInfo,
     movieAgentInfo: {
