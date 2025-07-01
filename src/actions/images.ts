@@ -39,10 +39,10 @@ export const imagePreprocessAgent = async (namedInputs: {
   context: MulmoStudioContext;
   beat: MulmoBeat;
   index: number;
-  imageAgentInfo: Text2ImageAgentInfo;
   imageRefs: Record<string, string>;
 }) => {
-  const { context, beat, index, imageAgentInfo, imageRefs } = namedInputs;
+  const { context, beat, index, imageRefs } = namedInputs;
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = getBeatPngImagePath(context, index);
   const returnValue = {
@@ -76,7 +76,7 @@ export const imagePreprocessAgent = async (namedInputs: {
     return { ...returnValue, imagePath, images, imageFromMovie: true }; // no image prompt, only movie prompt
   }
   const prompt = imagePrompt(beat, imageParams.style);
-  return { imagePath, referenceImage: imagePath, prompt, ...returnValue, images };
+  return { imageAgentInfo, imagePath, referenceImage: imagePath, prompt, ...returnValue, images };
 };
 
 export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
@@ -113,7 +113,6 @@ const beat_graph_data = {
   concurrency: 4,
   nodes: {
     context: {},
-    imageAgentInfo: {},
     htmlImageAgentInfo: {},
     movieAgentInfo: {},
     imageRefs: {},
@@ -125,7 +124,6 @@ const beat_graph_data = {
         context: ":context",
         beat: ":beat",
         index: ":__mapIndex",
-        imageAgentInfo: ":imageAgentInfo",
         imageRefs: ":imageRefs",
       },
     },
@@ -168,7 +166,7 @@ const beat_graph_data = {
     },
     imageGenerator: {
       if: ":preprocessor.prompt",
-      agent: ":imageAgentInfo.agent",
+      agent: ":preprocessor.imageAgentInfo.agent",
       retry: 2,
       inputs: {
         prompt: ":preprocessor.prompt",
@@ -240,7 +238,6 @@ const graph_data: GraphData = {
   concurrency: 4,
   nodes: {
     context: {},
-    imageAgentInfo: {},
     htmlImageAgentInfo: {},
     movieAgentInfo: {},
     outputStudioFilePath: {},
@@ -250,7 +247,6 @@ const graph_data: GraphData = {
       inputs: {
         rows: ":context.studio.script.beats",
         context: ":context",
-        imageAgentInfo: ":imageAgentInfo",
         htmlImageAgentInfo: ":htmlImageAgentInfo",
         movieAgentInfo: ":movieAgentInfo",
         imageRefs: ":imageRefs",
@@ -425,9 +421,8 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   };
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.imageParams.provider} model=${imageAgentInfo.imageParams.model}`);
-  const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> |undefined> = {
+  const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> |undefined> = {
     context,
-    imageAgentInfo,
     htmlImageAgentInfo,
     movieAgentInfo: {
       agent: getMovieAgent(),
