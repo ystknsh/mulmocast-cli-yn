@@ -33,6 +33,11 @@ const createMockContext = (): MulmoStudioContext => ({
     toJSON: () => "{}",
   },
   force: false,
+  presentationStyle: {
+    imageParams: {
+      provider: "openai",
+    },
+  },
   sessionState: {
     inSession: {
       audio: false,
@@ -741,7 +746,6 @@ test("imagePreprocessAgent - with imageParams override", async () => {
       model: "dall-e-2",
     },
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
@@ -749,7 +753,6 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     index: 21,
     suffix: "p",
     imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -757,6 +760,14 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     imagePath: "/test/images/test_studio/21p.png",
     referenceImage: "/test/images/test_studio/21p.png",
     prompt: "A beautiful sunset\nphotorealistic",
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        provider: "openai",
+        style: "photorealistic",
+        model: "dall-e-2",
+      },
+    },
     imageParams: {
       provider: "openai",
       model: "dall-e-2", // From beat override
@@ -766,6 +777,8 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     movieFile: undefined,
     images: [],
   };
+  console.log("***DEBUG***", JSON.stringify(result, null, 2));
+  console.log("***DEBUG***", JSON.stringify(expected, null, 2));
 
   assert.deepStrictEqual(result, expected);
 });
