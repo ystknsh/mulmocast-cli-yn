@@ -269,13 +269,11 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
   assert.deepStrictEqual(result, expected);
 });
 
-/*
 test("imagePreprocessAgent - filters undefined image references", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
     imageNames: ["image1", "nonexistent", "image2"],
   });
-  const imageAgentInfo = createMockImageAgentInfo();
   const imageRefs = {
     image1: "/path/to/image1.png",
     image2: "/path/to/image2.png",
@@ -285,9 +283,6 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
     context,
     beat,
     index: 9,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs,
   });
 
@@ -303,10 +298,21 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
     },
     movieFile: undefined,
     images: ["/path/to/image1.png", "/path/to/image2.png"],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
 });
+
+/*
 
 test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async () => {
   const context = createMockContext();
