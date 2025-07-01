@@ -332,12 +332,12 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
     taskManager,
   };
 
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
+  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle);
 
   const config = settings2GraphAIConfig(settings);
 
   // We need to get google's auth token only if the google is the text2image provider.
-  if (imageAgentInfo.imageParams.provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
+  if (provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
     userAssert(!!process.env.GOOGLE_PROJECT_ID, "GOOGLE_PROJECT_ID is not set");
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
@@ -403,7 +403,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
   mkdir(imageProjectDirPath);
 
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
+  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle);
   const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
 
   const imageRefs = await getImageRefs(context);
@@ -420,7 +420,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
     }
   };
 
-  GraphAILogger.info(`text2image: provider=${imageAgentInfo.imageParams.provider} model=${imageAgentInfo.imageParams.model}`);
+  GraphAILogger.info(`text2image: provider=${provider} model=${context.presentationStyle.imageParams?.model}`);
   const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> |undefined> = {
     context,
     htmlImageAgentInfo,
