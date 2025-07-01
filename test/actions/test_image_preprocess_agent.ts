@@ -623,7 +623,6 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-/*
 test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -631,15 +630,11 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
     imagePrompt: "Image prompt",
     moviePrompt: "Movie prompt",
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 18,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -655,6 +650,15 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
     },
     movieFile: "/test/images/test_studio/18.mov",
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
@@ -666,15 +670,11 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
     text: undefined,
     // No imagePrompt, no moviePrompt
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 19,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -690,6 +690,15 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
     },
     movieFile: undefined,
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
@@ -701,15 +710,11 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
     text: "Beat text content",
     imagePrompt: "Custom image prompt",
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 20,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -725,10 +730,21 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
     },
     movieFile: undefined,
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
 });
+
+/*
 
 test("imagePreprocessAgent - with imageParams override", async () => {
   const context = createMockContext();
