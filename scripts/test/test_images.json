@@ -1,0 +1,32 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Test Images",
+  "imageParams": {
+    "style": "Photorealistic-style",
+    "provider": "google"
+  },
+  "beats": [
+    {
+      "text": "Image with default provider and model",
+      "imagePrompt": "Blue sky, a flock of birds"
+    },
+    {
+      "text": "Image with openai provider",
+      "imagePrompt": "Blue sky, a flock of birds",
+      "imageParams": {
+        "provider": "openai"
+      }
+    },
+    {
+      "text": "Image with Dall-E 3",
+      "imagePrompt": "Blue sky, a flock of birds",
+      "imageParams": {
+        "model": "dall-e-3",
+        "style": "anime-style",
+        "provider": "openai"
+      }
+    }
+  ]
+}

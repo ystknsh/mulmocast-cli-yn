@@ -11,6 +11,7 @@ import {
   BeatMediaType,
   MulmoPresentationStyle,
   SpeakerData,
+  Text2ImageProvider,
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
@@ -73,17 +74,21 @@ export const MulmoPresentationStyleMethods = {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.voiceId;
   },
-  getImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2ImageAgentInfo {
+  getText2ImageProvider(provider: Text2ImageProvider | undefined): Text2ImageProvider {
+    return text2ImageProviderSchema.parse(provider);
+  },
+  getImageAgentInfo(presentationStyle: MulmoPresentationStyle, beat?: MulmoBeat): Text2ImageAgentInfo {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
-    const provider = text2ImageProviderSchema.parse(presentationStyle.imageParams?.provider);
+    const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
+    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider);
     const defaultImageParams: MulmoImageParams = {
+      provider,
       model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
     };
     return {
-      provider,
       agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
-      imageParams: { ...defaultImageParams, ...presentationStyle.imageParams },
+      imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
