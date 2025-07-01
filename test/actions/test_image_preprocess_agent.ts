@@ -4,7 +4,7 @@ import assert from "node:assert";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import type { MulmoStudioContext, MulmoBeat, Text2ImageAgentInfo } from "../../src/types/index.js";
+import type { MulmoStudioContext, MulmoBeat } from "../../src/types/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -430,7 +430,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
           style: "<style>sumie-style",
         },
       },
-      };
+    };
 
     assert.deepStrictEqual(result, expected);
   }
@@ -744,8 +744,6 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-/*
-
 test("imagePreprocessAgent - with imageParams override", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -761,8 +759,6 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     context,
     beat,
     index: 21,
-    suffix: "p",
-    imageDirPath: "/test/images",
     imageRefs: {},
   });
 
@@ -776,21 +772,18 @@ test("imagePreprocessAgent - with imageParams override", async () => {
         provider: "openai",
         style: "photorealistic",
         model: "dall-e-2",
+        moderation: "auto",
       },
     },
     imageParams: {
       provider: "openai",
       model: "dall-e-2", // From beat override
       style: "photorealistic", // From beat override
-      moderation: "auto", // From imageAgentInfo
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
   };
-  console.log("***DEBUG***", JSON.stringify(result, null, 2));
-  console.log("***DEBUG***", JSON.stringify(expected, null, 2));
 
   assert.deepStrictEqual(result, expected);
 });
-
-*/
