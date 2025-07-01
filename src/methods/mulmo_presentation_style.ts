@@ -11,6 +11,7 @@ import {
   BeatMediaType,
   MulmoPresentationStyle,
   SpeakerData,
+  Text2ImageProvider,
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
@@ -73,10 +74,13 @@ export const MulmoPresentationStyleMethods = {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.voiceId;
   },
+  getText2ImageProvider(presentationStyle: MulmoPresentationStyle): Text2ImageProvider {
+    return text2ImageProviderSchema.parse(presentationStyle.imageParams?.provider);
+  },
   getImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2ImageAgentInfo {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
-    const provider = text2ImageProviderSchema.parse(presentationStyle.imageParams?.provider);
+    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(presentationStyle);
     const defaultImageParams: MulmoImageParams = {
       provider,
       model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
