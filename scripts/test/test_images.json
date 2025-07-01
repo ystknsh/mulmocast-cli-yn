@@ -5,12 +5,19 @@
   "title": "Test Images",
   "imageParams": {
     "style": "Photorealistic-style",
-    "provider": "openai"
+    "provider": "google"
   },
   "beats": [
     {
       "text": "Image with default provider and model",
       "imagePrompt": "Blue sky, a flock of birds"
+    },
+    {
+      "text": "Image with openai provider",
+      "imagePrompt": "Blue sky, a flock of birds",
+      "imageParams": {
+        "provider": "openai"
+      }
     },
     {
       "text": "Image with Dall-E 3",

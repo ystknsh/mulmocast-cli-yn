@@ -38,10 +38,10 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
 export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number; imageRefs: Record<string, string> }) => {
   const { context, beat, index, imageRefs } = namedInputs;
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
-  const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
+  // const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
   const imagePath = getBeatPngImagePath(context, index);
   const returnValue = {
-    imageParams,
+    imageParams: imageAgentInfo.imageParams,
     movieFile: beat.moviePrompt ? getBeatMoviePath(context, index) : undefined,
   };
 
@@ -70,7 +70,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
   if (beat.moviePrompt && !beat.imagePrompt) {
     return { ...returnValue, imagePath, images, imageFromMovie: true }; // no image prompt, only movie prompt
   }
-  const prompt = imagePrompt(beat, imageParams.style);
+  const prompt = imagePrompt(beat, imageAgentInfo.imageParams.style);
   return { imageAgentInfo, imagePath, referenceImage: imagePath, prompt, ...returnValue, images };
 };
 
