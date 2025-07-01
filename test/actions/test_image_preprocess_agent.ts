@@ -518,7 +518,6 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-/*
 test("imagePreprocessAgent - moviePrompt only", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -526,15 +525,11 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
     // No imagePrompt
     moviePrompt: "Only movie prompt",
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 15,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -561,15 +556,11 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
     // No imagePrompt
     moviePrompt: "Movie prompt",
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 16,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -598,15 +589,11 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
     imagePrompt: "Image prompt",
     moviePrompt: "Movie prompt",
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 17,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -622,11 +609,21 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
     },
     movieFile: "/test/images/test_studio/17.mov",
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
 });
 
+/*
 test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
