@@ -103,7 +103,6 @@ test("imagePreprocessAgent - basic functionality", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-/*
 test("imagePreprocessAgent - with movie prompt and text", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -111,15 +110,11 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
     moviePrompt: "Generate a movie of this scene",
     // No explicit imagePrompt, so condition moviePrompt && !imagePrompt is true
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 1,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -141,6 +136,7 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
+/*
 test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
