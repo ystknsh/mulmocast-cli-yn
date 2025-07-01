@@ -78,6 +78,7 @@ export const MulmoPresentationStyleMethods = {
     // provider and model appropriately.
     const provider = text2ImageProviderSchema.parse(presentationStyle.imageParams?.provider);
     const defaultImageParams: MulmoImageParams = {
+      provider,
       model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
     };
     return {

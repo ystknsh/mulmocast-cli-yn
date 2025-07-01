@@ -425,7 +425,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   };
 
   GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
-  const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | undefined> = {
+  const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> |undefined> = {
     context,
     imageAgentInfo,
     htmlImageAgentInfo,

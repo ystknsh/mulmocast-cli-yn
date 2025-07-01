@@ -181,8 +181,10 @@ export const mulmoFillOptionSchema = z
   })
   .describe("How to handle aspect ratio differences between image and canvas");
 
+export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
 export const mulmoImageParamsSchema = z
   .object({
+    provider: text2ImageProviderSchema, // has default value
     model: z.string().optional(), // default: provider specific
     style: z.string().optional(), // optional image style
     moderation: z.string().optional(), // optional image style
@@ -282,7 +284,6 @@ export const mulmoSpeechParamsSchema = z
   })
   .strict();
 
-export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
 export const text2HtmlImageProviderSchema = z.union([z.literal("openai"), z.literal("anthropic")]).default("openai");
 export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google"), z.literal("replicate")]).default("google");
 
@@ -313,11 +314,7 @@ export const mulmoPresentationStyleSchema = z.object({
       },
     },
   }),
-  imageParams: mulmoImageParamsSchema
-    .extend({
-      provider: text2ImageProviderSchema, // has default value
-    })
-    .optional(),
+  imageParams: mulmoImageParamsSchema.optional(),
   movieParams: mulmoMovieParamsSchema.optional(),
   htmlImageParams: mulmoHtmlImageParamsSchema
     .extend({
