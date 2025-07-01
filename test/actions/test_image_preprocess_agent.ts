@@ -54,12 +54,12 @@ const createMockContext = (): MulmoStudioContext => ({
 
 // Helper function to create mock image agent info
 const createMockImageAgentInfo = (): Text2ImageAgentInfo => ({
-  provider: "openai",
   agent: "imageOpenaiAgent",
   imageParams: {
+    provider: "openai",
     model: "dall-e-3",
     style: "natural",
-    moderation: true,
+    moderation: "auto",
   },
 });
 
@@ -89,9 +89,10 @@ test("imagePreprocessAgent - basic functionality", async () => {
     referenceImage: "/test/images/test_studio/0p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -123,9 +124,10 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
   // only imageParams, movieFile, and images are returned
   const expected = {
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: "/test/images/test_studio/1.mov",
     imagePath: "/test/images/test_studio/1p.png",
@@ -156,9 +158,10 @@ test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
 
   const expected = {
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: "/test/images/test_studio/2.mov",
     imagePath: "/test/images/test_studio/2p.png",
@@ -213,9 +216,10 @@ test("imagePreprocessAgent - with imageNames", async () => {
     referenceImage: "/test/images/test_studio/7p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: ["/path/to/image1.png", "/path/to/image2.png"],
@@ -249,9 +253,10 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
     referenceImage: "/test/images/test_studio/8p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
@@ -286,9 +291,10 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
     referenceImage: "/test/images/test_studio/9p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: ["/path/to/image1.png", "/path/to/image2.png"],
@@ -322,6 +328,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
     referenceImage: "/test/images/test_studio/10p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nvivid",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3", // From imageAgentInfo
       style: "vivid", // From beat (override)
       moderation: false, // From beat (override)
@@ -356,7 +363,7 @@ test("imagePreprocessAgent - different suffix", async () => {
     imageParams: {
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -385,9 +392,10 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
     referenceImage: "/test/images/test_studio/12p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -424,9 +432,10 @@ test("imagePreprocessAgent - with real sample data", async () => {
       referenceImage: "/test/images/test/1p.png",
       prompt: "Blue sky, a flock of birds\n<style>sumie-style",
       imageParams: {
+        provider: "openai",
         model: "dall-e-3", // From imageAgentInfo
         style: "<style>sumie-style", // From beat override
-        moderation: true, // From imageAgentInfo
+        moderation: "auto", // From imageAgentInfo
       },
       movieFile: undefined,
       images: [],
@@ -460,9 +469,10 @@ test("imagePreprocessAgent - text only", async () => {
     referenceImage: "/test/images/test_studio/13p.png",
     prompt: "generate image appropriate for the text. text: Only text content\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -495,9 +505,10 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
     referenceImage: "/test/images/test_studio/14p.png",
     prompt: "Only image prompt\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -527,9 +538,10 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
 
   const expected = {
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     imagePath: "/test/images/test_studio/15p.png",
     movieFile: "/test/images/test_studio/15.mov",
@@ -563,9 +575,10 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
   // the function returns only imageParams, movieFile, and images (no imagePath or prompt)
   const expected = {
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     imagePath: "/test/images/test_studio/16p.png",
     movieFile: "/test/images/test_studio/16.mov",
@@ -600,9 +613,10 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
     referenceImage: "/test/images/test_studio/17p.png",
     prompt: "Image prompt\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: "/test/images/test_studio/17.mov",
     images: [],
@@ -635,9 +649,10 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
     referenceImage: "/test/images/test_studio/18p.png",
     prompt: "Image prompt\nnatural", // imagePrompt takes precedence over text
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: "/test/images/test_studio/18.mov",
     images: [],
@@ -669,9 +684,10 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
     referenceImage: "/test/images/test_studio/19p.png",
     prompt: "generate image appropriate for the text. text: undefined\nnatural",
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -703,9 +719,10 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
     referenceImage: "/test/images/test_studio/20p.png",
     prompt: "Custom image prompt\nnatural", // imagePrompt takes precedence
     imageParams: {
+      provider: "openai",
       model: "dall-e-3",
       style: "natural",
-      moderation: true,
+      moderation: "auto",
     },
     movieFile: undefined,
     images: [],
@@ -719,6 +736,7 @@ test("imagePreprocessAgent - with imageParams override", async () => {
   const beat = createMockBeat({
     imagePrompt: "A beautiful sunset",
     imageParams: {
+      provider: "openai",
       style: "photorealistic",
       model: "dall-e-2",
     },
@@ -740,9 +758,10 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     referenceImage: "/test/images/test_studio/21p.png",
     prompt: "A beautiful sunset\nphotorealistic",
     imageParams: {
+      provider: "openai",
       model: "dall-e-2", // From beat override
       style: "photorealistic", // From beat override
-      moderation: true, // From imageAgentInfo
+      moderation: "auto", // From imageAgentInfo
     },
     movieFile: undefined,
     images: [],
