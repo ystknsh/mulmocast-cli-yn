@@ -332,7 +332,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
     taskManager,
   };
 
-  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle);
+  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams);
 
   const config = settings2GraphAIConfig(settings);
 
@@ -403,7 +403,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
   mkdir(imageProjectDirPath);
 
-  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle);
+  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams);
   const htmlImageAgentInfo = MulmoPresentationStyleMethods.getHtmlImageAgentInfo(context.presentationStyle);
 
   const imageRefs = await getImageRefs(context);
