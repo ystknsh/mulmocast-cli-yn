@@ -54,6 +54,7 @@ export const handler = async (
 
   if (interactive) {
     await createMulmoScriptInteractively(context);
+    return;
   }
   if (inputFile) {
     await createMulmoScriptFromFile(inputFile, context);
