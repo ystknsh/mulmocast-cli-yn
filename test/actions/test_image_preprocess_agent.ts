@@ -312,25 +312,19 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-/*
-
 test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
     imageParams: {
       style: "vivid", // Should override imageAgentInfo style
-      moderation: false, // Should override imageAgentInfo moderation
+      moderation: "auto", // Should override imageAgentInfo moderation
     },
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 10,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -342,10 +336,19 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
       provider: "openai",
       model: "dall-e-3", // From imageAgentInfo
       style: "vivid", // From beat (override)
-      moderation: false, // From beat (override)
+      moderation: "auto", // From beat (override)
     },
     movieFile: undefined,
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "vivid",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
@@ -354,15 +357,11 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
 test("imagePreprocessAgent - empty imageRefs", async () => {
   const context = createMockContext();
   const beat = createMockBeat();
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 12,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -378,6 +377,15 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
     },
     movieFile: undefined,
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
@@ -391,8 +399,6 @@ test("imagePreprocessAgent - with real sample data", async () => {
   const context = createMockContext();
   context.studio.filename = "test";
 
-  const imageAgentInfo = createMockImageAgentInfo();
-
   // Test with the first beat that has imagePrompt
   const beatWithImagePrompt = scriptData.beats.find((beat: MulmoBeat) => beat.imagePrompt);
   if (beatWithImagePrompt) {
@@ -400,9 +406,6 @@ test("imagePreprocessAgent - with real sample data", async () => {
       context,
       beat: beatWithImagePrompt,
       index: 1,
-      suffix: "p",
-      imageDirPath: "/test/images",
-      imageAgentInfo,
       imageRefs: {},
     });
 
@@ -418,7 +421,16 @@ test("imagePreprocessAgent - with real sample data", async () => {
       },
       movieFile: undefined,
       images: [],
-    };
+      imageAgentInfo: {
+        agent: "imageOpenaiAgent",
+        imageParams: {
+          model: "dall-e-3",
+          moderation: "auto",
+          provider: "openai",
+          style: "<style>sumie-style",
+        },
+      },
+      };
 
     assert.deepStrictEqual(result, expected);
   }
@@ -431,15 +443,11 @@ test("imagePreprocessAgent - text only", async () => {
     text: "Only text content",
     // No imagePrompt, no moviePrompt
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 13,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -455,6 +463,15 @@ test("imagePreprocessAgent - text only", async () => {
     },
     movieFile: undefined,
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
@@ -467,15 +484,11 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
     imagePrompt: "Only image prompt",
     // No moviePrompt
   });
-  const imageAgentInfo = createMockImageAgentInfo();
 
   const result = await imagePreprocessAgent({
     context,
     beat,
     index: 14,
-    suffix: "p",
-    imageDirPath: "/test/images",
-    imageAgentInfo,
     imageRefs: {},
   });
 
@@ -491,11 +504,21 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
     },
     movieFile: undefined,
     images: [],
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
   };
 
   assert.deepStrictEqual(result, expected);
 });
 
+/*
 test("imagePreprocessAgent - moviePrompt only", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
