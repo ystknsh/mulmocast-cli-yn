@@ -341,7 +341,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
   const config = settings2GraphAIConfig(settings);
 
   // We need to get google's auth token only if the google is the text2image provider.
-  if (imageAgentInfo.provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
+  if (imageAgentInfo.imageParams.provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
     userAssert(!!process.env.GOOGLE_PROJECT_ID, "GOOGLE_PROJECT_ID is not set");
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
@@ -424,7 +424,7 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
     }
   };
 
-  GraphAILogger.info(`text2image: provider=${imageAgentInfo.provider} model=${imageAgentInfo.imageParams.model}`);
+  GraphAILogger.info(`text2image: provider=${imageAgentInfo.imageParams.provider} model=${imageAgentInfo.imageParams.model}`);
   const injections: Record<string, Text2ImageAgentInfo | string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> |undefined> = {
     context,
     imageAgentInfo,
@@ -443,7 +443,7 @@ const getConcurrency = (context: MulmoStudioContext) => {
     return 4;
   }
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
-  if (imageAgentInfo.provider === "openai") {
+  if (imageAgentInfo.imageParams.provider === "openai") {
     // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
     // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
     // gpt-image-1：3,000,000 TPM、150 images per minute

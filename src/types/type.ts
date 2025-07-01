@@ -122,7 +122,6 @@ export type PDFMode = (typeof pdf_modes)[number];
 export type PDFSize = (typeof pdf_sizes)[number];
 
 export type Text2ImageAgentInfo = {
-  provider: Text2ImageProvider;
   agent: string;
   imageParams: MulmoImageParams;
 };
