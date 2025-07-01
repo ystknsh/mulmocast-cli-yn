@@ -35,6 +35,8 @@ import {
   mulmoChartMediaSchema,
   mediaSourceSchema,
   mulmoSessionStateSchema,
+  mulmoOpenAIImageModelSchema,
+  mulmoGoogleImageModelSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
 import { LLM } from "../utils/utils.js";
@@ -70,6 +72,8 @@ export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSche
 export type MulmoStudioMultiLingualData = z.infer<typeof mulmoStudioMultiLingualDataSchema>;
 export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
 export type MulmoMovieParams = z.infer<typeof mulmoMovieParamsSchema>;
+export type MulmoOpenAIImageModel = z.infer<typeof mulmoOpenAIImageModelSchema>;
+export type MulmoGoogleImageModel = z.infer<typeof mulmoGoogleImageModelSchema>;
 
 // images
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
