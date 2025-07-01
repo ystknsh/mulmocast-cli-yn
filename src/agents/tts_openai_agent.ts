@@ -36,7 +36,7 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params, confi
     } else if (e instanceof Error) {
       GraphAILogger.info("tts_openai_agent: ");
       GraphAILogger.info(e.message);
-      throw new Error("TTS OpenAI Error", e.message);
+      throw new Error("TTS OpenAI Error: " + e.message);
     }
   }
 };
