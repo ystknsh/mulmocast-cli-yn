@@ -182,6 +182,23 @@ export const mulmoFillOptionSchema = z
   .describe("How to handle aspect ratio differences between image and canvas");
 
 export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
+
+// NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
+export const mulmoOpenAIImageModelSchema = z
+  .object({
+    provider: z.literal("openai"),
+    model: z.union([z.literal("dall-e-3"), z.literal("gpt-image-1")]).optional(),
+  })
+  .strict();
+
+// NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
+export const mulmoGoogleImageModelSchema = z
+  .object({
+    provider: z.literal("google"),
+    model: z.union([z.literal("imagen-3.0-fast-generate-001"), z.literal("imagen-3.0-generate-002"), z.literal("imagen-3.0-capability-001")]).optional(),
+  })
+  .strict();
+
 export const mulmoImageParamsSchema = z
   .object({
     provider: text2ImageProviderSchema, // has default value
