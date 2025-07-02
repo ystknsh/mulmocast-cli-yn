@@ -198,7 +198,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const result = {
     studio: {
       ...context.studio,
-      beats: context.studio.beats.map((studioBeat, index) => ({ ...studioBeat, duration: beatDurations[index] })),
+      beats: context.studio.beats.map((studioBeat, index) => ({
+        ...studioBeat,
+        duration: beatDurations[index],
+        audioDuration: mediaDurations[index].audioDuration,
+        movieDuration: mediaDurations[index].movieDuration,
+        silenceDuration: mediaDurations[index].silenceDuration,
+      })),
     },
   };
   // context.studio = result.studio; // TODO: removing this breaks test/test_movie.ts
