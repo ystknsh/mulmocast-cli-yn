@@ -212,19 +212,24 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Overlay voice-over captions
   const captionedVideoId = (() => {
-    const overlays = context.studio.beats.map((studioBeat, index) => {
-      return { index, 
-        captionFile: studioBeat.captionFile,
-        startTime: studioBeat.startAt as number,
-        duration: studioBeat.duration as number,
-      };
-    }).filter(({ captionFile }) => captionFile);
+    const overlays = context.studio.beats
+      .map((studioBeat, index) => {
+        return {
+          index,
+          captionFile: studioBeat.captionFile,
+          startTime: (studioBeat.startAt as number) + context.presentationStyle.audioParams.introPadding,
+          duration: studioBeat.duration as number,
+        };
+      })
+      .filter(({ captionFile }) => captionFile);
     if (caption && overlays.length > 0) {
       console.log("*** overlays", overlays);
       return overlays.reduce((acc, overlay) => {
         const captionInputIndex = FfmpegContextAddInput(ffmpegContext, overlay.captionFile as string);
         const compositeVideoId = `oc${overlay.index}`;
-        ffmpegContext.filterComplex.push(`[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${overlay.startTime},${overlay.startTime + overlay.duration})'[${compositeVideoId}]`);
+        ffmpegContext.filterComplex.push(
+          `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${overlay.startTime},${overlay.startTime + overlay.duration})'[${compositeVideoId}]`,
+        );
         return compositeVideoId;
       }, concatVideoId);
     }

@@ -91,7 +91,6 @@ export const captions = async (context: MulmoStudioContext, callbacks?: Callback
         });
       }
       await graph.run();
-
     } finally {
       MulmoStudioContextMethods.setSessionState(context, "caption", false);
     }
