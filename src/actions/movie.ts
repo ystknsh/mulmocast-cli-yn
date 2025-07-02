@@ -212,8 +212,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Overlay voice-over captions
   const captionedVideoId = (() => {
-    const beatsWithCaptions = context.studio.beats
-      .filter(({ captionFile }) => captionFile);
+    const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
     if (caption && beatsWithCaptions.length > 0) {
       const introPadding = context.presentationStyle.audioParams.introPadding;
       return beatsWithCaptions.reduce((acc, beat, index) => {
