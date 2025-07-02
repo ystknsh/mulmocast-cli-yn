@@ -98,7 +98,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         group.reduce((remaining, idx, iGroup) => {
           const subBeat = context.studio.script.beats[idx];
           const subBeatDurations = mediaDurations[idx];
-          userAssert(subBeatDurations.audioDuration <= remaining, `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`);
+          userAssert(
+            subBeatDurations.audioDuration <= remaining,
+            `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
+          );
           if (iGroup === group.length - 1) {
             beatDurations.push(subBeatDurations.audioDuration);
             subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
