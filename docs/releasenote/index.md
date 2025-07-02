@@ -1,5 +1,20 @@
 # RELEASE NOTE
 
+# v.0.0.27
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.27** introduces music video creation capabilities with caption display while maintaining system stability through comprehensive refactoring.
+
+- New Features
+  - **Music Video Mode**: New `suppressSpeech` flag enables creation of music videos with visual captions while suppressing speech audio synthesis
+
+- Others
+  - **System Refactoring**: Context initialization improvements and general code quality enhancements
+  - **Documentation Updates**: Fixed file references in README.md for accurate template names
+  - **Dependency Maintenance**: Updated project packages for security and compatibility
+
+This new feature enables music-focused content creation, expanding creative possibilities beyond traditional speech-based presentations.
+
 # v.0.0.26
 ## RELEASE NOTE
 
