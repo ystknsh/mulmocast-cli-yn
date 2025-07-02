@@ -315,7 +315,6 @@ Options:
   -b, --basedir            base dir                                     [string]
   -l, --lang               target language        [string] [choices: "en", "ja"]
   -f, --force              Force regenerate           [boolean] [default: false]
-      --dryRun             Dry run                    [boolean] [default: false]
   -p, --presentationStyle  Presentation Style                           [string]
   -a, --audiodir           Audio output directory                       [string]
 ```
@@ -336,7 +335,6 @@ Options:
   -b, --basedir            base dir                                     [string]
   -l, --lang               target language        [string] [choices: "en", "ja"]
   -f, --force              Force regenerate           [boolean] [default: false]
-      --dryRun             Dry run                    [boolean] [default: false]
   -p, --presentationStyle  Presentation Style                           [string]
   -i, --imagedir           Image output directory                       [string]
 ```
@@ -357,7 +355,6 @@ Options:
   -b, --basedir            base dir                                     [string]
   -l, --lang               target language        [string] [choices: "en", "ja"]
   -f, --force              Force regenerate           [boolean] [default: false]
-      --dryRun             Dry run                    [boolean] [default: false]
   -p, --presentationStyle  Presentation Style                           [string]
   -a, --audiodir           Audio output directory                       [string]
   -i, --imagedir           Image output directory                       [string]
