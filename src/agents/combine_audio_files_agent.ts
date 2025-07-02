@@ -102,20 +102,23 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
             `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
           );
           if (iGroup === group.length - 1) {
-            beatDurations.push(subBeatDurations.audioDuration);
+            beatDurations.push(remaining);
             subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
             return 0;
           }
-          beatDurations.push(subBeatDurations.audioDuration);
           const nextBeat = context.studio.script.beats[idx + 1];
           assert(nextBeat.image?.type === "voice_over", "nextBeat.image.type !== voice_over");
           const voiceStartAt = nextBeat.image?.startAt;
           if (voiceStartAt) {
             const remainingDuration = movieDuration - voiceStartAt;
-            subBeatDurations.silenceDuration = remaining - remainingDuration - subBeatDurations.audioDuration;
+            const duration = remaining - remainingDuration;
+            userAssert(duration >= 0, `duration(${duration}) < 0`);
+            beatDurations.push(duration);
+            subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
             userAssert(subBeatDurations.silenceDuration >= 0, `subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
             return remainingDuration;
           }
+          beatDurations.push(subBeatDurations.audioDuration);
           return remaining - subBeatDurations.audioDuration;
         }, movieDuration);
         return;
@@ -220,7 +223,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   };
   result.studio.beats.reduce((acc, beat) => {
     beat.startAt = acc;
-    return acc + beat.duration + beat.silenceDuration;
+    return acc + beat.duration;
   }, 0);
   // context.studio = result.studio; // TODO: removing this breaks test/test_movie.ts
   return {
