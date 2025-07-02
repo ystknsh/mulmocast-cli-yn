@@ -207,6 +207,18 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const videoIds = filterComplexVideoIds.filter((id) => id !== undefined); // filter out voice-over beats
   ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
 
+  // Overlay voice-over captions
+  const captionedVideoId = (() => {
+    const indeces = context.studio.beats.map((studioBeat, index) => {
+      const beat = context.studio.script.beats[index];
+      return { index, hasCaption: !!(beat.image?.type === "voice_over" && studioBeat.captionFile) };
+    }).filter(({ hasCaption }) => hasCaption);
+    if (caption && indeces.length > 0) {
+      console.log("*** indeces", indeces);
+    }
+    return concatVideoId;
+  })();
+
   // Add tranditions if needed
   const mixedVideoId = (() => {
     if (context.presentationStyle.movieParams?.transition && transitionVideoIds.length > 0) {
