@@ -37,7 +37,6 @@ const getMediaDurations = (context: MulmoStudioContext) => {
   return Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const beat = context.studio.script.beats[index];
-      const speed = beat.movieParams?.speed ?? 1.0;
       const movieDuration = await getMovieDulation(beat);
       const audioDuration = studioBeat.audioFile ? await ffmpegGetMediaDuration(studioBeat.audioFile) : 0;
       return {
