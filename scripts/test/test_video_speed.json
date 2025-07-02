@@ -53,7 +53,7 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This is a remote movie with audio. Speed is 0.5.",
+      "text": "This is a remote movie. Speed is 0.5.",
       "movieParams": {
         "speed": 0.5
       },
