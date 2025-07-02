@@ -8,7 +8,7 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
-export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension, fillOption: MulmoFillOption, speed?: number) => {
+export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension, fillOption: MulmoFillOption, speed: number) => {
   const videoId = `v${inputIndex}`;
 
   const videoFilters = [];
@@ -26,7 +26,7 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
   videoFilters.push(`trim=duration=${duration}`, "fps=30");
   
   // Apply speed if specified
-  if (speed && speed !== 1.0) {
+  if (speed !== 1.0) {
     videoFilters.push(`setpts=${1/speed}*PTS`);
   } else {
     videoFilters.push("setpts=PTS-STARTPTS");
@@ -139,7 +139,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
-    const speed = beat.movieParams?.speed;
+    const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && studioBeat.captionFile) {
@@ -165,7 +165,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       }
     }
 
-    if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
+    if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0 && speed === 1.0) {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);

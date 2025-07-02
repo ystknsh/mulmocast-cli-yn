@@ -17,7 +17,18 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This is a remote movie with audio. Speed is 2.0.",
+      "text": "Text slide.",
+      "duration": 0.3,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Text slide 1"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Speed is 2.0.",
       "movieParams": {
         "speed": 2.0
       },
@@ -26,6 +37,17 @@
         "source": {
           "kind": "url",
           "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.mov"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Text slide.",
+      "duration": 0.3,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Text slide 2"
         }
       }
     },
@@ -40,6 +62,17 @@
         "source": {
           "kind": "url",
           "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.mov"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "Text slide.",
+      "duration": 0.3,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Text slide 3"
         }
       }
     }
