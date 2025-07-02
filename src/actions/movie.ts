@@ -215,13 +215,14 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const beatsWithCaptions = context.studio.beats
       .filter(({ captionFile }) => captionFile);
     if (caption && beatsWithCaptions.length > 0) {
+      const introPadding = context.presentationStyle.audioParams.introPadding;
       return beatsWithCaptions.reduce((acc, beat, index) => {
         const { startAt, duration, captionFile } = beat;
         if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
           const captionInputIndex = FfmpegContextAddInput(ffmpegContext, captionFile);
           const compositeVideoId = `oc${index}`;
           ffmpegContext.filterComplex.push(
-            `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt},${startAt + duration})'[${compositeVideoId}]`,
+            `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt + introPadding},${startAt + duration + introPadding})'[${compositeVideoId}]`,
           );
           return compositeVideoId;
         }
