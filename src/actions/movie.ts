@@ -164,6 +164,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && studioBeat.captionFile) {
+      // NOTE: This works for normal beats, but not for voice-over beats.
       const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
       const compositeVideoId = `c${index}`;
       ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
