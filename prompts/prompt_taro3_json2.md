@@ -6,7 +6,7 @@
   "description": "韓国で最近発令された戒厳令とその可能性のある影響について、また日本の憲法に関する考慮事項との類似点を含めた洞察に満ちた議論。",
   "tts": "nijivoice",
   "voices": [
-    "afd7df65-0fdc-4d31-ae8b-a29f0f5eed62",
+    "3708ad43-cace-486c-a4ca-8fe41186e20c",
     "a7619e48-bf6a-4f9f-843f-40485651257f",
     "bc06c63f-fef6-43b6-92f7-67f919bd5dae"
   ],
