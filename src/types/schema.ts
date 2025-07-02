@@ -140,6 +140,13 @@ export const mulmoBeatReferenceMediaSchema = z
   })
   .strict();
 
+export const mulmoVoiceOverMediaSchema = z
+  .object({
+    type: z.literal("voice_over"),
+    timestamp: z.number().describe("The timestamp of the voice over in seconds."),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   mulmoMarkdownMediaSchema,
   mulmoWebMediaSchema,
@@ -154,6 +161,7 @@ export const mulmoImageAssetSchema = z.union([
   mulmoMermaidMediaSchema,
   mulmoHtmlTailwindMediaSchema,
   mulmoBeatReferenceMediaSchema,
+  mulmoVoiceOverMediaSchema,
 ]);
 
 const mulmoAudioMediaSchema = z
