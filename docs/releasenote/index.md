@@ -1,5 +1,58 @@
 # RELEASE NOTE
 
+# v.0.0.28
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.28** enhances deployment flexibility with custom FFmpeg path configuration.
+
+- System Improvements
+  - **FFmpeg Path Configuration**: Added `setFfmpegPath` and `setFfprobePath` functions for custom executable paths
+  - **Enhanced Compatibility**: Better support for containerized deployments and non-standard FFmpeg installations
+
+This technical release improves deployment flexibility across different environments while maintaining full backward compatibility.
+
+# v.0.0.27
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.27** introduces music video creation capabilities with caption display while maintaining system stability through comprehensive refactoring.
+
+- New Features
+  - **Music Video Mode**: New `suppressSpeech` flag enables creation of music videos with visual captions while suppressing speech audio synthesis
+
+- Others
+  - **System Refactoring**: Context initialization improvements and general code quality enhancements
+  - **Documentation Updates**: Fixed file references in README.md for accurate template names
+  - **Dependency Maintenance**: Updated project packages for security and compatibility
+
+This new feature enables music-focused content creation, expanding creative possibilities beyond traditional speech-based presentations.
+
+# v.0.0.26
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.26** introduces experimental Model Context Protocol (MCP) server implementation.
+
+- New Features
+  - **MCP Server Implementation**: Added experimental MCP server with JSON schemas for HTML prompts and MulmoScript configuration
+
+This experimental release introduces MCP server infrastructure for enhanced configuration management and validation capabilities.
+
+# v.0.0.25
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.25** enhances HTML-based image generation with debugging capabilities and lays the foundation for future AI improvements.
+
+- HTML Image Generation Enhancements
+  - **HTML Saving**: Automatically save generated HTML files when using htmlPrompt feature for debugging and reuse
+  - **Improved LLM Configuration**: Centralized configuration management for better consistency across providers
+  - **Token Optimization**: Fixed max_tokens handling to prevent response truncation and optimize API usage
+
+- Others
+  - **Educational Content Samples**: Added RL educational scripts demonstrating htmlPrompt vs traditional image generation
+  - **Enhanced Documentation**: Comprehensive Anthropic API integration guide and detailed release notes for v0.0.23-v0.0.24
+  - **System Stability**: Various maintenance updates to keep the codebase current and reliable
+
+This release strengthens the HTML-based image generation pipeline with improved debugging capabilities and enhanced documentation.
+
 # v.0.0.24
 ## RELEASE NOTE
 
