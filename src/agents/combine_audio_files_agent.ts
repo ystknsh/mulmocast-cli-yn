@@ -3,6 +3,7 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
 import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import { userAssert } from "../utils/utils.js";
 
 const getMovieDulation = async (beat: MulmoBeat) => {
   if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
@@ -87,6 +88,28 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     }
     assert(beatDurations.length === index, "beatDurations.length !== index");
     const { audioDuration, movieDuration } = mediaDurations[index];
+    // Check if we are processing a voice-over beat.
+    if (movieDuration > 0) {
+      const group = [index];
+      for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
+        group.push(i);
+      }
+      if (group.length > 1) {
+        group.reduce((remaining, idx, iGroup) => {
+          const subBeat = context.studio.script.beats[idx];
+          const subBeatDurations = mediaDurations[idx];
+          userAssert(subBeatDurations.audioDuration <= remaining, `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`);
+          if (iGroup === group.length - 1) {
+            beatDurations.push(subBeatDurations.audioDuration);
+            subBeatDurations.silenceDuration = remaining;
+            return 0;
+          }
+          beatDurations.push(subBeatDurations.audioDuration);
+          return remaining - subBeatDurations.audioDuration;
+        }, movieDuration);
+        return;
+      }
+    }
 
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {

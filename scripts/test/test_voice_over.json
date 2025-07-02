@@ -17,7 +17,7 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This is a reference beat.",
+      "text": "This code processes the image.",
       "duration": 0.5,
       "image": {
         "type": "voice_over",
