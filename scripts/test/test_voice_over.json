@@ -20,7 +20,8 @@
       "text": "This is a reference beat.",
       "duration": 0.5,
       "image": {
-        "type": "beat"
+        "type": "voice_over",
+        "timestamp": 4.0
       }
     }
   ]
