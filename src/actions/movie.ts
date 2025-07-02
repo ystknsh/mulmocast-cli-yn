@@ -8,22 +8,37 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
-export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension, fillOption: MulmoFillOption) => {
+export const getVideoPart = (
+  inputIndex: number,
+  mediaType: BeatMediaType,
+  duration: number,
+  canvasInfo: MulmoCanvasDimension,
+  fillOption: MulmoFillOption,
+  speed: number,
+) => {
   const videoId = `v${inputIndex}`;
 
   const videoFilters = [];
 
   // Handle different media types
+  const originalDuration = duration * speed;
   if (mediaType === "image") {
     videoFilters.push("loop=loop=-1:size=1:start=0");
   } else if (mediaType === "movie") {
     // For videos, extend with last frame if shorter than required duration
     // tpad will extend the video by cloning the last frame, then trim will ensure exact duration
-    videoFilters.push(`tpad=stop_mode=clone:stop_duration=${duration * 2}`); // Use 2x duration to ensure coverage
+    videoFilters.push(`tpad=stop_mode=clone:stop_duration=${originalDuration * 2}`); // Use 2x duration to ensure coverage
   }
 
   // Common filters for all media types
-  videoFilters.push(`trim=duration=${duration}`, "fps=30", "setpts=PTS-STARTPTS");
+  videoFilters.push(`trim=duration=${originalDuration}`, "fps=30");
+
+  // Apply speed if specified
+  if (speed !== 1.0) {
+    videoFilters.push(`setpts=${1 / speed}*PTS`);
+  } else {
+    videoFilters.push("setpts=PTS-STARTPTS");
+  }
 
   // Apply scaling based on fill option
   if (fillOption.style === "aspectFill") {
@@ -132,7 +147,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
-    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption);
+    const speed = beat.movieParams?.speed ?? 1.0;
+    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && studioBeat.captionFile) {
       const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
@@ -157,7 +173,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       }
     }
 
-    if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0) {
+    // NOTE: We don't support audio if the speed is not 1.0.
+    if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0 && speed === 1.0) {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
       filterComplexAudioIds.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);

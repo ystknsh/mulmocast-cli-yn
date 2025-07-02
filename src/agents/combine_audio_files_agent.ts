@@ -7,7 +7,8 @@ import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputForma
 const getMovieDulation = async (beat: MulmoBeat) => {
   if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
     const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
-    return await ffmpegGetMediaDuration(pathOrUrl);
+    const speed = beat.movieParams?.speed ?? 1.0;
+    return (await ffmpegGetMediaDuration(pathOrUrl)) / speed;
   }
   return 0;
 };

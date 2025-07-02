@@ -264,7 +264,8 @@ export const mulmoBeatSchema = z
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
     movieParams: z
       .object({
-        fillOption: mulmoFillOptionSchema,
+        fillOption: mulmoFillOptionSchema.optional(),
+        speed: z.number().optional().describe("Speed of the video. 1.0 is normal speed. 0.5 is half speed. 2.0 is double speed."),
       })
       .optional(),
     htmlImageParams: mulmoHtmlImageParamsSchema.optional(),
