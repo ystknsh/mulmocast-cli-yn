@@ -26,10 +26,42 @@
     },
     {
       "speaker": "Presenter",
-      "text": "This code processes the image.",
+      "text": "This code processes the captions.",
       "image": {
         "type": "voice_over",
-        "startAt": 4.0
+        "startAt": 8.0
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This code processes the images.",
+      "image": {
+        "type": "voice_over",
+        "startAt": 14.5
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This code processes the movie.",
+      "image": {
+        "type": "voice_over",
+        "startAt": 21.0
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This code processes the pdf.",
+      "image": {
+        "type": "voice_over",
+        "startAt": 25.0
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This code processes the translation.",
+      "image": {
+        "type": "voice_over",
+        "startAt": 30.0
       }
     },
     {

@@ -113,8 +113,8 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           const voiceStartAt = nextBeat.image?.startAt;
           if (voiceStartAt) {
             const remainingDuration = movieDuration - voiceStartAt;
-            userAssert(remainingDuration <= remaining, `remainingDuration(${remainingDuration}) > remaining(${remaining})`);
-            subBeatDurations.silenceDuration = remaining - remainingDuration;
+            subBeatDurations.silenceDuration = remaining - remainingDuration - subBeatDurations.audioDuration;
+            userAssert(subBeatDurations.silenceDuration >= 0, `subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
             return remainingDuration;
           }
           return remaining - subBeatDurations.audioDuration;
