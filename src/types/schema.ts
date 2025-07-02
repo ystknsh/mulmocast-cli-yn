@@ -143,7 +143,7 @@ export const mulmoBeatReferenceMediaSchema = z
 export const mulmoVoiceOverMediaSchema = z
   .object({
     type: z.literal("voice_over"),
-    startAt: z.number().describe("The time to start the voice over the video in seconds."),
+    startAt: z.number().optional().describe("The time to start the voice over the video in seconds."),
   })
   .strict();
 
