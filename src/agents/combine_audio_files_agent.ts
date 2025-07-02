@@ -3,6 +3,7 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
 import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import { userAssert } from "../utils/utils.js";
 
 const getMovieDulation = async (beat: MulmoBeat) => {
   if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
@@ -81,7 +82,49 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const beatDurations: number[] = [];
 
   context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
+    if (beatDurations.length > index) {
+      // The current beat has already been processed.
+      return;
+    }
+    assert(beatDurations.length === index, "beatDurations.length !== index");
     const { audioDuration, movieDuration } = mediaDurations[index];
+    // Check if we are processing a voice-over beat.
+    if (movieDuration > 0) {
+      const group = [index];
+      for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
+        group.push(i);
+      }
+      if (group.length > 1) {
+        group.reduce((remaining, idx, iGroup) => {
+          const subBeatDurations = mediaDurations[idx];
+          userAssert(
+            subBeatDurations.audioDuration <= remaining,
+            `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
+          );
+          if (iGroup === group.length - 1) {
+            beatDurations.push(remaining);
+            subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
+            return 0;
+          }
+          const nextBeat = context.studio.script.beats[idx + 1];
+          assert(nextBeat.image?.type === "voice_over", "nextBeat.image.type !== voice_over");
+          const voiceStartAt = nextBeat.image?.startAt;
+          if (voiceStartAt) {
+            const remainingDuration = movieDuration - voiceStartAt;
+            const duration = remaining - remainingDuration;
+            userAssert(duration >= 0, `duration(${duration}) < 0`);
+            beatDurations.push(duration);
+            subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
+            userAssert(subBeatDurations.silenceDuration >= 0, `subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
+            return remainingDuration;
+          }
+          beatDurations.push(subBeatDurations.audioDuration);
+          return remaining - subBeatDurations.audioDuration;
+        }, movieDuration);
+        return;
+      }
+    }
+
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
@@ -124,16 +167,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }
     } else if (movieDuration > 0) {
       // This beat has only a movie, not audio.
-      assert(beatDurations.length === index, "beatDurations.length !== index");
       beatDurations.push(movieDuration);
       mediaDurations[index].silenceDuration = movieDuration;
-    } else if (beatDurations.length === index) {
+    } else {
       // The current beat has no audio, nor no spilled over audio
       const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
       beatDurations.push(beatDuration);
       mediaDurations[index].silenceDuration = beatDuration;
     }
-    // else { Skip this beat if the duration has been already added as a group }
   });
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
@@ -171,9 +212,19 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const result = {
     studio: {
       ...context.studio,
-      beats: context.studio.beats.map((studioBeat, index) => ({ ...studioBeat, duration: beatDurations[index] })),
+      beats: context.studio.beats.map((studioBeat, index) => ({
+        ...studioBeat,
+        duration: beatDurations[index],
+        audioDuration: mediaDurations[index].audioDuration,
+        movieDuration: mediaDurations[index].movieDuration,
+        silenceDuration: mediaDurations[index].silenceDuration,
+      })),
     },
   };
+  result.studio.beats.reduce((acc, beat) => {
+    beat.startAt = acc;
+    return acc + beat.duration;
+  }, 0);
   // context.studio = result.studio; // TODO: removing this breaks test/test_movie.ts
   return {
     ...context,

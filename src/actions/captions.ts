@@ -2,9 +2,10 @@ import { MulmoStudioContext, MulmoBeat, mulmoCaptionParamsSchema } from "../type
 import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
-import { getHTMLFile, getCaptionImagePath } from "../utils/file.js";
+import { getHTMLFile, getCaptionImagePath, getOutputStudioFilePath } from "../utils/file.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import { MulmoStudioContextMethods, MulmoPresentationStyleMethods } from "../methods/index.js";
+import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 const vanillaAgents = agents.default ?? agents;
 
@@ -12,6 +13,7 @@ const graph_data: GraphData = {
   version: 0.5,
   nodes: {
     context: {},
+    outputStudioFilePath: {},
     map: {
       agent: "mapAgent",
       inputs: { rows: ":context.studio.script.beats", context: ":context" },
@@ -62,6 +64,14 @@ const graph_data: GraphData = {
         },
       },
     },
+    fileWrite: {
+      agent: "fileWriteAgent",
+      inputs: {
+        onComplete: ":map.generateCaption",
+        file: ":outputStudioFilePath",
+        text: ":context.studio.toJSON()",
+      },
+    },
   },
 };
 
@@ -69,8 +79,12 @@ export const captions = async (context: MulmoStudioContext, callbacks?: Callback
   if (MulmoStudioContextMethods.getCaption(context)) {
     try {
       MulmoStudioContextMethods.setSessionState(context, "caption", true);
-      const graph = new GraphAI(graph_data, { ...vanillaAgents });
+      const graph = new GraphAI(graph_data, { ...vanillaAgents, fileWriteAgent });
+      const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+      const fileName = MulmoStudioContextMethods.getFileName(context);
+      const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
       graph.injectValue("context", context);
+      graph.injectValue("outputStudioFilePath", outputStudioFilePath);
       if (callbacks) {
         callbacks.forEach((callback) => {
           graph.registerCallback(callback);

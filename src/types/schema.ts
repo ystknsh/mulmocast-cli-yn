@@ -140,6 +140,13 @@ export const mulmoBeatReferenceMediaSchema = z
   })
   .strict();
 
+export const mulmoVoiceOverMediaSchema = z
+  .object({
+    type: z.literal("voice_over"),
+    startAt: z.number().optional().describe("The time to start the voice over the video in seconds."),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   mulmoMarkdownMediaSchema,
   mulmoWebMediaSchema,
@@ -154,6 +161,7 @@ export const mulmoImageAssetSchema = z.union([
   mulmoMermaidMediaSchema,
   mulmoHtmlTailwindMediaSchema,
   mulmoBeatReferenceMediaSchema,
+  mulmoVoiceOverMediaSchema,
 ]);
 
 const mulmoAudioMediaSchema = z
@@ -379,6 +387,10 @@ export const mulmoStudioBeatSchema = z
   .object({
     hash: z.string().optional(),
     duration: z.number().optional(),
+    startAt: z.number().optional(),
+    audioDuration: z.number().optional(),
+    movieDuration: z.number().optional(),
+    silenceDuration: z.number().optional(),
     audioFile: z.string().optional(),
     imageFile: z.string().optional(), // path to the image
     movieFile: z.string().optional(), // path to the movie file

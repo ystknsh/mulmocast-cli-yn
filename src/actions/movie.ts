@@ -105,7 +105,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
-  const missingIndex = context.studio.beats.findIndex((beat) => !beat.imageFile && !beat.movieFile);
+  const missingIndex = context.studio.beats.findIndex((studioBeat, index) => {
+    const beat = context.studio.script.beats[index];
+    if (beat.image?.type === "voice_over") {
+      return false; // Voice-over does not have either imageFile or movieFile.
+    }
+    return !studioBeat.imageFile && !studioBeat.movieFile;
+  });
   if (missingIndex !== -1) {
     GraphAILogger.info(`ERROR: beat.imageFile or beat.movieFile is not set on beat ${missingIndex}.`);
     return false;
@@ -114,13 +120,18 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const canvasInfo = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
 
   // Add each image input
-  const filterComplexVideoIds: string[] = [];
+  const filterComplexVideoIds: (string | undefined)[] = [];
   const filterComplexAudioIds: string[] = [];
   const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
   context.studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = context.studio.script.beats[index];
+    if (beat.image?.type === "voice_over") {
+      filterComplexVideoIds.push(undefined);
+      beatTimestamps.push(timestamp);
+      return timestamp; // Skip voice-over beats.
+    }
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
     if (!sourceFile) {
       throw new Error(`studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
@@ -139,7 +150,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       }
       return 0;
     })();
-    const duration = studioBeat.duration + extraPadding;
+
+    // The movie duration is bigger in case of voice-over.
+    const duration = Math.max(studioBeat.duration + extraPadding, studioBeat.movieDuration ?? 0);
 
     // Get fillOption from merged imageParams (global + beat-specific)
     const globalFillOption = context.presentationStyle.movieParams?.fillOption;
@@ -150,14 +163,18 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
+    /*
     if (caption && studioBeat.captionFile) {
+      // NOTE: This works for normal beats, but not for voice-over beats.
       const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
       const compositeVideoId = `c${index}`;
       ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
       filterComplexVideoIds.push(compositeVideoId);
     } else {
-      filterComplexVideoIds.push(videoId);
     }
+    */
+    filterComplexVideoIds.push(videoId);
+
     if (context.presentationStyle.movieParams?.transition && index < context.studio.beats.length - 1) {
       const sourceId = filterComplexVideoIds.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
@@ -190,7 +207,29 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
-  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${context.studio.beats.length}:v=1:a=0[${concatVideoId}]`);
+  const videoIds = filterComplexVideoIds.filter((id) => id !== undefined); // filter out voice-over beats
+  ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
+
+  // Overlay voice-over captions
+  const captionedVideoId = (() => {
+    const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
+    if (caption && beatsWithCaptions.length > 0) {
+      const introPadding = context.presentationStyle.audioParams.introPadding;
+      return beatsWithCaptions.reduce((acc, beat, index) => {
+        const { startAt, duration, captionFile } = beat;
+        if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
+          const captionInputIndex = FfmpegContextAddInput(ffmpegContext, captionFile);
+          const compositeVideoId = `oc${index}`;
+          ffmpegContext.filterComplex.push(
+            `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt + introPadding},${startAt + duration + introPadding})'[${compositeVideoId}]`,
+          );
+          return compositeVideoId;
+        }
+        return acc;
+      }, concatVideoId);
+    }
+    return concatVideoId;
+  })();
 
   // Add tranditions if needed
   const mixedVideoId = (() => {
@@ -220,10 +259,12 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
           );
         }
         return outputId;
-      }, concatVideoId);
+      }, captionedVideoId);
     }
-    return concatVideoId;
+    return captionedVideoId;
   })();
+
+  GraphAILogger.log("filterComplex:", ffmpegContext.filterComplex.join("\n"));
 
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
