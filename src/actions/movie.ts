@@ -209,12 +209,22 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Overlay voice-over captions
   const captionedVideoId = (() => {
-    const indeces = context.studio.beats.map((studioBeat, index) => {
+    const overlays = context.studio.beats.map((studioBeat, index) => {
       const beat = context.studio.script.beats[index];
-      return { index, hasCaption: !!(beat.image?.type === "voice_over" && studioBeat.captionFile) };
-    }).filter(({ hasCaption }) => hasCaption);
-    if (caption && indeces.length > 0) {
-      console.log("*** indeces", indeces);
+      return { index, 
+        captionFile: beat.image?.type === "voice_over" && studioBeat.captionFile,
+        startTime: beatTimestamps[index],
+        duration: studioBeat.duration ?? 0, // HACK: ?? 0 for the TypeSceript compiler
+      };
+    }).filter(({ captionFile }) => captionFile);
+    if (caption && overlays.length > 0) {
+      console.log("*** overlays", overlays);
+      return overlays.reduce((acc, overlay) => {
+        const captionInputIndex = FfmpegContextAddInput(ffmpegContext, overlay.captionFile as string);
+        const compositeVideoId = `oc${overlay.index}`;
+        ffmpegContext.filterComplex.push(`[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${overlay.startTime},${overlay.startTime + overlay.duration})'[${compositeVideoId}]`);
+        return compositeVideoId;
+      }, concatVideoId);
     }
     return concatVideoId;
   })();
@@ -247,10 +257,12 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
           );
         }
         return outputId;
-      }, concatVideoId);
+      }, captionedVideoId);
     }
-    return concatVideoId;
+    return captionedVideoId;
   })();
+
+  GraphAILogger.log("filterComplex:", ffmpegContext.filterComplex.join("\n"));
 
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
