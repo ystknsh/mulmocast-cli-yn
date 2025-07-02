@@ -150,7 +150,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       }
       return 0;
     })();
-    const duration = studioBeat.duration + extraPadding;
+
+    // The movie duration is bigger in case of voice-over.
+    const duration = Math.max(studioBeat.duration + extraPadding, studioBeat.movieDuration ?? 0);
 
     // Get fillOption from merged imageParams (global + beat-specific)
     const globalFillOption = context.presentationStyle.movieParams?.fillOption;

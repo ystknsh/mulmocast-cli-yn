@@ -5,6 +5,15 @@
   "title": "Voice Over Test",
   "beats": [
     {
+      "text": "This is the first slide.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "First slide"
+        }
+      }
+    },
+    {
       "speaker": "Presenter",
       "text": "This code processes the audio.",
       "image": {
@@ -25,7 +34,6 @@
     },
     {
       "text": "This is the last slide.",
-      "duration": 0.5,
       "image": {
         "type": "textSlide",
         "slide": {
