@@ -81,7 +81,13 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
   const beatDurations: number[] = [];
 
   context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
+    if (beatDurations.length > index) {
+      // The current beat has already been processed.
+      return;
+    }
+    assert(beatDurations.length === index, "beatDurations.length !== index");
     const { audioDuration, movieDuration } = mediaDurations[index];
+    
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
@@ -124,16 +130,14 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }
     } else if (movieDuration > 0) {
       // This beat has only a movie, not audio.
-      assert(beatDurations.length === index, "beatDurations.length !== index");
       beatDurations.push(movieDuration);
       mediaDurations[index].silenceDuration = movieDuration;
-    } else if (beatDurations.length === index) {
+    } else {
       // The current beat has no audio, nor no spilled over audio
       const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
       beatDurations.push(beatDuration);
       mediaDurations[index].silenceDuration = beatDuration;
     }
-    // else { Skip this beat if the duration has been already added as a group }
   });
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
