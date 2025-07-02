@@ -200,11 +200,18 @@ writing: /Users/username/path/to/output/story-1747834931950__ja.mp4
 # Generate script from web content (requires Browserless API KEY)
 mulmo tool scripting -u https://example.com
 
+# Generate script from local file
+mulmo tool scripting --input-file story.txt
+
 # Generate script with interactive mode
 mulmo tool scripting -i
 ```
 
-When using the `⁠sensei_and_taro` template, a Nijivoice API key is required.
+Note: 
+- When using the `⁠sensei_and_taro` template, a Nijivoice API key is required
+- When -i is specified, --input-file value will be ignored
+- When --input-file is specified, -u value will be ignored
+
 
 ## Generate content from MulmoScript
 
@@ -411,16 +418,19 @@ Options:
   -b, --basedir      base dir                                           [string]
   -u, --url          URLs to reference (required when not in interactive mode)
                                                            [array] [default: []]
+      --input-file   input file name                                    [string]
   -i, --interactive  Generate script in interactive mode with user prompts
                                                                        [boolean]
   -t, --template     Template name to use
-       [string] [choices: "business", "children_book", "coding", "comic_strips",
-                         "ghibli_strips", "podcast_standard", "sensei_and_taro"]
+        [string] [choices: "akira_comic", "business", "children_book", "coding",
+           "comic_strips", "drslump_comic", "ghibli_comic", "ghibli_image_only",
+           "ghibli_shorts", "ghost_comic", "onepiece_comic", "podcast_standard",
+               "portrait_movie", "realistic_movie", "sensei_and_taro", "shorts",
+                                       "text_and_image", "text_only", "trailer"]
   -c, --cache        cache dir                                          [string]
   -s, --script       script filename                [string] [default: "script"]
       --llm          llm
-              [string] [choices: "openAIAgent", "anthropicAgent", "geminiAgent",
-                                                                    "groqAgent"]
+                     [string] [choices: "openai", "anthropic", "gemini", "groq"]
       --llm_model    llm model                                          [string]
 ```
 
