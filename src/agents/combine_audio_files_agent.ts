@@ -218,6 +218,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       })),
     },
   };
+  result.studio.beats.reduce((acc, beat, index) => {
+    beat.startAt = acc;
+    return acc + beat.duration;
+  }, 0);
   // context.studio = result.studio; // TODO: removing this breaks test/test_movie.ts
   return {
     ...context,

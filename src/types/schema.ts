@@ -387,6 +387,7 @@ export const mulmoStudioBeatSchema = z
   .object({
     hash: z.string().optional(),
     duration: z.number().optional(),
+    startAt: z.number().optional(),
     audioDuration: z.number().optional(),
     movieDuration: z.number().optional(),
     silenceDuration: z.number().optional(),
