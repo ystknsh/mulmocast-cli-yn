@@ -3,6 +3,9 @@
     "version": "1.0"
   },
   "title": "Voice Over Test",
+  "captionParams": {
+    "lang": "en"
+  },
   "beats": [
     {
       "text": "This is the first slide.",
