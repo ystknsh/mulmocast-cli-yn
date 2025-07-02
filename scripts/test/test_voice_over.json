@@ -1,0 +1,27 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Voice Over Test",
+  "beats": [
+    {
+      "speaker": "Presenter",
+      "text": "This code processes the audio.",
+      "image": {
+        "type": "movie",
+        "source": {
+          "kind": "url",
+          "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/movies/actions.mp4"
+        }
+      }
+    },
+    {
+      "speaker": "Presenter",
+      "text": "This is a reference beat.",
+      "duration": 0.5,
+      "image": {
+        "type": "beat"
+      }
+    }
+  ]
+}
