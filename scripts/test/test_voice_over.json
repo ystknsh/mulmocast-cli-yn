@@ -29,7 +29,7 @@
       "text": "This code processes the image.",
       "image": {
         "type": "voice_over",
-        "timestamp": 4.0
+        "startAt": 4.0
       }
     },
     {
