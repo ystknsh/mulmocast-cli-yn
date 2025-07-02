@@ -18,10 +18,19 @@
     {
       "speaker": "Presenter",
       "text": "This code processes the image.",
-      "duration": 0.5,
       "image": {
         "type": "voice_over",
         "timestamp": 4.0
+      }
+    },
+    {
+      "text": "This is the last slide.",
+      "duration": 0.5,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Last slide"
+        }
       }
     }
   ]
