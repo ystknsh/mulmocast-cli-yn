@@ -218,7 +218,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       })),
     },
   };
-  result.studio.beats.reduce((acc, beat, index) => {
+  result.studio.beats.reduce((acc, beat) => {
     beat.startAt = acc;
     return acc + beat.duration + beat.silenceDuration;
   }, 0);

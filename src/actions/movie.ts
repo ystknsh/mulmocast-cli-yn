@@ -223,7 +223,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       })
       .filter(({ captionFile }) => captionFile);
     if (caption && overlays.length > 0) {
-      console.log("*** overlays", overlays);
       return overlays.reduce((acc, overlay) => {
         const captionInputIndex = FfmpegContextAddInput(ffmpegContext, overlay.captionFile as string);
         const compositeVideoId = `oc${overlay.index}`;
