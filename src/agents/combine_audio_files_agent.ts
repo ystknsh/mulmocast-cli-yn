@@ -87,7 +87,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     }
     assert(beatDurations.length === index, "beatDurations.length !== index");
     const { audioDuration, movieDuration } = mediaDurations[index];
-    
+
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.

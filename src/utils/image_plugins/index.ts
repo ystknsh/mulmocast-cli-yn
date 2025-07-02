@@ -6,8 +6,9 @@ import * as pluginHtmlTailwind from "./html_tailwind.js";
 import * as pluginImage from "./image.js";
 import * as pluginMovie from "./movie.js";
 import * as pluginBeat from "./beat.js";
+import * as pluginVoiceOver from "./voice_over.js";
 
-const imagePlugins = [pluginTextSlide, pluginMarkdown, pluginImage, pluginChart, pluginMermaid, pluginMovie, pluginHtmlTailwind, pluginBeat];
+const imagePlugins = [pluginTextSlide, pluginMarkdown, pluginImage, pluginChart, pluginMermaid, pluginMovie, pluginHtmlTailwind, pluginBeat, pluginVoiceOver];
 
 export const findImagePlugin = (imageType?: string) => {
   return imagePlugins.find((plugin) => plugin.imageType === imageType);
