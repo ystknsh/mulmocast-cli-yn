@@ -96,7 +96,6 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       }
       if (group.length > 1) {
         group.reduce((remaining, idx, iGroup) => {
-          const subBeat = context.studio.script.beats[idx];
           const subBeatDurations = mediaDurations[idx];
           userAssert(
             subBeatDurations.audioDuration <= remaining,
