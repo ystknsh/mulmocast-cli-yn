@@ -8,7 +8,7 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 // const isMac = process.platform === "darwin";
 const videoCodec = "libx264"; // "h264_videotoolbox" (macOS only) is too noisy
 
-export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension, fillOption: MulmoFillOption) => {
+export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, duration: number, canvasInfo: MulmoCanvasDimension, fillOption: MulmoFillOption, speed?: number) => {
   const videoId = `v${inputIndex}`;
 
   const videoFilters = [];
@@ -23,7 +23,14 @@ export const getVideoPart = (inputIndex: number, mediaType: BeatMediaType, durat
   }
 
   // Common filters for all media types
-  videoFilters.push(`trim=duration=${duration}`, "fps=30", "setpts=PTS-STARTPTS");
+  videoFilters.push(`trim=duration=${duration}`, "fps=30");
+  
+  // Apply speed if specified
+  if (speed && speed !== 1.0) {
+    videoFilters.push(`setpts=${1/speed}*PTS`);
+  } else {
+    videoFilters.push("setpts=PTS-STARTPTS");
+  }
 
   // Apply scaling based on fill option
   if (fillOption.style === "aspectFill") {
@@ -132,7 +139,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
-    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption);
+    const speed = beat.movieParams?.speed;
+    const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
     if (caption && studioBeat.captionFile) {
       const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
