@@ -105,7 +105,13 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const start = performance.now();
   const ffmpegContext = FfmpegContextInit();
 
-  const missingIndex = context.studio.beats.findIndex((beat) => !beat.imageFile && !beat.movieFile);
+  const missingIndex = context.studio.beats.findIndex((studioBeat, index) => {
+    const beat = context.studio.script.beats[index];
+    if (beat.image?.type === "voice_over") {
+      return false; // Voice-over does not have either imageFile or movieFile.
+    }
+    return !studioBeat.imageFile && !studioBeat.movieFile;
+  });
   if (missingIndex !== -1) {
     GraphAILogger.info(`ERROR: beat.imageFile or beat.movieFile is not set on beat ${missingIndex}.`);
     return false;
@@ -114,13 +120,18 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const canvasInfo = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
 
   // Add each image input
-  const filterComplexVideoIds: string[] = [];
+  const filterComplexVideoIds: (string | undefined)[] = [];
   const filterComplexAudioIds: string[] = [];
   const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
   context.studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = context.studio.script.beats[index];
+    if (beat.image?.type === "voice_over") {
+      filterComplexVideoIds.push(undefined);
+      beatTimestamps.push(timestamp);
+      return timestamp; // Skip voice-over beats.
+    }
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
     if (!sourceFile) {
       throw new Error(`studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
@@ -190,7 +201,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
-  ffmpegContext.filterComplex.push(`${filterComplexVideoIds.map((id) => `[${id}]`).join("")}concat=n=${context.studio.beats.length}:v=1:a=0[${concatVideoId}]`);
+  const videoIds = filterComplexVideoIds.filter((id) => id !== undefined); // filter out voice-over beats
+  ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
 
   // Add tranditions if needed
   const mixedVideoId = (() => {
