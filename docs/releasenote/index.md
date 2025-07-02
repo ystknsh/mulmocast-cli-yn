@@ -1,5 +1,16 @@
 # RELEASE NOTE
 
+# v.0.0.28
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.28** enhances deployment flexibility with custom FFmpeg path configuration.
+
+- System Improvements
+  - **FFmpeg Path Configuration**: Added `setFfmpegPath` and `setFfprobePath` functions for custom executable paths
+  - **Enhanced Compatibility**: Better support for containerized deployments and non-standard FFmpeg installations
+
+This technical release improves deployment flexibility across different environments while maintaining full backward compatibility.
+
 # v.0.0.27
 ## RELEASE NOTE
 
