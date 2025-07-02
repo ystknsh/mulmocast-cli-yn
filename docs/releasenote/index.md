@@ -1,5 +1,15 @@
 # RELEASE NOTE
 
+# v.0.0.26
+## RELEASE NOTE
+
+**MulmoCast CLI v0.0.26** introduces experimental Model Context Protocol (MCP) server implementation.
+
+- New Features
+  - **MCP Server Implementation**: Added experimental MCP server with JSON schemas for HTML prompts and MulmoScript configuration
+
+This experimental release introduces MCP server infrastructure for enhanced configuration management and validation capabilities.
+
 # v.0.0.25
 ## RELEASE NOTE
 
