@@ -237,6 +237,38 @@ id は beat で指定する
 }
 ```
 
+### voice_over
+既存の動画にナレーション（音声）やキャプションを重ねる場合に使用します。このタイプでは画像は生成されません。
+
+```json
+{
+  "text": "8秒後に表示されるナレーション",
+  "image": {
+    "type": "voice_over",
+    "startAt": 8.0
+  }
+}
+```
+
+詳細な使用例については [scripts/test/test_voice_over.json](../scripts/test/test_voice_over.json) を参考にしてください。
+
+#### 注意事項
+- `voice_over` タイプの beat では、直前の beat の動画が継続して表示されます
+- 音声の開始タイミングは `startAt` パラメータで調整できます（省略可。省略時は直前の beat 終了後に開始）
+- キャプションは音声と同じタイミングで表示します。
+- キャプションの表示が終了するタイミングは次の beat が 空の voice_over かどうかで決まります。
+  - **空の voice_over beat あり**: 直前の beat のキャプションは音声終了時に消えます
+  - **空の voice_over beat なし**: 次の beat が始まるまでキャプションが表示され続けます
+
+  空の voice_over beat の例：
+  ```json
+  {
+    "image": {
+      "type": "voice_over"
+    }
+  }
+  ```
+
 ## 各条件での beat データ例
 
 ### 2. htmlPrompt
