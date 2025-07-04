@@ -82,6 +82,16 @@ brew install ffmpeg
 # Visit https://ffmpeg.org/download.html
 ```
 
+You can also use [`Dockerfile`](./Dockerfile) which helps you install the pre-requisits.
+```
+docker build -t mulmo-cli .
+```
+
+You can use the Docker image like this:
+```
+docker run -e OPENAI_API_KEY=<your_openai_api_key> -it mulmo-cli mulmo tool scripting -i -t children_book -o ./ -s story
+```
+
 ## Configuration
 
 Create a `.env` file in your project directory with the following API keys:
