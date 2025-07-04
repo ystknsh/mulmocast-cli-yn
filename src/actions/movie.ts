@@ -2,7 +2,13 @@ import { GraphAILogger, assert } from "graphai";
 import { MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema, MulmoFillOption, mulmoFillOptionSchema } from "../types/index.js";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
-import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
+import {
+  FfmpegContextAddInput,
+  FfmpegContextInit,
+  FfmpegContextPushFormattedAudio,
+  FfmpegContextGenerateOutput,
+  FfmpegContext,
+} from "../utils/ffmpeg_utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 // const isMac = process.platform === "darwin";
@@ -100,7 +106,7 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
-const addCaptions = (ffmpegContext: any, concatVideoId: string, context: MulmoStudioContext, caption: string | undefined) => {
+const addCaptions = (ffmpegContext: FfmpegContext, concatVideoId: string, context: MulmoStudioContext, caption: string | undefined) => {
   const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
   if (caption && beatsWithCaptions.length > 0) {
     const introPadding = context.presentationStyle.audioParams.introPadding;
@@ -121,7 +127,7 @@ const addCaptions = (ffmpegContext: any, concatVideoId: string, context: MulmoSt
 };
 
 const addTransitionEffects = (
-  ffmpegContext: any,
+  ffmpegContext: FfmpegContext,
   captionedVideoId: string,
   context: MulmoStudioContext,
   transitionVideoIds: string[],
@@ -158,7 +164,7 @@ const addTransitionEffects = (
   return captionedVideoId;
 };
 
-const mixAudiosFromMovieBeats = (ffmpegContext: any, artifactAudioId: string, audioIdsFromMovieBeats: string[]) => {
+const mixAudiosFromMovieBeats = (ffmpegContext: FfmpegContext, artifactAudioId: string, audioIdsFromMovieBeats: string[]) => {
   if (audioIdsFromMovieBeats.length > 0) {
     const mainAudioId = "mainaudio";
     const compositeAudioId = "composite";
