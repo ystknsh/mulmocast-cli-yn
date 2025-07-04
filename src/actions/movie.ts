@@ -201,7 +201,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const canvasInfo = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
 
   // Add each image input
-  const filterComplexVideoIds: (string | undefined)[] = [];
+  const videoIdsForBeats: (string | undefined)[] = [];
   const audioIdsFromMovieBeats: string[] = [];
   const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
@@ -209,7 +209,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   context.studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = context.studio.script.beats[index];
     if (beat.image?.type === "voice_over") {
-      filterComplexVideoIds.push(undefined);
+      videoIdsForBeats.push(undefined);
       beatTimestamps.push(timestamp);
       return timestamp; // Skip voice-over beats.
     }
@@ -244,12 +244,12 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
-    filterComplexVideoIds.push(videoId);
+    videoIdsForBeats.push(videoId);
 
     if (context.presentationStyle.movieParams?.transition && index < context.studio.beats.length - 1) {
-      const sourceId = filterComplexVideoIds.pop();
+      const sourceId = videoIdsForBeats.pop();
       ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
-      filterComplexVideoIds.push(`${sourceId}_0`);
+      videoIdsForBeats.push(`${sourceId}_0`);
       if (mediaType === "movie") {
         // For movie beats, extract the last frame for transition
         ffmpegContext.filterComplex.push(
@@ -271,14 +271,14 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     return timestamp + duration;
   }, 0);
 
-  assert(filterComplexVideoIds.length === context.studio.beats.length, "videoIds.length !== studio.beats.length");
+  assert(videoIdsForBeats.length === context.studio.beats.length, "videoIds.length !== studio.beats.length");
   assert(beatTimestamps.length === context.studio.beats.length, "beatTimestamps.length !== studio.beats.length");
 
   // console.log("*** images", images.audioIds);
 
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
-  const videoIds = filterComplexVideoIds.filter((id) => id !== undefined); // filter out voice-over beats
+  const videoIds = videoIdsForBeats.filter((id) => id !== undefined); // filter out voice-over beats
   ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
 
   const captionedVideoId = addCaptions(ffmpegContext, concatVideoId, context, caption);
