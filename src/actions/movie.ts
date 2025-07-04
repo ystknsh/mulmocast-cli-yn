@@ -100,7 +100,7 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
-const createCaptionedVideo = (
+const addCaptions = (
   ffmpegContext: any,
   concatVideoId: string,
   context: MulmoStudioContext,
@@ -125,7 +125,7 @@ const createCaptionedVideo = (
   return concatVideoId;
 };
 
-const createMixedVideo = (
+const addTransitionEffects = (
   ffmpegContext: any,
   captionedVideoId: string,
   context: MulmoStudioContext,
@@ -263,11 +263,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const videoIds = filterComplexVideoIds.filter((id) => id !== undefined); // filter out voice-over beats
   ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
 
-  // Overlay voice-over captions
-  const captionedVideoId = createCaptionedVideo(ffmpegContext, concatVideoId, context, caption);
-
-  // Add tranditions if needed
-  const mixedVideoId = createMixedVideo(ffmpegContext, captionedVideoId, context, transitionVideoIds, beatTimestamps);
+  const captionedVideoId = addCaptions(ffmpegContext, concatVideoId, context, caption);
+  const mixedVideoId = addTransitionEffects(ffmpegContext, captionedVideoId, context, transitionVideoIds, beatTimestamps);
 
   GraphAILogger.log("filterComplex:", ffmpegContext.filterComplex.join("\n"));
 
