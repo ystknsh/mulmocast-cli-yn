@@ -244,21 +244,22 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
-    videoIdsForBeats.push(videoId);
 
     if (context.presentationStyle.movieParams?.transition && index < context.studio.beats.length - 1) {
-      const sourceId = videoIdsForBeats.pop();
-      ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
-      videoIdsForBeats.push(`${sourceId}_0`);
+      // NOTE: We split the video into two parts for transition.
+      ffmpegContext.filterComplex.push(`[${videoId}]split=2[${videoId}_0][${videoId}_1]`);
+      videoIdsForBeats.push(`${videoId}_0`);
       if (mediaType === "movie") {
         // For movie beats, extract the last frame for transition
         ffmpegContext.filterComplex.push(
-          `[${sourceId}_1]reverse,select='eq(n,0)',reverse,tpad=stop_mode=clone:stop_duration=${duration},fps=30,setpts=PTS-STARTPTS[${sourceId}_2]`,
+          `[${videoId}_1]reverse,select='eq(n,0)',reverse,tpad=stop_mode=clone:stop_duration=${duration},fps=30,setpts=PTS-STARTPTS[${videoId}_2]`,
         );
-        transitionVideoIds.push(`${sourceId}_2`);
+        transitionVideoIds.push(`${videoId}_2`);
       } else {
-        transitionVideoIds.push(`${sourceId}_1`);
+        transitionVideoIds.push(`${videoId}_1`);
       }
+    } else {
+      videoIdsForBeats.push(videoId);
     }
 
     // NOTE: We don't support audio if the speed is not 1.0.
