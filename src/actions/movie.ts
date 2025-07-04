@@ -163,6 +163,24 @@ const addTransitionEffects = (
   return captionedVideoId;
 };
 
+const mixAudio = (
+  ffmpegContext: any,
+  artifactAudioId: string,
+  filterComplexAudioIds: string[]
+) => {
+  if (filterComplexAudioIds.length > 0) {
+    const mainAudioId = "mainaudio";
+    const compositeAudioId = "composite";
+    const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
+    FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
+    ffmpegContext.filterComplex.push(
+      `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
+    );
+    return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
+  }
+  return artifactAudioId;
+};
+
 const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, context: MulmoStudioContext) => {
   const caption = MulmoStudioContextMethods.getCaption(context);
   const start = performance.now();
@@ -271,19 +289,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
 
-  const ffmpegContextAudioId = (() => {
-    if (filterComplexAudioIds.length > 0) {
-      const mainAudioId = "mainaudio";
-      const compositeAudioId = "composite";
-      const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
-      FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
-      ffmpegContext.filterComplex.push(
-        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
-      );
-      return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
-    }
-    return artifactAudioId;
-  })();
+  const ffmpegContextAudioId = mixAudio(ffmpegContext, artifactAudioId, filterComplexAudioIds);
 
   // GraphAILogger.debug("filterComplex", ffmpegContext.filterComplex);
 
