@@ -163,18 +163,18 @@ const addTransitionEffects = (
   return captionedVideoId;
 };
 
-const mixAudio = (
+const mixAudiosFromMovieBeats = (
   ffmpegContext: any,
   artifactAudioId: string,
-  filterComplexAudioIds: string[]
+  audioIdsFromMovieBeats: string[]
 ) => {
-  if (filterComplexAudioIds.length > 0) {
+  if (audioIdsFromMovieBeats.length > 0) {
     const mainAudioId = "mainaudio";
     const compositeAudioId = "composite";
-    const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
+    const audioIds = audioIdsFromMovieBeats.map((id) => `[${id}]`).join("");
     FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
     ffmpegContext.filterComplex.push(
-      `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
+      `[${mainAudioId}]${audioIds}amix=inputs=${audioIdsFromMovieBeats.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
     );
     return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
   }
@@ -202,7 +202,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
   // Add each image input
   const filterComplexVideoIds: (string | undefined)[] = [];
-  const filterComplexAudioIds: string[] = [];
+  const audioIdsFromMovieBeats: string[] = [];
   const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
@@ -264,7 +264,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     // NOTE: We don't support audio if the speed is not 1.0.
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0 && speed === 1.0) {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
-      filterComplexAudioIds.push(audioId);
+      audioIdsFromMovieBeats.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
     beatTimestamps.push(timestamp);
@@ -289,7 +289,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
 
-  const ffmpegContextAudioId = mixAudio(ffmpegContext, artifactAudioId, filterComplexAudioIds);
+  const ffmpegContextAudioId = mixAudiosFromMovieBeats(ffmpegContext, artifactAudioId, audioIdsFromMovieBeats);
 
   // GraphAILogger.debug("filterComplex", ffmpegContext.filterComplex);
 
