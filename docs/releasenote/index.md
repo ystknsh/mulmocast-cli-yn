@@ -1,5 +1,25 @@
 # RELEASE NOTE
 
+# v.0.1.0
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.0** introduces voice-over capabilities and enhanced video control features.
+
+- New Features
+  - **Voice-Over Narration**: Add narration to existing videos using `voice_over` image type with timing control
+  - **Video Speed Control**: Adjust playback speed at beat level using `movieParams.speed` parameter
+  - **Per-Beat AI Providers**: Specify text-to-image providers at individual beat level
+
+- Technical Updates
+  - **Imagen 3.0 Schema**: Added UI-only schema definitions for Google's Imagen 3.0 models
+  - **Bug Fixes**: Fixed interactive scripting exit issue and updated Nijivoice voice ID
+  - **Error Messages**: Updated error message content
+
+- Others
+  - **Voice-Over Documentation**: Added voice-over feature documentation to image.md
+  - **Release Notes**: Added documentation for versions 0.0.25-0.0.28
+  - **README Updates**: Added `--input-file` option documentation and mode exclusivity notes
+
 # v.0.0.28
 ## RELEASE NOTE
 
