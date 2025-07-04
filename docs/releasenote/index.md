@@ -6,9 +6,9 @@
 **MulmoCast CLI v0.1.0** introduces voice-over capabilities and enhanced video control features.
 
 - New Features
-  - **Voice-Over Narration**: Add narration to existing videos using `voice_over` image type with timing control
-  - **Video Speed Control**: Adjust playback speed at beat level using `movieParams.speed` parameter
-  - **Per-Beat AI Providers**: Specify text-to-image providers at individual beat level
+  - **Voice-Over Narration**: Add narration to existing videos using `voice_over` image type with timing control ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.0/scripts/test/test_voice_over.json), [docs](https://github.com/receptron/mulmocast-cli/blob/0.1.0/docs/image.md#voice_over))
+  - **Video Speed Control**: Adjust playback speed at beat level using `movieParams.speed` parameter ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.0/scripts/test/test_video_speed.json))
+  - **Per-Beat AI Providers**: Specify text-to-image providers at individual beat level ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.0/scripts/test/test_images.json))
 
 - Technical Updates
   - **Imagen 3.0 Schema**: Added UI-only schema definitions for Google's Imagen 3.0 models
@@ -16,7 +16,7 @@
   - **Error Messages**: Updated error message content
 
 - Others
-  - **Voice-Over Documentation**: Added voice-over feature documentation to image.md
+  - **Voice-Over Documentation**: Added voice-over feature documentation to [image.md](https://github.com/receptron/mulmocast-cli/blob/0.1.0/docs/image.md#voice_over)
   - **Release Notes**: Added documentation for versions 0.0.25-0.0.28
   - **README Updates**: Added `--input-file` option documentation and mode exclusivity notes
 
