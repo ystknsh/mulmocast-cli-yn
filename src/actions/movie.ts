@@ -100,6 +100,31 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
+const createCaptionedVideo = (
+  ffmpegContext: any,
+  concatVideoId: string,
+  context: MulmoStudioContext,
+  caption: string | undefined
+) => {
+  const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
+  if (caption && beatsWithCaptions.length > 0) {
+    const introPadding = context.presentationStyle.audioParams.introPadding;
+    return beatsWithCaptions.reduce((acc, beat, index) => {
+      const { startAt, duration, captionFile } = beat;
+      if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
+        const captionInputIndex = FfmpegContextAddInput(ffmpegContext, captionFile);
+        const compositeVideoId = `oc${index}`;
+        ffmpegContext.filterComplex.push(
+          `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt + introPadding},${startAt + duration + introPadding})'[${compositeVideoId}]`,
+        );
+        return compositeVideoId;
+      }
+      return acc;
+    }, concatVideoId);
+  }
+  return concatVideoId;
+};
+
 const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, context: MulmoStudioContext) => {
   const caption = MulmoStudioContextMethods.getCaption(context);
   const start = performance.now();
@@ -201,25 +226,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
 
   // Overlay voice-over captions
-  const captionedVideoId = (() => {
-    const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
-    if (caption && beatsWithCaptions.length > 0) {
-      const introPadding = context.presentationStyle.audioParams.introPadding;
-      return beatsWithCaptions.reduce((acc, beat, index) => {
-        const { startAt, duration, captionFile } = beat;
-        if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
-          const captionInputIndex = FfmpegContextAddInput(ffmpegContext, captionFile);
-          const compositeVideoId = `oc${index}`;
-          ffmpegContext.filterComplex.push(
-            `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt + introPadding},${startAt + duration + introPadding})'[${compositeVideoId}]`,
-          );
-          return compositeVideoId;
-        }
-        return acc;
-      }, concatVideoId);
-    }
-    return concatVideoId;
-  })();
+  const captionedVideoId = createCaptionedVideo(ffmpegContext, concatVideoId, context, caption);
 
   // Add tranditions if needed
   const mixedVideoId = (() => {
