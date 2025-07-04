@@ -100,12 +100,7 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
-const addCaptions = (
-  ffmpegContext: any,
-  concatVideoId: string,
-  context: MulmoStudioContext,
-  caption: string | undefined
-) => {
+const addCaptions = (ffmpegContext: any, concatVideoId: string, context: MulmoStudioContext, caption: string | undefined) => {
   const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
   if (caption && beatsWithCaptions.length > 0) {
     const introPadding = context.presentationStyle.audioParams.introPadding;
@@ -130,7 +125,7 @@ const addTransitionEffects = (
   captionedVideoId: string,
   context: MulmoStudioContext,
   transitionVideoIds: string[],
-  beatTimestamps: number[]
+  beatTimestamps: number[],
 ) => {
   if (context.presentationStyle.movieParams?.transition && transitionVideoIds.length > 0) {
     const transition = mulmoTransitionSchema.parse(context.presentationStyle.movieParams.transition);
@@ -163,11 +158,7 @@ const addTransitionEffects = (
   return captionedVideoId;
 };
 
-const mixAudiosFromMovieBeats = (
-  ffmpegContext: any,
-  artifactAudioId: string,
-  audioIdsFromMovieBeats: string[]
-) => {
+const mixAudiosFromMovieBeats = (ffmpegContext: any, artifactAudioId: string, audioIdsFromMovieBeats: string[]) => {
   if (audioIdsFromMovieBeats.length > 0) {
     const mainAudioId = "mainaudio";
     const compositeAudioId = "composite";
