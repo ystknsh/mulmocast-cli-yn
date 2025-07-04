@@ -211,14 +211,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       return timestamp; // Skip voice-over beats.
     }
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
-    if (!sourceFile) {
-      throw new Error(`studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
-    }
-    if (!studioBeat.duration) {
-      throw new Error(`studioBeat.duration is not set: index=${index}`);
-    }
-    const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
-    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
+    assert(!!sourceFile, `studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
+    assert(!!studioBeat.duration, `studioBeat.duration is not set: index=${index}`);
     const extraPadding = (() => {
       // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
       if (index === 0) {
@@ -238,6 +232,8 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
+    const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
+    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
