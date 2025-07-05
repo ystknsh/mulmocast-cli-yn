@@ -1,5 +1,5 @@
 {
-  "title": "Ghibli comic style",
+  "title": "Ghibli style for YouTube Shorts",
   "description": "Template for Ghibli-style comic presentation.",
   "systemPrompt": "Generate a Japanese script for a Youtube shorts of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
   "presentationStyle": {
