@@ -1,4 +1,4 @@
-Turn this interview into a script in the follwing JSON format without remove any discussions between host and guest, but remove unnecessary text like advertisements. 
+Turn this interview into a script in the following JSON format without remove any discussions between host and guest, but remove unnecessary text like advertisements. 
 
 ```json
 {
