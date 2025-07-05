@@ -53,7 +53,7 @@ const translateGraph: GraphData = {
           // for cache
           multiLingual: {
             agent: (namedInputs: { rows?: MulmoStudioMultiLingualData[]; index: number }) => {
-              return namedInputs.rows?.[namedInputs.index] || {};
+              return (namedInputs.rows && namedInputs.rows[namedInputs.index]) || {};
             },
             inputs: {
               index: ":__mapIndex",
@@ -192,7 +192,7 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
   }
 
   // The original text is unchanged and the target language text is present
-  if (multiLingual.multiLingualTexts?.[lang]?.text === beat.text && multiLingual.multiLingualTexts?.[targetLang]?.text) {
+  if (multiLingual.multiLingualTexts?.[lang] && multiLingual.multiLingualTexts[lang].text === beat.text && multiLingual.multiLingualTexts?.[targetLang]?.text) {
     return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   // same language
