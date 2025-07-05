@@ -154,7 +154,7 @@ beats:
         }
         ```
   - text: >
-      For instance, here is an image generated with the promt: 
+      For instance, here is an image generated with the prompt: 
       "a globe with the word 'Hello' on it."
     image:
       type: image
