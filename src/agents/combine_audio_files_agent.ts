@@ -99,7 +99,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           const subBeatDurations = mediaDurations[idx];
           userAssert(
             subBeatDurations.audioDuration <= remaining,
-            `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
+            `idx(${idx}) subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
           );
           if (iGroup === group.length - 1) {
             beatDurations.push(remaining);
@@ -115,7 +115,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
             userAssert(duration >= 0, `duration(${duration}) < 0`);
             beatDurations.push(duration);
             subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
-            userAssert(subBeatDurations.silenceDuration >= 0, `subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
+            userAssert(subBeatDurations.silenceDuration >= 0, `idx(${idx}) subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
             return remainingDuration;
           }
           beatDurations.push(subBeatDurations.audioDuration);
