@@ -22,7 +22,7 @@
       }
     },
     {
-      "text": "Right away, FSD is navigating the tight confines of the garage. Using Tesla Vision, its network of cameras perceives the pillars, parked vehicles, and faint lane markings. Watch as it confidently executes a 90-degree right turn, staying perfectly centered in the narrow lane.",
+      "text": "Right away, FSD is navigating the tight confines of the garage. Using Tesla Vision, its network of cameras perceives the pillars, parked vehicles, and faint lane markings. Watch as it confidently executes a 90-degree left turn, staying perfectly centered in the narrow lane.",
       "image": {
         "type": "voice_over",
         "startAt": 18.0
@@ -32,14 +32,14 @@
       "text": "As it continues, the system smoothly navigates around corners and past other parked cars. It's not just following lines; it's building a 3D model of its surroundings in real-time to plot a safe and efficient path toward the exit.",
       "image": {
         "type": "voice_over",
-        "startAt": 41.0
+        "startAt": 39.0
       }
     },
     {
-      "text": "The system slows for the gate, waits, then proceeds. FSD handles a left turn onto a busy street, waiting for a safe gap.",
+      "text": "Approaching the exit, the system identifies the parking gate, slows down, and patiently waits for it to open before proceeding. Now, watch this transition from dark to light. FSD handles an unprotected left turn onto a busy city street, carefully assessing oncoming traffic and waiting for a safe gap to merge.",
       "image": {
         "type": "voice_over",
-        "startAt": 64.0
+        "startAt": 56.0
       }
     },
     {
@@ -50,7 +50,7 @@
       }
     },
     {
-      "text": "Here, FSD reads the green traffic light and prepares for the upcoming right turn. The maneuver is decisive and smooth, seamlessly integrating into the flow of traffic on a new, more pedestrian-heavy street.",
+      "text": "Here, FSD reads the green traffic light and prepares for the upcoming left turn. The maneuver is decisive and smooth, seamlessly integrating into the flow of traffic on a new, more pedestrian-heavy street.",
       "image": {
         "type": "voice_over",
         "startAt": 102.0
