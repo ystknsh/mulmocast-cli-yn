@@ -311,7 +311,23 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2HtmlImageProviderSchema = z.enum(["openai", "anthropic"]).default("openai");
-export const text2MovieProviderSchema = z.enum(["openai", "google", "replicate"]).default("google");
+export const text2MovieProviderSchema = z.enum(["google", "replicate"]).default("google");
+
+// NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
+export const mulmoGoogleMovieModelSchema = z
+  .object({
+    provider: z.literal("google"),
+    model: z.enum(["veo-2.0-generate-001"]).optional(),
+  })
+  .strict();
+
+// NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
+export const mulmoReplicateMovieModelSchema = z
+  .object({
+    provider: z.literal("replicate"),
+    model: z.enum(["bytedance/seedance-1-lite", "kwaivgi/kling-v2.1", "google/veo-3"]).optional(),
+  })
+  .strict();
 
 export const mulmoTransitionSchema = z.object({
   type: z.enum(["fade", "slideout_left"]),

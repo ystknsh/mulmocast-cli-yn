@@ -37,6 +37,8 @@ import {
   mulmoSessionStateSchema,
   mulmoOpenAIImageModelSchema,
   mulmoGoogleImageModelSchema,
+  mulmoGoogleMovieModelSchema,
+  mulmoReplicateMovieModelSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
 import { LLM } from "../utils/utils.js";
@@ -74,6 +76,8 @@ export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
 export type MulmoMovieParams = z.infer<typeof mulmoMovieParamsSchema>;
 export type MulmoOpenAIImageModel = z.infer<typeof mulmoOpenAIImageModelSchema>;
 export type MulmoGoogleImageModel = z.infer<typeof mulmoGoogleImageModelSchema>;
+export type MulmoGoogleMovieModel = z.infer<typeof mulmoGoogleMovieModelSchema>;
+export type MulmoReplicateMovieModel = z.infer<typeof mulmoReplicateMovieModelSchema>;
 
 // images
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
