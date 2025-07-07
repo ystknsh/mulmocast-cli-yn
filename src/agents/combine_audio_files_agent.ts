@@ -99,7 +99,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           const subBeatDurations = mediaDurations[idx];
           userAssert(
             subBeatDurations.audioDuration <= remaining,
-            `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
+            `Duration Overflow: At index(${idx}) audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
           );
           if (iGroup === group.length - 1) {
             beatDurations.push(remaining);
@@ -112,10 +112,10 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
           if (voiceStartAt) {
             const remainingDuration = movieDuration - voiceStartAt;
             const duration = remaining - remainingDuration;
-            userAssert(duration >= 0, `duration(${duration}) < 0`);
+            userAssert(duration >= 0, `Invalid startAt: At index(${idx}), avaiable duration(${duration}) < 0`);
             beatDurations.push(duration);
             subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
-            userAssert(subBeatDurations.silenceDuration >= 0, `subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
+            userAssert(subBeatDurations.silenceDuration >= 0, `Duration Overwrap: At index(${idx}), silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
             return remainingDuration;
           }
           beatDurations.push(subBeatDurations.audioDuration);
