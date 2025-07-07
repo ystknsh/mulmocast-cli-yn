@@ -118,3 +118,17 @@ export const settings2GraphAIConfig = (settings?: Record<string, string>): Confi
   }
   return config;
 };
+
+export const getExtention = (contentType: string | null, url: string) => {
+  if (contentType?.includes("jpeg") || contentType?.includes("jpg")) {
+    return "jpg";
+  } else if (contentType?.includes("png")) {
+    return "png";
+  }
+  // Fall back to URL extension
+  const urlExtension = url.split(".").pop()?.toLowerCase();
+  if (urlExtension && ["jpg", "jpeg", "png"].includes(urlExtension)) {
+    return urlExtension === "jpeg" ? "jpg" : urlExtension;
+  }
+  return "png"; // default
+};
