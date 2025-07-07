@@ -15,6 +15,7 @@
       "duration": 5
     },
     {
+      "id": "third_beat",
       "imagePrompt": "a woman walks in the park",
       "moviePrompt": "a woman walks in the park",
       "duration": 5
