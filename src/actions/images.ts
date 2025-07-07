@@ -15,7 +15,7 @@ import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAge
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { findImagePlugin } from "../utils/image_plugins/index.js";
 
-import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
+import { userAssert, settings2GraphAIConfig, getExtention } from "../utils/utils.js";
 import { imagePrompt, htmlImageSystemPrompt } from "../utils/prompt.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
 
@@ -367,22 +367,7 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
           const buffer = Buffer.from(await response.arrayBuffer());
 
           // Detect file extension from Content-Type header or URL
-          const extension = (() => {
-            const contentType = response.headers.get("content-type");
-            if (contentType?.includes("jpeg") || contentType?.includes("jpg")) {
-              return "jpg";
-            } else if (contentType?.includes("png")) {
-              return "png";
-            } else {
-              // Fall back to URL extension
-              const urlExtension = image.source.url.split(".").pop()?.toLowerCase();
-              if (urlExtension && ["jpg", "jpeg", "png"].includes(urlExtension)) {
-                return urlExtension === "jpeg" ? "jpg" : urlExtension;
-              }
-              return "png"; // default
-            }
-          })();
-
+          const extension = getExtention(response.headers.get("content-type"), image.source.url);
           const imagePath = getReferenceImagePath(context, key, extension);
           await fs.promises.writeFile(imagePath, buffer);
           imageRefs[key] = imagePath;
