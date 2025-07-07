@@ -14,7 +14,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   if (!fs.existsSync(voiceFile)) {
     throw new Error(`AddBGMAgent voiceFile not exist: ${voiceFile}`);
   }
-  if (!fs.existsSync(musicFile)) {
+  if (!musicFile.match(/^http/) && !fs.existsSync(musicFile)) {
     throw new Error(`AddBGMAgent musicFile not exist: ${musicFile}`);
   }
 
