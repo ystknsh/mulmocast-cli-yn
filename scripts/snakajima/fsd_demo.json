@@ -16,8 +16,8 @@
       "image": {
         "type": "movie",
         "source": {
-          "kind": "path",
-          "path": "/Users/satoshi/git/ai/media/movies/fsddemo001.MOV"
+          "kind": "url",
+          "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/movies/fsddemo001.mov"
         }
       }
     },
