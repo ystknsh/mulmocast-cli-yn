@@ -2,7 +2,13 @@ import { GraphAILogger, assert } from "graphai";
 import { MulmoStudioContext, MulmoCanvasDimension, BeatMediaType, mulmoTransitionSchema, MulmoFillOption, mulmoFillOptionSchema } from "../types/index.js";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { getAudioArtifactFilePath, getOutputVideoFilePath, writingMessage } from "../utils/file.js";
-import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextPushFormattedAudio, FfmpegContextGenerateOutput } from "../utils/ffmpeg_utils.js";
+import {
+  FfmpegContextAddInput,
+  FfmpegContextInit,
+  FfmpegContextPushFormattedAudio,
+  FfmpegContextGenerateOutput,
+  FfmpegContext,
+} from "../utils/ffmpeg_utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 // const isMac = process.platform === "darwin";
@@ -100,6 +106,78 @@ const getOutputOption = (audioId: string, videoId: string) => {
   ];
 };
 
+const addCaptions = (ffmpegContext: FfmpegContext, concatVideoId: string, context: MulmoStudioContext, caption: string | undefined) => {
+  const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
+  if (caption && beatsWithCaptions.length > 0) {
+    const introPadding = context.presentationStyle.audioParams.introPadding;
+    return beatsWithCaptions.reduce((acc, beat, index) => {
+      const { startAt, duration, captionFile } = beat;
+      if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
+        const captionInputIndex = FfmpegContextAddInput(ffmpegContext, captionFile);
+        const compositeVideoId = `oc${index}`;
+        ffmpegContext.filterComplex.push(
+          `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt + introPadding},${startAt + duration + introPadding})'[${compositeVideoId}]`,
+        );
+        return compositeVideoId;
+      }
+      return acc;
+    }, concatVideoId);
+  }
+  return concatVideoId;
+};
+
+const addTransitionEffects = (
+  ffmpegContext: FfmpegContext,
+  captionedVideoId: string,
+  context: MulmoStudioContext,
+  transitionVideoIds: string[],
+  beatTimestamps: number[],
+) => {
+  if (context.presentationStyle.movieParams?.transition && transitionVideoIds.length > 0) {
+    const transition = mulmoTransitionSchema.parse(context.presentationStyle.movieParams.transition);
+
+    return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
+      const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
+      const processedVideoId = `${transitionVideoId}_f`;
+      let transitionFilter;
+      if (transition.type === "fade") {
+        transitionFilter = `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`;
+      } else if (transition.type === "slideout_left") {
+        transitionFilter = `[${transitionVideoId}]format=yuva420p,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`;
+      } else {
+        throw new Error(`Unknown transition type: ${transition.type}`);
+      }
+      ffmpegContext.filterComplex.push(transitionFilter);
+      const outputId = `${transitionVideoId}_o`;
+      if (transition.type === "fade") {
+        ffmpegContext.filterComplex.push(
+          `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
+        );
+      } else if (transition.type === "slideout_left") {
+        ffmpegContext.filterComplex.push(
+          `[${acc}][${processedVideoId}]overlay=x='-(t-${transitionStartTime})*W/${transition.duration}':y=0:enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
+        );
+      }
+      return outputId;
+    }, captionedVideoId);
+  }
+  return captionedVideoId;
+};
+
+const mixAudiosFromMovieBeats = (ffmpegContext: FfmpegContext, artifactAudioId: string, audioIdsFromMovieBeats: string[]) => {
+  if (audioIdsFromMovieBeats.length > 0) {
+    const mainAudioId = "mainaudio";
+    const compositeAudioId = "composite";
+    const audioIds = audioIdsFromMovieBeats.map((id) => `[${id}]`).join("");
+    FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
+    ffmpegContext.filterComplex.push(
+      `[${mainAudioId}]${audioIds}amix=inputs=${audioIdsFromMovieBeats.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
+    );
+    return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
+  }
+  return artifactAudioId;
+};
+
 const createVideo = async (audioArtifactFilePath: string, outputVideoPath: string, context: MulmoStudioContext) => {
   const caption = MulmoStudioContextMethods.getCaption(context);
   const start = performance.now();
@@ -120,27 +198,21 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   const canvasInfo = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
 
   // Add each image input
-  const filterComplexVideoIds: (string | undefined)[] = [];
-  const filterComplexAudioIds: string[] = [];
+  const videoIdsForBeats: (string | undefined)[] = [];
+  const audioIdsFromMovieBeats: string[] = [];
   const transitionVideoIds: string[] = [];
   const beatTimestamps: number[] = [];
 
   context.studio.beats.reduce((timestamp, studioBeat, index) => {
     const beat = context.studio.script.beats[index];
     if (beat.image?.type === "voice_over") {
-      filterComplexVideoIds.push(undefined);
+      videoIdsForBeats.push(undefined);
       beatTimestamps.push(timestamp);
       return timestamp; // Skip voice-over beats.
     }
     const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
-    if (!sourceFile) {
-      throw new Error(`studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
-    }
-    if (!studioBeat.duration) {
-      throw new Error(`studioBeat.duration is not set: index=${index}`);
-    }
-    const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
-    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
+    assert(!!sourceFile, `studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
+    assert(!!studioBeat.duration, `studioBeat.duration is not set: index=${index}`);
     const extraPadding = (() => {
       // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
       if (index === 0) {
@@ -160,128 +232,58 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const defaultFillOption = mulmoFillOptionSchema.parse({}); // let the schema infer the default value
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
+    const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
+    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
-    /*
-    if (caption && studioBeat.captionFile) {
-      // NOTE: This works for normal beats, but not for voice-over beats.
-      const captionInputIndex = FfmpegContextAddInput(ffmpegContext, studioBeat.captionFile);
-      const compositeVideoId = `c${index}`;
-      ffmpegContext.filterComplex.push(`[${videoId}][${captionInputIndex}:v]overlay=format=auto[${compositeVideoId}]`);
-      filterComplexVideoIds.push(compositeVideoId);
-    } else {
-    }
-    */
-    filterComplexVideoIds.push(videoId);
 
     if (context.presentationStyle.movieParams?.transition && index < context.studio.beats.length - 1) {
-      const sourceId = filterComplexVideoIds.pop();
-      ffmpegContext.filterComplex.push(`[${sourceId}]split=2[${sourceId}_0][${sourceId}_1]`);
-      filterComplexVideoIds.push(`${sourceId}_0`);
+      // NOTE: We split the video into two parts for transition.
+      ffmpegContext.filterComplex.push(`[${videoId}]split=2[${videoId}_0][${videoId}_1]`);
+      videoIdsForBeats.push(`${videoId}_0`);
       if (mediaType === "movie") {
         // For movie beats, extract the last frame for transition
         ffmpegContext.filterComplex.push(
-          `[${sourceId}_1]reverse,select='eq(n,0)',reverse,tpad=stop_mode=clone:stop_duration=${duration},fps=30,setpts=PTS-STARTPTS[${sourceId}_2]`,
+          `[${videoId}_1]reverse,select='eq(n,0)',reverse,tpad=stop_mode=clone:stop_duration=${duration},fps=30,setpts=PTS-STARTPTS[${videoId}_2]`,
         );
-        transitionVideoIds.push(`${sourceId}_2`);
+        transitionVideoIds.push(`${videoId}_2`);
       } else {
-        transitionVideoIds.push(`${sourceId}_1`);
+        transitionVideoIds.push(`${videoId}_1`);
       }
+    } else {
+      videoIdsForBeats.push(videoId);
     }
 
     // NOTE: We don't support audio if the speed is not 1.0.
     if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0 && speed === 1.0) {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
-      filterComplexAudioIds.push(audioId);
+      audioIdsFromMovieBeats.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
     beatTimestamps.push(timestamp);
     return timestamp + duration;
   }, 0);
 
-  assert(filterComplexVideoIds.length === context.studio.beats.length, "videoIds.length !== studio.beats.length");
+  assert(videoIdsForBeats.length === context.studio.beats.length, "videoIds.length !== studio.beats.length");
   assert(beatTimestamps.length === context.studio.beats.length, "beatTimestamps.length !== studio.beats.length");
 
   // console.log("*** images", images.audioIds);
 
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
-  const videoIds = filterComplexVideoIds.filter((id) => id !== undefined); // filter out voice-over beats
+  const videoIds = videoIdsForBeats.filter((id) => id !== undefined); // filter out voice-over beats
   ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
 
-  // Overlay voice-over captions
-  const captionedVideoId = (() => {
-    const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
-    if (caption && beatsWithCaptions.length > 0) {
-      const introPadding = context.presentationStyle.audioParams.introPadding;
-      return beatsWithCaptions.reduce((acc, beat, index) => {
-        const { startAt, duration, captionFile } = beat;
-        if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
-          const captionInputIndex = FfmpegContextAddInput(ffmpegContext, captionFile);
-          const compositeVideoId = `oc${index}`;
-          ffmpegContext.filterComplex.push(
-            `[${acc}][${captionInputIndex}:v]overlay=format=auto:enable='between(t,${startAt + introPadding},${startAt + duration + introPadding})'[${compositeVideoId}]`,
-          );
-          return compositeVideoId;
-        }
-        return acc;
-      }, concatVideoId);
-    }
-    return concatVideoId;
-  })();
-
-  // Add tranditions if needed
-  const mixedVideoId = (() => {
-    if (context.presentationStyle.movieParams?.transition && transitionVideoIds.length > 0) {
-      const transition = mulmoTransitionSchema.parse(context.presentationStyle.movieParams.transition);
-
-      return transitionVideoIds.reduce((acc, transitionVideoId, index) => {
-        const transitionStartTime = beatTimestamps[index + 1] - 0.05; // 0.05 is to avoid flickering
-        const processedVideoId = `${transitionVideoId}_f`;
-        let transitionFilter;
-        if (transition.type === "fade") {
-          transitionFilter = `[${transitionVideoId}]format=yuva420p,fade=t=out:d=${transition.duration}:alpha=1,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`;
-        } else if (transition.type === "slideout_left") {
-          transitionFilter = `[${transitionVideoId}]format=yuva420p,setpts=PTS-STARTPTS+${transitionStartTime}/TB[${processedVideoId}]`;
-        } else {
-          throw new Error(`Unknown transition type: ${transition.type}`);
-        }
-        ffmpegContext.filterComplex.push(transitionFilter);
-        const outputId = `${transitionVideoId}_o`;
-        if (transition.type === "fade") {
-          ffmpegContext.filterComplex.push(
-            `[${acc}][${processedVideoId}]overlay=enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
-          );
-        } else if (transition.type === "slideout_left") {
-          ffmpegContext.filterComplex.push(
-            `[${acc}][${processedVideoId}]overlay=x='-(t-${transitionStartTime})*W/${transition.duration}':y=0:enable='between(t,${transitionStartTime},${transitionStartTime + transition.duration})'[${outputId}]`,
-          );
-        }
-        return outputId;
-      }, captionedVideoId);
-    }
-    return captionedVideoId;
-  })();
+  const captionedVideoId = addCaptions(ffmpegContext, concatVideoId, context, caption);
+  const mixedVideoId = addTransitionEffects(ffmpegContext, captionedVideoId, context, transitionVideoIds, beatTimestamps);
 
   GraphAILogger.log("filterComplex:", ffmpegContext.filterComplex.join("\n"));
 
   const audioIndex = FfmpegContextAddInput(ffmpegContext, audioArtifactFilePath); // Add audio input
   const artifactAudioId = `${audioIndex}:a`;
 
-  const ffmpegContextAudioId = (() => {
-    if (filterComplexAudioIds.length > 0) {
-      const mainAudioId = "mainaudio";
-      const compositeAudioId = "composite";
-      const audioIds = filterComplexAudioIds.map((id) => `[${id}]`).join("");
-      FfmpegContextPushFormattedAudio(ffmpegContext, `[${artifactAudioId}]`, `[${mainAudioId}]`);
-      ffmpegContext.filterComplex.push(
-        `[${mainAudioId}]${audioIds}amix=inputs=${filterComplexAudioIds.length + 1}:duration=first:dropout_transition=2[${compositeAudioId}]`,
-      );
-      return `[${compositeAudioId}]`; // notice that we need to use [mainaudio] instead of mainaudio
-    }
-    return artifactAudioId;
-  })();
+  const ffmpegContextAudioId = mixAudiosFromMovieBeats(ffmpegContext, artifactAudioId, audioIdsFromMovieBeats);
 
   // GraphAILogger.debug("filterComplex", ffmpegContext.filterComplex);
 

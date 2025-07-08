@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-test("test images", async () => {
+test("test images and movie", async () => {
   // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
   const fileDirs = getFileObject({ file: "hello.yaml" });
 
@@ -138,6 +138,7 @@ test("test images", async () => {
         movie: {},
         multiLingual: {},
         caption: {},
+        html: {},
       },
     },
     presentationStyle: studio.script,

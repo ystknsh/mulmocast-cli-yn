@@ -64,6 +64,7 @@ const initSessionState = () => {
       movie: {},
       multiLingual: {},
       caption: {},
+      html: {},
     },
   };
 };

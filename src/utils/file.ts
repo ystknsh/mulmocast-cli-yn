@@ -110,12 +110,22 @@ export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lan
 };
 // image
 export const imageSuffix = "p";
+
 export const getBeatPngImagePath = (context: MulmoStudioContext, index: number) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  const beat = context.studio.script.beats[index]; // beat could be undefined only in a test case.
+  if (beat?.id) {
+    return `${imageProjectDirPath}/${beat.id}.png`;
+  }
   return `${imageProjectDirPath}/${index}${imageSuffix}.png`;
 };
+
 export const getBeatMoviePath = (context: MulmoStudioContext, index: number) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  const beat = context.studio.script.beats[index]; // beat could be undefined only in a test case.
+  if (beat?.id) {
+    return `${imageProjectDirPath}/${beat.id}.mov`;
+  }
   return `${imageProjectDirPath}/${index}.mov`;
 };
 export const getReferenceImagePath = (context: MulmoStudioContext, key: string, extension: string) => {

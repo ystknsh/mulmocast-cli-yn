@@ -26,7 +26,7 @@ export const speechOptionsSchema = z
 
 const speakerIdSchema = z.string();
 
-export const text2SpeechProviderSchema = z.union([z.literal("openai"), z.literal("nijivoice"), z.literal("google"), z.literal("elevenlabs")]).default("openai");
+export const text2SpeechProviderSchema = z.enum(["openai", "nijivoice", "google", "elevenlabs"]).default("openai");
 
 export const speakerDataSchema = z
   .object({
@@ -189,13 +189,13 @@ export const mulmoFillOptionSchema = z
   })
   .describe("How to handle aspect ratio differences between image and canvas");
 
-export const text2ImageProviderSchema = z.union([z.literal("openai"), z.literal("google")]).default("openai");
+export const text2ImageProviderSchema = z.enum(["openai", "google"]).default("openai");
 
 // NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
 export const mulmoOpenAIImageModelSchema = z
   .object({
     provider: z.literal("openai"),
-    model: z.union([z.literal("dall-e-3"), z.literal("gpt-image-1")]).optional(),
+    model: z.enum(["dall-e-3", "gpt-image-1"]).optional(),
   })
   .strict();
 
@@ -203,7 +203,7 @@ export const mulmoOpenAIImageModelSchema = z
 export const mulmoGoogleImageModelSchema = z
   .object({
     provider: z.literal("google"),
-    model: z.union([z.literal("imagen-3.0-fast-generate-001"), z.literal("imagen-3.0-generate-002"), z.literal("imagen-3.0-capability-001")]).optional(),
+    model: z.enum(["imagen-3.0-fast-generate-001", "imagen-3.0-generate-002", "imagen-3.0-capability-001"]).optional(),
   })
   .strict();
 
@@ -310,8 +310,24 @@ export const mulmoSpeechParamsSchema = z
   })
   .strict();
 
-export const text2HtmlImageProviderSchema = z.union([z.literal("openai"), z.literal("anthropic")]).default("openai");
-export const text2MovieProviderSchema = z.union([z.literal("openai"), z.literal("google"), z.literal("replicate")]).default("google");
+export const text2HtmlImageProviderSchema = z.enum(["openai", "anthropic"]).default("openai");
+export const text2MovieProviderSchema = z.enum(["google", "replicate"]).default("google");
+
+// NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
+export const mulmoGoogleMovieModelSchema = z
+  .object({
+    provider: z.literal("google"),
+    model: z.enum(["veo-2.0-generate-001"]).optional(),
+  })
+  .strict();
+
+// NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
+export const mulmoReplicateMovieModelSchema = z
+  .object({
+    provider: z.literal("replicate"),
+    model: z.enum(["bytedance/seedance-1-lite", "kwaivgi/kling-v2.1", "google/veo-3"]).optional(),
+  })
+  .strict();
 
 export const mulmoTransitionSchema = z.object({
   type: z.enum(["fade", "slideout_left"]),
@@ -364,7 +380,7 @@ export const mulmoReferenceSchema = z.object({
   url: URLStringSchema,
   title: z.string().optional(),
   description: z.string().optional(),
-  type: z.union([z.literal("article"), z.literal("paper"), z.literal("image"), z.literal("video"), z.literal("audio")]).default("article"),
+  type: z.enum(["article", "paper", "image", "video", "audio"]).default("article"),
 });
 
 export const mulmoScriptSchema = mulmoPresentationStyleSchema
@@ -419,6 +435,7 @@ export const mulmoSessionStateSchema = z.object({
     movie: z.record(z.number().int(), z.boolean()),
     multiLingual: z.record(z.number().int(), z.boolean()),
     caption: z.record(z.number().int(), z.boolean()),
+    html: z.record(z.number().int(), z.boolean()),
   }),
 });
 
