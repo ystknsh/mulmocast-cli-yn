@@ -123,6 +123,7 @@ const getContext = () => {
         movie: {},
         multiLingual: {},
         caption: {},
+        html: {},
       },
     },
     presentationStyle: studio.script,

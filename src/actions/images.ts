@@ -57,7 +57,8 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
   if (beat.htmlPrompt) {
     const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
-    return { imagePath, htmlPrompt, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
+    const htmlPath = imagePath.replace(/\.[^/.]+$/, ".html");
+    return { imagePath, htmlPrompt, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
   }
 
   // images for "edit_image"
@@ -93,14 +94,9 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
   }
 };
 
-const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension }) => {
-  const { html, file, canvasSize } = namedInputs;
-
-  // Save HTML file
-  const htmlFile = file.replace(/\.[^/.]+$/, ".html");
-  await fs.promises.writeFile(htmlFile, html, "utf8");
-
-  await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
+const htmlImageGeneratorAgent = async (namedInputs: { file: string; canvasSize: MulmoCanvasDimension; htmlText: string }) => {
+  const { file, canvasSize, htmlText } = namedInputs;
+  await renderHTMLToImage(htmlText, file, canvasSize.width, canvasSize.height);
 };
 
 const beat_graph_data = {
@@ -144,14 +140,33 @@ const beat_graph_data = {
           model: ":htmlImageAgentInfo.model",
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
+        file: ":preprocessor.htmlPath", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "html", // for fileCacheAgentFilter
       },
+    },
+    htmlReader: {
+      if: ":preprocessor.htmlPrompt",
+      agent: async (namedInputs: { htmlPath: string }) => {
+        const html = await fs.promises.readFile(namedInputs.htmlPath, "utf8");
+        return { html };
+      },
+      inputs: {
+        onComplete: ":htmlImageAgent", // to wait for htmlImageAgent to finish
+        htmlPath: ":preprocessor.htmlPath",
+      },
+      output: {
+        htmlText: ".html.codeBlockOrRaw()",
+      },
+      defaultValue: {},
     },
     htmlImageGenerator: {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
       inputs: {
-        html: ":htmlImageAgent.text.codeBlockOrRaw()",
+        htmlText: ":htmlReader.htmlText",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
@@ -316,7 +331,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator"],
+      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator", "htmlImageAgent"],
     },
   ];
 
