@@ -30,7 +30,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
   }
   try {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, true);
-    const output = (await next(context)) as { buffer?: Buffer, text?: string } || undefined;
+    const output = ((await next(context)) as { buffer?: Buffer; text?: string }) || undefined;
     const { buffer, text } = output ?? {};
     if (buffer) {
       writingMessage(file);
