@@ -145,13 +145,16 @@ const beat_graph_data = {
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
       },
+      output: {
+        htmlText: ".text.codeBlockOrRaw()",
+      },
     },
     htmlImageGenerator: {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
       inputs: {
-        html: ":htmlImageAgent.text.codeBlockOrRaw()",
+        html: ":htmlImageAgent.htmlText",
         htmlPath: ":preprocessor.htmlPath",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter

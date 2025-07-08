@@ -30,15 +30,15 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
   }
   try {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, true);
-    const output = (await next(context)) as { buffer?: Buffer, text?: string } || undefined;
-    const { buffer, text } = output ?? {};
+    const output = (await next(context)) as { buffer?: Buffer, htmlText?: string } || undefined;
+    const { buffer, htmlText } = output ?? {};
     if (buffer) {
       writingMessage(file);
       await fsPromise.writeFile(file, buffer);
       return true;
-    } else if (text) {
+    } else if (htmlText) {
       writingMessage(file);
-      await fsPromise.writeFile(file, text, "utf-8");
+      await fsPromise.writeFile(file, htmlText, "utf-8");
       return true;
     }
     GraphAILogger.log("no cache, no buffer: " + file);
