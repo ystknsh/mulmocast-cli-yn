@@ -137,10 +137,6 @@ const beat_graph_data = {
       if: ":preprocessor.htmlPrompt",
       defaultValue: {},
       agent: ":htmlImageAgentInfo.agent",
-      console: {
-        before: true,
-        after: true,
-      },
       inputs: {
         prompt: ":preprocessor.htmlPrompt",
         system: ":preprocessor.htmlImageSystemPrompt",
