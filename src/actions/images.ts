@@ -96,7 +96,6 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
 
 const htmlImageGeneratorAgent = async (namedInputs: { file: string; canvasSize: MulmoCanvasDimension; htmlText: string }) => {
   const {file, canvasSize, htmlText } = namedInputs;
-  console.log("***DEBUG***", htmlText);
   await renderHTMLToImage(htmlText, file, canvasSize.width, canvasSize.height);
 };
 
@@ -144,7 +143,7 @@ const beat_graph_data = {
         file: ":preprocessor.htmlPath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
         index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "image", // for fileCacheAgentFilter
+        sessionType: "html", // for fileCacheAgentFilter
       }
     },
     htmlReader: {
