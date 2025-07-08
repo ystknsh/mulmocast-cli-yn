@@ -56,6 +56,7 @@ const createMockContext = (): MulmoStudioContext => ({
       movie: {},
       multiLingual: {},
       caption: {},
+      html: {},
     },
   },
 });
