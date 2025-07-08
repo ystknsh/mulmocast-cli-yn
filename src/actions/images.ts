@@ -144,6 +144,10 @@ const beat_graph_data = {
           model: ":htmlImageAgentInfo.model",
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
+        file: ":preprocessor.htmlPath", // only for fileCacheAgentFilter
+        mulmoContext: ":context", // for fileCacheAgentFilter
+        index: ":__mapIndex", // for fileCacheAgentFilter
+        sessionType: "image", // for fileCacheAgentFilter
       },
       output: {
         htmlText: ".text.codeBlockOrRaw()",
