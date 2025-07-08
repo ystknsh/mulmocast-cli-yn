@@ -94,10 +94,10 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
   }
 };
 
-const htmlImageGeneratorAgent = async (namedInputs: { file: string; canvasSize: MulmoCanvasDimension; htmlPath: string }) => {
-  const {file, canvasSize, htmlPath } = namedInputs;
-  const html = await fs.promises.readFile(htmlPath, "utf8");
-  await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
+const htmlImageGeneratorAgent = async (namedInputs: { file: string; canvasSize: MulmoCanvasDimension; htmlText: string }) => {
+  const {file, canvasSize, htmlText } = namedInputs;
+  console.log("***DEBUG***", htmlText);
+  await renderHTMLToImage(htmlText, file, canvasSize.width, canvasSize.height);
 };
 
 const beat_graph_data = {
@@ -145,9 +145,20 @@ const beat_graph_data = {
         mulmoContext: ":context", // for fileCacheAgentFilter
         index: ":__mapIndex", // for fileCacheAgentFilter
         sessionType: "image", // for fileCacheAgentFilter
+      }
+    },
+    htmlReader: {
+      if: ":preprocessor.htmlPrompt",
+      agent: async (namedInputs: { htmlPath: string }) => {
+        const html = await fs.promises.readFile(namedInputs.htmlPath, "utf8");
+        return { html };
+      },
+      inputs: {
+        onComplete: ":htmlImageAgent", // to wait for htmlImageAgent to finish
+        htmlPath: ":preprocessor.htmlPath",
       },
       output: {
-        foo: ".text.codeBlockOrRaw()",
+        htmlText: ".html.codeBlockOrRaw()",
       },
     },
     htmlImageGenerator: {
@@ -155,8 +166,7 @@ const beat_graph_data = {
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
       inputs: {
-        onComplete: ":htmlImageAgent", // to wait for htmlImageAgent to finish
-        htmlPath: ":preprocessor.htmlPath",
+        htmlText: ":htmlReader.htmlText",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
