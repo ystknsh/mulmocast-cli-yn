@@ -57,7 +57,8 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
   if (beat.htmlPrompt) {
     const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
-    return { imagePath, htmlPrompt, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
+    const htmlPath = imagePath.replace(/\.[^/.]+$/, ".html");
+    return { imagePath, htmlPrompt, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
   }
 
   // images for "edit_image"
@@ -93,12 +94,11 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
   }
 };
 
-const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension }) => {
-  const { html, file, canvasSize } = namedInputs;
+const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension; htmlPath: string }) => {
+  const { html, file, canvasSize, htmlPath } = namedInputs;
 
   // Save HTML file
-  const htmlFile = file.replace(/\.[^/.]+$/, ".html");
-  await fs.promises.writeFile(htmlFile, html, "utf8");
+  await fs.promises.writeFile(htmlPath, html, "utf8");
 
   await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
 };
@@ -152,6 +152,7 @@ const beat_graph_data = {
       agent: htmlImageGeneratorAgent,
       inputs: {
         html: ":htmlImageAgent.text.codeBlockOrRaw()",
+        htmlPath: ":preprocessor.htmlPath",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
