@@ -159,6 +159,7 @@ const beat_graph_data = {
       output: {
         htmlText: ".html.codeBlockOrRaw()",
       },
+      defaultValue: {},
     },
     htmlImageGenerator: {
       if: ":preprocessor.htmlPrompt",
