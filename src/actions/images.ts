@@ -94,12 +94,9 @@ export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContex
   }
 };
 
-const htmlImageGeneratorAgent = async (namedInputs: { html: string; file: string; canvasSize: MulmoCanvasDimension; htmlPath: string }) => {
-  const { html, file, canvasSize, htmlPath } = namedInputs;
-
-  // Save HTML file
-  await fs.promises.writeFile(htmlPath, html, "utf8");
-
+const htmlImageGeneratorAgent = async (namedInputs: { file: string; canvasSize: MulmoCanvasDimension; htmlPath: string }) => {
+  const {file, canvasSize, htmlPath } = namedInputs;
+  const html = await fs.promises.readFile(htmlPath, "utf8");
   await renderHTMLToImage(html, file, canvasSize.width, canvasSize.height);
 };
 
@@ -150,7 +147,7 @@ const beat_graph_data = {
         sessionType: "image", // for fileCacheAgentFilter
       },
       output: {
-        htmlText: ".text.codeBlockOrRaw()",
+        foo: ".text.codeBlockOrRaw()",
       },
     },
     htmlImageGenerator: {
@@ -158,7 +155,7 @@ const beat_graph_data = {
       defaultValue: {},
       agent: htmlImageGeneratorAgent,
       inputs: {
-        html: ":htmlImageAgent.htmlText",
+        onComplete: ":htmlImageAgent", // to wait for htmlImageAgent to finish
         htmlPath: ":preprocessor.htmlPath",
         canvasSize: ":context.presentationStyle.canvasSize",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
@@ -324,7 +321,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
     {
       name: "fileCacheAgentFilter",
       agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator"],
+      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator", "htmlImageAgent"],
     },
   ];
 
