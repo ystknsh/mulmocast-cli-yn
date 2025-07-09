@@ -15,7 +15,7 @@
 **MulmoCast CLI v0.1.1** includes improved error handling, code refactoring, and various sample scripts for better development experience.
 
 - New Features
-  - **Improved BGM Error Handling**: Clear error messages when BGM file paths are incorrect, with HTTP URL support
+  - **Improved BGM Error Handling**: Clear error messages when BGM file paths are incorrect, HTTP URLs skip file existence validation
 
 - Technical Improvements
   - **Schema Refactoring**: Migrated union literals to enum syntax for cleaner code
@@ -30,9 +30,7 @@
   - **Dockerfile Sample**: Added example Dockerfile for running MulmoCast in containers ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.1/README.md#installation))
 
 - Others
-  - **Release Notes**: Added v0.1.0 release notes with stricter factual reporting guidelines
   - **Template Clarity**: Updated Ghibli Shorts template title for better understanding
-  - **Typo Fixes**: Fixed typos across 4 files (first contribution from @noritaka1166)
 
 # v.0.1.0
 ## RELEASE NOTE
