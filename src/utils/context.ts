@@ -65,6 +65,7 @@ const initSessionState = () => {
       multiLingual: {},
       caption: {},
       html: {},
+      imageReference: {},
     },
   };
 };
