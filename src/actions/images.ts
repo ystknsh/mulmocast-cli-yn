@@ -8,7 +8,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, MulmoCanvasDimension } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, MulmoCanvasDimension, MulmoImagePromptMedia } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
@@ -364,6 +364,16 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
   return options;
 };
 
+export const generateReferenceImage = async (context: MulmoStudioContext, key: string, image: MulmoImagePromptMedia, force: boolean = false) => {
+  const imagePath = getReferenceImagePath(context, key, "png");
+  if (fs.existsSync(imagePath) && !force) {
+    return imagePath;
+  }
+  // generate image
+  console.log("***DEBUG***: generating reference image", imagePath);
+  return imagePath;
+};
+
 // TODO: unit test
 export const getImageRefs = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
@@ -373,10 +383,7 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
       Object.keys(images).map(async (key) => {
         const image = images[key];
         if (image.type === "imagePrompt") {
-          imageRefs[key] = getReferenceImagePath(context, key, "png");
-          if (!fs.existsSync(imageRefs[key])) {
-            userAssert(false, `reference image ${imageRefs[key]} does not exist`);
-          }
+          imageRefs[key] = await generateReferenceImage(context, key, image, false);
         } else if (image.type === "image") {
           if (image.source.kind === "path") {
             imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
