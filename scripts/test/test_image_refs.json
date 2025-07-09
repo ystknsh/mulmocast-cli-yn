@@ -1,0 +1,21 @@
+{
+  "$mulmocast": {
+    "version": "1.0"
+  },
+  "title": "Test Image References",
+  "imageParams": {
+    "style": "Ghibli-style",
+    "images": {
+      "girl": {
+        "type": "imagePrompt",
+        "prompt": "A girl with a green hair, wearing a red T-shirt"
+      }
+    }
+  },
+  "beats": [
+    {
+      "text": "Hello World",
+      "imagePrompt": "Saying hello to the world"
+    }
+  ]
+}

@@ -386,7 +386,7 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
               throw new Error(`Failed to download image: ${image.source.url}`);
             }
             const buffer = Buffer.from(await response.arrayBuffer());
-  
+
             // Detect file extension from Content-Type header or URL
             const extension = getExtention(response.headers.get("content-type"), image.source.url);
             const imagePath = getReferenceImagePath(context, key, extension);
