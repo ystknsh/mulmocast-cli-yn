@@ -1,5 +1,30 @@
 # RELEASE NOTE
 
+# v.0.1.1
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.1** includes improved error handling, code refactoring, and various sample scripts for better development experience.
+
+- New Features
+  - **Improved BGM Error Handling**: Clear error messages when BGM file paths are incorrect, with HTTP URL support
+
+- Technical Improvements
+  - **Schema Refactoring**: Migrated union literals to enum syntax for cleaner code
+  - **Utility Functions**: Extracted file extension logic into reusable `getExtention` function with unit tests
+  - **Beat ID File Naming**: When beat has ID specified, that ID is used as name for imageFile and movieFile
+  - **UI-Only Movie Model Schemas**: App (UI) focused schema definitions for Google Veo 2.0 and Replicate models
+  - **GraphAI Update**: Updated to GraphAI version 2.0.11
+
+- Samples & Templates
+  - **Mixed Image Generation**: Added sample demonstrating alternating imagePrompt and htmlPrompt usage ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.1/scripts/snakajima/peter_lynch.json))
+  - **Voice-Over Samples**: Added voice-over samples with Gemini 2.5 Pro auto-generated narration and improved error handling ([fsd_demo](https://github.com/receptron/mulmocast-cli/blob/0.1.1/scripts/snakajima/fsd_demo.json), [template](https://github.com/receptron/mulmocast-cli/blob/0.1.1/scripts/templates/voice_over.json))
+  - **Dockerfile Sample**: Added example Dockerfile for running MulmoCast in containers ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.1/README.md#installation))
+
+- Others
+  - **Release Notes**: Added v0.1.0 release notes with stricter factual reporting guidelines
+  - **Template Clarity**: Updated Ghibli Shorts template title for better understanding
+  - **Typo Fixes**: Fixed typos across 4 files (first contribution from @noritaka1166)
+
 # v.0.1.0
 ## RELEASE NOTE
 
