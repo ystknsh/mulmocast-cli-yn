@@ -18,7 +18,7 @@
   },
   "beats": [
     {
-      "text": "Hello World",
+      "text": "Hello World with all reference images",
       "imagePrompt": "Saying hello to the world"
     },
     {
@@ -32,7 +32,7 @@
       "imageNames": ["cat"]
     },
     {
-      "text": "Hello World with reference images",
+      "text": "Hello World with no reference image",
       "imagePrompt": "Saying hello to the world",
       "imageNames": []
     }

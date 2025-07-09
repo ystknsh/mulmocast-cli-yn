@@ -367,8 +367,8 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
 export const generateReferenceImage = async (context: MulmoStudioContext, key: string, image: MulmoImagePromptMedia, force: boolean = false) => {
   const imagePath = getReferenceImagePath(context, key, "png");
   // generate image
-  const prompt = `${image.prompt}\n${context.presentationStyle.imageParams?.style || ""}`;
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
+  const prompt = `${image.prompt}\n${imageAgentInfo.imageParams.style || ""}`;
   const graph_data = {
     version: 0.5,
     nodes: {
@@ -383,6 +383,7 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
           index: -1, // for fileCacheAgentFilter
           sessionType: "image", // for fileCacheAgentFilter
           params: {
+            model: imageAgentInfo.imageParams.model,
             canvasSize: context.presentationStyle.canvasSize,
           },
         },
