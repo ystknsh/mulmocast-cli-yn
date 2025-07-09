@@ -182,7 +182,15 @@ export const mulmoAudioAssetSchema = z.union([mulmoAudioMediaSchema, mulmoMidiMe
 
 const imageIdSchema = z.string();
 
-export const mulmoImageParamsImagesSchema = z.record(imageIdSchema, mulmoImageMediaSchema);
+export const mulmoImagePromptMediaSchema = z
+  .object({
+    type: z.literal("imagePrompt"),
+    prompt: z.string(),
+  })
+  .strict();
+
+
+export const mulmoImageParamsImagesSchema = z.record(imageIdSchema, z.union([mulmoImageMediaSchema, mulmoImagePromptMediaSchema]));
 export const mulmoFillOptionSchema = z
   .object({
     style: z.enum(["aspectFit", "aspectFill"]).default("aspectFit"),

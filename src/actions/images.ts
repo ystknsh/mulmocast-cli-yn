@@ -372,20 +372,27 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
     await Promise.all(
       Object.keys(images).map(async (key) => {
         const image = images[key];
-        if (image.source.kind === "path") {
-          imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
-        } else if (image.source.kind === "url") {
-          const response = await fetch(image.source.url);
-          if (!response.ok) {
-            throw new Error(`Failed to download image: ${image.source.url}`);
+        if (image.type === "imagePrompt") {
+          imageRefs[key] = getReferenceImagePath(context, key, "png");
+          if (!fs.existsSync(imageRefs[key])) {
+            userAssert(false, `reference image ${imageRefs[key]} does not exist`);
           }
-          const buffer = Buffer.from(await response.arrayBuffer());
-
-          // Detect file extension from Content-Type header or URL
-          const extension = getExtention(response.headers.get("content-type"), image.source.url);
-          const imagePath = getReferenceImagePath(context, key, extension);
-          await fs.promises.writeFile(imagePath, buffer);
-          imageRefs[key] = imagePath;
+        } else if (image.type === "image") {
+          if (image.source.kind === "path") {
+            imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+          } else if (image.source.kind === "url") {
+            const response = await fetch(image.source.url);
+            if (!response.ok) {
+              throw new Error(`Failed to download image: ${image.source.url}`);
+            }
+            const buffer = Buffer.from(await response.arrayBuffer());
+  
+            // Detect file extension from Content-Type header or URL
+            const extension = getExtention(response.headers.get("content-type"), image.source.url);
+            const imagePath = getReferenceImagePath(context, key, extension);
+            await fs.promises.writeFile(imagePath, buffer);
+            imageRefs[key] = imagePath;
+          }
         }
       }),
     );
