@@ -364,7 +364,8 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
   return options;
 };
 
-export const generateReferenceImage = async (context: MulmoStudioContext, key: string, image: MulmoImagePromptMedia, force: boolean = false) => {
+// Application may call this functoin directly to generate reference image.
+export const generateReferenceImage = async (context: MulmoStudioContext, key: string, index: number, image: MulmoImagePromptMedia, force: boolean = false) => {
   const imagePath = getReferenceImagePath(context, key, "png");
   // generate image
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
@@ -376,11 +377,11 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
         agent: imageAgentInfo.agent,
         retry: 2,
         inputs: {
-          prompt: prompt,
+          prompt,
           file: imagePath, // only for fileCacheAgentFilter
-          force: force, // only for fileCacheAgentFilter
+          force, // only for fileCacheAgentFilter
           mulmoContext: context, // for fileCacheAgentFilter
-          index: -1, // for fileCacheAgentFilter
+          index: -(index + 1), // for fileCacheAgentFilter
           sessionType: "image", // for fileCacheAgentFilter
           params: {
             model: imageAgentInfo.imageParams.model,
@@ -412,28 +413,30 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
   const images = context.presentationStyle.imageParams?.images;
   if (images) {
     await Promise.all(
-      Object.keys(images).map(async (key) => {
-        const image = images[key];
-        if (image.type === "imagePrompt") {
-          imageRefs[key] = await generateReferenceImage(context, key, image, false);
-        } else if (image.type === "image") {
-          if (image.source.kind === "path") {
-            imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
-          } else if (image.source.kind === "url") {
-            const response = await fetch(image.source.url);
-            if (!response.ok) {
-              throw new Error(`Failed to download image: ${image.source.url}`);
-            }
-            const buffer = Buffer.from(await response.arrayBuffer());
+      Object.keys(images)
+        .sort()
+        .map(async (key, index) => {
+          const image = images[key];
+          if (image.type === "imagePrompt") {
+            imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
+          } else if (image.type === "image") {
+            if (image.source.kind === "path") {
+              imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+            } else if (image.source.kind === "url") {
+              const response = await fetch(image.source.url);
+              if (!response.ok) {
+                throw new Error(`Failed to download image: ${image.source.url}`);
+              }
+              const buffer = Buffer.from(await response.arrayBuffer());
 
-            // Detect file extension from Content-Type header or URL
-            const extension = getExtention(response.headers.get("content-type"), image.source.url);
-            const imagePath = getReferenceImagePath(context, key, extension);
-            await fs.promises.writeFile(imagePath, buffer);
-            imageRefs[key] = imagePath;
+              // Detect file extension from Content-Type header or URL
+              const extension = getExtention(response.headers.get("content-type"), image.source.url);
+              const imagePath = getReferenceImagePath(context, key, extension);
+              await fs.promises.writeFile(imagePath, buffer);
+              imageRefs[key] = imagePath;
+            }
           }
-        }
-      }),
+        }),
     );
   }
   return imageRefs;
