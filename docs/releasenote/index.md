@@ -1,5 +1,14 @@
 # RELEASE NOTE
 
+# v.0.1.2
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.2** focuses on performance optimization and dependency maintenance for improved HTML generation efficiency.
+
+- Technical Improvements
+  - **HTML Caching Optimization**: Implemented caching for HTML generation to prevent unnecessary regeneration when images are already cached
+  - **Package Updates**: Updated core dependencies
+
 # v.0.1.1
 ## RELEASE NOTE
 
