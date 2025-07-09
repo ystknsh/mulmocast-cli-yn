@@ -392,15 +392,14 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
     },
   };
 
-  const options: GraphOptions = {
-    agentFilters: [
-      {
-        name: "fileCacheAgentFilter",
-        agent: fileCacheAgentFilter,
-        nodeIds: ["imageGenerator"],
-      },
-    ],
-  };
+  const options = await graphOption(context);
+  options.agentFilters = [
+    {
+      name: "fileCacheAgentFilter",
+      agent: fileCacheAgentFilter,
+      nodeIds: ["imageGenerator"],
+    },
+  ];
 
   const graph = new GraphAI(graph_data, { imageGoogleAgent, imageOpenaiAgent }, options);
   await graph.run<{ output: MulmoStudioBeat[] }>();
