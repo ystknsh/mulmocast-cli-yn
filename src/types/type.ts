@@ -39,6 +39,7 @@ import {
   mulmoGoogleImageModelSchema,
   mulmoGoogleMovieModelSchema,
   mulmoReplicateMovieModelSchema,
+  mulmoImagePromptMediaSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
 import { LLM } from "../utils/utils.js";
@@ -78,6 +79,7 @@ export type MulmoOpenAIImageModel = z.infer<typeof mulmoOpenAIImageModelSchema>;
 export type MulmoGoogleImageModel = z.infer<typeof mulmoGoogleImageModelSchema>;
 export type MulmoGoogleMovieModel = z.infer<typeof mulmoGoogleMovieModelSchema>;
 export type MulmoReplicateMovieModel = z.infer<typeof mulmoReplicateMovieModelSchema>;
+export type MulmoImagePromptMedia = z.infer<typeof mulmoImagePromptMediaSchema>;
 
 // images
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
@@ -146,7 +148,7 @@ export type BeatMediaType = "movie" | "image";
 export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];
 
 export type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
-export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie" | "html";
+export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie" | "html" | "imageReference";
 
 export type SessionProgressEvent =
   | { kind: "session"; sessionType: SessionType; inSession: boolean }
