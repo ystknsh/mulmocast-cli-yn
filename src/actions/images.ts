@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger, TaskManager } from "graphai";
-import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
+import type { GraphOptions, GraphData, CallbackFunction, AgentFunctionInfo } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -366,11 +366,43 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
 
 export const generateReferenceImage = async (context: MulmoStudioContext, key: string, image: MulmoImagePromptMedia, force: boolean = false) => {
   const imagePath = getReferenceImagePath(context, key, "png");
-  if (fs.existsSync(imagePath) && !force) {
-    return imagePath;
-  }
   // generate image
-  console.log("***DEBUG***: generating reference image", imagePath);
+  const prompt = `${image.prompt}\n${context.presentationStyle.imageParams?.style || ""}`;
+  console.log("***DEBUG***: generating reference image", prompt);
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
+  const graph_data = {
+    version: 0.5,
+    nodes: {
+      imageGenerator: {
+        agent: imageAgentInfo.agent,
+        retry: 2,
+        inputs: {
+          prompt: prompt,
+          file: imagePath, // only for fileCacheAgentFilter
+          force: force, // only for fileCacheAgentFilter
+          mulmoContext: context, // for fileCacheAgentFilter
+          index: -1, // for fileCacheAgentFilter
+          sessionType: "image", // for fileCacheAgentFilter
+          params: {
+            canvasSize: context.presentationStyle.canvasSize,
+          },
+        },
+      },
+    },
+  };
+
+  const options: GraphOptions = {
+    agentFilters: [
+      {
+        name: "fileCacheAgentFilter",
+        agent: fileCacheAgentFilter,
+        nodeIds: ["imageGenerator"],
+      },
+    ],
+  };
+
+  const graph = new GraphAI(graph_data, { imageGoogleAgent, imageOpenaiAgent }, options);
+  await graph.run<{ output: MulmoStudioBeat[] }>();
   return imagePath;
 };
 
