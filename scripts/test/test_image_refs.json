@@ -14,7 +14,7 @@
         "type": "imagePrompt",
         "prompt": "A tiny black cat with a green eyes"
       },
-      "bloom": {
+      "broom": {
         "type": "imagePrompt",
         "prompt": "A yellow, old broomstick"
       }
@@ -22,12 +22,12 @@
   },
   "beats": [
     {
-      "text": "Hello World with a witch",
+      "text": "Hello World with a witch and a broom",
       "imagePrompt": "Saying hello to the world",
-      "imageNames": ["witch"]
+      "imageNames": ["witch", "broom"]
     },
     {
-      "text": "Hello World with a cat",
+      "text": "Hello World with a cat alone",
       "imagePrompt": "Saying hello to the world",
       "imageNames": ["cat"]
     },
