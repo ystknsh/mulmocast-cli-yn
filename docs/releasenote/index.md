@@ -15,7 +15,7 @@
 **MulmoCast CLI v0.1.1** includes improved error handling, code refactoring, and various sample scripts for better development experience.
 
 - New Features
-  - **Improved BGM Error Handling**: Clear error messages when BGM file paths are incorrect, with HTTP URL support
+  - **Improved BGM Error Handling**: Clear error messages when BGM file paths are incorrect, HTTP URLs skip file existence validation
 
 - Technical Improvements
   - **Schema Refactoring**: Migrated union literals to enum syntax for cleaner code
