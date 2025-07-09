@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger, TaskManager } from "graphai";
-import type { GraphOptions, GraphData, CallbackFunction, AgentFunctionInfo } from "graphai";
+import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
