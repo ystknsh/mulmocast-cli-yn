@@ -443,6 +443,7 @@ export const mulmoSessionStateSchema = z.object({
     multiLingual: z.record(z.number().int(), z.boolean()),
     caption: z.record(z.number().int(), z.boolean()),
     html: z.record(z.number().int(), z.boolean()),
+    imageReference: z.record(z.number().int(), z.boolean()),
   }),
 });
 

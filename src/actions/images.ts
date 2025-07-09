@@ -365,7 +365,6 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
 };
 
 // Application may call this functoin directly to generate reference image.
-// NOTE: index is the index of the image reference sorted by key.
 export const generateReferenceImage = async (context: MulmoStudioContext, key: string, index: number, image: MulmoImagePromptMedia, force: boolean = false) => {
   const imagePath = getReferenceImagePath(context, key, "png");
   // generate image
@@ -382,8 +381,8 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
           file: imagePath, // only for fileCacheAgentFilter
           force, // only for fileCacheAgentFilter
           mulmoContext: context, // for fileCacheAgentFilter
-          index: -(index + 1), // for fileCacheAgentFilter
-          sessionType: "image", // for fileCacheAgentFilter
+          index: index, // for fileCacheAgentFilter
+          sessionType: "imageReference", // for fileCacheAgentFilter
           params: {
             model: imageAgentInfo.imageParams.model,
             canvasSize: context.presentationStyle.canvasSize,
