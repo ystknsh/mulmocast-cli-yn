@@ -6,9 +6,13 @@
   "imageParams": {
     "style": "Ghibli-style",
     "images": {
-      "girl": {
+      "witch": {
         "type": "imagePrompt",
-        "prompt": "A girl with a green hair, wearing a red T-shirt"
+        "prompt": "A witch with a green hair, wearing a black robe"
+      },
+      "cat": {
+        "type": "imagePrompt",
+        "prompt": "A tiny black cat with a green eyes"
       }
     }
   },
@@ -16,6 +20,21 @@
     {
       "text": "Hello World",
       "imagePrompt": "Saying hello to the world"
+    },
+    {
+      "text": "Hello World with a witch",
+      "imagePrompt": "Saying hello to the world",
+      "imageNames": ["witch"]
+    },
+    {
+      "text": "Hello World with a cat",
+      "imagePrompt": "Saying hello to the world",
+      "imageNames": ["cat"]
+    },
+    {
+      "text": "Hello World with reference images",
+      "imagePrompt": "Saying hello to the world",
+      "imageNames": []
     }
   ]
 }

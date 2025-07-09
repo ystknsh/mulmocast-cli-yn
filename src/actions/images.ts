@@ -368,7 +368,6 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
   const imagePath = getReferenceImagePath(context, key, "png");
   // generate image
   const prompt = `${image.prompt}\n${context.presentationStyle.imageParams?.style || ""}`;
-  console.log("***DEBUG***: generating reference image", prompt);
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   const graph_data = {
     version: 0.5,
