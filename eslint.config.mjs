@@ -3,6 +3,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
+import sonarjs from "eslint-plugin-sonarjs";
 
 export default [
   {
@@ -12,6 +13,7 @@ export default [
     ignores: ["lib"],
   },
   eslint.configs.recommended,
+  sonarjs.configs.recommended,
   ...tseslint.configs.recommended,
   {
     languageOptions: {
@@ -38,12 +40,20 @@ export default [
       "no-shadow": "warn",
       "no-param-reassign": "error",
       // "no-plusplus": "warn",
+      "no-undef": "warn",
       "prefer-const": "error",
       "no-return-assign": "error",
       "object-shorthand": "error",
       semi: ["error", "always"],
       "prettier/prettier": "error",
       "no-console": "error",
+      "sonarjs/todo-tag": "off",
+      "sonarjs/no-commented-code": "off",
+      "sonarjs/cognitive-complexity": "warn",
+      "sonarjs/no-nested-template-literals": "warn",
+      "sonarjs/no-ignored-exceptions": "warn",
+      "sonarjs/no-nested-conditional": "warn",
+      "sonarjs/no-unused-vars": "off",
     },
     plugins: {
       prettier: prettierPlugin,
