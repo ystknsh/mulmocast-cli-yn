@@ -28,7 +28,7 @@ export const ttsGoogleAgent: AgentFunction<
 
   // Construct the request
   const request: textToSpeech.protos.google.cloud.texttospeech.v1.ISynthesizeSpeechRequest = {
-    input: { text: text },
+    input: { text },
     voice: voiceParams,
     audioConfig: {
       audioEncoding: "MP3",

@@ -40,7 +40,7 @@ export default [
       // "no-plusplus": "warn",
       "prefer-const": "warn",
       "no-return-assign": "warn",
-      "object-shorthand": "warn",
+      "object-shorthand": "error",
       semi: ["error", "always"],
       "prettier/prettier": "error",
       "no-console": "error",
