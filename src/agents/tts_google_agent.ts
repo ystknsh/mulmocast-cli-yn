@@ -4,7 +4,15 @@ import * as textToSpeech from "@google-cloud/text-to-speech";
 
 const client = new textToSpeech.TextToSpeechClient();
 
-export const ttsGoogleAgent: AgentFunction = async ({ namedInputs, params }) => {
+export const ttsGoogleAgent: AgentFunction<
+  {
+    voice: string;
+    speed: number;
+    suppressError: boolean;
+  },
+  { buffer?: Buffer | null },
+  { text: string }
+> = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
   const { voice, suppressError, speed } = params;
 
@@ -30,7 +38,7 @@ export const ttsGoogleAgent: AgentFunction = async ({ namedInputs, params }) => 
   try {
     // Call the Text-to-Speech API
     const [response] = await client.synthesizeSpeech(request);
-    return { buffer: response.audioContent };
+    return { buffer: response.audioContent as Buffer };
   } catch (e) {
     if (suppressError) {
       return {
@@ -52,7 +60,7 @@ const ttsGoogleAgentInfo: AgentFunctionInfo = {
   author: "Receptron Team",
   repository: "https://github.com/receptron/mulmocast-cli/",
   license: "MIT",
-  environmentVariables: ["OPENAI_API_KEY"],
+  environmentVariables: ["GOOGLE_GENAI_API_KEY"],
 };
 
 export default ttsGoogleAgentInfo;

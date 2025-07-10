@@ -3,11 +3,21 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 import type { SpeechCreateParams } from "openai/resources/audio/speech";
 
-export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params, config }) => {
+export const ttsOpenaiAgent: AgentFunction<
+  {
+    model: string; // dall-e-3 or gpt-image-1
+    voice: string;
+    instructions: string;
+    suppressError: boolean;
+  },
+  { buffer?: Buffer },
+  { text: string },
+  { baseURL?: string; apiKey?: string }
+> = async ({ namedInputs, params, config }) => {
   const { text } = namedInputs;
   const { model, voice, suppressError, instructions } = params;
-  const { apiKey } = config ?? {};
-  const openai = new OpenAI({ apiKey });
+  const { apiKey, baseURL } = config ?? {};
+  const openai = new OpenAI({ apiKey, baseURL });
 
   try {
     const tts_options: SpeechCreateParams = {

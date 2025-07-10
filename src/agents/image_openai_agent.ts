@@ -19,20 +19,20 @@ type OpenAIImageOptions = {
 
 export const imageOpenaiAgent: AgentFunction<
   {
-    apiKey: string;
+    // apiKey: string;
     model: string; // dall-e-3 or gpt-image-1
     moderation: OpenAIModeration | null | undefined;
     canvasSize: { width: number; height: number };
   },
   { buffer: Buffer },
   { prompt: string; images: string[] | null | undefined },
-  { apiKey?: string }
+  { baseURL?: string; apiKey?: string }
 > = async ({ namedInputs, params, config }) => {
   const { prompt, images } = namedInputs;
   const { moderation, canvasSize } = params;
-  const { apiKey } = { ...config };
+  const { apiKey, baseURL } = { ...config };
   const model = params.model ?? defaultOpenAIImageModel;
-  const openai = new OpenAI({ apiKey });
+  const openai = new OpenAI({ apiKey, baseURL });
   const size = (() => {
     if (model === "gpt-image-1") {
       if (canvasSize.width > canvasSize.height) {
