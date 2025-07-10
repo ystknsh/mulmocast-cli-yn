@@ -51,7 +51,6 @@ export default [
       "sonarjs/no-commented-code": "off",
       "sonarjs/cognitive-complexity": "warn",
       "sonarjs/no-nested-template-literals": "warn",
-      "sonarjs/no-nested-conditional": "warn",
       "sonarjs/no-unused-vars": "off",
     },
     plugins: {
