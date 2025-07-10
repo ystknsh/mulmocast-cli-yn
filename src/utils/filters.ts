@@ -19,7 +19,8 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     try {
       await fsPromise.access(file);
       return true;
-    } catch (__e) {
+    } catch (error) {
+      GraphAILogger.debug("cache file read unknown error", error);
       return false;
     }
   };

@@ -60,9 +60,9 @@ export function readMulmoScriptFile<T = MulmoScript>(
       mulmoDataPath: scriptPath,
       fileName: parsedPath.name,
     };
-  } catch (__error) {
+  } catch (error) {
     if (errorMessage) {
-      GraphAILogger.info("read file format is broken.");
+      GraphAILogger.info("read file format is broken.", error);
     }
     return null;
   }
