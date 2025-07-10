@@ -33,7 +33,7 @@ export const renderHTMLToImage = async (
     );
   }
   // Step 3: Capture screenshot of the page (which contains the Markdown-rendered HTML)
-  await page.screenshot({ path: outputPath as `${string}.png` | `${string}.jpeg` | `${string}.webp`, omitBackground: omitBackground });
+  await page.screenshot({ path: outputPath as `${string}.png` | `${string}.jpeg` | `${string}.webp`, omitBackground });
 
   await browser.close();
 };

@@ -370,7 +370,7 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
   // generate image
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   const prompt = `${image.prompt}\n${imageAgentInfo.imageParams.style || ""}`;
-  const graph_data = {
+  const image_graph_data = {
     version: 0.5,
     nodes: {
       imageGenerator: {
@@ -393,7 +393,7 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
   };
 
   const options = await graphOption(context);
-  const graph = new GraphAI(graph_data, { imageGoogleAgent, imageOpenaiAgent }, options);
+  const graph = new GraphAI(image_graph_data, { imageGoogleAgent, imageOpenaiAgent }, options);
   await graph.run<{ output: MulmoStudioBeat[] }>();
   return imagePath;
 };
@@ -445,8 +445,8 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 
   // Determine movie agent based on provider
   const getMovieAgent = () => {
-    const provider = context.presentationStyle.movieParams?.provider ?? "google";
-    switch (provider) {
+    const movieProvider = context.presentationStyle.movieParams?.provider ?? "google";
+    switch (movieProvider) {
       case "replicate":
         return "movieReplicateAgent";
       case "google":
