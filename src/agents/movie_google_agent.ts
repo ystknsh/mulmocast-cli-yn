@@ -16,13 +16,13 @@ async function generateMovie(
   const payload = {
     instances: [
       {
-        prompt: prompt,
+        prompt,
         image: undefined as { bytesBase64Encoded: string; mimeType: string } | undefined,
       },
     ],
     parameters: {
       sampleCount: 1,
-      aspectRatio: aspectRatio,
+      aspectRatio,
       safetySetting: "block_only_high",
       personGeneration: "allow_all",
       durationSeconds: duration,

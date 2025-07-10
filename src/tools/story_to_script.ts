@@ -46,7 +46,7 @@ const createValidatedScriptGraphData = ({
         inputs: {
           model: llmModel,
           system: systemPrompt,
-          prompt: prompt,
+          prompt,
           max_tokens: maxTokens,
         },
       },
@@ -54,7 +54,7 @@ const createValidatedScriptGraphData = ({
         agent: "validateSchemaAgent",
         inputs: {
           text: ":llm.text.codeBlock()",
-          schema: schema,
+          schema,
         },
         isResult: true,
       },

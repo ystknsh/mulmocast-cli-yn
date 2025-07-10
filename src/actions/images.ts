@@ -8,7 +8,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, MulmoCanvasDimension } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, MulmoCanvasDimension, MulmoImagePromptMedia } from "../types/index.js";
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
@@ -344,7 +344,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
 
   const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams?.provider);
 
-  const config = settings2GraphAIConfig(settings);
+  const config = settings2GraphAIConfig(settings, process.env);
 
   // We need to get google's auth token only if the google is the text2image provider.
   if (provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
@@ -364,30 +364,70 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
   return options;
 };
 
+// Application may call this functoin directly to generate reference image.
+export const generateReferenceImage = async (context: MulmoStudioContext, key: string, index: number, image: MulmoImagePromptMedia, force: boolean = false) => {
+  const imagePath = getReferenceImagePath(context, key, "png");
+  // generate image
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
+  const prompt = `${image.prompt}\n${imageAgentInfo.imageParams.style || ""}`;
+  const image_graph_data = {
+    version: 0.5,
+    nodes: {
+      imageGenerator: {
+        agent: imageAgentInfo.agent,
+        retry: 2,
+        inputs: {
+          prompt,
+          file: imagePath, // only for fileCacheAgentFilter
+          force, // only for fileCacheAgentFilter
+          mulmoContext: context, // for fileCacheAgentFilter
+          index, // for fileCacheAgentFilter
+          sessionType: "imageReference", // for fileCacheAgentFilter
+          params: {
+            model: imageAgentInfo.imageParams.model,
+            canvasSize: context.presentationStyle.canvasSize,
+          },
+        },
+      },
+    },
+  };
+
+  const options = await graphOption(context);
+  const graph = new GraphAI(image_graph_data, { imageGoogleAgent, imageOpenaiAgent }, options);
+  await graph.run<{ output: MulmoStudioBeat[] }>();
+  return imagePath;
+};
+
 // TODO: unit test
 export const getImageRefs = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
   const images = context.presentationStyle.imageParams?.images;
   if (images) {
     await Promise.all(
-      Object.keys(images).map(async (key) => {
-        const image = images[key];
-        if (image.source.kind === "path") {
-          imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
-        } else if (image.source.kind === "url") {
-          const response = await fetch(image.source.url);
-          if (!response.ok) {
-            throw new Error(`Failed to download image: ${image.source.url}`);
-          }
-          const buffer = Buffer.from(await response.arrayBuffer());
+      Object.keys(images)
+        .sort()
+        .map(async (key, index) => {
+          const image = images[key];
+          if (image.type === "imagePrompt") {
+            imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
+          } else if (image.type === "image") {
+            if (image.source.kind === "path") {
+              imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+            } else if (image.source.kind === "url") {
+              const response = await fetch(image.source.url);
+              if (!response.ok) {
+                throw new Error(`Failed to download image: ${image.source.url}`);
+              }
+              const buffer = Buffer.from(await response.arrayBuffer());
 
-          // Detect file extension from Content-Type header or URL
-          const extension = getExtention(response.headers.get("content-type"), image.source.url);
-          const imagePath = getReferenceImagePath(context, key, extension);
-          await fs.promises.writeFile(imagePath, buffer);
-          imageRefs[key] = imagePath;
-        }
-      }),
+              // Detect file extension from Content-Type header or URL
+              const extension = getExtention(response.headers.get("content-type"), image.source.url);
+              const imagePath = getReferenceImagePath(context, key, extension);
+              await fs.promises.writeFile(imagePath, buffer);
+              imageRefs[key] = imagePath;
+            }
+          }
+        }),
     );
   }
   return imageRefs;
@@ -405,8 +445,8 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 
   // Determine movie agent based on provider
   const getMovieAgent = () => {
-    const provider = context.presentationStyle.movieParams?.provider ?? "google";
-    switch (provider) {
+    const movieProvider = context.presentationStyle.movieParams?.provider ?? "google";
+    switch (movieProvider) {
       case "replicate":
         return "movieReplicateAgent";
       case "google":

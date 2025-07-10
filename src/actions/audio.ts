@@ -267,7 +267,7 @@ export const audio = async (context: MulmoStudioContext, settings?: Record<strin
     mkdir(outDirPath);
     mkdir(audioSegmentDirPath);
 
-    const config = settings2GraphAIConfig(settings);
+    const config = settings2GraphAIConfig(settings, process.env);
     const taskManager = new TaskManager(getConcurrency(context));
     const graph = new GraphAI(graph_data, audioAgents, { agentFilters, taskManager, config });
     graph.injectValue("context", context);

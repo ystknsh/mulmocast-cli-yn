@@ -37,13 +37,13 @@ interface Replacement {
 }
 
 export function replacePairsJa(str: string, replacements: Replacement[]): string {
-  replacements.forEach(({ from, to }) => {
+  return replacements.reduce((tmp, current) => {
+    const { from, to } = current;
     // Escape any special regex characters in the 'from' string.
     const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const regex = new RegExp(escapedFrom, "g");
-    str = str.replace(regex, to);
-  });
-  return str;
+    return tmp.replace(regex, to);
+  }, str);
 }
 
 export const replacementsJa: Replacement[] = [

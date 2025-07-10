@@ -182,7 +182,14 @@ export const mulmoAudioAssetSchema = z.union([mulmoAudioMediaSchema, mulmoMidiMe
 
 const imageIdSchema = z.string();
 
-export const mulmoImageParamsImagesSchema = z.record(imageIdSchema, mulmoImageMediaSchema);
+export const mulmoImagePromptMediaSchema = z
+  .object({
+    type: z.literal("imagePrompt"),
+    prompt: z.string(),
+  })
+  .strict();
+
+export const mulmoImageParamsImagesSchema = z.record(imageIdSchema, z.union([mulmoImageMediaSchema, mulmoImagePromptMediaSchema]));
 export const mulmoFillOptionSchema = z
   .object({
     style: z.enum(["aspectFit", "aspectFill"]).default("aspectFit"),
@@ -436,6 +443,7 @@ export const mulmoSessionStateSchema = z.object({
     multiLingual: z.record(z.number().int(), z.boolean()),
     caption: z.record(z.number().int(), z.boolean()),
     html: z.record(z.number().int(), z.boolean()),
+    imageReference: z.record(z.number().int(), z.boolean()),
   }),
 });
 
