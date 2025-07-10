@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import puppeteer from "puppeteer";
+import { GraphAILogger } from "graphai";
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { localizedText, isHttp } from "../utils/utils.js";
@@ -31,7 +32,8 @@ const loadImage = async (imagePath: string): Promise<string> => {
     const ext = path.extname(imagePath).toLowerCase().replace(".", "");
     const mimeType = ext === "jpg" ? "jpeg" : ext;
     return `data:image/${mimeType};base64,${imageData.toString("base64")}`;
-  } catch (__error) {
+  } catch (error) {
+    GraphAILogger.info("loadImage failed", error);
     const placeholderData = fs.readFileSync("assets/images/mulmocast_credit.png");
     return `data:image/png;base64,${placeholderData.toString("base64")}`;
   }
