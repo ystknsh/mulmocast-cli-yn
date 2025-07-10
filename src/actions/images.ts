@@ -344,7 +344,7 @@ const graphOption = async (context: MulmoStudioContext, settings?: Record<string
 
   const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams?.provider);
 
-  const config = settings2GraphAIConfig(settings);
+  const config = settings2GraphAIConfig(settings, process.env);
 
   // We need to get google's auth token only if the google is the text2image provider.
   if (provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
