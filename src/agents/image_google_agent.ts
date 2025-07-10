@@ -22,12 +22,12 @@ async function generateImage(
     const payload = {
       instances: [
         {
-          prompt: prompt,
+          prompt,
         },
       ],
       parameters: {
         sampleCount: 1,
-        aspectRatio: aspectRatio,
+        aspectRatio,
         safetySetting: "block_only_high",
       },
     };

@@ -16,8 +16,8 @@ async function generateMovie(
   });
 
   const input = {
-    prompt: prompt,
-    duration: duration,
+    prompt,
+    duration,
     image: undefined as string | undefined,
     start_image: undefined as string | undefined,
     aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite

@@ -381,7 +381,7 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
           file: imagePath, // only for fileCacheAgentFilter
           force, // only for fileCacheAgentFilter
           mulmoContext: context, // for fileCacheAgentFilter
-          index: index, // for fileCacheAgentFilter
+          index, // for fileCacheAgentFilter
           sessionType: "imageReference", // for fileCacheAgentFilter
           params: {
             model: imageAgentInfo.imageParams.model,
