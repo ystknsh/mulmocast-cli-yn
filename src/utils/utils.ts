@@ -76,7 +76,10 @@ export function userAssert(condition: boolean, message: string): asserts conditi
   }
 }
 
-export const settings2GraphAIConfig = (settings?: Record<string, string>, env?: Record<string, string | undefined>): ConfigDataDictionary<DefaultConfigData> => {
+export const settings2GraphAIConfig = (
+  settings?: Record<string, string>,
+  env?: Record<string, string | undefined>,
+): ConfigDataDictionary<DefaultConfigData> => {
   const getKey = (prefix: string, key: string) => {
     return settings?.[`${prefix}_${key}`] ?? settings?.[key] ?? env?.[`${prefix}_${key}`] ?? env?.[key];
   };
