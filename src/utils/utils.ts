@@ -76,7 +76,7 @@ export function userAssert(condition: boolean, message: string): asserts conditi
   }
 }
 
-export const settings2GraphAIConfig = (settings?: Record<string, string>, env?: Record<string, string>): ConfigDataDictionary<DefaultConfigData> => {
+export const settings2GraphAIConfig = (settings?: Record<string, string>, env?: Record<string, string | undefined>): ConfigDataDictionary<DefaultConfigData> => {
   const getKey = (prefix: string, key: string) => {
     return settings?.[`${prefix}_${key}`] ?? settings?.[key] ?? env?.[`${prefix}_${key}`] ?? env?.[key];
   };
@@ -143,7 +143,7 @@ export const deepClean = <T extends CleanableValue>(input: T): T | undefined => 
 
   if (Array.isArray(input)) {
     const cleanedArray = input.map(deepClean).filter((v): v is Exclude<T, undefined> => v !== undefined);
-    return cleanedArray.length > 0 ? (cleanedArray as T) : undefined;
+    return cleanedArray.length > 0 ? (cleanedArray as unknown as T) : undefined;
   }
 
   if (typeof input === "object") {
