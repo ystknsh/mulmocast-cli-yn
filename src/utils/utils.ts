@@ -76,47 +76,44 @@ export function userAssert(condition: boolean, message: string): asserts conditi
   }
 }
 
-export const settings2GraphAIConfig = (settings?: Record<string, string>): ConfigDataDictionary<DefaultConfigData> => {
-  const config: ConfigDataDictionary<DefaultConfigData> = {};
-  if (settings) {
-    if (settings.OPENAI_API_KEY) {
-      config.openAIAgent = {
-        apiKey: settings.OPENAI_API_KEY,
-      };
-      config.ttsOpenaiAgent = {
-        apiKey: settings.OPENAI_API_KEY,
-      };
-      config.imageOpenaiAgent = {
-        apiKey: settings.OPENAI_API_KEY,
-      };
-    }
-    if (settings.ANTHROPIC_API_TOKEN) {
-      config.anthropicAgent = {
-        apiKey: settings.ANTHROPIC_API_TOKEN,
-      };
-    }
-    if (settings.REPLICATE_API_TOKEN) {
-      config.movieReplicateAgent = {
-        apiKey: settings.REPLICATE_API_TOKEN,
-      };
-    }
-    if (settings.NIJIVOICE_API_KEY) {
-      config.ttsNijivoiceAgent = {
-        apiKey: settings.NIJIVOICE_API_KEY,
-      };
-    }
-    if (settings.ELEVENLABS_API_KEY) {
-      config.ttsElevenlabsAgent = {
-        apiKey: settings.ELEVENLABS_API_KEY,
-      };
-    }
+export const settings2GraphAIConfig = (settings?: Record<string, string>, env?: Record<string, string>): ConfigDataDictionary<DefaultConfigData> => {
+  const getKey = (prexix: string, key: string) => {
+    return settings?.[`${prexix}_${key}`] ?? settings?.[key] ?? env?.[`${prexix}_${key}`] ?? env?.[key];
+  };
+
+  const config: ConfigDataDictionary<DefaultConfigData> = {
+    openAIAgent: {
+      apiKey: getKey("LLM", "OPENAI_API_KEY"),
+      baseURL: getKey("LLM", "OENAI_BASE_URL"),
+    },
+    ttsOpenaiAgent: {
+      apiKey: getKey("TTS", "OPENAI_API_KEY"),
+      baseURL: getKey("TTS", "OENAI_BASE_URL"),
+    },
+    imageOpenaiAgent: {
+      apiKey: getKey("IMAGE", "OPENAI_API_KEY"),
+      baseURL: getKey("IMAGE", "OENAI_BASE_URL"),
+    },
+    anthropicAgent: {
+      apiKey: getKey("LLM", "ANTHROPIC_API_TOKEN"),
+    },
+    movieReplicateAgent: {
+      apiKey: getKey("MOVIE", "REPLICATE_API_TOKEN"),
+    },
+    ttsNijivoiceAgent: {
+      apiKey: getKey("TTS", "NIJIVOICE_API_KEY"),
+    },
+    ttsElevenlabsAgent: {
+      apiKey: getKey("TTS", "ELEVENLABS_API_KEY"),
+    },
+
     // TODO
     // browserlessAgent
     // ttsGoogleAgent
     // geminiAgent, groqAgent for tool
     // TAVILY_API_KEY ( for deep research)
-  }
-  return config;
+  };
+  return deepClean(config) ?? {};
 };
 
 export const getExtention = (contentType: string | null, url: string) => {
@@ -131,4 +128,34 @@ export const getExtention = (contentType: string | null, url: string) => {
     return urlExtension === "jpeg" ? "jpg" : urlExtension;
   }
   return "png"; // default
+};
+
+// deepClean
+
+type Primitive = string | number | boolean | symbol | bigint;
+type CleanableValue = Primitive | null | undefined | CleanableObject | CleanableValue[];
+type CleanableObject = { [key: string]: CleanableValue };
+
+export const deepClean = <T extends CleanableValue>(input: T): T | undefined => {
+  if (input === null || input === undefined || input === "") {
+    return undefined;
+  }
+
+  if (Array.isArray(input)) {
+    const cleanedArray = input.map(deepClean).filter((v): v is Exclude<T, undefined> => v !== undefined);
+    return cleanedArray.length > 0 ? (cleanedArray as T) : undefined;
+  }
+
+  if (typeof input === "object") {
+    const result: Record<string, CleanableValue> = {};
+    for (const [key, value] of Object.entries(input)) {
+      const cleaned = deepClean(value);
+      if (cleaned !== undefined) {
+        result[key] = cleaned;
+      }
+    }
+    return Object.keys(result).length > 0 ? (result as T) : undefined;
+  }
+
+  return input;
 };
