@@ -1,4 +1,4 @@
-import { splitIntoSentencesJa, recursiveSplitJa } from "../../src/utils/string.js";
+import { splitIntoSentencesJa, recursiveSplitJa, replacePairsJa, replacementsJa } from "../../src/utils/string.js";
 
 import test from "node:test";
 import assert from "node:assert";
@@ -13,5 +13,11 @@ test("test splitIntoSentences", async () => {
 test("test recursiveSplit", async () => {
   const ret = recursiveSplitJa(text);
   const expect = ["あかさたなはまやらわ。", "東京特許許可局！", "今日はいい天気ですか？"];
+  assert.deepStrictEqual(ret, expect);
+});
+
+test("test replacePairsJa", async () => {
+  const ret = replacePairsJa("OpenAIはAnthropicではありません", replacementsJa);
+  const expect = "オープンエーアイはアンスロピックではありません";
   assert.deepStrictEqual(ret, expect);
 });
