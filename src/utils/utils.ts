@@ -77,22 +77,22 @@ export function userAssert(condition: boolean, message: string): asserts conditi
 }
 
 export const settings2GraphAIConfig = (settings?: Record<string, string>, env?: Record<string, string>): ConfigDataDictionary<DefaultConfigData> => {
-  const getKey = (prexix: string, key: string) => {
-    return settings?.[`${prexix}_${key}`] ?? settings?.[key] ?? env?.[`${prexix}_${key}`] ?? env?.[key];
+  const getKey = (prefix: string, key: string) => {
+    return settings?.[`${prefix}_${key}`] ?? settings?.[key] ?? env?.[`${prefix}_${key}`] ?? env?.[key];
   };
 
   const config: ConfigDataDictionary<DefaultConfigData> = {
     openAIAgent: {
       apiKey: getKey("LLM", "OPENAI_API_KEY"),
-      baseURL: getKey("LLM", "OENAI_BASE_URL"),
+      baseURL: getKey("LLM", "OPENAI_BASE_URL"),
     },
     ttsOpenaiAgent: {
       apiKey: getKey("TTS", "OPENAI_API_KEY"),
-      baseURL: getKey("TTS", "OENAI_BASE_URL"),
+      baseURL: getKey("TTS", "OPENAI_BASE_URL"),
     },
     imageOpenaiAgent: {
       apiKey: getKey("IMAGE", "OPENAI_API_KEY"),
-      baseURL: getKey("IMAGE", "OENAI_BASE_URL"),
+      baseURL: getKey("IMAGE", "OPENAI_BASE_URL"),
     },
     anthropicAgent: {
       apiKey: getKey("LLM", "ANTHROPIC_API_TOKEN"),
