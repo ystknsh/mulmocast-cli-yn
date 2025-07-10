@@ -12,7 +12,7 @@ export const ttsGoogleAgent: AgentFunction<
   },
   { buffer?: Buffer | null },
   { text: string }
-  >= async ({ namedInputs, params }) => {
+> = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
   const { voice, suppressError, speed } = params;
 
@@ -38,7 +38,7 @@ export const ttsGoogleAgent: AgentFunction<
   try {
     // Call the Text-to-Speech API
     const [response] = await client.synthesizeSpeech(request);
-    return { buffer: response.audioContent as Buffer};
+    return { buffer: response.audioContent as Buffer };
   } catch (e) {
     if (suppressError) {
       return {
