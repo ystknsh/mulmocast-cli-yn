@@ -22,7 +22,7 @@ export const recursiveSplitJa = (text: string) => {
   return delimiters
     .reduce<string[]>(
       (textData, delimiter) => {
-        return textData.map((text) => splitIntoSentencesJa(text, delimiter, 7)).flat(1);
+        return textData.map((textInner) => splitIntoSentencesJa(textInner, delimiter, 7)).flat(1);
       },
       [text],
     )
