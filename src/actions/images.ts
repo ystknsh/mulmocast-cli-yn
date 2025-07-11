@@ -393,24 +393,22 @@ const getConcurrency = (context: MulmoStudioContext) => {
   return 4;
 };
 
+const imageAgents = {
+  ...vanillaAgents,
+  imageGoogleAgent,
+  movieGoogleAgent,
+  movieReplicateAgent,
+  imageOpenaiAgent,
+  mediaMockAgent,
+  fileWriteAgent,
+  openAIAgent,
+  anthropicAgent,
+};
+
 const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
   const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(
-    graph_data,
-    {
-      ...vanillaAgents,
-      imageGoogleAgent,
-      movieGoogleAgent,
-      movieReplicateAgent,
-      imageOpenaiAgent,
-      mediaMockAgent,
-      fileWriteAgent,
-      openAIAgent,
-      anthropicAgent,
-    },
-    options,
-  );
+  const graph = new GraphAI(graph_data, imageAgents, options);
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
@@ -438,21 +436,7 @@ export const images = async (context: MulmoStudioContext, settings?: Record<stri
 export const generateBeatImage = async (index: number, context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
   const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(
-    beat_graph_data,
-    {
-      ...vanillaAgents,
-      imageGoogleAgent,
-      movieGoogleAgent,
-      movieReplicateAgent,
-      imageOpenaiAgent,
-      mediaMockAgent,
-      fileWriteAgent,
-      openAIAgent,
-      anthropicAgent,
-    },
-    options,
-  );
+  const graph = new GraphAI(beat_graph_data, imageAgents, options);
   Object.keys(injections).forEach((key: string) => {
     if ("outputStudioFilePath" !== key) {
       graph.injectValue(key, injections[key]);
