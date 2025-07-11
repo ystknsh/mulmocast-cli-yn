@@ -37,7 +37,6 @@ const imageAgents = {
 
 dotenv.config();
 
-
 const beat_graph_data = {
   version: 0.5,
   concurrency: 4,
