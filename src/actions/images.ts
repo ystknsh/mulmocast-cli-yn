@@ -12,8 +12,7 @@ import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoImageParams, Mulmo
 import { getOutputStudioFilePath, getBeatPngImagePath, getBeatMoviePath, getReferenceImagePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
-import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
-import { findImagePlugin } from "../utils/image_plugins/index.js";
+import { MulmoPresentationStyleMethods, MulmoStudioContextMethods, MulmoBeatMethods } from "../methods/index.js";
 
 import { userAssert, settings2GraphAIConfig, getExtention } from "../utils/utils.js";
 import { imagePrompt, htmlImageSystemPrompt } from "../utils/prompt.js";
@@ -38,51 +37,41 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
 export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number; imageRefs: Record<string, string> }) => {
   const { context, beat, index, imageRefs } = namedInputs;
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
-  // const imageParams = { ...imageAgentInfo.imageParams, ...beat.imageParams };
+
   const imagePath = getBeatPngImagePath(context, index);
+  if (beat.htmlPrompt) {
+    const htmlPrompt = MulmoBeatMethods.getHtmlPrompt(beat);
+    const htmlPath = imagePath.replace(/\.[^/.]+$/, ".html");
+    return { imagePath, htmlPrompt, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
+  }
+
   const returnValue = {
     imageParams: imageAgentInfo.imageParams,
     movieFile: beat.moviePrompt ? getBeatMoviePath(context, index) : undefined,
   };
 
   if (beat.image) {
-    const plugin = findImagePlugin(beat?.image?.type);
-    if (!plugin) {
-      throw new Error(`invalid beat image type: ${beat.image}`);
-    }
-    const path = plugin.path({ beat, context, imagePath, ...htmlStyle(context, beat) });
+    const plugin = MulmoBeatMethods.getPlugin(beat);
+    const pluginPath = plugin.path({ beat, context, imagePath, ...htmlStyle(context, beat) });
     // undefined prompt indicates that image generation is not needed
-    return { imagePath: path, referenceImage: path, ...returnValue };
-  }
-
-  if (beat.htmlPrompt) {
-    const htmlPrompt = beat.htmlPrompt.prompt + (beat.htmlPrompt.data ? "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2) : "");
-    const htmlPath = imagePath.replace(/\.[^/.]+$/, ".html");
-    return { imagePath, htmlPrompt, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
+    return { ...returnValue, imagePath: pluginPath, referenceImageForMovie: pluginPath };
   }
 
   // images for "edit_image"
-  const images = (() => {
-    const imageNames = beat.imageNames ?? Object.keys(imageRefs); // use all images if imageNames is not specified
-    const sources = imageNames.map((name) => imageRefs[name]);
-    return sources.filter((source) => source !== undefined);
-  })();
+  const images = MulmoBeatMethods.getImageReferenceForImageGenerator(beat, imageRefs);
 
   if (beat.moviePrompt && !beat.imagePrompt) {
     return { ...returnValue, imagePath, images, imageFromMovie: true }; // no image prompt, only movie prompt
   }
   const prompt = imagePrompt(beat, imageAgentInfo.imageParams.style);
-  return { imageAgentInfo, imagePath, referenceImage: imagePath, prompt, ...returnValue, images };
+  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, images };
 };
 
 export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
   const { context, beat, index } = namedInputs;
   const imagePath = getBeatPngImagePath(context, index);
 
-  const plugin = findImagePlugin(beat?.image?.type);
-  if (!plugin) {
-    throw new Error(`invalid beat image type: ${beat.image}`);
-  }
+  const plugin = MulmoBeatMethods.getPlugin(beat);
   try {
     MulmoStudioContextMethods.setBeatSessionState(context, "image", index, true);
     const processorParams = { beat, context, imagePath, ...htmlStyle(context, beat) };
@@ -200,7 +189,7 @@ const beat_graph_data = {
       inputs: {
         onComplete: [":imageGenerator", ":imagePlugin"], // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
-        imagePath: ":preprocessor.referenceImage",
+        imagePath: ":preprocessor.referenceImageForMovie",
         file: ":preprocessor.movieFile",
         studio: ":context.studio", // for cache
         mulmoContext: ":context", // for fileCacheAgentFilter
