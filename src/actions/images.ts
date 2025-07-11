@@ -57,12 +57,13 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     return { ...returnValue, imagePath: pluginPath, referenceImageForMovie: pluginPath };
   }
 
+  if (beat.moviePrompt && !beat.imagePrompt) {
+    return { ...returnValue, imagePath, imageFromMovie: true }; // no image prompt, only movie prompt
+  }
+
   // images for "edit_image"
   const images = MulmoBeatMethods.getImageReferenceForImageGenerator(beat, imageRefs);
 
-  if (beat.moviePrompt && !beat.imagePrompt) {
-    return { ...returnValue, imagePath, images, imageFromMovie: true }; // no image prompt, only movie prompt
-  }
   const prompt = imagePrompt(beat, imageAgentInfo.imageParams.style);
   return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, images };
 };
@@ -402,26 +403,27 @@ const downLoadImage = async (context: MulmoStudioContext, key: string, url: stri
 };
 // TODO: unit test
 export const getImageRefs = async (context: MulmoStudioContext) => {
-  const imageRefs: Record<string, string> = {};
   const images = context.presentationStyle.imageParams?.images;
-  if (images) {
-    await Promise.all(
-      Object.keys(images)
-        .sort()
-        .map(async (key, index) => {
-          const image = images[key];
-          if (image.type === "imagePrompt") {
-            imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
-          } else if (image.type === "image") {
-            if (image.source.kind === "path") {
-              imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
-            } else if (image.source.kind === "url") {
-              imageRefs[key] = await downLoadImage(context, key, image.source.url);
-            }
-          }
-        }),
-    );
+  if (!images) {
+    return {};
   }
+  const imageRefs: Record<string, string> = {};
+  await Promise.all(
+    Object.keys(images)
+      .sort()
+      .map(async (key, index) => {
+        const image = images[key];
+        if (image.type === "imagePrompt") {
+          imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
+        } else if (image.type === "image") {
+          if (image.source.kind === "path") {
+            imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+          } else if (image.source.kind === "url") {
+            imageRefs[key] = await downLoadImage(context, key, image.source.url);
+          }
+        }
+      }),
+  );
   return imageRefs;
 };
 const prepareGenerateImages = async (context: MulmoStudioContext) => {
