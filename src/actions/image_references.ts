@@ -28,10 +28,10 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
           mulmoContext: context, // for fileCacheAgentFilter
           index, // for fileCacheAgentFilter
           sessionType: "imageReference", // for fileCacheAgentFilter
-          params: {
-            model: imageAgentInfo.imageParams.model,
-            canvasSize: context.presentationStyle.canvasSize,
-          },
+        },
+        params: {
+          model: imageAgentInfo.imageParams.model,
+          canvasSize: context.presentationStyle.canvasSize,
         },
       },
     },
