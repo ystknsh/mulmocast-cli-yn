@@ -89,7 +89,7 @@ export const extractImageFromMovie = (movieFile: string, imagePath: string): Pro
     ffmpeg(movieFile)
       .outputOptions(["-frames:v 1"])
       .output(imagePath)
-      .on("end", () => resolve())
+      .on("end", () => resolve({}))
       .on("error", (err) => reject(err))
       .run();
   });

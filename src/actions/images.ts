@@ -207,15 +207,14 @@ const beat_graph_data = {
     imageFromMovie: {
       if: ":preprocessor.imageFromMovie",
       agent: async (namedInputs: { movieFile: string; imageFile: string }) => {
-        await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
-        return { };
+        return await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
       },
       inputs: {
         onComplete: ":movieGenerator", // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
-      defaultValue: { },
+      defaultValue: {},
     },
     output: {
       agent: "copyAgent",
