@@ -201,8 +201,8 @@ export const readTemplatePrompt = (templateName: string) => {
 
   const script = (() => {
     if (template.scriptName) {
-      const script = readScriptTemplateFile(template.scriptName);
-      return { ...script, ...(template.presentationStyle ?? {}) };
+      const scriptData = readScriptTemplateFile(template.scriptName);
+      return { ...scriptData, ...(template.presentationStyle ?? {}) };
     }
     return undefined;
   })();

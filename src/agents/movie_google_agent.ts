@@ -62,7 +62,7 @@ async function generateMovie(
     while (true) {
       GraphAILogger.info("...waiting for movie generation...");
       await sleep(3000);
-      const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
+      const operationResponse = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,10 +70,10 @@ async function generateMovie(
         },
         body: JSON.stringify(fetchBody),
       });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      if (!operationResponse.ok) {
+        throw new Error(`Error: ${operationResponse.status} - ${operationResponse.statusText}`);
       }
-      const responseData = await response.json();
+      const responseData = await operationResponse.json();
       if (responseData.done) {
         if (responseData.error) {
           GraphAILogger.info("Prompt: ", prompt);

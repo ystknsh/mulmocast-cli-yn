@@ -273,7 +273,10 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
   const videoIds = videoIdsForBeats.filter((id) => id !== undefined); // filter out voice-over beats
-  ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
+
+  const inputs = videoIds.map((id) => `[${id}]`).join("");
+  const filter = `${inputs}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`;
+  ffmpegContext.filterComplex.push(filter);
 
   const captionedVideoId = addCaptions(ffmpegContext, concatVideoId, context, caption);
   const mixedVideoId = addTransitionEffects(ffmpegContext, captionedVideoId, context, transitionVideoIds, beatTimestamps);
