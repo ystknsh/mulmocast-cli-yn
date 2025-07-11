@@ -36,7 +36,6 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
 
 export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number; imageRefs: Record<string, string> }) => {
   const { context, beat, index, imageRefs } = namedInputs;
-  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
 
   const imagePath = getBeatPngImagePath(context, index);
   if (beat.htmlPrompt) {
@@ -45,6 +44,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     return { imagePath, htmlPrompt, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
   }
 
+  const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
   const returnValue = {
     imageParams: imageAgentInfo.imageParams,
     movieFile: beat.moviePrompt ? getBeatMoviePath(context, index) : undefined,
