@@ -318,19 +318,15 @@ const googleAuth = async () => {
 };
 
 export const graphOption = async (context: MulmoStudioContext, settings?: Record<string, string>) => {
-  const agentFilters = [
-    {
-      name: "fileCacheAgentFilter",
-      agent: fileCacheAgentFilter,
-      nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator", "htmlImageAgent"],
-    },
-  ];
-
-  const taskManager = new TaskManager(getConcurrency(context));
-
   const options: GraphOptions = {
-    agentFilters,
-    taskManager,
+    agentFilters: [
+      {
+        name: "fileCacheAgentFilter",
+        agent: fileCacheAgentFilter,
+        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator", "htmlImageAgent"],
+      },
+    ],
+    taskManager: new TaskManager(getConcurrency(context)),
   };
 
   const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams?.provider);
