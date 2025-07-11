@@ -55,16 +55,16 @@ export const getFileObject = (args: {
   const { fileOrUrl, fileName } = (() => {
     if (file === "__clipboard") {
       // We generate a new unique script file from clipboard text in the output directory
-      const fileName = generateTimestampedFileName("script");
+      const generatedFileName = generateTimestampedFileName("script");
       const clipboardText = clipboardy.readSync();
-      const fileOrUrl = resolveDirPath(outDirPath, `${fileName}.json`);
+      const resolvedFilePath = resolveDirPath(outDirPath, `${generatedFileName}.json`);
       mkdir(outDirPath);
-      fs.writeFileSync(fileOrUrl, clipboardText, "utf8");
-      return { fileOrUrl, fileName };
+      fs.writeFileSync(resolvedFilePath, clipboardText, "utf8");
+      return { fileOrUrl: resolvedFilePath, fileName: generatedFileName };
     }
-    const fileOrUrl = file ?? "";
-    const fileName = path.parse(fileOrUrl).name;
-    return { fileOrUrl, fileName };
+    const resolvedFileOrUrl = file ?? "";
+    const parsedFileName = path.parse(resolvedFileOrUrl).name;
+    return { fileOrUrl: resolvedFileOrUrl, fileName: parsedFileName };
   })();
   const isHttpPath = isHttp(fileOrUrl);
   const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);

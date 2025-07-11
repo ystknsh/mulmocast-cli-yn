@@ -37,7 +37,7 @@ export default [
       ],
       "linebreak-style": ["error", "unix"],
       quotes: "off",
-      "no-shadow": "warn",
+      "no-shadow": "error",
       "no-param-reassign": "error",
       // "no-plusplus": "warn",
       "no-undef": "warn",
