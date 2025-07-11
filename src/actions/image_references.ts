@@ -57,7 +57,6 @@ const downLoadImage = async (context: MulmoStudioContext, key: string, url: stri
   return imagePath;
 };
 
-// TODO: unit test
 export const getImageRefs = async (context: MulmoStudioContext) => {
   const images = context.presentationStyle.imageParams?.images;
   if (!images) {
