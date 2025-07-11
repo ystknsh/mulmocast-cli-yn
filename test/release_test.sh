@@ -6,3 +6,6 @@ yarn run cli movie scripts/test/test_beats.json
 
 yarn run cli movie scripts/snakajima/digital_democracy.json
 yarn run cli movie scripts/test/test_spillover.json
+
+
+yarn run cli movie scripts/test/test_image_refs.json

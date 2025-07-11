@@ -366,24 +366,12 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 
   const imageRefs = await getImageRefs(context);
 
-  // Determine movie agent based on provider
-  const getMovieAgent = () => {
-    const movieProvider = context.presentationStyle.movieParams?.provider ?? "google";
-    switch (movieProvider) {
-      case "replicate":
-        return "movieReplicateAgent";
-      case "google":
-      default:
-        return "movieGoogleAgent";
-    }
-  };
-
   GraphAILogger.info(`text2image: provider=${provider} model=${context.presentationStyle.imageParams?.model}`);
   const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> | undefined> = {
     context,
     htmlImageAgentInfo,
     movieAgentInfo: {
-      agent: getMovieAgent(),
+      agent: MulmoPresentationStyleMethods.getMovieAgent(context.presentationStyle),
     },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, fileName),
     imageRefs,

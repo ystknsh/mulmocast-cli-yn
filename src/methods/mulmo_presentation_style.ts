@@ -91,6 +91,17 @@ export const MulmoPresentationStyleMethods = {
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
+  // Determine movie agent based on provider
+  getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
+    const movieProvider = presentationStyle.movieParams?.provider ?? "google";
+    switch (movieProvider) {
+      case "replicate":
+        return "movieReplicateAgent";
+      case "google":
+      default:
+        return "movieGoogleAgent";
+    }
+  },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
     const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
     const defaultConfig = llmConfig[provider];
