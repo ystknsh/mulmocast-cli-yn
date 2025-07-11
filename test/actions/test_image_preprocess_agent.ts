@@ -5,12 +5,11 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { MulmoStudioContext, MulmoBeat } from "../../src/types/index.js";
+import { imagePreprocessAgent } from "../../src/actions/image_agents.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Import the actual imagePreprocessAgent function from the source
-const { imagePreprocessAgent } = await import("../../src/actions/images.js");
 
 // Helper function to create mock context
 const createMockContext = (): MulmoStudioContext => ({
