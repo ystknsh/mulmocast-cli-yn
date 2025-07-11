@@ -91,6 +91,30 @@ export const MulmoPresentationStyleMethods = {
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
+  // Determine movie agent based on provider
+  getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
+    const movieProvider = presentationStyle.movieParams?.provider ?? "google";
+    switch (movieProvider) {
+      case "replicate":
+        return "movieReplicateAgent";
+      case "google":
+      default:
+        return "movieGoogleAgent";
+    }
+  },
+  getConcurrency(presentationStyle: MulmoPresentationStyle) {
+    if (presentationStyle.movieParams?.provider === "replicate") {
+      return 4;
+    }
+    const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(presentationStyle);
+    if (imageAgentInfo.imageParams.provider === "openai") {
+      // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
+      // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
+      // gpt-image-1：3,000,000 TPM、150 images per minute
+      return imageAgentInfo.imageParams.model === defaultOpenAIImageModel ? 4 : 16;
+    }
+    return 4;
+  },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
     const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
     const defaultConfig = llmConfig[provider];
