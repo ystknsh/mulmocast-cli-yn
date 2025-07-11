@@ -57,14 +57,15 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     return { ...returnValue, imagePath: pluginPath, referenceImageForMovie: pluginPath };
   }
 
-  // images for "edit_image"
-  const images = MulmoBeatMethods.getImageReferenceForImageGenerator(beat, imageRefs);
-
   if (beat.moviePrompt && !beat.imagePrompt) {
-    return { ...returnValue, imagePath, images, imageFromMovie: true }; // no image prompt, only movie prompt
+    return { ...returnValue, imagePath, imageFromMovie: true }; // no image prompt, only movie prompt
   }
+
+  // referenceImages for "edit_image", openai agent.
+  const referenceImages = MulmoBeatMethods.getImageReferenceForImageGenerator(beat, imageRefs);
+
   const prompt = imagePrompt(beat, imageAgentInfo.imageParams.style);
-  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, images };
+  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, referenceImages };
 };
 
 export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
@@ -169,7 +170,7 @@ const beat_graph_data = {
       retry: 2,
       inputs: {
         prompt: ":preprocessor.prompt",
-        images: ":preprocessor.images",
+        referenceImages: ":preprocessor.referenceImages",
         file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
         force: ":context.force", // only for fileCacheAgentFilter
         mulmoContext: ":context", // for fileCacheAgentFilter
@@ -206,15 +207,14 @@ const beat_graph_data = {
     imageFromMovie: {
       if: ":preprocessor.imageFromMovie",
       agent: async (namedInputs: { movieFile: string; imageFile: string }) => {
-        await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
-        return { generatedImage: true };
+        return await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
       },
       inputs: {
         onComplete: ":movieGenerator", // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
-      defaultValue: { generatedImage: false },
+      defaultValue: {},
     },
     output: {
       agent: "copyAgent",
@@ -402,26 +402,27 @@ const downLoadImage = async (context: MulmoStudioContext, key: string, url: stri
 };
 // TODO: unit test
 export const getImageRefs = async (context: MulmoStudioContext) => {
-  const imageRefs: Record<string, string> = {};
   const images = context.presentationStyle.imageParams?.images;
-  if (images) {
-    await Promise.all(
-      Object.keys(images)
-        .sort()
-        .map(async (key, index) => {
-          const image = images[key];
-          if (image.type === "imagePrompt") {
-            imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
-          } else if (image.type === "image") {
-            if (image.source.kind === "path") {
-              imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
-            } else if (image.source.kind === "url") {
-              imageRefs[key] = await downLoadImage(context, key, image.source.url);
-            }
-          }
-        }),
-    );
+  if (!images) {
+    return {};
   }
+  const imageRefs: Record<string, string> = {};
+  await Promise.all(
+    Object.keys(images)
+      .sort()
+      .map(async (key, index) => {
+        const image = images[key];
+        if (image.type === "imagePrompt") {
+          imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
+        } else if (image.type === "image") {
+          if (image.source.kind === "path") {
+            imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
+          } else if (image.source.kind === "url") {
+            imageRefs[key] = await downLoadImage(context, key, image.source.url);
+          }
+        }
+      }),
+  );
   return imageRefs;
 };
 const prepareGenerateImages = async (context: MulmoStudioContext) => {

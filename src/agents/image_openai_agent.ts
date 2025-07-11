@@ -25,10 +25,10 @@ export const imageOpenaiAgent: AgentFunction<
     canvasSize: { width: number; height: number };
   },
   { buffer: Buffer },
-  { prompt: string; images: string[] | null | undefined },
+  { prompt: string; referenceImages: string[] | null | undefined },
   { baseURL?: string; apiKey?: string }
 > = async ({ namedInputs, params, config }) => {
-  const { prompt, images } = namedInputs;
+  const { prompt, referenceImages } = namedInputs;
   const { moderation, canvasSize } = params;
   const { apiKey, baseURL } = { ...config };
   const model = params.model ?? defaultOpenAIImageModel;
@@ -66,15 +66,15 @@ export const imageOpenaiAgent: AgentFunction<
   const response = await (async () => {
     try {
       const targetSize = imageOptions.size;
-      if ((images ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
-        const imagelist = await Promise.all(
-          (images ?? []).map(async (file) => {
+      if ((referenceImages ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
+        const referenceImageFiles = await Promise.all(
+          (referenceImages ?? []).map(async (file) => {
             const ext = path.extname(file).toLowerCase();
             const type = ext === ".jpg" || ext === ".jpeg" ? "image/jpeg" : "image/png";
             return await toFile(fs.createReadStream(file), null, { type });
           }),
         );
-        return await openai.images.edit({ ...imageOptions, size: targetSize, image: imagelist });
+        return await openai.images.edit({ ...imageOptions, size: targetSize, image: referenceImageFiles });
       } else {
         return await openai.images.generate(imageOptions);
       }
