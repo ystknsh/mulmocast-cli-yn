@@ -80,7 +80,7 @@ test("imagePreprocessAgent - basic functionality", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/0p.png",
-    referenceImage: "/test/images/test_studio/0p.png",
+    referenceImageForMovie: "/test/images/test_studio/0p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -204,7 +204,7 @@ test("imagePreprocessAgent - with imageNames", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/7p.png",
-    referenceImage: "/test/images/test_studio/7p.png",
+    referenceImageForMovie: "/test/images/test_studio/7p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -246,7 +246,7 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
 
   const expected = {
     imagePath: "/test/images/test_studio/8p.png",
-    referenceImage: "/test/images/test_studio/8p.png",
+    referenceImageForMovie: "/test/images/test_studio/8p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -289,7 +289,7 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/9p.png",
-    referenceImage: "/test/images/test_studio/9p.png",
+    referenceImageForMovie: "/test/images/test_studio/9p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -331,7 +331,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
 
   const expected = {
     imagePath: "/test/images/test_studio/10p.png",
-    referenceImage: "/test/images/test_studio/10p.png",
+    referenceImageForMovie: "/test/images/test_studio/10p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nvivid",
     imageParams: {
       provider: "openai",
@@ -368,7 +368,7 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/12p.png",
-    referenceImage: "/test/images/test_studio/12p.png",
+    referenceImageForMovie: "/test/images/test_studio/12p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -412,7 +412,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
 
     const expected = {
       imagePath: "/test/images/test/1p.png",
-      referenceImage: "/test/images/test/1p.png",
+      referenceImageForMovie: "/test/images/test/1p.png",
       prompt: "Blue sky, a flock of birds\n<style>sumie-style",
       imageParams: {
         provider: "openai",
@@ -454,7 +454,7 @@ test("imagePreprocessAgent - text only", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/13p.png",
-    referenceImage: "/test/images/test_studio/13p.png",
+    referenceImageForMovie: "/test/images/test_studio/13p.png",
     prompt: "generate image appropriate for the text. text: Only text content\nnatural",
     imageParams: {
       provider: "openai",
@@ -495,7 +495,7 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/14p.png",
-    referenceImage: "/test/images/test_studio/14p.png",
+    referenceImageForMovie: "/test/images/test_studio/14p.png",
     prompt: "Only image prompt\nnatural",
     imageParams: {
       provider: "openai",
@@ -600,7 +600,7 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/17p.png",
-    referenceImage: "/test/images/test_studio/17p.png",
+    referenceImageForMovie: "/test/images/test_studio/17p.png",
     prompt: "Image prompt\nnatural",
     imageParams: {
       provider: "openai",
@@ -641,7 +641,7 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
 
   const expected = {
     imagePath: "/test/images/test_studio/18p.png",
-    referenceImage: "/test/images/test_studio/18p.png",
+    referenceImageForMovie: "/test/images/test_studio/18p.png",
     prompt: "Image prompt\nnatural", // imagePrompt takes precedence over text
     imageParams: {
       provider: "openai",
@@ -681,7 +681,7 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
 
   const expected = {
     imagePath: "/test/images/test_studio/19p.png",
-    referenceImage: "/test/images/test_studio/19p.png",
+    referenceImageForMovie: "/test/images/test_studio/19p.png",
     prompt: "generate image appropriate for the text. text: undefined\nnatural",
     imageParams: {
       provider: "openai",
@@ -721,7 +721,7 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/20p.png",
-    referenceImage: "/test/images/test_studio/20p.png",
+    referenceImageForMovie: "/test/images/test_studio/20p.png",
     prompt: "Custom image prompt\nnatural", // imagePrompt takes precedence
     imageParams: {
       provider: "openai",
@@ -765,7 +765,7 @@ test("imagePreprocessAgent - with imageParams override", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/21p.png",
-    referenceImage: "/test/images/test_studio/21p.png",
+    referenceImageForMovie: "/test/images/test_studio/21p.png",
     prompt: "A beautiful sunset\nphotorealistic",
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
