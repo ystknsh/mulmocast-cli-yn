@@ -387,6 +387,19 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
   return imagePath;
 };
 
+const downLoadImage = async (context: MulmoStudioContext, key: string, url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download image: ${url}`);
+  }
+  const buffer = Buffer.from(await response.arrayBuffer());
+
+  // Detect file extension from Content-Type header or URL
+  const extension = getExtention(response.headers.get("content-type"), url);
+  const imagePath = getReferenceImagePath(context, key, extension);
+  await fs.promises.writeFile(imagePath, buffer);
+  return imagePath;
+};
 // TODO: unit test
 export const getImageRefs = async (context: MulmoStudioContext) => {
   const imageRefs: Record<string, string> = {};
@@ -403,17 +416,7 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
             if (image.source.kind === "path") {
               imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);
             } else if (image.source.kind === "url") {
-              const response = await fetch(image.source.url);
-              if (!response.ok) {
-                throw new Error(`Failed to download image: ${image.source.url}`);
-              }
-              const buffer = Buffer.from(await response.arrayBuffer());
-
-              // Detect file extension from Content-Type header or URL
-              const extension = getExtention(response.headers.get("content-type"), image.source.url);
-              const imagePath = getReferenceImagePath(context, key, extension);
-              await fs.promises.writeFile(imagePath, buffer);
-              imageRefs[key] = imagePath;
+              imageRefs[key] = await downLoadImage(context, key, image.source.url);
             }
           }
         }),
