@@ -9,7 +9,7 @@ import { MulmoStudioContext, MulmoStudioBeat, MulmoImagePromptMedia } from "../t
 
 import { imageGoogleAgent, imageOpenaiAgent } from "../agents/index.js";
 
-// Application may call this functoin directly to generate reference image.
+// Application may call this function directly to generate reference image.
 export const generateReferenceImage = async (context: MulmoStudioContext, key: string, index: number, image: MulmoImagePromptMedia, force: boolean = false) => {
   const imagePath = getReferenceImagePath(context, key, "png");
   // generate image
