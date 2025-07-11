@@ -10,7 +10,6 @@ import { imagePreprocessAgent } from "../../src/actions/image_agents.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 // Helper function to create mock context
 const createMockContext = (): MulmoStudioContext => ({
   fileDirs: {
