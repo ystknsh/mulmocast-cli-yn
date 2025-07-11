@@ -89,7 +89,7 @@ test("imagePreprocessAgent - basic functionality", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -131,7 +131,6 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
     movieFile: "/test/images/test_studio/1.mov",
     imagePath: "/test/images/test_studio/1p.png",
     imageFromMovie: true,
-    images: [],
   };
 
   assert.deepStrictEqual(result, expected);
@@ -161,7 +160,6 @@ test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
     movieFile: "/test/images/test_studio/2.mov",
     imagePath: "/test/images/test_studio/2p.png",
     imageFromMovie: true,
-    images: [],
   };
 
   assert.deepStrictEqual(result, expected);
@@ -213,7 +211,7 @@ test("imagePreprocessAgent - with imageNames", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: ["/path/to/image1.png", "/path/to/image2.png"],
+    referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -255,7 +253,7 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
       moderation: "auto",
     },
     movieFile: undefined,
-    images: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
+    referenceImages: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -298,7 +296,7 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: ["/path/to/image1.png", "/path/to/image2.png"],
+    referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -340,7 +338,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
       moderation: "auto", // From beat (override)
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -377,7 +375,7 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -421,7 +419,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
         moderation: "auto", // From imageAgentInfo
       },
       movieFile: undefined,
-      images: [],
+      referenceImages: [],
       imageAgentInfo: {
         agent: "imageOpenaiAgent",
         imageParams: {
@@ -463,7 +461,7 @@ test("imagePreprocessAgent - text only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -504,7 +502,7 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -544,7 +542,6 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
     imagePath: "/test/images/test_studio/15p.png",
     movieFile: "/test/images/test_studio/15.mov",
     imageFromMovie: true,
-    images: [],
   };
 
   assert.deepStrictEqual(result, expected);
@@ -577,7 +574,6 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
     imagePath: "/test/images/test_studio/16p.png",
     movieFile: "/test/images/test_studio/16.mov",
     imageFromMovie: true,
-    images: [],
   };
 
   assert.deepStrictEqual(result, expected);
@@ -609,7 +605,7 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/17.mov",
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -650,7 +646,7 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/18.mov",
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -690,7 +686,7 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -730,7 +726,7 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -783,7 +779,7 @@ test("imagePreprocessAgent - with imageParams override", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    referenceImages: [],
   };
 
   assert.deepStrictEqual(result, expected);
