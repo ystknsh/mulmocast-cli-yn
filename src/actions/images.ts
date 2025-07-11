@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger, TaskManager } from "graphai";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
+import { GoogleAuth } from "google-auth-library";
+
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -9,22 +11,32 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
-import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
-import { fileCacheAgentFilter } from "../utils/filters.js";
 import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
+import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
+import { fileCacheAgentFilter } from "../utils/filters.js";
 import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
+import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 
 import { getImageRefs } from "./image_references.js";
 import { imagePreprocessAgent, imagePluginAgent, htmlImageGeneratorAgent } from "./image_agents.js";
 
 const vanillaAgents = agents.default ?? agents;
+const imageAgents = {
+  ...vanillaAgents,
+  imageGoogleAgent,
+  movieGoogleAgent,
+  movieReplicateAgent,
+  imageOpenaiAgent,
+  mediaMockAgent,
+  fileWriteAgent,
+  openAIAgent,
+  anthropicAgent,
+};
 
 dotenv.config();
 
-import { GoogleAuth } from "google-auth-library";
-import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 
 const beat_graph_data = {
   version: 0.5,
@@ -308,18 +320,6 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
     imageRefs,
   };
   return injections;
-};
-
-const imageAgents = {
-  ...vanillaAgents,
-  imageGoogleAgent,
-  movieGoogleAgent,
-  movieReplicateAgent,
-  imageOpenaiAgent,
-  mediaMockAgent,
-  fileWriteAgent,
-  openAIAgent,
-  anthropicAgent,
 };
 
 const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
