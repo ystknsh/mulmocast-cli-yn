@@ -50,7 +50,6 @@ export default [
       "sonarjs/todo-tag": "off",
       "sonarjs/no-commented-code": "off",
       "sonarjs/cognitive-complexity": "warn",
-      "sonarjs/no-nested-template-literals": "warn",
       "sonarjs/no-unused-vars": "off",
     },
     plugins: {
