@@ -21,6 +21,13 @@
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": " ",
       "duration": 5
+    },
+    {
+      "text": "movie with minimax/video-01",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "minimax/video-01"
+      }
     }
   ]
 }
