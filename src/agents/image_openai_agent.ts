@@ -19,7 +19,6 @@ type OpenAIImageOptions = {
 
 export const imageOpenaiAgent: AgentFunction<
   {
-    // apiKey: string;
     model: string; // dall-e-3 or gpt-image-1
     moderation: OpenAIModeration | null | undefined;
     canvasSize: { width: number; height: number };

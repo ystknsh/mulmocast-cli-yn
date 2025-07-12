@@ -64,7 +64,7 @@ const beat_graph_data = {
         context: ":context",
         beat: ":beat",
         index: ":__mapIndex",
-        onComplete: ":preprocessor",
+        onComplete: [":preprocessor"],
       },
     },
     htmlImageAgent: {
@@ -94,7 +94,7 @@ const beat_graph_data = {
         return { html };
       },
       inputs: {
-        onComplete: ":htmlImageAgent", // to wait for htmlImageAgent to finish
+        onComplete: [":htmlImageAgent"], // to wait for htmlImageAgent to finish
         htmlPath: ":preprocessor.htmlPath",
       },
       output: {
@@ -161,7 +161,7 @@ const beat_graph_data = {
         return await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
       },
       inputs: {
-        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
