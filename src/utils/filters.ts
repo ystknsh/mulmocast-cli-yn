@@ -9,11 +9,10 @@ import { text2hash } from "./utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
-  const { namedInputs } = context;
-  const { file, force, mulmoContext, index, sessionType } = namedInputs;
+  const { force, file, index, mulmoContext, sessionType } = context.namedInputs.cache;
 
   const shouldUseCache = async () => {
-    if (force) {
+    if (force && force.some((element: boolean | undefined) => element)) {
       return false;
     }
     try {

@@ -3,6 +3,8 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
+import type { AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentParams, ReplicateMovieAgentConfig } from "../types/agent.js";
+
 async function generateMovie(
   model: `${string}/${string}` | undefined,
   apiKey: string,
@@ -72,16 +74,11 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
   }
 };
 
-export type MovieReplicateConfig = {
-  apiKey?: string;
-};
-
-export const movieReplicateAgent: AgentFunction<
-  { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number },
-  { buffer: Buffer },
-  { prompt: string; imagePath?: string },
-  MovieReplicateConfig
-> = async ({ namedInputs, params, config }) => {
+export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const duration = params.duration ?? 5;

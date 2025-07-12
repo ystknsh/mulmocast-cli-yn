@@ -23,15 +23,17 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
         retry: 2,
         inputs: {
           prompt,
-          file: imagePath, // only for fileCacheAgentFilter
-          force, // only for fileCacheAgentFilter
-          mulmoContext: context, // for fileCacheAgentFilter
-          index, // for fileCacheAgentFilter
-          sessionType: "imageReference", // for fileCacheAgentFilter
-          params: {
-            model: imageAgentInfo.imageParams.model,
-            canvasSize: context.presentationStyle.canvasSize,
+          cache: {
+            force: [force],
+            file: imagePath,
+            index,
+            mulmoContext: context,
+            sessionType: "imageReference",
           },
+        },
+        params: {
+          model: imageAgentInfo.imageParams.model,
+          canvasSize: context.presentationStyle.canvasSize,
         },
       },
     },

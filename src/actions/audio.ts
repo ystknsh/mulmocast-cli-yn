@@ -108,11 +108,13 @@ const graph_tts: GraphData = {
       agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":preprocessor.text",
-        file: ":preprocessor.audioPath",
-        force: ":context.force",
-        mulmoContext: ":context", // for cache
-        index: ":__mapIndex", // for cache
-        sessionType: "audio", // for cache
+        cache: {
+          force: [":context.force"],
+          file: ":preprocessor.audioPath",
+          index: ":__mapIndex",
+          mulmoContext: ":context",
+          sessionType: "audio",
+        },
         params: {
           voice: ":preprocessor.voiceId",
           speed: ":preprocessor.speechOptions.speed",

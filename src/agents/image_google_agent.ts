@@ -1,6 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { getAspectRatio } from "./movie_google_agent.js";
+import type { AgentBufferResult, ImageAgentInputs, ImageAgentParams, GoogleImageAgentConfig } from "../types/agent.js";
 
 type PredictionResponse = {
   predictions?: {
@@ -68,17 +69,11 @@ async function generateImage(
   }
 }
 
-export type ImageGoogleConfig = {
-  projectId?: string;
-  token?: string;
-};
-
-export const imageGoogleAgent: AgentFunction<
-  { model: string; canvasSize: { width: number; height: number } },
-  { buffer: Buffer },
-  { prompt: string },
-  ImageGoogleConfig
-> = async ({ namedInputs, params, config }) => {
+export const imageGoogleAgent: AgentFunction<ImageAgentParams, AgentBufferResult, ImageAgentInputs, GoogleImageAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { prompt } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "imagen-3.0-fast-generate-001";

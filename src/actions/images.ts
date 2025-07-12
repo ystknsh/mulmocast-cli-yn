@@ -47,6 +47,8 @@ const beat_graph_data = {
     imageRefs: {},
     beat: {},
     __mapIndex: {},
+    forceMovie: { value: false },
+    forceImage: { value: false },
     preprocessor: {
       agent: imagePreprocessAgent,
       inputs: {
@@ -64,7 +66,7 @@ const beat_graph_data = {
         context: ":context",
         beat: ":beat",
         index: ":__mapIndex",
-        onComplete: ":preprocessor",
+        onComplete: [":preprocessor"],
       },
     },
     htmlImageAgent: {
@@ -78,10 +80,13 @@ const beat_graph_data = {
           model: ":htmlImageAgentInfo.model",
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
-        file: ":preprocessor.htmlPath", // only for fileCacheAgentFilter
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "html", // for fileCacheAgentFilter
+        cache: {
+          force: [":context.force", ":forceImage"],
+          file: ":preprocessor.htmlPath",
+          index: ":__mapIndex",
+          mulmoContext: ":context",
+          sessionType: "html",
+        },
       },
     },
     htmlReader: {
@@ -91,7 +96,7 @@ const beat_graph_data = {
         return { html };
       },
       inputs: {
-        onComplete: ":htmlImageAgent", // to wait for htmlImageAgent to finish
+        onComplete: [":htmlImageAgent"], // to wait for htmlImageAgent to finish
         htmlPath: ":preprocessor.htmlPath",
       },
       output: {
@@ -106,10 +111,7 @@ const beat_graph_data = {
       inputs: {
         htmlText: ":htmlReader.htmlText",
         canvasSize: ":context.presentationStyle.canvasSize",
-        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "image", // for fileCacheAgentFilter
+        file: ":preprocessor.imagePath",
       },
     },
     imageGenerator: {
@@ -119,11 +121,13 @@ const beat_graph_data = {
       inputs: {
         prompt: ":preprocessor.prompt",
         referenceImages: ":preprocessor.referenceImages",
-        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        force: ":context.force", // only for fileCacheAgentFilter
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "image", // for fileCacheAgentFilter
+        cache: {
+          force: [":context.force", ":forceImage"],
+          file: ":preprocessor.imagePath",
+          index: ":__mapIndex",
+          mulmoContext: ":context",
+          sessionType: "image",
+        },
         params: {
           model: ":preprocessor.imageParams.model",
           moderation: ":preprocessor.imageParams.moderation",
@@ -139,11 +143,13 @@ const beat_graph_data = {
         onComplete: [":imageGenerator", ":imagePlugin"], // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
         imagePath: ":preprocessor.referenceImageForMovie",
-        file: ":preprocessor.movieFile",
-        studio: ":context.studio", // for cache
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for cache
-        sessionType: "movie", // for cache
+        cache: {
+          force: [":context.force", ":forceMovie"],
+          file: ":preprocessor.movieFile",
+          index: ":__mapIndex",
+          sessionType: "movie",
+          mulmoContext: ":context",
+        },
         params: {
           model: ":context.presentationStyle.movieParams.model",
           duration: ":beat.duration",
@@ -158,7 +164,7 @@ const beat_graph_data = {
         return await extractImageFromMovie(namedInputs.movieFile, namedInputs.imageFile);
       },
       inputs: {
-        onComplete: ":movieGenerator", // to wait for movieGenerator to finish
+        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
@@ -269,7 +275,7 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
       {
         name: "fileCacheAgentFilter",
         agent: fileCacheAgentFilter,
-        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageGenerator", "htmlImageAgent"],
+        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent"],
       },
     ],
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),
@@ -360,6 +366,8 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   });
   graph.injectValue("__mapIndex", index);
   graph.injectValue("beat", context.studio.script.beats[index]);
+  graph.injectValue("forceMovie", false);
+  graph.injectValue("forceImage", false);
   if (callbacks) {
     callbacks.forEach((callback) => {
       graph.registerCallback(callback);

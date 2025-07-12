@@ -3,31 +3,14 @@ import path from "path";
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
 import OpenAI, { toFile } from "openai";
 import { defaultOpenAIImageModel } from "../utils/const.js";
-
-// NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
-type OpenAIImageSize = "1792x1024" | "1024x1792" | "1024x1024" | "1536x1024" | "1024x1536";
-type OpenAIModeration = "low" | "auto";
-type OpenAIImageOptions = {
-  model: string;
-  prompt: string;
-  n: number;
-  size: OpenAIImageSize;
-  moderation?: "low" | "auto";
-};
+import type { AgentBufferResult, OpenAIImageOptions, OpenAIImageAgentParams, OpenAIImageAgentInputs, OpenAIImageAgentConfig } from "../types/agent.js";
 
 // https://platform.openai.com/docs/guides/image-generation
-
-export const imageOpenaiAgent: AgentFunction<
-  {
-    // apiKey: string;
-    model: string; // dall-e-3 or gpt-image-1
-    moderation: OpenAIModeration | null | undefined;
-    canvasSize: { width: number; height: number };
-  },
-  { buffer: Buffer },
-  { prompt: string; referenceImages: string[] | null | undefined },
-  { baseURL?: string; apiKey?: string }
-> = async ({ namedInputs, params, config }) => {
+export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBufferResult, OpenAIImageAgentInputs, OpenAIImageAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { prompt, referenceImages } = namedInputs;
   const { moderation, canvasSize } = params;
   const { apiKey, baseURL } = { ...config };
