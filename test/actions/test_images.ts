@@ -145,5 +145,5 @@ test("test images", async () => {
 test("test beat images", async () => {
   // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
   const context = getContext();
-  await generateBeatImage(1, context);
+  await generateBeatImage({ index: 1, context });
 });

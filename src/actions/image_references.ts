@@ -9,8 +9,16 @@ import { MulmoStudioContext, MulmoStudioBeat, MulmoImagePromptMedia } from "../t
 
 import { imageGoogleAgent, imageOpenaiAgent } from "../agents/index.js";
 
+// public api
 // Application may call this function directly to generate reference image.
-export const generateReferenceImage = async (context: MulmoStudioContext, key: string, index: number, image: MulmoImagePromptMedia, force: boolean = false) => {
+export const generateReferenceImage = async (inputs: {
+  context: MulmoStudioContext;
+  key: string;
+  index: number;
+  image: MulmoImagePromptMedia;
+  force?: boolean;
+}) => {
+  const { context, key, index, image, force } = inputs;
   const imagePath = getReferenceImagePath(context, key, "png");
   // generate image
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
@@ -24,7 +32,7 @@ export const generateReferenceImage = async (context: MulmoStudioContext, key: s
         inputs: {
           prompt,
           cache: {
-            force: [force],
+            force: [context.force, force ?? false],
             file: imagePath,
             index,
             mulmoContext: context,
@@ -71,7 +79,7 @@ export const getImageRefs = async (context: MulmoStudioContext) => {
       .map(async (key, index) => {
         const image = images[key];
         if (image.type === "imagePrompt") {
-          imageRefs[key] = await generateReferenceImage(context, key, index, image, false);
+          imageRefs[key] = await generateReferenceImage({ context, key, index, image, force: false });
         } else if (image.type === "image") {
           if (image.source.kind === "path") {
             imageRefs[key] = MulmoStudioContextMethods.resolveAssetPath(context, image.source.path);

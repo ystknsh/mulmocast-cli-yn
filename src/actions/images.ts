@@ -343,6 +343,7 @@ const generateImages = async (context: MulmoStudioContext, settings?: Record<str
   return res.mergeResult as unknown as MulmoStudioContext;
 };
 
+// public api
 export const images = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]): Promise<MulmoStudioContext> => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
@@ -355,7 +356,16 @@ export const images = async (context: MulmoStudioContext, settings?: Record<stri
   }
 };
 
-export const generateBeatImage = async (index: number, context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
+// public api
+export const generateBeatImage = async (inputs: {
+  index: number;
+  context: MulmoStudioContext;
+  settings?: Record<string, string>;
+  callbacks?: CallbackFunction[];
+  forceMovie?: boolean;
+  forceImage?: boolean;
+}) => {
+  const { index, context, settings, callbacks, forceMovie, forceImage } = inputs;
   const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(beat_graph_data, imageAgents, options);
@@ -366,8 +376,8 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   });
   graph.injectValue("__mapIndex", index);
   graph.injectValue("beat", context.studio.script.beats[index]);
-  graph.injectValue("forceMovie", false);
-  graph.injectValue("forceImage", false);
+  graph.injectValue("forceMovie", forceMovie ?? false);
+  graph.injectValue("forceImage", forceImage ?? false);
   if (callbacks) {
     callbacks.forEach((callback) => {
       graph.registerCallback(callback);
