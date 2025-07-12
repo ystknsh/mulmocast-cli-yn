@@ -31,11 +31,11 @@ export type GoogleImageAgentConfig = {
 // movie
 //   inputs
 export type MovieAgentInputs = AgentPromptInputs & { imagePath?: string };
-// params
+//   params
 export type GoogleMovieAgentParams = ImageAgentParams & { duration?: number };
 export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number };
 
-//config
+//   config
 export type GoogleMovieAgentConfig = GoogleImageAgentConfig;
 export type ReplicateMovieAgentConfig = {
   apiKey?: string;
