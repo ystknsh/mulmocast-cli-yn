@@ -12,7 +12,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
   const { force, file, index, mulmoContext, sessionType } = context.namedInputs.cache;
 
   const shouldUseCache = async () => {
-    if (force) {
+    if (force && force.some((element) => element)) {
       return false;
     }
     try {

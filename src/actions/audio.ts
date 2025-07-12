@@ -109,7 +109,7 @@ const graph_tts: GraphData = {
       inputs: {
         text: ":preprocessor.text",
         cache: {
-          force: ":context.force",
+          force: [":context.force"],
           file: ":preprocessor.audioPath",
           index: ":__mapIndex",
           mulmoContext: ":context",

@@ -47,6 +47,8 @@ const beat_graph_data = {
     imageRefs: {},
     beat: {},
     __mapIndex: {},
+    forceMovie: { value: false },
+    forceImage: { value: false },
     preprocessor: {
       agent: imagePreprocessAgent,
       inputs: {
@@ -79,7 +81,7 @@ const beat_graph_data = {
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
         cache: {
-          force: ":context.force",
+          force: [":context.force", ":forceImage"],
           file: ":preprocessor.htmlPath",
           index: ":__mapIndex",
           mulmoContext: ":context",
@@ -120,7 +122,7 @@ const beat_graph_data = {
         prompt: ":preprocessor.prompt",
         referenceImages: ":preprocessor.referenceImages",
         cache: {
-          force: ":context.force",
+          force: [":context.force", ":forceImage"],
           file: ":preprocessor.imagePath",
           index: ":__mapIndex",
           mulmoContext: ":context",
@@ -142,6 +144,7 @@ const beat_graph_data = {
         prompt: ":beat.moviePrompt",
         imagePath: ":preprocessor.referenceImageForMovie",
         cache: {
+          force: [":context.force", ":forceMovie"],
           file: ":preprocessor.movieFile",
           index: ":__mapIndex",
           sessionType: "movie",
@@ -363,6 +366,8 @@ export const generateBeatImage = async (index: number, context: MulmoStudioConte
   });
   graph.injectValue("__mapIndex", index);
   graph.injectValue("beat", context.studio.script.beats[index]);
+  graph.injectValue("forceMovie", false);
+  graph.injectValue("forceImage", false);
   if (callbacks) {
     callbacks.forEach((callback) => {
       graph.registerCallback(callback);
