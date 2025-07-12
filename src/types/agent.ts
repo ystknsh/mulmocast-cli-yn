@@ -23,5 +23,7 @@ export type GoogleImageAgentConfig = {
   projectId?: string;
   token?: string;
 };
+export type GoogleMovieAgentInputs = AgentPromptInputs & { imagePath?: string };
+export type GoogleMovieAgentParams = ImageAgentParams & { duration?: number };
 
 // end of image agent

@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
-import type { AgentBufferResult, GoogleImageAgentConfig } from "../types/agent.js";
+import type { AgentBufferResult, GoogleImageAgentConfig, GoogleMovieAgentParams, GoogleMovieAgentInputs } from "../types/agent.js";
 
 async function generateMovie(
   projectId: string | undefined,
@@ -105,12 +105,11 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
   }
 };
 
-export const movieGoogleAgent: AgentFunction<
-  { model: string; canvasSize: { width: number; height: number }; duration?: number },
-  AgentBufferResult,
-  { prompt: string; imagePath?: string },
-  GoogleImageAgentConfig
-> = async ({ namedInputs, params, config }) => {
+export const movieGoogleAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferResult, GoogleMovieAgentInputs, GoogleImageAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";
