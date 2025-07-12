@@ -23,4 +23,5 @@ export type GoogleImageAgentConfig = {
   projectId?: string;
   token?: string;
 };
+
 // end of image agent

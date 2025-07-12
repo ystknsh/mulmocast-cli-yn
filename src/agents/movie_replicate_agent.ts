@@ -3,6 +3,8 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
+import type { AgentBufferResult } from "../types/agent.js";
+
 async function generateMovie(
   model: `${string}/${string}` | undefined,
   apiKey: string,
@@ -78,7 +80,7 @@ export type MovieReplicateConfig = {
 
 export const movieReplicateAgent: AgentFunction<
   { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number },
-  { buffer: Buffer },
+  AgentBufferResult,
   { prompt: string; imagePath?: string },
   MovieReplicateConfig
 > = async ({ namedInputs, params, config }) => {

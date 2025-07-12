@@ -2,6 +2,8 @@ import { readFileSync } from "fs";
 import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
+import type { AgentBufferResult, GoogleImageAgentConfig } from "../types/agent.js";
+
 async function generateMovie(
   projectId: string | undefined,
   model: string,
@@ -93,11 +95,6 @@ async function generateMovie(
   return undefined;
 }
 
-export type MovieGoogleConfig = {
-  projectId?: string;
-  token?: string;
-};
-
 export const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
   if (canvasSize.width > canvasSize.height) {
     return "16:9";
@@ -110,9 +107,9 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
 
 export const movieGoogleAgent: AgentFunction<
   { model: string; canvasSize: { width: number; height: number }; duration?: number },
-  { buffer: Buffer },
+  AgentBufferResult,
   { prompt: string; imagePath?: string },
-  MovieGoogleConfig
+  GoogleImageAgentConfig
 > = async ({ namedInputs, params, config }) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
