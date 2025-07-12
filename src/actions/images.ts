@@ -78,10 +78,13 @@ const beat_graph_data = {
           model: ":htmlImageAgentInfo.model",
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
-        file: ":preprocessor.htmlPath", // only for fileCacheAgentFilter
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "html", // for fileCacheAgentFilter
+        file: ":preprocessor.htmlPath", // for fileCacheAgentFilter and agent
+        cache: {
+          index: ":__mapIndex",
+          force: ":context.force",
+          mulmoContext: ":context",
+          sessionType: "html",
+        },
       },
     },
     htmlReader: {
@@ -106,10 +109,7 @@ const beat_graph_data = {
       inputs: {
         htmlText: ":htmlReader.htmlText",
         canvasSize: ":context.presentationStyle.canvasSize",
-        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "image", // for fileCacheAgentFilter
+        file: ":preprocessor.imagePath",
       },
     },
     imageGenerator: {
@@ -119,11 +119,13 @@ const beat_graph_data = {
       inputs: {
         prompt: ":preprocessor.prompt",
         referenceImages: ":preprocessor.referenceImages",
-        file: ":preprocessor.imagePath", // only for fileCacheAgentFilter
-        force: ":context.force", // only for fileCacheAgentFilter
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for fileCacheAgentFilter
-        sessionType: "image", // for fileCacheAgentFilter
+        file: ":preprocessor.imagePath", // for fileCacheAgentFilter and agent
+        cache: {
+          index: ":__mapIndex",
+          force: ":context.force",
+          mulmoContext: ":context",
+          sessionType: "image",
+        },
         params: {
           model: ":preprocessor.imageParams.model",
           moderation: ":preprocessor.imageParams.moderation",
@@ -140,10 +142,11 @@ const beat_graph_data = {
         prompt: ":beat.moviePrompt",
         imagePath: ":preprocessor.referenceImageForMovie",
         file: ":preprocessor.movieFile",
-        studio: ":context.studio", // for cache
-        mulmoContext: ":context", // for fileCacheAgentFilter
-        index: ":__mapIndex", // for cache
-        sessionType: "movie", // for cache
+        cache: {
+          index: ":__mapIndex",
+          sessionType: "movie",
+          mulmoContext: ":context",
+        },
         params: {
           model: ":context.presentationStyle.movieParams.model",
           duration: ":beat.duration",
