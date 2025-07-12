@@ -1,7 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { getAspectRatio } from "./movie_google_agent.js";
-import type { AgentBufferResult, AgentPromptInputs, ImageAgentParams, GoogleImageAgentConfig } from "../types/agent.js";
+import type { AgentBufferResult, ImageAgentInputs, ImageAgentParams, GoogleImageAgentConfig } from "../types/agent.js";
 
 type PredictionResponse = {
   predictions?: {
@@ -69,7 +69,7 @@ async function generateImage(
   }
 }
 
-export const imageGoogleAgent: AgentFunction<ImageAgentParams, AgentBufferResult, AgentPromptInputs, GoogleImageAgentConfig> = async ({
+export const imageGoogleAgent: AgentFunction<ImageAgentParams, AgentBufferResult, ImageAgentInputs, GoogleImageAgentConfig> = async ({
   namedInputs,
   params,
   config,

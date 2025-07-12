@@ -14,16 +14,31 @@ export type OpenAIImageOptions = {
 export type AgentBufferResult = { buffer: Buffer };
 export type AgentPromptInputs = { prompt: string };
 
+// image
+//   inputs
+export type ImageAgentInputs = AgentPromptInputs;
+export type OpenAIImageAgentInputs = AgentPromptInputs & { referenceImages: string[] | null | undefined };
+//   params
 export type ImageAgentParams = { model: string; canvasSize: { width: number; height: number } };
 export type OpenAIImageAgentParams = ImageAgentParams & { moderation: OpenAIImageModeration | null | undefined };
+//   config
 export type OpenAIImageAgentConfig = { baseURL?: string; apiKey?: string };
-export type OpenAIImageAgentInputs = AgentPromptInputs & { referenceImages: string[] | null | undefined };
-
 export type GoogleImageAgentConfig = {
   projectId?: string;
   token?: string;
 };
-export type GoogleMovieAgentInputs = AgentPromptInputs & { imagePath?: string };
+
+// movie
+//   inputs
+export type MovieAgentInputs = AgentPromptInputs & { imagePath?: string };
+// params
 export type GoogleMovieAgentParams = ImageAgentParams & { duration?: number };
+export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number };
+
+//config
+export type GoogleMovieAgentConfig = GoogleImageAgentConfig;
+export type ReplicateMovieAgentConfig = {
+  apiKey?: string;
+};
 
 // end of image agent
