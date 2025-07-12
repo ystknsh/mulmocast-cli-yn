@@ -32,7 +32,7 @@ export const generateReferenceImage = async (inputs: {
         inputs: {
           prompt,
           cache: {
-            force: [force ?? false],
+            force: [context.force, force ?? false],
             file: imagePath,
             index,
             mulmoContext: context,
