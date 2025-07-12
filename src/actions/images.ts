@@ -78,10 +78,10 @@ const beat_graph_data = {
           model: ":htmlImageAgentInfo.model",
           max_tokens: ":htmlImageAgentInfo.max_tokens",
         },
-        file: ":preprocessor.htmlPath", // for fileCacheAgentFilter and agent
         cache: {
-          index: ":__mapIndex",
           force: ":context.force",
+          file: ":preprocessor.htmlPath",
+          index: ":__mapIndex",
           mulmoContext: ":context",
           sessionType: "html",
         },
@@ -119,10 +119,10 @@ const beat_graph_data = {
       inputs: {
         prompt: ":preprocessor.prompt",
         referenceImages: ":preprocessor.referenceImages",
-        file: ":preprocessor.imagePath", // for fileCacheAgentFilter and agent
         cache: {
-          index: ":__mapIndex",
           force: ":context.force",
+          file: ":preprocessor.imagePath",
+          index: ":__mapIndex",
           mulmoContext: ":context",
           sessionType: "image",
         },
@@ -141,8 +141,8 @@ const beat_graph_data = {
         onComplete: [":imageGenerator", ":imagePlugin"], // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
         imagePath: ":preprocessor.referenceImageForMovie",
-        file: ":preprocessor.movieFile",
         cache: {
+          file: ":preprocessor.movieFile",
           index: ":__mapIndex",
           sessionType: "movie",
           mulmoContext: ":context",

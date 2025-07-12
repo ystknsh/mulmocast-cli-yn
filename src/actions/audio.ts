@@ -108,9 +108,9 @@ const graph_tts: GraphData = {
       agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":preprocessor.text",
-        file: ":preprocessor.audioPath",
         cache: {
           force: ":context.force",
+          file: ":preprocessor.audioPath",
           index: ":__mapIndex",
           mulmoContext: ":context",
           sessionType: "audio",
