@@ -362,8 +362,8 @@ export const generateBeatImage = async (inputs: {
   context: MulmoStudioContext;
   settings?: Record<string, string>;
   callbacks?: CallbackFunction[];
-  forceMovie: boolean;
-  forceImage: boolean;
+  forceMovie?: boolean;
+  forceImage?: boolean;
 }) => {
   const { index, context, settings, callbacks, forceMovie, forceImage } = inputs;
   const options = await graphOption(context, settings);

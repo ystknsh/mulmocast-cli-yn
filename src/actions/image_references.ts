@@ -16,7 +16,7 @@ export const generateReferenceImage = async (inputs: {
   key: string;
   index: number;
   image: MulmoImagePromptMedia;
-  force: boolean;
+  force?: boolean;
 }) => {
   const { context, key, index, image, force } = inputs;
   const imagePath = getReferenceImagePath(context, key, "png");
