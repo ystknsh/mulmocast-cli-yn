@@ -45,7 +45,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
   const referenceImages = MulmoBeatMethods.getImageReferenceForImageGenerator(beat, imageRefs);
 
   const prompt = imagePrompt(beat, imageAgentInfo.imageParams.style);
-  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, referenceImages, movieParams, moviePrompt: beat.moviePrompt };
+  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, referenceImages, movieParams };
 };
 
 export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
