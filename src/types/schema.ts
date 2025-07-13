@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { provider2ImageAgent } from "../utils/provider2agent.js";
 
 export const langSchema = z.string();
 const URLStringSchema = z.string().url();
@@ -196,13 +197,13 @@ export const mulmoFillOptionSchema = z
   })
   .describe("How to handle aspect ratio differences between image and canvas");
 
-export const text2ImageProviderSchema = z.enum(["openai", "google"]).default("openai");
+export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent)).default("openai");
 
 // NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
 export const mulmoOpenAIImageModelSchema = z
   .object({
     provider: z.literal("openai"),
-    model: z.enum(["dall-e-3", "gpt-image-1"]).optional(),
+    model: z.enum(provider2ImageAgent["openai"].models).optional(),
   })
   .strict();
 
@@ -210,7 +211,7 @@ export const mulmoOpenAIImageModelSchema = z
 export const mulmoGoogleImageModelSchema = z
   .object({
     provider: z.literal("google"),
-    model: z.enum(["imagen-3.0-fast-generate-001", "imagen-3.0-generate-002", "imagen-3.0-capability-001"]).optional(),
+    model: z.enum(provider2ImageAgent["google"].models).optional(),
   })
   .strict();
 
