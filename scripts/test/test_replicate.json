@@ -4,6 +4,9 @@
     "provider": "replicate",
     "model": "bytedance/seedance-1-lite"
   },
+  "audioParams": {
+    "bgmVolume": 0
+  },
   "beats": [
     {
       "text": "movie with bytedance seedance-1-lite",
@@ -11,13 +14,13 @@
       "duration": 5
     },
     {
-      "text": "image gpt4-image and movie with bytedance seedance-1-lite",
+      "text": "start image with gpt4 and movie with bytedance seedance-1-lite",
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "duration": 5
     },
     {
-      "text": "image gpt4-image and movie with bytedance seedance-1-lite, no movie prompt",
+      "text": "start image with gpt4 and movie with bytedance seedance-1-lite, no movie prompt",
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": " ",
       "duration": 5
@@ -30,7 +33,7 @@
       }
     },
     {
-      "text": "image gpt4-image and movie with kwaivgi/kling-v1.6-pro",
+      "text": "start image with gpt4 and movie with kwaivgi/kling-v1.6-pro",
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "movieParams": {
@@ -38,7 +41,7 @@
       }
     },
     {
-      "text": "image gpt4-image and movie with kwaivgi/kling-v2.1",
+      "text": "start image with gpt4 and movie with kwaivgi/kling-v2.1",
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "movieParams": {
@@ -64,6 +67,14 @@
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "movieParams": {
         "model": "google/veo-3-fast"
+      }
+    },
+    {
+      "id": "seedance-1-pro",
+      "text": "movie with bytedance/seedance-1-pro",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "bytedance/seedance-1-pro"
       }
     }
   ]
