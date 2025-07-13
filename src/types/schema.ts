@@ -326,7 +326,7 @@ export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) 
 export const mulmoGoogleMovieModelSchema = z
   .object({
     provider: z.literal("google"),
-    model: z.enum(["veo-2.0-generate-001"]).optional(),
+    model: z.enum(provider2MovieAgent.google.models as [string, ...string[]]).optional(),
   })
   .strict();
 
@@ -334,18 +334,7 @@ export const mulmoGoogleMovieModelSchema = z
 export const mulmoReplicateMovieModelSchema = z
   .object({
     provider: z.literal("replicate"),
-    model: z
-      .enum([
-        "bytedance/seedance-1-lite",
-        "bytedance/seedance-1-pro",
-        "kwaivgi/kling-v1.6-pro",
-        "kwaivgi/kling-v2.1",
-        "google/veo-2",
-        "google/veo-3",
-        "google/veo-3-fast",
-        "minimax/video-01",
-      ])
-      .optional(),
+    model: z.enum(provider2MovieAgent.replicate.models as [string, ...string[]]).optional(),
   })
   .strict();
 
