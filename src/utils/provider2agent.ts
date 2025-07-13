@@ -24,7 +24,7 @@ export const provider2TTSAgent = {
 export const provider2ImageAgent = {
   openai: {
     agentName: "imageOpenaiAgent",
-    defaultModel: "dall-e-3",
+    defaultModel: "gpt-image-1",
     models: ["dall-e-3", "gpt-image-1"],
   },
   google: {
