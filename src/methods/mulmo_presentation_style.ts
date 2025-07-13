@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { userAssert, llmConfig } from "../utils/utils.js";
+import { userAssert } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
   MulmoBeat,
@@ -14,8 +14,7 @@ import {
   Text2ImageProvider,
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
-import { defaultOpenAIImageModel } from "../utils/const.js";
-import { provider2ImageAgent, provider2MovieAgent } from "../utils/provider2agent.js";
+import { provider2ImageAgent, provider2MovieAgent, provider2LLMAgent } from "../utils/provider2agent.js";
 
 const defaultTextSlideStyles = [
   '*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}',
@@ -82,43 +81,50 @@ export const MulmoPresentationStyleMethods = {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
     const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
-    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider);
+    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider) as keyof typeof provider2ImageAgent;
+    const agentInfo = provider2ImageAgent[provider];
+
+    // The default text2image model is gpt-image-1 from OpenAI, and to use it you must have an OpenAI account and have verified your identity. If this is not possible, please specify dall-e-3 as the model.
     const defaultImageParams: MulmoImageParams = {
       provider,
-      model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
+      model: agentInfo.defaultModel,
     };
 
     return {
-      agent: provider2ImageAgent[provider],
+      agent: agentInfo.agentName,
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
   // Determine movie agent based on provider
   getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
-    const movieProvider = presentationStyle.movieParams?.provider ?? "google";
-    return provider2MovieAgent[movieProvider];
+    const movieProvider = (presentationStyle.movieParams?.provider ?? "google") as keyof typeof provider2MovieAgent;
+    return provider2MovieAgent[movieProvider].agentName;
   },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {
+    /*
     if (presentationStyle.movieParams?.provider === "replicate") {
       return 4;
     }
+    */
     const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(presentationStyle);
     if (imageAgentInfo.imageParams.provider === "openai") {
       // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
       // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
       // gpt-image-1：3,000,000 TPM、150 images per minute
-      return imageAgentInfo.imageParams.model === defaultOpenAIImageModel ? 4 : 16;
+      if (imageAgentInfo.imageParams.model === provider2ImageAgent.openai.defaultModel) {
+        return 16;
+      }
     }
     return 4;
   },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
     const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
-    const defaultConfig = llmConfig[provider];
+    const defaultConfig = provider2LLMAgent[provider];
     const model = presentationStyle.htmlImageParams?.model ? presentationStyle.htmlImageParams?.model : defaultConfig.defaultModel;
 
     return {
       provider,
-      agent: defaultConfig.agent,
+      agent: defaultConfig.agentName,
       model,
       max_tokens: defaultConfig.max_tokens,
     };

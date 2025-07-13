@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
 import OpenAI, { toFile } from "openai";
-import { defaultOpenAIImageModel } from "../utils/const.js";
+import { provider2ImageAgent } from "../utils/provider2agent.js";
 import type { AgentBufferResult, OpenAIImageOptions, OpenAIImageAgentParams, OpenAIImageAgentInputs, OpenAIImageAgentConfig } from "../types/agent.js";
 
 // https://platform.openai.com/docs/guides/image-generation
@@ -14,7 +14,7 @@ export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBuffer
   const { prompt, referenceImages } = namedInputs;
   const { moderation, canvasSize } = params;
   const { apiKey, baseURL } = { ...config };
-  const model = params.model ?? defaultOpenAIImageModel;
+  const model = params.model ?? provider2ImageAgent["openai"].defaultModel;
   const openai = new OpenAI({ apiKey, baseURL });
   const size = (() => {
     if (model === "gpt-image-1") {
