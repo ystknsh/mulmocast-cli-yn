@@ -86,8 +86,13 @@ export const MulmoPresentationStyleMethods = {
       provider,
       model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
     };
+    const provider2ImageAgent = {
+      google: "imageGoogleAgent",
+      openai: "imageOpenaiAgent",
+    };
+
     return {
-      agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      agent: provider2ImageAgent[provider],
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },

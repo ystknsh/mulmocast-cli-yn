@@ -23,7 +23,7 @@ const vanillaAgents = agents.default ?? agents;
 
 // const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
 // const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
-const provider_to_agent = {
+const provider2TTSAgent = {
   nijivoice: "ttsNijivoiceAgent",
   openai: "ttsOpenaiAgent",
   google: "ttsGoogleAgent",
@@ -77,7 +77,7 @@ const preprocessor = (namedInputs: {
   const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {
-    ttsAgent: provider_to_agent[provider],
+    ttsAgent: provider2TTSAgent[provider],
     text,
     voiceId,
     speechOptions,
