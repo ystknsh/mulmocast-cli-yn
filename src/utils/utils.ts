@@ -1,33 +1,9 @@
 import * as crypto from "crypto";
-import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
-export const llm = ["openai", "anthropic", "gemini", "groq"] as const;
-
-export type LLM = (typeof llm)[number];
-
-export const llmConfig: Record<LLM, { agent: string; defaultModel: string; max_tokens: number }> = {
-  openai: {
-    agent: "openAIAgent",
-    defaultModel: "gpt-4o",
-    max_tokens: 8192,
-  },
-  anthropic: {
-    agent: "anthropicAgent",
-    defaultModel: "claude-3-7-sonnet-20250219",
-    max_tokens: 8192,
-  },
-  gemini: {
-    agent: "geminiAgent",
-    defaultModel: "gemini-1.5-flash",
-    max_tokens: 8192,
-  },
-  groq: {
-    agent: "groqAgent",
-    defaultModel: "llama3-8b-8192",
-    max_tokens: 4096,
-  },
-} as const;
+import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
+import { LLM, llmConfig, llm } from "./provider2agent.js";
+export { LLM, llmConfig, llm };
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
   const llmKey = _llm ?? "openai";

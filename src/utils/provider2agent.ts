@@ -42,3 +42,30 @@ export const provider2MovieAgent = {
     agentName: "movieGoogleAgent",
   },
 };
+
+// : Record<LLM, { agent: string; defaultModel: string; max_tokens: number }>
+export const llmConfig = {
+  openai: {
+    agent: "openAIAgent",
+    defaultModel: "gpt-4o",
+    max_tokens: 8192,
+  },
+  anthropic: {
+    agent: "anthropicAgent",
+    defaultModel: "claude-3-7-sonnet-20250219",
+    max_tokens: 8192,
+  },
+  gemini: {
+    agent: "geminiAgent",
+    defaultModel: "gemini-1.5-flash",
+    max_tokens: 8192,
+  },
+  groq: {
+    agent: "groqAgent",
+    defaultModel: "llama3-8b-8192",
+    max_tokens: 4096,
+  },
+} as const;
+
+export const llm = Object.keys(llmConfig) as (keyof typeof llmConfig)[];
+export type LLM = keyof typeof llmConfig;
