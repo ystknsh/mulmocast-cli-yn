@@ -5,9 +5,11 @@ export const provider2TTSAgent = {
   },
   openai: {
     agentName: "ttsOpenaiAgent",
+    hasLimitedConcurrency: false,
   },
   google: {
     agentName: "ttsGoogleAgent",
+    hasLimitedConcurrency: false,
   },
   elevenlabs: {
     agentName: "ttsElevenlabsAgent",
@@ -15,6 +17,7 @@ export const provider2TTSAgent = {
   },
   mock: {
     agentName: "mediaMockAgent",
+    hasLimitedConcurrency: false,
   },
 };
 
