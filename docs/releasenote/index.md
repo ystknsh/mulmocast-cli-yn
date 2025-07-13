@@ -1,5 +1,46 @@
 # RELEASE NOTE
 
+# v.0.1.3
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.3** introduces advanced character consistency features, template expansion, and significant system improvements for enhanced multimedia content creation.
+
+### New Features
+
+**Reference Images for Character Consistency**
+- Generate reference images directly from prompts to maintain consistent character appearance across multiple scenes ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.3/scripts/test/test_image_refs.json))
+- Support for multi-scene storytelling with unified character design
+
+**HTML Templates and Multi-Character Support**
+- New templates for HTML-based presentations and complex multi-character storytelling ([templates](https://github.com/receptron/mulmocast-cli/tree/0.1.3/assets/templates/))
+- Added 5 new template files: html.json, characters.json, image_refs.json, voice_over.json, and html.json (scripts)
+
+### Breaking Changes (Developers Only)
+
+**Image API Function Signatures Changed**
+- `generateBeatImage()` and `generateReferenceImage()` now use single object parameter instead of multiple positional parameters
+- **Before:** `generateBeatImage(index, context, settings, callbacks)`
+- **After:** `generateBeatImage({ index, context, settings, callbacks })`
+- Only affects library users, not CLI users
+
+### Creative Samples
+
+**New Story and Movie Examples**
+- "The Girl Who Listened" - Complete multimedia story with Studio Ghibli-style visuals ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.3/scripts/snakajima/girl_and_cat.json))
+- Japanese short animation movie sample with Replicate provider integration ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.3/scripts/snakajima/replicate_movie_sample.json))
+
+### Technical Improvements
+
+- **Enhanced Type Safety**: Added explicit type definitions to agent functions for better development experience
+- **Configuration Management**: Improved settings integration with environment variables
+- **Code Quality Enhancements**: Applied comprehensive linting rules and refactored image processing components
+- **Logging Improvements**: Reduced console noise during processing
+
+### System Updates
+- Updated core dependencies for better performance and stability
+
+This release focuses on character consistency, template expansion, and improved creative workflows for multimedia content creation.
+
 # v.0.1.2
 ## RELEASE NOTE
 
