@@ -28,6 +28,14 @@
       "movieParams": {
         "model": "minimax/video-01"
       }
+    },
+    {
+      "text": "image gpt4-image and movie with kwaivgi/kling-v1.6-pro",
+      "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "kwaivgi/kling-v1.6-pro"
+      }
     }
   ]
 }
