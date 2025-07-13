@@ -335,14 +335,14 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 };
 
 type ImageOptions = {
-  imageAgents: Record<string, unknown>,
+  imageAgents: Record<string, unknown>;
 };
 const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[], options?: ImageOptions) => {
-  const imageAgents = options?.imageAgents ?? {};
+  const optionImageAgents = options?.imageAgents ?? {};
   const injections = await prepareGenerateImages(context);
   const graphaiAgent = {
     ...defaultAgents,
-    ...imageAgents,
+    ...optionImageAgents,
   };
   const graph = new GraphAI(graph_data, graphaiAgent, await graphOption(context, settings));
   Object.keys(injections).forEach((key: string) => {
@@ -358,15 +358,18 @@ const generateImages = async (context: MulmoStudioContext, settings?: Record<str
 };
 
 // public api
-export const images = async (context: MulmoStudioContext, args?: {
-  settings?: Record<string, string>;
-  callbacks?: CallbackFunction[];
-  options?: ImageOptions;
-}): Promise<MulmoStudioContext> => {
+export const images = async (
+  context: MulmoStudioContext,
+  args?: {
+    settings?: Record<string, string>;
+    callbacks?: CallbackFunction[];
+    options?: ImageOptions;
+  },
+): Promise<MulmoStudioContext> => {
   const { settings, callbacks, options } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
-    const newContext = await generateImages(context, settings, callbacks);
+    const newContext = await generateImages(context, settings, callbacks, options);
     MulmoStudioContextMethods.setSessionState(context, "image", false);
     return newContext;
   } catch (error) {
