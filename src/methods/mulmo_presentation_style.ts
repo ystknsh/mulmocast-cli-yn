@@ -97,7 +97,7 @@ export const MulmoPresentationStyleMethods = {
   // Determine movie agent based on provider
   getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
     const movieProvider = presentationStyle.movieParams?.provider ?? "google";
-    return provider2MovieAgent[movieProvider];
+    return provider2MovieAgent[movieProvider].agentName;
   },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {
     if (presentationStyle.movieParams?.provider === "replicate") {

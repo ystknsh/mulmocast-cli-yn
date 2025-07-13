@@ -35,6 +35,10 @@ export const provider2ImageAgent = {
 };
 
 export const provider2MovieAgent = {
-  replicate: "movieReplicateAgent",
-  google: "movieGoogleAgent",
+  replicate: {
+    agentName: "movieReplicateAgent",
+  },
+  google: {
+    agentName: "movieGoogleAgent",
+  },
 };
