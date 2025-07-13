@@ -14,7 +14,6 @@ import {
   Text2ImageProvider,
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
-import { defaultOpenAIImageModel } from "../utils/const.js";
 import { provider2ImageAgent, provider2MovieAgent, provider2LLMAgent } from "../utils/provider2agent.js";
 
 const defaultTextSlideStyles = [
@@ -110,7 +109,7 @@ export const MulmoPresentationStyleMethods = {
       // NOTE: Here are the rate limits of OpenAI's text2image API (1token = 32x32 patch).
       // dall-e-3: 7,500 RPM、15 images per minute (4 images for max resolution)
       // gpt-image-1：3,000,000 TPM、150 images per minute
-      return imageAgentInfo.imageParams.model === defaultOpenAIImageModel ? 4 : 16;
+      return imageAgentInfo.imageParams.model === provider2ImageAgent.openai.defaultModel ? 16 : 4;
     }
     return 4;
   },
