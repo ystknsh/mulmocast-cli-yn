@@ -15,6 +15,7 @@ import {
 } from "../types/index.js";
 import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
 import { defaultOpenAIImageModel } from "../utils/const.js";
+import { provider2ImageAgent, provider2MovieAgent } from "../utils/provider2agent.js";
 
 const defaultTextSlideStyles = [
   '*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}',
@@ -86,21 +87,16 @@ export const MulmoPresentationStyleMethods = {
       provider,
       model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
     };
+
     return {
-      agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      agent: provider2ImageAgent[provider],
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
   // Determine movie agent based on provider
   getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
     const movieProvider = presentationStyle.movieParams?.provider ?? "google";
-    switch (movieProvider) {
-      case "replicate":
-        return "movieReplicateAgent";
-      case "google":
-      default:
-        return "movieGoogleAgent";
-    }
+    return provider2MovieAgent[movieProvider];
   },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {
     if (presentationStyle.movieParams?.provider === "replicate") {
