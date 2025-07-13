@@ -1,9 +1,21 @@
 export const provider2TTSAgent = {
-  nijivoice: "ttsNijivoiceAgent",
-  openai: "ttsOpenaiAgent",
-  google: "ttsGoogleAgent",
-  elevenlabs: "ttsElevenlabsAgent",
-  mock: "mediaMockAgent",
+  nijivoice: {
+    agentName: "ttsNijivoiceAgent",
+    hasLimitedConcurrency: true,
+  },
+  openai: {
+    agentName: "ttsOpenaiAgent",
+  },
+  google: {
+    agentName: "ttsGoogleAgent",
+  },
+  elevenlabs: {
+    agentName: "ttsElevenlabsAgent",
+    hasLimitedConcurrency: true,
+  },
+  mock: {
+    agentName: "mediaMockAgent",
+  },
 };
 
 export const provider2ImageAgent = {

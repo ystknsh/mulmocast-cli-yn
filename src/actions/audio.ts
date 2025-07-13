@@ -68,7 +68,7 @@ const preprocessor = (namedInputs: {
   const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {
-    ttsAgent: provider2TTSAgent[provider],
+    ttsAgent: provider2TTSAgent[provider].agentName,
     text,
     voiceId,
     speechOptions,
@@ -199,7 +199,7 @@ const getConcurrency = (context: MulmoStudioContext) => {
   // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
   const hasLimitedConcurrencyProvider = Object.values(context.presentationStyle.speechParams.speakers).some((speaker) => {
     const provider = speaker.provider ?? context.presentationStyle.speechParams.provider;
-    return provider === "nijivoice" || provider === "elevenlabs";
+    return provider2TTSAgent[provider].hasLimitedConcurrency;
   });
   return hasLimitedConcurrencyProvider ? 1 : 8;
 };
