@@ -34,7 +34,7 @@ async function generateMovie(
   if (imagePath) {
     const buffer = readFileSync(imagePath);
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-    if (model === "kwaivgi/kling-v2.1") {
+    if (model === "kwaivgi/kling-v2.1" || model === "kwaivgi/kling-v1.6-pro") {
       input.start_image = base64Image;
     } else {
       input.image = base64Image;
