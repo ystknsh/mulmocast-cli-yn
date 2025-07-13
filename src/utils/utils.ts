@@ -2,8 +2,9 @@ import * as crypto from "crypto";
 import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
 import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
-import { LLM, provider2LLMAgent, llm } from "./provider2agent.js";
-export { LLM, provider2LLMAgent, llm };
+import { provider2LLMAgent, llm } from "./provider2agent.js";
+import type { LLM } from "./provider2agent.js";
+export { LLM, llm };
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
   const llmKey = _llm ?? "openai";
