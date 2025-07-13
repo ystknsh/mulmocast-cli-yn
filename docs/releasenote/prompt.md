@@ -1,8 +1,8 @@
 # プロンプト
 
 **バージョン指定**（毎回ここを変更）：
-- [VERSION] = v0.1.2
-- [PREVIOUS_VERSION] = v0.1.1
+- [VERSION] = v0.1.3
+- [PREVIOUS_VERSION] = v0.1.2
 
 ---
 
@@ -153,6 +153,7 @@ GitHub 向けリリースノートを作成してください。
 
 **基本セクション構成**：
 - **New Features**: 真の新機能のみ（新しいコマンド、パラメータ、ユーザーが使える機能）
+- **Breaking Changes**: 既存APIの変更など、ユーザーのコード修正が必要な変更（該当する場合）
 - **Technical Improvements** または **System Improvements**: 内部改善、リファクタリング、パフォーマンス向上、依存関係更新
 - **Bug Fixes** または **Error Handling**: バグ修正、エラーハンドリング改善（該当するものがある場合）
 - **Samples & Templates**: サンプルスクリプト、テンプレート、使用例の追加
@@ -184,6 +185,7 @@ GitHub 向けリリースノートを作成してください。
 **リリースノートの品質確認**：
 - [ ] 新機能に適切なサンプルファイルやドキュメントのリンクを追加したか
 - [ ] リンク先ファイルの内容を確認し、機能との関連性を検証したか
+- [ ] すべてのリンクがGitHubの完全URL（https://github.com/receptron/mulmocast-cli/blob/バージョン/パス）形式になっているか
 - [ ] 開発者向け・クリエイター向けの4種類のリリースノートを作成したか
 - [ ] GitHub向けリリースノートをindex.mdに追加したか
 - [ ] 文量と詳細レベルがv0.0.17.mdを参考にして適切か
@@ -201,9 +203,30 @@ GitHub 向けリリースノートを作成してください。
 
 ## 今回のリリースに含まれる Pull Request
 ## What's Changed
-* update packages by @isamu in https://github.com/receptron/mulmocast-cli/pull/625
-* htmlPrompt: Cache html by @snakajima in https://github.com/receptron/mulmocast-cli/pull/626
-* udpate packages by @isamu in https://github.com/receptron/mulmocast-cli/pull/627
+* update release note  by @ystknsh in https://github.com/receptron/mulmocast-cli/pull/631
+* update release note by @ystknsh in https://github.com/receptron/mulmocast-cli/pull/632
+* add release note v0.1.1 to v0.1.2 and update prompt for release note by @ystknsh in https://github.com/receptron/mulmocast-cli/pull/629
+* image generation of reference images by @snakajima in https://github.com/receptron/mulmocast-cli/pull/633
+* add types to agents by @isamu in https://github.com/receptron/mulmocast-cli/pull/634
+* Settings and env to config by @isamu in https://github.com/receptron/mulmocast-cli/pull/635
+* add lint rule by @isamu in https://github.com/receptron/mulmocast-cli/pull/636
+* fix fix_shorthand by @isamu in https://github.com/receptron/mulmocast-cli/pull/637
+* Fix reassign by @isamu in https://github.com/receptron/mulmocast-cli/pull/638
+* add sonarjs by @isamu in https://github.com/receptron/mulmocast-cli/pull/639
+* fix no-nested-conditional by @isamu in https://github.com/receptron/mulmocast-cli/pull/640
+* fix no-ignored-exceptions by @isamu in https://github.com/receptron/mulmocast-cli/pull/641
+* Html template and multi-character template by @snakajima in https://github.com/receptron/mulmocast-cli/pull/628
+* fix sonarjs/no-nested-conditional by @isamu in https://github.com/receptron/mulmocast-cli/pull/642
+* fix no-shadow by @isamu in https://github.com/receptron/mulmocast-cli/pull/643
+* girl and cat script: by @snakajima in https://github.com/receptron/mulmocast-cli/pull/644
+* refactor image action by @isamu in https://github.com/receptron/mulmocast-cli/pull/645
+* fix: remove noisy logs by @isamu in https://github.com/receptron/mulmocast-cli/pull/646
+* a simple movie sample by @snakajima in https://github.com/receptron/mulmocast-cli/pull/648
+* Refactor image action2 by @isamu in https://github.com/receptron/mulmocast-cli/pull/647
+* Refactor image ref by @isamu in https://github.com/receptron/mulmocast-cli/pull/649
+* Image update by @isamu in https://github.com/receptron/mulmocast-cli/pull/650
+* update by @isamu in https://github.com/receptron/mulmocast-cli/pull/652
+* update public image api by @isamu in https://github.com/receptron/mulmocast-cli/pull/651
 
 +**Full Changelog**: https://github.com/receptron/mulmocast-cli/compare/[PREVIOUS_VERSION]...[VERSION]
 
