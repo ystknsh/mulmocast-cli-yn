@@ -46,22 +46,22 @@ export const provider2MovieAgent = {
 // : Record<LLM, { agent: string; defaultModel: string; max_tokens: number }>
 export const provider2LLMAgent = {
   openai: {
-    agent: "openAIAgent",
+    agentName: "openAIAgent",
     defaultModel: "gpt-4o",
     max_tokens: 8192,
   },
   anthropic: {
-    agent: "anthropicAgent",
+    agentName: "anthropicAgent",
     defaultModel: "claude-3-7-sonnet-20250219",
     max_tokens: 8192,
   },
   gemini: {
-    agent: "geminiAgent",
+    agentName: "geminiAgent",
     defaultModel: "gemini-1.5-flash",
     max_tokens: 8192,
   },
   groq: {
-    agent: "groqAgent",
+    agentName: "groqAgent",
     defaultModel: "llama3-8b-8192",
     max_tokens: 4096,
   },

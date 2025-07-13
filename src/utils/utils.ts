@@ -8,7 +8,7 @@ export { LLM, llm };
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
   const llmKey = _llm ?? "openai";
-  const agent = provider2LLMAgent[llmKey]?.agent ?? provider2LLMAgent.openai.agent;
+  const agent = provider2LLMAgent[llmKey]?.agentName ?? provider2LLMAgent.openai.agentName;
   const model = _model ?? provider2LLMAgent[llmKey]?.defaultModel ?? provider2LLMAgent.openai.defaultModel;
   const max_tokens = provider2LLMAgent[llmKey]?.max_tokens ?? provider2LLMAgent.openai.max_tokens;
 

@@ -119,7 +119,7 @@ export const MulmoPresentationStyleMethods = {
 
     return {
       provider,
-      agent: defaultConfig.agent,
+      agent: defaultConfig.agentName,
       model,
       max_tokens: defaultConfig.max_tokens,
     };
