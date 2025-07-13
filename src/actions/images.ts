@@ -4,7 +4,7 @@ import { GraphAI, GraphAILogger, TaskManager } from "graphai";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
 import { GoogleAuth } from "google-auth-library";
 
-import * as agents from "@graphai/vanilla";
+import * as vanilla from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
 
@@ -22,13 +22,20 @@ import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
 import { getImageRefs } from "./image_references.js";
 import { imagePreprocessAgent, imagePluginAgent, htmlImageGeneratorAgent } from "./image_agents.js";
 
-const vanillaAgents = agents.default ?? agents;
+const vanillaAgents = vanilla.default ?? vanilla;
+
 const imageAgents = {
-  ...vanillaAgents,
   imageGoogleAgent,
+  imageOpenaiAgent,
+};
+const movieAgents = {
   movieGoogleAgent,
   movieReplicateAgent,
-  imageOpenaiAgent,
+};
+const defaultAgents = {
+  ...vanillaAgents,
+  ...imageAgents,
+  ...movieAgents,
   mediaMockAgent,
   fileWriteAgent,
   openAIAgent,
@@ -327,10 +334,17 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   return injections;
 };
 
-const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
-  const options = await graphOption(context, settings);
+type ImageOptions = {
+  imageAgents: Record<string, unknown>,
+};
+const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[], options?: ImageOptions) => {
+  const imageAgents = options?.imageAgents ?? {};
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(graph_data, imageAgents, options);
+  const graphaiAgent = {
+    ...defaultAgents,
+    ...imageAgents,
+  };
+  const graph = new GraphAI(graph_data, graphaiAgent, await graphOption(context, settings));
   Object.keys(injections).forEach((key: string) => {
     graph.injectValue(key, injections[key]);
   });
@@ -344,7 +358,12 @@ const generateImages = async (context: MulmoStudioContext, settings?: Record<str
 };
 
 // public api
-export const images = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]): Promise<MulmoStudioContext> => {
+export const images = async (context: MulmoStudioContext, args?: {
+  settings?: Record<string, string>;
+  callbacks?: CallbackFunction[];
+  options?: ImageOptions;
+}): Promise<MulmoStudioContext> => {
+  const { settings, callbacks, options } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
     const newContext = await generateImages(context, settings, callbacks);
@@ -368,7 +387,7 @@ export const generateBeatImage = async (inputs: {
   const { index, context, settings, callbacks, forceMovie, forceImage } = inputs;
   const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
-  const graph = new GraphAI(beat_graph_data, imageAgents, options);
+  const graph = new GraphAI(beat_graph_data, defaultAgents, options);
   Object.keys(injections).forEach((key: string) => {
     if ("outputStudioFilePath" !== key) {
       graph.injectValue(key, injections[key]);
