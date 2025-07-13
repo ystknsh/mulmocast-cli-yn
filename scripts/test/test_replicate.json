@@ -44,6 +44,20 @@
       "movieParams": {
         "model": "kwaivgi/kling-v2.1"
       }
+    },
+    {
+      "text": "movie with google/veo-2",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "google/veo-2"
+      }
+    },
+    {
+      "text": "movie with google/veo-3",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "google/veo-3"
+      }
     }
   ]
 }
