@@ -1,6 +1,7 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { getAspectRatio } from "./movie_google_agent.js";
+import { provider2ImageAgent } from "../utils/provider2agent.js";
 import type { AgentBufferResult, ImageAgentInputs, ImageAgentParams, GoogleImageAgentConfig } from "../types/agent.js";
 
 type PredictionResponse = {
@@ -76,8 +77,7 @@ export const imageGoogleAgent: AgentFunction<ImageAgentParams, AgentBufferResult
 }) => {
   const { prompt } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
-  const model = params.model ?? "imagen-3.0-fast-generate-001";
-  //const projectId = process.env.GOOGLE_PROJECT_ID; // Your Google Cloud Project ID
+  const model = params.model ?? provider2ImageAgent["google"].defaultModel;
   const projectId = config?.projectId;
   const token = config?.token;
 

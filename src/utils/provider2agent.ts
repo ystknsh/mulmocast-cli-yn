@@ -24,9 +24,11 @@ export const provider2TTSAgent = {
 export const provider2ImageAgent = {
   google: {
     agentName: "imageGoogleAgent",
+    defaultModel: "imagen-3.0-fast-generate-001",
   },
   openai: {
     agentName: "imageOpenaiAgent",
+    defaultModel: "dall-e-3",
   },
 };
 

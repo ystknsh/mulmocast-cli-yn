@@ -83,13 +83,14 @@ export const MulmoPresentationStyleMethods = {
     // provider and model appropriately.
     const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
     const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider);
+    const agentInfo = provider2ImageAgent[provider];
     const defaultImageParams: MulmoImageParams = {
       provider,
-      model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
+      model: agentInfo.defaultModel,
     };
 
     return {
-      agent: provider2ImageAgent[provider].agentName,
+      agent: agentInfo.agentName,
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
