@@ -89,7 +89,7 @@ export const MulmoPresentationStyleMethods = {
     };
 
     return {
-      agent: provider2ImageAgent[provider],
+      agent: provider2ImageAgent[provider].agentName,
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },

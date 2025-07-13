@@ -22,8 +22,12 @@ export const provider2TTSAgent = {
 };
 
 export const provider2ImageAgent = {
-  google: "imageGoogleAgent",
-  openai: "imageOpenaiAgent",
+  google: {
+    agentName: "imageGoogleAgent",
+  },
+  openai: {
+    agentName: "imageOpenaiAgent",
+  },
 };
 
 export const provider2MovieAgent = {
