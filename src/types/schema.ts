@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { provider2ImageAgent } from "../utils/provider2agent.js";
+import { provider2ImageAgent, provider2MovieAgent } from "../utils/provider2agent.js";
 
 export const langSchema = z.string();
 const URLStringSchema = z.string().url();
@@ -320,7 +320,7 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2HtmlImageProviderSchema = z.enum(["openai", "anthropic"]).default("openai");
-export const text2MovieProviderSchema = z.enum(["google", "replicate"]).default("google");
+export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent)).default("google");
 
 // NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
 export const mulmoGoogleMovieModelSchema = z
