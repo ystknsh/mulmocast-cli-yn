@@ -15,10 +15,6 @@ export const provider2TTSAgent = {
     agentName: "ttsElevenlabsAgent",
     hasLimitedConcurrency: true,
   },
-  mock: {
-    agentName: "mediaMockAgent",
-    hasLimitedConcurrency: false,
-  },
 };
 
 export const provider2ImageAgent = {
@@ -37,9 +33,20 @@ export const provider2ImageAgent = {
 export const provider2MovieAgent = {
   replicate: {
     agentName: "movieReplicateAgent",
+    models: [
+      "bytedance/seedance-1-lite",
+      "bytedance/seedance-1-pro",
+      "kwaivgi/kling-v1.6-pro",
+      "kwaivgi/kling-v2.1",
+      "google/veo-2",
+      "google/veo-3",
+      "google/veo-3-fast",
+      "minimax/video-01",
+    ],
   },
   google: {
     agentName: "movieGoogleAgent",
+    models: ["veo-2.0-generate-001"],
   },
 };
 
@@ -69,3 +76,5 @@ export const provider2LLMAgent = {
 
 export const llm = Object.keys(provider2LLMAgent) as (keyof typeof provider2LLMAgent)[];
 export type LLM = keyof typeof provider2LLMAgent;
+
+export const htmlLLMProvider = ["openai", "anthropic"];
