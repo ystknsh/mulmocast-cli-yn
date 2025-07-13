@@ -16,20 +16,11 @@ import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
 import { text2hash, localizedText, settings2GraphAIConfig } from "../utils/utils.js";
+import { provider2TTSAgent } from "../utils/provider2agent.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 import { MulmoMediaSourceMethods } from "../methods/mulmo_media_source.js";
 
 const vanillaAgents = agents.default ?? agents;
-
-// const rion_takanashi_voice = "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0"; // たかなし りおん
-// const ben_carter_voice = "bc06c63f-fef6-43b6-92f7-67f919bd5dae"; // ベン・カーター
-const provider2TTSAgent = {
-  nijivoice: "ttsNijivoiceAgent",
-  openai: "ttsOpenaiAgent",
-  google: "ttsGoogleAgent",
-  elevenlabs: "ttsElevenlabsAgent",
-  mock: "mediaMockAgent",
-};
 
 const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: string): string | undefined => {
   if (beat.audio?.type === "audio") {
