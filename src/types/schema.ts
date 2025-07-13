@@ -333,7 +333,7 @@ export const mulmoGoogleMovieModelSchema = z
 export const mulmoReplicateMovieModelSchema = z
   .object({
     provider: z.literal("replicate"),
-    model: z.enum(["bytedance/seedance-1-lite", "kwaivgi/kling-v1.6-pro","kwaivgi/kling-v2.1", "google/veo-2", "google/veo-3", "minimax/video-01"]).optional(),
+    model: z.enum(["bytedance/seedance-1-lite", "kwaivgi/kling-v1.6-pro","kwaivgi/kling-v2.1", "google/veo-2", "google/veo-3", "google/veo-3-fast", "minimax/video-01"]).optional(),
   })
   .strict();
 

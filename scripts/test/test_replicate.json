@@ -58,6 +58,13 @@
       "movieParams": {
         "model": "google/veo-3"
       }
+    },
+    {
+      "text": "movie with google/veo-3-fast",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "google/veo-3-fast"
+      }
     }
   ]
 }
