@@ -9,17 +9,29 @@
   },
   "beats": [
     {
+      "text": "movie generations by various models",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "PROMPT: a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses"
+        }
+      }
+    },
+    {
+      "id": "seedance-1-lite",
       "text": "bytedance seedance-1-lite",
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "duration": 5
     },
     {
+      "id": "seedance-1-lite-gpt4-image",
       "text": "bytedance seedance-1-lite with gpt4-image",
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "duration": 5
     },
     {
+      "id": "seedance-1-lite-gpt4-image-no-movie-prompt",
       "text": "bytedance seedance-1-lite with gpt4-image, no movie prompt",
       "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "moviePrompt": " ",
