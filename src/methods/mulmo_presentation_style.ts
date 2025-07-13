@@ -98,14 +98,12 @@ export const MulmoPresentationStyleMethods = {
   },
   // Determine movie agent based on provider
   getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
+    const provider2MovieAgent = {
+      replicate: "movieReplicateAgent",
+      google: "movieGoogleAgent",
+    };
     const movieProvider = presentationStyle.movieParams?.provider ?? "google";
-    switch (movieProvider) {
-      case "replicate":
-        return "movieReplicateAgent";
-      case "google":
-      default:
-        return "movieGoogleAgent";
-    }
+    return provider2MovieAgent[movieProvider];
   },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {
     if (presentationStyle.movieParams?.provider === "replicate") {
