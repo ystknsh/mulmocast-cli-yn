@@ -2,14 +2,14 @@ import * as crypto from "crypto";
 import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
 import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
-import { LLM, llmConfig, llm } from "./provider2agent.js";
-export { LLM, llmConfig, llm };
+import { LLM, provider2LLMAgent, llm } from "./provider2agent.js";
+export { LLM, provider2LLMAgent, llm };
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
   const llmKey = _llm ?? "openai";
-  const agent = llmConfig[llmKey]?.agent ?? llmConfig.openai.agent;
-  const model = _model ?? llmConfig[llmKey]?.defaultModel ?? llmConfig.openai.defaultModel;
-  const max_tokens = llmConfig[llmKey]?.max_tokens ?? llmConfig.openai.max_tokens;
+  const agent = provider2LLMAgent[llmKey]?.agent ?? provider2LLMAgent.openai.agent;
+  const model = _model ?? provider2LLMAgent[llmKey]?.defaultModel ?? provider2LLMAgent.openai.defaultModel;
+  const max_tokens = provider2LLMAgent[llmKey]?.max_tokens ?? provider2LLMAgent.openai.max_tokens;
 
   return { agent, model, max_tokens };
 };

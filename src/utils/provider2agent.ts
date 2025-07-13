@@ -44,7 +44,7 @@ export const provider2MovieAgent = {
 };
 
 // : Record<LLM, { agent: string; defaultModel: string; max_tokens: number }>
-export const llmConfig = {
+export const provider2LLMAgent = {
   openai: {
     agent: "openAIAgent",
     defaultModel: "gpt-4o",
@@ -67,5 +67,5 @@ export const llmConfig = {
   },
 } as const;
 
-export const llm = Object.keys(llmConfig) as (keyof typeof llmConfig)[];
-export type LLM = keyof typeof llmConfig;
+export const llm = Object.keys(provider2LLMAgent) as (keyof typeof provider2LLMAgent)[];
+export type LLM = keyof typeof provider2LLMAgent;

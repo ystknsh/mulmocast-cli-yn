@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { userAssert, llmConfig } from "../utils/utils.js";
+import { userAssert, provider2LLMAgent } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
   MulmoBeat,
@@ -114,7 +114,7 @@ export const MulmoPresentationStyleMethods = {
   },
   getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
     const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
-    const defaultConfig = llmConfig[provider];
+    const defaultConfig = provider2LLMAgent[provider];
     const model = presentationStyle.htmlImageParams?.model ? presentationStyle.htmlImageParams?.model : defaultConfig.defaultModel;
 
     return {
