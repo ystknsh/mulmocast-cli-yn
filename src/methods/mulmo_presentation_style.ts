@@ -82,7 +82,7 @@ export const MulmoPresentationStyleMethods = {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
     const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
-    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider);
+    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider) as keyof typeof provider2ImageAgent;
     const agentInfo = provider2ImageAgent[provider];
     const defaultImageParams: MulmoImageParams = {
       provider,
@@ -96,7 +96,7 @@ export const MulmoPresentationStyleMethods = {
   },
   // Determine movie agent based on provider
   getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
-    const movieProvider = presentationStyle.movieParams?.provider ?? "google";
+    const movieProvider = (presentationStyle.movieParams?.provider ?? "google") as keyof typeof provider2MovieAgent;
     return provider2MovieAgent[movieProvider].agentName;
   },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {

@@ -197,13 +197,13 @@ export const mulmoFillOptionSchema = z
   })
   .describe("How to handle aspect ratio differences between image and canvas");
 
-export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent)).default("openai");
+export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent) as [string, ...string[]]).default("openai");
 
 // NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
 export const mulmoOpenAIImageModelSchema = z
   .object({
     provider: z.literal("openai"),
-    model: z.enum(provider2ImageAgent["openai"].models).optional(),
+    model: z.enum(provider2ImageAgent["openai"].models as [string, ...string[]]).optional(),
   })
   .strict();
 
@@ -211,7 +211,7 @@ export const mulmoOpenAIImageModelSchema = z
 export const mulmoGoogleImageModelSchema = z
   .object({
     provider: z.literal("google"),
-    model: z.enum(provider2ImageAgent["google"].models).optional(),
+    model: z.enum(provider2ImageAgent["google"].models as [string, ...string[]]).optional(),
   })
   .strict();
 
@@ -320,7 +320,7 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2HtmlImageProviderSchema = z.enum(["openai", "anthropic"]).default("openai");
-export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent)).default("google");
+export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default("google");
 
 // NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
 export const mulmoGoogleMovieModelSchema = z
