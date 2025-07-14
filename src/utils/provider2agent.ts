@@ -1,3 +1,11 @@
+export const defaultProviders = {
+  tts: "openai",
+  text2image: "openai",
+  text2movie: "google",
+  text2Html: "openai",
+  llm: "openai",
+};
+
 export const provider2TTSAgent = {
   nijivoice: {
     agentName: "ttsNijivoiceAgent",

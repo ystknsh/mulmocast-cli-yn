@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { provider2ImageAgent, provider2MovieAgent } from "../utils/provider2agent.js";
+import { htmlLLMProvider, provider2TTSAgent, provider2ImageAgent, provider2MovieAgent, defaultProviders } from "../utils/provider2agent.js";
 
 export const langSchema = z.string();
 const URLStringSchema = z.string().url();
@@ -27,7 +27,7 @@ export const speechOptionsSchema = z
 
 const speakerIdSchema = z.string();
 
-export const text2SpeechProviderSchema = z.enum(["openai", "nijivoice", "google", "elevenlabs"]).default("openai");
+export const text2SpeechProviderSchema = z.enum(Object.keys(provider2TTSAgent) as [string, ...string[]]).default(defaultProviders.tts);
 
 export const speakerDataSchema = z
   .object({
@@ -197,7 +197,7 @@ export const mulmoFillOptionSchema = z
   })
   .describe("How to handle aspect ratio differences between image and canvas");
 
-export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent) as [string, ...string[]]).default("openai");
+export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent) as [string, ...string[]]).default(defaultProviders.text2image);
 
 // NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
 export const mulmoOpenAIImageModelSchema = z
@@ -319,8 +319,8 @@ export const mulmoSpeechParamsSchema = z
   })
   .strict();
 
-export const text2HtmlImageProviderSchema = z.enum(["openai", "anthropic"]).default("openai");
-export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default("google");
+export const text2HtmlImageProviderSchema = z.enum(htmlLLMProvider as [string, ...string[]]).default(defaultProviders.text2Html);
+export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 
 // NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
 export const mulmoGoogleMovieModelSchema = z
