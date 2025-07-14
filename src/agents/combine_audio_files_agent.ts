@@ -167,7 +167,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         return;
       }
     }
-
+    
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
@@ -188,36 +188,36 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
             mediaDurations[idx].silenceDuration = groupBeatsDurations[iGroup] - remaining;
             return 0;
           }, audioDuration);
-        } else {
+        } else if (audioDuration > beatsTotalDuration) {
           // Last beat gets the rest of the audio.
-          if (audioDuration > beatsTotalDuration) {
-            groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
-          }
+          groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
         }
         beatDurations.push(...groupBeatsDurations);
-      } else {
-        // No spilled over audio.
-        assert(beatDurations.length === index, "beatDurations.length !== index");
-        // padding is the amount of audio padding specified in the script.
-        const padding = getPadding(context, beat, index);
-        // totalPadding is the amount of audio padding to be added to the audio file.
-        const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
-        const beatDuration = audioDuration + totalPadding;
-        beatDurations.push(beatDuration);
-        if (totalPadding > 0) {
-          mediaDurations[index].silenceDuration = totalPadding;
-        }
+        return;
       }
-    } else if (movieDuration > 0) {
+      // No spilled over audio.
+      assert(beatDurations.length === index, "beatDurations.length !== index");
+      // padding is the amount of audio padding specified in the script.
+      const padding = getPadding(context, beat, index);
+      // totalPadding is the amount of audio padding to be added to the audio file.
+      const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
+      const beatDuration = audioDuration + totalPadding;
+      beatDurations.push(beatDuration);
+      if (totalPadding > 0) {
+        mediaDurations[index].silenceDuration = totalPadding;
+      }
+      return;
+    }
+    if (movieDuration > 0) {
       // This beat has only a movie, not audio.
       beatDurations.push(movieDuration);
       mediaDurations[index].silenceDuration = movieDuration;
-    } else {
-      // The current beat has no audio, nor no spilled over audio
-      const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
-      beatDurations.push(beatDuration);
-      mediaDurations[index].silenceDuration = beatDuration;
+      return;
     }
+    // The current beat has no audio, nor no spilled over audio
+    const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
+    beatDurations.push(beatDuration);
+    mediaDurations[index].silenceDuration = beatDuration;
   });
   assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
 
