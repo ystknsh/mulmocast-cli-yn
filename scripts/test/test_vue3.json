@@ -7,6 +7,15 @@
   "audioParams": {
     "bgmVolume": 0
   },
+  "imageParams": {
+    "style": "<style>Photorealistic, Scematic</style>",
+    "images": {
+      "tomoya": {
+        "type": "imagePrompt",
+        "prompt": "A young Japanese hansome but shy man in early 20s with short black hair and brown eyes."
+      }
+    }
+  },
   "beats": [
     {
       "id": "opening",
