@@ -415,6 +415,7 @@ export const mulmoStudioBeatSchema = z
     audioDuration: z.number().optional(),
     movieDuration: z.number().optional(),
     silenceDuration: z.number().optional(),
+    hasMovieAudio: z.boolean().optional(),
     audioFile: z.string().optional(),
     imageFile: z.string().optional(), // path to the image
     movieFile: z.string().optional(), // path to the movie file

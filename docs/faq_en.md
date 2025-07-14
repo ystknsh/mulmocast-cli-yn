@@ -167,6 +167,56 @@ Speaker-specific settings take priority; if not specified, the global setting is
 **Environment variables setup**:
 When using each provider, set the corresponding API key in your `.env` file. Available providers and details can be found in [Configuration](../README.md#configuration).
 
+## API Configuration
+
+### Q: Can I change the baseURL?
+
+**A: Yes, you can change the baseURL for OpenAI-compatible services. This supports Azure OpenAI and custom endpoints.**
+
+```bash
+# Basic settings (fallback)
+OPENAI_BASE_URL=https://your-azure.openai.azure.com
+
+# Service-specific settings (priority)
+LLM_OPENAI_BASE_URL=https://your-azure.openai.azure.com
+TTS_OPENAI_BASE_URL=https://api.openai.com/v1
+IMAGE_OPENAI_BASE_URL=https://custom-image-endpoint.com/v1
+```
+
+### Q: Can I configure API keys separately for each service?
+
+**A: Yes, you can configure API keys individually for major services.**
+
+```bash
+# Basic settings (fallback)
+OPENAI_API_KEY=sk-general-key
+ANTHROPIC_API_TOKEN=your-claude-key
+REPLICATE_API_TOKEN=your-replicate-key
+
+# Service-specific settings (priority)
+LLM_OPENAI_API_KEY=sk-llm-key
+TTS_OPENAI_API_KEY=sk-tts-key
+IMAGE_OPENAI_API_KEY=sk-image-key
+LLM_ANTHROPIC_API_TOKEN=sk-claude-key
+MOVIE_REPLICATE_API_TOKEN=your-replicate-movie-key
+```
+
+**Prefix explanation**: Used for the following processes
+- **LLM_**: Text processing such as translation and script generation
+- **TTS_**: Audio generation
+- **IMAGE_**: Image generation
+- **MOVIE_**: Video generation
+
+**Priority**: Service-specific settings > General settings
+
+## Image Generation Configuration
+
+### Q: Can I switch image generation AI models and providers?
+
+**A: Yes, you can specify providers and models using imageParams.**
+
+For detailed configuration examples, see [test_images.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_images.json).
+
 ## Troubleshooting
 
 ### Q: Getting 429 error during image generation
