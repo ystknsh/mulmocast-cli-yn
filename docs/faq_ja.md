@@ -122,6 +122,12 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **注意**: `npm install -g mulmocast`でインストールした場合、スタイルファイルは含まれません。別途ダウンロードするか、独自に作成する必要があります。
 
+## 画像生成設定
+### Q. 画像生成AIのモデルやプロバイダーを切り替えられますか？
+**A. はい、⁠imageParams でプロバイダーやモデルを指定できます。**
+
+詳しい設定例は [test_images.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_images.json) を参考にしてください。
+
 ## 音声（TTS）設定
 
 ### Q: TTSエンジンを変更するにはどうすればよいですか？
