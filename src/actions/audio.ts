@@ -65,7 +65,7 @@ const preprocessor = (namedInputs: {
   const text = localizedText(beat, multiLingual, lang);
   const { voiceId, provider, speechOptions, model } = getAudioParam(presentationStyle, beat);
   const audioPath = getBeatAudioPath(text, context, beat, lang);
-  studioBeat.audioFile = audioPath; // TODO
+  studioBeat.audioFile = audioPath; // TODO: Passing by reference is difficult to maintain, so pass it using graphai inputs
   const needsTTS = !beat.audio && audioPath !== undefined;
 
   return {

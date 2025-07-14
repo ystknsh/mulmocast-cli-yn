@@ -85,7 +85,6 @@ export const settings2GraphAIConfig = (
     },
     ttsElevenlabsAgent: {
       apiKey: getKey("TTS", "ELEVENLABS_API_KEY"),
-      defaultModel: env?.["DEFAULT_ELEVENLABS_MODEL"],
     },
 
     // TODO

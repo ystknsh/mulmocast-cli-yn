@@ -1,5 +1,6 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
+import { provider2TTSAgent } from "../utils/provider2agent.js";
 
 export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, config }) => {
   const { text } = namedInputs;
@@ -10,16 +11,14 @@ export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, c
     throw new Error("ELEVENLABS_API_KEY environment variable is required");
   }
 
-  const defaultModel = config?.defaultModel ?? process.env.DEFAULT_ELEVENLABS_MODEL ?? "eleven_multilingual_v2";
-
   if (!voice) {
-    throw new Error("Voice ID is required");
+    throw new Error("ELEVENLABS Voice ID is required");
   }
 
   try {
     const requestBody = {
       text,
-      model_id: model ?? defaultModel,
+      model_id: model ?? provider2TTSAgent.elevenlabs.defaultModel,
       voice_settings: {
         stability: stability ?? 0.5,
         similarity_boost: similarityBoost ?? 0.75,
