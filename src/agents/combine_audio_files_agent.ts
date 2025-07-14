@@ -103,7 +103,13 @@ const getInputIds = (context: MulmoStudioContext, mediaDurations: MediaDuration[
   return inputIds;
 };
 
-const voiceOverProcess = (context: MulmoStudioContext, mediaDurations: MediaDuration[], movieDuration: number, beatDurations: number[], groupLength: number) => {
+const voiceOverProcess = (
+  context: MulmoStudioContext,
+  mediaDurations: MediaDuration[],
+  movieDuration: number,
+  beatDurations: number[],
+  groupLength: number,
+) => {
   return (remaining: number, idx: number, iGroup: number) => {
     const subBeatDurations = mediaDurations[idx];
     userAssert(
