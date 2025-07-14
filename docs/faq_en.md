@@ -209,6 +209,14 @@ MOVIE_REPLICATE_API_TOKEN=your-replicate-movie-key
 
 **Priority**: Service-specific settings > General settings
 
+## Image Generation Configuration
+
+### Q: Can I switch image generation AI models and providers?
+
+**A: Yes, you can specify providers and models using imageParams.**
+
+For detailed configuration examples, see [test_images.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_images.json).
+
 ## Troubleshooting
 
 ### Q: Getting 429 error during image generation
