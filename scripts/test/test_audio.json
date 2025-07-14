@@ -96,8 +96,10 @@
         "source": {
           "kind": "url",
           "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.mov"
-        },
-        "mixAudio": 0.2
+        }
+      },
+      "audioParams": {
+        "movieVolume": 0.2
       }
     },
     {
@@ -108,8 +110,10 @@
         "source": {
           "kind": "url",
           "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/test/pingpong.mov"
-        },
-        "mixAudio": 0.0
+        }
+      },
+      "audioParams": {
+        "movieVolume": 0.0
       }
     },
     {
