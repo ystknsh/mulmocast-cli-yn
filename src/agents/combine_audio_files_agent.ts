@@ -2,7 +2,13 @@ import { assert, GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
-import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import {
+  FfmpegContext,
+  FfmpegContextInit,
+  FfmpegContextGenerateOutput,
+  FfmpegContextInputFormattedAudio,
+  ffmpegGetMediaDuration,
+} from "../utils/ffmpeg_utils.js";
 import { userAssert } from "../utils/utils.js";
 
 const getMovieDuration = async (beat: MulmoBeat) => {
@@ -35,7 +41,14 @@ const getTotalPadding = (padding: number, movieDuration: number, audioDuration: 
   return padding;
 };
 
-const getMediaDurationsOfAllBeats = (context: MulmoStudioContext) => {
+type MediaDuration = {
+  movieDuration: number;
+  audioDuration: number;
+  hasMedia: boolean;
+  silenceDuration: number;
+  hasMovieAudio: boolean;
+};
+const getMediaDurationsOfAllBeats = (context: MulmoStudioContext): Promise<MediaDuration[]> => {
   return Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const beat = context.studio.script.beats[index];
@@ -72,6 +85,59 @@ const getGroupBeatDurations = (context: MulmoStudioContext, group: number[], aud
   return durations;
 };
 
+const getInputIds = (context: MulmoStudioContext, mediaDurations: MediaDuration[], ffmpegContext: FfmpegContext, silentIds: string[]) => {
+  const inputIds: string[] = [];
+  context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
+    const { silenceDuration } = mediaDurations[index];
+    const paddingId = `[padding_${index}]`;
+    if (studioBeat.audioFile) {
+      const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
+      inputIds.push(audioId);
+    }
+    if (silenceDuration > 0) {
+      const silentId = silentIds.pop();
+      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${silenceDuration}${paddingId}`);
+      inputIds.push(paddingId);
+    }
+  });
+  return inputIds;
+};
+
+const voiceOverProcess = (
+  context: MulmoStudioContext,
+  mediaDurations: MediaDuration[],
+  movieDuration: number,
+  beatDurations: number[],
+  groupLength: number,
+) => {
+  return (remaining: number, idx: number, iGroup: number) => {
+    const subBeatDurations = mediaDurations[idx];
+    userAssert(
+      subBeatDurations.audioDuration <= remaining,
+      `Duration Overflow: At index(${idx}) audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
+    );
+    if (iGroup === groupLength - 1) {
+      beatDurations.push(remaining);
+      subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
+      return 0;
+    }
+    const nextBeat = context.studio.script.beats[idx + 1];
+    assert(nextBeat.image?.type === "voice_over", "nextBeat.image.type !== voice_over");
+    const voiceStartAt = nextBeat.image?.startAt;
+    if (voiceStartAt) {
+      const remainingDuration = movieDuration - voiceStartAt;
+      const duration = remaining - remainingDuration;
+      userAssert(duration >= 0, `Invalid startAt: At index(${idx}), avaiable duration(${duration}) < 0`);
+      beatDurations.push(duration);
+      subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
+      userAssert(subBeatDurations.silenceDuration >= 0, `Duration Overwrap: At index(${idx}), silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
+      return remainingDuration;
+    }
+    beatDurations.push(subBeatDurations.audioDuration);
+    return remaining - subBeatDurations.audioDuration;
+  };
+};
+
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
@@ -97,32 +163,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         group.push(i);
       }
       if (group.length > 1) {
-        group.reduce((remaining, idx, iGroup) => {
-          const subBeatDurations = mediaDurations[idx];
-          userAssert(
-            subBeatDurations.audioDuration <= remaining,
-            `Duration Overflow: At index(${idx}) audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
-          );
-          if (iGroup === group.length - 1) {
-            beatDurations.push(remaining);
-            subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
-            return 0;
-          }
-          const nextBeat = context.studio.script.beats[idx + 1];
-          assert(nextBeat.image?.type === "voice_over", "nextBeat.image.type !== voice_over");
-          const voiceStartAt = nextBeat.image?.startAt;
-          if (voiceStartAt) {
-            const remainingDuration = movieDuration - voiceStartAt;
-            const duration = remaining - remainingDuration;
-            userAssert(duration >= 0, `Invalid startAt: At index(${idx}), avaiable duration(${duration}) < 0`);
-            beatDurations.push(duration);
-            subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
-            userAssert(subBeatDurations.silenceDuration >= 0, `Duration Overwrap: At index(${idx}), silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
-            return remainingDuration;
-          }
-          beatDurations.push(subBeatDurations.audioDuration);
-          return remaining - subBeatDurations.audioDuration;
-        }, movieDuration);
+        group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group.length), movieDuration);
         return;
       }
     }
@@ -187,21 +228,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
   }
 
-  const inputIds: string[] = [];
-
-  context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
-    const { silenceDuration } = mediaDurations[index];
-    const paddingId = `[padding_${index}]`;
-    if (studioBeat.audioFile) {
-      const audioId = FfmpegContextInputFormattedAudio(ffmpegContext, studioBeat.audioFile);
-      inputIds.push(audioId);
-    }
-    if (silenceDuration > 0) {
-      const silentId = silentIds.pop();
-      ffmpegContext.filterComplex.push(`${silentId}atrim=start=0:end=${silenceDuration}${paddingId}`);
-      inputIds.push(paddingId);
-    }
-  });
+  const inputIds = getInputIds(context, mediaDurations, ffmpegContext, silentIds);
 
   assert(silentIds.length === 0, "silentIds.length !== 0");
 
