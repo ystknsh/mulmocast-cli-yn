@@ -47,7 +47,7 @@ export const ttsNijivoiceAgent: AgentFunction<NijivoiceTTSAgentParams, AgentBuff
     if (voiceJson && voiceJson.generatedVoice && voiceJson.generatedVoice.audioFileDownloadUrl) {
       const audioRes = await fetch(voiceJson.generatedVoice.audioFileDownloadUrl);
       const buffer = Buffer.from(await audioRes.arrayBuffer());
-      return { buffer, generatedVoice: voiceJson.generatedVoice };
+      return { buffer };
     }
     if (suppressError) {
       return {
