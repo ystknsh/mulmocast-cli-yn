@@ -58,7 +58,6 @@ export default [
       "sonarjs/redundant-type-aliases": "off",
       "sonarjs/todo-tag": "off",
       "sonarjs/no-commented-code": "off",
-      "sonarjs/cognitive-complexity": "warn",
       "sonarjs/no-unused-vars": "off",
     },
     plugins: {

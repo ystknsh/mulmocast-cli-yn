@@ -138,6 +138,62 @@ const voiceOverProcess = (
   };
 };
 
+const getVoiceOverGroup = (context: MulmoStudioContext, index: number) => {
+  const group = [index];
+  for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
+    group.push(i);
+  }
+  return group;
+};
+
+const getSpillOverGroup = (context: MulmoStudioContext, mediaDurations: MediaDuration[], index: number) => {
+  const group = [index];
+  for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
+    group.push(i);
+  }
+  return group;
+};
+
+const spilledOverAudio = (context: MulmoStudioContext, group: number[], audioDuration: number, beatDurations: number[], mediaDurations: MediaDuration[]) => {
+  const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
+  // Yes, the current beat has spilled over audio.
+  const beatsTotalDuration = groupBeatsDurations.reduce((a, b) => a + b, 0);
+  if (beatsTotalDuration > audioDuration + 0.01) {
+    // 0.01 is a tolerance to avoid floating point precision issues
+    group.reduce((remaining, idx, iGroup) => {
+      if (remaining >= groupBeatsDurations[iGroup]) {
+        return remaining - groupBeatsDurations[iGroup];
+      }
+      mediaDurations[idx].silenceDuration = groupBeatsDurations[iGroup] - remaining;
+      return 0;
+    }, audioDuration);
+  } else if (audioDuration > beatsTotalDuration) {
+    // Last beat gets the rest of the audio.
+    groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
+  }
+  beatDurations.push(...groupBeatsDurations);
+};
+
+const noSpilledOverAudio = (
+  context: MulmoStudioContext,
+  beat: MulmoBeat,
+  index: number,
+  movieDuration: number,
+  audioDuration: number,
+  beatDurations: number[],
+  mediaDurations: MediaDuration[],
+) => {
+  // padding is the amount of audio padding specified in the script.
+  const padding = getPadding(context, beat, index);
+  // totalPadding is the amount of audio padding to be added to the audio file.
+  const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
+  const beatDuration = audioDuration + totalPadding;
+  beatDurations.push(beatDuration);
+  if (totalPadding > 0) {
+    mediaDurations[index].silenceDuration = totalPadding;
+  }
+};
+
 const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
   namedInputs,
 }) => {
@@ -158,11 +214,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     const { audioDuration, movieDuration } = mediaDurations[index];
     // Check if we are processing a voice-over beat.
     if (movieDuration > 0) {
-      const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
-        group.push(i);
-      }
+      const group = getVoiceOverGroup(context, index);
       if (group.length > 1) {
+        GraphAILogger.log(`Voice over group: ${group.length}`);
         group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group.length), movieDuration);
         return;
       }
@@ -171,41 +225,15 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
-      const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
-        group.push(i);
-      }
+      const group = getSpillOverGroup(context, mediaDurations, index);
       if (group.length > 1) {
-        const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
-        // Yes, the current beat has spilled over audio.
-        const beatsTotalDuration = groupBeatsDurations.reduce((a, b) => a + b, 0);
-        if (beatsTotalDuration > audioDuration + 0.01) {
-          // 0.01 is a tolerance to avoid floating point precision issues
-          group.reduce((remaining, idx, iGroup) => {
-            if (remaining >= groupBeatsDurations[iGroup]) {
-              return remaining - groupBeatsDurations[iGroup];
-            }
-            mediaDurations[idx].silenceDuration = groupBeatsDurations[iGroup] - remaining;
-            return 0;
-          }, audioDuration);
-        } else if (audioDuration > beatsTotalDuration) {
-          // Last beat gets the rest of the audio.
-          groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
-        }
-        beatDurations.push(...groupBeatsDurations);
+        GraphAILogger.log(`Spill over group: ${group.length}`);
+        spilledOverAudio(context, group, audioDuration, beatDurations, mediaDurations);
         return;
       }
       // No spilled over audio.
       assert(beatDurations.length === index, "beatDurations.length !== index");
-      // padding is the amount of audio padding specified in the script.
-      const padding = getPadding(context, beat, index);
-      // totalPadding is the amount of audio padding to be added to the audio file.
-      const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
-      const beatDuration = audioDuration + totalPadding;
-      beatDurations.push(beatDuration);
-      if (totalPadding > 0) {
-        mediaDurations[index].silenceDuration = totalPadding;
-      }
+      noSpilledOverAudio(context, beat, index, movieDuration, audioDuration, beatDurations, mediaDurations);
       return;
     }
     if (movieDuration > 0) {
