@@ -35,6 +35,7 @@ export const speakerDataSchema = z
     voiceId: z.string(),
     speechOptions: speechOptionsSchema.optional(),
     provider: text2SpeechProviderSchema.optional(),
+    model: z.string().optional().describe("TTS model to use for this speaker"),
   })
   .strict();
 
@@ -316,6 +317,7 @@ export const mulmoSpeechParamsSchema = z
   .object({
     provider: text2SpeechProviderSchema, // has default value
     speakers: speakerDictionarySchema,
+    model: z.string().optional().describe("Default TTS model to use"),
   })
   .strict();
 
