@@ -3,6 +3,7 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 import type { SpeechCreateParams } from "openai/resources/audio/speech";
 import { provider2TTSAgent } from "../utils/provider2agent.js";
+import type { AgentBufferResult, AgentTextInputs, AgentErrorResult, OpenAIImageAgentConfig } from "../types/agent.js";
 
 export const ttsOpenaiAgent: AgentFunction<
   {
@@ -11,9 +12,9 @@ export const ttsOpenaiAgent: AgentFunction<
     instructions: string;
     suppressError: boolean;
   },
-  { buffer?: Buffer },
-  { text: string },
-  { baseURL?: string; apiKey?: string }
+  AgentBufferResult | AgentErrorResult,
+  AgentTextInputs,
+  OpenAIImageAgentConfig
 > = async ({ namedInputs, params, config }) => {
   const { text } = namedInputs;
   const { model, voice, suppressError, instructions } = params;
