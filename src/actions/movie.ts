@@ -234,6 +234,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
 
     const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
     const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
+    const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
 
@@ -255,7 +256,6 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
 
     // NOTE: We don't support audio if the speed is not 1.0.
-    const speed = beat.movieParams?.speed ?? 1.0;
     const movieVolume = beat.audioParams?.movieVolume ?? 1.0;
     if (studioBeat.hasMovieAudio && movieVolume > 0.0 && speed === 1.0) {
       const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, movieVolume);

@@ -17,7 +17,7 @@ import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../met
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
-import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
+import { extractImageFromMovie, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 import { getImageRefs } from "./image_references.js";
 import { imagePreprocessAgent, imagePluginAgent, htmlImageGeneratorAgent } from "./image_agents.js";
@@ -177,10 +177,23 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
+    audioChecker: {
+      if: ":preprocessor.movieFile",
+      agent: async (namedInputs: { movieFile: string }) => {
+        const { hasAudio } = await ffmpegGetMediaDuration(namedInputs.movieFile);
+        console.log("******* audioChecker", namedInputs.movieFile, hasAudio);
+        return { hasAudio };
+      },
+      inputs: {
+        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
+        movieFile: ":preprocessor.movieFile",
+      },
+      defaultValue: {},
+    },
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: [":imageFromMovie", ":htmlImageGenerator"], // to wait for imageFromMovie to finish
+        onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker"], // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
       },
