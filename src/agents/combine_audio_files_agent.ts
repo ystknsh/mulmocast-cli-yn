@@ -103,14 +103,14 @@ const getInputIds = (context: MulmoStudioContext, mediaDurations: MediaDuration[
   return inputIds;
 };
 
-const voiceOverProcess = (context: MulmoStudioContext, mediaDurations: MediaDuration[], movieDuration: number, beatDurations: number[], group: number[]) => {
+const voiceOverProcess = (context: MulmoStudioContext, mediaDurations: MediaDuration[], movieDuration: number, beatDurations: number[], groupLength: number) => {
   return (remaining: number, idx: number, iGroup: number) => {
     const subBeatDurations = mediaDurations[idx];
     userAssert(
       subBeatDurations.audioDuration <= remaining,
       `Duration Overflow: At index(${idx}) audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
     );
-    if (iGroup === group.length - 1) {
+    if (iGroup === groupLength - 1) {
       beatDurations.push(remaining);
       subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
       return 0;
@@ -157,7 +157,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         group.push(i);
       }
       if (group.length > 1) {
-        group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group), movieDuration);
+        group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group.length), movieDuration);
         return;
       }
     }
