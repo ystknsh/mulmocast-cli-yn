@@ -167,7 +167,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         return;
       }
     }
-    
+
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
