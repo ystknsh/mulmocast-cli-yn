@@ -1,13 +1,13 @@
 {
   "name": "mulmocast",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "",
   "type": "module",
-  "main": "lib/index.js",
+  "main": "lib/index.node.js",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
+      "types": "./lib/index.node.d.ts",
+      "default": "./lib/index.node.js"
     },
     "./browser": {
       "types": "./lib/index.browser.d.ts",
