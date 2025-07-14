@@ -256,8 +256,9 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
 
     // NOTE: We don't support audio if the speed is not 1.0.
-    if (studioBeat.hasMovieAudio && beat.image?.type == "movie" && beat.image.mixAudio > 0.0 && speed === 1.0) {
-      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
+    const movieVolume = beat.audioParams?.movieVolume ?? 1.0;
+    if (studioBeat.hasMovieAudio && movieVolume > 0.0 && speed === 1.0) {
+      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, movieVolume);
       audioIdsFromMovieBeats.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }

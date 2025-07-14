@@ -154,9 +154,7 @@ export const mulmoImageAssetSchema = z.union([
   mulmoPdfMediaSchema,
   mulmoImageMediaSchema,
   mulmoSvgMediaSchema,
-  mulmoMovieMediaSchema.extend({
-    mixAudio: z.number().default(1.0),
-  }),
+  mulmoMovieMediaSchema,
   mulmoTextSlideMediaSchema,
   mulmoChartMediaSchema,
   mulmoMermaidMediaSchema,
@@ -234,6 +232,7 @@ export const textSlideParamsSchema = z
 export const beatAudioParamsSchema = z
   .object({
     padding: z.number().optional().describe("Padding between beats"), // seconds
+    movieVolume: z.number().default(1.0).describe("Audio volume of the imported or generated movie"),
   })
   .strict();
 

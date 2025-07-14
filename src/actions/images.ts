@@ -17,7 +17,7 @@ import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../met
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
-import { extractImageFromMovie } from "../utils/ffmpeg_utils.js";
+import { extractImageFromMovie, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 import { getImageRefs } from "./image_references.js";
 import { imagePreprocessAgent, imagePluginAgent, htmlImageGeneratorAgent } from "./image_agents.js";
@@ -177,16 +177,30 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
+    audioChecker: {
+      if: ":preprocessor.movieFile",
+      agent: async (namedInputs: { movieFile: string }) => {
+        const { hasAudio } = await ffmpegGetMediaDuration(namedInputs.movieFile);
+        return { hasMovieAudio: hasAudio };
+      },
+      inputs: {
+        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
+        movieFile: ":preprocessor.movieFile",
+      },
+      defaultValue: {},
+    },
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: [":imageFromMovie", ":htmlImageGenerator"], // to wait for imageFromMovie to finish
+        onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker"], // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
+        hasMovieAudio: ":audioChecker.hasMovieAudio",
       },
       output: {
         imageFile: ".imageFile",
         movieFile: ".movieFile",
+        hasMovieAudio: ".hasMovieAudio",
       },
       isResult: true,
     },
@@ -220,7 +234,7 @@ const graph_data: GraphData = {
     },
     mergeResult: {
       isResult: true,
-      agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string; movieFile: string; hasMovieAudio: boolean }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
         const beatIndexMap: Record<string, number> = {};
