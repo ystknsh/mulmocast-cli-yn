@@ -39,7 +39,7 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
 const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBeat) => {
   const voiceId = MulmoPresentationStyleMethods.getVoiceId(presentationStyle, beat);
   // Use speaker-specific provider if available, otherwise fall back to script-level provider
-  const provider = MulmoPresentationStyleMethods.getProvider(presentationStyle, beat) as keyof typeof provider2TTSAgent;
+  const provider = MulmoPresentationStyleMethods.getTTSProvider(presentationStyle, beat) as keyof typeof provider2TTSAgent;
   const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(presentationStyle, beat);
   return { voiceId, provider, speechOptions };
 };

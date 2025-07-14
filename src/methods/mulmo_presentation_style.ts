@@ -66,7 +66,7 @@ export const MulmoPresentationStyleMethods = {
     userAssert(!!speaker, `speaker is not set: speaker "${beat.speaker}"`);
     return speaker;
   },
-  getProvider(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): Text2SpeechProvider {
+  getTTSProvider(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): Text2SpeechProvider {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.provider ?? presentationStyle.speechParams.provider;
   },
