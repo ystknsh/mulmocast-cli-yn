@@ -13,6 +13,9 @@ export type OpenAIImageOptions = {
 
 export type AgentBufferResult = { buffer: Buffer };
 export type AgentPromptInputs = { prompt: string };
+export type AgentTextInputs = { text: string };
+export type AgentErrorResult = { error: unknown };
+export type AgentConfig = { apiKey?: string };
 
 // image
 //   inputs
@@ -37,8 +40,23 @@ export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefin
 
 //   config
 export type GoogleMovieAgentConfig = GoogleImageAgentConfig;
-export type ReplicateMovieAgentConfig = {
-  apiKey?: string;
-};
+export type ReplicateMovieAgentConfig = AgentConfig;
 
 // end of image agent
+
+export type TTSAgentParams = {
+  suppressError: boolean;
+  voice: string;
+};
+export type OpenAITTSAgentParams = TTSAgentParams & {
+  instructions: string;
+};
+
+export type NijivoiceTTSAgentParams = TTSAgentParams & {
+  speed: number;
+  speed_global: number;
+};
+
+export type GoogleTTSAgentParams = TTSAgentParams & {
+  speed: number;
+};
