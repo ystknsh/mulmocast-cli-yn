@@ -41,13 +41,14 @@ const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBea
   // Use speaker-specific provider if available, otherwise fall back to script-level provider
   const provider = MulmoPresentationStyleMethods.getTTSProvider(presentationStyle, beat) as keyof typeof provider2TTSAgent;
   const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(presentationStyle, beat);
-  return { voiceId, provider, speechOptions };
+  const model = MulmoPresentationStyleMethods.getTTSModel(presentationStyle, beat);
+  return { voiceId, provider, speechOptions, model };
 };
 
 export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat: MulmoBeat, lang?: string) => {
   const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
-  const { voiceId, provider, speechOptions } = getAudioParam(context.presentationStyle, beat);
-  const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider].join(":");
+  const { voiceId, provider, speechOptions, model } = getAudioParam(context.presentationStyle, beat);
+  const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider, model ?? ""].join(":");
   const audioFileName = `${context.studio.filename}_${text2hash(hash_string)}`;
   const audioFile = getAudioFilePath(audioDirPath, context.studio.filename, audioFileName, lang);
   return getAudioPath(context, beat, audioFile);
@@ -62,7 +63,7 @@ const preprocessor = (namedInputs: {
   const { beat, studioBeat, multiLingual, context } = namedInputs;
   const { lang, presentationStyle } = context;
   const text = localizedText(beat, multiLingual, lang);
-  const { voiceId, provider, speechOptions } = getAudioParam(presentationStyle, beat);
+  const { voiceId, provider, speechOptions, model } = getAudioParam(presentationStyle, beat);
   const audioPath = getBeatAudioPath(text, context, beat, lang);
   studioBeat.audioFile = audioPath; // TODO
   const needsTTS = !beat.audio && audioPath !== undefined;
@@ -72,6 +73,7 @@ const preprocessor = (namedInputs: {
     text,
     voiceId,
     speechOptions,
+    model,
     audioPath,
     studioBeat,
     needsTTS,
@@ -110,6 +112,7 @@ const graph_tts: GraphData = {
           voice: ":preprocessor.voiceId",
           speed: ":preprocessor.speechOptions.speed",
           instructions: ":preprocessor.speechOptions.instruction",
+          model: ":preprocessor.model",
         },
       },
     },

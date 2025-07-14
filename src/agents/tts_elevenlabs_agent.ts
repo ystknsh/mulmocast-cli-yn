@@ -10,6 +10,8 @@ export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, c
     throw new Error("ELEVENLABS_API_KEY environment variable is required");
   }
 
+  const defaultModel = config?.defaultModel ?? process.env.DEFAULT_ELEVENLABS_MODEL ?? "eleven_multilingual_v2";
+
   if (!voice) {
     throw new Error("Voice ID is required");
   }
@@ -17,7 +19,7 @@ export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, c
   try {
     const requestBody = {
       text,
-      model_id: model ?? "eleven_monolingual_v1",
+      model_id: model ?? defaultModel,
       voice_settings: {
         stability: stability ?? 0.5,
         similarity_boost: similarityBoost ?? 0.75,

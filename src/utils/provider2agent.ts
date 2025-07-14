@@ -22,6 +22,10 @@ export const provider2TTSAgent = {
   elevenlabs: {
     agentName: "ttsElevenlabsAgent",
     hasLimitedConcurrency: true,
+    defaultModel: "eleven_multilingual_v2",
+    // Models | ElevenLabs Documentation
+    // https://elevenlabs.io/docs/models
+    models: ["eleven_multilingual_v2", "eleven_turbo_v2_5", "eleven_turbo_v2", "eleven_flash_v2_5", "eleven_flash_v2"],
   },
 };
 

@@ -70,6 +70,10 @@ export const MulmoPresentationStyleMethods = {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.provider ?? presentationStyle.speechParams.provider;
   },
+  getTTSModel(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): string | undefined {
+    const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
+    return speaker.model ?? presentationStyle.speechParams.model;
+  },
   getVoiceId(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): string {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.voiceId;
