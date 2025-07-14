@@ -1,8 +1,13 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { provider2TTSAgent } from "../utils/provider2agent.js";
+import type { ElevenlabsTTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult, AgentConfig } from "../types/agent.js";
 
-export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, config }) => {
+export const ttsElevenlabsAgent: AgentFunction<ElevenlabsTTSAgentParams, AgentBufferResult | AgentErrorResult, AgentTextInputs, AgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { text } = namedInputs;
   const { voice, model, stability, similarityBoost, suppressError } = params;
 
