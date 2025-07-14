@@ -146,7 +146,7 @@ const getVoiceOverGroup = (context: MulmoStudioContext, index: number) => {
   return group;
 };
 
-const getHasMediaGroup = (context: MulmoStudioContext, mediaDurations: MediaDuration[], index: number) => {
+const getSpillOverGroup = (context: MulmoStudioContext, mediaDurations: MediaDuration[], index: number) => {
   const group = [index];
   for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
     group.push(i);
@@ -216,6 +216,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     if (movieDuration > 0) {
       const group = getVoiceOverGroup(context, index);
       if (group.length > 1) {
+        GraphAILogger.log(`Voice over group: ${group.length}`);
         group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group.length), movieDuration);
         return;
       }
@@ -224,8 +225,9 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
-      const group = getHasMediaGroup(context, mediaDurations, index);
+      const group = getSpillOverGroup(context, mediaDurations, index);
       if (group.length > 1) {
+        GraphAILogger.log(`Spill over group: ${group.length}`);
         spilledOverAudio(context, group, audioDuration, beatDurations, mediaDurations);
         return;
       }
