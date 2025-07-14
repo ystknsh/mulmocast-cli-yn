@@ -181,8 +181,7 @@ const beat_graph_data = {
       if: ":preprocessor.movieFile",
       agent: async (namedInputs: { movieFile: string }) => {
         const { hasAudio } = await ffmpegGetMediaDuration(namedInputs.movieFile);
-        console.log("******* audioChecker", namedInputs.movieFile, hasAudio);
-        return { hasAudio };
+        return { hasMovieAudio: hasAudio };
       },
       inputs: {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
@@ -196,10 +195,12 @@ const beat_graph_data = {
         onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker"], // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
+        hasMovieAudio: ":audioChecker.hasMovieAudio",
       },
       output: {
         imageFile: ".imageFile",
         movieFile: ".movieFile",
+        hasMovieAudio: ".hasMovieAudio",
       },
       isResult: true,
     },
@@ -233,7 +234,7 @@ const graph_data: GraphData = {
     },
     mergeResult: {
       isResult: true,
-      agent: (namedInputs: { array: { imageFile: string; movieFile: string }[]; context: MulmoStudioContext }) => {
+      agent: (namedInputs: { array: { imageFile: string; movieFile: string; hasMovieAudio: boolean }[]; context: MulmoStudioContext }) => {
         const { array, context } = namedInputs;
         const { studio } = context;
         const beatIndexMap: Record<string, number> = {};
