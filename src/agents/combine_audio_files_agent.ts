@@ -138,6 +138,22 @@ const voiceOverProcess = (
   };
 };
 
+const getVoiceOverGroup = (context: MulmoStudioContext, index: number) => {
+  const group = [index];
+  for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
+    group.push(i);
+  }
+  return group;
+};
+
+const getHasMediaGroup = (context: MulmoStudioContext, mediaDurations: MediaDuration[], index: number) => {
+  const group = [index];
+  for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
+    group.push(i);
+  }
+  return group;
+};
+
 const spilledOverAudio = (context: MulmoStudioContext, group: number[], audioDuration: number, beatDurations: number[], mediaDurations: MediaDuration[]) => {
   const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
   // Yes, the current beat has spilled over audio.
@@ -198,10 +214,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     const { audioDuration, movieDuration } = mediaDurations[index];
     // Check if we are processing a voice-over beat.
     if (movieDuration > 0) {
-      const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
-        group.push(i);
-      }
+      const group = getVoiceOverGroup(context, index);
       if (group.length > 1) {
         group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group.length), movieDuration);
         return;
@@ -211,10 +224,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
     // Check if the current beat has media and the next beat does not have media.
     if (audioDuration > 0) {
       // Check if the current beat has spilled over audio.
-      const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
-        group.push(i);
-      }
+      const group = getHasMediaGroup(context, mediaDurations, index);
       if (group.length > 1) {
         spilledOverAudio(context, group, audioDuration, beatDurations, mediaDurations);
         return;
