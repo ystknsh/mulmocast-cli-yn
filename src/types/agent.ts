@@ -49,7 +49,6 @@ export type TTSAgentParams = {
   voice: string;
 };
 export type OpenAITTSAgentParams = TTSAgentParams & {
-  voice: string;
   instructions: string;
 };
 
