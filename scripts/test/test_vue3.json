@@ -1,0 +1,22 @@
+{
+  "$mulmocast": { "version": "1.0" },
+  "movieParams": {
+    "provider": "replicate",
+    "model": "google/veo-3-fast"
+  },
+  "audioParams": {
+    "bgmVolume": 0
+  },
+  "beats": [
+    {
+      "id": "opening",
+      "text": "Hello World",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Hello World"
+        }
+      }
+    }
+  ]
+}
