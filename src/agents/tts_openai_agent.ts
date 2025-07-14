@@ -2,10 +2,11 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 import type { SpeechCreateParams } from "openai/resources/audio/speech";
+import { provider2TTSAgent } from "../utils/provider2agent.js";
 
 export const ttsOpenaiAgent: AgentFunction<
   {
-    model: string; // dall-e-3 or gpt-image-1
+    model: string;
     voice: string;
     instructions: string;
     suppressError: boolean;
@@ -21,8 +22,8 @@ export const ttsOpenaiAgent: AgentFunction<
 
   try {
     const tts_options: SpeechCreateParams = {
-      model: model ?? "gpt-4o-mini-tts", // "tts-1",
-      voice: voice ?? "shimmer",
+      model: model ?? provider2TTSAgent.openai.defaultModel,
+      voice: voice ?? provider2TTSAgent.openai.defaultVoice,
       input: text,
     };
     if (instructions) {

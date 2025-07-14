@@ -14,6 +14,8 @@ export const provider2TTSAgent = {
   openai: {
     agentName: "ttsOpenaiAgent",
     hasLimitedConcurrency: false,
+    defaultModel: "gpt-4o-mini-tts",
+    defaultVoice: "shimmer",
   },
   google: {
     agentName: "ttsGoogleAgent",
