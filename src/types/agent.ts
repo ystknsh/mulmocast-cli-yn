@@ -57,3 +57,7 @@ export type NijivoiceTTSAgentParams = TTSAgentParams & {
   speed: number;
   speed_global: number;
 };
+
+export type GoogleTTSAgentParams = TTSAgentParams & {
+  speed: number;
+};

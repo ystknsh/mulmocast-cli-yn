@@ -2,17 +2,11 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import * as textToSpeech from "@google-cloud/text-to-speech";
 
+import type { GoogleTTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult } from "../types/agent.js";
+
 const client = new textToSpeech.TextToSpeechClient();
 
-export const ttsGoogleAgent: AgentFunction<
-  {
-    voice: string;
-    speed: number;
-    suppressError: boolean;
-  },
-  { buffer?: Buffer | null },
-  { text: string }
-> = async ({ namedInputs, params }) => {
+export const ttsGoogleAgent: AgentFunction<GoogleTTSAgentParams, AgentBufferResult | AgentErrorResult, AgentTextInputs> = async ({ namedInputs, params }) => {
   const { text } = namedInputs;
   const { voice, suppressError, speed } = params;
 
