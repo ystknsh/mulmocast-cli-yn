@@ -9,7 +9,7 @@ export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, c
   if (!apiKey) {
     throw new Error("ELEVENLABS_API_KEY environment variable is required");
   }
-  
+
   const defaultModel = config?.defaultModel ?? process.env.DEFAULT_ELEVENLABS_MODEL ?? "eleven_multilingual_v2";
 
   if (!voice) {

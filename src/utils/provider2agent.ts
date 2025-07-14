@@ -25,13 +25,7 @@ export const provider2TTSAgent = {
     defaultModel: "eleven_multilingual_v2",
     // Models | ElevenLabs Documentation
     // https://elevenlabs.io/docs/models
-    models: [
-      "eleven_multilingual_v2",
-      "eleven_turbo_v2_5",
-      "eleven_turbo_v2",
-      "eleven_flash_v2_5",
-      "eleven_flash_v2",
-    ],
+    models: ["eleven_multilingual_v2", "eleven_turbo_v2_5", "eleven_turbo_v2", "eleven_flash_v2_5", "eleven_flash_v2"],
   },
 };
 
