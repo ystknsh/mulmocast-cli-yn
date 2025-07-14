@@ -232,7 +232,7 @@ export const textSlideParamsSchema = z
 export const beatAudioParamsSchema = z
   .object({
     padding: z.number().optional().describe("Padding between beats"), // seconds
-    movieVolume: z.number().default(1.0).describe("Volume of the imported or generated movie"),
+    movieVolume: z.number().default(1.0).describe("Audio volume of the imported or generated movie"),
   })
   .strict();
 
