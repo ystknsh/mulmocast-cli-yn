@@ -18,7 +18,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
     throw new Error(`AddBGMAgent musicFile not exist: ${musicFile}`);
   }
 
-  const speechDuration = await ffmpegGetMediaDuration(voiceFile);
+  const { duration: speechDuration } = await ffmpegGetMediaDuration(voiceFile);
   const introPadding = context.presentationStyle.audioParams.introPadding;
   const outroPadding = context.presentationStyle.audioParams.outroPadding;
   const totalDuration = speechDuration + introPadding + outroPadding;

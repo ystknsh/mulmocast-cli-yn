@@ -5,11 +5,12 @@ import { silent60secPath } from "../utils/file.js";
 import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 import { userAssert } from "../utils/utils.js";
 
-const getMovieDulation = async (beat: MulmoBeat) => {
+const getMovieDuration = async (beat: MulmoBeat) => {
   if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
     const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
     const speed = beat.movieParams?.speed ?? 1.0;
-    return (await ffmpegGetMediaDuration(pathOrUrl)) / speed;
+    const { duration } = await ffmpegGetMediaDuration(pathOrUrl);
+    return duration / speed;
   }
   return 0;
 };
@@ -38,8 +39,8 @@ const getMediaDurations = (context: MulmoStudioContext) => {
   return Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const beat = context.studio.script.beats[index];
-      const movieDuration = await getMovieDulation(beat);
-      const audioDuration = studioBeat.audioFile ? await ffmpegGetMediaDuration(studioBeat.audioFile) : 0;
+      const movieDuration = await getMovieDuration(beat);
+      const audioDuration = studioBeat.audioFile ? (await ffmpegGetMediaDuration(studioBeat.audioFile)).duration : 0;
       return {
         movieDuration,
         audioDuration,

@@ -72,13 +72,14 @@ export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: stri
 };
 
 export const ffmpegGetMediaDuration = (filePath: string) => {
-  return new Promise<number>((resolve, reject) => {
+  return new Promise<{ duration: number; hasAudio: boolean }>((resolve, reject) => {
     ffmpeg.ffprobe(filePath, (err, metadata) => {
       if (err) {
         GraphAILogger.info("Error while getting metadata:", err);
         reject(err);
       } else {
-        resolve(metadata.format.duration!);
+        const hasAudio = metadata.streams?.some((stream) => stream.codec_type === "audio") ?? false;
+        resolve({ duration: metadata.format.duration!, hasAudio });
       }
     });
   });
