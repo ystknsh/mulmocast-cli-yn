@@ -1,5 +1,5 @@
 import fs from "fs";
-import { GraphAI } from "graphai";
+import { GraphAI, GraphAILogger } from "graphai";
 import { getReferenceImagePath } from "../utils/file.js";
 import { getExtention } from "../utils/utils.js";
 
@@ -23,6 +23,7 @@ export const generateReferenceImage = async (inputs: {
   // generate image
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle);
   const prompt = `${image.prompt}\n${imageAgentInfo.imageParams.style || ""}`;
+  GraphAILogger.info(`Generating reference image for ${key}: ${prompt}`);
   const image_graph_data = {
     version: 0.5,
     nodes: {
