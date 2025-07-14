@@ -2,19 +2,14 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 import type { SpeechCreateParams } from "openai/resources/audio/speech";
-import type { AgentBufferResult, AgentTextInputs, AgentErrorResult, OpenAIImageAgentConfig } from "../types/agent.js";
+import { provider2TTSAgent } from "../utils/provider2agent.js";
+import type { OpenAITTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult, OpenAIImageAgentConfig } from "../types/agent.js";
 
-export const ttsOpenaiAgent: AgentFunction<
-  {
-    model: string; // dall-e-3 or gpt-image-1
-    voice: string;
-    instructions: string;
-    suppressError: boolean;
-  },
-  AgentBufferResult | AgentErrorResult,
-  AgentTextInputs,
-  OpenAIImageAgentConfig
-> = async ({ namedInputs, params, config }) => {
+export const ttsOpenaiAgent: AgentFunction<OpenAITTSAgentParams, AgentBufferResult | AgentErrorResult, AgentTextInputs, OpenAIImageAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { text } = namedInputs;
   const { model, voice, suppressError, instructions } = params;
   const { apiKey, baseURL } = config ?? {};
@@ -22,8 +17,8 @@ export const ttsOpenaiAgent: AgentFunction<
 
   try {
     const tts_options: SpeechCreateParams = {
-      model: model ?? "gpt-4o-mini-tts", // "tts-1",
-      voice: voice ?? "shimmer",
+      model: model ?? provider2TTSAgent.openai.defaultModel,
+      voice: voice ?? provider2TTSAgent.openai.defaultVoice,
       input: text,
     };
     if (instructions) {

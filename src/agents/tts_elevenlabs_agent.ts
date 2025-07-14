@@ -1,7 +1,13 @@
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
+import { provider2TTSAgent } from "../utils/provider2agent.js";
+import type { ElevenlabsTTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult, AgentConfig } from "../types/agent.js";
 
-export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, config }) => {
+export const ttsElevenlabsAgent: AgentFunction<ElevenlabsTTSAgentParams, AgentBufferResult | AgentErrorResult, AgentTextInputs, AgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { text } = namedInputs;
   const { voice, model, stability, similarityBoost, suppressError } = params;
 
@@ -11,13 +17,13 @@ export const ttsElevenlabsAgent: AgentFunction = async ({ namedInputs, params, c
   }
 
   if (!voice) {
-    throw new Error("Voice ID is required");
+    throw new Error("ELEVENLABS Voice ID is required");
   }
 
   try {
     const requestBody = {
       text,
-      model_id: model ?? "eleven_monolingual_v1",
+      model_id: model ?? provider2TTSAgent.elevenlabs.defaultModel,
       voice_settings: {
         stability: stability ?? 0.5,
         similarity_boost: similarityBoost ?? 0.75,

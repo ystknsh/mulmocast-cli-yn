@@ -50,6 +50,7 @@ export type TTSAgentParams = {
 };
 export type OpenAITTSAgentParams = TTSAgentParams & {
   instructions: string;
+  model: string;
 };
 
 export type NijivoiceTTSAgentParams = TTSAgentParams & {
@@ -61,6 +62,8 @@ export type GoogleTTSAgentParams = TTSAgentParams & {
   speed: number;
 };
 
-export type OpenGoogleTTSAgentParams = TTSAgentParams & {
-  speed: number;
+export type ElevenlabsTTSAgentParams = TTSAgentParams & {
+  model: string;
+  stability: number;
+  similarityBoost: number;
 };
