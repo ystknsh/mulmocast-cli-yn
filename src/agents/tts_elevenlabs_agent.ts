@@ -11,7 +11,7 @@ export const ttsElevenlabsAgent: AgentFunction<ElevenlabsTTSAgentParams, AgentBu
   const { text } = namedInputs;
   const { voice, model, stability, similarityBoost, suppressError } = params;
 
-  const apiKey = config?.apiKey ?? process.env.ELEVENLABS_API_KEY;
+  const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("ELEVENLABS_API_KEY environment variable is required");
   }
