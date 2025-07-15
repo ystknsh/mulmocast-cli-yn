@@ -6,6 +6,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
+import { settings2GraphAIConfig } from "../utils/utils.js";
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual } from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
@@ -223,7 +224,14 @@ const agentFilters = [
 const defaultLang = "en";
 const targetLangs = ["ja", "en"];
 
-export const translate = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+export const translate = async (
+  context: MulmoStudioContext,
+  args?: {
+    callbacks?: CallbackFunction[];
+    settings?: Record<string, string>;
+  },
+) => {
+  const { settings, callbacks } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
     const fileName = MulmoStudioContextMethods.getFileName(context);
@@ -233,7 +241,9 @@ export const translate = async (context: MulmoStudioContext, callbacks?: Callbac
 
     assert(!!process.env.OPENAI_API_KEY, "The OPENAI_API_KEY environment variable is missing or empty");
 
-    const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters });
+    const config = settings2GraphAIConfig(settings, process.env);
+
+    const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters, config });
     graph.injectValue("context", context);
     graph.injectValue("defaultLang", defaultLang);
     graph.injectValue("targetLangs", targetLangs);
