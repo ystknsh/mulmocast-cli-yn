@@ -308,17 +308,11 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
 
   // We need to get google's auth token only if the google is the text2image provider.
   if (provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
-    userAssert(!!process.env.GOOGLE_PROJECT_ID, "GOOGLE_PROJECT_ID is not set");
+    userAssert(!!config.movieGoogleAgent || !!config.imageGoogleAgent, "GOOGLE_PROJECT_ID is not set");
     GraphAILogger.log("google was specified as text2image engine");
     const token = await googleAuth();
-    config["imageGoogleAgent"] = {
-      projectId: process.env.GOOGLE_PROJECT_ID,
-      token,
-    };
-    config["movieGoogleAgent"] = {
-      projectId: process.env.GOOGLE_PROJECT_ID,
-      token,
-    };
+    config["imageGoogleAgent"].token = token;
+    config["movieGoogleAgent"].token = token;
   }
   options.config = config;
   return options;
