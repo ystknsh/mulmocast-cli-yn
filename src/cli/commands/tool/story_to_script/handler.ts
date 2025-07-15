@@ -5,7 +5,7 @@ import { storyToScript } from "../../../../tools/story_to_script.js";
 import { mulmoStoryboardSchema } from "../../../../types/schema.js";
 import { getBaseDirPath, getFullPath, readAndParseJson } from "../../../../utils/file.js";
 import { outDirName } from "../../../../utils/const.js";
-import { LLM } from "../../../../utils/utils.js";
+import type { LLM } from "../../../../utils/provider2agent.js";
 import { StoryToScriptGenerateMode } from "../../../../types/type.js";
 
 export const handler = async (
