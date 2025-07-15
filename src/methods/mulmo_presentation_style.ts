@@ -104,6 +104,13 @@ export const MulmoPresentationStyleMethods = {
     const movieProvider = (presentationStyle.movieParams?.provider ?? defaultProviders.text2movie) as keyof typeof provider2MovieAgent;
     return provider2MovieAgent[movieProvider].agentName;
   },
+  getMovieAgentInfo(presentationStyle: MulmoPresentationStyle, beat?: MulmoBeat) {
+    const movieParams = { ...presentationStyle.movieParams, ...beat?.movieParams };
+
+    return {
+      movieParams,
+    };
+  },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {
     /*
     if (presentationStyle.movieParams?.provider === "replicate") {

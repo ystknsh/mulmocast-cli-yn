@@ -158,7 +158,7 @@ const beat_graph_data = {
           mulmoContext: ":context",
         },
         params: {
-          model: ":preprocessor.movieParams.model",
+          model: ":preprocessor.movieAgentInfo.movieParams.model",
           duration: ":beat.duration",
           canvasSize: ":context.presentationStyle.canvasSize",
         },

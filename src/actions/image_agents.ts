@@ -35,17 +35,17 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     return { ...returnValue, imagePath: pluginPath, referenceImageForMovie: pluginPath };
   }
 
-  const movieParams = { ...context.presentationStyle.movieParams, ...beat.movieParams };
-  GraphAILogger.log(`movieParams: ${index}`, movieParams, beat.moviePrompt);
+  const movieAgentInfo = MulmoPresentationStyleMethods.getMovieAgentInfo(context.presentationStyle, beat);
+  GraphAILogger.log(`movieParams: ${index}`, movieAgentInfo.movieParams, beat.moviePrompt);
   if (beat.moviePrompt && !beat.imagePrompt) {
-    return { ...returnValue, imagePath, imageFromMovie: true, movieParams }; // no image prompt, only movie prompt
+    return { ...returnValue, imagePath, imageFromMovie: true, movieAgentInfo }; // no image prompt, only movie prompt
   }
 
   // referenceImages for "edit_image", openai agent.
   const referenceImages = MulmoBeatMethods.getImageReferenceForImageGenerator(beat, imageRefs);
 
   const prompt = imagePrompt(beat, imageAgentInfo.imageParams.style);
-  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, referenceImages, movieParams };
+  return { ...returnValue, imagePath, referenceImageForMovie: imagePath, imageAgentInfo, prompt, referenceImages, movieAgentInfo };
 };
 
 export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
