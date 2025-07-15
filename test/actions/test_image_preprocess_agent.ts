@@ -87,7 +87,10 @@ test("imagePreprocessAgent - basic functionality", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -128,7 +131,10 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/1.mov",
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     imagePath: "/test/images/test_studio/1p.png",
     imageFromMovie: true,
   };
@@ -158,7 +164,10 @@ test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/2.mov",
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     imagePath: "/test/images/test_studio/2p.png",
     imageFromMovie: true,
   };
@@ -212,7 +221,10 @@ test("imagePreprocessAgent - with imageNames", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -255,7 +267,10 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -299,7 +314,10 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -342,7 +360,10 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
       moderation: "auto", // From beat (override)
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -380,7 +401,10 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -425,7 +449,10 @@ test("imagePreprocessAgent - with real sample data", async () => {
         moderation: "auto", // From imageAgentInfo
       },
       movieFile: undefined,
-      movieParams: {},
+      movieAgentInfo: {
+        agent: "movieGoogleAgent",
+        movieParams: {},
+      },
       referenceImages: [],
       imageAgentInfo: {
         agent: "imageOpenaiAgent",
@@ -468,7 +495,10 @@ test("imagePreprocessAgent - text only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -510,7 +540,10 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -550,7 +583,10 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
     },
     imagePath: "/test/images/test_studio/15p.png",
     movieFile: "/test/images/test_studio/15.mov",
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     imageFromMovie: true,
   };
 
@@ -583,7 +619,10 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
     },
     imagePath: "/test/images/test_studio/16p.png",
     movieFile: "/test/images/test_studio/16.mov",
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     imageFromMovie: true,
   };
 
@@ -616,7 +655,10 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/17.mov",
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -658,7 +700,10 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/18.mov",
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -699,7 +744,10 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -740,7 +788,10 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
@@ -794,7 +845,10 @@ test("imagePreprocessAgent - with imageParams override", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    movieParams: {},
+    movieAgentInfo: {
+      agent: "movieGoogleAgent",
+      movieParams: {},
+    },
     referenceImages: [],
   };
 
