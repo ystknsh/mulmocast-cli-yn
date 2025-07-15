@@ -1,6 +1,6 @@
 import { Argv } from "yargs";
 import { getAvailableTemplates } from "../../../../utils/file.js";
-import { llm } from "../../../../utils/utils.js";
+import { llm } from "../../../../utils/provider2agent.js";
 import { storyToScriptGenerateMode } from "../../../../utils/const.js";
 
 const availableTemplateNames = getAvailableTemplates().map((template) => template.filename);

@@ -42,7 +42,7 @@ import {
   mulmoImagePromptMediaSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
-import { LLM } from "../utils/utils.js";
+import type { LLM } from "../utils/provider2agent.js";
 import { z } from "zod";
 
 export type LANG = z.infer<typeof langSchema>;
