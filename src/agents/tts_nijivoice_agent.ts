@@ -2,8 +2,6 @@ import { GraphAILogger, assert } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import type { NijivoiceTTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult, AgentConfig } from "../types/agent.js";
 
-const nijovoiceApiKey = process.env.NIJIVOICE_API_KEY ?? "";
-
 type VoiceJson = {
   generatedVoice: {
     audioFileDownloadUrl: string;
@@ -25,7 +23,7 @@ export const ttsNijivoiceAgent: AgentFunction<NijivoiceTTSAgentParams, AgentBuff
   const { suppressError, voice, speed, speed_global } = params;
   const { apiKey } = config ?? {};
   const { text } = namedInputs;
-  assert(!!(apiKey ?? nijovoiceApiKey), errorMessage);
+  assert(!!apiKey, errorMessage);
   const url = `https://api.nijivoice.com/api/platform/v1/voice-actors/${voice}/generate-voice`;
   const options = {
     method: "POST",

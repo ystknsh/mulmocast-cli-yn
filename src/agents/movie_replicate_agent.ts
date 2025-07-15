@@ -82,7 +82,7 @@ export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, Agent
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const duration = params.duration ?? 5;
-  const apiKey = config?.apiKey ?? process.env.REPLICATE_API_TOKEN;
+  const apiKey = config?.apiKey;
 
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
