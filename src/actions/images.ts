@@ -50,7 +50,6 @@ const beat_graph_data = {
   nodes: {
     context: {},
     htmlImageAgentInfo: {},
-    movieAgentInfo: {},
     imageRefs: {},
     beat: {},
     __mapIndex: {},
@@ -145,7 +144,7 @@ const beat_graph_data = {
     },
     movieGenerator: {
       if: ":preprocessor.movieFile",
-      agent: ":movieAgentInfo.agent",
+      agent: ":preprocessor.movieAgentInfo.agent",
       inputs: {
         onComplete: [":imageGenerator", ":imagePlugin"], // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
@@ -213,7 +212,6 @@ const graph_data: GraphData = {
   nodes: {
     context: {},
     htmlImageAgentInfo: {},
-    movieAgentInfo: {},
     outputStudioFilePath: {},
     imageRefs: {},
     map: {
@@ -222,7 +220,6 @@ const graph_data: GraphData = {
         rows: ":context.studio.script.beats",
         context: ":context",
         htmlImageAgentInfo: ":htmlImageAgentInfo",
-        movieAgentInfo: ":movieAgentInfo",
         imageRefs: ":imageRefs",
       },
       isResult: true,
@@ -333,9 +330,6 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
   const injections: Record<string, string | MulmoImageParams | MulmoStudioContext | { agent: string } | Record<string, string> | undefined> = {
     context,
     htmlImageAgentInfo,
-    movieAgentInfo: {
-      agent: MulmoPresentationStyleMethods.getMovieAgent(context.presentationStyle),
-    },
     outputStudioFilePath: getOutputStudioFilePath(outDirPath, fileName),
     imageRefs,
   };

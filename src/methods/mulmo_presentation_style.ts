@@ -99,15 +99,13 @@ export const MulmoPresentationStyleMethods = {
       imageParams: { ...defaultImageParams, ...imageParams },
     };
   },
-  // Determine movie agent based on provider
-  getMovieAgent(presentationStyle: MulmoPresentationStyle): string {
-    const movieProvider = (presentationStyle.movieParams?.provider ?? defaultProviders.text2movie) as keyof typeof provider2MovieAgent;
-    return provider2MovieAgent[movieProvider].agentName;
-  },
   getMovieAgentInfo(presentationStyle: MulmoPresentationStyle, beat?: MulmoBeat) {
     const movieParams = { ...presentationStyle.movieParams, ...beat?.movieParams };
+    const movieProvider = (movieParams?.provider ?? defaultProviders.text2movie) as keyof typeof provider2MovieAgent;
+    const agentInfo = provider2MovieAgent[movieProvider];
 
     return {
+      agent: agentInfo.agentName,
       movieParams,
     };
   },
