@@ -28,7 +28,7 @@ export const ttsNijivoiceAgent: AgentFunction<NijivoiceTTSAgentParams, AgentBuff
   const options = {
     method: "POST",
     headers: {
-      "x-api-key": apiKey ?? nijovoiceApiKey,
+      "x-api-key": apiKey,
       accept: "application/json",
       "content-type": "application/json",
     },

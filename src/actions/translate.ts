@@ -243,7 +243,6 @@ export const translate = async (
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
 
-
     const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters, config });
     graph.injectValue("context", context);
     graph.injectValue("defaultLang", defaultLang);
