@@ -74,11 +74,17 @@ export const settings2GraphAIConfig = (
       apiKey: getKey("IMAGE", "OPENAI_API_KEY"),
       baseURL: getKey("IMAGE", "OPENAI_BASE_URL"),
     },
+    imageGoogleAgent: {
+      projectId: getKey("IMAGE", "GOOGLE_PROJECT_ID"),
+    },
     anthropicAgent: {
       apiKey: getKey("LLM", "ANTHROPIC_API_TOKEN"),
     },
     movieReplicateAgent: {
       apiKey: getKey("MOVIE", "REPLICATE_API_TOKEN"),
+    },
+    movieGoogleAgent: {
+      projectId: getKey("MOVIE", "GOOGLE_PROJECT_ID"),
     },
     ttsNijivoiceAgent: {
       apiKey: getKey("TTS", "NIJIVOICE_API_KEY"),
