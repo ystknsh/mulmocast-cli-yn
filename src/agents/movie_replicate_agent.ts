@@ -34,7 +34,7 @@ async function generateMovie(
   if (imagePath) {
     const buffer = readFileSync(imagePath);
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-    if (model === "kwaivgi/kling-v2.1" || model === "kwaivgi/kling-v1.6-pro") {
+    if (model === "kwaivgi/kling-v2.1" || model === "kwaivgi/kling-v1.6-pro" || model === "minimax/hailuo-02") {
       input.start_image = base64Image;
     } else {
       input.image = base64Image;
@@ -46,7 +46,7 @@ async function generateMovie(
 
     // Download the generated video
     if (output && typeof output === "object" && "url" in output) {
-      const videoUrl = (output.url as () => string)();
+      const videoUrl = (output.url as () => URL)();
       const videoResponse = await fetch(videoUrl);
 
       if (!videoResponse.ok) {
