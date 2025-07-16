@@ -276,6 +276,11 @@ export const htmlPromptParamsSchema = z
 export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 export const text2SoundEffectProviderSchema = z.enum(Object.keys(provider2SoundEffectAgent) as [string, ...string[]]).default(defaultProviders.soundEffect);
 
+export const mulmoSoundEffectParamsSchema = z.object({
+  provider: text2SoundEffectProviderSchema.optional(),
+  model: z.string().optional(), // default: provider specific
+});
+
 const defaultSpeaker = "Presenter";
 export const mulmoBeatSchema = z
   .object({
@@ -297,6 +302,7 @@ export const mulmoBeatSchema = z
         speed: z.number().optional().describe("Speed of the video. 1.0 is normal speed. 0.5 is half speed. 2.0 is double speed."), // for movie.ts
       })
       .optional(),
+    soundEffectParams: mulmoSoundEffectParamsSchema.optional(),
     htmlImageParams: mulmoHtmlImageParamsSchema.optional(),
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
@@ -364,11 +370,6 @@ export const mulmoMovieParamsSchema = z
     fillOption: mulmoFillOptionSchema.optional(), // for movie.ts
   })
   .strict();
-
-export const mulmoSoundEffectParamsSchema = z.object({
-  provider: text2SoundEffectProviderSchema.optional(),
-  model: z.string().optional(), // default: provider specific
-});
 
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,

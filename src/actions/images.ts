@@ -198,6 +198,7 @@ const beat_graph_data = {
       inputs: {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         prompt: ":preprocessor.soundEffectPrompt",
+        movieFile: ":preprocessor.movieFile",
         soundEffectFile: ":preprocessor.soundEffectFile",
         cache: {
           force: [":context.force"],

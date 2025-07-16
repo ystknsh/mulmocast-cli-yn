@@ -80,7 +80,7 @@ export const soundEffectReplicateAgent: AgentFunction<
   SoundEffectAgentInputs,
   ReplicateMovieAgentConfig
 > = async ({ namedInputs, params, config }) => {
-  const { prompt, soundEffectFile } = namedInputs;
+  const { prompt, soundEffectFile, movieFile } = namedInputs; // TODO: use params.model
   const apiKey = config?.apiKey;
 
   if (!apiKey) {
@@ -88,7 +88,7 @@ export const soundEffectReplicateAgent: AgentFunction<
   }
 
   try {
-    console.log("**** soundEffectReplicateAgent", prompt, soundEffectFile, apiKey);
+    console.log("**** soundEffectReplicateAgent", prompt, soundEffectFile, movieFile, apiKey);
     /*
     const buffer = undefined; // await generateMovie(params.model, apiKey, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
