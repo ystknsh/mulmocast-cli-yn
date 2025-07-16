@@ -101,6 +101,15 @@
       "movieParams": {
         "model": "kwaivgi/kling-v2.1"
       }
+    },
+    {
+      "id": "hailuo-02",
+      "text": "minimax/hailuo-02",
+      "duration": 6,
+      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "movieParams": {
+        "model": "minimax/hailuo-02"
+      }
     }
   ]
 }

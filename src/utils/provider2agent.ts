@@ -56,6 +56,7 @@ export const provider2MovieAgent = {
       "google/veo-3",
       "google/veo-3-fast",
       "minimax/video-01",
+      "minimax/hailuo-02",
     ],
   },
   google: {
