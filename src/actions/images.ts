@@ -173,6 +173,13 @@ const beat_graph_data = {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
+        cache: {
+          force: [":context.force"],
+          file: ":preprocessor.soundEffectFile",
+          index: ":__mapIndex",
+          sessionType: "soundEffect",
+          mulmoContext: ":context",
+        },
       },
       defaultValue: {},
     },
@@ -188,10 +195,24 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
+    soundEffectGenerator: {
+      if: ":preprocessor.soundEffectPrompt",
+      agent: async (namedInputs: { prompt: string; soundEffectFile: string }) => {
+        const { prompt, soundEffectFile } = namedInputs;
+        console.log("**** soundEffectGenerator", prompt, soundEffectFile);
+        return { };
+      },
+      inputs: {
+        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
+        prompt: ":preprocessor.soundEffectPrompt",
+        soundEffectFile: ":preprocessor.soundEffectFile",
+      },
+      defaultValue: {},
+    },
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker"], // to wait for imageFromMovie to finish
+        onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker", ":soundEffectGenerator"], // to wait for imageFromMovie to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
         hasMovieAudio: ":audioChecker.hasMovieAudio",
