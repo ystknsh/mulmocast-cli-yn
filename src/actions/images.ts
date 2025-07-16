@@ -182,13 +182,17 @@ const beat_graph_data = {
     },
     audioChecker: {
       if: ":preprocessor.movieFile",
-      agent: async (namedInputs: { movieFile: string }) => {
+      agent: async (namedInputs: { movieFile: string; soundEffectFile: string }) => {
+        if (namedInputs.soundEffectFile) {
+          return { hasMovieAudio: true };
+        }
         const { hasAudio } = await ffmpegGetMediaDuration(namedInputs.movieFile);
         return { hasMovieAudio: hasAudio };
       },
       inputs: {
-        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
+        onComplete: [":movieGenerator", ":soundEffectGenerator"], // to wait for movieGenerator to finish
         movieFile: ":preprocessor.movieFile",
+        soundEffectFile: ":preprocessor.soundEffectFile",
       },
       defaultValue: {},
     },
