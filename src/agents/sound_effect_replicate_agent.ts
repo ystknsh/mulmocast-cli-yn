@@ -3,7 +3,12 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
-import type { AgentBufferResult, ReplicateMovieAgentParams, ReplicateMovieAgentConfig, SoundEffectAgentInputs } from "../types/agent.js";
+import type {
+  AgentBufferResult,
+  SoundEffectAgentInputs,
+  ReplicateSoundEffectAgentParams,
+  ReplicateSoundEffectAgentConfig,
+} from "../types/agent.js";
 
 async function generateMovie(
   model: `${string}/${string}` | undefined,
@@ -75,20 +80,21 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
 };
 
 export const soundEffectReplicateAgent: AgentFunction<
-  ReplicateMovieAgentParams,
+  ReplicateSoundEffectAgentParams,
   AgentBufferResult,
   SoundEffectAgentInputs,
-  ReplicateMovieAgentConfig
+  ReplicateSoundEffectAgentConfig
 > = async ({ namedInputs, params, config }) => {
   const { prompt, soundEffectFile, movieFile } = namedInputs; // TODO: use params.model
   const apiKey = config?.apiKey;
+  const model = params.model;
 
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
   }
 
   try {
-    console.log("**** soundEffectReplicateAgent", prompt, soundEffectFile, movieFile, apiKey);
+    console.log("**** soundEffectReplicateAgent", prompt, model, soundEffectFile, movieFile, apiKey);
     /*
     const buffer = undefined; // await generateMovie(params.model, apiKey, prompt, imagePath, aspectRatio, duration);
     if (buffer) {

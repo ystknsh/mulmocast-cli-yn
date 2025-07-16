@@ -109,8 +109,8 @@ export const MulmoPresentationStyleMethods = {
       movieParams,
     };
   },
-  getSoundEffectAgentInfo(presentationStyle: MulmoPresentationStyle, __?: MulmoBeat) {
-    const soundEffectProvider = (presentationStyle.soundEffectParams?.provider ?? defaultProviders.soundEffect) as keyof typeof provider2SoundEffectAgent;
+  getSoundEffectAgentInfo(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat) {
+    const soundEffectProvider = (beat.soundEffectParams?.provider ?? presentationStyle.soundEffectParams?.provider ?? defaultProviders.soundEffect) as keyof typeof provider2SoundEffectAgent;
     const agentInfo = provider2SoundEffectAgent[soundEffectProvider];
     return agentInfo;
   },

@@ -200,6 +200,9 @@ const beat_graph_data = {
         prompt: ":preprocessor.soundEffectPrompt",
         movieFile: ":preprocessor.movieFile",
         soundEffectFile: ":preprocessor.soundEffectFile",
+        params: {
+          model: ":preprocessor.soundEffectModel",
+        },
         cache: {
           force: [":context.force"],
           file: ":preprocessor.soundEffectFile",
