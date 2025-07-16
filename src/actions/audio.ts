@@ -160,6 +160,7 @@ const graph_data: GraphData = {
     },
     addBGM: {
       agent: "addBGMAgent",
+      unless: ":context.presentationStyle.audioParams.bgmVolume.equal(0)",
       inputs: {
         wait: ":combineFiles",
         voiceFile: ":audioCombinedFilePath",
@@ -170,6 +171,7 @@ const graph_data: GraphData = {
         },
       },
       isResult: true,
+      defaultValue: {},
     },
     title: {
       agent: "copyAgent",
