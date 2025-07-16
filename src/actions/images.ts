@@ -194,11 +194,7 @@ const beat_graph_data = {
     },
     soundEffectGenerator: {
       if: ":preprocessor.soundEffectPrompt",
-      agent: async (namedInputs: { prompt: string; soundEffectFile: string }) => {
-        const { prompt, soundEffectFile } = namedInputs;
-        console.log("**** soundEffectGenerator", prompt, soundEffectFile);
-        return {};
-      },
+      agent: ":preprocessor.soundEffectAgentInfo.agentName",
       inputs: {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         prompt: ":preprocessor.soundEffectPrompt",
