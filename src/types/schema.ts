@@ -266,6 +266,8 @@ export const htmlPromptParamsSchema = z
   })
   .strict();
 
+export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
+
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.default("Presenter"),
@@ -280,9 +282,10 @@ export const mulmoBeatSchema = z
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
     movieParams: z
       .object({
+        provider: text2MovieProviderSchema.optional(), // TODO: implement
         model: z.string().optional(),
-        fillOption: mulmoFillOptionSchema.optional(),
-        speed: z.number().optional().describe("Speed of the video. 1.0 is normal speed. 0.5 is half speed. 2.0 is double speed."),
+        fillOption: mulmoFillOptionSchema.optional(), // for movie.ts
+        speed: z.number().optional().describe("Speed of the video. 1.0 is normal speed. 0.5 is half speed. 2.0 is double speed."), // for movie.ts
       })
       .optional(),
     htmlImageParams: mulmoHtmlImageParamsSchema.optional(),
@@ -321,7 +324,6 @@ export const mulmoSpeechParamsSchema = z
   .strict();
 
 export const text2HtmlImageProviderSchema = z.enum(htmlLLMProvider as [string, ...string[]]).default(defaultProviders.text2Html);
-export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 
 // NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
 export const mulmoGoogleMovieModelSchema = z
@@ -346,10 +348,10 @@ export const mulmoTransitionSchema = z.object({
 
 export const mulmoMovieParamsSchema = z
   .object({
-    provider: text2MovieProviderSchema.optional(),
-    model: z.string().optional(), // default: provider specific
-    transition: mulmoTransitionSchema.optional(),
-    fillOption: mulmoFillOptionSchema.optional(),
+    provider: text2MovieProviderSchema.optional(), // for agent
+    model: z.string().optional(), // default: provider specific. for agent
+    transition: mulmoTransitionSchema.optional(), // for movie.ts
+    fillOption: mulmoFillOptionSchema.optional(), // for movie.ts
   })
   .strict();
 

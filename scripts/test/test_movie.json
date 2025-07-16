@@ -10,6 +10,8 @@
     "height": 1280
   },
   "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3",
     "style": "Photo realistic, cinematic style.",
     "images": {
       "optimus": {
