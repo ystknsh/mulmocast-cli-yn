@@ -173,13 +173,6 @@ const beat_graph_data = {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
-        cache: {
-          force: [":context.force"],
-          file: ":preprocessor.soundEffectFile",
-          index: ":__mapIndex",
-          sessionType: "soundEffect",
-          mulmoContext: ":context",
-        },
       },
       defaultValue: {},
     },
@@ -206,6 +199,13 @@ const beat_graph_data = {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         prompt: ":preprocessor.soundEffectPrompt",
         soundEffectFile: ":preprocessor.soundEffectFile",
+        cache: {
+          force: [":context.force"],
+          file: ":preprocessor.soundEffectFile",
+          index: ":__mapIndex",
+          sessionType: "soundEffect",
+          mulmoContext: ":context",
+        },
       },
       defaultValue: {},
     },
@@ -314,7 +314,7 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
       {
         name: "fileCacheAgentFilter",
         agent: fileCacheAgentFilter,
-        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent"],
+        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent", "soundEffectGenerator"],
       },
     ],
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),
