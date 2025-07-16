@@ -3,7 +3,7 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
-import type { AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentParams, ReplicateMovieAgentConfig, SoundEffectAgentInputs } from "../types/agent.js";
+import type { AgentBufferResult, ReplicateMovieAgentParams, ReplicateMovieAgentConfig, SoundEffectAgentInputs } from "../types/agent.js";
 
 async function generateMovie(
   model: `${string}/${string}` | undefined,
@@ -74,11 +74,12 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
   }
 };
 
-export const soundEffectReplicateAgent: AgentFunction<ReplicateMovieAgentParams, AgentBufferResult, SoundEffectAgentInputs, ReplicateMovieAgentConfig> = async ({
-  namedInputs,
-  params,
-  config,
-}) => {
+export const soundEffectReplicateAgent: AgentFunction<
+  ReplicateMovieAgentParams,
+  AgentBufferResult,
+  SoundEffectAgentInputs,
+  ReplicateMovieAgentConfig
+> = async ({ namedInputs, params, config }) => {
   const { prompt, soundEffectFile } = namedInputs;
   const apiKey = config?.apiKey;
 

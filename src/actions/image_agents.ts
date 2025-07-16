@@ -24,7 +24,13 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
   const moviePaths = getBeatMoviePaths(context, index);
-  const returnValue: { imageParams: MulmoImageParams; movieFile: string | undefined; soundEffectFile?: string; soundEffectPrompt?: string; soundEffectAgentInfo?: { agentName: string; defaultModel: string } } = {
+  const returnValue: {
+    imageParams: MulmoImageParams;
+    movieFile: string | undefined;
+    soundEffectFile?: string;
+    soundEffectPrompt?: string;
+    soundEffectAgentInfo?: { agentName: string; defaultModel: string };
+  } = {
     imageParams: imageAgentInfo.imageParams,
     movieFile: beat.moviePrompt ? moviePaths.movieFile : undefined,
   };
