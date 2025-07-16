@@ -268,10 +268,10 @@ export const htmlPromptParamsSchema = z
 
 export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 
-const defaultSpearker = "Presenter";
+const defaultSpeaker = "Presenter";
 export const mulmoBeatSchema = z
   .object({
-    speaker: speakerIdSchema.default(defaultSpearker),
+    speaker: speakerIdSchema.default(defaultSpeaker),
     text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
     id: z.string().optional().describe("Unique identifier for the beat."),
     description: z.string().optional(),
@@ -283,7 +283,7 @@ export const mulmoBeatSchema = z
     audioParams: beatAudioParamsSchema.optional(), // beat specific parameters
     movieParams: z
       .object({
-        provider: text2MovieProviderSchema.optional(), // TODO: implement
+        provider: text2MovieProviderSchema.optional(),
         model: z.string().optional(),
         fillOption: mulmoFillOptionSchema.optional(), // for movie.ts
         speed: z.number().optional().describe("Speed of the video. 1.0 is normal speed. 0.5 is half speed. 2.0 is double speed."), // for movie.ts
@@ -361,10 +361,10 @@ export const mulmoPresentationStyleSchema = z.object({
   canvasSize: mulmoCanvasDimensionSchema, // has default value
   speechParams: mulmoSpeechParamsSchema.default({
     speakers: {
-      [defaultSpearker]: {
+      [defaultSpeaker]: {
         voiceId: "shimmer",
         displayName: {
-          en: defaultSpearker,
+          en: defaultSpeaker,
         },
       },
     },
