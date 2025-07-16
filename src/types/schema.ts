@@ -268,9 +268,10 @@ export const htmlPromptParamsSchema = z
 
 export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 
+const defaultSpearker = "Presenter";
 export const mulmoBeatSchema = z
   .object({
-    speaker: speakerIdSchema.default("Presenter"),
+    speaker: speakerIdSchema.default(defaultSpearker),
     text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
     id: z.string().optional().describe("Unique identifier for the beat."),
     description: z.string().optional(),
@@ -360,10 +361,10 @@ export const mulmoPresentationStyleSchema = z.object({
   canvasSize: mulmoCanvasDimensionSchema, // has default value
   speechParams: mulmoSpeechParamsSchema.default({
     speakers: {
-      Presenter: {
+      [defaultSpearker]: {
         voiceId: "shimmer",
         displayName: {
-          en: "Presenter",
+          en: defaultSpearker,
         },
       },
     },
