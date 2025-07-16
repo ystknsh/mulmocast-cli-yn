@@ -38,7 +38,8 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
   if (beat.soundEffectPrompt) {
     returnValue.soundEffectAgentInfo = MulmoPresentationStyleMethods.getSoundEffectAgentInfo(context.presentationStyle, beat);
-    returnValue.soundEffectModel = beat.soundEffectParams?.model ?? context.presentationStyle.soundEffectParams?.model ?? returnValue.soundEffectAgentInfo.defaultModel;
+    returnValue.soundEffectModel =
+      beat.soundEffectParams?.model ?? context.presentationStyle.soundEffectParams?.model ?? returnValue.soundEffectAgentInfo.defaultModel;
     returnValue.soundEffectFile = moviePaths.soundEffectFile;
     returnValue.soundEffectPrompt = beat.soundEffectPrompt;
   }

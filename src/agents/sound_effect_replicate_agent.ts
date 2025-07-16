@@ -3,12 +3,7 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
-import type {
-  AgentBufferResult,
-  SoundEffectAgentInputs,
-  ReplicateSoundEffectAgentParams,
-  ReplicateSoundEffectAgentConfig,
-} from "../types/agent.js";
+import type { AgentBufferResult, SoundEffectAgentInputs, ReplicateSoundEffectAgentParams, ReplicateSoundEffectAgentConfig } from "../types/agent.js";
 
 async function generateMovie(
   model: `${string}/${string}` | undefined,
