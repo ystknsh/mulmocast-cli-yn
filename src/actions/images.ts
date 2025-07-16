@@ -11,7 +11,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
-import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent } from "../agents/index.js";
+import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent, soundEffectReplicateAgent } from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
@@ -32,10 +32,14 @@ const movieAgents = {
   movieGoogleAgent,
   movieReplicateAgent,
 };
+const soundEffectAgents = {
+  soundEffectReplicateAgent,
+};
 const defaultAgents = {
   ...vanillaAgents,
   ...imageAgents,
   ...movieAgents,
+  ...soundEffectAgents,
   mediaMockAgent,
   fileWriteAgent,
   openAIAgent,

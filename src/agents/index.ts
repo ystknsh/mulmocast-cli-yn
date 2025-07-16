@@ -10,6 +10,7 @@ import ttsElevenlabsAgent from "./tts_elevenlabs_agent.js";
 import ttsNijivoiceAgent from "./tts_nijivoice_agent.js";
 import ttsOpenaiAgent from "./tts_openai_agent.js";
 import validateSchemaAgent from "./validate_schema_agent.js";
+import soundEffectReplicateAgent from "./sound_effect_replicate_agent.js";
 
 import { browserlessAgent } from "@graphai/browserless_agent";
 import { textInputAgent } from "@graphai/input_agents";
@@ -17,6 +18,7 @@ import { textInputAgent } from "@graphai/input_agents";
 import { openAIAgent } from "@graphai/openai_agent";
 // import * as vanilla from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
+
 
 export {
   openAIAgent,
@@ -35,4 +37,5 @@ export {
   ttsNijivoiceAgent,
   ttsOpenaiAgent,
   validateSchemaAgent,
+  soundEffectReplicateAgent,
 };
