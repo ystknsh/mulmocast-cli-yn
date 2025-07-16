@@ -24,12 +24,13 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
   const moviePaths = getBeatMoviePaths(context, index);
-  const returnValue: { imageParams: MulmoImageParams; movieFile: string | undefined; soundEffectFile?: string; soundEffectPrompt?: string } = {
+  const returnValue: { imageParams: MulmoImageParams; movieFile: string | undefined; soundEffectFile?: string; soundEffectPrompt?: string; soundEffectAgentInfo?: { agentName: string; defaultModel: string } } = {
     imageParams: imageAgentInfo.imageParams,
     movieFile: beat.moviePrompt ? moviePaths.movieFile : undefined,
   };
 
   if (beat.soundEffectPrompt) {
+    returnValue.soundEffectAgentInfo = MulmoPresentationStyleMethods.getSoundEffectAgentInfo(context.presentationStyle, beat);
     returnValue.soundEffectFile = moviePaths.soundEffectFile;
     returnValue.soundEffectPrompt = beat.soundEffectPrompt;
   }
@@ -42,7 +43,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
   }
 
   const movieAgentInfo = MulmoPresentationStyleMethods.getMovieAgentInfo(context.presentationStyle, beat);
-  GraphAILogger.log(`movieParams: ${index}`, movieAgentInfo.movieParams, beat.moviePrompt, beat.soundEffectPrompt);
+  GraphAILogger.log(`movieParams: ${index}`, movieAgentInfo.movieParams, returnValue.soundEffectAgentInfo, "\n", beat.moviePrompt, beat.soundEffectPrompt);
   if (beat.moviePrompt && !beat.imagePrompt) {
     return { ...returnValue, imagePath, imageFromMovie: true, movieAgentInfo }; // no image prompt, only movie prompt
   }

@@ -91,7 +91,7 @@ const buildContext = (
 };
 
 export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, caption?: string, lang?: string) => {
-  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath} = files;
+  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath } = files;
 
   // read mulmoScript, presentationStyle, currentStudio from files
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);

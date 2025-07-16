@@ -193,7 +193,7 @@ const beat_graph_data = {
       agent: async (namedInputs: { prompt: string; soundEffectFile: string }) => {
         const { prompt, soundEffectFile } = namedInputs;
         console.log("**** soundEffectGenerator", prompt, soundEffectFile);
-        return { };
+        return {};
       },
       inputs: {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
