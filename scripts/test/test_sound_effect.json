@@ -14,10 +14,11 @@
   "lang": "en",
   "beats": [
     {
-      "id": "horse_running",
+      "id": "horse_galloping",
       "text": "A horse galloping",
       "duration": 5,
-      "moviePrompt": "A horse galloping in a field",
+      "imagePrompt": "A horse galloping fast in a large field",
+      "moviePrompt": "A horse galloping fast in a large field",
       "soundEffectPrompt": "sound of a horse galloping"
     },
     {
