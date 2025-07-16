@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { htmlLLMProvider, provider2TTSAgent, provider2ImageAgent, provider2MovieAgent, defaultProviders } from "../utils/provider2agent.js";
+import {
+  htmlLLMProvider,
+  provider2TTSAgent,
+  provider2ImageAgent,
+  provider2MovieAgent,
+  defaultProviders,
+  provider2SoundEffectAgent,
+} from "../utils/provider2agent.js";
 
 export const langSchema = z.string();
 const URLStringSchema = z.string().url();
@@ -267,6 +274,7 @@ export const htmlPromptParamsSchema = z
   .strict();
 
 export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
+export const text2SoundEffectProviderSchema = z.enum(Object.keys(provider2SoundEffectAgent) as [string, ...string[]]).default(defaultProviders.soundEffect);
 
 const defaultSpeaker = "Presenter";
 export const mulmoBeatSchema = z
@@ -356,6 +364,11 @@ export const mulmoMovieParamsSchema = z
   })
   .strict();
 
+export const mulmoSoundEffectParamsSchema = z.object({
+  provider: text2SoundEffectProviderSchema.optional(),
+  model: z.string().optional(), // default: provider specific
+});
+
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,
   canvasSize: mulmoCanvasDimensionSchema, // has default value
@@ -371,6 +384,7 @@ export const mulmoPresentationStyleSchema = z.object({
   }),
   imageParams: mulmoImageParamsSchema.optional(),
   movieParams: mulmoMovieParamsSchema.optional(),
+  soundEffectParams: mulmoSoundEffectParamsSchema.optional(),
   htmlImageParams: mulmoHtmlImageParamsSchema
     .extend({
       provider: text2HtmlImageProviderSchema,
@@ -424,6 +438,7 @@ export const mulmoStudioBeatSchema = z
     audioFile: z.string().optional(),
     imageFile: z.string().optional(), // path to the image
     movieFile: z.string().optional(), // path to the movie file
+    soundEffectFile: z.string().optional(), // path to the sound effect file
     captionFile: z.string().optional(), // path to the caption image
   })
   .strict();
