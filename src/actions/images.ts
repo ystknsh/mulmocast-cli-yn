@@ -177,16 +177,19 @@ const beat_graph_data = {
       defaultValue: {},
     },
     audioChecker: {
-      if: ":preprocessor.movieFile",
-      agent: async (namedInputs: { movieFile: string }) => {
-        const { hasAudio } = await ffmpegGetMediaDuration(namedInputs.movieFile);
+      agent: async (namedInputs: { movieFile: string; imageFile: string }) => {
+        const sourceFile = namedInputs.movieFile || namedInputs.imageFile;
+        if (!sourceFile) {
+          return { hasMovieAudio: false };
+        }
+        const { hasAudio } = await ffmpegGetMediaDuration(sourceFile);
         return { hasMovieAudio: hasAudio };
       },
       inputs: {
         onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
         movieFile: ":preprocessor.movieFile",
+        imageFile: ":preprocessor.imagePath",
       },
-      defaultValue: {},
     },
     output: {
       agent: "copyAgent",
