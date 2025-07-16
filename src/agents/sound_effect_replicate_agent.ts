@@ -89,11 +89,14 @@ export const soundEffectReplicateAgent: AgentFunction<
 
   try {
     console.log("**** soundEffectReplicateAgent", prompt, soundEffectFile, apiKey);
+    /*
     const buffer = undefined; // await generateMovie(params.model, apiKey, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
     throw new Error("ERROR: generateMovie returned undefined");
+    */
+    return { buffer: undefined };
   } catch (error) {
     GraphAILogger.info("Failed to generate movie:", (error as Error).message);
     throw error;
