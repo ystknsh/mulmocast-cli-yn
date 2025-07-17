@@ -7,6 +7,16 @@
       "version": "1.0",
       "credit": "closing"
     },
+    "movieParams": {
+      "provider": "replicate",
+      "model": "bytedance/seedance-1-lite"
+    },
+    "audioParams": {
+      "bgm": {
+        "kind": "url",
+        "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3"
+      }
+    },
     "lang": "en",
     "canvasSize": {
       "width": 1024,
