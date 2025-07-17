@@ -60,8 +60,8 @@ test("test createOrUpdateStudioData", async () => {
         provider: "openai",
       },
       movieParams: {
-        model: "veo-2.0-generate-001",
-        provider: "google",
+        model: 'bytedance/seedance-1-lite',
+        provider: 'replicate'
       },
       beats: [
         { speaker: "Presenter", text: "hello" },

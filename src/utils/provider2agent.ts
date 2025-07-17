@@ -92,7 +92,7 @@ export const defaultProviders: {
 } = {
   tts: "openai",
   text2image: "openai",
-  text2movie: "google",
+  text2movie: "replicate",
   text2Html: "openai",
   llm: "openai",
 };
