@@ -115,7 +115,7 @@ export const mulmoChartMediaSchema = z
   .object({
     type: z.literal("chart"),
     title: z.string(),
-    chartData: z.record(z.any()),
+    chartData: z.record(z.string(), z.any()),
   })
   .strict();
 
@@ -262,7 +262,7 @@ export const htmlPromptParamsSchema = z
     systemPrompt: z.string().default("").optional(),
     prompt: z.string().default(""),
     data: z.any().optional(),
-    images: z.record(z.any()).optional(),
+    images: z.record(z.string(), z.any()).optional(),
   })
   .strict();
 
