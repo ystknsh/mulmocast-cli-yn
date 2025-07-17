@@ -43,6 +43,16 @@
       }
     },
     {
+      "id": "kling-v1.6-pro",
+      "text": "kwaivgi/kling-v1.6-pro",
+      "duration": 5,
+      "imagePrompt": "televised footage of a cat is ready to dive into a swimming pool at the olympics, from a 10m high diving board. No text.",
+      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "movieParams": {
+        "model": "kwaivgi/kling-v1.6-pro"
+      }
+    },
+    {
       "id": "kling-v2.1-master",
       "text": "kwaivgi/kling-v2.1-master",
       "duration": 5,
