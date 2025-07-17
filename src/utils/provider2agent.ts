@@ -45,11 +45,13 @@ export const provider2MovieAgent = {
       "bytedance/seedance-1-pro",
       "kwaivgi/kling-v1.6-pro",
       "kwaivgi/kling-v2.1",
+      "kwaivgi/kling-v2.1-master",
       "google/veo-2",
       "google/veo-3",
       "google/veo-3-fast",
       "minimax/video-01",
       "minimax/hailuo-02",
+      "pixverse/pixverse-v4.5",
     ],
   },
   google: {

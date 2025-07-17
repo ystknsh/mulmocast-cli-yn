@@ -34,12 +34,30 @@
       }
     },
     {
+      "id": "veo-2",
+      "text": "google/veo-2",
+      "duration": 5,
+      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "movieParams": {
+        "model": "google/veo-2"
+      }
+    },
+    {
       "id": "veo-3-fast",
       "text": "google/veo-3-fast",
       "duration": 5,
       "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
       "movieParams": {
         "model": "google/veo-3-fast"
+      }
+    },
+    {
+      "id": "seedance-1-lite",
+      "text": "bytedance/seedance-1-lite",
+      "duration": 5,
+      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "movieParams": {
+        "model": "bytedance/seedance-1-lite"
       }
     },
     {
