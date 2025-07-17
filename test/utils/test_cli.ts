@@ -59,6 +59,10 @@ test("test createOrUpdateStudioData", async () => {
         model: 'gpt-image-1',
         provider: 'openai'
       },
+      movieParams: {
+        model: 'veo-2.0-generate-001',
+        provider: 'google'
+      },
       beats: [
         { speaker: "Presenter", text: "hello" },
         {

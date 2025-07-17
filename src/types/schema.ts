@@ -374,7 +374,10 @@ export const mulmoPresentationStyleSchema = z.object({
     model: provider2ImageAgent[defaultProviders.text2image].defaultModel,
     images: {},
   }),
-  movieParams: mulmoMovieParamsSchema.optional(),
+  movieParams: mulmoMovieParamsSchema.optional().default({
+    provider: defaultProviders.text2movie,
+    model: provider2MovieAgent[defaultProviders.text2movie].defaultModel,
+  }),
   htmlImageParams: mulmoHtmlImageParamsSchema
     .extend({
       provider: text2HtmlImageProviderSchema,

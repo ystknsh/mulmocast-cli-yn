@@ -47,6 +47,7 @@ export const provider2ImageAgent = {
 export const provider2MovieAgent = {
   replicate: {
     agentName: "movieReplicateAgent",
+    defaultModel: "bytedance/seedance-1-lite",
     models: [
       "bytedance/seedance-1-lite",
       "bytedance/seedance-1-pro",
@@ -61,6 +62,7 @@ export const provider2MovieAgent = {
   },
   google: {
     agentName: "movieGoogleAgent",
+    defaultModel: "veo-2.0-generate-001",
     models: ["veo-2.0-generate-001"],
   },
 };
