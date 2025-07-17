@@ -56,12 +56,10 @@ test("test createOrUpdateStudioData", async () => {
       },
       imageParams: {
         images: {},
-        model: "gpt-image-1",
         provider: "openai",
       },
       movieParams: {
-        model: 'bytedance/seedance-1-lite',
-        provider: 'replicate'
+        provider: "replicate",
       },
       beats: [
         { speaker: "Presenter", text: "hello" },
