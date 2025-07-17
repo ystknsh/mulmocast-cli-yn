@@ -11,6 +11,15 @@
       "provider": "replicate",
       "model": "bytedance/seedance-1-lite"
     },
+    "speechParams": {
+      "provider": "openai",
+      "speakers": {
+        "Presenter": {
+          "voiceId": "shimmer",
+          "speechOptions": { "instruction": "Speak in a slightly high-pitched, curt tone with sudden flustered shifts—like a tsundere anime girl." }
+        }
+      }
+    },
     "audioParams": {
       "bgm": {
         "kind": "url",
