@@ -54,6 +54,11 @@ test("test createOrUpdateStudioData", async () => {
         bgmVolume: 0.2,
         audioVolume: 1.0,
       },
+      imageParams: {
+        images: {},
+        model: 'gpt-image-1',
+        provider: 'openai'
+      },
       beats: [
         { speaker: "Presenter", text: "hello" },
         {
