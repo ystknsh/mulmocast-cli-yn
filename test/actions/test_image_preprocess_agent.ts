@@ -88,7 +88,7 @@ test("imagePreprocessAgent - basic functionality", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -132,7 +132,7 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
     },
     movieFile: "/test/images/test_studio/1.mov",
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     imagePath: "/test/images/test_studio/1p.png",
@@ -165,7 +165,7 @@ test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
     },
     movieFile: "/test/images/test_studio/2.mov",
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     imagePath: "/test/images/test_studio/2p.png",
@@ -222,7 +222,7 @@ test("imagePreprocessAgent - with imageNames", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
@@ -268,7 +268,7 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
@@ -315,7 +315,7 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
@@ -361,7 +361,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -402,7 +402,7 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -450,7 +450,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
       },
       movieFile: undefined,
       movieAgentInfo: {
-        agent: "movieGoogleAgent",
+        agent: "movieReplicateAgent",
         movieParams: {},
       },
       referenceImages: [],
@@ -496,7 +496,7 @@ test("imagePreprocessAgent - text only", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -541,7 +541,7 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -584,7 +584,7 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
     imagePath: "/test/images/test_studio/15p.png",
     movieFile: "/test/images/test_studio/15.mov",
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     imageFromMovie: true,
@@ -620,7 +620,7 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
     imagePath: "/test/images/test_studio/16p.png",
     movieFile: "/test/images/test_studio/16.mov",
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     imageFromMovie: true,
@@ -656,7 +656,7 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
     },
     movieFile: "/test/images/test_studio/17.mov",
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -701,7 +701,7 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
     },
     movieFile: "/test/images/test_studio/18.mov",
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -745,7 +745,7 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -789,7 +789,7 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],
@@ -846,7 +846,7 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     },
     movieFile: undefined,
     movieAgentInfo: {
-      agent: "movieGoogleAgent",
+      agent: "movieReplicateAgent",
       movieParams: {},
     },
     referenceImages: [],

@@ -54,6 +54,13 @@ test("test createOrUpdateStudioData", async () => {
         bgmVolume: 0.2,
         audioVolume: 1.0,
       },
+      imageParams: {
+        images: {},
+        provider: "openai",
+      },
+      movieParams: {
+        provider: "replicate",
+      },
       beats: [
         { speaker: "Presenter", text: "hello" },
         {
