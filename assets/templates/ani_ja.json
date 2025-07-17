@@ -15,7 +15,7 @@
     "speechParams": {
       "provider": "nijivoice",
       "speakers": {
-        "Presenter": { "voiceId": "231e0170-0ece-4155-be44-231423062f41" }
+        "Presenter": { "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0" }
       }
     },
     "imageParams": {
