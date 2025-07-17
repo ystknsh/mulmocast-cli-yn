@@ -1,11 +1,3 @@
-export const defaultProviders = {
-  tts: "openai",
-  text2image: "openai",
-  text2movie: "google",
-  text2Html: "openai",
-  llm: "openai",
-};
-
 export const provider2TTSAgent = {
   nijivoice: {
     agentName: "ttsNijivoiceAgent",
@@ -47,7 +39,7 @@ export const provider2ImageAgent = {
 export const provider2MovieAgent = {
   replicate: {
     agentName: "movieReplicateAgent",
-    defaultModel: "bytedance/seedance-1-lite",
+    defaultModel: "bytedance/seedance-1-lite" as `${string}/${string}`,
     models: [
       "bytedance/seedance-1-lite",
       "bytedance/seedance-1-pro",
@@ -90,6 +82,20 @@ export const provider2LLMAgent = {
     max_tokens: 4096,
   },
 } as const;
+
+export const defaultProviders: {
+  tts: keyof typeof provider2TTSAgent;
+  text2image: keyof typeof provider2ImageAgent;
+  text2movie: keyof typeof provider2MovieAgent;
+  text2Html: keyof typeof provider2LLMAgent;
+  llm: keyof typeof provider2LLMAgent;
+} = {
+  tts: "openai",
+  text2image: "openai",
+  text2movie: "google",
+  text2Html: "openai",
+  llm: "openai",
+};
 
 export const llm = Object.keys(provider2LLMAgent) as (keyof typeof provider2LLMAgent)[];
 export type LLM = keyof typeof provider2LLMAgent;

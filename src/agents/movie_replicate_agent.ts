@@ -4,6 +4,7 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
 import type { AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentParams, ReplicateMovieAgentConfig } from "../types/agent.js";
+import { provider2MovieAgent } from "../utils/provider2agent.js";
 
 async function generateMovie(
   model: `${string}/${string}` | undefined,
@@ -42,7 +43,7 @@ async function generateMovie(
   }
 
   try {
-    const output = await replicate.run(model ?? "bytedance/seedance-1-lite", { input });
+    const output = await replicate.run(model ?? provider2MovieAgent.replicate.defaultModel, { input });
 
     // Download the generated video
     if (output && typeof output === "object" && "url" in output) {
