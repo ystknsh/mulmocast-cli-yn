@@ -122,6 +122,31 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **注意**: `npm install -g mulmocast`でインストールした場合、スタイルファイルは含まれません。別途ダウンロードするか、独自に作成する必要があります。
 
+### Q: 画像生成で 「403 Your organization must be verified to use the model 'gpt-image-1'」 エラーが発生します
+
+**A: このエラーは、 画像生成で使用されている OpenAI `gpt-image-1` モデルを利用するのに組織認証を必要とするために発生します。**
+
+**解決方法は以下の2つから選択できます：**
+
+**方法1**: 組織認証を完了して `gpt-image-1` を使用する
+- より高品質な画像生成が可能です
+- [ベータ版リリースノート](beta1_ja.md)を参照して、OpenAIの組織認証を完了してください
+
+**方法2**: 従来の `dall-e-3` を使用する
+- 組織認証は不要です
+- 以下の設定を MulmoScript に追加してください：
+
+```json
+{
+  "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3"
+  }
+}
+```
+
+**背景**: バージョンアップにより、より高品質な画像生成が可能な `gpt-image-1` をデフォルトモデルに変更しました。`gpt-image-1` は組織認証が必要ですが、従来の `dall-e-3` は認証なしで利用可能です。
+
 ## 画像生成設定
 ### Q. 画像生成AIのモデルやプロバイダーを切り替えられますか？
 **A. はい、⁠imageParams でプロバイダーやモデルを指定できます。**
