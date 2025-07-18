@@ -1,5 +1,94 @@
 # RELEASE NOTE
 
+# v.0.1.6
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.6** focuses on code quality improvements and creative sample expansion through comprehensive refactoring and enhanced development tooling.
+
+### Samples & Templates
+
+**Google Veo-3-Fast Creative Showcase**
+- Comprehensive sample script with 8 diverse video generation scenarios including ASMR fruit cutting, Arctic fox drone footage, stand-up comedy, and clay animation ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.6/scripts/snakajima/veo3_sample.json))
+- Optimized 8-second clips for pure visual content with professional caption formatting
+- Reference-driven content with Twitter/X inspiration links for creative guidance
+
+### Technical Improvements
+- Audio processing and type safety improvements in combine_audio_files_agent.ts
+- Google Cloud config centralization, ESLint/browser support, and API key cleanup
+- Unified formatting, enhanced tests, and clearer type annotations
+
+### Bug Fixes
+- Nijivoice voice IDs in test configs updated for continued TTS functionality
+
+This release emphasizes developer experience and code maintainability while providing new creative examples for video generation workflows.
+
+# v.0.1.5
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.5** enhances TTS capabilities with comprehensive model selection and improves video generation with Google Veo3 support.
+
+### Video Generation
+
+**Google Veo3 Support**
+- Enhanced video generation with Google Veo3 integration through improved Replicate support ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_replicate.json))
+- Smart audio handling with automatic detection of audio tracks in generated content
+- Better audio mixing when combining multiple video sources
+
+### TTS & Audio Enhancements
+
+**ElevenLabs Model Selection**
+- Configure ElevenLabs models with fine-grained control: eleven_multilingual_v2, eleven_turbo_v2_5, eleven_flash_v2_5 ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_elevenlabs_models.json))
+- Set models at system, speaker, or speechParams level with environment variable support
+- Updated default from eleven_monolingual_v1 to eleven_multilingual_v2
+
+**Advanced Audio Control**
+- Implemented audio track detection for both external and AI-generated videos
+- Enhanced TTS processing with improved type safety for Nijivoice and OpenAI agents
+
+### Breaking Changes
+
+**Audio Schema Changes**
+- Added `audioParams.movieVolume` parameter for controlling audio levels from videos ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_audio.json))
+
+### Documentation & Configuration
+
+**Comprehensive Setup Guides**
+- API configuration documentation covering baseURL setup, Azure OpenAI integration, and service-specific API key management ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.5/docs/faq_en.md))
+- Image generation configuration guide with practical examples ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.5/docs/faq_ja.md))
+
+### Technical Improvements
+- **Browser Compatibility**: Exported provider utilities for browser environments, enabling MulmoCast components usage in web applications
+- Enhanced schema descriptions and parameter definitions
+- Removed obsolete generatedVoice parameter from Nijivoice implementation
+
+This release provides greater control over audio generation quality, speed, and language support while improving video integration and expanding platform versatility.
+
+# v.0.1.4
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.4** introduces beat-specific movie model configuration and significantly expands movie generation capabilities with 8 new AI models.
+
+### New Features
+
+**Beat-Specific Movie Model Configuration**
+- Configure different movie generation models for individual beats within a single presentation ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.4/scripts/test/test_replicate.json))
+- Set global default movie models and override them per beat for optimal results
+- Mix and match movie models to leverage each model's unique strengths
+
+**Expanded Movie Generation Models**
+- **ByteDance SeedAnce**: `bytedance/seedance-1-lite` (fast, efficient) and `bytedance/seedance-1-pro` (higher quality)
+- **Kling Models**: `kwaivgi/kling-v1.6-pro` and `kwaivgi/kling-v2.1` (great for image-to-video)
+- **Google Veo**: `google/veo-2`, `google/veo-3`, and `google/veo-3-fast` (versatile and reliable)
+- **Minimax**: `minimax/video-01` and `minimax/hailuo-02` (unique artistic styles)
+- Comprehensive test suite showing effective usage of each new model ([sample file](https://github.com/receptron/mulmocast-cli/blob/0.1.4/scripts/test/test_replicate.json))
+
+### System Improvements
+- **Centralized Configuration**: Improved provider system makes it easier to switch between AI services
+- **Better Resource Management**: Enhanced handling of API rate limits and processing constraints
+- **Enhanced Type Safety**: Improved TypeScript definitions for better development experience
+
+This release enables greater creative control by allowing you to choose the perfect AI model for each moment in your presentation, opening new possibilities for educational content, marketing materials, and artistic projects.
+
 # v.0.1.3
 ## RELEASE NOTE
 
