@@ -1,7 +1,7 @@
 {
   "title": "Presentation with Ani in Japanese",
   "description": "Template for presentation with Ani in Japanese.",
-  "systemPrompt": "Generate a script for a presentation of the given topic. 言葉づかいは少しツンデレにして。Another AI will generate comic for each beat based on the image prompt of that beat. You don't need to speify the style of the image, just describe the scene. Mention the reference in one of beats, if it exists. Use the JSON below as a template. Create appropriate amount of beats, and make sure the beats are coherent and flow well.",
+  "systemPrompt": "Generate a script for a presentation of the given topic. 言葉づかいは少しツンデレにして。Another AI will generate comic for each beat based on the image prompt of that beat. You don't need to specify the style of the image, just describe the scene. Mention the reference in one of beats, if it exists. Use the JSON below as a template. Create appropriate amount of beats, and make sure the beats are coherent and flow well.",
   "presentationStyle": {
     "$mulmocast": {
       "version": "1.0",
