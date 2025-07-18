@@ -1,5 +1,31 @@
 # RELEASE NOTE
 
+# v.0.1.4
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.4** introduces beat-specific movie model configuration and significantly expands movie generation capabilities with 8 new AI models.
+
+### New Features
+
+**Beat-Specific Movie Model Configuration**
+- Configure different movie generation models for individual beats within a single presentation ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.4/scripts/test/test_replicate.json))
+- Set global default movie models and override them per beat for optimal results
+- Mix and match movie models to leverage each model's unique strengths
+
+**Expanded Movie Generation Models**
+- **ByteDance SeedAnce**: `bytedance/seedance-1-lite` (fast, efficient) and `bytedance/seedance-1-pro` (higher quality)
+- **Kling Models**: `kwaivgi/kling-v1.6-pro` and `kwaivgi/kling-v2.1` (great for image-to-video)
+- **Google Veo**: `google/veo-2`, `google/veo-3`, and `google/veo-3-fast` (versatile and reliable)
+- **Minimax**: `minimax/video-01` and `minimax/hailuo-02` (unique artistic styles)
+- Comprehensive test suite showing effective usage of each new model ([sample file](https://github.com/receptron/mulmocast-cli/blob/0.1.4/scripts/test/test_replicate.json))
+
+### System Improvements
+- **Centralized Configuration**: Improved provider system makes it easier to switch between AI services
+- **Better Resource Management**: Enhanced handling of API rate limits and processing constraints
+- **Enhanced Type Safety**: Improved TypeScript definitions for better development experience
+
+This release enables greater creative control by allowing you to choose the perfect AI model for each moment in your presentation, opening new possibilities for educational content, marketing materials, and artistic projects.
+
 # v.0.1.3
 ## RELEASE NOTE
 
