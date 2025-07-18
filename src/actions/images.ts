@@ -186,7 +186,7 @@ const beat_graph_data = {
         return { hasMovieAudio: hasAudio };
       },
       inputs: {
-        onComplete: [":movieGenerator"], // to wait for movieGenerator to finish
+        onComplete: [":movieGenerator", ":htmlImageGenerator"], // to wait for movieGenerator and htmlImageGenerator to finish
         movieFile: ":preprocessor.movieFile",
         imageFile: ":preprocessor.imagePath",
       },

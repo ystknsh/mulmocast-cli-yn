@@ -1,5 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import { GraphAILogger } from "graphai";
+import fs from "fs";
 
 export type FfmpegContext = {
   command: ffmpeg.FfmpegCommand;
@@ -73,6 +74,10 @@ export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: stri
 
 export const ffmpegGetMediaDuration = (filePath: string) => {
   return new Promise<{ duration: number; hasAudio: boolean }>((resolve, reject) => {
+    if (!fs.existsSync(filePath)) {
+      reject(new Error(`File not found: ${filePath}`));
+      return;
+    }
     ffmpeg.ffprobe(filePath, (err, metadata) => {
       if (err) {
         GraphAILogger.info("Error while getting metadata:", err);
