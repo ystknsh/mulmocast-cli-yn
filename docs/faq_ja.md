@@ -130,16 +130,18 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **方法1**: 組織認証を完了して `gpt-image-1` を使用する
 - より高品質な画像生成が可能です
-- [ベータ版リリースノートの項番5](beta1_ja.md#推奨項目綺麗な画像生成のために必要)を参照して、OpenAIの組織認証を完了してください
+- [ベータ版リリースノート](beta1_ja.md)を参照して、OpenAIの組織認証を完了してください
 
 **方法2**: 従来の `dall-e-3` を使用する
 - 組織認証は不要です
 - 以下の設定を MulmoScript に追加してください：
 
 ```json
-"imageParams": {
-  "provider": "openai",
-  "model": "dall-e-3"
+{
+  "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3"
+  }
 }
 ```
 

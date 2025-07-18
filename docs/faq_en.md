@@ -130,16 +130,18 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **Option 1**: Complete organization verification to use `gpt-image-1`
 - Enables higher quality image generation
-- Refer to [Beta Release Notes item 5](beta1_en.md#recommended-steps-for-high-quality-image-generation) to complete OpenAI organization verification
+- Refer to [Beta Release Notes](beta1_en.md#recommended-steps-for-high-quality-image-generation) to complete OpenAI organization verification
 
 **Option 2**: Use the traditional `dall-e-3`
 - No organization verification required
 - Add the following configuration to your MulmoScript:
 
 ```json
-"imageParams": {
-  "provider": "openai",
-  "model": "dall-e-3"
+{
+  "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3"
+  }
 }
 ```
 
