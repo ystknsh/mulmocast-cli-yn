@@ -28,6 +28,7 @@ import {
   mulmoPresentationStyleSchema,
   multiLingualTextsSchema,
   // for image
+  mulmoImageAssetSchema,
   mulmoMermaidMediaSchema,
   mulmoTextSlideMediaSchema,
   mulmoMarkdownMediaSchema,
@@ -82,6 +83,7 @@ export type MulmoReplicateMovieModel = z.infer<typeof mulmoReplicateMovieModelSc
 export type MulmoImagePromptMedia = z.infer<typeof mulmoImagePromptMediaSchema>;
 
 // images
+export type MulmoImageAsset = z.infer<typeof mulmoImageAssetSchema>;
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
 export type MulmoMarkdownMedia = z.infer<typeof mulmoMarkdownMediaSchema>;
 export type MulmoImageMedia = z.infer<typeof mulmoImageMediaSchema>;
