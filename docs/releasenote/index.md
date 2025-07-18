@@ -1,5 +1,46 @@
 # RELEASE NOTE
 
+# v.0.1.5
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.5** enhances TTS capabilities with comprehensive model selection and improves video generation with Google Veo3 support.
+
+### Video Generation
+
+**Google Veo3 Support**
+- Enhanced video generation with Google Veo3 integration through improved Replicate support ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_replicate.json))
+- Smart audio handling with automatic detection of audio tracks in generated content
+- Better audio mixing when combining multiple video sources
+
+### TTS & Audio Enhancements
+
+**ElevenLabs Model Selection**
+- Configure ElevenLabs models with fine-grained control: eleven_multilingual_v2, eleven_turbo_v2_5, eleven_flash_v2_5 ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_elevenlabs_models.json))
+- Set models at system, speaker, or speechParams level with environment variable support
+- Updated default from eleven_monolingual_v1 to eleven_multilingual_v2
+
+**Advanced Audio Control**
+- Implemented audio track detection for both external and AI-generated videos
+- Enhanced TTS processing with improved type safety for Nijivoice and OpenAI agents
+
+### Breaking Changes
+
+**Audio Schema Changes**
+- Added `audioParams.movieVolume` parameter for controlling audio levels from videos ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_audio.json))
+
+### Documentation & Configuration
+
+**Comprehensive Setup Guides**
+- API configuration documentation covering baseURL setup, Azure OpenAI integration, and service-specific API key management ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.5/docs/faq_en.md))
+- Image generation configuration guide with practical examples ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.5/docs/faq_ja.md))
+
+### Technical Improvements
+- **Browser Compatibility**: Exported provider utilities for browser environments, enabling MulmoCast components usage in web applications
+- Enhanced schema descriptions and parameter definitions
+- Removed obsolete generatedVoice parameter from Nijivoice implementation
+
+This release provides greater control over audio generation quality, speed, and language support while improving video integration and expanding platform versatility.
+
 # v.0.1.4
 ## RELEASE NOTE
 
