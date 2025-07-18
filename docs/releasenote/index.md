@@ -1,5 +1,27 @@
 # RELEASE NOTE
 
+# v.0.1.6
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.6** focuses on code quality improvements and creative sample expansion through comprehensive refactoring and enhanced development tooling.
+
+### Samples & Templates
+
+**Google Veo-3-Fast Creative Showcase**
+- Comprehensive sample script with 8 diverse video generation scenarios including ASMR fruit cutting, Arctic fox drone footage, stand-up comedy, and clay animation ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.6/scripts/snakajima/veo3_sample.json))
+- Optimized 8-second clips for pure visual content with professional caption formatting
+- Reference-driven content with Twitter/X inspiration links for creative guidance
+
+### Technical Improvements
+- Audio processing and type safety improvements in combine_audio_files_agent.ts
+- Google Cloud config centralization, ESLint/browser support, and API key cleanup
+- Unified formatting, enhanced tests, and clearer type annotations
+
+### Bug Fixes
+- Nijivoice voice IDs in test configs updated for continued TTS functionality
+
+This release emphasizes developer experience and code maintainability while providing new creative examples for video generation workflows.
+
 # v.0.1.5
 ## RELEASE NOTE
 
