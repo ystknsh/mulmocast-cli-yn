@@ -56,7 +56,7 @@ export const createOrUpdateStudioData = (
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
     const defaultSpeaker = MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle ?? studio.script)
-    mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker
+    mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker ?? defaultSpeaker)); // First speaker
   }
 
   studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
