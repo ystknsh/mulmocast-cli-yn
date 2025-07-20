@@ -22,7 +22,6 @@ test("defaultSpeaker isDefault", async () => {
   assert.equal(result, "Presenter");
 });
 
-
 test("defaultSpeaker no isDefault", async () => {
   const presentationStyle = {
     speechParams: {
@@ -40,7 +39,6 @@ test("defaultSpeaker no isDefault", async () => {
   const result = MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
   assert.equal(result, "Presenter");
 });
-
 
 test("defaultSpeaker no isDefault two speaker", async () => {
   const presentationStyle = {
@@ -65,7 +63,6 @@ test("defaultSpeaker no isDefault two speaker", async () => {
   const result = MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
   assert.equal(result, "Presenter1");
 });
-
 
 test("defaultSpeaker isDefault two speaker", async () => {
   const presentationStyle = {
@@ -93,7 +90,6 @@ test("defaultSpeaker isDefault two speaker", async () => {
   assert.equal(result, "Presenter1");
 });
 
-
 test("defaultSpeaker error no speaker", async () => {
   const presentationStyle = {
     speechParams: {
@@ -101,9 +97,7 @@ test("defaultSpeaker error no speaker", async () => {
       speakers: {},
     },
   };
-  await assert.rejects(
-    async () => {
-      MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
-    }
-  )
+  await assert.rejects(async () => {
+    MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
+  });
 });
