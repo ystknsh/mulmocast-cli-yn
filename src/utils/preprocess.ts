@@ -1,5 +1,5 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
+import { MulmoStudio, MulmoScript, MulmoPresentationStyle, mulmoScriptSchema, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
 import { MulmoPresentationStyleMethods } from "../methods/mulmo_presentation_style.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
@@ -55,7 +55,7 @@ export const createOrUpdateStudioData = (
   // TODO: Move this code out of this function later
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
-    const defaultSpeaker = MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle ?? studio.script)
+    const defaultSpeaker = MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle ?? studio.script);
     mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker ?? defaultSpeaker)); // First speaker
   }
 

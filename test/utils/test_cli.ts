@@ -80,7 +80,6 @@ test("test createOrUpdateStudioData", async () => {
   assert.deepStrictEqual(studio, expect);
 });
 
-
 test("test createOrUpdateStudioData", async () => {
   const studio = createOrUpdateStudioData(
     {
