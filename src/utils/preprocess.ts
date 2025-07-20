@@ -46,7 +46,7 @@ export const createOrUpdateStudioData = (
   currentStudio: MulmoStudio | undefined,
   fileName: string,
   videoCaption?: string,
-  presentationStyle?: MulmoPresentationStyle,
+  presentationStyle?: MulmoPresentationStyle | null,
 ) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
 
