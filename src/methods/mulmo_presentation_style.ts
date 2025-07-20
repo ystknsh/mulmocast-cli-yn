@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { isNull } from "graphai";
 import { userAssert } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
@@ -64,6 +65,16 @@ export const MulmoPresentationStyleMethods = {
   },
   getSpeechOptions(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeechOptions | undefined {
     return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
+  },
+  getDefaultSpeaker(presentationStyle: MulmoPresentationStyle) {
+    const speakers = presentationStyle.speechParams.speakers ?? {};
+    const keys = Object.keys(speakers).sort();
+    userAssert(keys.length !== 0, "presentationStyle.speechParams.speakers is not set!!");
+    const defaultSpeaker = keys.find((key) => speakers[key].isDefault);
+    if (!isNull(defaultSpeaker)) {
+      return defaultSpeaker;
+    }
+    return keys[0];
   },
   getSpeaker(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeakerData {
     userAssert(!!presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
