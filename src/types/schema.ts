@@ -353,18 +353,20 @@ const defaultSpeaker = "Presenter";
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,
   canvasSize: mulmoCanvasDimensionSchema, // has default value
-  speechParams: z.object({
-    speakers: speakerDictionarySchema,
-  }).default({
-    speakers: {
-      [defaultSpeaker]: {
-        voiceId: "shimmer",
-        displayName: {
-          en: defaultSpeaker,
+  speechParams: z
+    .object({
+      speakers: speakerDictionarySchema,
+    })
+    .default({
+      speakers: {
+        [defaultSpeaker]: {
+          voiceId: "shimmer",
+          displayName: {
+            en: defaultSpeaker,
+          },
         },
       },
-    },
-  }),
+    }),
   imageParams: mulmoImageParamsSchema.optional().default({
     provider: defaultProviders.text2image,
     images: {},
