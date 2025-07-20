@@ -64,7 +64,8 @@ export const MulmoPresentationStyleMethods = {
     return [...defaultTextSlideStyles, ...[styles], ...[extraStyles]].flat().join("\n");
   },
   getSpeechOptions(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeechOptions | undefined {
-    return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
+    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
+    return { ...presentationStyle.speechParams.speakers[speakerId].speechOptions, ...beat.speechOptions };
   },
   getDefaultSpeaker(presentationStyle: MulmoPresentationStyle) {
     const speakers = presentationStyle.speechParams.speakers ?? {};
