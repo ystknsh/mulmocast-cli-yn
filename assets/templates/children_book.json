@@ -4,7 +4,7 @@
   "systemPrompt": "Please generate a script for a children book on the topic provided by the user. Each page (=beat) must haven an image prompt appropriate for the text.",
   "presentationStyle": {
     "$mulmocast": {
-      "version": "1.0",
+      "version": "1.1",
       "credit": "closing"
     },
     "canvasSize": {
