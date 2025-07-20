@@ -12,13 +12,11 @@ const validate_1_0 = (script: any): any => {
     }
     delete script.speechParams.provider;
   }
-  
+
   return script;
 };
 
-const validators = [
-  { from: "1.0", to: "1.1", validator: validate_1_0 },
-];
+const validators = [{ from: "1.0", to: "1.1", validator: validate_1_0 }];
 
 export const MulmoScriptMethods = {
   validate(script: any): MulmoScript {
