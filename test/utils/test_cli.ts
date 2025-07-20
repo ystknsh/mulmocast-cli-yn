@@ -44,7 +44,7 @@ test("test createOrUpdateStudioData", async () => {
     script: {
       $mulmocast: { version: "1.0", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
-      speechParams: { provider: "openai", speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,
@@ -87,7 +87,7 @@ test("test createOrUpdateStudioData", async () => {
         version: "1.0",
         credit: "closing",
       },
-      speechParams: { provider: "openai", speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       beats: [{ text: "hello" }],
     },
     null,
@@ -98,7 +98,7 @@ test("test createOrUpdateStudioData", async () => {
     script: {
       $mulmocast: { version: "1.0", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
-      speechParams: { provider: "openai", speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,
