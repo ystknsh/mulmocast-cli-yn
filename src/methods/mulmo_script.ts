@@ -1,7 +1,18 @@
 import { MulmoScript, mulmoScriptSchema } from "../types/index.js";
 
 const validate_1_0 = (script: any): any => {
-  console.log("*** validating script 1.0 ***");
+  if (script.speechParams?.provider) {
+    if (typeof script.speechParams.speakers === "object") {
+      Object.keys(script.speechParams.speakers).forEach((speakerId: any) => {
+        const speaker = script.speechParams.speakers[speakerId];
+        if (!speaker.provider) {
+          speaker.provider = script.speechParams.provider;
+        }
+      });
+    }
+    delete script.speechParams.provider;
+  }
+  
   return script;
 };
 
