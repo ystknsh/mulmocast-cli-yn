@@ -269,7 +269,6 @@ export const htmlPromptParamsSchema = z
 
 export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 
-const defaultSpeaker = "Presenter";
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.optional(),
@@ -317,14 +316,6 @@ export const mulmoCastCreditSchema = z
   })
   .strict();
 
-export const mulmoSpeechParamsSchema = z
-  .object({
-    provider: text2SpeechProviderSchema, // has default value
-    speakers: speakerDictionarySchema,
-    model: z.string().optional().describe("Default TTS model to use"),
-  })
-  .strict();
-
 export const text2HtmlImageProviderSchema = z.enum(htmlLLMProvider as [string, ...string[]]).default(defaultProviders.text2Html);
 
 // NOTE: This is UI only. (until we figure out how to use it in mulmoMovieParamsSchema)
@@ -357,18 +348,20 @@ export const mulmoMovieParamsSchema = z
   })
   .strict();
 
+const defaultSpeaker = "Presenter";
+
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,
   canvasSize: mulmoCanvasDimensionSchema, // has default value
-  speechParams: mulmoSpeechParamsSchema.default({
-    speakers: {
+  speechParams: z.object({
+    speakers: speakerDictionarySchema.default({
       [defaultSpeaker]: {
         voiceId: "shimmer",
         displayName: {
           en: defaultSpeaker,
         },
       },
-    },
+    }),
   }),
   imageParams: mulmoImageParamsSchema.optional().default({
     provider: defaultProviders.text2image,
