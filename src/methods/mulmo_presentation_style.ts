@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { isNull } from "graphai";
 import { userAssert } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
@@ -63,13 +64,25 @@ export const MulmoPresentationStyleMethods = {
     return [...defaultTextSlideStyles, ...[styles], ...[extraStyles]].flat().join("\n");
   },
   getSpeechOptions(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeechOptions | undefined {
-    return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
+    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
+    return { ...presentationStyle.speechParams.speakers[speakerId].speechOptions, ...beat.speechOptions };
+  },
+  getDefaultSpeaker(presentationStyle: MulmoPresentationStyle) {
+    const speakers = presentationStyle.speechParams.speakers ?? {};
+    const keys = Object.keys(speakers).sort();
+    userAssert(keys.length !== 0, "presentationStyle.speechParams.speakers is not set!!");
+    const defaultSpeaker = keys.find((key) => speakers[key].isDefault);
+    if (!isNull(defaultSpeaker)) {
+      return defaultSpeaker;
+    }
+    return keys[0];
   },
   getSpeaker(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeakerData {
     userAssert(!!presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
-    userAssert(!!beat?.speaker, "beat.speaker is not set");
-    const speaker = presentationStyle.speechParams.speakers[beat.speaker];
-    userAssert(!!speaker, `speaker is not set: speaker "${beat.speaker}"`);
+    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
+    userAssert(!!speakerId, "beat.speaker and default speaker is not set");
+    const speaker = presentationStyle.speechParams.speakers[speakerId];
+    userAssert(!!speaker, `speaker is not set: speaker "${speakerId}"`);
     return speaker;
   },
   getTTSProvider(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): Text2SpeechProvider {

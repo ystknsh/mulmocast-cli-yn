@@ -33,6 +33,7 @@ export const speakerDataSchema = z
   .object({
     displayName: z.record(langSchema, z.string()).optional(),
     voiceId: z.string(),
+    isDefault: z.boolean().optional(),
     speechOptions: speechOptionsSchema.optional(),
     provider: text2SpeechProviderSchema.optional(),
     model: z.string().optional().describe("TTS model to use for this speaker"),
@@ -271,7 +272,7 @@ export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) 
 const defaultSpeaker = "Presenter";
 export const mulmoBeatSchema = z
   .object({
-    speaker: speakerIdSchema.default(defaultSpeaker),
+    speaker: speakerIdSchema.optional(),
     text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
     id: z.string().optional().describe("Unique identifier for the beat."),
     description: z.string().optional(),
