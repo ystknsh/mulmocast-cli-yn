@@ -4,7 +4,6 @@ import { userAssert } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
   MulmoBeat,
-  SpeechOptions,
   MulmoImageParams,
   Text2SpeechProvider,
   Text2ImageAgentInfo,
