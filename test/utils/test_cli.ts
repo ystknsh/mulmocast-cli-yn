@@ -31,7 +31,7 @@ test("test createOrUpdateStudioData", async () => {
   const studio = createOrUpdateStudioData(
     {
       $mulmocast: {
-        version: "1.0",
+        version: "1.1",
         credit: "closing",
       },
       beats: [{ text: "hello" }],
@@ -42,9 +42,9 @@ test("test createOrUpdateStudioData", async () => {
   // console.log(JSON.stringify(ret));
   const expect = {
     script: {
-      $mulmocast: { version: "1.0", credit: "closing" },
+      $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
-      speechParams: { provider: "openai", speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,
@@ -84,10 +84,10 @@ test("test createOrUpdateStudioData", async () => {
   const studio = createOrUpdateStudioData(
     {
       $mulmocast: {
-        version: "1.0",
+        version: "1.1",
         credit: "closing",
       },
-      speechParams: { provider: "openai", speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       beats: [{ text: "hello" }],
     },
     null,
@@ -96,9 +96,9 @@ test("test createOrUpdateStudioData", async () => {
   // console.log(JSON.stringify(ret));
   const expect = {
     script: {
-      $mulmocast: { version: "1.0", credit: "closing" },
+      $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
-      speechParams: { provider: "openai", speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,

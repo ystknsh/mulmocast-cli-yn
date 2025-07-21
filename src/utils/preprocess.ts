@@ -1,6 +1,6 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoScript, MulmoPresentationStyle, mulmoScriptSchema, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
-import { MulmoPresentationStyleMethods } from "../methods/mulmo_presentation_style.js";
+import { MulmoStudio, MulmoScript, MulmoPresentationStyle, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
+import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
   const isTest = process.env.NODE_ENV === "test";
@@ -48,7 +48,7 @@ export const createOrUpdateStudioData = (
   videoCaption?: string,
   presentationStyle?: MulmoPresentationStyle | null,
 ) => {
-  const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
+  const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript); // validate and insert default value
 
   const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
 
@@ -59,7 +59,7 @@ export const createOrUpdateStudioData = (
     mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker ?? defaultSpeaker)); // First speaker
   }
 
-  studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
+  studio.script = MulmoScriptMethods.validate(mulmoScript); // update the script
   studio.beats = studio.script.beats.map((_, index) => studio.beats[index] ?? {});
 
   if (videoCaption) {
