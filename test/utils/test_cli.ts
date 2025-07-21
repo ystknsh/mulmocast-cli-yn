@@ -31,7 +31,7 @@ test("test createOrUpdateStudioData", async () => {
   const studio = createOrUpdateStudioData(
     {
       $mulmocast: {
-        version: "1.0",
+        version: "1.1",
         credit: "closing",
       },
       beats: [{ text: "hello" }],
@@ -42,7 +42,7 @@ test("test createOrUpdateStudioData", async () => {
   // console.log(JSON.stringify(ret));
   const expect = {
     script: {
-      $mulmocast: { version: "1.0", credit: "closing" },
+      $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
       speechParams: { speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
       audioParams: {
@@ -84,7 +84,7 @@ test("test createOrUpdateStudioData", async () => {
   const studio = createOrUpdateStudioData(
     {
       $mulmocast: {
-        version: "1.0",
+        version: "1.1",
         credit: "closing",
       },
       speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
@@ -96,7 +96,7 @@ test("test createOrUpdateStudioData", async () => {
   // console.log(JSON.stringify(ret));
   const expect = {
     script: {
-      $mulmocast: { version: "1.0", credit: "closing" },
+      $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
       speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       audioParams: {
