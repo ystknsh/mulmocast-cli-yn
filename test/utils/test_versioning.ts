@@ -1,5 +1,3 @@
-import { getBaseDirPath, getFullPath } from "../../src/utils/file.js";
-
 import test from "node:test";
 import assert from "node:assert";
 import { MulmoScriptMethods } from "../../src/methods/index.js";
@@ -10,7 +8,7 @@ const script_10 = {
     credit: "closing",
   },
   speechParams: {
-    provider: "nijivoice",
+    provider: "nijivoice", // this is not in the 1.1 schema
     speakers: {
       speaker1: {
         voiceId: "voice-123",
