@@ -1,5 +1,5 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoScript, MulmoPresentationStyle, mulmoScriptSchema, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
+import { MulmoStudio, MulmoScript, MulmoPresentationStyle, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
 import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
