@@ -107,6 +107,7 @@
       }
     },
     {
+      "id": "credits",
       "duration": 10,
       "image": {
         "type": "textSlide",
