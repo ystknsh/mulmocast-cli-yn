@@ -39,6 +39,8 @@ async function generateMovie(
     const start_image = provider2MovieAgent.replicate.modelParams[model]?.start_image;
     if (start_image === "first_frame_image" || start_image === "image" || start_image === "start_image") {
       input[start_image] = base64Image;
+    } else if (start_image === undefined) {
+      throw new Error(`Model ${model} does not support image-to-video generation`);
     } else {
       input.image = base64Image;
     }
