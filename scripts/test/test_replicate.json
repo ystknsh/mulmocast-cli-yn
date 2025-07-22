@@ -71,6 +71,7 @@
     {
       "id": "seedance-1-pro",
       "text": "bytedance/seedance-1-pro",
+      "duration": 5,
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "movieParams": {
         "model": "bytedance/seedance-1-pro"

@@ -7,7 +7,7 @@ import type { AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentParams, Re
 import { provider2MovieAgent } from "../utils/provider2agent.js";
 
 async function generateMovie(
-  model: `${string}/${string}` | undefined,
+  model: `${string}/${string}`,
   apiKey: string,
   prompt: string,
   imagePath: string | undefined,
@@ -36,17 +36,18 @@ async function generateMovie(
   if (imagePath) {
     const buffer = readFileSync(imagePath);
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-    if (model === "kwaivgi/kling-v2.1" || model === "kwaivgi/kling-v1.6-pro") {
-      input.start_image = base64Image;
-    } else if (model === "minimax/hailuo-02") {
-      input.first_frame_image = base64Image;
+    const start_image = provider2MovieAgent.replicate.modelParams[model]?.start_image;
+    if (start_image === "first_frame_image" || start_image === "image" || start_image === "start_image") {
+      input[start_image] = base64Image;
+    } else if (start_image === undefined) {
+      throw new Error(`Model ${model} does not support image-to-video generation`);
     } else {
       input.image = base64Image;
     }
   }
 
   try {
-    const output = await replicate.run(model ?? provider2MovieAgent.replicate.defaultModel, { input });
+    const output = await replicate.run(model, { input });
 
     // Download the generated video
     if (output && typeof output === "object" && "url" in output) {
@@ -85,15 +86,24 @@ export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, Agent
 }) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
-  const duration = params.duration ?? 5;
-  const apiKey = config?.apiKey;
+  const model = params.model ?? provider2MovieAgent.replicate.defaultModel;
+  if (!provider2MovieAgent.replicate.modelParams[model]) {
+    throw new Error(`Model ${model} is not supported`);
+  }
+  const duration = params.duration ?? provider2MovieAgent.replicate.modelParams[model].durations[0] ?? 5;
+  if (!provider2MovieAgent.replicate.modelParams[model].durations.includes(duration)) {
+    throw new Error(
+      `Duration ${duration} is not supported for model ${model}. Supported durations: ${provider2MovieAgent.replicate.modelParams[model].durations.join(", ")}`,
+    );
+  }
 
+  const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
   }
 
   try {
-    const buffer = await generateMovie(params.model, apiKey, prompt, imagePath, aspectRatio, duration);
+    const buffer = await generateMovie(model, apiKey, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }
