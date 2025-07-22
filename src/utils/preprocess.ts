@@ -1,5 +1,6 @@
 import { GraphAILogger } from "graphai";
-import { MulmoStudio, MulmoScript, mulmoScriptSchema, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
+import { MulmoStudio, MulmoScript, MulmoPresentationStyle, mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
+import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/index.js";
 
 const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
   const isTest = process.env.NODE_ENV === "test";
@@ -40,18 +41,25 @@ const mulmoCredit = (speaker: string) => {
   };
 };
 
-export const createOrUpdateStudioData = (_mulmoScript: MulmoScript, currentStudio: MulmoStudio | undefined, fileName: string, videoCaption?: string) => {
-  const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : mulmoScriptSchema.parse(_mulmoScript); // validate and insert default value
+export const createOrUpdateStudioData = (
+  _mulmoScript: MulmoScript,
+  currentStudio: MulmoStudio | undefined,
+  fileName: string,
+  videoCaption?: string,
+  presentationStyle?: MulmoPresentationStyle | null,
+) => {
+  const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript); // validate and insert default value
 
   const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
 
   // TODO: Move this code out of this function later
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
-    mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker)); // First speaker
+    const defaultSpeaker = MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle ?? studio.script);
+    mulmoScript.beats.push(mulmoCredit(mulmoScript.beats[0].speaker ?? defaultSpeaker)); // First speaker
   }
 
-  studio.script = mulmoScriptSchema.parse(mulmoScript); // update the script
+  studio.script = MulmoScriptMethods.validate(mulmoScript); // update the script
   studio.beats = studio.script.beats.map((_, index) => studio.beats[index] ?? {});
 
   if (videoCaption) {

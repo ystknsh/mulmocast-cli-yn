@@ -12,7 +12,14 @@ import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, MulmoPresentationStyle } from "../types/index.js";
+import {
+  MulmoStudioContext,
+  MulmoBeat,
+  MulmoStudioBeat,
+  MulmoStudioMultiLingualData,
+  MulmoPresentationStyle,
+  text2SpeechProviderSchema,
+} from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
 import { text2hash, localizedText, settings2GraphAIConfig } from "../utils/utils.js";
@@ -37,12 +44,10 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
 };
 
 const getAudioParam = (presentationStyle: MulmoPresentationStyle, beat: MulmoBeat) => {
-  const voiceId = MulmoPresentationStyleMethods.getVoiceId(presentationStyle, beat);
-  // Use speaker-specific provider if available, otherwise fall back to script-level provider
-  const provider = MulmoPresentationStyleMethods.getTTSProvider(presentationStyle, beat) as keyof typeof provider2TTSAgent;
-  const speechOptions = MulmoPresentationStyleMethods.getSpeechOptions(presentationStyle, beat);
-  const model = MulmoPresentationStyleMethods.getTTSModel(presentationStyle, beat);
-  return { voiceId, provider, speechOptions, model };
+  const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
+  const speechOptions = { ...speaker.speechOptions, ...beat.speechOptions };
+  const provider = text2SpeechProviderSchema.parse(speaker.provider) as keyof typeof provider2TTSAgent;
+  return { voiceId: speaker.voiceId, provider, speechOptions, model: speaker.model };
 };
 
 export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat: MulmoBeat, lang?: string) => {
@@ -203,7 +208,7 @@ export const audioFilePath = (context: MulmoStudioContext) => {
 const getConcurrency = (context: MulmoStudioContext) => {
   // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
   const hasLimitedConcurrencyProvider = Object.values(context.presentationStyle.speechParams.speakers).some((speaker) => {
-    const provider = (speaker.provider ?? context.presentationStyle.speechParams.provider) as keyof typeof provider2TTSAgent;
+    const provider = text2SpeechProviderSchema.parse(speaker.provider) as keyof typeof provider2TTSAgent;
     return provider2TTSAgent[provider].hasLimitedConcurrency;
   });
   return hasLimitedConcurrencyProvider ? 1 : 8;

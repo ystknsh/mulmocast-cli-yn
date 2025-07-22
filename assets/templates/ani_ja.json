@@ -4,7 +4,7 @@
   "systemPrompt": "Generate a Japanese script for a presentation of the given topic. 言葉づかいは少しツンデレにして。Another AI will generate comic for each beat based on the image prompt of that beat. You don't need to specify the style of the image, just describe the scene. Mention the reference in one of beats, if it exists. Use the JSON below as a template. Create appropriate amount of beats, and make sure the beats are coherent and flow well.",
   "presentationStyle": {
     "$mulmocast": {
-      "version": "1.0",
+      "version": "1.1",
       "credit": "closing"
     },
     "movieParams": {
@@ -23,9 +23,8 @@
       "height": 1536
     },
     "speechParams": {
-      "provider": "nijivoice",
       "speakers": {
-        "Presenter": { "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0" }
+        "Presenter": { "provider": "nijivoice", "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0" }
       }
     },
     "imageParams": {

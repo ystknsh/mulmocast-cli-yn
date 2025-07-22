@@ -23,6 +23,7 @@ async function generateMovie(
     duration,
     image: undefined as string | undefined,
     start_image: undefined as string | undefined,
+    first_frame_image: undefined as string | undefined,
     aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite
     // resolution: "720p", // only for bytedance/seedance-1-lite
     // fps: 24, // only for bytedance/seedance-1-lite
@@ -35,8 +36,10 @@ async function generateMovie(
   if (imagePath) {
     const buffer = readFileSync(imagePath);
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-    if (model === "kwaivgi/kling-v2.1" || model === "kwaivgi/kling-v1.6-pro" || model === "minimax/hailuo-02") {
+    if (model === "kwaivgi/kling-v2.1" || model === "kwaivgi/kling-v1.6-pro") {
       input.start_image = base64Image;
+    } else if (model === "minimax/hailuo-02") {
+      input.first_frame_image = base64Image;
     } else {
       input.image = base64Image;
     }

@@ -33,6 +33,7 @@ export const speakerDataSchema = z
   .object({
     displayName: z.record(langSchema, z.string()).optional(),
     voiceId: z.string(),
+    isDefault: z.boolean().optional(),
     speechOptions: speechOptionsSchema.optional(),
     provider: text2SpeechProviderSchema.optional(),
     model: z.string().optional().describe("TTS model to use for this speaker"),
@@ -268,10 +269,9 @@ export const htmlPromptParamsSchema = z
 
 export const text2MovieProviderSchema = z.enum(Object.keys(provider2MovieAgent) as [string, ...string[]]).default(defaultProviders.text2movie);
 
-const defaultSpeaker = "Presenter";
 export const mulmoBeatSchema = z
   .object({
-    speaker: speakerIdSchema.default(defaultSpeaker),
+    speaker: speakerIdSchema.optional(),
     text: z.string().default("").describe("Text to be spoken. If empty, the audio is not generated."),
     id: z.string().optional().describe("Unique identifier for the beat."),
     description: z.string().optional(),
@@ -311,16 +311,8 @@ export const mulmoCanvasDimensionSchema = z
 
 export const mulmoCastCreditSchema = z
   .object({
-    version: z.literal("1.0"),
+    version: z.literal("1.1"),
     credit: z.literal("closing").optional(),
-  })
-  .strict();
-
-export const mulmoSpeechParamsSchema = z
-  .object({
-    provider: text2SpeechProviderSchema, // has default value
-    speakers: speakerDictionarySchema,
-    model: z.string().optional().describe("Default TTS model to use"),
   })
   .strict();
 
@@ -356,19 +348,25 @@ export const mulmoMovieParamsSchema = z
   })
   .strict();
 
+const defaultSpeaker = "Presenter";
+
 export const mulmoPresentationStyleSchema = z.object({
   $mulmocast: mulmoCastCreditSchema,
   canvasSize: mulmoCanvasDimensionSchema, // has default value
-  speechParams: mulmoSpeechParamsSchema.default({
-    speakers: {
-      [defaultSpeaker]: {
-        voiceId: "shimmer",
-        displayName: {
-          en: defaultSpeaker,
+  speechParams: z
+    .object({
+      speakers: speakerDictionarySchema,
+    })
+    .default({
+      speakers: {
+        [defaultSpeaker]: {
+          voiceId: "shimmer",
+          displayName: {
+            en: defaultSpeaker,
+          },
         },
       },
-    },
-  }),
+    }),
   imageParams: mulmoImageParamsSchema.optional().default({
     provider: defaultProviders.text2image,
     images: {},
