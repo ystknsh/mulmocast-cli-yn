@@ -5,6 +5,10 @@ type BgmAsset = {
   suno_url: string;
   date: string;
   duration: string;
+  account: string;
+  original_license: string;
+  prompt: string;
+  model: string;
 };
 
 export type BgmAssets = {
@@ -109,6 +113,7 @@ export const bgmAssets: BgmAssets = {
       duration: "03:52",
       account: "@snakajima",
       original_license: "morning, piano solo, Japanese name, sexy",
+      prompt: "morning, piano solo, Japanese name, sexy",
       model: "v4.5+",
     },
   ],
