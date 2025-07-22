@@ -112,7 +112,7 @@ export const provider2MovieAgent = {
         last_imagae: "last_frame_image",
         price_per_sec: 0.12,
       },
-    },
+    } as Record<`${string}/${string}`, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
   },
   google: {
     agentName: "movieGoogleAgent",
