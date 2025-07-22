@@ -85,9 +85,17 @@ export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, Agent
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? provider2MovieAgent.replicate.defaultModel;
-  const duration = params.duration ?? provider2MovieAgent.replicate.modelParams[model]?.durations[0] ?? 5;
-  const apiKey = config?.apiKey;
+  if (!provider2MovieAgent.replicate.modelParams[model]) {
+    throw new Error(`Model ${model} is not supported`);
+  }
+  const duration = params.duration ?? provider2MovieAgent.replicate.modelParams[model].durations[0] ?? 5;
+  if (!provider2MovieAgent.replicate.modelParams[model].durations.includes(duration)) {
+    throw new Error(
+      `Duration ${duration} is not supported for model ${model}. Supported durations: ${provider2MovieAgent.replicate.modelParams[model].durations.join(", ")}`,
+    );
+  }
 
+  const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
   }
