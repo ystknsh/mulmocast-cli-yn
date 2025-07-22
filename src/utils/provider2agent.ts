@@ -58,7 +58,7 @@ export const provider2MovieAgent = {
         durations: [5, 10],
         start_image: "image",
         last_image: "last_frame_image",
-        price_per_sec: 0.036,
+        price_per_sec: 0.036, // in USD
       },
       "bytedance/seedance-1-pro": {
         durations: [5, 10],
@@ -109,7 +109,7 @@ export const provider2MovieAgent = {
       "pixverse/pixverse-v4.5": {
         durations: [5, 8],
         start_image: "image",
-        last_imagae: "last_frame_image",
+        last_image: "last_frame_image",
         price_per_sec: 0.12,
       },
     } as Record<`${string}/${string}`, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
