@@ -24,7 +24,8 @@
     {
       "id": "cat_jumping_into_pool",
       "text": "cat jumping into a swimming pool",
-      "duration": 5,
+      "duration": 10,
+      "imagePrompt": "A televised view of a cat is on a 10m high jumping board, preparing to jump into a swimming pool at the olympics",
       "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
       "soundEffectPrompt": "sound of a cat jumping into a swimming pool"
     }

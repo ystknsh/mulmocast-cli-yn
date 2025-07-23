@@ -128,6 +128,11 @@ export const provider2SoundEffectAgent = {
     agentName: "soundEffectReplicateAgent",
     defaultModel: "zsxkib/mmaudio" as ReplicateModel,
     models: ["zsxkib/mmaudio"] as ReplicateModel[],
+    modelParams: {
+      "zsxkib/mmaudio": {
+        identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
+      },
+    } as Record<ReplicateModel, { identifier?: `${string}/${string}:${string}` }>,
   },
 };
 

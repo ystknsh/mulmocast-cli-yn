@@ -12,10 +12,9 @@ export const soundEffectReplicateAgent: AgentFunction<
   SoundEffectAgentInputs,
   ReplicateSoundEffectAgentConfig
 > = async ({ namedInputs, params, config }) => {
-  const { prompt, soundEffectFile, movieFile } = namedInputs; 
+  const { prompt, movieFile } = namedInputs;
   const apiKey = config?.apiKey;
   const model = params.model ?? provider2SoundEffectAgent.replicate.defaultModel;
-  console.log("**** soundEffectReplicateAgent movieFile:", prompt, movieFile, soundEffectFile, model);
 
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
@@ -38,7 +37,8 @@ export const soundEffectReplicateAgent: AgentFunction<
   };
 
   try {
-    const model_identifier: `${string}/${string}:${string}` = `${model}:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484`;
+    const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` =
+      provider2SoundEffectAgent.replicate.modelParams[model]?.identifier ?? model;
     const output = await replicate.run(model_identifier, {
       input,
     });
