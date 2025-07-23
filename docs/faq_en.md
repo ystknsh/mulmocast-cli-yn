@@ -122,6 +122,31 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **Note**: When installing via `npm install -g mulmocast`, style files are not included. You need to download them separately or create your own.
 
+### Q: Getting "403 Your organization must be verified to use the model 'gpt-image-1'" error during image generation
+
+**A: This error occurs because the OpenAI `gpt-image-1` model used for image generation requires organization verification.**
+
+**You can choose from the following two solutions:**
+
+**Option 1**: Complete organization verification to use `gpt-image-1`
+- Enables higher quality image generation
+- Refer to [Beta Release Notes](beta1_en.md#recommended-steps-for-high-quality-image-generation) to complete OpenAI organization verification
+
+**Option 2**: Use the traditional `dall-e-3`
+- No organization verification required
+- Add the following configuration to your MulmoScript:
+
+```json
+{
+  "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3"
+  }
+}
+```
+
+**Background**: With version updates, we changed the default model to `gpt-image-1` which enables higher quality image generation. While `gpt-image-1` requires organization verification, the traditional `dall-e-3` can be used without verification.
+
 ## Text-to-Speech (TTS) Configuration
 
 ### Q: How do I change the TTS engine?

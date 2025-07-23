@@ -31,7 +31,7 @@ test("test createOrUpdateStudioData", async () => {
   const studio = createOrUpdateStudioData(
     {
       $mulmocast: {
-        version: "1.0",
+        version: "1.1",
         credit: "closing",
       },
       beats: [{ text: "hello" }],
@@ -42,9 +42,9 @@ test("test createOrUpdateStudioData", async () => {
   // console.log(JSON.stringify(ret));
   const expect = {
     script: {
-      $mulmocast: { version: "1.0", credit: "closing" },
+      $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
-      speechParams: { provider: "openai", speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
+      speechParams: { speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,
@@ -54,10 +54,71 @@ test("test createOrUpdateStudioData", async () => {
         bgmVolume: 0.2,
         audioVolume: 1.0,
       },
+      imageParams: {
+        images: {},
+        provider: "openai",
+      },
+      movieParams: {
+        provider: "replicate",
+      },
       beats: [
-        { speaker: "Presenter", text: "hello" },
+        { text: "hello" },
         {
           speaker: "Presenter",
+          text: "",
+          image: {
+            type: "image",
+            source: { kind: "url", url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/images/mulmocast_credit.png" },
+          },
+          audio: { type: "audio", source: { kind: "url", url: "https://github.com/receptron/mulmocast-cli/raw/refs/heads/main/assets/audio/silent300.mp3" } },
+        },
+      ],
+    },
+    filename: "",
+    beats: [{}, {}],
+  };
+  assert.deepStrictEqual(studio, expect);
+});
+
+test("test createOrUpdateStudioData", async () => {
+  const studio = createOrUpdateStudioData(
+    {
+      $mulmocast: {
+        version: "1.1",
+        credit: "closing",
+      },
+      speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      beats: [{ text: "hello" }],
+    },
+    null,
+    "",
+  );
+  // console.log(JSON.stringify(ret));
+  const expect = {
+    script: {
+      $mulmocast: { version: "1.1", credit: "closing" },
+      canvasSize: { width: 1280, height: 720 },
+      speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      audioParams: {
+        closingPadding: 0.8,
+        introPadding: 1,
+        outroPadding: 1,
+        padding: 0.3,
+        suppressSpeech: false,
+        bgmVolume: 0.2,
+        audioVolume: 1.0,
+      },
+      imageParams: {
+        images: {},
+        provider: "openai",
+      },
+      movieParams: {
+        provider: "replicate",
+      },
+      beats: [
+        { text: "hello" },
+        {
+          speaker: "Test",
           text: "",
           image: {
             type: "image",

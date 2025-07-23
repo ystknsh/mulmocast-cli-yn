@@ -104,7 +104,7 @@ export const initializeContextFromFiles = async (files: FileObject, raiseError: 
 
   try {
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
-    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, caption);
+    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, caption, presentationStyle);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
     return buildContext(studio, files, presentationStyle, multiLingual, force, lang);
