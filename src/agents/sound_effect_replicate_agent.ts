@@ -2,6 +2,7 @@ import { readFileSync } from "fs";
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
+import { provider2SoundEffectAgent } from "../utils/provider2agent.js";
 
 import type { AgentBufferResult, SoundEffectAgentInputs, ReplicateSoundEffectAgentParams, ReplicateSoundEffectAgentConfig } from "../types/agent.js";
 
@@ -13,8 +14,8 @@ export const soundEffectReplicateAgent: AgentFunction<
 > = async ({ namedInputs, params, config }) => {
   const { prompt, soundEffectFile, movieFile } = namedInputs; 
   const apiKey = config?.apiKey;
-  // const model = params.model;
-  console.log("**** soundEffectReplicateAgent movieFile:", prompt, movieFile, soundEffectFile);
+  const model = params.model ?? provider2SoundEffectAgent.replicate.defaultModel;
+  console.log("**** soundEffectReplicateAgent movieFile:", prompt, movieFile, soundEffectFile, model);
 
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
@@ -27,17 +28,18 @@ export const soundEffectReplicateAgent: AgentFunction<
   const uri = `data:image/png;base64,${buffer.toString("base64")}`;
 
   const input = {
-    // seed: -1,
     video: uri,
     prompt,
-    // duration: 8,
+    duration: params.duration,
+    // seed: -1,
     // num_steps: 25,
     // cfg_strength: 4.5,
     // negative_prompt: "music"
   };
 
   try {
-    const output = await replicate.run("zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484", {
+    const identifier: `${string}/${string}:${string}` = `${model}:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484`;
+    const output = await replicate.run(identifier, {
       input,
     });
 

@@ -209,6 +209,7 @@ const beat_graph_data = {
         soundEffectFile: ":preprocessor.soundEffectFile",
         params: {
           model: ":preprocessor.soundEffectModel",
+          duration: ":beat.duration",
         },
         cache: {
           force: [":context.force"],

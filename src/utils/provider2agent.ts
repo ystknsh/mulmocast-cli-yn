@@ -124,8 +124,8 @@ export const provider2MovieAgent = {
 export const provider2SoundEffectAgent = {
   replicate: {
     agentName: "soundEffectReplicateAgent",
-    defaultModel: "zsxkib/mmaudio",
-    models: ["zsxkib/mmaudio"],
+    defaultModel: "zsxkib/mmaudio" as `${string}/${string}`,
+    models: ["zsxkib/mmaudio"] as `${string}/${string}`[],
   },
 };
 

@@ -16,10 +16,10 @@
     {
       "id": "horse_galloping",
       "text": "A horse galloping",
-      "duration": 5,
-      "imagePrompt": "A horse galloping fast in a large field",
+      "duration": 10,
+      "imagePrompt": "A wide view of a horse galloping fast in a large field",
       "moviePrompt": "A horse galloping fast in a large field",
-      "soundEffectPrompt": "sound of a horse galloping"
+      "soundEffectPrompt": "galloping"
     },
     {
       "id": "cat_jumping_into_pool",
