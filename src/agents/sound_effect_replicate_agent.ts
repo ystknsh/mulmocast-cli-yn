@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
@@ -10,9 +11,10 @@ export const soundEffectReplicateAgent: AgentFunction<
   SoundEffectAgentInputs,
   ReplicateSoundEffectAgentConfig
 > = async ({ namedInputs, params, config }) => {
-  const { prompt, soundEffectFile, movieFile } = namedInputs; // TODO: use params.model
+  const { prompt, soundEffectFile, movieFile } = namedInputs; 
   const apiKey = config?.apiKey;
-  const model = params.model;
+  // const model = params.model;
+  console.log("**** soundEffectReplicateAgent movieFile:", prompt, movieFile, soundEffectFile);
 
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
@@ -21,8 +23,8 @@ export const soundEffectReplicateAgent: AgentFunction<
     auth: apiKey,
   });
 
-  // TODO: upload movieFile on a server and use the url here.
-  const uri = "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/movies/horse_galloping.mov";
+  const buffer = readFileSync(movieFile);
+  const uri = `data:image/png;base64,${buffer.toString("base64")}`;
 
   const input = {
     // seed: -1,

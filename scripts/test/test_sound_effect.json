@@ -25,7 +25,8 @@
       "id": "cat_jumping_into_pool",
       "text": "cat jumping into a swimming pool",
       "duration": 5,
-      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins"
+      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "soundEffectPrompt": "sound of a cat jumping into a swimming pool"
     }
   ]
 }

@@ -40,7 +40,7 @@ export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefin
 
 // sound effect
 export type ReplicateSoundEffectAgentParams = { model: `${string}/${string}` | undefined };
-export type SoundEffectAgentInputs = AgentPromptInputs & { soundEffectFile?: string; movieFile?: string };
+export type SoundEffectAgentInputs = AgentPromptInputs & { soundEffectFile: string; movieFile: string };
 
 //   config
 export type GoogleMovieAgentConfig = GoogleImageAgentConfig;
