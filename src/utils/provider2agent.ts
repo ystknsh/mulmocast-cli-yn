@@ -36,10 +36,12 @@ export const provider2ImageAgent = {
   },
 };
 
+export type ReplicateModel = `${string}/${string}`;
+
 export const provider2MovieAgent = {
   replicate: {
     agentName: "movieReplicateAgent",
-    defaultModel: "bytedance/seedance-1-lite" as `${string}/${string}`,
+    defaultModel: "bytedance/seedance-1-lite" as ReplicateModel,
     models: [
       "bytedance/seedance-1-lite",
       "bytedance/seedance-1-pro",
@@ -112,12 +114,25 @@ export const provider2MovieAgent = {
         last_image: "last_frame_image",
         price_per_sec: 0.12,
       },
-    } as Record<`${string}/${string}`, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
+    } as Record<ReplicateModel, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
   },
   google: {
     agentName: "movieGoogleAgent",
     defaultModel: "veo-2.0-generate-001",
     models: ["veo-2.0-generate-001"],
+  },
+};
+
+export const provider2SoundEffectAgent = {
+  replicate: {
+    agentName: "soundEffectReplicateAgent",
+    defaultModel: "zsxkib/mmaudio" as ReplicateModel,
+    models: ["zsxkib/mmaudio"] as ReplicateModel[],
+    modelParams: {
+      "zsxkib/mmaudio": {
+        identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
+      },
+    } as Record<ReplicateModel, { identifier?: `${string}/${string}:${string}` }>,
   },
 };
 
@@ -151,12 +166,14 @@ export const defaultProviders: {
   text2movie: keyof typeof provider2MovieAgent;
   text2Html: keyof typeof provider2LLMAgent;
   llm: keyof typeof provider2LLMAgent;
+  soundEffect: keyof typeof provider2SoundEffectAgent;
 } = {
   tts: "openai",
   text2image: "openai",
   text2movie: "replicate",
   text2Html: "openai",
   llm: "openai",
+  soundEffect: "replicate",
 };
 
 export const llm = Object.keys(provider2LLMAgent) as (keyof typeof provider2LLMAgent)[];

@@ -45,6 +45,9 @@ test("test createOrUpdateStudioData", async () => {
       $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
       speechParams: { speakers: { Presenter: { displayName: { en: "Presenter" }, voiceId: "shimmer" } } },
+      soundEffectParams: {
+        provider: "replicate",
+      },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,
@@ -99,6 +102,9 @@ test("test createOrUpdateStudioData", async () => {
       $mulmocast: { version: "1.1", credit: "closing" },
       canvasSize: { width: 1280, height: 720 },
       speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
+      soundEffectParams: {
+        provider: "replicate",
+      },
       audioParams: {
         closingPadding: 0.8,
         introPadding: 1,

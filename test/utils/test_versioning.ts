@@ -7,6 +7,9 @@ const script_10 = {
     version: "1.0",
     credit: "closing",
   },
+  soundEffectParams: {
+    provider: "replicate",
+  },
   speechParams: {
     provider: "nijivoice", // this is not in the 1.1 schema
     speakers: {
@@ -53,6 +56,9 @@ const script_11 = {
     outroPadding: 1,
     padding: 0.3,
     suppressSpeech: false,
+  },
+  soundEffectParams: {
+    provider: "replicate",
   },
   speechParams: {
     speakers: {
