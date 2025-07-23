@@ -28,6 +28,14 @@
       "imagePrompt": "A televised view of a cat is on a 10m high jumping board, preparing to jump into a swimming pool at the olympics",
       "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
       "soundEffectPrompt": "sound of a cat jumping into a swimming pool"
+    },
+    {
+      "id": "ice cutting",
+      "text": "Cutting ice with a sharp knife",
+      "duration": 10,
+      "imagePrompt": "Close up of a sharp knife is ready to cut a slice out of a block ofice",
+      "moviePrompt": "Close up of a sharp knife is cutting a slice out of a block of ice",
+      "soundEffectPrompt": "cutting ice"
     }
   ]
 }
