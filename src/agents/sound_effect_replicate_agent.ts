@@ -38,8 +38,8 @@ export const soundEffectReplicateAgent: AgentFunction<
   };
 
   try {
-    const identifier: `${string}/${string}:${string}` = `${model}:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484`;
-    const output = await replicate.run(identifier, {
+    const model_identifier: `${string}/${string}:${string}` = `${model}:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484`;
+    const output = await replicate.run(model_identifier, {
       input,
     });
 

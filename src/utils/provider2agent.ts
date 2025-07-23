@@ -36,10 +36,12 @@ export const provider2ImageAgent = {
   },
 };
 
+export type ReplicateModel = `${string}/${string}`;
+
 export const provider2MovieAgent = {
   replicate: {
     agentName: "movieReplicateAgent",
-    defaultModel: "bytedance/seedance-1-lite" as `${string}/${string}`,
+    defaultModel: "bytedance/seedance-1-lite" as ReplicateModel,
     models: [
       "bytedance/seedance-1-lite",
       "bytedance/seedance-1-pro",
@@ -112,7 +114,7 @@ export const provider2MovieAgent = {
         last_image: "last_frame_image",
         price_per_sec: 0.12,
       },
-    } as Record<`${string}/${string}`, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
+    } as Record<ReplicateModel, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
   },
   google: {
     agentName: "movieGoogleAgent",
@@ -124,8 +126,8 @@ export const provider2MovieAgent = {
 export const provider2SoundEffectAgent = {
   replicate: {
     agentName: "soundEffectReplicateAgent",
-    defaultModel: "zsxkib/mmaudio" as `${string}/${string}`,
-    models: ["zsxkib/mmaudio"] as `${string}/${string}`[],
+    defaultModel: "zsxkib/mmaudio" as ReplicateModel,
+    models: ["zsxkib/mmaudio"] as ReplicateModel[],
   },
 };
 
