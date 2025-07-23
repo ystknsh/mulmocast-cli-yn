@@ -24,7 +24,7 @@ export const soundEffectReplicateAgent: AgentFunction<
   });
 
   const buffer = readFileSync(movieFile);
-  const uri = `data:image/png;base64,${buffer.toString("base64")}`;
+  const uri = `data:video/quicktime;base64,${buffer.toString("base64")}`;
 
   const input = {
     video: uri,
