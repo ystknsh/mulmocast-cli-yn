@@ -12,14 +12,12 @@
     {
       "id": "presenter_introduction",
       "text": "Welcome to our presentation on artificial intelligence. Today we'll explore the fascinating world of machine learning.",
-      "moviePrompt": "A professional presenter standing in front of a modern presentation screen, speaking confidently to an audience",
-      "enableLipSync": true
+      "moviePrompt": "A professional presenter standing in front of a modern presentation screen, speaking confidently to an audience"
     },
     {
       "id": "explaining_concepts",
       "text": "Machine learning algorithms can process vast amounts of data to identify patterns and make predictions about future outcomes.",
-      "moviePrompt": "A close-up view of a person explaining complex concepts with animated data visualizations and charts in the background",
-      "enableLipSync": true
+      "moviePrompt": "A close-up view of a person explaining complex concepts with animated data visualizations and charts in the background"
     },
     {
       "id": "concluding_remarks",
