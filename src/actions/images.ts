@@ -11,7 +11,15 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
-import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent, soundEffectReplicateAgent, lipSyncReplicateAgent } from "../agents/index.js";
+import {
+  imageGoogleAgent,
+  imageOpenaiAgent,
+  movieGoogleAgent,
+  movieReplicateAgent,
+  mediaMockAgent,
+  soundEffectReplicateAgent,
+  lipSyncReplicateAgent,
+} from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";

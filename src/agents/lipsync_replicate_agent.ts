@@ -6,12 +6,11 @@ import { provider2LipSyncAgent } from "../utils/provider2agent.js";
 
 import type { AgentBufferResult, LipSyncAgentInputs, ReplicateLipSyncAgentParams, ReplicateLipSyncAgentConfig } from "../types/agent.js";
 
-export const lipSyncReplicateAgent: AgentFunction<
-  ReplicateLipSyncAgentParams,
-  AgentBufferResult,
-  LipSyncAgentInputs,
-  ReplicateLipSyncAgentConfig
-> = async ({ namedInputs, params, config }) => {
+export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, AgentBufferResult, LipSyncAgentInputs, ReplicateLipSyncAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { movieFile, audioFile } = namedInputs;
   const apiKey = config?.apiKey;
   const model = params.model ?? provider2LipSyncAgent.replicate.defaultModel;
@@ -35,8 +34,7 @@ export const lipSyncReplicateAgent: AgentFunction<
   };
 
   try {
-    const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` =
-      provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
+    const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` = provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
     const output = await replicate.run(model_identifier, {
       input,
     });
