@@ -136,6 +136,19 @@ export const provider2SoundEffectAgent = {
   },
 };
 
+export const provider2LipSyncAgent = {
+  replicate: {
+    agentName: "lipSyncReplicateAgent",
+    defaultModel: "bytedance/latentsync" as ReplicateModel,
+    models: ["bytedance/latentsync"] as ReplicateModel[],
+    modelParams: {
+      "bytedance/latentsync": {
+        identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+      },
+    } as Record<ReplicateModel, { identifier?: `${string}/${string}:${string}` }>,
+  },
+};
+
 // : Record<LLM, { agent: string; defaultModel: string; max_tokens: number }>
 export const provider2LLMAgent = {
   openai: {
@@ -167,6 +180,7 @@ export const defaultProviders: {
   text2Html: keyof typeof provider2LLMAgent;
   llm: keyof typeof provider2LLMAgent;
   soundEffect: keyof typeof provider2SoundEffectAgent;
+  lipSync: keyof typeof provider2LipSyncAgent;
 } = {
   tts: "openai",
   text2image: "openai",
@@ -174,6 +188,7 @@ export const defaultProviders: {
   text2Html: "openai",
   llm: "openai",
   soundEffect: "replicate",
+  lipSync: "replicate",
 };
 
 export const llm = Object.keys(provider2LLMAgent) as (keyof typeof provider2LLMAgent)[];
