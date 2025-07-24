@@ -5,14 +5,17 @@
     "model": "bytedance/latentsync"
   },
   "audioParams": {
-    "bgmVolume": 0.01
+    "bgmVolume": 0.01,
+    "introPadding": 0
   },
   "lang": "en",
   "beats": [
     {
       "id": "presenter_introduction",
+      "duration": 10,
       "text": "Welcome to our presentation on artificial intelligence. Today we'll explore the fascinating world of machine learning.",
-      "moviePrompt": "A professional presenter standing in front of a modern presentation screen, speaking confidently to an audience"
+      "moviePrompt": "A professional presenter standing in front of a modern presentation screen, speaking confidently to an audience",
+      "enableLipSync": true
     },
     {
       "id": "explaining_concepts",

@@ -210,7 +210,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       beatTimestamps.push(timestamp);
       return timestamp; // Skip voice-over beats.
     }
-    const sourceFile = studioBeat.soundEffectFile ?? studioBeat.movieFile ?? studioBeat.imageFile;
+    const sourceFile = studioBeat.lipSyncFile ?? studioBeat.soundEffectFile ?? studioBeat.movieFile ?? studioBeat.imageFile;
     assert(!!sourceFile, `studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
     assert(!!studioBeat.duration, `studioBeat.duration is not set: index=${index}`);
     const extraPadding = (() => {
@@ -233,7 +233,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
     const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
-    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
+    const mediaType = (studioBeat.lipSyncFile || studioBeat.movieFile) ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
