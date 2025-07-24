@@ -454,6 +454,7 @@ export const mulmoStudioBeatSchema = z
     imageFile: z.string().optional(), // path to the image
     movieFile: z.string().optional(), // path to the movie file
     soundEffectFile: z.string().optional(), // path to the sound effect file
+    lipSyncFile: z.string().optional(), // path to the lip sync file
     captionFile: z.string().optional(), // path to the caption image
   })
   .strict();

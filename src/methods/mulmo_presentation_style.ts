@@ -26,6 +26,7 @@ import {
   provider2LLMAgent,
   provider2TTSAgent,
   provider2SoundEffectAgent,
+  provider2LipSyncAgent,
   defaultProviders,
 } from "../utils/provider2agent.js";
 
@@ -122,6 +123,13 @@ export const MulmoPresentationStyleMethods = {
       presentationStyle.soundEffectParams?.provider ??
       defaultProviders.soundEffect) as keyof typeof provider2SoundEffectAgent;
     const agentInfo = provider2SoundEffectAgent[soundEffectProvider];
+    return agentInfo;
+  },
+  getLipSyncAgentInfo(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat) {
+    const lipSyncProvider = (beat.lipSyncParams?.provider ??
+      presentationStyle.lipSyncParams?.provider ??
+      defaultProviders.lipSync) as keyof typeof provider2LipSyncAgent;
+    const agentInfo = provider2LipSyncAgent[lipSyncProvider];
     return agentInfo;
   },
   getConcurrency(presentationStyle: MulmoPresentationStyle) {
