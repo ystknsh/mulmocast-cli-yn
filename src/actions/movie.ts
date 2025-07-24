@@ -233,7 +233,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
     const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
-    const mediaType = (studioBeat.lipSyncFile || studioBeat.movieFile) ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
+    const mediaType = studioBeat.lipSyncFile || studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);

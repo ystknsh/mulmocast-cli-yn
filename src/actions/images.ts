@@ -193,8 +193,9 @@ const beat_graph_data = {
       defaultValue: {},
     },
     audioChecker: {
-      agent: async (namedInputs: { movieFile: string; imageFile: string; soundEffectFile: string; lipSyncFile: string }) => {
-        if (namedInputs.soundEffectFile) { // NOTE: We intentinonally don't check lipSyncFile here.
+      agent: async (namedInputs: { movieFile: string; imageFile: string; soundEffectFile: string }) => {
+        if (namedInputs.soundEffectFile) {
+          // NOTE: We intentinonally don't check lipSyncFile here.
           return { hasMovieAudio: true };
         }
         const sourceFile = namedInputs.movieFile || namedInputs.imageFile;
@@ -205,11 +206,10 @@ const beat_graph_data = {
         return { hasMovieAudio: hasAudio };
       },
       inputs: {
-        onComplete: [":movieGenerator", ":htmlImageGenerator", ":soundEffectGenerator", ":lipSyncGenerator"], // to wait for movieGenerator, htmlImageGenerator, soundEffectGenerator, and lipSyncGenerator to finish
+        onComplete: [":movieGenerator", ":htmlImageGenerator", ":soundEffectGenerator"], // to wait for movieGenerator, htmlImageGenerator, soundEffectGenerator, and lipSyncGenerator to finish
         movieFile: ":preprocessor.movieFile",
         imageFile: ":preprocessor.imagePath",
         soundEffectFile: ":preprocessor.soundEffectFile",
-        lipSyncFile: ":preprocessor.lipSyncFile",
       },
     },
     soundEffectGenerator: {

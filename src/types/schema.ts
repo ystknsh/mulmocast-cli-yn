@@ -483,6 +483,7 @@ export const mulmoSessionStateSchema = z.object({
     html: z.record(z.number().int(), z.boolean()),
     imageReference: z.record(z.number().int(), z.boolean()),
     soundEffect: z.record(z.number().int(), z.boolean()),
+    lipSync: z.record(z.number().int(), z.boolean()),
   }),
 });
 
