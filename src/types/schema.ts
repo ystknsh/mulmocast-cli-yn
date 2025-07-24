@@ -282,6 +282,11 @@ export const mulmoSoundEffectParamsSchema = z.object({
   model: z.string().optional(), // default: provider specific
 });
 
+export const mulmoLipSyncParamsSchema = z.object({
+  provider: z.string().optional(), // lip sync provider
+  model: z.string().optional(), // default: provider specific
+});
+
 export const mulmoBeatSchema = z
   .object({
     speaker: speakerIdSchema.optional(),
@@ -303,6 +308,7 @@ export const mulmoBeatSchema = z
       })
       .optional(),
     soundEffectParams: mulmoSoundEffectParamsSchema.optional(),
+    lipSyncParams: mulmoLipSyncParamsSchema.optional(),
     htmlImageParams: mulmoHtmlImageParamsSchema.optional(),
     speechOptions: speechOptionsSchema.optional(),
     textSlideParams: textSlideParamsSchema.optional(),
@@ -312,6 +318,7 @@ export const mulmoBeatSchema = z
     moviePrompt: z.string().optional(),
     soundEffectPrompt: z.string().optional(),
     htmlPrompt: htmlPromptParamsSchema.optional(),
+    enableLipSync: z.boolean().optional().describe("Enable lip sync generation for this beat"),
   })
   .strict();
 
@@ -392,6 +399,7 @@ export const mulmoPresentationStyleSchema = z.object({
   soundEffectParams: mulmoSoundEffectParamsSchema.optional().default({
     provider: defaultProviders.soundEffect,
   }),
+  lipSyncParams: mulmoLipSyncParamsSchema.optional(),
   htmlImageParams: mulmoHtmlImageParamsSchema
     .extend({
       provider: text2HtmlImageProviderSchema,
