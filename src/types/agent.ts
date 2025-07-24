@@ -42,10 +42,15 @@ export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefin
 export type ReplicateSoundEffectAgentParams = { model: `${string}/${string}` | undefined; duration?: number };
 export type SoundEffectAgentInputs = AgentPromptInputs & { soundEffectFile: string; movieFile: string };
 
+// lip sync
+export type ReplicateLipSyncAgentParams = { model: `${string}/${string}` | undefined; duration?: number };
+export type LipSyncAgentInputs = { lipSyncFile: string; movieFile: string; audioFile: string };
+
 //   config
 export type GoogleMovieAgentConfig = GoogleImageAgentConfig;
 export type ReplicateMovieAgentConfig = AgentConfig;
 export type ReplicateSoundEffectAgentConfig = AgentConfig;
+export type ReplicateLipSyncAgentConfig = AgentConfig;
 
 // end of image agent
 
