@@ -3,11 +3,11 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext, ScriptTemplate } from "../types/index.js";
+import type { MulmoScript, MulmoScriptTemplateFile, MulmoScriptTemplate, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoScriptTemplateSchema } from "../types/schema.js";
+import { mulmoScriptTemplateSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
-import { ZodSchema } from "zod";
+import { ZodSchema, ZodType } from "zod";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -205,7 +205,7 @@ const readPromptTemplateFile = (promptTemplateName: string) => {
   return promptTemplate;
 };
 
-const mulmoScriptTemplate2Script = (scriptTemplate: ScriptTemplate) => {
+const mulmoScriptTemplate2Script = (scriptTemplate: MulmoScriptTemplate) => {
   if (scriptTemplate.scriptName) {
     const scriptData = readScriptTemplateFile(scriptTemplate.scriptName);
     return { ...scriptData, ...(scriptTemplate.presentationStyle ?? {}) };
@@ -224,21 +224,30 @@ export const readTemplatePrompt = (promptTemplateName: string) => {
   return prompt;
 };
 
+// TODO: MulmoScriptTemplateFileは、実際はpromptTempate
+// TODO: remove it after update app
 export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
   return getAvailablePromptTemplates();
 };
 export const getAvailablePromptTemplates = (): MulmoScriptTemplateFile[] => {
-  const promptTemplatesDir = path.resolve(npmRoot, "./assets/templates");
+  return getPromptTemplates<MulmoScriptTemplateFile>("./assets/templates", mulmoScriptTemplateSchema);
+};
+export const getAvailableScriptTemplates = (): MulmoScriptTemplateFile[] => {
+  return getPromptTemplates<MulmoScriptTemplateFile>("./scripts/templates", mulmoPresentationStyleSchema);
+};
 
-  if (!fs.existsSync(promptTemplatesDir)) {
+export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
+  const templatesDir = path.resolve(npmRoot, dirPath);
+
+  if (!fs.existsSync(templatesDir)) {
     return [];
   }
 
-  const files = fs.readdirSync(promptTemplatesDir);
+  const files = fs.readdirSync(templatesDir);
   return files.map((file) => {
-    const promptTemplate = JSON.parse(fs.readFileSync(path.resolve(promptTemplatesDir, file), "utf-8"));
+    const promptTemplate = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
     return {
-      ...mulmoScriptTemplateSchema.parse(promptTemplate),
+      ...schema.parse(promptTemplate),
       filename: file.replace(/\.json$/, ""),
     };
   });
