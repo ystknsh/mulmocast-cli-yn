@@ -48,9 +48,10 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   if (audioParam === "audio" || audioParam === "audio_input" || audioParam === "audio_file") {
     input[audioParam] = audioUri;
   }
+  const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` = provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
+  console.log("*** input", input, model_identifier);
 
   try {
-    const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` = provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
     const output = await replicate.run(model_identifier, {
       input,
     });
