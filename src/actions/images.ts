@@ -174,7 +174,7 @@ const beat_graph_data = {
         },
         params: {
           model: ":preprocessor.movieAgentInfo.movieParams.model",
-          duration: ":beat.duration",
+          duration: ":preprocessor.beatDuration",
           canvasSize: ":context.presentationStyle.canvasSize",
         },
       },
@@ -222,7 +222,7 @@ const beat_graph_data = {
         soundEffectFile: ":preprocessor.soundEffectFile",
         params: {
           model: ":preprocessor.soundEffectModel",
-          duration: ":beat.duration",
+          duration: ":preprocessor.beatDuration",
         },
         cache: {
           force: [":context.force"],
@@ -244,7 +244,7 @@ const beat_graph_data = {
         lipSyncFile: ":preprocessor.lipSyncFile",
         params: {
           model: ":preprocessor.lipSyncModel",
-          duration: ":beat.duration",
+          duration: ":preprocessor.beatDuration",
         },
         cache: {
           force: [":context.force"],

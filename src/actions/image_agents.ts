@@ -15,6 +15,7 @@ const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
 export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number; imageRefs: Record<string, string> }) => {
   const { context, beat, index, imageRefs } = namedInputs;
 
+  const studioBeat = context.studio.beats[index];
   const imagePath = getBeatPngImagePath(context, index);
   if (beat.htmlPrompt) {
     const htmlPrompt = MulmoBeatMethods.getHtmlPrompt(beat);
@@ -35,9 +36,11 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     lipSyncModel?: string;
     lipSyncAgentInfo?: { agentName: string; defaultModel: string };
     audioFile?: string;
+    beatDuration?: number;
   } = {
     imageParams: imageAgentInfo.imageParams,
     movieFile: beat.moviePrompt ? moviePaths.movieFile : undefined,
+    beatDuration: beat.duration ?? studioBeat?.duration,
   };
 
   if (beat.soundEffectPrompt) {
@@ -53,7 +56,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? returnValue.lipSyncAgentInfo.defaultModel;
     returnValue.lipSyncFile = moviePaths.lipSyncFile;
     // Audio file will be set from the beat's audio file when available
-    returnValue.audioFile = context.studio.beats[index]?.audioFile;
+    returnValue.audioFile = studioBeat?.audioFile;
   }
 
   if (beat.image) {
