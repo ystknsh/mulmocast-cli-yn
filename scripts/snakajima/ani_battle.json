@@ -52,7 +52,7 @@
       "moviePrompt": "相手を睨みつけたままで、落ち着いたようにしゃべるツンデレ少女",
       "enableLipSync": true,
       "lipSyncParams": {
-        "model": "kwaivgi/kling-lip-sync"
+        "model": "tmappdev/lipsync"
       }
     }
   ]
