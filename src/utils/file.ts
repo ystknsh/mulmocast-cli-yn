@@ -200,7 +200,7 @@ export const readScriptTemplateFile = (scriptName: string) => {
   return JSON.parse(scriptData);
 };
 
-const readPromptTemplateFile = (promptTemplateName: string) => {
+const readPromptTemplateFile = (promptTemplateName: string): MulmoScriptTemplateFile => {
   const promptTemplatePath = getPromptTemplateFilePath(promptTemplateName);
   const promptTemplateData = fs.readFileSync(promptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
@@ -220,7 +220,7 @@ export const getScriptFromPromptTemplate = (promptTemplateName: string) => {
   return mulmoScriptTemplate2Script(promptTemplate);
 };
 
-export const readTemplatePrompt = (promptTemplateName: string) => {
+export const readTemplatePrompt = (promptTemplateName: string): string => {
   const promptTemplate = readPromptTemplateFile(promptTemplateName);
   const script = mulmoScriptTemplate2Script(promptTemplate);
   const prompt = MulmoScriptTemplateMethods.getSystemPrompt(promptTemplate, script);
@@ -256,7 +256,7 @@ export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => 
   });
 };
 
-export const writingMessage = (filePath: string) => {
+export const writingMessage = (filePath: string): void => {
   GraphAILogger.debug(`writing: ${filePath}`);
 };
 
