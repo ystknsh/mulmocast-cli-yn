@@ -1,5 +1,65 @@
 # RELEASE NOTE
 
+# v1.1.0
+## RELEASE NOTE
+
+**MulmoCast CLI v1.1.0** introduces major architectural improvements with schema version 1.1, advanced sound effects, and enhanced video model management.
+
+### Breaking Changes
+
+**Schema Version 1.1**
+- Updated MulmoScript schema from 1.0 to 1.1 requiring file updates
+- In `mulmoPresentationStyleSchema`, the `provider` and `model` fields have been removed from top-level `speechParams` and moved into each individual `speaker` object
+- Each speaker must specify own provider field
+
+**Before (0.x.y):**
+```json
+"speechParams": {
+  "provider": "nijivoice",
+  "speakers": {
+    "Presenter": {
+      "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0"
+    }
+  }
+}
+```
+
+**After (1.1.x):**
+
+```json
+"speechParams": {
+  "speakers": {
+    "Presenter": {
+      "provider": "nijivoice",
+      "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0"
+    }
+  }
+}
+```
+
+**Migration Notes**
+- This change breaks compatibility with some existing Mulmo Scripts.  
+  However, when using the CLI, scripts are automatically transformed before execution, so no action is needed in most cases.
+- CLI automatically transforms scripts with `$mulmocast.version: "1.0"` during execution
+- For programmatic usage, use `MulmoScriptMethod.validate()` for transformation
+- Please set `$mulmocast.version` to `1.1` for new scripts
+
+### New Features
+
+- **Default Speaker System**: Mark speakers with `default: true` to auto-assign throughout presentations
+- **Sound Effect Generation**: AI-powered audio effects via Replicate's zsxkib/mmaudio synchronized with video ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.0/scripts/test/test_sound_effect.json))
+- **Centralized Video Models**: Unified configuration for 11 Replicate models with duration validation and pricing ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.0/scripts/test/test_replicate.json))
+
+### Technical Improvements
+
+- **BGM Asset Library**: Added 9 commercially licensed BGM tracks with Suno AI metadata for Electron app
+- **Model Parameter Fix**: Corrected minimax/hailuo-02 image input mapping (first_frame_image) ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.0/scripts/test/test_replicate.json))
+- **Data-Driven Models**: Replaced hardcoded video model handling with centralized configuration
+- **Code Cleanup**: Removed deprecated helper methods and updated 38 templates for new speaker system
+- **Enhanced Providers**: Improved provider2agent mapping with sound effect agent integration
+
+This release significantly modernizes the speech system architecture while introducing powerful new audio-visual capabilities for content creation.
+
 # v.0.1.6
 ## RELEASE NOTE
 
