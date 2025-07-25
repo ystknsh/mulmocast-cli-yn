@@ -11,8 +11,10 @@ const main = () => {
     sorted: true,
     breakLength: 120,
   });
-  const promptTsExport = `export const data = ${promptData}\n`;
-//  console.log(promptTsExport);
+  const promptTsExport = `export const promptTemplates = ${promptData}\n`;
+  fs.writeFileSync("./src/data/promptTemplates.ts", promptTsExport, "utf8");
+
+  //  console.log(promptTsExport);
 
   const scriptTemplates = getAvailableScriptTemplates();
   const scriptData = util.inspect(scriptTemplates, {
@@ -21,8 +23,9 @@ const main = () => {
     sorted: true,
     breakLength: 120,
   });
-  const scriptTsExport = `export const data = ${scriptData}\n`;
+  const scriptTsExport = `export const scriptTemplates = ${scriptData}\n`;
   //  console.log(scriptTsExport);
+  fs.writeFileSync("./src/data/scriptTemplates.ts", promptTsExport, "utf8");
 
   
 };
