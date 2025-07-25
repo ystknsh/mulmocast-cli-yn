@@ -60,6 +60,40 @@
 
 This release significantly modernizes the speech system architecture while introducing powerful new audio-visual capabilities for content creation.
 
+# v.0.1.7
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.7** significantly expands video generation capabilities with new AI models and introduces character-based presentation templates, while improving system performance and reliability.
+
+### Expanded Video Generation Models
+
+**New AI Models for Video Creation**
+- **minimax/hailuo-02**: Physics-specialized model excellent for realistic motion and complex physics simulations ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.7/scripts/test/test_replicate.json))
+- **Google Veo Models**: Added Veo-2 and Veo-3 support for versatile video generation
+- **ByteDance Seedance**: Both lite and pro versions for different quality/speed trade-offs
+- **Additional Models**: Pixverse v4.5, Kwaivgi Kling models, and Minimax video-01 for diverse visual styles
+
+### Character-Based Presentations
+
+**Ani Character Templates**
+- New bilingual character templates with anime/manga styling and personality-driven narration ([English template](https://github.com/receptron/mulmocast-cli/blob/0.1.7/assets/templates/ani.json), [Japanese template](https://github.com/receptron/mulmocast-cli/blob/0.1.7/assets/templates/ani_ja.json))
+- Enhanced voice customization with speech parameter controls for character-specific audio
+- Supports both English and Japanese presentations with consistent character personality
+
+### Performance & System Improvements
+- **Audio Processing Optimizations**: BGM processing now automatically skips when volume is set to 0, improving generation speed
+- **Configuration & Setup**: Updated default video provider from Google to Replicate with optimized model selection
+
+### Technical Improvements & Bug Fixes
+- **Reliability**: Fixed a critical audio detection bug to prevent race conditions and improve movie audio quality.
+- **Type Safety**: Enhanced TypeScript safety with new image asset definitions and refined schemas.
+- **Dependencies**: Updated core dependencies, including GraphAI packages and security patches for `marked`.
+- **Code Quality**: Improved module organization, eliminated circular dependencies, and standardized default values.
+- **Documentation**: Updated OpenAI image generation setup guides.
+- **Test Maintenance**: Refreshed expired Nijivoice voice IDs in test configurations.
+
+This release expands your creative possibilities with more AI video models and character-based storytelling while making the system faster and more reliable.
+
 # v.0.1.6
 ## RELEASE NOTE
 

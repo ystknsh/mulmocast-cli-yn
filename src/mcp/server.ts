@@ -12,8 +12,8 @@ import { audio, images, movie, captions, pdf } from "../actions/index.js";
 import { initializeContext, runTranslateIfNeeded } from "../cli/helpers.js";
 import { outDirName } from "../utils/const.js";
 import { resolveDirPath, mkdir, generateTimestampedFileName } from "../utils/file.js";
-import { mulmoScriptSchema } from "../types/schema.js";
 import type { MulmoScript } from "../types/type.js";
+import { MulmoScriptMethods } from "../methods/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -116,7 +116,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
     };
 
     // Validate MulmoScript schema
-    const validatedScript = mulmoScriptSchema.parse(mulmoScript);
+    const validatedScript = MulmoScriptMethods.validate(mulmoScript);
 
     // Save MulmoScript to output directory
     const filePath = await saveMulmoScriptToOutput(validatedScript);

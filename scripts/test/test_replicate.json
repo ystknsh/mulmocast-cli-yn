@@ -71,6 +71,7 @@
     {
       "id": "seedance-1-pro",
       "text": "bytedance/seedance-1-pro",
+      "duration": 5,
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
       "movieParams": {
         "model": "bytedance/seedance-1-pro"
@@ -106,6 +107,16 @@
       "id": "hailuo-02",
       "text": "minimax/hailuo-02",
       "duration": 6,
+      "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "movieParams": {
+        "model": "minimax/hailuo-02"
+      }
+    },
+    {
+      "id": "hailuo-02-image",
+      "text": "minimax/hailuo-02 with ghibli-styleimage",
+      "duration": 6,
+      "imagePrompt": "a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, Ghibli style",
       "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
       "movieParams": {
         "model": "minimax/hailuo-02"

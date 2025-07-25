@@ -14,7 +14,6 @@ import {
   mulmoImageParamsImagesSchema,
   mulmoFillOptionSchema,
   mulmoMovieParamsSchema,
-  mulmoSpeechParamsSchema,
   textSlideParamsSchema,
   speechOptionsSchema,
   speakerDataSchema,
@@ -50,7 +49,6 @@ export type LANG = z.infer<typeof langSchema>;
 export type MulmoBeat = z.infer<typeof mulmoBeatSchema>;
 export type SpeakerDictonary = z.infer<typeof speakerDictionarySchema>;
 
-export type MulmoSpeechParams = z.infer<typeof mulmoSpeechParamsSchema>;
 export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
 export type SpeakerData = z.infer<typeof speakerDataSchema>;
 export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
@@ -150,7 +148,7 @@ export type BeatMediaType = "movie" | "image";
 export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];
 
 export type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
-export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie" | "html" | "imageReference";
+export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie" | "html" | "imageReference" | "soundEffect" | "lipSync";
 
 export type SessionProgressEvent =
   | { kind: "session"; sessionType: SessionType; inSession: boolean }

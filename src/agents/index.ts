@@ -10,6 +10,8 @@ import ttsElevenlabsAgent from "./tts_elevenlabs_agent.js";
 import ttsNijivoiceAgent from "./tts_nijivoice_agent.js";
 import ttsOpenaiAgent from "./tts_openai_agent.js";
 import validateSchemaAgent from "./validate_schema_agent.js";
+import soundEffectReplicateAgent from "./sound_effect_replicate_agent.js";
+import lipSyncReplicateAgent from "./lipsync_replicate_agent.js";
 
 import { browserlessAgent } from "@graphai/browserless_agent";
 import { textInputAgent } from "@graphai/input_agents";
@@ -35,4 +37,6 @@ export {
   ttsNijivoiceAgent,
   ttsOpenaiAgent,
   validateSchemaAgent,
+  soundEffectReplicateAgent,
+  lipSyncReplicateAgent,
 };
