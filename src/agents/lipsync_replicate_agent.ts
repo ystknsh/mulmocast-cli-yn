@@ -30,7 +30,6 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   const input = {
     video: videoUri,
     audio: audioUri,
-    duration: params.duration,
   };
 
   try {

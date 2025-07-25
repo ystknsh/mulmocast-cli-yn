@@ -25,13 +25,6 @@
           "kind": "url",
           "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/ani.png"
         }
-      },
-      "optimus": {
-        "type": "image",
-        "source": {
-          "kind": "url",
-          "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/optimus.png"
-        }
       }
     }
   },
@@ -55,8 +48,9 @@
     {
       "speaker": "Presenter",
       "text": "は？あたしに勝てると思ってんの。あまく見るんじゃないわよ！",
-      "imagePrompt": "古びた倉庫の中で、両手を広げて相手を睨みつけるツンデレ少女",
-      "moviePrompt": "相手を睨みつけたままで、落ち着いたようにしゃべるツンデレ少女"
+      "imagePrompt": "古びた倉庫の中で、両手を広げて相手を睨みつけるツンデレ少女。full body view.",
+      "moviePrompt": "相手を睨みつけたままで、落ち着いたようにしゃべるツンデレ少女",
+      "enableLipSync": true
     }
   ]
 }
