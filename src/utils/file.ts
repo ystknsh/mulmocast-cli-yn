@@ -147,8 +147,9 @@ export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMo
   }
   return path.resolve(outDirPath, `${fileName}_${pdfMode}.pdf`);
 };
-export const getTemplateFilePath = (templateName: string) => {
-  return path.resolve(npmRoot, "./assets/templates/" + templateName + ".json");
+// prompt template
+export const getPromptTemplateFilePath = (promptTemplateName: string) => {
+  return path.resolve(npmRoot, "./assets/templates/" + promptTemplateName + ".json");
 };
 
 export const mkdir = (dirPath: string) => {
@@ -197,7 +198,7 @@ export const readScriptTemplateFile = (scriptName: string) => {
 };
 
 const readTemplateFile = (templateName: string) => {
-  const templatePath = getTemplateFilePath(templateName);
+  const templatePath = getPromptTemplateFilePath(templateName);
   const templateData = fs.readFileSync(templatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
   const template = JSON.parse(templateData);
