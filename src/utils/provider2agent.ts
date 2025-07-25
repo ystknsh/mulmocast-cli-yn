@@ -140,12 +140,23 @@ export const provider2LipSyncAgent = {
   replicate: {
     agentName: "lipSyncReplicateAgent",
     defaultModel: "bytedance/latentsync" as ReplicateModel,
-    models: ["bytedance/latentsync"] as ReplicateModel[],
+    models: ["bytedance/latentsync", "tmappdev/lipsync", "kwaivgi/kling-lip-sync"] as ReplicateModel[],
     modelParams: {
       "bytedance/latentsync": {
         identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+        video: "video",
+        audio: "audio",
       },
-    } as Record<ReplicateModel, { identifier?: `${string}/${string}:${string}` }>,
+      "tmappdev/lipsync": {
+        identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+        video: "video_input",
+        audio: "audio_input",
+      },
+      "kwaivgi/kling-lip-sync": {
+        video: "video_url",
+        audio: "audio_file",
+      },
+    } as Record<ReplicateModel, { identifier?: `${string}/${string}:${string}`; video: string; audio: string }>,
   },
 };
 
