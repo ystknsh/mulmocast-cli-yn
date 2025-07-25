@@ -12,6 +12,9 @@
     "./browser": {
       "types": "./lib/index.browser.d.ts",
       "default": "./lib/index.browser.js"
+    },
+    "./data": {
+      "default": "./lib/data/index.js"
     }
   },
   "bin": {
