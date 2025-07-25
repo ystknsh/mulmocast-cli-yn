@@ -181,3 +181,12 @@ export type InitOptions = {
   c?: string;
   p?: string;
 };
+
+
+export type TemplateFile = {
+  title: string;
+  description: string;
+  systemPrompt: string;
+  scriptName: string;
+  presentationStyle: MulmoPresentationStyle
+};

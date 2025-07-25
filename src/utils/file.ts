@@ -3,7 +3,7 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext } from "../types/index.js";
+import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext, TemplateFile } from "../types/index.js";
 import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
@@ -204,7 +204,7 @@ const readTemplateFile = (templateName: string) => {
   return template;
 };
 
-const template2Script = (template) => {
+const template2Script = (template: TemplateFile) => {
   if (template.scriptName) {
     const scriptData = readScriptTemplateFile(template.scriptName);
     return { ...scriptData, ...(template.presentationStyle ?? {}) };
