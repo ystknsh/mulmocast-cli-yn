@@ -9,6 +9,9 @@ import { mulmoScriptTemplateSchema, mulmoPresentationStyleSchema } from "../type
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 
+const promptTemplateDirName = "./assets/templates";
+const scriptTemplateDirName = "./scripts/templates";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -149,7 +152,7 @@ export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMo
 };
 
 export const getPromptTemplateFilePath = (promptTemplateName: string) => {
-  return path.resolve(npmRoot, "./assets/templates/" + promptTemplateName + ".json");
+  return path.resolve(npmRoot, promptTemplateDirName, promptTemplateName + ".json");
 };
 
 export const mkdir = (dirPath: string) => {
@@ -191,7 +194,7 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 };
 
 export const readScriptTemplateFile = (scriptName: string) => {
-  const scriptPath = path.resolve(npmRoot, "./scripts/templates", scriptName);
+  const scriptPath = path.resolve(npmRoot, scriptTemplateDirName, scriptName);
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
   // NOTE: We don't want to schema parse the script here to eliminate default values.
   return JSON.parse(scriptData);
@@ -230,10 +233,10 @@ export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
   return getAvailablePromptTemplates();
 };
 export const getAvailablePromptTemplates = (): MulmoScriptTemplateFile[] => {
-  return getPromptTemplates<MulmoScriptTemplateFile>("./assets/templates", mulmoScriptTemplateSchema);
+  return getPromptTemplates<MulmoScriptTemplateFile>(promptTemplateDirName, mulmoScriptTemplateSchema);
 };
 export const getAvailableScriptTemplates = (): MulmoScriptTemplateFile[] => {
-  return getPromptTemplates<MulmoScriptTemplateFile>("./scripts/templates", mulmoPresentationStyleSchema);
+  return getPromptTemplates<MulmoScriptTemplateFile>(scriptTemplateDirName, mulmoPresentationStyleSchema);
 };
 
 export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
