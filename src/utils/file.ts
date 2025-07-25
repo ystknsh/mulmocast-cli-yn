@@ -3,7 +3,7 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext } from "../types/index.js";
+import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext, ScriptTemplate } from "../types/index.js";
 import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoScriptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
@@ -147,8 +147,9 @@ export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMo
   }
   return path.resolve(outDirPath, `${fileName}_${pdfMode}.pdf`);
 };
-export const getTemplateFilePath = (templateName: string) => {
-  return path.resolve(npmRoot, "./assets/templates/" + templateName + ".json");
+
+export const getPromptTemplateFilePath = (promptTemplateName: string) => {
+  return path.resolve(npmRoot, "./assets/templates/" + promptTemplateName + ".json");
 };
 
 export const mkdir = (dirPath: string) => {
@@ -196,35 +197,48 @@ export const readScriptTemplateFile = (scriptName: string) => {
   return JSON.parse(scriptData);
 };
 
-export const readTemplatePrompt = (templateName: string) => {
-  const templatePath = getTemplateFilePath(templateName);
-  const templateData = fs.readFileSync(templatePath, "utf-8");
+const readPromptTemplateFile = (promptTemplateName: string) => {
+  const promptTemplatePath = getPromptTemplateFilePath(promptTemplateName);
+  const promptTemplateData = fs.readFileSync(promptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
-  const template = JSON.parse(templateData);
+  const promptTemplate = JSON.parse(promptTemplateData);
+  return promptTemplate;
+};
 
-  const script = (() => {
-    if (template.scriptName) {
-      const scriptData = readScriptTemplateFile(template.scriptName);
-      return { ...scriptData, ...(template.presentationStyle ?? {}) };
-    }
-    return undefined;
-  })();
-  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template, script);
+const mulmoScriptTemplate2Script = (scriptTemplate: ScriptTemplate) => {
+  if (scriptTemplate.scriptName) {
+    const scriptData = readScriptTemplateFile(scriptTemplate.scriptName);
+    return { ...scriptData, ...(scriptTemplate.presentationStyle ?? {}) };
+  }
+  return undefined;
+};
+export const getScriptFromPromptTemplate = (promptTemplateName: string) => {
+  const promptTemplate = readPromptTemplateFile(promptTemplateName);
+  return mulmoScriptTemplate2Script(promptTemplate);
+};
+
+export const readTemplatePrompt = (promptTemplateName: string) => {
+  const promptTemplate = readPromptTemplateFile(promptTemplateName);
+  const script = mulmoScriptTemplate2Script(promptTemplate);
+  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(promptTemplate, script);
   return prompt;
 };
 
 export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
-  const templatesDir = path.resolve(npmRoot, "./assets/templates");
+  return getAvailablePromptTemplates();
+};
+export const getAvailablePromptTemplates = (): MulmoScriptTemplateFile[] => {
+  const promptTemplatesDir = path.resolve(npmRoot, "./assets/templates");
 
-  if (!fs.existsSync(templatesDir)) {
+  if (!fs.existsSync(promptTemplatesDir)) {
     return [];
   }
 
-  const files = fs.readdirSync(templatesDir);
+  const files = fs.readdirSync(promptTemplatesDir);
   return files.map((file) => {
-    const template = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
+    const promptTemplate = JSON.parse(fs.readFileSync(path.resolve(promptTemplatesDir, file), "utf-8"));
     return {
-      ...mulmoScriptTemplateSchema.parse(template),
+      ...mulmoScriptTemplateSchema.parse(promptTemplate),
       filename: file.replace(/\.json$/, ""),
     };
   });
