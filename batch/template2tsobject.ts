@@ -25,7 +25,7 @@ const main = () => {
   });
   const scriptTsExport = `export const scriptTemplates = ${scriptData}\n`;
   //  console.log(scriptTsExport);
-  fs.writeFileSync("./src/data/scriptTemplates.ts", promptTsExport, "utf8");
+  fs.writeFileSync("./src/data/scriptTemplates.ts", scriptTsExport, "utf8");
 
   
 };
