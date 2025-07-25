@@ -182,7 +182,7 @@ export type InitOptions = {
   p?: string;
 };
 
-export type TemplateFile = {
+export type ScriptTemplate = {
   title: string;
   description: string;
   systemPrompt: string;
