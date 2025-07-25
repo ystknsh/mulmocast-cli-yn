@@ -94,6 +94,9 @@ export const settings2GraphAIConfig = (
     soundEffectReplicateAgent: {
       apiKey: getKey("SOUND_EFFECT", "REPLICATE_API_TOKEN"),
     },
+    lipSyncReplicateAgent: {
+      apiKey: getKey("LIPSYNC", "REPLICATE_API_TOKEN"),
+    },
 
     // TODO
     // browserlessAgent

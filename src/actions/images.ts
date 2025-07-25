@@ -11,7 +11,15 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
-import { imageGoogleAgent, imageOpenaiAgent, movieGoogleAgent, movieReplicateAgent, mediaMockAgent, soundEffectReplicateAgent } from "../agents/index.js";
+import {
+  imageGoogleAgent,
+  imageOpenaiAgent,
+  movieGoogleAgent,
+  movieReplicateAgent,
+  mediaMockAgent,
+  soundEffectReplicateAgent,
+  lipSyncReplicateAgent,
+} from "../agents/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
@@ -35,11 +43,15 @@ const movieAgents = {
 const soundEffectAgents = {
   soundEffectReplicateAgent,
 };
+const lipSyncAgents = {
+  lipSyncReplicateAgent,
+};
 const defaultAgents = {
   ...vanillaAgents,
   ...imageAgents,
   ...movieAgents,
   ...soundEffectAgents,
+  ...lipSyncAgents,
   mediaMockAgent,
   fileWriteAgent,
   openAIAgent,
@@ -183,6 +195,7 @@ const beat_graph_data = {
     audioChecker: {
       agent: async (namedInputs: { movieFile: string; imageFile: string; soundEffectFile: string }) => {
         if (namedInputs.soundEffectFile) {
+          // NOTE: We intentinonally don't check lipSyncFile here.
           return { hasMovieAudio: true };
         }
         const sourceFile = namedInputs.movieFile || namedInputs.imageFile;
@@ -193,7 +206,7 @@ const beat_graph_data = {
         return { hasMovieAudio: hasAudio };
       },
       inputs: {
-        onComplete: [":movieGenerator", ":htmlImageGenerator", ":soundEffectGenerator"], // to wait for movieGenerator and htmlImageGenerator to finish
+        onComplete: [":movieGenerator", ":htmlImageGenerator", ":soundEffectGenerator"], // to wait for movieGenerator, htmlImageGenerator, soundEffectGenerator, and lipSyncGenerator to finish
         movieFile: ":preprocessor.movieFile",
         imageFile: ":preprocessor.imagePath",
         soundEffectFile: ":preprocessor.soundEffectFile",
@@ -221,19 +234,43 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
+    lipSyncGenerator: {
+      if: ":beat.enableLipSync",
+      agent: ":preprocessor.lipSyncAgentInfo.agentName",
+      inputs: {
+        onComplete: [":soundEffectGenerator"], // to wait for soundEffectGenerator to finish
+        movieFile: ":preprocessor.movieFile",
+        audioFile: ":preprocessor.audioFile",
+        lipSyncFile: ":preprocessor.lipSyncFile",
+        params: {
+          model: ":preprocessor.lipSyncModel",
+          duration: ":beat.duration",
+        },
+        cache: {
+          force: [":context.force"],
+          file: ":preprocessor.lipSyncFile",
+          index: ":__mapIndex",
+          sessionType: "lipSync",
+          mulmoContext: ":context",
+        },
+      },
+      defaultValue: {},
+    },
     output: {
       agent: "copyAgent",
       inputs: {
-        onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker", ":soundEffectGenerator"], // to wait for imageFromMovie to finish
+        onComplete: [":imageFromMovie", ":htmlImageGenerator", ":audioChecker", ":soundEffectGenerator", ":lipSyncGenerator"], // to wait for imageFromMovie, soundEffectGenerator, and lipSyncGenerator to finish
         imageFile: ":preprocessor.imagePath",
         movieFile: ":preprocessor.movieFile",
         soundEffectFile: ":preprocessor.soundEffectFile",
+        lipSyncFile: ":preprocessor.lipSyncFile",
         hasMovieAudio: ":audioChecker.hasMovieAudio",
       },
       output: {
         imageFile: ".imageFile",
         movieFile: ".movieFile",
         soundEffectFile: ".soundEffectFile",
+        lipSyncFile: ".lipSyncFile",
         hasMovieAudio: ".hasMovieAudio",
       },
       isResult: true,
@@ -267,7 +304,7 @@ const graph_data: GraphData = {
     mergeResult: {
       isResult: true,
       agent: (namedInputs: {
-        array: { imageFile: string; movieFile: string; soundEffectFile: string; hasMovieAudio: boolean }[];
+        array: { imageFile: string; movieFile: string; soundEffectFile: string; lipSyncFile: string; hasMovieAudio: boolean }[];
         context: MulmoStudioContext;
       }) => {
         const { array, context } = namedInputs;
@@ -331,7 +368,7 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
       {
         name: "fileCacheAgentFilter",
         agent: fileCacheAgentFilter,
-        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent", "soundEffectGenerator"],
+        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent", "soundEffectGenerator", "lipSyncGenerator"],
       },
     ],
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),

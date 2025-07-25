@@ -67,6 +67,7 @@ const initSessionState = () => {
       html: {},
       imageReference: {},
       soundEffect: {},
+      lipSync: {},
     },
   };
 };
