@@ -3,9 +3,9 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import type { MulmoScript, MulmoScriptTemplateFile, MulmoScriptTemplate, MulmoStudioContext } from "../types/index.js";
+import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoScriptTemplateSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
+import { mulmoPromptTemplateSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 
@@ -200,7 +200,7 @@ export const readScriptTemplateFile = (scriptName: string) => {
   return JSON.parse(scriptData);
 };
 
-const readPromptTemplateFile = (promptTemplateName: string): MulmoScriptTemplateFile => {
+const readPromptTemplateFile = (promptTemplateName: string): MulmoPromptTemplateFile => {
   const promptTemplatePath = getPromptTemplateFilePath(promptTemplateName);
   const promptTemplateData = fs.readFileSync(promptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
@@ -208,7 +208,7 @@ const readPromptTemplateFile = (promptTemplateName: string): MulmoScriptTemplate
   return promptTemplate;
 };
 
-const mulmoScriptTemplate2Script = (scriptTemplate: MulmoScriptTemplate) => {
+const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate) => {
   if (scriptTemplate.scriptName) {
     const scriptData = readScriptTemplateFile(scriptTemplate.scriptName);
     return { ...scriptData, ...(scriptTemplate.presentationStyle ?? {}) };
@@ -229,14 +229,14 @@ export const readTemplatePrompt = (promptTemplateName: string): string => {
 
 // TODO: MulmoScriptTemplateFileは、実際はpromptTempate
 // TODO: remove it after update app
-export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
+export const getAvailableTemplates = (): MulmoPromptTemplateFile[] => {
   return getAvailablePromptTemplates();
 };
-export const getAvailablePromptTemplates = (): MulmoScriptTemplateFile[] => {
-  return getPromptTemplates<MulmoScriptTemplateFile>(promptTemplateDirName, mulmoScriptTemplateSchema);
+export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
+  return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
 };
-export const getAvailableScriptTemplates = (): MulmoScriptTemplateFile[] => {
-  return getPromptTemplates<MulmoScriptTemplateFile>(scriptTemplateDirName, mulmoPresentationStyleSchema);
+export const getAvailableScriptTemplates = (): MulmoPromptTemplateFile[] => {
+  return getPromptTemplates<MulmoPromptTemplateFile>(scriptTemplateDirName, mulmoPresentationStyleSchema);
 };
 
 export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
