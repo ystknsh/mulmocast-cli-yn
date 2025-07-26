@@ -1,11 +1,11 @@
 {
   "$mulmocast": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "speechParams": {
-    "provider": "google",
     "speakers": {
       "Presenter": {
+        "provider": "google",
         "voiceId": "en-US-Studio-O"
       }
     }
