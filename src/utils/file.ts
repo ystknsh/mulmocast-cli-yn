@@ -215,7 +215,7 @@ const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoP
   }
   return undefined;
 };
-export const getScriptFromPromptTemplate = (promptTemplateName: string) => {
+export const getScriptFromPromptTemplate = (promptTemplateName: string): MulmoPresentationStyle | undefined => {
   const promptTemplate = readPromptTemplateFile(promptTemplateName);
   return mulmoScriptTemplate2Script(promptTemplate);
 };
