@@ -77,7 +77,7 @@ Do not add any keys that are not present in the sample script.
 Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`.trim();
 };
 
-export const storyToScriptPrompt = (script: MulmoScript, beatsPerScene: number, story: MulmoStoryboard) => {
+export const storyToScriptPrompt = (script: MulmoPresentationStyle, beatsPerScene: number, story: MulmoStoryboard) => {
   return `Generate script for the given storyboard, following the structure of the sample scripts below.
 Storyboard:
 - title: ${story.title}

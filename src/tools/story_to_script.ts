@@ -250,7 +250,7 @@ const oneStepGraphData: GraphData = {
 
 const generateBeatsPrompt = async (template: MulmoPromptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   const allScenes = story.scenes.map((scene) => scene.description).join("\n");
-  const sampleBeats = template.scriptName ? readScriptTemplateFile(template.scriptName).beats : [];
+  const sampleBeats = template.scriptName ? (readScriptTemplateFile(template.scriptName).beats ?? []) : [];
   return sceneToBeatsPrompt({ sampleBeats, beatsPerScene, allScenes });
 };
 
