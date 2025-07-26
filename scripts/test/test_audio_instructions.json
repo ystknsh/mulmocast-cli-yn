@@ -1,15 +1,16 @@
 {
   "$mulmocast": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "title": "Audio Instructions Test",
   "speechParams": {
-    "provider": "openai",
     "speakers": {
       "Presenter": {
+        "provider": "openai",
         "voiceId": "shimmer"
       },
       "Presenter2": {
+        "provider": "openai",
         "voiceId": "shimmer",
         "speechOptions": {
           "instruction": "Speak in a cheerful and positive tone."

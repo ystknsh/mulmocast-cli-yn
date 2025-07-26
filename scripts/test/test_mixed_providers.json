@@ -1,13 +1,13 @@
 {
   "$mulmocast": {
-    "version": "1.0"
+    "version": "1.1"
   },
   "title": "Mixed Providers Test",
   "description": "Testing multiple TTS providers for different speakers",
   "speechParams": {
-    "provider": "openai",
     "speakers": {
       "Presenter": {
+        "provider": "openai",
         "voiceId": "shimmer",
         "displayName": {
           "en": "Main Presenter"
