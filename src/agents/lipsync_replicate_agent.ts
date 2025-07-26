@@ -42,7 +42,7 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   }
   const videoParam = modelParams.video;
   const audioParam = modelParams.audio;
-  if (videoParam === "video" || videoParam === "video_input" || videoParam === "video_url") { 
+  if (videoParam === "video" || videoParam === "video_input" || videoParam === "video_url") {
     input[videoParam] = videoUri;
   }
   if (audioParam === "audio" || audioParam === "audio_input" || audioParam === "audio_file") {
