@@ -193,45 +193,39 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
   return path.resolve(file);
 };
 
-export const readScriptTemplateFile = (scriptName: string): MulmoPresentationStyle => {
-  const scriptPath = path.resolve(npmRoot, scriptTemplateDirName, scriptName);
-  const scriptData = fs.readFileSync(scriptPath, "utf-8");
+export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoPresentationStyle => {
+  const scriptTemplatePath = path.resolve(npmRoot, scriptTemplateDirName, scriptTemplateFileName);
+  const scriptTemplateData = fs.readFileSync(scriptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  return JSON.parse(scriptData);
+  return JSON.parse(scriptTemplateData);
 };
 
-const readPromptTemplateFile = (promptTemplateName: string): MulmoPromptTemplateFile => {
-  const promptTemplatePath = getPromptTemplateFilePath(promptTemplateName);
+const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemplateFile => {
+  const promptTemplatePath = getPromptTemplateFilePath(promptTemplateFileName);
   const promptTemplateData = fs.readFileSync(promptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
-  const promptTemplate = JSON.parse(promptTemplateData);
-  return promptTemplate;
+  return JSON.parse(promptTemplateData);
 };
 
 const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoPresentationStyle | undefined => {
   if (scriptTemplate.scriptName) {
-    const scriptData = readScriptTemplateFile(scriptTemplate.scriptName);
-    return { ...scriptData, ...(scriptTemplate.presentationStyle ?? {}) };
+    const scriptTemplateData = readScriptTemplateFile(scriptTemplate.scriptName);
+    return { ...scriptTemplateData, ...(scriptTemplate.presentationStyle ?? {}) };
   }
   return undefined;
 };
-export const getScriptFromPromptTemplate = (promptTemplateName: string): MulmoPresentationStyle | undefined => {
-  const promptTemplate = readPromptTemplateFile(promptTemplateName);
+export const getScriptFromPromptTemplate = (promptTemplateFileName: string): MulmoPresentationStyle | undefined => {
+  const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
   return mulmoScriptTemplate2Script(promptTemplate);
 };
 
-export const readTemplatePrompt = (promptTemplateName: string): string => {
-  const promptTemplate = readPromptTemplateFile(promptTemplateName);
+export const readTemplatePrompt = (promptTemplateFileName: string): string => {
+  const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
   const script = mulmoScriptTemplate2Script(promptTemplate);
   const prompt = MulmoScriptTemplateMethods.getSystemPrompt(promptTemplate, script);
   return prompt;
 };
 
-// TODO: MulmoScriptTemplateFileは、実際はpromptTempate
-// TODO: remove it after update app
-export const getAvailableTemplates = (): MulmoPromptTemplateFile[] => {
-  return getAvailablePromptTemplates();
-};
 export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
   return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
 };
