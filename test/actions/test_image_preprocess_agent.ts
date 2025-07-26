@@ -92,6 +92,7 @@ test("imagePreprocessAgent - basic functionality", async () => {
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -137,6 +138,7 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
     },
     imagePath: "/test/images/test_studio/1p.png",
     imageFromMovie: true,
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -170,6 +172,7 @@ test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
     },
     imagePath: "/test/images/test_studio/2p.png",
     imageFromMovie: true,
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -226,6 +229,7 @@ test("imagePreprocessAgent - with imageNames", async () => {
       movieParams: {},
     },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -272,6 +276,7 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
       movieParams: {},
     },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -319,6 +324,7 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
       movieParams: {},
     },
     referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -365,6 +371,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -406,6 +413,7 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -454,6 +462,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
         movieParams: {},
       },
       referenceImages: [],
+      beatDuration: undefined,
       imageAgentInfo: {
         agent: "imageOpenaiAgent",
         imageParams: {
@@ -500,6 +509,7 @@ test("imagePreprocessAgent - text only", async () => {
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -545,6 +555,7 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -588,6 +599,7 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
       movieParams: {},
     },
     imageFromMovie: true,
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -624,6 +636,7 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
       movieParams: {},
     },
     imageFromMovie: true,
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -660,6 +673,7 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -705,6 +719,7 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -749,6 +764,7 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -793,6 +809,7 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
       movieParams: {},
     },
     referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -829,6 +846,7 @@ test("imagePreprocessAgent - with imageParams override", async () => {
     imagePath: "/test/images/test_studio/21p.png",
     referenceImageForMovie: "/test/images/test_studio/21p.png",
     prompt: "A beautiful sunset\nphotorealistic",
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
