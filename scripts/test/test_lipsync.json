@@ -37,7 +37,11 @@
       "id": "future_possibilities",
       "text": "In the future, advancements in AI could revolutionize industries like healthcare, education, and transportation.",
       "imagePrompt": "A female presenter is standing in front of a futuristic cityscape with AI-powered hospital and an autonomous vehicle.",
-      "moviePrompt": "A female presenter in a futuristic cityscape with AI-powered hospitals, autonomous vehicles, and interactive learning environments"
+      "moviePrompt": "A female presenter in a futuristic cityscape with AI-powered hospitals, autonomous vehicles, and interactive learning environments",
+      "enableLipSync": true,
+      "lipSyncParams": {
+        "model": "tmappdev/lipsync"
+      }
     },
     {
       "id": "concluding_remarks",
