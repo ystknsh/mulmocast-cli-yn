@@ -1,6 +1,6 @@
 import "dotenv/config";
 import path from "path";
-import { GraphAI, GraphData } from "graphai";
+import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
 import { geminiAgent } from "@graphai/gemini_agent";
@@ -21,7 +21,7 @@ import { readFileSync } from "fs";
 const vanillaAgents = agents.default ?? agents;
 
 const showErrorMessage = (text: string) => {
-  console.error("\x1b[31m" + text + "\x1b[0m");
+  GraphAILogger.info("\x1b[31m" + text + "\x1b[0m");
 };
 
 const graphMulmoScript: GraphData = {
