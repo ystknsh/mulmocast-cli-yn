@@ -416,7 +416,6 @@ export const mulmoPresentationStyleSchema = z.object({
     bgmVolume: 0.2,
     audioVolume: 1.0,
   }),
-  beats: z.array(mulmoBeatSchema).optional(),
 });
 
 export const mulmoReferenceSchema = z.object({
