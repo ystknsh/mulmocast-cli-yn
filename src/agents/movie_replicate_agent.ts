@@ -99,7 +99,6 @@ export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, Agent
       return durations[0];
     }
   })();
-  console.log("*** duration", params.duration, duration);
 
   if (!provider2MovieAgent.replicate.modelParams[model].durations.includes(duration)) {
     throw new Error(
