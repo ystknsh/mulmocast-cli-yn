@@ -3,7 +3,7 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext } from "../types/index.js";
+import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext, MulmoPresentationStyle } from "../types/index.js";
 import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoPromptTemplateSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
@@ -235,8 +235,8 @@ export const getAvailableTemplates = (): MulmoPromptTemplateFile[] => {
 export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
   return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
 };
-export const getAvailableScriptTemplates = (): MulmoPromptTemplateFile[] => {
-  return getPromptTemplates<MulmoPromptTemplateFile>(scriptTemplateDirName, mulmoPresentationStyleSchema);
+export const getAvailableScriptTemplates = (): MulmoPresentationStyle[] => {
+  return getPromptTemplates<MulmoPresentationStyle>(scriptTemplateDirName, mulmoPresentationStyleSchema);
 };
 
 export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
