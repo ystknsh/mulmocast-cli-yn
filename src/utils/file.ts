@@ -193,6 +193,7 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
   return path.resolve(file);
 };
 
+// script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoPresentationStyle => {
   const scriptTemplatePath = path.resolve(npmRoot, scriptTemplateDirName, scriptTemplateFileName);
   const scriptTemplateData = fs.readFileSync(scriptTemplatePath, "utf-8");
@@ -226,14 +227,7 @@ export const readTemplatePrompt = (promptTemplateFileName: string): string => {
   return prompt;
 };
 
-export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
-  return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
-};
-export const getAvailableScriptTemplates = (): MulmoPresentationStyle[] => {
-  return getPromptTemplates<MulmoPresentationStyle>(scriptTemplateDirName, mulmoPresentationStyleSchema);
-};
-
-export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
+const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
   const templatesDir = path.resolve(npmRoot, dirPath);
 
   if (!fs.existsSync(templatesDir)) {
@@ -249,6 +243,14 @@ export const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => 
     };
   });
 };
+
+export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
+  return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
+};
+export const getAvailableScriptTemplates = (): MulmoPresentationStyle[] => {
+  return getPromptTemplates<MulmoPresentationStyle>(scriptTemplateDirName, mulmoPresentationStyleSchema);
+};
+// end of template
 
 export const writingMessage = (filePath: string): void => {
   GraphAILogger.debug(`writing: ${filePath}`);
