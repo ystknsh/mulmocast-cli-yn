@@ -28,13 +28,29 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   const audioUri = `data:audio/wav;base64,${audioBuffer.toString("base64")}`;
 
   const input = {
-    video: videoUri,
-    audio: audioUri,
-    duration: params.duration,
+    video: undefined as string | undefined,
+    video_input: undefined as string | undefined,
+    video_url: undefined as string | undefined,
+    audio: undefined as string | undefined,
+    audio_input: undefined as string | undefined,
+    audio_file: undefined as string | undefined,
   };
 
+  const modelParams = provider2LipSyncAgent.replicate.modelParams[model];
+  if (!modelParams) {
+    throw new Error(`Model ${model} is not supported`);
+  }
+  const videoParam = modelParams.video;
+  const audioParam = modelParams.audio;
+  if (videoParam === "video" || videoParam === "video_input" || videoParam === "video_url") {
+    input[videoParam] = videoUri;
+  }
+  if (audioParam === "audio" || audioParam === "audio_input" || audioParam === "audio_file") {
+    input[audioParam] = audioUri;
+  }
+  const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` = provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
+
   try {
-    const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` = provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
     const output = await replicate.run(model_identifier, {
       input,
     });

@@ -90,7 +90,16 @@ export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, Agent
   if (!provider2MovieAgent.replicate.modelParams[model]) {
     throw new Error(`Model ${model} is not supported`);
   }
-  const duration = params.duration ?? provider2MovieAgent.replicate.modelParams[model].durations[0] ?? 5;
+  const duration = (() => {
+    const durations = provider2MovieAgent.replicate.modelParams[model].durations;
+    if (params.duration) {
+      const largerDurations = durations.filter((d) => d >= params.duration!);
+      return largerDurations.length > 0 ? largerDurations[0] : durations[durations.length - 1];
+    } else {
+      return durations[0];
+    }
+  })();
+
   if (!provider2MovieAgent.replicate.modelParams[model].durations.includes(duration)) {
     throw new Error(
       `Duration ${duration} is not supported for model ${model}. Supported durations: ${provider2MovieAgent.replicate.modelParams[model].durations.join(", ")}`,

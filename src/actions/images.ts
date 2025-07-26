@@ -174,7 +174,7 @@ const beat_graph_data = {
         },
         params: {
           model: ":preprocessor.movieAgentInfo.movieParams.model",
-          duration: ":beat.duration",
+          duration: ":preprocessor.beatDuration",
           canvasSize: ":context.presentationStyle.canvasSize",
         },
       },
@@ -194,8 +194,8 @@ const beat_graph_data = {
     },
     audioChecker: {
       agent: async (namedInputs: { movieFile: string; imageFile: string; soundEffectFile: string }) => {
+        // NOTE: We intentinonally don't check lipSyncFile here.
         if (namedInputs.soundEffectFile) {
-          // NOTE: We intentinonally don't check lipSyncFile here.
           return { hasMovieAudio: true };
         }
         const sourceFile = namedInputs.movieFile || namedInputs.imageFile;
@@ -206,7 +206,7 @@ const beat_graph_data = {
         return { hasMovieAudio: hasAudio };
       },
       inputs: {
-        onComplete: [":movieGenerator", ":htmlImageGenerator", ":soundEffectGenerator"], // to wait for movieGenerator, htmlImageGenerator, soundEffectGenerator, and lipSyncGenerator to finish
+        onComplete: [":movieGenerator", ":htmlImageGenerator", ":soundEffectGenerator"],
         movieFile: ":preprocessor.movieFile",
         imageFile: ":preprocessor.imagePath",
         soundEffectFile: ":preprocessor.soundEffectFile",
@@ -222,7 +222,7 @@ const beat_graph_data = {
         soundEffectFile: ":preprocessor.soundEffectFile",
         params: {
           model: ":preprocessor.soundEffectModel",
-          duration: ":beat.duration",
+          duration: ":preprocessor.beatDuration",
         },
         cache: {
           force: [":context.force"],
@@ -244,7 +244,7 @@ const beat_graph_data = {
         lipSyncFile: ":preprocessor.lipSyncFile",
         params: {
           model: ":preprocessor.lipSyncModel",
-          duration: ":beat.duration",
+          duration: ":preprocessor.beatDuration",
         },
         cache: {
           force: [":context.force"],
