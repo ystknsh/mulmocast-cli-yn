@@ -208,7 +208,7 @@ const readPromptTemplateFile = (promptTemplateName: string): MulmoPromptTemplate
   return promptTemplate;
 };
 
-const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate) => {
+const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoPresentationStyle | undefined => {
   if (scriptTemplate.scriptName) {
     const scriptData = readScriptTemplateFile(scriptTemplate.scriptName);
     return { ...scriptData, ...(scriptTemplate.presentationStyle ?? {}) };
