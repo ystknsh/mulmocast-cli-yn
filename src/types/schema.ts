@@ -495,7 +495,7 @@ export const mulmoStudioSchema = z
   })
   .strict();
 
-export const mulmoScriptTemplateSchema = z
+export const mulmoPromptTemplateSchema = z
   .object({
     title: z.string(),
     description: z.string(),
@@ -505,7 +505,7 @@ export const mulmoScriptTemplateSchema = z
   })
   .strict();
 
-export const mulmoScriptTemplateFileSchema = mulmoScriptTemplateSchema.extend({
+export const mulmoPromptTemplateFileSchema = mulmoPromptTemplateSchema.extend({
   filename: z.string(),
 });
 

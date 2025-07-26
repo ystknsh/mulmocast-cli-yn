@@ -1,8 +1,8 @@
 import inquirer from "inquirer";
-import { getAvailableTemplates } from "./file.js";
+import { getAvailablePromptTemplates } from "./file.js";
 
 export const selectTemplate = async (): Promise<string> => {
-  const availableTemplates = getAvailableTemplates();
+  const availableTemplates = getAvailablePromptTemplates();
   const answers = await inquirer.prompt([
     {
       type: "list",

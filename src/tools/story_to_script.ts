@@ -1,6 +1,6 @@
 import { getPromptTemplateFilePath, readAndParseJson, readScriptTemplateFile, writingMessage } from "../utils/file.js";
-import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
-import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
+import { mulmoScriptSchema, mulmoPromptTemplateSchema } from "../types/schema.js";
+import { MulmoPromptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -248,13 +248,13 @@ const oneStepGraphData: GraphData = {
   },
 };
 
-const generateBeatsPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
+const generateBeatsPrompt = async (template: MulmoPromptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   const allScenes = story.scenes.map((scene) => scene.description).join("\n");
-  const sampleBeats = template.scriptName ? readScriptTemplateFile(template.scriptName).beats : [];
+  const sampleBeats = template.scriptName ? (readScriptTemplateFile(template.scriptName).beats ?? []) : [];
   return sceneToBeatsPrompt({ sampleBeats, beatsPerScene, allScenes });
 };
 
-const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: MulmoStoryboard) => {
+const generateScriptInfoPrompt = async (template: MulmoPromptTemplate, story: MulmoStoryboard) => {
   if (!template.scriptName) {
     // TODO: use default schema
     throw new Error("script is not provided");
@@ -264,7 +264,7 @@ const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: Mu
   return storyToScriptInfoPrompt(scriptWithoutBeats, story);
 };
 
-const generateScriptPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
+const generateScriptPrompt = async (template: MulmoPromptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   if (!template.scriptName) {
     // TODO: use default schema
     throw new Error("script is not provided");
@@ -292,7 +292,7 @@ export const storyToScript = async ({
   llmModel?: string;
   generateMode: StoryToScriptGenerateMode;
 }) => {
-  const template = readAndParseJson(getPromptTemplateFilePath(templateName), mulmoScriptTemplateSchema);
+  const template = readAndParseJson(getPromptTemplateFilePath(templateName), mulmoPromptTemplateSchema);
   const { agent, model, max_tokens } = llmPair(llm, llmModel);
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);
