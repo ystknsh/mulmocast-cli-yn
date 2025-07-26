@@ -1,4 +1,4 @@
-import { MulmoBeat, MulmoScript, MulmoPromptTemplate, MulmoStoryboard, MulmoCanvasDimension } from "../types/index.js";
+import { MulmoBeat, MulmoScript, MulmoPresentationStyle, MulmoPromptTemplate, MulmoStoryboard, MulmoCanvasDimension } from "../types/index.js";
 import { mulmoScriptSchema } from "../types/schema.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
@@ -15,7 +15,7 @@ export const graphDataScriptGeneratePrompt = (scene: string) => {
   return `Please generate a script from the following scenes: ${scene}`;
 };
 
-export const getMulmoScriptTemplateSystemPrompt = (template: MulmoPromptTemplate, script?: MulmoScript) => {
+export const getMulmoScriptTemplateSystemPrompt = (template: MulmoPromptTemplate, script?: MulmoPresentationStyle) => {
   // script is provided, use it as a script template
   if (script) {
     return `${template.systemPrompt}\n\`\`\`JSON\n${JSON.stringify(script)}\n\`\`\``;

@@ -416,6 +416,7 @@ export const mulmoPresentationStyleSchema = z.object({
     bgmVolume: 0.2,
     audioVolume: 1.0,
   }),
+  beats: z.array(mulmoBeatSchema).min(1),
 });
 
 export const mulmoReferenceSchema = z.object({
@@ -431,7 +432,6 @@ export const mulmoScriptSchema = mulmoPresentationStyleSchema
     description: z.string().optional(),
     references: z.array(mulmoReferenceSchema).optional(),
     lang: langSchema.optional(), // default "en"
-    beats: z.array(mulmoBeatSchema).min(1),
 
     // TODO: Delete it later
     imagePath: z.string().optional(), // for keynote images movie ??

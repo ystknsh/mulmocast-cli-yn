@@ -193,7 +193,7 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
   return path.resolve(file);
 };
 
-export const readScriptTemplateFile = (scriptName: string) => {
+export const readScriptTemplateFile = (scriptName: string): MulmoPresentationStyle => {
   const scriptPath = path.resolve(npmRoot, scriptTemplateDirName, scriptName);
   const scriptData = fs.readFileSync(scriptPath, "utf-8");
   // NOTE: We don't want to schema parse the script here to eliminate default values.
