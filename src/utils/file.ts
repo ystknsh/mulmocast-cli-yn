@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext } from "../types/index.js";
 import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoPromptTemplateSchema, mulmoScriptSchema } from "../types/schema.js";
+import { mulmoPromptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 
