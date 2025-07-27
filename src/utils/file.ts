@@ -9,6 +9,8 @@ import { mulmoPromptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 
+import  { promptTemplates, scriptTemplates } from "../data";
+
 const promptTemplateDirName = "./assets/templates";
 const scriptTemplateDirName = "./scripts/templates";
 
@@ -195,10 +197,10 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
-  const scriptTemplatePath = path.resolve(npmRoot, scriptTemplateDirName, scriptTemplateFileName);
-  const scriptTemplateData = fs.readFileSync(scriptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  return JSON.parse(scriptTemplateData);
+  const scriptTemplate = scriptTemplates.find(template => template.filename === scriptTemplateFileName.split(".")[0]);
+  const {filename: __, ...retValue } = scriptTemplate;
+  return retValue;
 };
 
 const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemplateFile => {
