@@ -9,7 +9,7 @@ import { mulmoPromptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 
-import  { promptTemplates, scriptTemplates } from "../data";
+import { promptTemplates, scriptTemplates } from "../data";
 
 const promptTemplateDirName = "./assets/templates";
 const scriptTemplateDirName = "./scripts/templates";
@@ -198,16 +198,15 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  const scriptTemplate = scriptTemplates.find(template => template.filename === scriptTemplateFileName.split(".")[0]);
-  const {filename: __, ...retValue } = scriptTemplate;
+  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName.split(".")[0]);
+  const { filename: __, ...retValue } = scriptTemplate;
   return retValue;
 };
 
 const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemplateFile => {
-  const promptTemplatePath = getPromptTemplateFilePath(promptTemplateFileName);
-  const promptTemplateData = fs.readFileSync(promptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
-  return JSON.parse(promptTemplateData);
+  const promptTemplate = promptTemplates.find((template) => template.filename === promptTemplateFileName.split(".")[0]);
+  return promptTemplate;
 };
 
 const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoScript | undefined => {
@@ -217,7 +216,7 @@ const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoS
   }
   return undefined;
 };
-export const getScriptFromPromptTemplate = (promptTemplateFileName: string): MulmoScript | undefined => {
+const getScriptFromPromptTemplate = (promptTemplateFileName: string): MulmoScript | undefined => {
   const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
   return mulmoScriptTemplate2Script(promptTemplate);
 };
