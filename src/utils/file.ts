@@ -199,7 +199,10 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName.split(".")[0])!;
+  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName.split(".")[0]);
+  if (!scriptTemplate) {
+    throw new Error(`Script template not found: ${scriptTemplateFileName}`);
+  }
   const { filename: __, ...retValue } = scriptTemplate;
   return retValue as unknown as MulmoScript;
 };
@@ -208,7 +211,10 @@ const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemp
   // NOTE: We don't want to schema parse the template here to eliminate default values.
   const promptTemplate = (promptTemplates as MulmoPromptTemplateFile[]).find(
     (template: MulmoPromptTemplateFile) => template.filename === promptTemplateFileName.split(".")[0],
-  )!;
+  );
+  if (!promptTemplate) {
+    throw new Error(`Prompt template not found: ${promptTemplateFileName}`);
+  }
   return promptTemplate;
 };
 
@@ -252,6 +258,7 @@ const getPromptTemplates = <T>(dirPath: string, schema: ZodType | null): T[] => 
 
 export const getAvailablePromptTemplates = (skipValidation?: boolean): MulmoPromptTemplateFile[] => {
   if (skipValidation) {
+    return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, null);
   }
   return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
 };
