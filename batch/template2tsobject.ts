@@ -24,6 +24,7 @@ const main = () => {
     compact: false,
     sorted: true,
     breakLength: 120,
+    maxStringLength: null,
   });
   const templateDataSetExport = `export const scriptTemplates = ${templateDataSet}\n`;
   fs.writeFileSync("./src/data/templateDataSet.ts", templateDataSetExport, "utf8");
