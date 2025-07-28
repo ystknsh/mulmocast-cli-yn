@@ -199,7 +199,7 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName.split(".")[0]);
+  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName);
   if (!scriptTemplate) {
     throw new Error(`Script template not found: ${scriptTemplateFileName}`);
   }
@@ -210,7 +210,7 @@ export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScr
 const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemplateFile => {
   // NOTE: We don't want to schema parse the template here to eliminate default values.
   const promptTemplate = (promptTemplates as MulmoPromptTemplateFile[]).find(
-    (template: MulmoPromptTemplateFile) => template.filename === promptTemplateFileName.split(".")[0],
+    (template: MulmoPromptTemplateFile) => template.filename === promptTemplateFileName,
   );
   if (!promptTemplate) {
     throw new Error(`Prompt template not found: ${promptTemplateFileName}`);

@@ -24,7 +24,7 @@ export const promptTemplates = [
         style: "<style>AKIRA aesthetic.</style>",
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Akira style",
@@ -77,7 +77,7 @@ export const promptTemplates = [
         },
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. 言葉づかいは少しツンデレにして。Another AI will generate comic for each beat based on the image prompt of that beat. You don't need to specify the style of the image, just describe the scene. Mention the reference in one of beats, if it exists. Use the JSON below as a template. Create appropriate amount of beats, and make sure the beats are coherent and flow well.",
     title: "Presentation with Ani",
@@ -127,7 +127,7 @@ export const promptTemplates = [
         },
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a Japanese script for a presentation of the given topic. 言葉づかいは少しツンデレにして。Another AI will generate comic for each beat based on the image prompt of that beat. You don't need to specify the style of the image, just describe the scene. Mention the reference in one of beats, if it exists. Use the JSON below as a template. Create appropriate amount of beats, and make sure the beats are coherent and flow well.",
     title: "Presentation with Ani in Japanese",
@@ -135,7 +135,7 @@ export const promptTemplates = [
   {
     description: "Template for business presentation.",
     filename: "business",
-    scriptName: "business.json",
+    scriptName: "business",
     systemPrompt:
       "Generate a script for a business presentation of the given topic. Use textSlides, markdown, mermaid, or chart to show slides. Extract image links in the article (from <img> tag) to reuse them in the presentation. Mention the reference in one of beats, if it exists. Use the JSON below as a template. chartData is the data for Chart.js",
     title: "Business presentation",
@@ -153,7 +153,7 @@ export const promptTemplates = [
         width: 1536,
       },
     },
-    scriptName: "image_refs.json",
+    scriptName: "image_refs",
     systemPrompt:
       "Generate a script for a the given story with multiple characters. Generate image prompts for each character, and make references to them in the beats. Use the JSON below as a template.",
     title: "Story with multiple characters",
@@ -175,7 +175,7 @@ export const promptTemplates = [
           "A hand-drawn style illustration with a warm, nostalgic atmosphere. The background is rich with natural scenery—lush forests, cloudy skies, and traditional Japanese architecture. Characters have expressive eyes, soft facial features, and are portrayed with gentle lighting and subtle shading. The color palette is muted yet vivid, using earthy tones and watercolor-like textures. The overall scene feels magical and peaceful, with a sense of quiet wonder and emotional depth, reminiscent of classic 1980s and 1990s Japanese animation.",
       },
     },
-    scriptName: "children_book.json",
+    scriptName: "children_book",
     systemPrompt:
       "Please generate a script for a children book on the topic provided by the user. Each page (=beat) must haven an image prompt appropriate for the text.",
     title: "Children Book",
@@ -183,7 +183,7 @@ export const promptTemplates = [
   {
     description: "Template for software and coding presentation.",
     filename: "coding",
-    scriptName: "coding.json",
+    scriptName: "coding",
     systemPrompt:
       "Generate a script for a technical presentation of the given topic. Use markdown with a code block to show some code on a slide. Avoid long coding examples, which may not fit in a single slide. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Coding presentation",
@@ -205,7 +205,7 @@ export const promptTemplates = [
           "<style>A multi panel comic strips. 1990s American workplace humor. Clean, minimalist line art with muted colors. One character is a nerdy office worker with glasses</style>",
       },
     },
-    scriptName: "text_only_template.json",
+    scriptName: "text_only_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "American Comic Strips",
@@ -235,7 +235,7 @@ export const promptTemplates = [
         style: "<style>Dragon Ball/Dr. Slump aesthetic.</style>",
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Dr. Slump Style",
@@ -265,7 +265,7 @@ export const promptTemplates = [
         style: "<style>Ghibli style</style>",
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Ghibli comic style",
@@ -295,7 +295,7 @@ export const promptTemplates = [
         style: "<style>Ghibli style</style>",
       },
     },
-    scriptName: "image_prompt_only_template.json",
+    scriptName: "image_prompt_only_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate an image for each beat based on the text description of that beat. Use the JSON below as a template.",
     title: "Ghibli comic image-only",
@@ -336,7 +336,7 @@ export const promptTemplates = [
         },
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a Japanese script for a Youtube shorts of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Ghibli style for YouTube Shorts",
@@ -373,7 +373,7 @@ export const promptTemplates = [
         style: "<style>Ghost in the shell aesthetic.</style>",
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Ghost in the shell style",
@@ -381,7 +381,7 @@ export const promptTemplates = [
   {
     description: "Template for business presentation in HTML.",
     filename: "html",
-    scriptName: "html.json",
+    scriptName: "html",
     systemPrompt:
       "Generate a script for a business presentation of the given topic. Another LLM will generate actual slides from the prompt and data for each beat. Adding optional data would help it to generate more compelling slide. Mention the reference in one of beats, if it exists. The valid type of reference is 'article', 'paper', 'image', 'video', 'audio'. Use the JSON below as a template.",
     title: "Business presentation in HTML",
@@ -411,7 +411,7 @@ export const promptTemplates = [
         style: "<style>One Piece aesthetic.</style>",
       },
     },
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "One Piece style",
@@ -447,7 +447,7 @@ export const promptTemplates = [
         style: "<style>Photo realistic, cinematic.</style>",
       },
     },
-    scriptName: "movie_prompts_template.json",
+    scriptName: "movie_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Photo realistic movie (portrait)",
@@ -477,7 +477,7 @@ export const promptTemplates = [
         style: "<style>Photo realistic, cinematic.</style>",
       },
     },
-    scriptName: "movie_prompts_template.json",
+    scriptName: "movie_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Photo realistic movie template",
@@ -524,7 +524,7 @@ export const promptTemplates = [
         },
       },
     },
-    scriptName: "sensei_and_taro.json",
+    scriptName: "sensei_and_taro",
     systemPrompt:
       "この件について、内容全てを高校生にも分かるように、太郎くん(Student)と先生(Teacher)の会話、という形の台本をArtifactとして作って。ただし要点はしっかりと押さえて。以下に別のトピックに関するサンプルを貼り付けます。このJSONフォーマットに従って。",
     title: "Student and Teacher",
@@ -544,7 +544,7 @@ export const promptTemplates = [
         style: "<style>Photo realistic, cinematic.</style>",
       },
     },
-    scriptName: "movie_prompts_template.json",
+    scriptName: "movie_prompts_template",
     systemPrompt:
       "Generate a script for a Youtube shorts of the given topic. The first beat should be a hook, which describes the topic. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English.",
     title: "Short movie template",
@@ -552,7 +552,7 @@ export const promptTemplates = [
   {
     description: "Template for Text and Image Script.",
     filename: "text_and_image",
-    scriptName: "image_prompts_template.json",
+    scriptName: "image_prompts_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the imagePrompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Text and Image",
@@ -560,7 +560,7 @@ export const promptTemplates = [
   {
     description: "Template for Text Only Script.",
     filename: "text_only",
-    scriptName: "text_only_template.json",
+    scriptName: "text_only_template",
     systemPrompt:
       "Generate a script for a presentation of the given topic. Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
     title: "Text Only",
@@ -590,7 +590,7 @@ export const promptTemplates = [
         style: "<style>Photo realistic, cinematic.</style>",
       },
     },
-    scriptName: "movie_prompts_no_text_template.json",
+    scriptName: "movie_prompts_no_text_template",
     systemPrompt:
       "Generate a script for a movie trailer of the given story. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English.",
     title: "Movie Trailer template",
