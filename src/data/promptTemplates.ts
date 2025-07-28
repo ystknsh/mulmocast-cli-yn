@@ -7,15 +7,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -30,24 +21,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>AKIRA aesthetic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_prompts_template.json",
@@ -64,17 +38,10 @@ export const promptTemplates = [
         version: "1.1",
       },
       audioParams: {
-        audioVolume: 1,
         bgm: {
           kind: "url",
           url: "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3",
         },
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
       },
       canvasSize: {
         height: 1536,
@@ -90,18 +57,16 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style:
           "<style>A highly polished 2D digital illustration in anime and manga style, featuring clean linework, soft shading, vivid colors, and expressive facial detailing. The composition emphasizes clarity and visual impact with a minimalistic background and a strong character focus. The lighting is even and bright, giving the image a crisp and energetic feel, reminiscent of high-quality character art used in Japanese visual novels or mobile games.</style>",
       },
+      lang: "en",
       movieParams: {
         model: "bytedance/seedance-1-lite",
         provider: "replicate",
       },
-      soundEffectParams: {
-        provider: "replicate",
-      },
       speechParams: {
+        provider: "openai",
         speakers: {
           Presenter: {
             speechOptions: {
@@ -126,17 +91,10 @@ export const promptTemplates = [
         version: "1.1",
       },
       audioParams: {
-        audioVolume: 1,
         bgm: {
           kind: "url",
           url: "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3",
         },
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
       },
       canvasSize: {
         height: 1536,
@@ -152,15 +110,12 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style:
           "<style>A highly polished 2D digital illustration in anime and manga style, featuring clean linework, soft shading, vivid colors, and expressive facial detailing. The composition emphasizes clarity and visual impact with a minimalistic background and a strong character focus. The lighting is even and bright, giving the image a crisp and energetic feel, reminiscent of high-quality character art used in Japanese visual novels or mobile games.</style>",
       },
+      lang: "ja",
       movieParams: {
         model: "bytedance/seedance-1-lite",
-        provider: "replicate",
-      },
-      soundEffectParams: {
         provider: "replicate",
       },
       speechParams: {
@@ -193,38 +148,9 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
-      },
-      imageParams: {
-        images: {},
-        provider: "openai",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_refs.json",
@@ -240,39 +166,13 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
       },
       imageParams: {
-        provider: "openai",
         style:
           "A hand-drawn style illustration with a warm, nostalgic atmosphere. The background is rich with natural scenery—lush forests, cloudy skies, and traditional Japanese architecture. Characters have expressive eyes, soft facial features, and are portrayed with gentle lighting and subtle shading. The color palette is muted yet vivid, using earthy tones and watercolor-like textures. The overall scene feels magical and peaceful, with a sense of quiet wonder and emotional depth, reminiscent of classic 1980s and 1990s Japanese animation.",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "children_book.json",
@@ -296,39 +196,13 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
       },
       imageParams: {
-        provider: "openai",
         style:
           "<style>A multi panel comic strips. 1990s American workplace humor. Clean, minimalist line art with muted colors. One character is a nerdy office worker with glasses</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "text_only_template.json",
@@ -344,15 +218,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -367,24 +232,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Dragon Ball/Dr. Slump aesthetic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_prompts_template.json",
@@ -400,15 +248,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -423,24 +262,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Ghibli style</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_prompts_template.json",
@@ -456,15 +278,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -479,24 +292,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Ghibli style</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_prompt_only_template.json",
@@ -512,15 +308,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1536,
         width: 1024,
@@ -535,14 +322,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Ghibli style</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
       },
       speechParams: {
         speakers: {
@@ -569,15 +349,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -599,24 +370,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Ghost in the shell aesthetic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_prompts_template.json",
@@ -640,15 +394,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -663,24 +408,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>One Piece aesthetic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "image_prompts_template.json",
@@ -702,15 +430,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1536,
         width: 1024,
@@ -725,24 +444,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Photo realistic, cinematic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "movie_prompts_template.json",
@@ -758,15 +460,6 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
@@ -781,24 +474,7 @@ export const promptTemplates = [
             type: "image",
           },
         },
-        provider: "openai",
         style: "<style>Photo realistic, cinematic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "movie_prompts_template.json",
@@ -814,29 +490,13 @@ export const promptTemplates = [
         credit: "closing",
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1024,
         width: 1536,
       },
       imageParams: {
-        provider: "openai",
         style:
           "<style>Ghibli style. Student (Taro) is a young teenager with a dark short hair with glasses. Teacher is a middle-aged man with grey hair and moustache.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
       },
       speechParams: {
         speakers: {
@@ -876,38 +536,12 @@ export const promptTemplates = [
       $mulmocast: {
         version: "1.1",
       },
-      audioParams: {
-        audioVolume: 1,
-        bgmVolume: 0.2,
-        closingPadding: 0.8,
-        introPadding: 1,
-        outroPadding: 1,
-        padding: 0.3,
-        suppressSpeech: false,
-      },
       canvasSize: {
         height: 1280,
         width: 720,
       },
       imageParams: {
-        provider: "openai",
         style: "<style>Photo realistic, cinematic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "movie_prompts_template.json",
@@ -939,41 +573,21 @@ export const promptTemplates = [
         version: "1.1",
       },
       audioParams: {
-        audioVolume: 1,
         bgm: {
           kind: "url",
           url: "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/bgms/trailer_dramatic.mp3",
         },
-        bgmVolume: 0.2,
         closingPadding: 0,
         introPadding: 0,
         outroPadding: 2.5,
         padding: 0,
-        suppressSpeech: false,
       },
       canvasSize: {
         height: 720,
         width: 1280,
       },
       imageParams: {
-        provider: "openai",
         style: "<style>Photo realistic, cinematic.</style>",
-      },
-      movieParams: {
-        provider: "replicate",
-      },
-      soundEffectParams: {
-        provider: "replicate",
-      },
-      speechParams: {
-        speakers: {
-          Presenter: {
-            displayName: {
-              en: "Presenter",
-            },
-            voiceId: "shimmer",
-          },
-        },
       },
     },
     scriptName: "movie_prompts_no_text_template.json",
