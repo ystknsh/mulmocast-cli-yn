@@ -12,8 +12,7 @@ import { groqAgent } from "@graphai/groq_agent";
 import * as agents from "@graphai/vanilla";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { mkdir } from "../utils/file.js";
-import { readTemplatePrompt } from "../utils/templates.js";
+import { readTemplatePrompt, mkdir } from "../utils/file.js";
 import { browserlessCacheGenerator } from "../utils/filters.js";
 import { mulmoScriptSchema, ScriptingParams } from "../types/index.js";
 import { browserlessAgent } from "@graphai/browserless_agent";
