@@ -4,7 +4,7 @@ import util from "util";
 
 
 const main = () => {
-  const promptTemplates = getAvailablePromptTemplates(true);
+  const promptTemplates = getAvailablePromptTemplates();
   const promptData = util.inspect(promptTemplates, {
     depth: null,
     compact: false,
