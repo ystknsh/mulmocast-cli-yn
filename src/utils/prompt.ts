@@ -1,6 +1,4 @@
-import { MulmoBeat, MulmoScript, MulmoPromptTemplate, MulmoStoryboard, MulmoCanvasDimension } from "../types/index.js";
-import { mulmoScriptSchema } from "../types/schema.js";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { MulmoBeat, MulmoScript, MulmoStoryboard, MulmoCanvasDimension } from "../types/index.js";
 
 export const imagePrompt = (beat: MulmoBeat, style?: string) => {
   return (beat.imagePrompt || `generate image appropriate for the text. text: ${beat.text}`) + "\n" + (style || "");

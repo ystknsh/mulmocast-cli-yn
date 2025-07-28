@@ -1,5 +1,7 @@
 import type { MulmoScript, MulmoPromptTemplate, MulmoPromptTemplateFile } from "../types/type.js";
+import { mulmoScriptSchema } from "../types/schema.js";
 import { promptTemplates, scriptTemplates } from "../data/index.js";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
