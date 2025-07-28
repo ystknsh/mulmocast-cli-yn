@@ -1,5 +1,5 @@
 import { GraphAILogger } from "graphai";
-import { readTemplatePrompt } from "../utils/file.js";
+import { readTemplatePrompt } from "../utils/templates.js";
 import clipboardy from "clipboardy";
 
 export const dumpPromptFromTemplate = async ({ templateName }: { templateName: string }) => {
