@@ -250,7 +250,9 @@ const getPromptTemplates = <T>(dirPath: string, schema: ZodType | null): T[] => 
   });
 };
 
-export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
+export const getAvailablePromptTemplates = (skipValidation?: boolean): MulmoPromptTemplateFile[] => {
+  if (skipValidation) {
+  }
   return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
 };
 export const getAvailableScriptTemplates = (): MulmoScript[] => {
