@@ -1,5 +1,4 @@
-import { getPromptTemplateFilePath, readAndParseJson, writingMessage } from "../utils/file.js";
-import { readScriptTemplateFile } from "../utils/templates.js";
+import { getPromptTemplateFilePath, readAndParseJson, readScriptTemplateFile, writingMessage } from "../utils/file.js";
 import { mulmoScriptSchema, mulmoPromptTemplateSchema } from "../types/schema.js";
 import { MulmoPromptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";

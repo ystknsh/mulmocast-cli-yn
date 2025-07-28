@@ -2,4 +2,3 @@
 
 export * from "./types/index.js";
 export * from "./utils/provider2agent.js";
-export * from "./utils/templates.js";
