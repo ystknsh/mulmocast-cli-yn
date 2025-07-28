@@ -51,7 +51,7 @@
     "latest": "yarn upgrade-interactive  --latest",
     "format": "prettier --write '{src,scripts,assets/templates,assets/styles,draft,ideason,scripts_mag2,proto,test,graphai,output,docs/scripts}/**/*.{ts,json,yaml}'",
     "deep_research": "npx tsx ./src/tools/deep_research.ts",
-    "template": "npx tsx batch/template2tsobject.ts",
+    "template": "npx tsx batch/template2tsobject.ts && yarn run format",
     "fake_data": "npx tsx test/fake/sample.ts",
     "mcp_server": "npx tsx ./src/mcp/server.ts"
   },
