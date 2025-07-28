@@ -25,7 +25,8 @@ const main = () => {
     sorted: true,
     breakLength: 120,
   });
-  fs.writeFileSync("./src/data/templateDataSet.ts", templateDataSet, "utf8");
+  const templateDataSetExport = `export const scriptTemplates = ${templateDataSet}\n`;
+  fs.writeFileSync("./src/data/templateDataSet.ts", templateDataSetExport, "utf8");
 
   //  console.log(promptTsExport);
 
