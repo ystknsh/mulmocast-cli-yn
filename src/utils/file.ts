@@ -10,7 +10,7 @@ import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 import { getMulmoScriptTemplateSystemPrompt } from "./prompt.js";
 
-import { promptTemplates, scriptTemplates } from "../data";
+import { promptTemplates, scriptTemplates } from "../data/index.js";
 
 const promptTemplateDirName = "./assets/templates";
 const scriptTemplateDirName = "./scripts/templates";
@@ -199,14 +199,16 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName.split(".")[0]);
+  const scriptTemplate = scriptTemplates.find((template: Record<string, unknown>) => template.filename === scriptTemplateFileName.split(".")[0])!;
   const { filename: __, ...retValue } = scriptTemplate;
-  return retValue;
+  return retValue as unknown as MulmoScript;
 };
 
 const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemplateFile => {
   // NOTE: We don't want to schema parse the template here to eliminate default values.
-  const promptTemplate = promptTemplates.find((template) => template.filename === promptTemplateFileName.split(".")[0]);
+  const promptTemplate = (promptTemplates as MulmoPromptTemplateFile[]).find(
+    (template: MulmoPromptTemplateFile) => template.filename === promptTemplateFileName.split(".")[0],
+  )!;
   return promptTemplate;
 };
 
@@ -216,10 +218,6 @@ const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoS
     return { ...scriptTemplateData, ...(scriptTemplate.presentationStyle ?? {}) };
   }
   return undefined;
-};
-const getScriptFromPromptTemplate = (promptTemplateFileName: string): MulmoScript | undefined => {
-  const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
-  return mulmoScriptTemplate2Script(promptTemplate);
 };
 
 export const readTemplatePrompt = (promptTemplateFileName: string): string => {
