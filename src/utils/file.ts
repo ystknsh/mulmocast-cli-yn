@@ -4,10 +4,11 @@ import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext } from "../types/index.js";
-import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
+import { MulmoStudioContextMethods } from "../methods/index.js";
 import { mulmoPromptTemplateSchema, mulmoScriptSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
+import { getMulmoScriptTemplateSystemPrompt } from "./prompt.js";
 
 const promptTemplateDirName = "./assets/templates";
 const scriptTemplateDirName = "./scripts/templates";
@@ -223,7 +224,7 @@ export const getScriptFromPromptTemplate = (promptTemplateFileName: string): Mul
 export const readTemplatePrompt = (promptTemplateFileName: string): string => {
   const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
   const script = mulmoScriptTemplate2Script(promptTemplate);
-  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(promptTemplate, script);
+  const prompt = getMulmoScriptTemplateSystemPrompt(promptTemplate, script);
   return prompt;
 };
 
