@@ -15,21 +15,6 @@ export const graphDataScriptGeneratePrompt = (scene: string) => {
   return `Please generate a script from the following scenes: ${scene}`;
 };
 
-export const getMulmoScriptTemplateSystemPrompt = (template: MulmoPromptTemplate, script?: MulmoScript) => {
-  // script is provided, use it as a script template
-  if (script) {
-    return `${template.systemPrompt}\n\`\`\`JSON\n${JSON.stringify(script)}\n\`\`\``;
-  }
-
-  // script is not provided, use the default schema
-  const defaultSchema = zodToJsonSchema(mulmoScriptSchema, {
-    strictUnions: true,
-  });
-
-  const specificOutputPrompt = `The output should follow the JSON schema specified below. Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`;
-  return `${template.systemPrompt}\n\n${specificOutputPrompt}\n\n\`\`\`JSON\n${JSON.stringify(defaultSchema)}\n\`\`\``;
-};
-
 export const interactiveClarificationPrompt = `If there are any unclear points, be sure to ask the user questions and clarify them before generating the script.`;
 
 export const prefixPrompt = "Here is the web content that can be used as reference material for the script:";

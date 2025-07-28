@@ -1,4 +1,3 @@
-import { getMulmoScriptTemplateSystemPrompt } from "./prompt.js";
 import type { MulmoScript, MulmoPromptTemplate, MulmoPromptTemplateFile } from "../types/type.js";
 import { promptTemplates, scriptTemplates } from "../data/index.js";
 
@@ -37,4 +36,19 @@ export const readTemplatePrompt = (promptTemplateFileName: string): string => {
   const script = mulmoScriptTemplate2Script(promptTemplate);
   const prompt = getMulmoScriptTemplateSystemPrompt(promptTemplate, script);
   return prompt;
+};
+
+const getMulmoScriptTemplateSystemPrompt = (template: MulmoPromptTemplate, script?: MulmoScript) => {
+  // script is provided, use it as a script template
+  if (script) {
+    return `${template.systemPrompt}\n\`\`\`JSON\n${JSON.stringify(script)}\n\`\`\``;
+  }
+
+  // script is not provided, use the default schema
+  const defaultSchema = zodToJsonSchema(mulmoScriptSchema, {
+    strictUnions: true,
+  });
+
+  const specificOutputPrompt = `The output should follow the JSON schema specified below. Please provide your response as valid JSON within \`\`\`json code blocks for clarity.`;
+  return `${template.systemPrompt}\n\n${specificOutputPrompt}\n\n\`\`\`JSON\n${JSON.stringify(defaultSchema)}\n\`\`\``;
 };
