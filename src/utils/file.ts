@@ -199,7 +199,7 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
 // script and prompt template
 export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  const scriptTemplate = scriptTemplates.find((template: Record<string, unknown>) => template.filename === scriptTemplateFileName.split(".")[0])!;
+  const scriptTemplate = scriptTemplates.find((template) => template.filename === scriptTemplateFileName.split(".")[0])!;
   const { filename: __, ...retValue } = scriptTemplate;
   return retValue as unknown as MulmoScript;
 };
