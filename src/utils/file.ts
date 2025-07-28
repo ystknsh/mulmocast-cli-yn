@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
 import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext } from "../types/index.js";
 import { MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoPromptTemplateSchema, mulmoScriptSchema } from "../types/schema.js";
+import { mulmoPromptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
 import { ZodSchema, ZodType } from "zod";
 import { getMulmoScriptTemplateSystemPrompt } from "./prompt.js";
@@ -228,7 +228,7 @@ export const readTemplatePrompt = (promptTemplateFileName: string): string => {
   return prompt;
 };
 
-const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
+const getPromptTemplates = <T>(dirPath: string, schema: ZodType | null): T[] => {
   const templatesDir = path.resolve(npmRoot, dirPath);
 
   if (!fs.existsSync(templatesDir)) {
@@ -237,11 +237,17 @@ const getPromptTemplates = <T>(dirPath: string, schema: ZodType): T[] => {
 
   const files = fs.readdirSync(templatesDir);
   return files.map((file) => {
-    const promptTemplate = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
-    return {
-      ...schema.parse(promptTemplate),
-      filename: file.replace(/\.json$/, ""),
-    };
+    try {
+      const promptTemplate = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
+      return {
+        ...(schema ? schema.parse(promptTemplate) : promptTemplate),
+        filename: file.replace(/\.json$/, ""),
+      };
+    } catch (e) {
+      GraphAILogger.info("file: " + file);
+      GraphAILogger.info(e);
+      return {};
+    }
   });
 };
 
@@ -249,7 +255,7 @@ export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
   return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
 };
 export const getAvailableScriptTemplates = (): MulmoScript[] => {
-  return getPromptTemplates<MulmoScript>(scriptTemplateDirName, mulmoScriptSchema);
+  return getPromptTemplates<MulmoScript>(scriptTemplateDirName, null);
 };
 // end of template
 
