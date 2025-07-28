@@ -49,7 +49,7 @@
     "schema": "npx tsx ./src/cli/bin.ts tool schema",
     "story_to_script": "npx tsx ./src/cli/bin.ts tool story_to_script",
     "latest": "yarn upgrade-interactive  --latest",
-    "format": "prettier --write '{src,scripts,assets/templates,assets/styles,draft,ideason,scripts_mag2,proto,test,graphai,output,docs/scripts}/**/*.{ts,json,yaml}'",
+    "format": "prettier --write '{src,scripts,assets/templates,assets/styles,draft,ideason,scripts_mag2,proto,test,batch,graphai,output,docs/scripts}/**/*.{ts,json,yaml}'",
     "deep_research": "npx tsx ./src/tools/deep_research.ts",
     "template": "npx tsx batch/template2tsobject.ts",
     "fake_data": "npx tsx test/fake/sample.ts",
