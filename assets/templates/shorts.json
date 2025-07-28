@@ -14,5 +14,5 @@
       "style": "<style>Photo realistic, cinematic.</style>"
     }
   },
-  "scriptName": "movie_prompts_template"
+  "scriptName": "movie_prompts_template.json"
 }
