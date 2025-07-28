@@ -1,4 +1,4 @@
-export const scriptTemplates = {
+export const templateDataSet = {
   akira_comic:
     "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.\n" +
     "```JSON\n" +
