@@ -200,9 +200,10 @@ const agentFilters = [
 ];
 
 export const audioFilePath = (context: MulmoStudioContext) => {
+  const suffix = context.lang ? `_${context.lang}` : "";
   const fileName = MulmoStudioContextMethods.getFileName(context);
   const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-  return getAudioArtifactFilePath(outDirPath, fileName);
+  return getAudioArtifactFilePath(outDirPath, fileName + suffix);
 };
 
 const getConcurrency = (context: MulmoStudioContext) => {
@@ -290,6 +291,7 @@ export const audio = async (context: MulmoStudioContext, settings?: Record<strin
     const result = await graph.run();
     writingMessage(audioCombinedFilePath);
     MulmoStudioContextMethods.setSessionState(context, "audio", false);
+    writingMessage(audioArtifactFilePath);
     return result.combineFiles as MulmoStudioContext;
   } catch (__error) {
     MulmoStudioContextMethods.setSessionState(context, "audio", false);
