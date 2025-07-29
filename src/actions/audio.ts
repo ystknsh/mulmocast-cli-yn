@@ -199,13 +199,6 @@ const agentFilters = [
   },
 ];
 
-export const audioFilePath = (context: MulmoStudioContext) => {
-  const suffix = context.lang ? `_${context.lang}` : "";
-  const fileName = MulmoStudioContextMethods.getFileName(context);
-  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-  return getAudioArtifactFilePath(outDirPath, fileName + suffix);
-};
-
 const getConcurrency = (context: MulmoStudioContext) => {
   // Check if any speaker uses nijivoice or elevenlabs (providers that require concurrency = 1)
   const hasLimitedConcurrencyProvider = Object.values(context.presentationStyle.speechParams.speakers).some((speaker) => {
@@ -263,7 +256,7 @@ export const audio = async (context: MulmoStudioContext, settings?: Record<strin
     const fileName = MulmoStudioContextMethods.getFileName(context);
     const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
     const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-    const audioArtifactFilePath = audioFilePath(context);
+    const audioArtifactFilePath = getAudioArtifactFilePath(context);
     const audioSegmentDirPath = resolveDirPath(audioDirPath, fileName);
     const audioCombinedFilePath = getAudioFilePath(audioDirPath, fileName, fileName, context.lang);
     const outputStudioFilePath = getOutputStudioFilePath(outDirPath, fileName);
