@@ -12,14 +12,7 @@ import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
-import {
-  MulmoStudioContext,
-  MulmoBeat,
-  MulmoStudioBeat,
-  MulmoStudioMultiLingualData,
-  MulmoPresentationStyle,
-  text2SpeechProviderSchema,
-} from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, text2SpeechProviderSchema } from "../types/index.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
 import { text2hash, localizedText, settings2GraphAIConfig } from "../utils/utils.js";
@@ -66,7 +59,7 @@ const preprocessor = (namedInputs: {
   context: MulmoStudioContext;
 }) => {
   const { beat, studioBeat, multiLingual, context } = namedInputs;
-  const { lang, presentationStyle } = context;
+  const { lang } = context;
   const text = localizedText(beat, multiLingual, lang);
   const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat);
   const audioPath = getBeatAudioPath(text, context, beat, lang);
