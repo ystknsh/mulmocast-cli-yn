@@ -12,7 +12,7 @@ export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBuffer
   config,
 }) => {
   const { prompt, referenceImages } = namedInputs;
-  const { moderation, canvasSize } = params;
+  const { moderation, canvasSize, quality } = params;
   const { apiKey, baseURL } = { ...config };
   const model = params.model ?? provider2ImageAgent["openai"].defaultModel;
   const openai = new OpenAI({ apiKey, baseURL });
@@ -44,6 +44,9 @@ export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBuffer
   };
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
+  }
+  if (quality && model !== "gpt-image-1") {
+    imageOptions.quality = quality;
   }
 
   const response = await (async () => {
