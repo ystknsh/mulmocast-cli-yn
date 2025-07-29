@@ -27,6 +27,22 @@
         "style": "anime-style",
         "provider": "openai"
       }
+    },
+    {
+      "id": "image_with_quality",
+      "text": "Image with low quality",
+      "imagePrompt": "Blue sky, a flock of birds",
+      "imageParams": {
+        "quality": "low"
+      }
+    },
+    {
+      "id": "image_with_medium_quality",
+      "text": "Image with medium quality",
+      "imagePrompt": "Blue sky, a flock of birds",
+      "imageParams": {
+        "quality": "medium"
+      }
     }
   ]
 }

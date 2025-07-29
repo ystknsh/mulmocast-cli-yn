@@ -211,6 +211,7 @@ export const mulmoOpenAIImageModelSchema = z
   .object({
     provider: z.literal("openai"),
     model: z.enum(provider2ImageAgent["openai"].models as [string, ...string[]]).optional(),
+    quality: z.enum(["low", "medium", "high", "auto"]).optional(),
   })
   .strict();
 
@@ -226,6 +227,7 @@ export const mulmoImageParamsSchema = z
   .object({
     provider: text2ImageProviderSchema, // has default value
     model: z.string().optional(), // default: provider specific
+    quality: z.string().optional(), // optional image quality (model specific)
     style: z.string().optional(), // optional image style
     moderation: z.string().optional(), // optional image style
     images: mulmoImageParamsImagesSchema.optional(),
