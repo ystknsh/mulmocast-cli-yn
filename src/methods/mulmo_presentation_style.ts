@@ -78,8 +78,20 @@ export const MulmoPresentationStyleMethods = {
   },
   getSpeaker(context: MulmoStudioContext, beat: MulmoBeat): SpeakerData {
     userAssert(!!context.presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
-    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(context.presentationStyle);
-    userAssert(!!speakerId, "beat.speaker and default speaker is not set");
+    const speakerId = (() => {
+      const id = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(context.presentationStyle);
+      userAssert(!!id, "beat.speaker and default speaker is not set");
+      const speakerMap = context.presentationStyle.speechParams.speakerMap;
+      if (speakerMap && context.lang) {
+        const mappedId = speakerMap[context.lang]?.[id];
+        console.log("mappedId", mappedId, id, context.lang);
+        if (mappedId) {
+          return mappedId;
+        }
+      }
+      return id;
+    })();
+  
     const speaker = context.presentationStyle.speechParams.speakers[speakerId];
     userAssert(!!speaker, `speaker is not set: speaker "${speakerId}"`);
     return speaker;

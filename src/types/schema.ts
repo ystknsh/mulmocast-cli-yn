@@ -380,6 +380,7 @@ export const mulmoPresentationStyleSchema = z.object({
   speechParams: z
     .object({
       speakers: speakerDictionarySchema,
+      speakerMap: z.record(langSchema, z.record(speakerIdSchema, speakerIdSchema)).optional(),
     })
     .default({
       speakers: {
