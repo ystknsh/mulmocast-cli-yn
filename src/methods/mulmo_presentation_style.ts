@@ -12,6 +12,7 @@ import {
   MulmoPresentationStyle,
   SpeakerData,
   Text2ImageProvider,
+  MulmoStudioContext,
 } from "../types/index.js";
 import {
   text2ImageProviderSchema,
@@ -75,18 +76,20 @@ export const MulmoPresentationStyleMethods = {
     }
     return keys[0];
   },
-  getSpeaker(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeakerData {
-    userAssert(!!presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
-    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(presentationStyle);
+  getSpeaker(context: MulmoStudioContext, beat: MulmoBeat): SpeakerData {
+    userAssert(!!context.presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
+    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(context.presentationStyle);
     userAssert(!!speakerId, "beat.speaker and default speaker is not set");
-    const speaker = presentationStyle.speechParams.speakers[speakerId];
+    const speaker = context.presentationStyle.speechParams.speakers[speakerId];
     userAssert(!!speaker, `speaker is not set: speaker "${speakerId}"`);
     return speaker;
   },
-  getTTSModel(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): string | undefined {
-    const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
+  /* NOTE: This method is not used.
+  getTTSModel(context: MulmoStudioContext, beat: MulmoBeat): string | undefined {
+    const speaker = MulmoPresentationStyleMethods.getSpeaker(context, beat);
     return speaker.model;
   },
+  */
   getText2ImageProvider(provider: Text2ImageProvider | undefined): Text2ImageProvider {
     return text2ImageProviderSchema.parse(provider);
   },

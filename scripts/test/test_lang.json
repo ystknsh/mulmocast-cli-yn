@@ -1,0 +1,22 @@
+{
+  "$mulmocast": {
+    "version": "1.1"
+  },
+  "lang": "ja",
+  "speechParams": {
+    "speakers": {
+      "Presenter": { "provider": "nijivoice", "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0" }
+    }
+  },
+  "beats": [
+    {
+      "text": "こんにちは",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Hello World"
+        }
+      }
+    }
+  ]
+}
