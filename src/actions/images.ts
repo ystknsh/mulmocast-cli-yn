@@ -154,6 +154,7 @@ const beat_graph_data = {
           model: ":preprocessor.imageParams.model",
           moderation: ":preprocessor.imageParams.moderation",
           canvasSize: ":context.presentationStyle.canvasSize",
+          quality: ":preprocessor.imageParams.quality",
         },
       },
       defaultValue: {},

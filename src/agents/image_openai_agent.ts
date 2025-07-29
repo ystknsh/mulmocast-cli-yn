@@ -44,9 +44,9 @@ export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBuffer
   };
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
-  }
-  if (quality && model !== "gpt-image-1") {
-    imageOptions.quality = quality;
+    if (quality) {
+      imageOptions.quality = quality;
+    }
   }
 
   const response = await (async () => {
