@@ -919,6 +919,7 @@ test("imagePreprocessAgent - with soundEffectPrompt only", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
+// no movie
 test("imagePreprocessAgent - soundEffectPrompt + imagePrompt", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -1119,6 +1120,7 @@ test("imagePreprocessAgent - with enableLipSync true", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
+// no movie
 test("imagePreprocessAgent - enableLipSync + imagePrompt", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -1287,7 +1289,7 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt + moviePrompt", async (
   assert.deepStrictEqual(result, expected);
 });
 
-// Combined soundEffectPrompt + enableLipSync tests
+// Combined soundEffectPrompt + enableLipSync tests ( no movie)
 test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
