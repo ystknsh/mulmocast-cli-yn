@@ -311,9 +311,7 @@ export const movieFilePath = (context: MulmoStudioContext) => {
 export const movie = async (context: MulmoStudioContext) => {
   MulmoStudioContextMethods.setSessionState(context, "video", true);
   try {
-    const fileName = MulmoStudioContextMethods.getFileName(context);
-    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-    const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, fileName);
+    const audioArtifactFilePath = getAudioArtifactFilePath(context);
     const outputVideoPath = movieFilePath(context);
 
     if (await createVideo(audioArtifactFilePath, outputVideoPath, context)) {

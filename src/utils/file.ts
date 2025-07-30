@@ -104,9 +104,14 @@ export const getAudioFilePath = (audioDirPath: string, dirName: string, fileName
   }
   return path.resolve(audioDirPath, dirName, fileName + ".mp3");
 };
-export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + ".mp3");
+
+export const getAudioArtifactFilePath = (context: MulmoStudioContext) => {
+  const suffix = context.lang ? `_${context.lang}` : "";
+  const fileName = MulmoStudioContextMethods.getFileName(context);
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+  return path.resolve(outDirPath, fileName + suffix + ".mp3");
 };
+
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lang?: string, caption?: string) => {
   const suffix = lang ? `_${lang}` : "";
   const suffix2 = caption ? `__${caption}` : "";
