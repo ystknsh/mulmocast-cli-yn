@@ -43,20 +43,23 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     beatDuration: beat.duration ?? studioBeat?.duration,
   };
 
-  if (beat.soundEffectPrompt) {
-    returnValue.soundEffectAgentInfo = MulmoPresentationStyleMethods.getSoundEffectAgentInfo(context.presentationStyle, beat);
-    returnValue.soundEffectModel =
-      beat.soundEffectParams?.model ?? context.presentationStyle.soundEffectParams?.model ?? returnValue.soundEffectAgentInfo.defaultModel;
-    returnValue.soundEffectFile = moviePaths.soundEffectFile;
-    returnValue.soundEffectPrompt = beat.soundEffectPrompt;
-  }
+  const isMovie = Boolean(beat.moviePrompt || beat?.image?.type === "movie");
+  if (isMovie) {
+    if (beat.soundEffectPrompt) {
+      returnValue.soundEffectAgentInfo = MulmoPresentationStyleMethods.getSoundEffectAgentInfo(context.presentationStyle, beat);
+      returnValue.soundEffectModel =
+        beat.soundEffectParams?.model ?? context.presentationStyle.soundEffectParams?.model ?? returnValue.soundEffectAgentInfo.defaultModel;
+      returnValue.soundEffectFile = moviePaths.soundEffectFile;
+      returnValue.soundEffectPrompt = beat.soundEffectPrompt;
+    }
 
-  if (beat.enableLipSync) {
-    returnValue.lipSyncAgentInfo = MulmoPresentationStyleMethods.getLipSyncAgentInfo(context.presentationStyle, beat);
-    returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? returnValue.lipSyncAgentInfo.defaultModel;
-    returnValue.lipSyncFile = moviePaths.lipSyncFile;
-    // Audio file will be set from the beat's audio file when available
-    returnValue.audioFile = studioBeat?.audioFile;
+    if (beat.enableLipSync) {
+      returnValue.lipSyncAgentInfo = MulmoPresentationStyleMethods.getLipSyncAgentInfo(context.presentationStyle, beat);
+      returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? returnValue.lipSyncAgentInfo.defaultModel;
+      returnValue.lipSyncFile = moviePaths.lipSyncFile;
+      // Audio file will be set from the beat's audio file when available
+      returnValue.audioFile = studioBeat?.audioFile;
+    }
   }
 
   if (beat.image) {
