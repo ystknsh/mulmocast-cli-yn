@@ -1,6 +1,6 @@
 {
   "name": "mulmocast",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "",
   "type": "module",
   "main": "lib/index.node.js",
@@ -23,6 +23,7 @@
   "files": [
     "./lib",
     "./scripts/templates",
+    "./scripts/test",
     "./assets/audio/silent60sec.mp3",
     "./assets/html/",
     "./assets/templates/"

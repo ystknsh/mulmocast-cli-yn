@@ -47,7 +47,12 @@ export const speakerDataSchema = z
   })
   .strict();
 
-export const speakerDictionarySchema = z.record(speakerIdSchema, speakerDataSchema);
+export const speakerDictionarySchema = z.record(
+  speakerIdSchema,
+  speakerDataSchema.extend({
+    lang: z.record(langSchema, speakerDataSchema).optional(),
+  }),
+);
 
 export const mediaSourceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("url"), url: URLStringSchema }).strict(), // https://example.com/foo.pdf
