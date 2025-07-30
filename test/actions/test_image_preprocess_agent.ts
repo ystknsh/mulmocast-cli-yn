@@ -873,7 +873,7 @@ test("imagePreprocessAgent - with imageParams override", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
-// soundEffectPrompt parameter tests
+// soundEffectPrompt parameter tests(no movie)
 test("imagePreprocessAgent - with soundEffectPrompt only", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -899,19 +899,6 @@ test("imagePreprocessAgent - with soundEffectPrompt only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    soundEffectAgentInfo: {
-      agentName: "soundEffectReplicateAgent",
-      defaultModel: "zsxkib/mmaudio",
-      models: ["zsxkib/mmaudio"],
-      modelParams: {
-        "zsxkib/mmaudio": {
-          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
-        },
-      },
-    },
-    soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/22_sound.mov",
-    soundEffectPrompt: "Birds chirping in the background",
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -958,19 +945,6 @@ test("imagePreprocessAgent - soundEffectPrompt + imagePrompt", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    soundEffectAgentInfo: {
-      agentName: "soundEffectReplicateAgent",
-      defaultModel: "zsxkib/mmaudio",
-      models: ["zsxkib/mmaudio"],
-      modelParams: {
-        "zsxkib/mmaudio": {
-          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
-        },
-      },
-    },
-    soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/23_sound.mov",
-    soundEffectPrompt: "Birds chirping and wind blowing",
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1099,7 +1073,7 @@ test("imagePreprocessAgent - soundEffectPrompt + imagePrompt + moviePrompt", asy
   assert.deepStrictEqual(result, expected);
 });
 
-// enableLipSync parameter tests
+// enableLipSync parameter tests(no movie)
 test("imagePreprocessAgent - with enableLipSync true", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -1125,26 +1099,6 @@ test("imagePreprocessAgent - with enableLipSync true", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
-    lipSyncFile: "/test/images/test_studio/26_lipsync.mov",
-    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1191,26 +1145,6 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
-    lipSyncFile: "/test/images/test_studio/27_lipsync.mov",
-    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1380,39 +1314,6 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    soundEffectAgentInfo: {
-      agentName: "soundEffectReplicateAgent",
-      defaultModel: "zsxkib/mmaudio",
-      models: ["zsxkib/mmaudio"],
-      modelParams: {
-        "zsxkib/mmaudio": {
-          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
-        },
-      },
-    },
-    soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/30_sound.mov",
-    soundEffectPrompt: "Background music",
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
-    lipSyncFile: "/test/images/test_studio/30_lipsync.mov",
-    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1433,6 +1334,7 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
   assert.deepStrictEqual(result, expected);
 });
 
+// no movie
 test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt", async () => {
   const context = createMockContext();
   const beat = createMockBeat({
@@ -1460,39 +1362,6 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt", a
       moderation: "auto",
     },
     movieFile: undefined,
-    soundEffectAgentInfo: {
-      agentName: "soundEffectReplicateAgent",
-      defaultModel: "zsxkib/mmaudio",
-      models: ["zsxkib/mmaudio"],
-      modelParams: {
-        "zsxkib/mmaudio": {
-          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
-        },
-      },
-    },
-    soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/31_sound.mov",
-    soundEffectPrompt: "Applause and background music",
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
-    lipSyncFile: "/test/images/test_studio/31_lipsync.mov",
-    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
