@@ -78,22 +78,14 @@ export const MulmoPresentationStyleMethods = {
   },
   getSpeaker(context: MulmoStudioContext, beat: MulmoBeat): SpeakerData {
     userAssert(!!context.presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
-    const speakerId = (() => {
-      const id = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(context.presentationStyle);
-      userAssert(!!id, "beat.speaker and default speaker is not set");
-      const speakerMap = context.presentationStyle.speechParams.speakerMap;
-      const lang = context.lang ?? context.studio.script.lang;
-      if (speakerMap && lang) {
-        const mappedId = speakerMap[lang]?.[id];
-        if (mappedId) {
-          return mappedId;
-        }
-      }
-      return id;
-    })();
-
+    const speakerId = beat?.speaker ?? MulmoPresentationStyleMethods.getDefaultSpeaker(context.presentationStyle);
     const speaker = context.presentationStyle.speechParams.speakers[speakerId];
     userAssert(!!speaker, `speaker is not set: speaker "${speakerId}"`);
+    // Check if the speaker has a language-specific version
+    const lang = context.lang ?? context.studio.script.lang;
+    if (speaker.lang && lang && speaker.lang[lang]) {
+      return speaker.lang[lang];
+    }
     return speaker;
   },
   /* NOTE: This method is not used.
