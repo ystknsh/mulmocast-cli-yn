@@ -47,7 +47,12 @@ export const speakerDataSchema = z
   })
   .strict();
 
-export const speakerDictionarySchema = z.record(speakerIdSchema, speakerDataSchema);
+export const speakerDictionarySchema = z.record(
+  speakerIdSchema,
+  speakerDataSchema.extend({
+    lang: z.record(langSchema, speakerDataSchema).optional(),
+  }),
+);
 
 export const mediaSourceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("url"), url: URLStringSchema }).strict(), // https://example.com/foo.pdf
@@ -380,7 +385,6 @@ export const mulmoPresentationStyleSchema = z.object({
   speechParams: z
     .object({
       speakers: speakerDictionarySchema,
-      speakerMap: z.record(langSchema, z.record(speakerIdSchema, speakerIdSchema)).optional(),
     })
     .default({
       speakers: {

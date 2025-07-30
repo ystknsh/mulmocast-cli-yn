@@ -5,12 +5,15 @@
   "lang": "ja",
   "speechParams": {
     "speakers": {
-      "Presenter": { "provider": "openai", "voiceId": "shimmer" },
-      "Presenter_ja": { "provider": "nijivoice", "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0" }
-    },
-    "speakerMap": {
-      "ja": {
-        "Presenter": "Presenter_ja"
+      "Presenter": {
+        "provider": "openai",
+        "voiceId": "shimmer",
+        "lang": {
+          "ja": {
+            "provider": "nijivoice",
+            "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0"
+          }
+        }
       }
     }
   },
