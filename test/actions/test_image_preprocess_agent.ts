@@ -910,7 +910,7 @@ test("imagePreprocessAgent - with soundEffectPrompt only", async () => {
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/22_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/22_sound.mov",
     soundEffectPrompt: "Birds chirping in the background",
     movieAgentInfo: {
       agent: "movieReplicateAgent",
@@ -969,7 +969,7 @@ test("imagePreprocessAgent - soundEffectPrompt + imagePrompt", async () => {
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/23_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/23_sound.mov",
     soundEffectPrompt: "Birds chirping and wind blowing",
     movieAgentInfo: {
       agent: "movieReplicateAgent",
@@ -1026,7 +1026,7 @@ test("imagePreprocessAgent - soundEffectPrompt + moviePrompt (no imagePrompt)", 
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/24_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/24_sound.mov",
     soundEffectPrompt: "Birds chirping and leaves rustling",
     movieAgentInfo: {
       agent: "movieReplicateAgent",
@@ -1077,7 +1077,7 @@ test("imagePreprocessAgent - soundEffectPrompt + imagePrompt + moviePrompt", asy
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/25_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/25_sound.mov",
     soundEffectPrompt: "Nature sounds with gentle breeze",
     movieAgentInfo: {
       agent: "movieReplicateAgent",
@@ -1125,6 +1125,26 @@ test("imagePreprocessAgent - with enableLipSync true", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/26_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1171,6 +1191,26 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/27_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1215,6 +1255,26 @@ test("imagePreprocessAgent - enableLipSync + moviePrompt (no imagePrompt)", asyn
     },
     imagePath: "/test/images/test_studio/28p.png",
     movieFile: "/test/images/test_studio/28.mov",
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/28_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1253,6 +1313,26 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt + moviePrompt", async (
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/29.mov",
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/29_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1311,8 +1391,28 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/30_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/30_sound.mov",
     soundEffectPrompt: "Background music",
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/30_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1371,8 +1471,28 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt", a
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/31_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/31_sound.mov",
     soundEffectPrompt: "Applause and background music",
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/31_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1429,8 +1549,28 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + moviePrompt (no
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/32_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/32_sound.mov",
     soundEffectPrompt: "Live concert atmosphere",
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
+    },
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/32_lipsync.mov",
+    audioFile: undefined,
     movieAgentInfo: {
       agent: "movieReplicateAgent",
       movieParams: {},
@@ -1460,9 +1600,6 @@ test("imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync +
   });
 
   const expected = {
-    imagePath: "/test/images/test_studio/33p.png",
-    referenceImageForMovie: "/test/images/test_studio/33p.png",
-    prompt: "Professional speaker at podium\nnatural",
     imageParams: {
       provider: "openai",
       model: "dall-e-3",
@@ -1481,14 +1618,31 @@ test("imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync +
       },
     },
     soundEffectModel: "zsxkib/mmaudio",
-    soundEffectFile: "/test/images/test_studio/33_sound_effect.wav",
+    soundEffectFile: "/test/images/test_studio/33_sound.mov",
     soundEffectPrompt: "Ambient conference room sound",
-    movieAgentInfo: {
-      agent: "movieReplicateAgent",
-      movieParams: {},
+    lipSyncAgentInfo: {
+      agentName: "lipSyncReplicateAgent",
+      defaultModel: "bytedance/latentsync",
+      models: ["bytedance/latentsync", "tmappdev/lipsync"],
+      modelParams: {
+        "bytedance/latentsync": {
+          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
+          video: "video",
+          audio: "audio",
+        },
+        "tmappdev/lipsync": {
+          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
+          video: "video_input",
+          audio: "audio_input",
+        },
+      },
     },
-    referenceImages: [],
+    lipSyncModel: "bytedance/latentsync",
+    lipSyncFile: "/test/images/test_studio/33_lipsync.mov",
+    audioFile: undefined,
     beatDuration: undefined,
+    imagePath: "/test/images/test_studio/33p.png",
+    referenceImageForMovie: "/test/images/test_studio/33p.png",
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -1497,6 +1651,12 @@ test("imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync +
         provider: "openai",
         style: "natural",
       },
+    },
+    prompt: "Professional speaker at podium\nnatural",
+    referenceImages: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
     },
   };
 
