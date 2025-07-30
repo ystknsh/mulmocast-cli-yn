@@ -54,6 +54,7 @@ export const provider2MovieAgent = {
       "minimax/video-01",
       "minimax/hailuo-02",
       "pixverse/pixverse-v4.5",
+      "wan-video/wan-2.2-i2v-480p-fast",
     ],
     modelParams: {
       "bytedance/seedance-1-lite": {
@@ -113,6 +114,11 @@ export const provider2MovieAgent = {
         start_image: "image",
         last_image: "last_frame_image",
         price_per_sec: 0.12,
+      },
+      "wan-video/wan-2.2-i2v-480p-fast": {
+        durations: [5],
+        start_image: "image",
+        price_per_sec: 0.012,
       },
     } as Record<ReplicateModel, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
   },
