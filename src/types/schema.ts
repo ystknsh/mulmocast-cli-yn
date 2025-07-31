@@ -437,7 +437,7 @@ export const mulmoScriptSchema = mulmoPresentationStyleSchema
     title: z.string().optional(),
     description: z.string().optional(),
     references: z.array(mulmoReferenceSchema).optional(),
-    lang: langSchema.optional(), // default "en"
+    lang: langSchema, // required (default WAS "en")
     beats: z.array(mulmoBeatSchema).min(1),
 
     // TODO: Delete it later
