@@ -36,14 +36,16 @@ interface Replacement {
   to: string;
 }
 
-export function replacePairsJa(str: string, replacements: Replacement[]): string {
-  return replacements.reduce((tmp, current) => {
-    const { from, to } = current;
-    // Escape any special regex characters in the 'from' string.
-    const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(escapedFrom, "g");
-    return tmp.replace(regex, to);
-  }, str);
+export function replacePairsJa(replacements: Replacement[]) {
+  return (str: string) => {
+    return replacements.reduce((tmp, current) => {
+      const { from, to } = current;
+      // Escape any special regex characters in the 'from' string.
+      const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(escapedFrom, "g");
+      return tmp.replace(regex, to);
+    }, str);
+  };
 }
 
 export const replacementsJa: Replacement[] = [
