@@ -54,7 +54,7 @@ const translateGraph: GraphData = {
           },
           preprocessMultiLingual: {
             agent: "mapAgent",
-            console: {before: true},
+            console: { before: true },
             inputs: {
               beat: ":beat",
               multiLingual: ":multiLingual",
@@ -208,8 +208,6 @@ const agentFilters = [
   },
 ];
 
-const targetLangs = ["ja", "en"];
-
 export const translate = async (
   context: MulmoStudioContext,
   args?: {
@@ -225,11 +223,13 @@ export const translate = async (
     const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
     mkdir(outDirPath);
 
+    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => x != null))];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
 
     const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters, config });
+
     graph.injectValue("context", context);
     graph.injectValue("targetLangs", targetLangs);
     graph.injectValue("outDirPath", outDirPath);
