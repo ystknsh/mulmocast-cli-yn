@@ -17,7 +17,7 @@ test("test recursiveSplit", async () => {
 });
 
 test("test replacePairsJa", async () => {
-  const ret = replacePairsJa("OpenAIはAnthropicではありません", replacementsJa);
+  const ret = replacePairsJa(replacementsJa)("OpenAIはAnthropicではありません");
   const expect = "オープンエーアイはアンスロピックではありません";
   assert.deepStrictEqual(ret, expect);
 });

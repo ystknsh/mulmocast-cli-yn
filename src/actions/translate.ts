@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { GraphAI, assert } from "graphai";
+import { GraphAI, assert, isNull } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -18,17 +18,9 @@ const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
     context: {},
-    defaultLang: {},
     outDirPath: {},
     outputMultilingualFilePath: {},
-    lang: {
-      agent: "stringUpdateTextAgent",
-      inputs: {
-        newText: ":context.studio.script.lang",
-        oldText: ":defaultLang",
-      },
-    },
-    targetLangs: {}, // TODO
+    targetLangs: {},
     mergeStudioResult: {
       isResult: true,
       agent: "mergeObjectAgent",
@@ -42,7 +34,6 @@ const translateGraph: GraphData = {
         targetLangs: ":targetLangs",
         context: ":context",
         rows: ":context.studio.script.beats",
-        lang: ":lang",
       },
       params: {
         rowKey: "beat",
@@ -67,7 +58,7 @@ const translateGraph: GraphData = {
               beat: ":beat",
               multiLingual: ":multiLingual",
               rows: ":targetLangs",
-              lang: ":lang.text",
+              lang: ":context.studio.script.lang",
               context: ":context",
               beatIndex: ":__mapIndex",
             },
@@ -133,7 +124,7 @@ const translateGraph: GraphData = {
                     if (targetLang === "ja") {
                       return {
                         ...localizedText,
-                        ttsTexts: localizedText?.texts?.map((text: string) => replacePairsJa(text, replacementsJa)),
+                        ttsTexts: localizedText?.texts?.map(replacePairsJa(replacementsJa)),
                       };
                     }
                     return {
@@ -192,19 +183,14 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
     return { text: "" };
   }
 
-  // The original text is unchanged and the target language text is present
-  if (
-    multiLingual.multiLingualTexts &&
-    multiLingual.multiLingualTexts[lang] &&
-    multiLingual.multiLingualTexts[lang].text === beat.text &&
-    multiLingual.multiLingualTexts[targetLang] &&
-    multiLingual.multiLingualTexts[targetLang].text
-  ) {
-    return { text: multiLingual.multiLingualTexts[targetLang].text };
-  }
   // same language
   if (targetLang === lang) {
     return { text: beat.text };
+  }
+
+  // The original text is unchanged and the target language text is present
+  if (multiLingual.multiLingualTexts?.[lang]?.text === beat.text && multiLingual.multiLingualTexts[targetLang]?.text) {
+    return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   try {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, true);
@@ -221,9 +207,6 @@ const agentFilters = [
   },
 ];
 
-const defaultLang = "en";
-const targetLangs = ["ja", "en"];
-
 export const translate = async (
   context: MulmoStudioContext,
   args?: {
@@ -239,13 +222,14 @@ export const translate = async (
     const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
     mkdir(outDirPath);
 
+    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
 
     const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters, config });
+
     graph.injectValue("context", context);
-    graph.injectValue("defaultLang", defaultLang);
     graph.injectValue("targetLangs", targetLangs);
     graph.injectValue("outDirPath", outDirPath);
     graph.injectValue("outputMultilingualFilePath", outputMultilingualFilePath);

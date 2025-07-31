@@ -68,4 +68,14 @@ export const MulmoStudioContextMethods = {
     }
     notifyBeatStateChange(context, sessionType, index);
   },
+  needTranslate(context: MulmoStudioContext, includeCaption: boolean = false) {
+    // context.studio.script.lang = defaultLang, context.lang = targetLanguage.
+    if (includeCaption) {
+      return (
+        context.studio.script.lang !== context.lang ||
+        (context.studio.script.captionParams?.lang && context.studio.script.lang !== context.studio.script.captionParams?.lang)
+      );
+    }
+    return context.studio.script.lang !== context.lang;
+  },
 };
