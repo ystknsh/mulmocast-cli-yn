@@ -2,7 +2,7 @@ import test from "node:test";
 // import assert from "node:assert";
 
 import { getFileObject } from "../../src/cli/helpers.js";
-import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
+import { createOrUpdateStudioData } from "../../src/utils/context.js";
 import { generateBeatAudio } from "../../src/actions/audio.js";
 
 import path from "path";
