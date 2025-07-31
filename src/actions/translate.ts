@@ -116,7 +116,7 @@ const translateGraph: GraphData = {
                 },
                 ttsTexts: {
                   agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
-                    const { localizedText, targetLang } = namedInputs;
+                    const { localizedText } = namedInputs;
                     // cache
                     if (localizedText.ttsTexts) {
                       return localizedText;
