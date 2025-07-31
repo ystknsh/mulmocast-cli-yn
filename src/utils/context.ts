@@ -52,7 +52,7 @@ const initSessionState = () => {
   };
 };
 
-export const createOrUpdateStudioData = (
+export const createStudioData = (
   _mulmoScript: MulmoScript,
   fileName: string,
   videoCaptionLang?: string,
@@ -138,7 +138,7 @@ export const initializeContextFromFiles = async (files: FileObject, raiseError: 
 
   try {
     const presentationStyle = getPresentationStyle(presentationStylePath);
-    const studio = createOrUpdateStudioData(mulmoScript, fileName, captionLang, presentationStyle);
+    const studio = createStudioData(mulmoScript, fileName, captionLang, presentationStyle);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
     return {
