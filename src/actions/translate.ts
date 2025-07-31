@@ -18,7 +18,6 @@ const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
     context: {},
-    defaultLang: {},
     outDirPath: {},
     outputMultilingualFilePath: {},
     targetLangs: {}, // TODO
@@ -55,6 +54,7 @@ const translateGraph: GraphData = {
           },
           preprocessMultiLingual: {
             agent: "mapAgent",
+            console: {before: true},
             inputs: {
               beat: ":beat",
               multiLingual: ":multiLingual",
@@ -208,7 +208,6 @@ const agentFilters = [
   },
 ];
 
-const defaultLang = "en";
 const targetLangs = ["ja", "en"];
 
 export const translate = async (
@@ -232,7 +231,6 @@ export const translate = async (
 
     const graph = new GraphAI(translateGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters, config });
     graph.injectValue("context", context);
-    graph.injectValue("defaultLang", defaultLang);
     graph.injectValue("targetLangs", targetLangs);
     graph.injectValue("outDirPath", outDirPath);
     graph.injectValue("outputMultilingualFilePath", outputMultilingualFilePath);
