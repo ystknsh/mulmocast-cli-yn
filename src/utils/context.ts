@@ -84,7 +84,7 @@ const buildContext = (
     studio,
     fileDirs: files,
     force: Boolean(force),
-    lang: targetLang ?? studio.lang, // This lang is target Language. studio.lang is default Language
+    lang: targetLang ?? studio.script.lang, // This lang is target Language. studio.lang is default Language
     sessionState: initSessionState(),
     presentationStyle: presentationStyle ?? studio.script,
     multiLingual,
