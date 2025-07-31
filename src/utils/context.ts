@@ -91,7 +91,7 @@ const buildContext = (
   };
 };
 
-export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, caption?: string, lang?: string) => {
+export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, captionLang?: string, lang?: string) => {
   const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath } = files;
 
   // read mulmoScript, presentationStyle, currentStudio from files
@@ -105,7 +105,7 @@ export const initializeContextFromFiles = async (files: FileObject, raiseError: 
 
   try {
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
-    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, caption, presentationStyle);
+    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, captionLang, presentationStyle);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
     return buildContext(studio, files, presentationStyle, multiLingual, force, lang);

@@ -45,7 +45,7 @@ export const createOrUpdateStudioData = (
   _mulmoScript: MulmoScript,
   currentStudio: MulmoStudio | undefined,
   fileName: string,
-  videoCaption?: string,
+  videoCaptionLang?: string,
   presentationStyle?: MulmoPresentationStyle | null,
 ) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript); // validate and insert default value
@@ -62,10 +62,10 @@ export const createOrUpdateStudioData = (
   studio.script = MulmoScriptMethods.validate(mulmoScript); // update the script
   studio.beats = studio.script.beats.map((_, index) => studio.beats[index] ?? {});
 
-  if (videoCaption) {
+  if (videoCaptionLang) {
     studio.script.captionParams = mulmoCaptionParamsSchema.parse({
       ...(studio.script.captionParams ?? {}),
-      lang: videoCaption,
+      lang: videoCaptionLang,
     });
   }
 
