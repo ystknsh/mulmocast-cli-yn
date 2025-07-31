@@ -7,16 +7,7 @@ import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/in
 
 import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema, FileObject } from "../types/index.js";
 
-const rebuildStudio = (currentStudio: MulmoStudio | undefined, mulmoScript: MulmoScript, fileName: string) => {
-  const isTest = process.env.NODE_ENV === "test";
-  const parsed =
-    isTest && currentStudio ? { data: mulmoStudioSchema.parse(currentStudio), success: true, error: null } : mulmoStudioSchema.safeParse(currentStudio);
-  if (parsed.success) {
-    return parsed.data;
-  }
-  if (currentStudio) {
-    GraphAILogger.info("currentStudio is invalid", parsed.error);
-  }
+const rebuildStudio = (mulmoScript: MulmoScript, fileName: string) => {
   // We need to parse it to fill default values
   return mulmoStudioSchema.parse({
     script: mulmoScript,
@@ -48,14 +39,13 @@ const mulmoCredit = (speaker: string) => {
 
 export const createOrUpdateStudioData = (
   _mulmoScript: MulmoScript,
-  currentStudio: MulmoStudio | undefined,
   fileName: string,
   videoCaptionLang?: string,
   presentationStyle?: MulmoPresentationStyle | null,
 ) => {
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript); // validate and insert default value
 
-  const studio: MulmoStudio = rebuildStudio(currentStudio, mulmoScript, fileName);
+  const studio: MulmoStudio = rebuildStudio(mulmoScript, fileName);
 
   // TODO: Move this code out of this function later
   // Addition cloing credit
@@ -163,20 +153,18 @@ const buildContext = (
 };
 
 export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, captionLang?: string, targetLang?: string) => {
-  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath } = files;
+  const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, presentationStylePath, outputMultilingualFilePath } = files;
 
-  // read mulmoScript, presentationStyle, currentStudio from files
+  // read mulmoScript, presentationStyle from files
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
   if (!mulmoScript) {
     return null;
   }
   const presentationStyle = getPresentationStyle(presentationStylePath);
-  // Create or update MulmoStudio file with MulmoScript
-  const currentStudio = readMulmoScriptFile<MulmoStudio>(outputStudioFilePath);
 
   try {
     // validate mulmoStudioSchema. skip if __test_invalid__ is true
-    const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, captionLang, presentationStyle);
+    const studio = createOrUpdateStudioData(mulmoScript, fileName, captionLang, presentationStyle);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
     return buildContext(studio, files, presentationStyle, multiLingual, force, targetLang);

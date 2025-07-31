@@ -37,7 +37,6 @@ test("test createOrUpdateStudioData", async () => {
       lang: "en",
       beats: [{ text: "hello" }],
     },
-    null,
     "",
   );
   // console.log(JSON.stringify(ret));
@@ -96,7 +95,6 @@ test("test createOrUpdateStudioData", async () => {
       speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       beats: [{ text: "hello" }],
     },
-    null,
     "",
   );
   // console.log(JSON.stringify(ret));

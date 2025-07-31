@@ -103,7 +103,7 @@ const getContext = () => {
       },
     ],
   };
-  const studio = createOrUpdateStudioData(mulmoScript, null, "hello");
+  const studio = createOrUpdateStudioData(mulmoScript, "hello");
   const context = {
     studio,
     fileDirs,
