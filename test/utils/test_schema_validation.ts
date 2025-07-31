@@ -18,11 +18,6 @@ const validateJsonFile = (filePath: string, schema: z.ZodObject<any>): { isValid
     const jsonData = JSON.parse(content);
     if (schema === mulmoScriptSchema) {
       MulmoScriptMethods.validate(jsonData);
-      try {
-        schema.parse(jsonData);
-      } catch (error) {
-        console.log("*** UPDATE REQUIRED ***", filePath);
-      }
     } else {
       schema.parse(jsonData);
     }
