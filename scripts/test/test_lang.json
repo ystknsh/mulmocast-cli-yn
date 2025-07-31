@@ -2,7 +2,7 @@
   "$mulmocast": {
     "version": "1.1"
   },
-  "lang": "ja",
+  "lang": "en",
   "speechParams": {
     "speakers": {
       "Presenter": {
@@ -19,11 +19,58 @@
   },
   "beats": [
     {
-      "text": "こんにちは",
+      "text": "Hello World",
       "image": {
         "type": "textSlide",
         "slide": {
           "title": "Hello World"
+        }
+      }
+    },
+    {
+      "text": "Switching Language and Switching Screen should match.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Switching Language"
+        }
+      }
+    },
+    {
+      "text": "May the force be with you.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "May the force be with you"
+        }
+      }
+    },
+    {
+      "text": "Switching Language and Switching Screen should match even with a short duration.",
+      "duration": 1,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Switching Language (short duration)"
+        }
+      }
+    },
+    {
+      "text": "Switching Language and Switching Screen should match even with a long duration.",
+      "duration": 8,
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Switching Language (long duration)"
+        }
+      }
+    },
+    {
+      "text": "Goodbye",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Goodbye"
         }
       }
     }
