@@ -190,13 +190,13 @@ const graph_data: GraphData = {
 
 const agentFilters = [
   {
-    name: "nijovoiceTextAgentFilter",
-    agent: nijovoiceTextAgentFilter,
+    name: "fileCacheAgentFilter",
+    agent: fileCacheAgentFilter,
     nodeIds: ["tts"],
   },
   {
-    name: "fileCacheAgentFilter",
-    agent: fileCacheAgentFilter,
+    name: "nijovoiceTextAgentFilter",
+    agent: nijovoiceTextAgentFilter,
     nodeIds: ["tts"],
   },
 ];
