@@ -8,6 +8,14 @@ import { writingMessage } from "./file.js";
 import { text2hash } from "./utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
+export const nijovoiceTextAgentFilter: AgentFilterFunction = async (context, next) => {
+  const { text, provider, lang } = context.namedInputs;
+  if (provider === "nijivoice" && lang === "ja") {
+    console.log("*** nijovoiceTextAgentFilter ***", text, provider, lang);
+  }
+  return next(context);
+};
+
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { force, file, index, mulmoContext, sessionType } = context.namedInputs.cache;
 
