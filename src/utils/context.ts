@@ -67,7 +67,7 @@ export const createOrUpdateStudioData = (
     filename: fileName,
     beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
   });
-  
+
   // TODO: Move this code out of this function later
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
@@ -108,8 +108,7 @@ export const getMultiLingual = (multilingualFilePath: string, studioBeatsLength:
   if (!fs.existsSync(multilingualFilePath)) {
     return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
   }
-  const jsonData =
-    readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
+  const jsonData = readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
   const dataSet = mulmoStudioMultiLingualSchema.parse(jsonData);
   while (dataSet.length < studioBeatsLength) {
     dataSet.push({ multiLingualTexts: {} });
@@ -125,8 +124,7 @@ export const getPresentationStyle = (presentationStylePath: string | undefined):
   if (!fs.existsSync(presentationStylePath)) {
     throw new Error(`ERROR: File not exists ${presentationStylePath}`);
   }
-  const jsonData =
-    readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
+  const jsonData = readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
   return mulmoPresentationStyleSchema.parse(jsonData);
 };
 
@@ -151,7 +149,7 @@ export const initializeContextFromFiles = async (files: FileObject, raiseError: 
       sessionState: initSessionState(),
       force: Boolean(force),
       lang: targetLang ?? studio.script.lang, // This lang is target Language. studio.lang is default Language
-    }
+    };
   } catch (error) {
     GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
     if (raiseError) {
