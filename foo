@@ -1,0 +1,2456 @@
+yarn run v1.22.22
+$ NODE_ENV=test tsx --test ./test/*/test_*.ts
+TAP version 13
+# movieParams: 0 {} undefined 
+#  undefined undefined
+# movieParams: 1 {} undefined 
+#  Generate a movie of this scene undefined
+# movieParams: 2 {} undefined 
+#  Generate a movie of this scene undefined
+# movieParams: 7 {} undefined 
+#  undefined undefined
+# movieParams: 8 {} undefined 
+#  undefined undefined
+# movieParams: 9 {} undefined 
+#  undefined undefined
+# movieParams: 10 {} undefined 
+#  undefined undefined
+# movieParams: 12 {} undefined 
+#  undefined undefined
+# movieParams: 1 {} undefined 
+#  undefined undefined
+# movieParams: 13 {} undefined 
+#  undefined undefined
+# movieParams: 14 {} undefined 
+#  undefined undefined
+# movieParams: 15 {} undefined 
+#  Only movie prompt undefined
+# movieParams: 16 {} undefined 
+#  Movie prompt undefined
+# movieParams: 17 {} undefined 
+#  Movie prompt undefined
+# movieParams: 18 {} undefined 
+#  Movie prompt undefined
+# movieParams: 19 {} undefined 
+#  undefined undefined
+# movieParams: 20 {} undefined 
+#  undefined undefined
+# movieParams: 21 {} undefined 
+#  undefined undefined
+# movieParams: 22 {} undefined 
+#  undefined Birds chirping in the background
+# movieParams: 23 {} undefined 
+#  undefined Birds chirping and wind blowing
+# movieParams: 24 {} {
+#   agentName: 'soundEffectReplicateAgent',
+#   defaultModel: 'zsxkib/mmaudio',
+#   models: [ 'zsxkib/mmaudio' ],
+#   modelParams: {
+#     'zsxkib/mmaudio': {
+#       identifier: 'zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484'
+#     }
+#   }
+# } 
+#  A forest scene with movement Birds chirping and leaves rustling
+# movieParams: 25 {} {
+#   agentName: 'soundEffectReplicateAgent',
+#   defaultModel: 'zsxkib/mmaudio',
+#   models: [ 'zsxkib/mmaudio' ],
+#   modelParams: {
+#     'zsxkib/mmaudio': {
+#       identifier: 'zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484'
+#     }
+#   }
+# } 
+#  Trees swaying gently Nature sounds with gentle breeze
+# movieParams: 26 {} undefined 
+#  undefined undefined
+# movieParams: 27 {} undefined 
+#  undefined undefined
+# movieParams: 28 {} undefined 
+#  Person speaking with lip movement undefined
+# movieParams: 29 {} undefined 
+#  Subtle lip movements while speaking undefined
+# movieParams: 30 {} undefined 
+#  undefined Background music
+# movieParams: 31 {} undefined 
+#  undefined Applause and background music
+# movieParams: 32 {} {
+#   agentName: 'soundEffectReplicateAgent',
+#   defaultModel: 'zsxkib/mmaudio',
+#   models: [ 'zsxkib/mmaudio' ],
+#   modelParams: {
+#     'zsxkib/mmaudio': {
+#       identifier: 'zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484'
+#     }
+#   }
+# } 
+#  Performance with synchronized audio and lip movement Live concert atmosphere
+# movieParams: 33 {} {
+#   agentName: 'soundEffectReplicateAgent',
+#   defaultModel: 'zsxkib/mmaudio',
+#   models: [ 'zsxkib/mmaudio' ],
+#   modelParams: {
+#     'zsxkib/mmaudio': {
+#       identifier: 'zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484'
+#     }
+#   }
+# } 
+#  Speaker gesturing while presenting Ambient conference room sound
+# Subtest: imagePreprocessAgent - basic functionality
+ok 1 - imagePreprocessAgent - basic functionality
+  ---
+  duration_ms: 1.613416
+  ...
+# Subtest: imagePreprocessAgent - with movie prompt and text
+ok 2 - imagePreprocessAgent - with movie prompt and text
+  ---
+  duration_ms: 0.219584
+  ...
+# Subtest: imagePreprocessAgent - movie prompt only (no image prompt)
+ok 3 - imagePreprocessAgent - movie prompt only (no image prompt)
+  ---
+  duration_ms: 0.128041
+  ...
+# Subtest: imagePreprocessAgent - with image plugin (textSlide)
+ok 4 - imagePreprocessAgent - with image plugin (textSlide) # SKIP
+  ---
+  duration_ms: 0.093834
+  ...
+# Subtest: imagePreprocessAgent - with image plugin (markdown)
+ok 5 - imagePreprocessAgent - with image plugin (markdown) # SKIP
+  ---
+  duration_ms: 0.03325
+  ...
+# Subtest: imagePreprocessAgent - with image plugin (chart)
+ok 6 - imagePreprocessAgent - with image plugin (chart) # SKIP
+  ---
+  duration_ms: 0.024541
+  ...
+# Subtest: imagePreprocessAgent - with image plugin (mermaid)
+ok 7 - imagePreprocessAgent - with image plugin (mermaid) # SKIP
+  ---
+  duration_ms: 0.081583
+  ...
+# Subtest: imagePreprocessAgent - with imageNames
+ok 8 - imagePreprocessAgent - with imageNames
+  ---
+  duration_ms: 0.134375
+  ...
+# Subtest: imagePreprocessAgent - without imageNames (uses all imageRefs)
+ok 9 - imagePreprocessAgent - without imageNames (uses all imageRefs)
+  ---
+  duration_ms: 0.412791
+  ...
+# Subtest: imagePreprocessAgent - filters undefined image references
+ok 10 - imagePreprocessAgent - filters undefined image references
+  ---
+  duration_ms: 0.3475
+  ...
+# Subtest: imagePreprocessAgent - merges beat and imageAgentInfo imageParams
+ok 11 - imagePreprocessAgent - merges beat and imageAgentInfo imageParams
+  ---
+  duration_ms: 0.152958
+  ...
+# Subtest: imagePreprocessAgent - empty imageRefs
+ok 12 - imagePreprocessAgent - empty imageRefs
+  ---
+  duration_ms: 0.084959
+  ...
+# Subtest: imagePreprocessAgent - with real sample data
+ok 13 - imagePreprocessAgent - with real sample data
+  ---
+  duration_ms: 0.554875
+  ...
+# Subtest: imagePreprocessAgent - text only
+ok 14 - imagePreprocessAgent - text only
+  ---
+  duration_ms: 0.11225
+  ...
+# Subtest: imagePreprocessAgent - imagePrompt only
+ok 15 - imagePreprocessAgent - imagePrompt only
+  ---
+  duration_ms: 0.076125
+  ...
+# Subtest: imagePreprocessAgent - moviePrompt only
+ok 16 - imagePreprocessAgent - moviePrompt only
+  ---
+  duration_ms: 0.070959
+  ...
+# Subtest: imagePreprocessAgent - text + moviePrompt (no imagePrompt)
+ok 17 - imagePreprocessAgent - text + moviePrompt (no imagePrompt)
+  ---
+  duration_ms: 0.056416
+  ...
+# Subtest: imagePreprocessAgent - imagePrompt + moviePrompt (no text)
+ok 18 - imagePreprocessAgent - imagePrompt + moviePrompt (no text)
+  ---
+  duration_ms: 0.072375
+  ...
+# Subtest: imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)
+ok 19 - imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)
+  ---
+  duration_ms: 0.059208
+  ...
+# Subtest: imagePreprocessAgent - no text, no imagePrompt, no moviePrompt
+ok 20 - imagePreprocessAgent - no text, no imagePrompt, no moviePrompt
+  ---
+  duration_ms: 0.059375
+  ...
+# Subtest: imagePreprocessAgent - with both text and imagePrompt
+ok 21 - imagePreprocessAgent - with both text and imagePrompt
+  ---
+  duration_ms: 0.059667
+  ...
+# Subtest: imagePreprocessAgent - with imageParams override
+ok 22 - imagePreprocessAgent - with imageParams override
+  ---
+  duration_ms: 0.076791
+  ...
+# Subtest: imagePreprocessAgent - with soundEffectPrompt only
+ok 23 - imagePreprocessAgent - with soundEffectPrompt only
+  ---
+  duration_ms: 0.064292
+  ...
+# Subtest: imagePreprocessAgent - soundEffectPrompt + imagePrompt
+ok 24 - imagePreprocessAgent - soundEffectPrompt + imagePrompt
+  ---
+  duration_ms: 0.059209
+  ...
+# Subtest: imagePreprocessAgent - soundEffectPrompt + moviePrompt (no imagePrompt)
+ok 25 - imagePreprocessAgent - soundEffectPrompt + moviePrompt (no imagePrompt)
+  ---
+  duration_ms: 0.451667
+  ...
+# Subtest: imagePreprocessAgent - soundEffectPrompt + imagePrompt + moviePrompt
+ok 26 - imagePreprocessAgent - soundEffectPrompt + imagePrompt + moviePrompt
+  ---
+  duration_ms: 0.202166
+  ...
+# Subtest: imagePreprocessAgent - with enableLipSync true
+ok 27 - imagePreprocessAgent - with enableLipSync true
+  ---
+  duration_ms: 0.068583
+  ...
+# Subtest: imagePreprocessAgent - enableLipSync + imagePrompt
+ok 28 - imagePreprocessAgent - enableLipSync + imagePrompt
+  ---
+  duration_ms: 0.061667
+  ...
+# Subtest: imagePreprocessAgent - enableLipSync + moviePrompt (no imagePrompt)
+ok 29 - imagePreprocessAgent - enableLipSync + moviePrompt (no imagePrompt)
+  ---
+  duration_ms: 0.100625
+  ...
+# Subtest: imagePreprocessAgent - enableLipSync + imagePrompt + moviePrompt
+ok 30 - imagePreprocessAgent - enableLipSync + imagePrompt + moviePrompt
+  ---
+  duration_ms: 0.080667
+  ...
+# Subtest: imagePreprocessAgent - soundEffectPrompt + enableLipSync
+ok 31 - imagePreprocessAgent - soundEffectPrompt + enableLipSync
+  ---
+  duration_ms: 0.062042
+  ...
+# Subtest: imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt
+ok 32 - imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt
+  ---
+  duration_ms: 0.057542
+  ...
+# Subtest: imagePreprocessAgent - soundEffectPrompt + enableLipSync + moviePrompt (no imagePrompt)
+ok 33 - imagePreprocessAgent - soundEffectPrompt + enableLipSync + moviePrompt (no imagePrompt)
+  ---
+  duration_ms: 0.10575
+  ...
+# Subtest: imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync + imagePrompt + moviePrompt + text
+ok 34 - imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync + imagePrompt + moviePrompt + text
+  ---
+  duration_ms: 0.169208
+  ...
+# [dotenv@17.2.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+# < image
+# { kind: 'session', sessionType: 'image', inSession: true }
+# text2image: provider=openai model=undefined
+# { image 0
+# { kind: 'beat', sessionType: 'image', index: 0, inSession: true }
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# { image 1
+# { kind: 'beat', sessionType: 'image', index: 1, inSession: true }
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# { image 2
+# { kind: 'beat', sessionType: 'image', index: 2, inSession: true }
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# { image 3
+# { kind: 'beat', sessionType: 'image', index: 3, inSession: true }
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# { image 4
+# { kind: 'beat', sessionType: 'image', index: 4, inSession: true }
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+#  } image 4
+# { kind: 'beat', sessionType: 'image', index: 4, inSession: false }
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+#  } image 1
+# { kind: 'beat', sessionType: 'image', index: 1, inSession: false }
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+#  } image 0
+# { kind: 'beat', sessionType: 'image', index: 0, inSession: false }
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+#  } image 2
+# { kind: 'beat', sessionType: 'image', index: 2, inSession: false }
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+#  } image 3
+# { kind: 'beat', sessionType: 'image', index: 3, inSession: false }
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+#  > image
+# { kind: 'session', sessionType: 'image', inSession: false }
+# text2image: provider=openai model=undefined
+# { image 1
+# { kind: 'beat', sessionType: 'image', index: 1, inSession: true }
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# Subtest: test images
+ok 35 - test images
+  ---
+  duration_ms: 2564.463125
+  ...
+#  } image 1
+# { kind: 'beat', sessionType: 'image', index: 1, inSession: false }
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# Subtest: test beat images
+ok 36 - test beat images
+  ---
+  duration_ms: 761.765375
+  ...
+# [dotenv@17.2.1] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+# < audio
+# filterComplex: [0:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a0]
+# [a0]asplit=4[ls_0][ls_1][ls_2][ls_3]
+# [1:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a1]
+# [ls_3]atrim=start=0:end=0.3[padding_0]
+# [2:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a2]
+# [ls_2]atrim=start=0:end=0.3[padding_1]
+# [3:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a3]
+# [ls_1]atrim=start=0:end=0.3[padding_2]
+# [4:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a4]
+# [ls_0]atrim=start=0:end=0.8[padding_3]
+# [5:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[a5]
+# Started FFmpeg ...
+# totalDucation: 8.672653 10.672653
+# Started FFmpeg ...
+# prop: reference is not hit
+# writing: /Users/satoshi/git/ai/mulmo/output/audio/hello/hello.mp3
+#  > audio
+# writing: /Users/satoshi/git/ai/mulmo/output/hello.mp3
+# < image
+# text2image: provider=openai model=undefined
+# { image 0
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# { image 1
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# { image 2
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# prop: htmlPrompt is not hit
+# prop: htmlPrompt is not hit
+# prop: html.codeBlockOrRaw() is not hit
+# prop: codeBlockOrRaw() is not hit
+# prop: htmlPrompt is not hit
+# prop: prompt is not hit
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# { image 3
+# { image 4
+#  } image 4
+# prop: enableLipSync is not hit
+#  } image 1
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+#  } image 0
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+#  } image 2
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+#  } image 3
+# prop: movieFile is not hit
+# prop: imageFromMovie is not hit
+# prop: soundEffectPrompt is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: enableLipSync is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+# prop: movieFile is not hit
+# prop: soundEffectFile is not hit
+# prop: lipSyncFile is not hit
+#  > image
+# < video
+# filterComplex: [0:v]loop=loop=-1:size=1:start=0,trim=duration=2.956,fps=30,setpts=PTS-STARTPTS,scale=w=1280:h=720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v0]
+# [1:v]loop=loop=-1:size=1:start=0,trim=duration=1.956,fps=30,setpts=PTS-STARTPTS,scale=w=1280:h=720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v1]
+# [2:v]loop=loop=-1:size=1:start=0,trim=duration=1.956,fps=30,setpts=PTS-STARTPTS,scale=w=1280:h=720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v2]
+# [3:v]loop=loop=-1:size=1:start=0,trim=duration=2.456,fps=30,setpts=PTS-STARTPTS,scale=w=1280:h=720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v3]
+# [4:v]loop=loop=-1:size=1:start=0,trim=duration=1.3395920000000001,fps=30,setpts=PTS-STARTPTS,scale=w=1280:h=720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p[v4]
+# [v0][v1][v2][v3][v4]concat=n=5:v=1:a=0[concat_video]
+# Started FFmpeg ...
+# Video created successfully! 1.45 sec
+# MASAI: A Modular Future for Software Engineering AI
+# writing: /Users/satoshi/git/ai/mulmo/output/hello.mp4
+#  > video
+# Subtest: test images and movie
+ok 37 - test images and movie
+  ---
+  duration_ms: 6452.218167
+  ...
+# Subtest: validateSchemaAgent with valid MulmoScript
+ok 38 - validateSchemaAgent with valid MulmoScript
+  ---
+  duration_ms: 2.305416
+  ...
+# Subtest: validateSchemaAgent with invalid MulmoScript
+ok 39 - validateSchemaAgent with invalid MulmoScript
+  ---
+  duration_ms: 0.198459
+  ...
+# Subtest: defaultSpeaker isDefault
+ok 40 - defaultSpeaker isDefault
+  ---
+  duration_ms: 0.721583
+  ...
+# Subtest: defaultSpeaker no isDefault
+ok 41 - defaultSpeaker no isDefault
+  ---
+  duration_ms: 0.063875
+  ...
+# Subtest: defaultSpeaker no isDefault two speaker
+ok 42 - defaultSpeaker no isDefault two speaker
+  ---
+  duration_ms: 0.056166
+  ...
+# Subtest: defaultSpeaker isDefault two speaker
+ok 43 - defaultSpeaker isDefault two speaker
+  ---
+  duration_ms: 0.0475
+  ...
+# Subtest: defaultSpeaker error no speaker
+ok 44 - defaultSpeaker error no speaker
+  ---
+  duration_ms: 0.14475
+  ...
+# Subtest: test getFileObject
+ok 45 - test getFileObject
+  ---
+  duration_ms: 0.75525
+  ...
+# Subtest: test createOrUpdateStudioData
+ok 46 - test createOrUpdateStudioData
+  ---
+  duration_ms: 2.463167
+  ...
+# Subtest: test createOrUpdateStudioData
+ok 47 - test createOrUpdateStudioData
+  ---
+  duration_ms: 0.607792
+  ...
+# Subtest: test getBaseDirPath pwd
+ok 48 - test getBaseDirPath pwd
+  ---
+  duration_ms: 0.692875
+  ...
+# Subtest: test getBaseDirPath absolute
+ok 49 - test getBaseDirPath absolute
+  ---
+  duration_ms: 0.05925
+  ...
+# Subtest: test getBaseDirPath related
+ok 50 - test getBaseDirPath related
+  ---
+  duration_ms: 0.047083
+  ...
+# Subtest: test getFullPath 1
+ok 51 - test getFullPath 1
+  ---
+  duration_ms: 0.052416
+  ...
+# Subtest: test getFullPath 2
+ok 52 - test getFullPath 2
+  ---
+  duration_ms: 0.104416
+  ...
+# Subtest: test getFullPath 3
+ok 53 - test getFullPath 3
+  ---
+  duration_ms: 0.035084
+  ...
+# Subtest: test getFullPath 4
+ok 54 - test getFullPath 4
+  ---
+  duration_ms: 0.084167
+  ...
+# Subtest: test getFullPath 5
+ok 55 - test getFullPath 5
+  ---
+  duration_ms: 0.039583
+  ...
+# Subtest: test getFullPath 6
+ok 56 - test getFullPath 6
+  ---
+  duration_ms: 0.206833
+  ...
+# Subtest: test imagePlugin mermaid
+ok 57 - test imagePlugin mermaid
+  ---
+  duration_ms: 0.404875
+  ...
+# Subtest: test imagePlugin image
+ok 58 - test imagePlugin image
+  ---
+  duration_ms: 0.085666
+  ...
+# Subtest: test imagePlugin beat
+ok 59 - test imagePlugin beat
+  ---
+  duration_ms: 0.067208
+  ...
+# Subtest: test getVideoParts image
+ok 60 - test getVideoParts image
+  ---
+  duration_ms: 0.423417
+  ...
+# Subtest: test getVideoParts movie
+ok 61 - test getVideoParts movie
+  ---
+  duration_ms: 0.062041
+  ...
+# Subtest: test getAudioPart movie
+ok 62 - test getAudioPart movie
+  ---
+  duration_ms: 0.060541
+  ...
+# Subtest: test/utils/test_mulmo_data.ts
+ok 10 - test/utils/test_mulmo_data.ts
+  ---
+  duration_ms: 192.873042
+  ...
+# Subtest: test imagePrompt
+ok 64 - test imagePrompt
+  ---
+  duration_ms: 0.37025
+  ...
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/samples/graphai_intro.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/slides/test_markdown.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/slides/test_slide.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/slides/test_slide2.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/slides/test_slide_img.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/slides/test_slide_img2.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/slides/test_whales.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/stories/momotaro.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/templates/image_refs.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/templates/voice_over.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/gpt.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test1.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_audio.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_audio_instructions.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_beats.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_captions.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_elevenlabs_models.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_hello.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_hello_google.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_html.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_image_refs.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_images.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_layout.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_loop.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_media.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_mixed_providers.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_movie.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_no_audio.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_no_audio_with_credit.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_order.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_order_portrait.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_slideout_left_no_audio.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_spillover.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_transition.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_transition_no_audio.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_video_speed.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_voice_over.json
+# *** UPDATE REQUIRED *** /Users/satoshi/git/ai/mulmo/scripts/test/test_voices.json
+# Subtest: JSON files in scripts directory should conform to mulmoScriptSchema
+    # Subtest: Validating errors/error_audio.json
+    ok 1 - Validating errors/error_audio.json
+      ---
+      duration_ms: 3.2065
+      ...
+    # Subtest: Validating errors/error_image.json
+    ok 2 - Validating errors/error_image.json
+      ---
+      duration_ms: 0.301209
+      ...
+    # Subtest: Validating samples/ai2027.json
+    ok 3 - Validating samples/ai2027.json
+      ---
+      duration_ms: 0.48525
+      ...
+    # Subtest: Validating samples/attention.json
+    ok 4 - Validating samples/attention.json
+      ---
+      duration_ms: 1.5735
+      ...
+    # Subtest: Validating samples/economics_genai.json
+    ok 5 - Validating samples/economics_genai.json
+      ---
+      duration_ms: 0.411208
+      ...
+    # Subtest: Validating samples/google_dilemma.json
+    ok 6 - Validating samples/google_dilemma.json
+      ---
+      duration_ms: 0.637
+      ...
+    # Subtest: Validating samples/graphai_intro.json
+    ok 7 - Validating samples/graphai_intro.json
+      ---
+      duration_ms: 0.604625
+      ...
+    # Subtest: Validating samples/infinit_game.json
+    ok 8 - Validating samples/infinit_game.json
+      ---
+      duration_ms: 0.715375
+      ...
+    # Subtest: Validating samples/llama_funding.json
+    ok 9 - Validating samples/llama_funding.json
+      ---
+      duration_ms: 0.519042
+      ...
+    # Subtest: Validating samples/tesla_drone.json
+    ok 10 - Validating samples/tesla_drone.json
+      ---
+      duration_ms: 0.438417
+      ...
+    # Subtest: Validating samples/test_cash_vs_mergin.json
+    ok 11 - Validating samples/test_cash_vs_mergin.json
+      ---
+      duration_ms: 0.4995
+      ...
+    # Subtest: Validating slides/test_markdown.json
+    ok 12 - Validating slides/test_markdown.json
+      ---
+      duration_ms: 0.34275
+      ...
+    # Subtest: Validating slides/test_slide.json
+    ok 13 - Validating slides/test_slide.json
+      ---
+      duration_ms: 1.668417
+      ...
+    # Subtest: Validating slides/test_slide2.json
+    ok 14 - Validating slides/test_slide2.json
+      ---
+      duration_ms: 1.179417
+      ...
+    # Subtest: Validating slides/test_slide_img.json
+    ok 15 - Validating slides/test_slide_img.json
+      ---
+      duration_ms: 0.25625
+      ...
+    # Subtest: Validating slides/test_slide_img2.json
+    ok 16 - Validating slides/test_slide_img2.json
+      ---
+      duration_ms: 0.759791
+      ...
+    # Subtest: Validating slides/test_whales.json
+    ok 17 - Validating slides/test_whales.json
+      ---
+      duration_ms: 1.052208
+      ...
+    # Subtest: Validating snakajima/digital_democracy.json
+    ok 18 - Validating snakajima/digital_democracy.json
+      ---
+      duration_ms: 0.35725
+      ...
+    # Subtest: Validating snakajima/fsd_demo.json
+    ok 19 - Validating snakajima/fsd_demo.json
+      ---
+      duration_ms: 2.274334
+      ...
+    # Subtest: Validating snakajima/girl_and_cat.json
+    ok 20 - Validating snakajima/girl_and_cat.json
+      ---
+      duration_ms: 0.255875
+      ...
+    # Subtest: Validating snakajima/love_is_vibe_coding.json
+    ok 21 - Validating snakajima/love_is_vibe_coding.json
+      ---
+      duration_ms: 0.444375
+      ...
+    # Subtest: Validating snakajima/math_mystery.json
+    ok 22 - Validating snakajima/math_mystery.json
+      ---
+      duration_ms: 0.328584
+      ...
+    # Subtest: Validating snakajima/olympics.json
+    ok 23 - Validating snakajima/olympics.json
+      ---
+      duration_ms: 0.373959
+      ...
+    # Subtest: Validating snakajima/peter_lynch.json
+    ok 24 - Validating snakajima/peter_lynch.json
+      ---
+      duration_ms: 0.327791
+      ...
+    # Subtest: Validating snakajima/replicate_movie_sample.json
+    ok 25 - Validating snakajima/replicate_movie_sample.json
+      ---
+      duration_ms: 0.148
+      ...
+    # Subtest: Validating snakajima/rl_html.json
+    ok 26 - Validating snakajima/rl_html.json
+      ---
+      duration_ms: 0.27925
+      ...
+    # Subtest: Validating snakajima/rl_image.json
+    ok 27 - Validating snakajima/rl_image.json
+      ---
+      duration_ms: 0.22525
+      ...
+    # Subtest: Validating snakajima/spacex_shorts.json
+    ok 28 - Validating snakajima/spacex_shorts.json
+      ---
+      duration_ms: 0.209292
+      ...
+    # Subtest: Validating snakajima/veo3_sample.json
+    ok 29 - Validating snakajima/veo3_sample.json
+      ---
+      duration_ms: 0.270541
+      ...
+    # Subtest: Validating snakajima/vibe_coding.json
+    ok 30 - Validating snakajima/vibe_coding.json
+      ---
+      duration_ms: 0.496916
+      ...
+    # Subtest: Validating stories/momotaro.json
+    ok 31 - Validating stories/momotaro.json
+      ---
+      duration_ms: 0.41525
+      ...
+    # Subtest: Validating templates/business.json
+    ok 32 - Validating templates/business.json
+      ---
+      duration_ms: 0.922166
+      ...
+    # Subtest: Validating templates/children_book.json
+    ok 33 - Validating templates/children_book.json
+      ---
+      duration_ms: 0.35425
+      ...
+    # Subtest: Validating templates/coding.json
+    ok 34 - Validating templates/coding.json
+      ---
+      duration_ms: 0.710917
+      ...
+    # Subtest: Validating templates/html.json
+    ok 35 - Validating templates/html.json
+      ---
+      duration_ms: 0.164291
+      ...
+    # Subtest: Validating templates/image_refs.json
+    ok 36 - Validating templates/image_refs.json
+      ---
+      duration_ms: 0.461834
+      ...
+    # Subtest: Validating templates/presentation.json
+    ok 37 - Validating templates/presentation.json
+      ---
+      duration_ms: 0.960458
+      ...
+    # Subtest: Validating templates/sensei_and_taro.json
+    ok 38 - Validating templates/sensei_and_taro.json
+      ---
+      duration_ms: 0.232959
+      ...
+    # Subtest: Validating templates/voice_over.json
+    ok 39 - Validating templates/voice_over.json
+      ---
+      duration_ms: 0.786542
+      ...
+    # Subtest: Validating test/gpt.json
+    ok 40 - Validating test/gpt.json
+      ---
+      duration_ms: 0.125667
+      ...
+    # Subtest: Validating test/test.json
+    ok 41 - Validating test/test.json
+      ---
+      duration_ms: 0.144417
+      ...
+    # Subtest: Validating test/test1.json
+    ok 42 - Validating test/test1.json
+      ---
+      duration_ms: 0.123292
+      ...
+    # Subtest: Validating test/test2.json
+    ok 43 - Validating test/test2.json
+      ---
+      duration_ms: 0.113291
+      ...
+    # Subtest: Validating test/test_audio.json
+    ok 44 - Validating test/test_audio.json
+      ---
+      duration_ms: 0.810083
+      ...
+    # Subtest: Validating test/test_audio_instructions.json
+    ok 45 - Validating test/test_audio_instructions.json
+      ---
+      duration_ms: 0.758666
+      ...
+    # Subtest: Validating test/test_beats.json
+    ok 46 - Validating test/test_beats.json
+      ---
+      duration_ms: 0.7375
+      ...
+    # Subtest: Validating test/test_captions.json
+    ok 47 - Validating test/test_captions.json
+      ---
+      duration_ms: 0.317792
+      ...
+    # Subtest: Validating test/test_elevenlabs_models.json
+    ok 48 - Validating test/test_elevenlabs_models.json
+      ---
+      duration_ms: 0.634583
+      ...
+    # Subtest: Validating test/test_en.json
+    ok 49 - Validating test/test_en.json
+      ---
+      duration_ms: 0.0915
+      ...
+    # Subtest: Validating test/test_hello.json
+    ok 50 - Validating test/test_hello.json
+      ---
+      duration_ms: 0.16
+      ...
+    # Subtest: Validating test/test_hello_google.json
+    ok 51 - Validating test/test_hello_google.json
+      ---
+      duration_ms: 0.161791
+      ...
+    # Subtest: Validating test/test_html.json
+    ok 52 - Validating test/test_html.json
+      ---
+      duration_ms: 0.110042
+      ...
+    # Subtest: Validating test/test_image_refs.json
+    ok 53 - Validating test/test_image_refs.json
+      ---
+      duration_ms: 0.148584
+      ...
+    # Subtest: Validating test/test_images.json
+    ok 54 - Validating test/test_images.json
+      ---
+      duration_ms: 0.142375
+      ...
+    # Subtest: Validating test/test_lang.json
+    ok 55 - Validating test/test_lang.json
+      ---
+      duration_ms: 0.150375
+      ...
+    # Subtest: Validating test/test_layout.json
+    ok 56 - Validating test/test_layout.json
+      ---
+      duration_ms: 0.634208
+      ...
+    # Subtest: Validating test/test_lipsync.json
+    ok 57 - Validating test/test_lipsync.json
+      ---
+      duration_ms: 0.138875
+      ...
+    # Subtest: Validating test/test_loop.json
+    ok 58 - Validating test/test_loop.json
+      ---
+      duration_ms: 0.230542
+      ...
+    # Subtest: Validating test/test_media.json
+    ok 59 - Validating test/test_media.json
+      ---
+      duration_ms: 0.912875
+      ...
+    # Subtest: Validating test/test_mixed_providers.json
+    ok 60 - Validating test/test_mixed_providers.json
+      ---
+      duration_ms: 0.365458
+      ...
+    # Subtest: Validating test/test_movie.json
+    ok 61 - Validating test/test_movie.json
+      ---
+      duration_ms: 0.138167
+      ...
+    # Subtest: Validating test/test_no_audio.json
+    ok 62 - Validating test/test_no_audio.json
+      ---
+      duration_ms: 0.940875
+      ...
+    # Subtest: Validating test/test_no_audio_with_credit.json
+    ok 63 - Validating test/test_no_audio_with_credit.json
+      ---
+      duration_ms: 0.857458
+      ...
+    # Subtest: Validating test/test_order.json
+    ok 64 - Validating test/test_order.json
+      ---
+      duration_ms: 0.185708
+      ...
+    # Subtest: Validating test/test_order_portrait.json
+    ok 65 - Validating test/test_order_portrait.json
+      ---
+      duration_ms: 0.190292
+      ...
+    # Subtest: Validating test/test_replicate.json
+    ok 66 - Validating test/test_replicate.json
+      ---
+      duration_ms: 0.256875
+      ...
+    # Subtest: Validating test/test_slideout_left_no_audio.json
+    ok 67 - Validating test/test_slideout_left_no_audio.json
+      ---
+      duration_ms: 0.280917
+      ...
+    # Subtest: Validating test/test_sound_effect.json
+    ok 68 - Validating test/test_sound_effect.json
+      ---
+      duration_ms: 0.094792
+      ...
+    # Subtest: Validating test/test_spillover.json
+    ok 69 - Validating test/test_spillover.json
+      ---
+      duration_ms: 1.900833
+      ...
+    # Subtest: Validating test/test_transition.json
+    ok 70 - Validating test/test_transition.json
+      ---
+      duration_ms: 0.359042
+      ...
+    # Subtest: Validating test/test_transition_no_audio.json
+    ok 71 - Validating test/test_transition_no_audio.json
+      ---
+      duration_ms: 0.24975
+      ...
+    # Subtest: Validating test/test_video_speed.json
+    ok 72 - Validating test/test_video_speed.json
+      ---
+      duration_ms: 0.482458
+      ...
+    # Subtest: Validating test/test_voice_over.json
+    ok 73 - Validating test/test_voice_over.json
+      ---
+      duration_ms: 1.340458
+      ...
+    # Subtest: Validating test/test_voices.json
+    ok 74 - Validating test/test_voices.json
+      ---
+      duration_ms: 0.271084
+      ...
+    1..74
+ok 65 - JSON files in scripts directory should conform to mulmoScriptSchema
+  ---
+  duration_ms: 44.060708
+  ...
+# Subtest: JSON files in templates directory should conform to mulmoPromptTemplateSchema
+    # Subtest: Validating template: akira_comic.json
+    ok 1 - Validating template: akira_comic.json
+      ---
+      duration_ms: 0.112083
+      ...
+    # Subtest: Validating template: ani.json
+    ok 2 - Validating template: ani.json
+      ---
+      duration_ms: 0.088625
+      ...
+    # Subtest: Validating template: ani_ja.json
+    ok 3 - Validating template: ani_ja.json
+      ---
+      duration_ms: 0.07425
+      ...
+    # Subtest: Validating template: business.json
+    ok 4 - Validating template: business.json
+      ---
+      duration_ms: 0.048584
+      ...
+    # Subtest: Validating template: characters.json
+    ok 5 - Validating template: characters.json
+      ---
+      duration_ms: 0.065834
+      ...
+    # Subtest: Validating template: children_book.json
+    ok 6 - Validating template: children_book.json
+      ---
+      duration_ms: 0.059417
+      ...
+    # Subtest: Validating template: coding.json
+    ok 7 - Validating template: coding.json
+      ---
+      duration_ms: 0.044167
+      ...
+    # Subtest: Validating template: comic_strips.json
+    ok 8 - Validating template: comic_strips.json
+      ---
+      duration_ms: 0.055
+      ...
+    # Subtest: Validating template: drslump_comic.json
+    ok 9 - Validating template: drslump_comic.json
+      ---
+      duration_ms: 0.054375
+      ...
+    # Subtest: Validating template: ghibli_comic.json
+    ok 10 - Validating template: ghibli_comic.json
+      ---
+      duration_ms: 0.056166
+      ...
+    # Subtest: Validating template: ghibli_image_only.json
+    ok 11 - Validating template: ghibli_image_only.json
+      ---
+      duration_ms: 0.065417
+      ...
+    # Subtest: Validating template: ghibli_shorts.json
+    ok 12 - Validating template: ghibli_shorts.json
+      ---
+      duration_ms: 0.067375
+      ...
+    # Subtest: Validating template: ghost_comic.json
+    ok 13 - Validating template: ghost_comic.json
+      ---
+      duration_ms: 0.063167
+      ...
+    # Subtest: Validating template: html.json
+    ok 14 - Validating template: html.json
+      ---
+      duration_ms: 0.051417
+      ...
+    # Subtest: Validating template: onepiece_comic.json
+    ok 15 - Validating template: onepiece_comic.json
+      ---
+      duration_ms: 0.0565
+      ...
+    # Subtest: Validating template: podcast_standard.json
+    ok 16 - Validating template: podcast_standard.json
+      ---
+      duration_ms: 0.054458
+      ...
+    # Subtest: Validating template: portrait_movie.json
+    ok 17 - Validating template: portrait_movie.json
+      ---
+      duration_ms: 0.061042
+      ...
+    # Subtest: Validating template: realistic_movie.json
+    ok 18 - Validating template: realistic_movie.json
+      ---
+      duration_ms: 0.056417
+      ...
+    # Subtest: Validating template: sensei_and_taro.json
+    ok 19 - Validating template: sensei_and_taro.json
+      ---
+      duration_ms: 0.071834
+      ...
+    # Subtest: Validating template: shorts.json
+    ok 20 - Validating template: shorts.json
+      ---
+      duration_ms: 0.059916
+      ...
+    # Subtest: Validating template: text_and_image.json
+    ok 21 - Validating template: text_and_image.json
+      ---
+      duration_ms: 0.046333
+      ...
+    # Subtest: Validating template: text_only.json
+    ok 22 - Validating template: text_only.json
+      ---
+      duration_ms: 0.042834
+      ...
+    # Subtest: Validating template: trailer.json
+    ok 23 - Validating template: trailer.json
+      ---
+      duration_ms: 0.069916
+      ...
+    1..23
+ok 66 - JSON files in templates directory should conform to mulmoPromptTemplateSchema
+  ---
+  duration_ms: 1.966916
+  ...
+# Subtest: test splitIntoSentences
+ok 67 - test splitIntoSentences
+  ---
+  duration_ms: 2.15125
+  ...
+# Subtest: test recursiveSplit
+ok 68 - test recursiveSplit
+  ---
+  duration_ms: 0.363792
+  ...
+# Subtest: test replacePairsJa
+ok 69 - test replacePairsJa
+  ---
+  duration_ms: 0.135917
+  ...
+# Subtest: test getExtention
+ok 70 - test getExtention
+  ---
+  duration_ms: 0.373541
+  ...
+# Subtest: test getExtention
+ok 71 - test getExtention
+  ---
+  duration_ms: 0.053625
+  ...
+# Subtest: test getExtention
+ok 72 - test getExtention
+  ---
+  duration_ms: 0.042708
+  ...
+# Subtest: test getExtention
+ok 73 - test getExtention
+  ---
+  duration_ms: 0.04075
+  ...
+# Subtest: test getExtention
+ok 74 - test getExtention
+  ---
+  duration_ms: 0.041459
+  ...
+# Subtest: test settings2GraphAIConfig
+ok 75 - test settings2GraphAIConfig
+  ---
+  duration_ms: 1.780584
+  ...
+# Subtest: test settings2GraphAIConfig
+ok 76 - test settings2GraphAIConfig
+  ---
+  duration_ms: 0.185084
+  ...
+# gpt.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test1.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_audio.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_audio_instructions.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_beats.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_captions.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_elevenlabs_models.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_hello.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_hello_google.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_html.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_image_refs.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_images.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_layout.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_loop.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_media.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_mixed_providers.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_movie.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_no_audio.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_no_audio_with_credit.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_order.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_order_portrait.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_slideout_left_no_audio.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_spillover.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_transition.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_transition_no_audio.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_video_speed.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_voice_over.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# test_voices.json ZodError: [
+#   {
+#     "code": "invalid_type",
+#     "expected": "string",
+#     "received": "undefined",
+#     "path": [
+#       "lang"
+#     ],
+#     "message": "Required"
+#   }
+# ]
+#     at get error (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:39:31)
+#     at ZodObject.parse (file:///Users/satoshi/git/ai/mulmo/node_modules/zod/v3/types.js:114:22)
+#     at <anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:23:25)
+#     at Array.map (<anonymous>)
+#     at TestContext.<anonymous> (/Users/satoshi/git/ai/mulmo/test/utils/test_validate_sample.ts:16:28)
+#     at Test.runInAsyncScope (node:async_hooks:211:14)
+#     at Test.run (node:internal/test_runner/test:979:25)
+#     at Test.start (node:internal/test_runner/test:877:17)
+#     at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+#   issues: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ],
+#   addIssue: [Function (anonymous)],
+#   addIssues: [Function (anonymous)],
+#   errors: [
+#     {
+#       code: 'invalid_type',
+#       expected: 'string',
+#       received: 'undefined',
+#       path: [Array],
+#       message: 'Required'
+#     }
+#   ]
+# }
+# Subtest: test mulmoScriptSchema.parse in scripts/test dir 
+ok 77 - test mulmoScriptSchema.parse in scripts/test dir 
+  ---
+  duration_ms: 39.058417
+  ...
+# Subtest: test presentation styles
+ok 78 - test presentation styles
+  ---
+  duration_ms: 2.653708
+  ...
+# Subtest: validating versioning from 1.0
+ok 79 - validating versioning from 1.0
+  ---
+  duration_ms: 1.874084
+  ...
+# Subtest: validating versioning from 1.1
+ok 80 - validating versioning from 1.1
+  ---
+  duration_ms: 0.548041
+  ...
+1..80
+# tests 177
+# suites 0
+# pass 173
+# fail 0
+# cancelled 0
+# skipped 4
+# todo 0
+# duration_ms 7449.732208
+Done in 7.91s.
