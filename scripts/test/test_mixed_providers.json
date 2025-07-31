@@ -2,6 +2,7 @@
   "$mulmocast": {
     "version": "1.1"
   },
+  "lang": "en",
   "title": "Mixed Providers Test",
   "description": "Testing multiple TTS providers for different speakers",
   "speechParams": {
