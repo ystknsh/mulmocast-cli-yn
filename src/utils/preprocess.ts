@@ -65,7 +65,7 @@ export const createOrUpdateStudioData = (
   if (videoCaptionLang) {
     studio.script.captionParams = mulmoCaptionParamsSchema.parse({
       ...(studio.script.captionParams ?? {}),
-      lang: videoCaptionLang ?? mulmoScript.lang,
+      lang: videoCaptionLang,
     });
   }
 
