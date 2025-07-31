@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { GraphAI, assert } from "graphai";
+import { GraphAI, assert, isNull } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -54,7 +54,6 @@ const translateGraph: GraphData = {
           },
           preprocessMultiLingual: {
             agent: "mapAgent",
-            console: { before: true },
             inputs: {
               beat: ":beat",
               multiLingual: ":multiLingual",
@@ -223,7 +222,7 @@ export const translate = async (
     const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
     mkdir(outDirPath);
 
-    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => x != null))];
+    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x) ))];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
