@@ -66,6 +66,15 @@
       }
     },
     {
+      "text": "The yield of TSMC's 3nm process exceeeds 70%.",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Text replacement test for nijivoice"
+        }
+      }
+    },
+    {
       "text": "Goodbye",
       "image": {
         "type": "textSlide",

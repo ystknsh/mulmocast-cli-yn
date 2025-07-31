@@ -5,7 +5,7 @@ import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { recursiveSplitJa, replacementsJa, replacePairsJa } from "../utils/string.js";
+import { recursiveSplitJa } from "../utils/string.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual } from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
@@ -116,16 +116,10 @@ const translateGraph: GraphData = {
                 },
                 ttsTexts: {
                   agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
-                    const { localizedText, targetLang } = namedInputs;
+                    const { localizedText } = namedInputs;
                     // cache
                     if (localizedText.ttsTexts) {
                       return localizedText;
-                    }
-                    if (targetLang === "ja") {
-                      return {
-                        ...localizedText,
-                        ttsTexts: localizedText?.texts?.map(replacePairsJa(replacementsJa)),
-                      };
                     }
                     return {
                       ...localizedText,

@@ -13,7 +13,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
 import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, text2SpeechProviderSchema } from "../types/index.js";
-import { fileCacheAgentFilter } from "../utils/filters.js";
+import { fileCacheAgentFilter, nijovoiceTextAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
 import { text2hash, localizedText, settings2GraphAIConfig } from "../utils/utils.js";
 import { provider2TTSAgent } from "../utils/provider2agent.js";
@@ -72,6 +72,8 @@ const preprocessor = (namedInputs: {
     voiceId,
     speechOptions,
     model,
+    provider,
+    lang,
     audioPath,
     studioBeat,
     needsTTS,
@@ -99,6 +101,8 @@ const graph_tts: GraphData = {
       agent: ":preprocessor.ttsAgent",
       inputs: {
         text: ":preprocessor.text",
+        provider: ":preprocessor.provider",
+        lang: ":preprocessor.lang",
         cache: {
           force: [":context.force"],
           file: ":preprocessor.audioPath",
@@ -188,6 +192,11 @@ const agentFilters = [
   {
     name: "fileCacheAgentFilter",
     agent: fileCacheAgentFilter,
+    nodeIds: ["tts"],
+  },
+  {
+    name: "nijovoiceTextAgentFilter",
+    agent: nijovoiceTextAgentFilter,
     nodeIds: ["tts"],
   },
 ];

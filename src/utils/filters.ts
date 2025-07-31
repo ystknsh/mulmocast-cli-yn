@@ -7,6 +7,15 @@ import { GraphAILogger } from "graphai";
 import { writingMessage } from "./file.js";
 import { text2hash } from "./utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
+import { replacementsJa, replacePairsJa } from "../utils/string.js";
+
+export const nijovoiceTextAgentFilter: AgentFilterFunction = async (context, next) => {
+  const { text, provider, lang } = context.namedInputs;
+  if (provider === "nijivoice" && lang === "ja") {
+    context.namedInputs.text = replacePairsJa(replacementsJa)(text);
+  }
+  return next(context);
+};
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
   const { force, file, index, mulmoContext, sessionType } = context.namedInputs.cache;
