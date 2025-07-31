@@ -7,15 +7,6 @@ import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/in
 
 import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema, FileObject } from "../types/index.js";
 
-const rebuildStudio = (mulmoScript: MulmoScript, fileName: string) => {
-  // We need to parse it to fill default values
-  return mulmoStudioSchema.parse({
-    script: mulmoScript,
-    filename: fileName,
-    beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
-  });
-};
-
 const mulmoCredit = (speaker: string) => {
   return {
     speaker,
@@ -37,16 +28,46 @@ const mulmoCredit = (speaker: string) => {
   };
 };
 
+const initSessionState = () => {
+  return {
+    inSession: {
+      audio: false,
+      image: false,
+      video: false,
+      multiLingual: false,
+      caption: false,
+      pdf: false,
+    },
+    inBeatSession: {
+      audio: {},
+      image: {},
+      movie: {},
+      multiLingual: {},
+      caption: {},
+      html: {},
+      imageReference: {},
+      soundEffect: {},
+      lipSync: {},
+    },
+  };
+};
+
 export const createOrUpdateStudioData = (
   _mulmoScript: MulmoScript,
   fileName: string,
   videoCaptionLang?: string,
   presentationStyle?: MulmoPresentationStyle | null,
 ) => {
-  const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript); // validate and insert default value
+  // validate and insert default value
+  const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript);
 
-  const studio: MulmoStudio = rebuildStudio(mulmoScript, fileName);
-
+  // We need to parse it to fill default values
+  const studio: MulmoStudio = mulmoStudioSchema.parse({
+    script: mulmoScript,
+    filename: fileName,
+    beats: [...Array(mulmoScript.beats.length)].map(() => ({})),
+  });
+  
   // TODO: Move this code out of this function later
   // Addition cloing credit
   if (mulmoScript.$mulmocast.credit === "closing") {
@@ -84,90 +105,53 @@ export const fetchScript = async (isHttpPath: boolean, mulmoFilePath: string, fi
 };
 
 export const getMultiLingual = (multilingualFilePath: string, studioBeatsLength: number): MulmoStudioMultiLingual => {
-  if (fs.existsSync(multilingualFilePath)) {
-    const jsonData =
-      readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-    const dataSet = mulmoStudioMultiLingualSchema.parse(jsonData);
-    while (dataSet.length < studioBeatsLength) {
-      dataSet.push({ multiLingualTexts: {} });
-    }
-    dataSet.length = studioBeatsLength;
-    return dataSet;
+  if (!fs.existsSync(multilingualFilePath)) {
+    return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
   }
-  return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
+  const jsonData =
+    readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
+  const dataSet = mulmoStudioMultiLingualSchema.parse(jsonData);
+  while (dataSet.length < studioBeatsLength) {
+    dataSet.push({ multiLingualTexts: {} });
+  }
+  dataSet.length = studioBeatsLength;
+  return dataSet;
 };
 
 export const getPresentationStyle = (presentationStylePath: string | undefined): MulmoPresentationStyle | null => {
-  if (presentationStylePath) {
-    if (!fs.existsSync(presentationStylePath)) {
-      throw new Error(`ERROR: File not exists ${presentationStylePath}`);
-    }
-    const jsonData =
-      readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
-    return mulmoPresentationStyleSchema.parse(jsonData);
+  if (!presentationStylePath) {
+    return null;
   }
-  return null;
-};
-
-const initSessionState = () => {
-  return {
-    inSession: {
-      audio: false,
-      image: false,
-      video: false,
-      multiLingual: false,
-      caption: false,
-      pdf: false,
-    },
-    inBeatSession: {
-      audio: {},
-      image: {},
-      movie: {},
-      multiLingual: {},
-      caption: {},
-      html: {},
-      imageReference: {},
-      soundEffect: {},
-      lipSync: {},
-    },
-  };
-};
-
-const buildContext = (
-  studio: MulmoStudio,
-  files: FileObject,
-  presentationStyle: MulmoPresentationStyle | null,
-  multiLingual: MulmoStudioMultiLingual,
-  force?: boolean,
-  targetLang?: string,
-) => {
-  return {
-    studio,
-    fileDirs: files,
-    force: Boolean(force),
-    lang: targetLang ?? studio.script.lang, // This lang is target Language. studio.lang is default Language
-    sessionState: initSessionState(),
-    presentationStyle: presentationStyle ?? studio.script,
-    multiLingual,
-  };
+  if (!fs.existsSync(presentationStylePath)) {
+    throw new Error(`ERROR: File not exists ${presentationStylePath}`);
+  }
+  const jsonData =
+    readMulmoScriptFile<MulmoPresentationStyle>(presentationStylePath, "ERROR: File does not exist " + presentationStylePath)?.mulmoData ?? null;
+  return mulmoPresentationStyleSchema.parse(jsonData);
 };
 
 export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, captionLang?: string, targetLang?: string) => {
   const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, presentationStylePath, outputMultilingualFilePath } = files;
 
-  // read mulmoScript, presentationStyle from files
   const mulmoScript = await fetchScript(isHttpPath, mulmoFilePath, fileOrUrl);
   if (!mulmoScript) {
     return null;
   }
-  const presentationStyle = getPresentationStyle(presentationStylePath);
 
   try {
-    // validate mulmoStudioSchema. skip if __test_invalid__ is true
+    const presentationStyle = getPresentationStyle(presentationStylePath);
     const studio = createOrUpdateStudioData(mulmoScript, fileName, captionLang, presentationStyle);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
-    return buildContext(studio, files, presentationStyle, multiLingual, force, targetLang);
+    return {
+      studio,
+      multiLingual,
+      fileDirs: files,
+      presentationStyle: presentationStyle ?? studio.script,
+      sessionState: initSessionState(),
+      force: Boolean(force),
+      lang: targetLang ?? studio.script.lang, // This lang is target Language. studio.lang is default Language
+    }
   } catch (error) {
     GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
     if (raiseError) {
