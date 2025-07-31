@@ -7,7 +7,7 @@ export const handler = async (argv: CliArgs<{ i?: string; pdf_mode: string; pdf_
   if (!context) {
     process.exit(1);
   }
-  await runTranslateIfNeeded(context, argv);
+  await runTranslateIfNeeded(context);
   await images(context);
 
   await pdf(context, argv.pdf_mode, argv.pdf_size);

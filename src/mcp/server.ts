@@ -141,7 +141,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
     }
 
     // Run translation if needed
-    await runTranslateIfNeeded(context, argv);
+    await runTranslateIfNeeded(context);
 
     // Execute the requested command
     switch (cmd) {
