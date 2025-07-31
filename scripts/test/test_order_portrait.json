@@ -1,5 +1,6 @@
 {
   "$mulmocast": { "version": "1.1" },
+  "lang": "en",
   "canvasSize": {
     "width": 720,
     "height": 1280

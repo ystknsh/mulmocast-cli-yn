@@ -22,14 +22,20 @@ const validators = [{ from: "1.0", to: "1.1", validator: validate_1_0 }];
 export const MulmoScriptMethods = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validate(script: any): MulmoScript {
-    const validatedScript = validators.reduce((acc, validator) => {
-      if (acc.$mulmocast.version === validator.from) {
-        const validated = validator.validator(acc);
-        validated.$mulmocast.version = validator.to;
-        return validated;
-      }
-      return acc;
-    }, script);
+    const version = script.$mulmocast.version;
+    // lang was optional in 1.0 and 1.1
+    const defaultLang = version === "1.0" || version === "1.1" ? { lang: "en" } : {};
+    const validatedScript = validators.reduce(
+      (acc, validator) => {
+        if (acc.$mulmocast.version === validator.from) {
+          const validated = validator.validator(acc);
+          validated.$mulmocast.version = validator.to;
+          return validated;
+        }
+        return acc;
+      },
+      { ...defaultLang, ...script },
+    );
     return mulmoScriptSchema.parse(validatedScript);
   },
 };
