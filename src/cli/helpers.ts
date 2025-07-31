@@ -20,8 +20,8 @@ import { initializeContextFromFiles } from "../utils/context.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { FileObject, InitOptions, MulmoStudioContext } from "../types/index.js";
 
-export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
-  if (argv.l || context.studio.script.captionParams?.lang) {
+export const runTranslateIfNeeded = async (context: MulmoStudioContext) => {
+  if (context.lang || context.studio.script.captionParams?.lang) {
     GraphAILogger.log("run translate");
     await translate(context);
   }

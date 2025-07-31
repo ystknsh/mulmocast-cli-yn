@@ -7,6 +7,6 @@ export const handler = async (argv: CliArgs<{ a?: string }>) => {
   if (!context) {
     process.exit(1);
   }
-  await runTranslateIfNeeded(context, argv);
+  await runTranslateIfNeeded(context);
   await audio(context);
 };
