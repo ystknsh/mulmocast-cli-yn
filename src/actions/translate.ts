@@ -21,13 +21,6 @@ const translateGraph: GraphData = {
     defaultLang: {},
     outDirPath: {},
     outputMultilingualFilePath: {},
-    lang: {
-      agent: "stringUpdateTextAgent",
-      inputs: {
-        newText: ":context.studio.script.lang",
-        oldText: ":defaultLang",
-      },
-    },
     targetLangs: {}, // TODO
     mergeStudioResult: {
       isResult: true,
@@ -42,7 +35,6 @@ const translateGraph: GraphData = {
         targetLangs: ":targetLangs",
         context: ":context",
         rows: ":context.studio.script.beats",
-        lang: ":lang",
       },
       params: {
         rowKey: "beat",
@@ -67,7 +59,7 @@ const translateGraph: GraphData = {
               beat: ":beat",
               multiLingual: ":multiLingual",
               rows: ":targetLangs",
-              lang: ":lang.text",
+              lang: ":context.studio.script.lang",
               context: ":context",
               beatIndex: ":__mapIndex",
             },
