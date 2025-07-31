@@ -37,6 +37,7 @@ const script_11 = {
     version: "1.1",
     credit: "closing",
   },
+  lang: "en",
   canvasSize: {
     height: 720,
     width: 1280,
@@ -86,4 +87,9 @@ const script_11 = {
 test("validating versioning from 1.0", async () => {
   const validated = MulmoScriptMethods.validate(script_10);
   assert.deepStrictEqual(validated, script_11);
+});
+
+test("validating versioning from 1.1", async () => {
+  const validated = MulmoScriptMethods.validate({ ...script_10, lang: "ja" });
+  assert.deepStrictEqual(validated, { ...script_11, lang: "ja" });
 });
