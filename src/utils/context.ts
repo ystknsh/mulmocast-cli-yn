@@ -52,12 +52,7 @@ const initSessionState = () => {
   };
 };
 
-export const createStudioData = (
-  _mulmoScript: MulmoScript,
-  fileName: string,
-  videoCaptionLang?: string,
-  presentationStyle?: MulmoPresentationStyle | null,
-) => {
+export const createStudioData = (_mulmoScript: MulmoScript, fileName: string, videoCaptionLang?: string, presentationStyle?: MulmoPresentationStyle | null) => {
   // validate and insert default value
   const mulmoScript = _mulmoScript.__test_invalid__ ? _mulmoScript : MulmoScriptMethods.validate(_mulmoScript);
 
