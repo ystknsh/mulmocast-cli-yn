@@ -71,7 +71,9 @@ export const MulmoStudioContextMethods = {
   needTranslate(context: MulmoStudioContext, includeCaption: boolean = false) {
     // context.studio.lang = defaultLang, context.lang = targetLanguage.
     if (includeCaption) {
-      return context.studio.lang !== context.lang || context.studio.lang !== context.studio.script.captionParams?.lang;
+      return (
+        context.studio.lang !== context.lang || (context.studio.script.captionParams?.lang && context.studio.lang !== context.studio.script.captionParams?.lang)
+      );
     }
     return context.studio.lang !== context.lang;
   },
