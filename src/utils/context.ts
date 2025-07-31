@@ -78,20 +78,20 @@ const buildContext = (
   presentationStyle: MulmoPresentationStyle | null,
   multiLingual: MulmoStudioMultiLingual,
   force?: boolean,
-  lang?: string,
+  targetLang?: string,
 ) => {
   return {
     studio,
     fileDirs: files,
     force: Boolean(force),
-    lang,
+    lang: targetLang ?? studio.lang, // This lang is target Language. studio.lang is default Language
     sessionState: initSessionState(),
     presentationStyle: presentationStyle ?? studio.script,
     multiLingual,
   };
 };
 
-export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, captionLang?: string, lang?: string) => {
+export const initializeContextFromFiles = async (files: FileObject, raiseError: boolean, force?: boolean, captionLang?: string, targetLang?: string) => {
   const { fileName, isHttpPath, fileOrUrl, mulmoFilePath, outputStudioFilePath, presentationStylePath, outputMultilingualFilePath } = files;
 
   // read mulmoScript, presentationStyle, currentStudio from files
@@ -108,7 +108,7 @@ export const initializeContextFromFiles = async (files: FileObject, raiseError: 
     const studio = createOrUpdateStudioData(mulmoScript, currentStudio?.mulmoData, fileName, captionLang, presentationStyle);
     const multiLingual = getMultiLingual(outputMultilingualFilePath, studio.beats.length);
 
-    return buildContext(studio, files, presentationStyle, multiLingual, force, lang);
+    return buildContext(studio, files, presentationStyle, multiLingual, force, targetLang);
   } catch (error) {
     GraphAILogger.info(`Error: invalid MulmoScript Schema: ${isHttpPath ? fileOrUrl : mulmoFilePath} \n ${error}`);
     if (raiseError) {

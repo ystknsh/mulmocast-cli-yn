@@ -13,6 +13,7 @@ import {
 } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 import { translate } from "../actions/translate.js";
 
@@ -20,8 +21,8 @@ import { initializeContextFromFiles } from "../utils/context.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { FileObject, InitOptions, MulmoStudioContext } from "../types/index.js";
 
-export const runTranslateIfNeeded = async (context: MulmoStudioContext) => {
-  if (context.lang || context.studio.script.captionParams?.lang) {
+export const runTranslateIfNeeded = async (context: MulmoStudioContext, includeCaption: boolean = false) => {
+  if (MulmoStudioContextMethods.needTranslate(context, includeCaption)) {
     GraphAILogger.log("run translate");
     await translate(context);
   }

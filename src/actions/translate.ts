@@ -192,19 +192,14 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
     return { text: "" };
   }
 
-  // The original text is unchanged and the target language text is present
-  if (
-    multiLingual.multiLingualTexts &&
-    multiLingual.multiLingualTexts[lang] &&
-    multiLingual.multiLingualTexts[lang].text === beat.text &&
-    multiLingual.multiLingualTexts[targetLang] &&
-    multiLingual.multiLingualTexts[targetLang].text
-  ) {
-    return { text: multiLingual.multiLingualTexts[targetLang].text };
-  }
   // same language
   if (targetLang === lang) {
     return { text: beat.text };
+  }
+
+  // The original text is unchanged and the target language text is present
+  if (multiLingual.multiLingualTexts?.[lang]?.text === beat.text && multiLingual.multiLingualTexts[targetLang]?.text) {
+    return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   try {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, true);
