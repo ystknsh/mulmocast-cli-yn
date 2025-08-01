@@ -33,8 +33,7 @@
     {
       "text": "ねぇ、Adobeが2022年に200億ドルで買おうとしたの覚えてる？今回の時価総額を見たら、そのとき買収出来なかったのが悔しすぎて眠れない人もいそうね。",
       "imagePrompt": "Adobeのロゴが描かれた書類を見て頭を抱える男性のイラスト",
-      "moviePrompt": "A man is looking at a document with Adobe's logo sadly, and rips it apart.",
-      "enableLipSync": true
+      "moviePrompt": "A man is looking at a document with Adobe's logo sadly, and rips it apart."
     },
     {
       "text": "そして調達額は約12億ドル。これだけの資金を手に入れたら、AI機能の強化も新サービス展開も、好き放題できちゃうじゃない。",
