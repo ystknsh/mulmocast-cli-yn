@@ -46,7 +46,7 @@ export type SoundEffectAgentInputs = AgentPromptInputs & { soundEffectFile: stri
 
 // lip sync
 export type ReplicateLipSyncAgentParams = { model: `${string}/${string}` | undefined; duration?: number };
-export type LipSyncAgentInputs = { lipSyncFile: string; movieFile: string; audioFile: string };
+export type LipSyncAgentInputs = { lipSyncFile: string; movieFile: string; audioFile: string; imageFile: string };
 
 //   config
 export type GoogleMovieAgentConfig = GoogleImageAgentConfig;

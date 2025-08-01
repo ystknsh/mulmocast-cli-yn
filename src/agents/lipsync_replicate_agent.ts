@@ -11,7 +11,7 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   params,
   config,
 }) => {
-  const { movieFile, audioFile } = namedInputs;
+  const { movieFile, audioFile, imageFile } = namedInputs;
   const apiKey = config?.apiKey;
   const model = params.model ?? provider2LipSyncAgent.replicate.defaultModel;
 
@@ -22,10 +22,12 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
     auth: apiKey,
   });
 
-  const videoBuffer = readFileSync(movieFile);
+  const videoBuffer = movieFile ? readFileSync(movieFile) : undefined;
   const audioBuffer = readFileSync(audioFile);
-  const videoUri = `data:video/quicktime;base64,${videoBuffer.toString("base64")}`;
+  const imageBuffer = imageFile ? readFileSync(imageFile) : undefined;
+  const videoUri = videoBuffer ? `data:video/quicktime;base64,${videoBuffer.toString("base64")}` : undefined;
   const audioUri = `data:audio/wav;base64,${audioBuffer.toString("base64")}`;
+  const imageUri = imageBuffer ? `data:image/png;base64,${imageBuffer.toString("base64")}` : undefined;
 
   const input = {
     video: undefined as string | undefined,
@@ -34,6 +36,7 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
     audio: undefined as string | undefined,
     audio_input: undefined as string | undefined,
     audio_file: undefined as string | undefined,
+    image: undefined as string | undefined,
   };
 
   const modelParams = provider2LipSyncAgent.replicate.modelParams[model];
@@ -42,11 +45,15 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   }
   const videoParam = modelParams.video;
   const audioParam = modelParams.audio;
+  const imageParam = modelParams.image;
   if (videoParam === "video" || videoParam === "video_input" || videoParam === "video_url") {
     input[videoParam] = videoUri;
   }
   if (audioParam === "audio" || audioParam === "audio_input" || audioParam === "audio_file") {
     input[audioParam] = audioUri;
+  }
+  if (imageParam === "image") {
+    input[imageParam] = imageUri;
   }
   const model_identifier: `${string}/${string}:${string}` | `${string}/${string}` = provider2LipSyncAgent.replicate.modelParams[model]?.identifier ?? model;
 

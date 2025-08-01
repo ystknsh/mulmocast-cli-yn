@@ -1104,6 +1104,10 @@ test("imagePreprocessAgent - with enableLipSync true", async () => {
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/26_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1151,6 +1155,10 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt", async () => {
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/27_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1191,24 +1199,8 @@ test("imagePreprocessAgent - enableLipSync + moviePrompt (no imagePrompt)", asyn
     },
     imagePath: "/test/images/test_studio/28p.png",
     movieFile: "/test/images/test_studio/28.mov",
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
     lipSyncFile: "/test/images/test_studio/28_lipsync.mov",
     audioFile: undefined,
     movieAgentInfo: {
@@ -1249,24 +1241,8 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt + moviePrompt", async (
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/29.mov",
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
     lipSyncFile: "/test/images/test_studio/29_lipsync.mov",
     audioFile: undefined,
     movieAgentInfo: {
@@ -1320,6 +1296,10 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/30_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1368,6 +1348,10 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt", a
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/31_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1422,24 +1406,8 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + moviePrompt (no
     soundEffectModel: "zsxkib/mmaudio",
     soundEffectFile: "/test/images/test_studio/32_sound.mov",
     soundEffectPrompt: "Live concert atmosphere",
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
     lipSyncFile: "/test/images/test_studio/32_lipsync.mov",
     audioFile: undefined,
     movieAgentInfo: {
@@ -1491,24 +1459,8 @@ test("imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync +
     soundEffectModel: "zsxkib/mmaudio",
     soundEffectFile: "/test/images/test_studio/33_sound.mov",
     soundEffectPrompt: "Ambient conference room sound",
-    lipSyncAgentInfo: {
-      agentName: "lipSyncReplicateAgent",
-      defaultModel: "bytedance/latentsync",
-      models: ["bytedance/latentsync", "tmappdev/lipsync"],
-      modelParams: {
-        "bytedance/latentsync": {
-          identifier: "bytedance/latentsync:637ce1919f807ca20da3a448ddc2743535d2853649574cd52a933120e9b9e293",
-          video: "video",
-          audio: "audio",
-        },
-        "tmappdev/lipsync": {
-          identifier: "tmappdev/lipsync:c54ce2fe673ea59b857b91250b3d71a2cd304a78f2370687632805c8405fbf4c",
-          video: "video_input",
-          audio: "audio_input",
-        },
-      },
-    },
-    lipSyncModel: "bytedance/latentsync",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
     lipSyncFile: "/test/images/test_studio/33_lipsync.mov",
     audioFile: undefined,
     beatDuration: undefined,
