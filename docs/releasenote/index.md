@@ -1,5 +1,64 @@
 # RELEASE NOTE
 
+# v1.1.5
+
+**MulmoCast CLI v1.1.5** enhances multilingual content creation with language-specific speaker support and introduces image quality controls for better content customization.
+
+### New Features
+- **Image Quality Control**: Configure OpenAI image generation using a new `quality` parameter (`low`, `medium`, `high`, or `auto`) to balance generation speed and visual quality. ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.5/scripts/test/test_images.json))
+- **Language-Specific Speakers**: Assign different voice models and providers for each language within a single presentation by using the new `lang` field in speaker definitions. ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.5/scripts/test/test_lang.json))
+
+### Technical Improvements
+- **Multilingual Audio Handling**: Centralized path generation logic to automatically add language suffixes (e.g., `_en.mp3`) to audio filenames in multilingual projects.
+- **Package Contents**: Test scripts are now included in the npm package, providing library users with more examples and reference implementations.
+
+# v1.1.4
+
+**MulmoCast CLI v1.1.4** is a maintenance release that enhances the internal template system with improved data generation and a more optimized build process.
+
+### Technical Improvements
+- **Template System**: Refactored the internal script that generates TypeScript objects from JSON templates, preventing truncation of long strings and renaming an exported constant to `templateDataSet` for consistency.
+- **Build Process**: Streamlined the build workflow by integrating code formatting into the template generation step.
+
+# v1.1.3
+
+**MulmoCast CLI v1.1.3** is a maintenance release that reverts recent template system changes to restore stability.
+
+### System Stability
+- **Template System Rollback**: Reverted changes from v1.1.2 related to the template system. Template loading is restored to a file system-based approach, and the build process has been updated accordingly to ensure reliable behavior.
+
+# v1.1.2
+
+**MulmoCast CLI v1.1.2** enhances lip sync capabilities with additional model support and improves template system performance.
+
+### Enhancements
+- **Lip Sync**: Added support for new AI models (`tmappdev/lipsync`, `kwaivgi/kling-lip-sync`) for more realistic results. Also improved duration handling for better audio-video synchronization ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.2/scripts/test/test_lipsync.json)).
+
+### Technical Improvements & Bug Fixes
+- **Performance**: Templates are now bundled directly into the application, reducing file-system access and improving startup time.
+- **Code Quality**: Refactored template-related functions into a dedicated module and removed deprecated methods.
+- **Bug Fixes**: Corrected an issue where `validateSchemaAgent` was not exported properly for browser environments.
+
+### Samples & Templates
+- Added a new "math mystery" script to demonstrate educational content creation ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.2/scripts/snakajima/math_mystery.json)).
+- Updated all test scripts to use schema version 1.1 for consistency.
+
+# v1.1.1
+
+**MulmoCast CLI v1.1.1** introduces realistic lip sync capabilities and enhances the template system with improved performance and stability.
+
+### New Features
+- **Lip Sync Support**: Added a comprehensive lip synchronization feature. Use `enableLipSync: true` in beats with both `text` and `moviePrompt` to automatically match lip movements to spoken audio using Replicate API models. ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.1/scripts/test/test_lipsync.json))
+
+### Technical Improvements
+- **Template System**: Refactored internal template handling and bundled template data directly into the code, resulting in faster performance.
+- **Dependencies**: Updated core packages and resolved security vulnerabilities identified by `yarn audit`.
+
+### Bug Fixes
+- **Template Metadata**: Corrected the `title` and `description` in the English and Japanese Ani templates.
+- **Browser Compatibility**: Fixed an issue where `validateSchemaAgent` was not properly exported for browser environments.
+- **Version Updates**: Updated all script template JSON files to version 1.1.
+
 # v1.1.0
 ## RELEASE NOTE
 
