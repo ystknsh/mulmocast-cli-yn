@@ -2,7 +2,7 @@ import test from "node:test";
 // import assert from "node:assert";
 
 import { getFileObject } from "../../src/cli/helpers.js";
-import { createOrUpdateStudioData } from "../../src/utils/context.js";
+import { createStudioData } from "../../src/utils/context.js";
 import { audio, images, movie } from "../../src/actions/index.js";
 
 import path from "path";
@@ -118,7 +118,7 @@ test("test images and movie", async () => {
     ],
   };
 
-  const studio = createOrUpdateStudioData(mulmoScript, null, "hello");
+  const studio = createStudioData(mulmoScript, "hello");
   const context = {
     studio,
     fileDirs,

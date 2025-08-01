@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert";
 
 import { getFileObject } from "../../src/cli/helpers.js";
-import { createOrUpdateStudioData } from "../../src/utils/context.js";
+import { createStudioData } from "../../src/utils/context.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -27,8 +27,8 @@ test("test getFileObject", async () => {
   });
 });
 
-test("test createOrUpdateStudioData", async () => {
-  const studio = createOrUpdateStudioData(
+test("test createStudioData", async () => {
+  const studio = createStudioData(
     {
       $mulmocast: {
         version: "1.1",
@@ -37,7 +37,6 @@ test("test createOrUpdateStudioData", async () => {
       lang: "en",
       beats: [{ text: "hello" }],
     },
-    null,
     "",
   );
   // console.log(JSON.stringify(ret));
@@ -85,8 +84,8 @@ test("test createOrUpdateStudioData", async () => {
   assert.deepStrictEqual(studio, expect);
 });
 
-test("test createOrUpdateStudioData", async () => {
-  const studio = createOrUpdateStudioData(
+test("test createStudioData", async () => {
+  const studio = createStudioData(
     {
       $mulmocast: {
         version: "1.1",
@@ -96,7 +95,6 @@ test("test createOrUpdateStudioData", async () => {
       speechParams: { speakers: { Test: { displayName: { en: "Test" }, voiceId: "shimmer" } } },
       beats: [{ text: "hello" }],
     },
-    null,
     "",
   );
   // console.log(JSON.stringify(ret));

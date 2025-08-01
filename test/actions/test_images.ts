@@ -3,7 +3,7 @@ import test from "node:test";
 import { GraphAILogger } from "graphai";
 
 import { getFileObject } from "../../src/cli/helpers.js";
-import { createOrUpdateStudioData } from "../../src/utils/context.js";
+import { createStudioData } from "../../src/utils/context.js";
 import { images, generateBeatImage } from "../../src/actions/images.js";
 import { addSessionProgressCallback } from "../../src/methods/mulmo_studio_context.js";
 
@@ -105,7 +105,7 @@ const getContext = () => {
       },
     ],
   };
-  const studio = createOrUpdateStudioData(mulmoScript, null, "hello");
+  const studio = createStudioData(mulmoScript, "hello");
   const context = {
     studio,
     fileDirs,
