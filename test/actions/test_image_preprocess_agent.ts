@@ -1104,6 +1104,10 @@ test("imagePreprocessAgent - with enableLipSync true", async () => {
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/26_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1151,6 +1155,10 @@ test("imagePreprocessAgent - enableLipSync + imagePrompt", async () => {
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/27_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1288,6 +1296,10 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/30_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
@@ -1336,6 +1348,10 @@ test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt", a
       agent: "movieReplicateAgent",
       movieParams: {},
     },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/31_lipsync.mov",
+    audioFile: undefined,
     referenceImages: [],
     beatDuration: undefined,
     imageAgentInfo: {
