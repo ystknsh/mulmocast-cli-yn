@@ -22,7 +22,6 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
     auth: apiKey,
   });
 
-  console.log("*** imageFile ***", imageFile);
   const videoBuffer = movieFile ? readFileSync(movieFile) : undefined;
   const audioBuffer = readFileSync(audioFile);
   const imageBuffer = imageFile ? readFileSync(imageFile) : undefined;
@@ -47,7 +46,6 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
   const videoParam = modelParams.video;
   const audioParam = modelParams.audio;
   const imageParam = modelParams.image;
-  console.log("*** imageParam ***", imageParam);
   if (videoParam === "video" || videoParam === "video_input" || videoParam === "video_url") {
     input[videoParam] = videoUri;
   }
