@@ -216,7 +216,10 @@ export const translate = async (
     const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
     mkdir(outDirPath);
 
-    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
+    const langs = (context.multiLingual ?? []).map((x) => Object.keys(x.multiLingualTexts)).flat(); // existing langs in multiLingual
+    const targetLangs = [
+      ...new Set([context.studio.script.lang, langs, context.lang, context.studio.script.captionParams?.lang].flat().filter((x) => !isNull(x))),
+    ];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
