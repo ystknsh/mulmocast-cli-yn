@@ -52,14 +52,14 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
       returnValue.soundEffectFile = moviePaths.soundEffectFile;
       returnValue.soundEffectPrompt = beat.soundEffectPrompt;
     }
+  }
 
-    if (beat.enableLipSync) {
-      returnValue.lipSyncAgentInfo = MulmoPresentationStyleMethods.getLipSyncAgentInfo(context.presentationStyle, beat);
-      returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? returnValue.lipSyncAgentInfo.defaultModel;
-      returnValue.lipSyncFile = moviePaths.lipSyncFile;
-      // Audio file will be set from the beat's audio file when available
-      returnValue.audioFile = studioBeat?.audioFile;
-    }
+  if (beat.enableLipSync) {
+    returnValue.lipSyncAgentInfo = MulmoPresentationStyleMethods.getLipSyncAgentInfo(context.presentationStyle, beat);
+    returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? returnValue.lipSyncAgentInfo.defaultModel;
+    returnValue.lipSyncFile = moviePaths.lipSyncFile;
+    // Audio file will be set from the beat's audio file when available
+    returnValue.audioFile = studioBeat?.audioFile;
   }
 
   if (beat.image) {

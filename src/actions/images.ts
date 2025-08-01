@@ -241,7 +241,7 @@ const beat_graph_data = {
       inputs: {
         onComplete: [":soundEffectGenerator"], // to wait for soundEffectGenerator to finish
         movieFile: ":preprocessor.movieFile",
-        imagePath: ":preprocessor.referenceImageForMovie",
+        imageFile: ":preprocessor.referenceImageForMovie",
         audioFile: ":preprocessor.audioFile",
         lipSyncFile: ":preprocessor.lipSyncFile",
         params: {

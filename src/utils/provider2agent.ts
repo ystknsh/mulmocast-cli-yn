@@ -151,7 +151,7 @@ export const provider2SoundEffectAgent = {
 export const provider2LipSyncAgent = {
   replicate: {
     agentName: "lipSyncReplicateAgent",
-    defaultModel: "bytedance/latentsync" as ReplicateModel,
+    defaultModel: "bytedance/omni-human" as ReplicateModel,
     models: ["bytedance/latentsync", "tmappdev/lipsync", "bytedance/omni-human"] as ReplicateModel[],
     modelParams: {
       "bytedance/latentsync": {
@@ -168,6 +168,7 @@ export const provider2LipSyncAgent = {
         identifier: "bytedance/omni-human",
         image: "image",
         audio: "audio",
+        price_per_sec: 0.14,
       },
       /* NOTE: This model does not work with large base64 urls.
       "sync/lipsync-2": {
