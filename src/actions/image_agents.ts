@@ -34,7 +34,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     soundEffectAgentInfo?: { agentName: string; defaultModel: string };
     lipSyncFile?: string;
     lipSyncModel?: string;
-    lipSyncAgentInfo?: { agentName: string; defaultModel: string };
+    lipSyncAgentName?: string;
     audioFile?: string;
     beatDuration?: number;
   } = {
@@ -55,8 +55,9 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
   }
 
   if (beat.enableLipSync) {
-    returnValue.lipSyncAgentInfo = MulmoPresentationStyleMethods.getLipSyncAgentInfo(context.presentationStyle, beat);
-    returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? returnValue.lipSyncAgentInfo.defaultModel;
+    const lipSyncAgentInfo = MulmoPresentationStyleMethods.getLipSyncAgentInfo(context.presentationStyle, beat);
+    returnValue.lipSyncAgentName = lipSyncAgentInfo.agentName;
+    returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? lipSyncAgentInfo.defaultModel;
     returnValue.lipSyncFile = moviePaths.lipSyncFile;
     // Audio file will be set from the beat's audio file when available
     returnValue.audioFile = studioBeat?.audioFile;

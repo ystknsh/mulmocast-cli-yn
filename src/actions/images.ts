@@ -237,7 +237,7 @@ const beat_graph_data = {
     },
     lipSyncGenerator: {
       if: ":beat.enableLipSync",
-      agent: ":preprocessor.lipSyncAgentInfo.agentName",
+      agent: ":preprocessor.lipSyncAgentName",
       inputs: {
         onComplete: [":soundEffectGenerator"], // to wait for soundEffectGenerator to finish
         movieFile: ":preprocessor.movieFile",
