@@ -8,7 +8,7 @@ import { createHash } from "crypto";
 
 import { recursiveSplitJa } from "../utils/string.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
-import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual } from "../types/index.js";
+import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
@@ -88,12 +88,13 @@ const beatGraph = {
       agent: (namedInputs: { text?: string; multiLinguals?: MulmoStudioMultiLingualData[]; beatIndex: number }) => {
         const { multiLinguals, beatIndex, text } = namedInputs;
         const cacheKey = hashSHA256(text ?? "");
-
-        const ret = multiLinguals?.[beatIndex] || {};
+        if (!multiLinguals?.[beatIndex]) {
+          return { cacheKey, multiLingualTexts: {} };
+        }
         return {
-          multiLingualTexts: Object.keys(ret.multiLingualTexts).reduce((tmp, lang) => {
-            if (ret.multiLingualTexts[lang].cacheKey === cacheKey) {
-              tmp[lang] = ret.multiLingualTexts[lang];
+          multiLingualTexts: Object.keys(multiLinguals?.[beatIndex].multiLingualTexts).reduce((tmp: MultiLingualTexts, lang) => {
+            if (multiLinguals?.[beatIndex].multiLingualTexts[lang].cacheKey === cacheKey) {
+              tmp[lang] = multiLinguals?.[beatIndex].multiLingualTexts[lang];
             }
             return tmp;
           }, {}),
@@ -239,10 +240,6 @@ export const translate = async (
     mkdir(outDirPath);
 
     const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
-    // const langs = (context.multiLingual ?? []).map((x) => Object.keys(x.multiLingualTexts)).flat(); // existing langs in multiLingual
-    // const targetLangs = [
-    //   ...new Set([context.studio.script.lang, langs, context.lang, context.studio.script.captionParams?.lang].flat().filter((x) => !isNull(x))),
-    // ];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");

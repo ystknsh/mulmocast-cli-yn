@@ -469,7 +469,7 @@ export const mulmoStudioBeatSchema = z
 
 export const mulmoStudioMultiLingualDataSchema = z.object({
   multiLingualTexts: multiLingualTextsSchema,
-  cacheKey: z.string(),
+  cacheKey: z.string().optional(),
 });
 
 export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1);
