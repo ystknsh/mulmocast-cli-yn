@@ -14,6 +14,75 @@ import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const vanillaAgents = agents.default ?? agents;
 
+export const translateTextGraph = {
+  version: 0.5,
+  nodes: {
+    localizedTexts: {
+      inputs: {
+        targetLang: ":targetLang", // for cache
+        beat: ":beat", // for cache
+        multiLingual: ":multiLingual", // for cache
+        lang: ":lang", // for cache
+        beatIndex: ":beatIndex", // for cache (state)
+        mulmoContext: ":context", // for cache (state)
+        system: translateSystemPrompt,
+        prompt: translatePrompts,
+      },
+      passThrough: {
+        lang: ":targetLang",
+      },
+      output: {
+        text: ".text",
+      },
+      // return { lang, text } <- localizedText
+      agent: "openAIAgent",
+    },
+    splitText: {
+      agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
+        const { localizedText, targetLang } = namedInputs;
+        // Cache
+        if (localizedText.texts) {
+          return localizedText;
+        }
+        if (targetLang === "ja") {
+          return {
+            ...localizedText,
+            texts: recursiveSplitJa(localizedText.text),
+          };
+        }
+        // not split
+        return {
+          ...localizedText,
+          texts: [localizedText.text],
+        };
+        // return { lang, text, texts }
+      },
+      inputs: {
+        targetLang: ":targetLang",
+        localizedText: ":localizedTexts",
+      },
+    },
+    ttsTexts: {
+      agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
+        const { localizedText } = namedInputs;
+        // cache
+        if (localizedText.ttsTexts) {
+          return localizedText;
+        }
+        return {
+          ...localizedText,
+          ttsTexts: localizedText.texts,
+        };
+      },
+      inputs: {
+        targetLang: ":targetLang",
+        localizedText: ":splitText",
+      },
+      isResult: true,
+    },
+  },
+};
+
 const translateGraph: GraphData = {
   version: 0.5,
   nodes: {
@@ -66,74 +135,7 @@ const translateGraph: GraphData = {
               compositeResult: true,
               rowKey: "targetLang",
             },
-            graph: {
-              version: 0.5,
-              nodes: {
-                localizedTexts: {
-                  inputs: {
-                    targetLang: ":targetLang", // for cache
-                    beat: ":beat", // for cache
-                    multiLingual: ":multiLingual", // for cache
-                    lang: ":lang", // for cache
-                    beatIndex: ":beatIndex", // for cache
-                    mulmoContext: ":context", // for cache
-                    system: translateSystemPrompt,
-                    prompt: translatePrompts,
-                  },
-                  passThrough: {
-                    lang: ":targetLang",
-                  },
-                  output: {
-                    text: ".text",
-                  },
-                  // return { lang, text } <- localizedText
-                  agent: "openAIAgent",
-                },
-                splitText: {
-                  agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
-                    const { localizedText, targetLang } = namedInputs;
-                    // Cache
-                    if (localizedText.texts) {
-                      return localizedText;
-                    }
-                    if (targetLang === "ja") {
-                      return {
-                        ...localizedText,
-                        texts: recursiveSplitJa(localizedText.text),
-                      };
-                    }
-                    // not split
-                    return {
-                      ...localizedText,
-                      texts: [localizedText.text],
-                    };
-                    // return { lang, text, texts }
-                  },
-                  inputs: {
-                    targetLang: ":targetLang",
-                    localizedText: ":localizedTexts",
-                  },
-                },
-                ttsTexts: {
-                  agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
-                    const { localizedText } = namedInputs;
-                    // cache
-                    if (localizedText.ttsTexts) {
-                      return localizedText;
-                    }
-                    return {
-                      ...localizedText,
-                      ttsTexts: localizedText.texts,
-                    };
-                  },
-                  inputs: {
-                    targetLang: ":targetLang",
-                    localizedText: ":splitText",
-                  },
-                  isResult: true,
-                },
-              },
-            },
+            graph: translateTextGraph,
           },
           mergeLocalizedText: {
             agent: "arrayToObjectAgent",
