@@ -65,7 +65,6 @@ export const translateTextGraph = {
     },
     textTranslateResult: {
       isResult: true,
-      console: { after: true },
       agent: "copyAgent",
       inputs: {
         lang: ":targetLang",
@@ -121,6 +120,7 @@ const beatGraph = {
       graph: translateTextGraph,
     },
     mergeLocalizedText: {
+      // console: { after: true},
       agent: "arrayToObjectAgent",
       inputs: {
         items: ":preprocessMultiLingual.textTranslateResult",
@@ -129,11 +129,18 @@ const beatGraph = {
         key: "lang",
       },
     },
-    mergeMultiLingualData: {
-      isResult: true,
+    multiLingualTexts: {
       agent: "mergeObjectAgent",
       inputs: {
-        items: [":multiLingual", { multiLingualTexts: ":mergeLocalizedText" }],
+        items: [":multiLingual.multiLingualTexts", ":mergeLocalizedText"],
+      },
+    },
+    mergeMultiLingualData: {
+      isResult: true,
+      // console: { after: true},
+      agent: "mergeObjectAgent",
+      inputs: {
+        items: [":multiLingual", { multiLingualTexts: ":multiLingualTexts" }],
       },
     },
   },
@@ -195,7 +202,7 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
   }
 
   // The original text is unchanged and the target language text is present
-  if (multiLingual.multiLingualTexts?.[lang]?.text === beat.text && multiLingual.multiLingualTexts[targetLang]?.text) {
+  if (multiLingual.cacheKey === multiLingual.multiLingualTexts[targetLang]?.cacheKey) {
     return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   try {
@@ -228,10 +235,11 @@ export const translate = async (
     const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
     mkdir(outDirPath);
 
-    const langs = (context.multiLingual ?? []).map((x) => Object.keys(x.multiLingualTexts)).flat(); // existing langs in multiLingual
-    const targetLangs = [
-      ...new Set([context.studio.script.lang, langs, context.lang, context.studio.script.captionParams?.lang].flat().filter((x) => !isNull(x))),
-    ];
+    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
+    // const langs = (context.multiLingual ?? []).map((x) => Object.keys(x.multiLingualTexts)).flat(); // existing langs in multiLingual
+    // const targetLangs = [
+    //   ...new Set([context.studio.script.lang, langs, context.lang, context.studio.script.captionParams?.lang].flat().filter((x) => !isNull(x))),
+    // ];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
