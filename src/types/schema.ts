@@ -7,6 +7,7 @@ import {
   defaultProviders,
   provider2SoundEffectAgent,
 } from "../utils/provider2agent.js";
+import { currentMulmoScriptVersion } from "../utils/const.js";
 
 export const langSchema = z.string();
 const URLStringSchema = z.string().url();
@@ -341,7 +342,7 @@ export const mulmoCanvasDimensionSchema = z
 
 export const mulmoCastCreditSchema = z
   .object({
-    version: z.literal("1.1"),
+    version: z.literal(currentMulmoScriptVersion),
     credit: z.literal("closing").optional(),
   })
   .strict();
