@@ -87,17 +87,16 @@ const beatGraph = {
         const { multiLinguals, beatIndex, text } = namedInputs;
         const cacheKey = hashSHA256(text ?? "");
 
-        const ret = (multiLinguals && multiLinguals[beatIndex]) || {};
-        const newData = Object.keys(ret.multiLingualTexts).reduce((tmp, lang) => {
-          if (ret.multiLingualTexts[lang].cacheKey === cacheKey) {
-            tmp[lang] = ret.multiLingualTexts[lang];
-          }
-          return tmp;
-        }, {});
-        ret.multiLingualTexts = newData;
-        ret.cacheKey = cacheKey;
-        console.log(ret);
-        return ret;
+        const ret = multiLinguals?.[beatIndex] || {};
+        return {
+          multiLingualTexts: Object.keys(ret.multiLingualTexts).reduce((tmp, lang) => {
+            if (ret.multiLingualTexts[lang].cacheKey === cacheKey) {
+              tmp[lang] = ret.multiLingualTexts[lang];
+            }
+            return tmp;
+          }, {}),
+          cacheKey,
+        };
       },
       inputs: {
         text: ":beat.text",
