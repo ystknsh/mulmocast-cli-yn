@@ -9,6 +9,7 @@ import {
   mulmoStoryboardSceneSchema,
   mulmoStudioMultiLingualSchema,
   mulmoStudioMultiLingualDataSchema,
+  mulmoStudioMultiLingualFileSchema,
   speakerDictionarySchema,
   mulmoImageParamsSchema,
   mulmoImageParamsImagesSchema,
@@ -72,6 +73,7 @@ export type MulmoPromptTemplate = z.infer<typeof mulmoPromptTemplateSchema>;
 export type MulmoPromptTemplateFile = z.infer<typeof mulmoPromptTemplateFileSchema>;
 export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSchema>;
 export type MulmoStudioMultiLingualData = z.infer<typeof mulmoStudioMultiLingualDataSchema>;
+export type MulmoStudioMultiLingualFile = z.infer<typeof mulmoStudioMultiLingualFileSchema>;
 export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
 export type MulmoMovieParams = z.infer<typeof mulmoMovieParamsSchema>;
 export type MulmoOpenAIImageModel = z.infer<typeof mulmoOpenAIImageModelSchema>;

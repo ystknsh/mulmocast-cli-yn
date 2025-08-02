@@ -1,7 +1,7 @@
 import { GraphAILogger } from "graphai";
 import fs from "fs";
 import { readMulmoScriptFile, fetchMulmoScriptFile } from "./file.js";
-import type { MulmoStudio, MulmoScript, MulmoPresentationStyle, MulmoStudioMultiLingual, FileObject } from "../types/type.js";
+import type { MulmoStudio, MulmoScript, MulmoPresentationStyle, MulmoStudioMultiLingual, MulmoStudioMultiLingualFile, FileObject } from "../types/type.js";
 import { mulmoStudioSchema, mulmoCaptionParamsSchema, mulmoStudioMultiLingualFileSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
 import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/index.js";
 
@@ -103,7 +103,8 @@ export const getMultiLingual = (multilingualFilePath: string, studioBeatsLength:
   if (!fs.existsSync(multilingualFilePath)) {
     return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
   }
-  const jsonData = readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
+  const jsonData =
+    readMulmoScriptFile<MulmoStudioMultiLingualFile>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
 
   const result = mulmoStudioMultiLingualFileSchema.safeParse(jsonData);
   const dataSet = result.success ? result.data : { multiLingual: [], version: currentMulmoScriptVersion };
