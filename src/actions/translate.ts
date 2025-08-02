@@ -80,6 +80,9 @@ export const translateTextGraph = {
 const beatGraph = {
   version: 0.5,
   nodes: {
+    targetLangs: {},
+    context: {},
+    beat: {},
     // for cache
     multiLingual: {
       agent: (namedInputs: { text?: string; multiLinguals?: MulmoStudioMultiLingualData[]; beatIndex: number }) => {
