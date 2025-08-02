@@ -89,7 +89,7 @@ const beatGraph = {
         const { multiLinguals, beatIndex, text } = namedInputs;
         const cacheKey = hashSHA256(text ?? "");
         const multiLingual = multiLinguals?.[beatIndex];
-        if (!multiLingual || multiLingual?.cacheKey !== cacheKey) {
+        if (!multiLingual) {
           return { cacheKey, multiLingualTexts: {} };
         }
         return {
@@ -264,4 +264,5 @@ export const translate = async (
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", false);
   }
+  return context;
 };
