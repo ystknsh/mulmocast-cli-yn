@@ -224,6 +224,13 @@ const agentFilters = [
   },
 ];
 
+export const translateBeat = async (
+  index: number,
+  context: MulmoStudioContext,
+  targetLangs: string[],
+  args?: { settings?: Record<string, string>; callbacks?: CallbackFunction[] },
+) => {};
+
 export const translate = async (
   context: MulmoStudioContext,
   args?: {
