@@ -88,13 +88,14 @@ const beatGraph = {
       agent: (namedInputs: { text?: string; multiLinguals?: MulmoStudioMultiLingualData[]; beatIndex: number }) => {
         const { multiLinguals, beatIndex, text } = namedInputs;
         const cacheKey = hashSHA256(text ?? "");
-        if (!multiLinguals?.[beatIndex]) {
+        const multiLingual = multiLinguals?.[beatIndex];
+        if (!multiLingual || multiLingual?.cacheKey !== cacheKey) {
           return { cacheKey, multiLingualTexts: {} };
         }
         return {
-          multiLingualTexts: Object.keys(multiLinguals?.[beatIndex].multiLingualTexts).reduce((tmp: MultiLingualTexts, lang) => {
-            if (multiLinguals?.[beatIndex].multiLingualTexts[lang].cacheKey === cacheKey) {
-              tmp[lang] = multiLinguals?.[beatIndex].multiLingualTexts[lang];
+          multiLingualTexts: Object.keys(multiLingual.multiLingualTexts).reduce((tmp: MultiLingualTexts, lang) => {
+            if (multiLingual.multiLingualTexts[lang].cacheKey === cacheKey) {
+              tmp[lang] = multiLingual.multiLingualTexts[lang];
             }
             return tmp;
           }, {}),

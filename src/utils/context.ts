@@ -104,7 +104,8 @@ export const getMultiLingual = (multilingualFilePath: string, studioBeatsLength:
     return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
   }
   const jsonData = readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-  const dataSet = mulmoStudioMultiLingualSchema.parse(jsonData);
+  const result = mulmoStudioMultiLingualSchema.safeParse(jsonData);
+  const dataSet = result.success ? result.data : [];
   while (dataSet.length < studioBeatsLength) {
     dataSet.push({ multiLingualTexts: {} });
   }
