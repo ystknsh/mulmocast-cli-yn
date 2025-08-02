@@ -2,16 +2,23 @@ import { assert, GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudio, MulmoStudioContext, MulmoStudioBeat, MulmoBeat } from "../types/index.js";
 import { silent60secPath } from "../utils/file.js";
-import { FfmpegContextInit, FfmpegContextGenerateOutput, FfmpegContextInputFormattedAudio, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import {
+  FfmpegContext,
+  FfmpegContextInit,
+  FfmpegContextGenerateOutput,
+  FfmpegContextInputFormattedAudio,
+  ffmpegGetMediaDuration,
+} from "../utils/ffmpeg_utils.js";
 import { userAssert } from "../utils/utils.js";
 
-const getMovieDulation = async (beat: MulmoBeat) => {
+const getMovieDuration = async (beat: MulmoBeat) => {
   if (beat.image?.type === "movie" && (beat.image.source.kind === "url" || beat.image.source.kind === "path")) {
     const pathOrUrl = beat.image.source.kind === "url" ? beat.image.source.url : beat.image.source.path;
     const speed = beat.movieParams?.speed ?? 1.0;
-    return (await ffmpegGetMediaDuration(pathOrUrl)) / speed;
+    const { duration, hasAudio } = await ffmpegGetMediaDuration(pathOrUrl);
+    return { duration: duration / speed, hasAudio };
   }
-  return 0;
+  return { duration: 0, hasAudio: false };
 };
 
 const getPadding = (context: MulmoStudioContext, beat: MulmoBeat, index: number) => {
@@ -34,17 +41,25 @@ const getTotalPadding = (padding: number, movieDuration: number, audioDuration: 
   return padding;
 };
 
-const getMediaDurations = (context: MulmoStudioContext) => {
+type MediaDuration = {
+  movieDuration: number;
+  audioDuration: number;
+  hasMedia: boolean;
+  silenceDuration: number;
+  hasMovieAudio: boolean;
+};
+const getMediaDurationsOfAllBeats = (context: MulmoStudioContext): Promise<MediaDuration[]> => {
   return Promise.all(
     context.studio.beats.map(async (studioBeat: MulmoStudioBeat, index: number) => {
       const beat = context.studio.script.beats[index];
-      const movieDuration = await getMovieDulation(beat);
-      const audioDuration = studioBeat.audioFile ? await ffmpegGetMediaDuration(studioBeat.audioFile) : 0;
+      const { duration: movieDuration, hasAudio: hasMovieAudio } = await getMovieDuration(beat);
+      const audioDuration = studioBeat.audioFile ? (await ffmpegGetMediaDuration(studioBeat.audioFile)).duration : 0;
       return {
         movieDuration,
         audioDuration,
         hasMedia: movieDuration + audioDuration > 0,
         silenceDuration: 0,
+        hasMovieAudio,
       };
     }),
   );
@@ -70,123 +85,8 @@ const getGroupBeatDurations = (context: MulmoStudioContext, group: number[], aud
   return durations;
 };
 
-const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
-  namedInputs,
-}) => {
-  const { context, combinedFileName } = namedInputs;
-  const ffmpegContext = FfmpegContextInit();
-
-  // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
-  const mediaDurations = await getMediaDurations(context);
-
-  const beatDurations: number[] = [];
-
-  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
-    if (beatDurations.length > index) {
-      // The current beat has already been processed.
-      return;
-    }
-    assert(beatDurations.length === index, "beatDurations.length !== index");
-    const { audioDuration, movieDuration } = mediaDurations[index];
-    // Check if we are processing a voice-over beat.
-    if (movieDuration > 0) {
-      const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
-        group.push(i);
-      }
-      if (group.length > 1) {
-        group.reduce((remaining, idx, iGroup) => {
-          const subBeatDurations = mediaDurations[idx];
-          userAssert(
-            subBeatDurations.audioDuration <= remaining,
-            `subBeatDurations.audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
-          );
-          if (iGroup === group.length - 1) {
-            beatDurations.push(remaining);
-            subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
-            return 0;
-          }
-          const nextBeat = context.studio.script.beats[idx + 1];
-          assert(nextBeat.image?.type === "voice_over", "nextBeat.image.type !== voice_over");
-          const voiceStartAt = nextBeat.image?.startAt;
-          if (voiceStartAt) {
-            const remainingDuration = movieDuration - voiceStartAt;
-            const duration = remaining - remainingDuration;
-            userAssert(duration >= 0, `duration(${duration}) < 0`);
-            beatDurations.push(duration);
-            subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
-            userAssert(subBeatDurations.silenceDuration >= 0, `subBeatDurations.silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
-            return remainingDuration;
-          }
-          beatDurations.push(subBeatDurations.audioDuration);
-          return remaining - subBeatDurations.audioDuration;
-        }, movieDuration);
-        return;
-      }
-    }
-
-    // Check if the current beat has media and the next beat does not have media.
-    if (audioDuration > 0) {
-      // Check if the current beat has spilled over audio.
-      const group = [index];
-      for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
-        group.push(i);
-      }
-      if (group.length > 1) {
-        const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
-        // Yes, the current beat has spilled over audio.
-        const beatsTotalDuration = groupBeatsDurations.reduce((a, b) => a + b, 0);
-        if (beatsTotalDuration > audioDuration + 0.01) {
-          // 0.01 is a tolerance to avoid floating point precision issues
-          group.reduce((remaining, idx, iGroup) => {
-            if (remaining >= groupBeatsDurations[iGroup]) {
-              return remaining - groupBeatsDurations[iGroup];
-            }
-            mediaDurations[idx].silenceDuration = groupBeatsDurations[iGroup] - remaining;
-            return 0;
-          }, audioDuration);
-        } else {
-          // Last beat gets the rest of the audio.
-          if (audioDuration > beatsTotalDuration) {
-            groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
-          }
-        }
-        beatDurations.push(...groupBeatsDurations);
-      } else {
-        // No spilled over audio.
-        assert(beatDurations.length === index, "beatDurations.length !== index");
-        // padding is the amount of audio padding specified in the script.
-        const padding = getPadding(context, beat, index);
-        // totalPadding is the amount of audio padding to be added to the audio file.
-        const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
-        const beatDuration = audioDuration + totalPadding;
-        beatDurations.push(beatDuration);
-        if (totalPadding > 0) {
-          mediaDurations[index].silenceDuration = totalPadding;
-        }
-      }
-    } else if (movieDuration > 0) {
-      // This beat has only a movie, not audio.
-      beatDurations.push(movieDuration);
-      mediaDurations[index].silenceDuration = movieDuration;
-    } else {
-      // The current beat has no audio, nor no spilled over audio
-      const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
-      beatDurations.push(beatDuration);
-      mediaDurations[index].silenceDuration = beatDuration;
-    }
-  });
-  assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
-
-  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
-  const silentIds = mediaDurations.filter((md) => md.silenceDuration > 0).map((_, index) => `[ls_${index}]`);
-  if (silentIds.length > 0) {
-    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath(), undefined, ["-stream_loop", "-1"]);
-    ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
-  }
-
+const getInputIds = (context: MulmoStudioContext, mediaDurations: MediaDuration[], ffmpegContext: FfmpegContext, silentIds: string[]) => {
   const inputIds: string[] = [];
-
   context.studio.beats.forEach((studioBeat: MulmoStudioBeat, index: number) => {
     const { silenceDuration } = mediaDurations[index];
     const paddingId = `[padding_${index}]`;
@@ -200,6 +100,163 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
       inputIds.push(paddingId);
     }
   });
+  return inputIds;
+};
+
+const voiceOverProcess = (
+  context: MulmoStudioContext,
+  mediaDurations: MediaDuration[],
+  movieDuration: number,
+  beatDurations: number[],
+  groupLength: number,
+) => {
+  return (remaining: number, idx: number, iGroup: number) => {
+    const subBeatDurations = mediaDurations[idx];
+    userAssert(
+      subBeatDurations.audioDuration <= remaining,
+      `Duration Overflow: At index(${idx}) audioDuration(${subBeatDurations.audioDuration}) > remaining(${remaining})`,
+    );
+    if (iGroup === groupLength - 1) {
+      beatDurations.push(remaining);
+      subBeatDurations.silenceDuration = remaining - subBeatDurations.audioDuration;
+      return 0;
+    }
+    const nextBeat = context.studio.script.beats[idx + 1];
+    assert(nextBeat.image?.type === "voice_over", "nextBeat.image.type !== voice_over");
+    const voiceStartAt = nextBeat.image?.startAt;
+    if (voiceStartAt) {
+      const remainingDuration = movieDuration - voiceStartAt;
+      const duration = remaining - remainingDuration;
+      userAssert(duration >= 0, `Invalid startAt: At index(${idx}), avaiable duration(${duration}) < 0`);
+      beatDurations.push(duration);
+      subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
+      userAssert(subBeatDurations.silenceDuration >= 0, `Duration Overwrap: At index(${idx}), silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
+      return remainingDuration;
+    }
+    beatDurations.push(subBeatDurations.audioDuration);
+    return remaining - subBeatDurations.audioDuration;
+  };
+};
+
+const getVoiceOverGroup = (context: MulmoStudioContext, index: number) => {
+  const group = [index];
+  for (let i = index + 1; i < context.studio.beats.length && context.studio.script.beats[i].image?.type === "voice_over"; i++) {
+    group.push(i);
+  }
+  return group;
+};
+
+const getSpillOverGroup = (context: MulmoStudioContext, mediaDurations: MediaDuration[], index: number) => {
+  const group = [index];
+  for (let i = index + 1; i < context.studio.beats.length && !mediaDurations[i].hasMedia; i++) {
+    group.push(i);
+  }
+  return group;
+};
+
+const spilledOverAudio = (context: MulmoStudioContext, group: number[], audioDuration: number, beatDurations: number[], mediaDurations: MediaDuration[]) => {
+  const groupBeatsDurations = getGroupBeatDurations(context, group, audioDuration);
+  // Yes, the current beat has spilled over audio.
+  const beatsTotalDuration = groupBeatsDurations.reduce((a, b) => a + b, 0);
+  if (beatsTotalDuration > audioDuration + 0.01) {
+    // 0.01 is a tolerance to avoid floating point precision issues
+    group.reduce((remaining, idx, iGroup) => {
+      if (remaining >= groupBeatsDurations[iGroup]) {
+        return remaining - groupBeatsDurations[iGroup];
+      }
+      mediaDurations[idx].silenceDuration = groupBeatsDurations[iGroup] - remaining;
+      return 0;
+    }, audioDuration);
+  } else if (audioDuration > beatsTotalDuration) {
+    // Last beat gets the rest of the audio.
+    groupBeatsDurations[groupBeatsDurations.length - 1] += audioDuration - beatsTotalDuration;
+  }
+  beatDurations.push(...groupBeatsDurations);
+};
+
+const noSpilledOverAudio = (
+  context: MulmoStudioContext,
+  beat: MulmoBeat,
+  index: number,
+  movieDuration: number,
+  audioDuration: number,
+  beatDurations: number[],
+  mediaDurations: MediaDuration[],
+) => {
+  // padding is the amount of audio padding specified in the script.
+  const padding = getPadding(context, beat, index);
+  // totalPadding is the amount of audio padding to be added to the audio file.
+  const totalPadding = Math.round(getTotalPadding(padding, movieDuration, audioDuration, beat.duration) * 100) / 100;
+  const beatDuration = audioDuration + totalPadding;
+  beatDurations.push(beatDuration);
+  if (totalPadding > 0) {
+    mediaDurations[index].silenceDuration = totalPadding;
+  }
+};
+
+const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { context: MulmoStudioContext; combinedFileName: string }> = async ({
+  namedInputs,
+}) => {
+  const { context, combinedFileName } = namedInputs;
+  const ffmpegContext = FfmpegContextInit();
+
+  // First, get the audio durations of all beats, taking advantage of multi-threading capability of ffmpeg.
+  const mediaDurations = await getMediaDurationsOfAllBeats(context);
+
+  const beatDurations: number[] = [];
+
+  context.studio.script.beats.forEach((beat: MulmoBeat, index: number) => {
+    if (beatDurations.length > index) {
+      // The current beat has already been processed.
+      return;
+    }
+    assert(beatDurations.length === index, "beatDurations.length !== index");
+    const { audioDuration, movieDuration } = mediaDurations[index];
+    // Check if we are processing a voice-over beat.
+    if (movieDuration > 0) {
+      const group = getVoiceOverGroup(context, index);
+      if (group.length > 1) {
+        GraphAILogger.log(`Voice over group: ${group.length}`);
+        group.reduce(voiceOverProcess(context, mediaDurations, movieDuration, beatDurations, group.length), movieDuration);
+        return;
+      }
+    }
+
+    // Check if the current beat has media and the next beat does not have media.
+    if (audioDuration > 0) {
+      // Check if the current beat has spilled over audio.
+      const group = getSpillOverGroup(context, mediaDurations, index);
+      if (group.length > 1) {
+        GraphAILogger.log(`Spill over group: ${group.length}`);
+        spilledOverAudio(context, group, audioDuration, beatDurations, mediaDurations);
+        return;
+      }
+      // No spilled over audio.
+      assert(beatDurations.length === index, "beatDurations.length !== index");
+      noSpilledOverAudio(context, beat, index, movieDuration, audioDuration, beatDurations, mediaDurations);
+      return;
+    }
+    if (movieDuration > 0) {
+      // This beat has only a movie, not audio.
+      beatDurations.push(movieDuration);
+      mediaDurations[index].silenceDuration = movieDuration;
+      return;
+    }
+    // The current beat has no audio, nor no spilled over audio
+    const beatDuration = beat.duration ?? (movieDuration > 0 ? movieDuration : 1.0);
+    beatDurations.push(beatDuration);
+    mediaDurations[index].silenceDuration = beatDuration;
+  });
+  assert(beatDurations.length === context.studio.beats.length, "beatDurations.length !== studio.beats.length");
+
+  // We cannot reuse longSilentId. We need to explicitly split it for each beat.
+  const silentIds = mediaDurations.filter((md) => md.silenceDuration > 0).map((_, index) => `[ls_${index}]`);
+  if (silentIds.length > 0) {
+    const longSilentId = FfmpegContextInputFormattedAudio(ffmpegContext, silent60secPath(), undefined, ["-stream_loop", "-1"]);
+    ffmpegContext.filterComplex.push(`${longSilentId}asplit=${silentIds.length}${silentIds.join("")}`);
+  }
+
+  const inputIds = getInputIds(context, mediaDurations, ffmpegContext, silentIds);
 
   assert(silentIds.length === 0, "silentIds.length !== 0");
 
@@ -218,6 +275,7 @@ const combineAudioFilesAgent: AgentFunction<null, { studio: MulmoStudio }, { con
         audioDuration: mediaDurations[index].audioDuration,
         movieDuration: mediaDurations[index].movieDuration,
         silenceDuration: mediaDurations[index].silenceDuration,
+        hasMovieAudio: mediaDurations[index].hasMovieAudio,
       })),
     },
   };

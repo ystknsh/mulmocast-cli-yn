@@ -7,6 +7,6 @@ export const handler = async (argv: CliArgs<{ a?: string; i?: string; c?: string
   if (!context) {
     process.exit(1);
   }
-  await runTranslateIfNeeded(context, argv);
+  await runTranslateIfNeeded(context, true);
   await audio(context).then(images).then(captions).then(movie);
 };

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import path from "path";
-import { GraphAI, GraphData } from "graphai";
+import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
 import { geminiAgent } from "@graphai/gemini_agent";
@@ -19,6 +19,10 @@ import { llmPair } from "../utils/utils.js";
 import { readFileSync } from "fs";
 
 const vanillaAgents = agents.default ?? agents;
+
+const showErrorMessage = (text: string) => {
+  GraphAILogger.info("\x1b[31m" + text + "\x1b[0m");
+};
 
 const graphMulmoScript: GraphData = {
   version: 0.5,
@@ -249,6 +253,10 @@ export const createMulmoScriptFromUrl = async ({ urls, templateName, outDirPath,
   graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
 
   const result = await graph.run<{ path: string }>();
+  if (!result?.writeJSON?.path) {
+    showErrorMessage("Script generation failed. Please try again.");
+    return;
+  }
   writingMessage(result?.writeJSON?.path ?? "");
 };
 
@@ -284,5 +292,9 @@ export const createMulmoScriptFromFile = async (
     graph.registerCallback(cliLoadingPlugin({ nodeId: "mulmoScript", message: "Generating script..." }));
   }
   const result = await graph.run<{ path: string }>();
+  if (!result?.writeJSON?.path) {
+    showErrorMessage("Script generation failed. Please try again.");
+    return;
+  }
   writingMessage(result?.writeJSON?.path ?? "");
 };

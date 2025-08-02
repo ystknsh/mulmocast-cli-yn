@@ -13,6 +13,7 @@ import {
 } from "../utils/file.js";
 import { isHttp } from "../utils/utils.js";
 import { outDirName, imageDirName, audioDirName } from "../utils/const.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 import { translate } from "../actions/translate.js";
 
@@ -20,8 +21,8 @@ import { initializeContextFromFiles } from "../utils/context.js";
 import type { CliArgs } from "../types/cli_types.js";
 import { FileObject, InitOptions, MulmoStudioContext } from "../types/index.js";
 
-export const runTranslateIfNeeded = async (context: MulmoStudioContext, argv: { l?: string; c?: string }) => {
-  if (argv.l || context.studio.script.captionParams?.lang) {
+export const runTranslateIfNeeded = async (context: MulmoStudioContext, includeCaption: boolean = false) => {
+  if (MulmoStudioContextMethods.needTranslate(context, includeCaption)) {
     GraphAILogger.log("run translate");
     await translate(context);
   }
@@ -55,16 +56,16 @@ export const getFileObject = (args: {
   const { fileOrUrl, fileName } = (() => {
     if (file === "__clipboard") {
       // We generate a new unique script file from clipboard text in the output directory
-      const fileName = generateTimestampedFileName("script");
+      const generatedFileName = generateTimestampedFileName("script");
       const clipboardText = clipboardy.readSync();
-      const fileOrUrl = resolveDirPath(outDirPath, `${fileName}.json`);
+      const resolvedFilePath = resolveDirPath(outDirPath, `${generatedFileName}.json`);
       mkdir(outDirPath);
-      fs.writeFileSync(fileOrUrl, clipboardText, "utf8");
-      return { fileOrUrl, fileName };
+      fs.writeFileSync(resolvedFilePath, clipboardText, "utf8");
+      return { fileOrUrl: resolvedFilePath, fileName: generatedFileName };
     }
-    const fileOrUrl = file ?? "";
-    const fileName = path.parse(fileOrUrl).name;
-    return { fileOrUrl, fileName };
+    const resolvedFileOrUrl = file ?? "";
+    const parsedFileName = path.parse(resolvedFileOrUrl).name;
+    return { fileOrUrl: resolvedFileOrUrl, fileName: parsedFileName };
   })();
   const isHttpPath = isHttp(fileOrUrl);
   const mulmoFilePath = isHttpPath ? "" : getFullPath(baseDirPath, fileOrUrl);

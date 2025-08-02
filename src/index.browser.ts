@@ -1,5 +1,6 @@
-// Entry point that exposes only APIs available for use in the browser
+// Entry point for browser code
 
-export * from "./types/type.js";
-export * from "./types/schema.js";
-export * from "./agents/validate_schema_agent.js";
+export * from "./index.common.js";
+
+import validateSchemaAgent from "./agents/validate_schema_agent.js";
+export { validateSchemaAgent };

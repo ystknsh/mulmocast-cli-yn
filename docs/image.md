@@ -6,6 +6,8 @@
 4. moviePromptのみが設定されている場合、画像は生成せず、そのプロンプトだけで動画を生成する
 5. image プロパティもimagePromptもmoviePromptも設定されていない場合、textからイメージプロンプトを生成し、それを使って画像を生成する
 6. 1か3の条件で画像が生成・取得された場合で、moviePromptが存在する場合、その画像とmoviePromptで映像を生成する
+7. 1のtype=movie, 4, 6で動画が生成されbeatにsoundEffectPromptがあれば、動画対してsoundEffectPromptで指定されている音声を作成・合成する
+8. 動画が生成されbeatにenableLipSyncの指定があれば、動画と音声ファイルを使って動画のリップシンク処理を行う
 
 ## Beat画像生成ルール一覧表
 
@@ -59,6 +61,17 @@
   "source": {
     "kind": "path",
     "path": "../../assets/images/mulmocast_credit.png"
+  }
+}
+```
+
+### localの動画
+```json
+{
+  "type": "movie",
+  "source": {
+    "kind": "path",
+    "url": "../../test/pingpong.mov"
   }
 }
 ```

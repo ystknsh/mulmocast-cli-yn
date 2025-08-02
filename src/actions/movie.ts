@@ -210,7 +210,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
       beatTimestamps.push(timestamp);
       return timestamp; // Skip voice-over beats.
     }
-    const sourceFile = studioBeat.movieFile ?? studioBeat.imageFile;
+    const sourceFile = studioBeat.lipSyncFile ?? studioBeat.soundEffectFile ?? studioBeat.movieFile ?? studioBeat.imageFile;
     assert(!!sourceFile, `studioBeat.imageFile or studioBeat.movieFile is not set: index=${index}`);
     assert(!!studioBeat.duration, `studioBeat.duration is not set: index=${index}`);
     const extraPadding = (() => {
@@ -233,7 +233,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const fillOption = { ...defaultFillOption, ...globalFillOption, ...beatFillOption };
 
     const inputIndex = FfmpegContextAddInput(ffmpegContext, sourceFile);
-    const mediaType = studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
+    const mediaType = studioBeat.lipSyncFile || studioBeat.movieFile ? "movie" : MulmoPresentationStyleMethods.getImageType(context.presentationStyle, beat);
     const speed = beat.movieParams?.speed ?? 1.0;
     const { videoId, videoPart } = getVideoPart(inputIndex, mediaType, duration, canvasInfo, fillOption, speed);
     ffmpegContext.filterComplex.push(videoPart);
@@ -256,8 +256,10 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     }
 
     // NOTE: We don't support audio if the speed is not 1.0.
-    if (beat.image?.type == "movie" && beat.image.mixAudio > 0.0 && speed === 1.0) {
-      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, beat.image.mixAudio);
+    const movieVolume = beat.audioParams?.movieVolume ?? 1.0;
+    if (studioBeat.hasMovieAudio && movieVolume > 0.0 && speed === 1.0) {
+      // TODO: Handle a special case where it has lipSyncFile AND hasMovieAudio is on (the source file has an audio, such as sound effect).
+      const { audioId, audioPart } = getAudioPart(inputIndex, duration, timestamp, movieVolume);
       audioIdsFromMovieBeats.push(audioId);
       ffmpegContext.filterComplex.push(audioPart);
     }
@@ -273,7 +275,10 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
   // Concatenate the trimmed images
   const concatVideoId = "concat_video";
   const videoIds = videoIdsForBeats.filter((id) => id !== undefined); // filter out voice-over beats
-  ffmpegContext.filterComplex.push(`${videoIds.map((id) => `[${id}]`).join("")}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`);
+
+  const inputs = videoIds.map((id) => `[${id}]`).join("");
+  const filter = `${inputs}concat=n=${videoIds.length}:v=1:a=0[${concatVideoId}]`;
+  ffmpegContext.filterComplex.push(filter);
 
   const captionedVideoId = addCaptions(ffmpegContext, concatVideoId, context, caption);
   const mixedVideoId = addTransitionEffects(ffmpegContext, captionedVideoId, context, transitionVideoIds, beatTimestamps);
@@ -306,9 +311,7 @@ export const movieFilePath = (context: MulmoStudioContext) => {
 export const movie = async (context: MulmoStudioContext) => {
   MulmoStudioContextMethods.setSessionState(context, "video", true);
   try {
-    const fileName = MulmoStudioContextMethods.getFileName(context);
-    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-    const audioArtifactFilePath = getAudioArtifactFilePath(outDirPath, fileName);
+    const audioArtifactFilePath = getAudioArtifactFilePath(context);
     const outputVideoPath = movieFilePath(context);
 
     if (await createVideo(audioArtifactFilePath, outputVideoPath, context)) {

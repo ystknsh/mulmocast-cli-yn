@@ -1,14 +1,23 @@
 {
   "$mulmocast": {
-    "version": "1.0"
+    "version": "1.1"
   },
+  "lang": "en",
   "title": "Voice Test",
   "speechParams": {
-    "provider": "elevenlabs",
     "speakers": {
-      "David": { "voiceId": "XjLkpWUlnhS8i7gGz3lZ" },
-      "Felicity": { "voiceId": "aTbnroHRGIomiKpqAQR8" },
-      "Ishibashi": { "voiceId": "Mv8AjrYZCBkdsmDHNwcB" }
+      "David": {
+        "provider": "elevenlabs",
+        "voiceId": "XjLkpWUlnhS8i7gGz3lZ"
+      },
+      "Felicity": {
+        "provider": "elevenlabs",
+        "voiceId": "aTbnroHRGIomiKpqAQR8"
+      },
+      "Ishibashi": {
+        "provider": "elevenlabs",
+        "voiceId": "Mv8AjrYZCBkdsmDHNwcB"
+      }
     }
   },
   "beats": [

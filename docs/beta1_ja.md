@@ -43,11 +43,16 @@
 
 5. OpenAIの [Settings > Organization > General](https://platform.openai.com/settings/organization/general) ページの「Verification」セクションで個人認証を行います
 
-6. 認証後、`.env`ファイルに以下の1行を追加します：
+6. 認証後、高品質な画像生成のために、MulmoScriptの`imageParams`を以下のように設定してください：
 
+   ```json
+   "imageParams": {
+     "provider": "openai",
+     "model": "gpt-image-1"
+   }
    ```
-   DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1
-   ```
+
+   設定方法の詳細は、[test_images.json](../scripts/test/test_images.json)や[test_movie.json](../scripts/test/test_movie.json)を参考にしてください。
 
 ### 推奨項目2（BGM変更）
 BGM を変更したい場合は、`⁠.env` ファイルに以下の設定を追加します。

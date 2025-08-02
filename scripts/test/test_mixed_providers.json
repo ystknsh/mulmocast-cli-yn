@@ -1,13 +1,14 @@
 {
   "$mulmocast": {
-    "version": "1.0"
+    "version": "1.1"
   },
+  "lang": "en",
   "title": "Mixed Providers Test",
   "description": "Testing multiple TTS providers for different speakers",
   "speechParams": {
-    "provider": "openai",
     "speakers": {
       "Presenter": {
+        "provider": "openai",
         "voiceId": "shimmer",
         "displayName": {
           "en": "Main Presenter"
@@ -28,7 +29,7 @@
         }
       },
       "Host": {
-        "voiceId": "b9277ce3-ba1c-4f6f-9a65-c05ca102ded0",
+        "voiceId": "3708ad43-cace-486c-a4ca-8fe41186e20c",
         "provider": "nijivoice",
         "displayName": {
           "en": "Japanese Host"

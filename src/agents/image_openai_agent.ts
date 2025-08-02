@@ -2,37 +2,20 @@ import fs from "fs";
 import path from "path";
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
 import OpenAI, { toFile } from "openai";
-import { defaultOpenAIImageModel } from "../utils/const.js";
-
-// NOTE: gpt-image-1 supports only '1024x1024', '1024x1536', '1536x1024'
-type OpenAIImageSize = "1792x1024" | "1024x1792" | "1024x1024" | "1536x1024" | "1024x1536";
-type OpenAIModeration = "low" | "auto";
-type OpenAIImageOptions = {
-  model: string;
-  prompt: string;
-  n: number;
-  size: OpenAIImageSize;
-  moderation?: "low" | "auto";
-};
+import { provider2ImageAgent } from "../utils/provider2agent.js";
+import type { AgentBufferResult, OpenAIImageOptions, OpenAIImageAgentParams, OpenAIImageAgentInputs, OpenAIImageAgentConfig } from "../types/agent.js";
 
 // https://platform.openai.com/docs/guides/image-generation
-
-export const imageOpenaiAgent: AgentFunction<
-  {
-    apiKey: string;
-    model: string; // dall-e-3 or gpt-image-1
-    moderation: OpenAIModeration | null | undefined;
-    canvasSize: { width: number; height: number };
-  },
-  { buffer: Buffer },
-  { prompt: string; images: string[] | null | undefined },
-  { apiKey?: string }
-> = async ({ namedInputs, params, config }) => {
-  const { prompt, images } = namedInputs;
-  const { moderation, canvasSize } = params;
-  const { apiKey } = { ...config };
-  const model = params.model ?? defaultOpenAIImageModel;
-  const openai = new OpenAI({ apiKey });
+export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBufferResult, OpenAIImageAgentInputs, OpenAIImageAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
+  const { prompt, referenceImages } = namedInputs;
+  const { moderation, canvasSize, quality } = params;
+  const { apiKey, baseURL } = { ...config };
+  const model = params.model ?? provider2ImageAgent["openai"].defaultModel;
+  const openai = new OpenAI({ apiKey, baseURL });
   const size = (() => {
     if (model === "gpt-image-1") {
       if (canvasSize.width > canvasSize.height) {
@@ -61,20 +44,23 @@ export const imageOpenaiAgent: AgentFunction<
   };
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
+    if (quality) {
+      imageOptions.quality = quality;
+    }
   }
 
   const response = await (async () => {
     try {
       const targetSize = imageOptions.size;
-      if ((images ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
-        const imagelist = await Promise.all(
-          (images ?? []).map(async (file) => {
+      if ((referenceImages ?? []).length > 0 && (targetSize === "1536x1024" || targetSize === "1024x1536" || targetSize === "1024x1024")) {
+        const referenceImageFiles = await Promise.all(
+          (referenceImages ?? []).map(async (file) => {
             const ext = path.extname(file).toLowerCase();
             const type = ext === ".jpg" || ext === ".jpeg" ? "image/jpeg" : "image/png";
             return await toFile(fs.createReadStream(file), null, { type });
           }),
         );
-        return await openai.images.edit({ ...imageOptions, size: targetSize, image: imagelist });
+        return await openai.images.edit({ ...imageOptions, size: targetSize, image: referenceImageFiles });
       } else {
         return await openai.images.generate(imageOptions);
       }

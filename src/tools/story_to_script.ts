@@ -1,6 +1,6 @@
-import { getTemplateFilePath, readAndParseJson, readScriptTemplateFile, writingMessage } from "../utils/file.js";
-import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../types/schema.js";
-import { MulmoScriptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
+import { getPromptTemplateFilePath, readAndParseJson, readScriptTemplateFile, writingMessage } from "../utils/file.js";
+import { mulmoScriptSchema, mulmoPromptTemplateSchema } from "../types/schema.js";
+import { MulmoPromptTemplate, MulmoStoryboard, StoryToScriptGenerateMode } from "../types/index.js";
 import { GraphAI, GraphAILogger, GraphData } from "graphai";
 import { openAIAgent } from "@graphai/openai_agent";
 import { anthropicAgent } from "@graphai/anthropic_agent";
@@ -11,7 +11,8 @@ import { graphDataScriptGeneratePrompt, sceneToBeatsPrompt, storyToScriptInfoPro
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import validateSchemaAgent from "../agents/validate_schema_agent.js";
 import { ZodSchema } from "zod";
-import { LLM, llmPair } from "../utils/utils.js";
+import { llmPair } from "../utils/utils.js";
+import type { LLM } from "../utils/provider2agent.js";
 import { storyToScriptGenerateMode } from "../utils/const.js";
 import { cliLoadingPlugin } from "../utils/plugins.js";
 
@@ -46,7 +47,7 @@ const createValidatedScriptGraphData = ({
         inputs: {
           model: llmModel,
           system: systemPrompt,
-          prompt: prompt,
+          prompt,
           max_tokens: maxTokens,
         },
       },
@@ -54,7 +55,7 @@ const createValidatedScriptGraphData = ({
         agent: "validateSchemaAgent",
         inputs: {
           text: ":llm.text.codeBlock()",
-          schema: schema,
+          schema,
         },
         isResult: true,
       },
@@ -247,13 +248,13 @@ const oneStepGraphData: GraphData = {
   },
 };
 
-const generateBeatsPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
+const generateBeatsPrompt = async (template: MulmoPromptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   const allScenes = story.scenes.map((scene) => scene.description).join("\n");
-  const sampleBeats = template.scriptName ? readScriptTemplateFile(template.scriptName).beats : [];
+  const sampleBeats = template.scriptName ? (readScriptTemplateFile(template.scriptName).beats ?? []) : [];
   return sceneToBeatsPrompt({ sampleBeats, beatsPerScene, allScenes });
 };
 
-const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: MulmoStoryboard) => {
+const generateScriptInfoPrompt = async (template: MulmoPromptTemplate, story: MulmoStoryboard) => {
   if (!template.scriptName) {
     // TODO: use default schema
     throw new Error("script is not provided");
@@ -263,7 +264,7 @@ const generateScriptInfoPrompt = async (template: MulmoScriptTemplate, story: Mu
   return storyToScriptInfoPrompt(scriptWithoutBeats, story);
 };
 
-const generateScriptPrompt = async (template: MulmoScriptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
+const generateScriptPrompt = async (template: MulmoPromptTemplate, beatsPerScene: number, story: MulmoStoryboard) => {
   if (!template.scriptName) {
     // TODO: use default schema
     throw new Error("script is not provided");
@@ -291,7 +292,7 @@ export const storyToScript = async ({
   llmModel?: string;
   generateMode: StoryToScriptGenerateMode;
 }) => {
-  const template = readAndParseJson(getTemplateFilePath(templateName), mulmoScriptTemplateSchema);
+  const template = readAndParseJson(getPromptTemplateFilePath(templateName), mulmoPromptTemplateSchema);
   const { agent, model, max_tokens } = llmPair(llm, llmModel);
 
   const beatsPrompt = await generateBeatsPrompt(template, beatsPerScene, story);

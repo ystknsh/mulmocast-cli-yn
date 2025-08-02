@@ -14,13 +14,12 @@ import {
   mulmoImageParamsImagesSchema,
   mulmoFillOptionSchema,
   mulmoMovieParamsSchema,
-  mulmoSpeechParamsSchema,
   textSlideParamsSchema,
   speechOptionsSchema,
   speakerDataSchema,
   mulmoCanvasDimensionSchema,
-  mulmoScriptTemplateSchema,
-  mulmoScriptTemplateFileSchema,
+  mulmoPromptTemplateSchema,
+  mulmoPromptTemplateFileSchema,
   text2ImageProviderSchema,
   text2HtmlImageProviderSchema,
   text2MovieProviderSchema,
@@ -28,6 +27,7 @@ import {
   mulmoPresentationStyleSchema,
   multiLingualTextsSchema,
   // for image
+  mulmoImageAssetSchema,
   mulmoMermaidMediaSchema,
   mulmoTextSlideMediaSchema,
   mulmoMarkdownMediaSchema,
@@ -37,16 +37,18 @@ import {
   mulmoSessionStateSchema,
   mulmoOpenAIImageModelSchema,
   mulmoGoogleImageModelSchema,
+  mulmoGoogleMovieModelSchema,
+  mulmoReplicateMovieModelSchema,
+  mulmoImagePromptMediaSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
-import { LLM } from "../utils/utils.js";
+import type { LLM } from "../utils/provider2agent.js";
 import { z } from "zod";
 
 export type LANG = z.infer<typeof langSchema>;
 export type MulmoBeat = z.infer<typeof mulmoBeatSchema>;
 export type SpeakerDictonary = z.infer<typeof speakerDictionarySchema>;
 
-export type MulmoSpeechParams = z.infer<typeof mulmoSpeechParamsSchema>;
 export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
 export type SpeakerData = z.infer<typeof speakerDataSchema>;
 export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
@@ -66,16 +68,20 @@ export type MulmoStoryboard = z.infer<typeof mulmoStoryboardSchema>;
 export type MulmoStudioBeat = z.infer<typeof mulmoStudioBeatSchema>;
 export type MulmoMediaSource = z.infer<typeof mediaSourceSchema>;
 export type MulmoStudio = z.infer<typeof mulmoStudioSchema>;
-export type MulmoScriptTemplate = z.infer<typeof mulmoScriptTemplateSchema>;
-export type MulmoScriptTemplateFile = z.infer<typeof mulmoScriptTemplateFileSchema>;
+export type MulmoPromptTemplate = z.infer<typeof mulmoPromptTemplateSchema>;
+export type MulmoPromptTemplateFile = z.infer<typeof mulmoPromptTemplateFileSchema>;
 export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSchema>;
 export type MulmoStudioMultiLingualData = z.infer<typeof mulmoStudioMultiLingualDataSchema>;
 export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
 export type MulmoMovieParams = z.infer<typeof mulmoMovieParamsSchema>;
 export type MulmoOpenAIImageModel = z.infer<typeof mulmoOpenAIImageModelSchema>;
 export type MulmoGoogleImageModel = z.infer<typeof mulmoGoogleImageModelSchema>;
+export type MulmoGoogleMovieModel = z.infer<typeof mulmoGoogleMovieModelSchema>;
+export type MulmoReplicateMovieModel = z.infer<typeof mulmoReplicateMovieModelSchema>;
+export type MulmoImagePromptMedia = z.infer<typeof mulmoImagePromptMediaSchema>;
 
 // images
+export type MulmoImageAsset = z.infer<typeof mulmoImageAssetSchema>;
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
 export type MulmoMarkdownMedia = z.infer<typeof mulmoMarkdownMediaSchema>;
 export type MulmoImageMedia = z.infer<typeof mulmoImageMediaSchema>;
@@ -96,7 +102,7 @@ export type FileDirs = {
 export type MulmoStudioContext = {
   fileDirs: FileDirs;
   studio: MulmoStudio;
-  lang?: string;
+  lang: string;
   force: boolean;
   sessionState: MulmoSessionState;
   presentationStyle: MulmoPresentationStyle;
@@ -142,7 +148,7 @@ export type BeatMediaType = "movie" | "image";
 export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];
 
 export type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
-export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie";
+export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie" | "html" | "imageReference" | "soundEffect" | "lipSync";
 
 export type SessionProgressEvent =
   | { kind: "session"; sessionType: SessionType; inSession: boolean }

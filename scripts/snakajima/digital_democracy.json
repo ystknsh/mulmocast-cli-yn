@@ -1,8 +1,9 @@
 {
   "$mulmocast": {
-    "version": "1.0",
+    "version": "1.1",
     "credit": "closing"
   },
+  "lang": "ja",
   "title": "声をつなげ - デジタル民主主義プロモーションビデオ",
   "imageParams": {
     "style": "<style>Ghibli style</style>"
@@ -39,7 +40,7 @@
       "imagePrompt": "A ballot box glowing digitally surrounded by holograms of future cities"
     },
     {
-      "imagePrompt": "A montage of protest signs, tweets, and real voices overlayed"
+      "imagePrompt": "A montage of protest signs, tweets, and real voices overlaid"
     },
     {
       "imagePrompt": "A voting booth with neon lights and digital icons floating around"

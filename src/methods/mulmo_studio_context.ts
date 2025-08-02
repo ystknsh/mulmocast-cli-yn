@@ -58,11 +58,24 @@ export const MulmoStudioContextMethods = {
   },
   setBeatSessionState(context: MulmoStudioContext, sessionType: BeatSessionType, index: number, value: boolean) {
     if (value) {
+      if (!context.sessionState.inBeatSession[sessionType]) {
+        context.sessionState.inBeatSession[sessionType] = {};
+      }
       context.sessionState.inBeatSession[sessionType][index] = true;
     } else {
       // NOTE: Setting to false causes the parse error in rebuildStudio in preprocess.ts
       delete context.sessionState.inBeatSession[sessionType][index];
     }
     notifyBeatStateChange(context, sessionType, index);
+  },
+  needTranslate(context: MulmoStudioContext, includeCaption: boolean = false) {
+    // context.studio.script.lang = defaultLang, context.lang = targetLanguage.
+    if (includeCaption) {
+      return (
+        context.studio.script.lang !== context.lang ||
+        (context.studio.script.captionParams?.lang && context.studio.script.lang !== context.studio.script.captionParams?.lang)
+      );
+    }
+    return context.studio.script.lang !== context.lang;
   },
 };

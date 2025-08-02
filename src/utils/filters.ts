@@ -7,34 +7,46 @@ import { GraphAILogger } from "graphai";
 import { writingMessage } from "./file.js";
 import { text2hash } from "./utils.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
+import { replacementsJa, replacePairsJa } from "../utils/string.js";
+
+export const nijovoiceTextAgentFilter: AgentFilterFunction = async (context, next) => {
+  const { text, provider, lang } = context.namedInputs;
+  if (provider === "nijivoice" && lang === "ja") {
+    context.namedInputs.text = replacePairsJa(replacementsJa)(text);
+  }
+  return next(context);
+};
 
 export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) => {
-  const { namedInputs } = context;
-  const { file, force, mulmoContext, index, sessionType } = namedInputs;
+  const { force, file, index, mulmoContext, sessionType } = context.namedInputs.cache;
 
   const shouldUseCache = async () => {
-    if (force) {
+    if (force && force.some((element: boolean | undefined) => element)) {
       return false;
     }
     try {
       await fsPromise.access(file);
       return true;
-    } catch (__e) {
+    } catch {
       return false;
     }
   };
 
   if (await shouldUseCache()) {
-    GraphAILogger.debug("cache");
+    GraphAILogger.debug(`cache: ${path.basename(file)}`);
     return true;
   }
   try {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, true);
-    const output = (await next(context)) as { buffer: Buffer };
-    const buffer = output ? output["buffer"] : undefined;
+    const output = ((await next(context)) as { buffer?: Buffer; text?: string }) || undefined;
+    const { buffer, text } = output ?? {};
     if (buffer) {
       writingMessage(file);
       await fsPromise.writeFile(file, buffer);
+      return true;
+    } else if (text) {
+      writingMessage(file);
+      await fsPromise.writeFile(file, text, "utf-8");
       return true;
     }
     GraphAILogger.log("no cache, no buffer: " + file);

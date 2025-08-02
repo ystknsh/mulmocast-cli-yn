@@ -1,5 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import { GraphAILogger } from "graphai";
+import fs from "fs";
 
 export type FfmpegContext = {
   command: ffmpeg.FfmpegCommand;
@@ -72,24 +73,30 @@ export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: stri
 };
 
 export const ffmpegGetMediaDuration = (filePath: string) => {
-  return new Promise<number>((resolve, reject) => {
+  return new Promise<{ duration: number; hasAudio: boolean }>((resolve, reject) => {
+    // Only check file existence for local paths, not URLs
+    if (!filePath.startsWith("http://") && !filePath.startsWith("https://") && !fs.existsSync(filePath)) {
+      reject(new Error(`File not found: ${filePath}`));
+      return;
+    }
     ffmpeg.ffprobe(filePath, (err, metadata) => {
       if (err) {
         GraphAILogger.info("Error while getting metadata:", err);
         reject(err);
       } else {
-        resolve(metadata.format.duration!);
+        const hasAudio = metadata.streams?.some((stream) => stream.codec_type === "audio") ?? false;
+        resolve({ duration: metadata.format.duration!, hasAudio });
       }
     });
   });
 };
 
-export const extractImageFromMovie = (movieFile: string, imagePath: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
+export const extractImageFromMovie = (movieFile: string, imagePath: string): Promise<object> => {
+  return new Promise<object>((resolve, reject) => {
     ffmpeg(movieFile)
       .outputOptions(["-frames:v 1"])
       .output(imagePath)
-      .on("end", () => resolve())
+      .on("end", () => resolve({}))
       .on("error", (err) => reject(err))
       .run();
   });

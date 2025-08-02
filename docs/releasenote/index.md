@@ -1,5 +1,261 @@
 # RELEASE NOTE
 
+# v1.1.0
+## RELEASE NOTE
+
+**MulmoCast CLI v1.1.0** introduces major architectural improvements with schema version 1.1, advanced sound effects, and enhanced video model management.
+
+### Breaking Changes
+
+**Schema Version 1.1**
+- Updated MulmoScript schema from 1.0 to 1.1 requiring file updates
+- In `mulmoPresentationStyleSchema`, the `provider` and `model` fields have been removed from top-level `speechParams` and moved into each individual `speaker` object
+- Each speaker must specify own provider field
+
+**Before (0.x.y):**
+```json
+"speechParams": {
+  "provider": "nijivoice",
+  "speakers": {
+    "Presenter": {
+      "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0"
+    }
+  }
+}
+```
+
+**After (1.1.x):**
+
+```json
+"speechParams": {
+  "speakers": {
+    "Presenter": {
+      "provider": "nijivoice",
+      "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0"
+    }
+  }
+}
+```
+
+**Migration Notes**
+- This change breaks compatibility with some existing Mulmo Scripts.  
+  However, when using the CLI, scripts are automatically transformed before execution, so no action is needed in most cases.
+- CLI automatically transforms scripts with `$mulmocast.version: "1.0"` during execution
+- For programmatic usage, use `MulmoScriptMethod.validate()` for transformation
+- Please set `$mulmocast.version` to `1.1` for new scripts
+
+### New Features
+
+- **Default Speaker System**: Mark speakers with `default: true` to auto-assign throughout presentations
+- **Sound Effect Generation**: AI-powered audio effects via Replicate's zsxkib/mmaudio synchronized with video ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.0/scripts/test/test_sound_effect.json))
+- **Centralized Video Models**: Unified configuration for 11 Replicate models with duration validation and pricing ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.0/scripts/test/test_replicate.json))
+
+### Technical Improvements
+
+- **BGM Asset Library**: Added 9 commercially licensed BGM tracks with Suno AI metadata for Electron app
+- **Model Parameter Fix**: Corrected minimax/hailuo-02 image input mapping (first_frame_image) ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.0/scripts/test/test_replicate.json))
+- **Data-Driven Models**: Replaced hardcoded video model handling with centralized configuration
+- **Code Cleanup**: Removed deprecated helper methods and updated 38 templates for new speaker system
+- **Enhanced Providers**: Improved provider2agent mapping with sound effect agent integration
+
+This release significantly modernizes the speech system architecture while introducing powerful new audio-visual capabilities for content creation.
+
+# v.0.1.7
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.7** significantly expands video generation capabilities with new AI models and introduces character-based presentation templates, while improving system performance and reliability.
+
+### Expanded Video Generation Models
+
+**New AI Models for Video Creation**
+- **minimax/hailuo-02**: Physics-specialized model excellent for realistic motion and complex physics simulations ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.7/scripts/test/test_replicate.json))
+- **Google Veo Models**: Added Veo-2 and Veo-3 support for versatile video generation
+- **ByteDance Seedance**: Both lite and pro versions for different quality/speed trade-offs
+- **Additional Models**: Pixverse v4.5, Kwaivgi Kling models, and Minimax video-01 for diverse visual styles
+
+### Character-Based Presentations
+
+**Ani Character Templates**
+- New bilingual character templates with anime/manga styling and personality-driven narration ([English template](https://github.com/receptron/mulmocast-cli/blob/0.1.7/assets/templates/ani.json), [Japanese template](https://github.com/receptron/mulmocast-cli/blob/0.1.7/assets/templates/ani_ja.json))
+- Enhanced voice customization with speech parameter controls for character-specific audio
+- Supports both English and Japanese presentations with consistent character personality
+
+### Performance & System Improvements
+- **Audio Processing Optimizations**: BGM processing now automatically skips when volume is set to 0, improving generation speed
+- **Configuration & Setup**: Updated default video provider from Google to Replicate with optimized model selection
+
+### Technical Improvements & Bug Fixes
+- **Reliability**: Fixed a critical audio detection bug to prevent race conditions and improve movie audio quality.
+- **Type Safety**: Enhanced TypeScript safety with new image asset definitions and refined schemas.
+- **Dependencies**: Updated core dependencies, including GraphAI packages and security patches for `marked`.
+- **Code Quality**: Improved module organization, eliminated circular dependencies, and standardized default values.
+- **Documentation**: Updated OpenAI image generation setup guides.
+- **Test Maintenance**: Refreshed expired Nijivoice voice IDs in test configurations.
+
+This release expands your creative possibilities with more AI video models and character-based storytelling while making the system faster and more reliable.
+
+# v.0.1.6
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.6** focuses on code quality improvements and creative sample expansion through comprehensive refactoring and enhanced development tooling.
+
+### Samples & Templates
+
+**Google Veo-3-Fast Creative Showcase**
+- Comprehensive sample script with 8 diverse video generation scenarios including ASMR fruit cutting, Arctic fox drone footage, stand-up comedy, and clay animation ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.6/scripts/snakajima/veo3_sample.json))
+- Optimized 8-second clips for pure visual content with professional caption formatting
+- Reference-driven content with Twitter/X inspiration links for creative guidance
+
+### Technical Improvements
+- Audio processing and type safety improvements in combine_audio_files_agent.ts
+- Google Cloud config centralization, ESLint/browser support, and API key cleanup
+- Unified formatting, enhanced tests, and clearer type annotations
+
+### Bug Fixes
+- Nijivoice voice IDs in test configs updated for continued TTS functionality
+
+This release emphasizes developer experience and code maintainability while providing new creative examples for video generation workflows.
+
+# v.0.1.5
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.5** enhances TTS capabilities with comprehensive model selection and improves video generation with Google Veo3 support.
+
+### Video Generation
+
+**Google Veo3 Support**
+- Enhanced video generation with Google Veo3 integration through improved Replicate support ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_replicate.json))
+- Smart audio handling with automatic detection of audio tracks in generated content
+- Better audio mixing when combining multiple video sources
+
+### TTS & Audio Enhancements
+
+**ElevenLabs Model Selection**
+- Configure ElevenLabs models with fine-grained control: eleven_multilingual_v2, eleven_turbo_v2_5, eleven_flash_v2_5 ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_elevenlabs_models.json))
+- Set models at system, speaker, or speechParams level with environment variable support
+- Updated default from eleven_monolingual_v1 to eleven_multilingual_v2
+
+**Advanced Audio Control**
+- Implemented audio track detection for both external and AI-generated videos
+- Enhanced TTS processing with improved type safety for Nijivoice and OpenAI agents
+
+### Breaking Changes
+
+**Audio Schema Changes**
+- Added `audioParams.movieVolume` parameter for controlling audio levels from videos ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.5/scripts/test/test_audio.json))
+
+### Documentation & Configuration
+
+**Comprehensive Setup Guides**
+- API configuration documentation covering baseURL setup, Azure OpenAI integration, and service-specific API key management ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.5/docs/faq_en.md))
+- Image generation configuration guide with practical examples ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.5/docs/faq_ja.md))
+
+### Technical Improvements
+- **Browser Compatibility**: Exported provider utilities for browser environments, enabling MulmoCast components usage in web applications
+- Enhanced schema descriptions and parameter definitions
+- Removed obsolete generatedVoice parameter from Nijivoice implementation
+
+This release provides greater control over audio generation quality, speed, and language support while improving video integration and expanding platform versatility.
+
+# v.0.1.4
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.4** introduces beat-specific movie model configuration and significantly expands movie generation capabilities with 8 new AI models.
+
+### New Features
+
+**Beat-Specific Movie Model Configuration**
+- Configure different movie generation models for individual beats within a single presentation ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.4/scripts/test/test_replicate.json))
+- Set global default movie models and override them per beat for optimal results
+- Mix and match movie models to leverage each model's unique strengths
+
+**Expanded Movie Generation Models**
+- **ByteDance SeedAnce**: `bytedance/seedance-1-lite` (fast, efficient) and `bytedance/seedance-1-pro` (higher quality)
+- **Kling Models**: `kwaivgi/kling-v1.6-pro` and `kwaivgi/kling-v2.1` (great for image-to-video)
+- **Google Veo**: `google/veo-2`, `google/veo-3`, and `google/veo-3-fast` (versatile and reliable)
+- **Minimax**: `minimax/video-01` and `minimax/hailuo-02` (unique artistic styles)
+- Comprehensive test suite showing effective usage of each new model ([sample file](https://github.com/receptron/mulmocast-cli/blob/0.1.4/scripts/test/test_replicate.json))
+
+### System Improvements
+- **Centralized Configuration**: Improved provider system makes it easier to switch between AI services
+- **Better Resource Management**: Enhanced handling of API rate limits and processing constraints
+- **Enhanced Type Safety**: Improved TypeScript definitions for better development experience
+
+This release enables greater creative control by allowing you to choose the perfect AI model for each moment in your presentation, opening new possibilities for educational content, marketing materials, and artistic projects.
+
+# v.0.1.3
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.3** introduces advanced character consistency features, template expansion, and significant system improvements for enhanced multimedia content creation.
+
+### New Features
+
+**Reference Images for Character Consistency**
+- Generate reference images directly from prompts to maintain consistent character appearance across multiple scenes ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.3/scripts/test/test_image_refs.json))
+- Support for multi-scene storytelling with unified character design
+
+**HTML Templates and Multi-Character Support**
+- New templates for HTML-based presentations and complex multi-character storytelling ([templates](https://github.com/receptron/mulmocast-cli/tree/0.1.3/assets/templates/))
+- Added 5 new template files: html.json, characters.json, image_refs.json, voice_over.json, and html.json (scripts)
+
+### Breaking Changes (Developers Only)
+
+**Image API Function Signatures Changed**
+- `generateBeatImage()` and `generateReferenceImage()` now use single object parameter instead of multiple positional parameters
+- **Before:** `generateBeatImage(index, context, settings, callbacks)`
+- **After:** `generateBeatImage({ index, context, settings, callbacks })`
+- Only affects library users, not CLI users
+
+### Creative Samples
+
+**New Story and Movie Examples**
+- "The Girl Who Listened" - Complete multimedia story with Studio Ghibli-style visuals ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.3/scripts/snakajima/girl_and_cat.json))
+- Japanese short animation movie sample with Replicate provider integration ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.3/scripts/snakajima/replicate_movie_sample.json))
+
+### Technical Improvements
+
+- **Enhanced Type Safety**: Added explicit type definitions to agent functions for better development experience
+- **Configuration Management**: Improved settings integration with environment variables
+- **Code Quality Enhancements**: Applied comprehensive linting rules and refactored image processing components
+- **Logging Improvements**: Reduced console noise during processing
+
+### System Updates
+- Updated core dependencies for better performance and stability
+
+This release focuses on character consistency, template expansion, and improved creative workflows for multimedia content creation.
+
+# v.0.1.2
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.2** focuses on performance optimization and dependency maintenance for improved HTML generation efficiency.
+
+- Technical Improvements
+  - **HTML Caching Optimization**: Implemented caching for HTML generation to prevent unnecessary regeneration when images are already cached
+  - **Package Updates**: Updated core dependencies
+
+# v.0.1.1
+## RELEASE NOTE
+
+**MulmoCast CLI v0.1.1** includes improved error handling, code refactoring, and various sample scripts for better development experience.
+
+- New Features
+  - **Improved BGM Error Handling**: Clear error messages when BGM file paths are incorrect, HTTP URLs skip file existence validation
+
+- Technical Improvements
+  - **Schema Refactoring**: Migrated union literals to enum syntax for cleaner code
+  - **Utility Functions**: Extracted file extension logic into reusable `getExtention` function with unit tests
+  - **Beat ID File Naming**: When beat has ID specified, that ID is used as name for imageFile and movieFile
+  - **UI-Only Movie Model Schemas**: App (UI) focused schema definitions for Google Veo 2.0 and Replicate models
+  - **GraphAI Update**: Updated to GraphAI version 2.0.11
+
+- Samples & Templates
+  - **Mixed Image Generation**: Added sample demonstrating alternating imagePrompt and htmlPrompt usage ([sample](https://github.com/receptron/mulmocast-cli/blob/0.1.1/scripts/snakajima/peter_lynch.json))
+  - **Voice-Over Samples**: Added voice-over samples with Gemini 2.5 Pro auto-generated narration and improved error handling ([fsd_demo](https://github.com/receptron/mulmocast-cli/blob/0.1.1/scripts/snakajima/fsd_demo.json), [template](https://github.com/receptron/mulmocast-cli/blob/0.1.1/scripts/templates/voice_over.json))
+  - **Dockerfile Sample**: Added example Dockerfile for running MulmoCast in containers ([docs](https://github.com/receptron/mulmocast-cli/blob/0.1.1/README.md#installation))
+
+- Others
+  - **Template Clarity**: Updated Ghibli Shorts template title for better understanding
+
 # v.0.1.0
 ## RELEASE NOTE
 

@@ -1,7 +1,6 @@
 import { GraphAILogger, assert } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
-
-const nijovoiceApiKey = process.env.NIJIVOICE_API_KEY ?? "";
+import type { NijivoiceTTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult, AgentConfig } from "../types/agent.js";
 
 type VoiceJson = {
   generatedVoice: {
@@ -16,22 +15,26 @@ const errorMessage = [
   '2. Use OpenAI\'s TTS instead of Niji Voice by changing speechParams.provider from "nijivoice" to "openai".',
 ].join("\n");
 
-export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs, config }) => {
+export const ttsNijivoiceAgent: AgentFunction<NijivoiceTTSAgentParams, AgentBufferResult | AgentErrorResult, AgentTextInputs, AgentConfig> = async ({
+  params,
+  namedInputs,
+  config,
+}) => {
   const { suppressError, voice, speed, speed_global } = params;
   const { apiKey } = config ?? {};
   const { text } = namedInputs;
-  assert(apiKey ?? nijovoiceApiKey, errorMessage);
+  assert(!!apiKey, errorMessage);
   const url = `https://api.nijivoice.com/api/platform/v1/voice-actors/${voice}/generate-voice`;
   const options = {
     method: "POST",
     headers: {
-      "x-api-key": apiKey ?? nijovoiceApiKey,
+      "x-api-key": apiKey,
       accept: "application/json",
       "content-type": "application/json",
     },
     body: JSON.stringify({
       format: "mp3",
-      speed: speed ? "" + speed : speed_global ? "" + speed_global : "1.0",
+      speed: String(speed ?? speed_global ?? "1.0"),
       script: text,
     }),
   };
@@ -42,7 +45,7 @@ export const ttsNijivoiceAgent: AgentFunction = async ({ params, namedInputs, co
     if (voiceJson?.generatedVoice?.audioFileDownloadUrl) {
       const audioRes = await fetch(voiceJson.generatedVoice.audioFileDownloadUrl);
       const buffer = Buffer.from(await audioRes.arrayBuffer());
-      return { buffer, generatedVoice: voiceJson.generatedVoice };
+      return { buffer };
     }
     if (suppressError) {
       return {

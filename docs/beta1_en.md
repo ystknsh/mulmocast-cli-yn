@@ -47,11 +47,16 @@ We're also working on a more user-friendly app version—please stay tuned!
 
 5. Go to [OpenAI Settings > Organization > General](https://platform.openai.com/settings/organization/general) and complete the identity verification
 
-6. After verification, add the following line to your `.env` file:
+6. After verification, for high-quality image generation, configure the `imageParams` in your MulmoScript as follows:
 
+   ```json
+   "imageParams": {
+     "provider": "openai",
+     "model": "gpt-image-1"
+   }
    ```
-   DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1
-   ```
+
+   For detailed configuration examples, refer to [test_images.json](../scripts/test/test_images.json) or [test_movie.json](../scripts/test/test_movie.json).
 
 ### Recommended Steps 2 (BGM Customization)
 To use custom background music, add the following configuration to your `.env` file:

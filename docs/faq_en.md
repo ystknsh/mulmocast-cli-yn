@@ -122,6 +122,31 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **Note**: When installing via `npm install -g mulmocast`, style files are not included. You need to download them separately or create your own.
 
+### Q: Getting "403 Your organization must be verified to use the model 'gpt-image-1'" error during image generation
+
+**A: This error occurs because the OpenAI `gpt-image-1` model used for image generation requires organization verification.**
+
+**You can choose from the following two solutions:**
+
+**Option 1**: Complete organization verification to use `gpt-image-1`
+- Enables higher quality image generation
+- Refer to [Beta Release Notes](beta1_en.md#recommended-steps-for-high-quality-image-generation) to complete OpenAI organization verification
+
+**Option 2**: Use the traditional `dall-e-3`
+- No organization verification required
+- Add the following configuration to your MulmoScript:
+
+```json
+{
+  "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3"
+  }
+}
+```
+
+**Background**: With version updates, we changed the default model to `gpt-image-1` which enables higher quality image generation. While `gpt-image-1` requires organization verification, the traditional `dall-e-3` can be used without verification.
+
 ## Text-to-Speech (TTS) Configuration
 
 ### Q: How do I change the TTS engine?
@@ -166,6 +191,56 @@ Speaker-specific settings take priority; if not specified, the global setting is
 
 **Environment variables setup**:
 When using each provider, set the corresponding API key in your `.env` file. Available providers and details can be found in [Configuration](../README.md#configuration).
+
+## API Configuration
+
+### Q: Can I change the baseURL?
+
+**A: Yes, you can change the baseURL for OpenAI-compatible services. This supports Azure OpenAI and custom endpoints.**
+
+```bash
+# Basic settings (fallback)
+OPENAI_BASE_URL=https://your-azure.openai.azure.com
+
+# Service-specific settings (priority)
+LLM_OPENAI_BASE_URL=https://your-azure.openai.azure.com
+TTS_OPENAI_BASE_URL=https://api.openai.com/v1
+IMAGE_OPENAI_BASE_URL=https://custom-image-endpoint.com/v1
+```
+
+### Q: Can I configure API keys separately for each service?
+
+**A: Yes, you can configure API keys individually for major services.**
+
+```bash
+# Basic settings (fallback)
+OPENAI_API_KEY=sk-general-key
+ANTHROPIC_API_TOKEN=your-claude-key
+REPLICATE_API_TOKEN=your-replicate-key
+
+# Service-specific settings (priority)
+LLM_OPENAI_API_KEY=sk-llm-key
+TTS_OPENAI_API_KEY=sk-tts-key
+IMAGE_OPENAI_API_KEY=sk-image-key
+LLM_ANTHROPIC_API_TOKEN=sk-claude-key
+MOVIE_REPLICATE_API_TOKEN=your-replicate-movie-key
+```
+
+**Prefix explanation**: Used for the following processes
+- **LLM_**: Text processing such as translation and script generation
+- **TTS_**: Audio generation
+- **IMAGE_**: Image generation
+- **MOVIE_**: Video generation
+
+**Priority**: Service-specific settings > General settings
+
+## Image Generation Configuration
+
+### Q: Can I switch image generation AI models and providers?
+
+**A: Yes, you can specify providers and models using imageParams.**
+
+For detailed configuration examples, see [test_images.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_images.json).
 
 ## Troubleshooting
 

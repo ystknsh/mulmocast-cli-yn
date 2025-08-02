@@ -22,7 +22,7 @@ export const recursiveSplitJa = (text: string) => {
   return delimiters
     .reduce<string[]>(
       (textData, delimiter) => {
-        return textData.map((text) => splitIntoSentencesJa(text, delimiter, 7)).flat(1);
+        return textData.map((textInner) => splitIntoSentencesJa(textInner, delimiter, 7)).flat(1);
       },
       [text],
     )
@@ -36,14 +36,16 @@ interface Replacement {
   to: string;
 }
 
-export function replacePairsJa(str: string, replacements: Replacement[]): string {
-  replacements.forEach(({ from, to }) => {
-    // Escape any special regex characters in the 'from' string.
-    const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(escapedFrom, "g");
-    str = str.replace(regex, to);
-  });
-  return str;
+export function replacePairsJa(replacements: Replacement[]) {
+  return (str: string) => {
+    return replacements.reduce((tmp, current) => {
+      const { from, to } = current;
+      // Escape any special regex characters in the 'from' string.
+      const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(escapedFrom, "g");
+      return tmp.replace(regex, to);
+    }, str);
+  };
 }
 
 export const replacementsJa: Replacement[] = [
@@ -64,4 +66,5 @@ export const replacementsJa: Replacement[] = [
   { from: "5つ", to: "いつつ" },
   { from: "危険な面", to: "危険なめん" },
   { from: "その通り！", to: "その通り。" },
+  { from: "%", to: "パーセント" },
 ];

@@ -6,7 +6,7 @@ import { mulmoScriptSchema } from "../../src/types/schema.js";
 
 const validMulmoScriptJson = JSON.stringify({
   $mulmocast: {
-    version: "1.0",
+    version: "1.1",
     credit: "closing",
   },
   title: "Test Script",
@@ -35,7 +35,6 @@ const validMulmoScriptJson = JSON.stringify({
     },
   ],
   speechParams: {
-    provider: "openai",
     speakers: {
       speaker1: {
         displayName: {

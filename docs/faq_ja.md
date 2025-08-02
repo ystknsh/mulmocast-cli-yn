@@ -122,6 +122,37 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **注意**: `npm install -g mulmocast`でインストールした場合、スタイルファイルは含まれません。別途ダウンロードするか、独自に作成する必要があります。
 
+### Q: 画像生成で 「403 Your organization must be verified to use the model 'gpt-image-1'」 エラーが発生します
+
+**A: このエラーは、 画像生成で使用されている OpenAI `gpt-image-1` モデルを利用するのに組織認証を必要とするために発生します。**
+
+**解決方法は以下の2つから選択できます：**
+
+**方法1**: 組織認証を完了して `gpt-image-1` を使用する
+- より高品質な画像生成が可能です
+- [ベータ版リリースノート](beta1_ja.md)を参照して、OpenAIの組織認証を完了してください
+
+**方法2**: 従来の `dall-e-3` を使用する
+- 組織認証は不要です
+- 以下の設定を MulmoScript に追加してください：
+
+```json
+{
+  "imageParams": {
+    "provider": "openai",
+    "model": "dall-e-3"
+  }
+}
+```
+
+**背景**: バージョンアップにより、より高品質な画像生成が可能な `gpt-image-1` をデフォルトモデルに変更しました。`gpt-image-1` は組織認証が必要ですが、従来の `dall-e-3` は認証なしで利用可能です。
+
+## 画像生成設定
+### Q. 画像生成AIのモデルやプロバイダーを切り替えられますか？
+**A. はい、⁠imageParams でプロバイダーやモデルを指定できます。**
+
+詳しい設定例は [test_images.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_images.json) を参考にしてください。
+
 ## 音声（TTS）設定
 
 ### Q: TTSエンジンを変更するにはどうすればよいですか？
@@ -166,6 +197,48 @@ mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
 
 **環境変数の設定**:
 各プロバイダーを使用する場合は、対応するAPIキーを`.env`ファイルに設定してください。利用可能なプロバイダーと詳細は[Configuration](../README.md#configuration)を参照してください。
+
+## API設定
+
+### Q: baseURLは変更できますか？
+
+**A: はい、OpenAI系サービスのbaseURLの変更が可能です。Azure OpenAIやカスタムエンドポイントに対応できます。**
+
+```bash
+# 基本設定（フォールバック）
+OPENAI_BASE_URL=https://your-azure.openai.azure.com
+
+# サービス別設定（優先）
+LLM_OPENAI_BASE_URL=https://your-azure.openai.azure.com
+TTS_OPENAI_BASE_URL=https://api.openai.com/v1
+IMAGE_OPENAI_BASE_URL=https://custom-image-endpoint.com/v1
+```
+
+### Q: APIキーをサービス別に個別設定できますか？
+
+**A: はい、主要なサービスで個別設定が可能です。**
+
+```bash
+# 基本設定（フォールバック）
+OPENAI_API_KEY=sk-general-key
+ANTHROPIC_API_TOKEN=your-claude-key
+REPLICATE_API_TOKEN=your-replicate-key
+
+# サービス別設定（優先）
+LLM_OPENAI_API_KEY=sk-llm-key
+TTS_OPENAI_API_KEY=sk-tts-key
+IMAGE_OPENAI_API_KEY=sk-image-key
+LLM_ANTHROPIC_API_TOKEN=sk-claude-key
+MOVIE_REPLICATE_API_TOKEN=your-replicate-movie-key
+```
+
+**プレフィックス説明**: 以下の処理に利用します
+- **LLM_**: 翻訳、スクリプト生成等のテキスト処理
+- **TTS_**: 音声生成
+- **IMAGE_**: 画像生成
+- **MOVIE_**: 動画生成
+
+**優先順位**: サービス固有設定 > 汎用設定
 
 ## トラブルシューティング
 

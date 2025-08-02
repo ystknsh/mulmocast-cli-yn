@@ -2,6 +2,8 @@ import { readFileSync } from "fs";
 import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
+import type { AgentBufferResult, GoogleImageAgentConfig, GoogleMovieAgentParams, MovieAgentInputs } from "../types/agent.js";
+
 async function generateMovie(
   projectId: string | undefined,
   model: string,
@@ -16,13 +18,13 @@ async function generateMovie(
   const payload = {
     instances: [
       {
-        prompt: prompt,
+        prompt,
         image: undefined as { bytesBase64Encoded: string; mimeType: string } | undefined,
       },
     ],
     parameters: {
       sampleCount: 1,
-      aspectRatio: aspectRatio,
+      aspectRatio,
       safetySetting: "block_only_high",
       personGeneration: "allow_all",
       durationSeconds: duration,
@@ -62,7 +64,7 @@ async function generateMovie(
     while (true) {
       GraphAILogger.info("...waiting for movie generation...");
       await sleep(3000);
-      const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
+      const operationResponse = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,10 +72,10 @@ async function generateMovie(
         },
         body: JSON.stringify(fetchBody),
       });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      if (!operationResponse.ok) {
+        throw new Error(`Error: ${operationResponse.status} - ${operationResponse.statusText}`);
       }
-      const responseData = await response.json();
+      const responseData = await operationResponse.json();
       if (responseData.done) {
         if (responseData.error) {
           GraphAILogger.info("Prompt: ", prompt);
@@ -93,11 +95,6 @@ async function generateMovie(
   return undefined;
 }
 
-export type MovieGoogleConfig = {
-  projectId?: string;
-  token?: string;
-};
-
 export const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
   if (canvasSize.width > canvasSize.height) {
     return "16:9";
@@ -108,12 +105,11 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
   }
 };
 
-export const movieGoogleAgent: AgentFunction<
-  { model: string; canvasSize: { width: number; height: number }; duration?: number },
-  { buffer: Buffer },
-  { prompt: string; imagePath?: string },
-  MovieGoogleConfig
-> = async ({ namedInputs, params, config }) => {
+export const movieGoogleAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferResult, MovieAgentInputs, GoogleImageAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";

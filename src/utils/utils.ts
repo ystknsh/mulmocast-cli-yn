@@ -1,39 +1,15 @@
 import * as crypto from "crypto";
-import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
 import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
-export const llm = ["openai", "anthropic", "gemini", "groq"] as const;
-
-export type LLM = (typeof llm)[number];
-
-export const llmConfig: Record<LLM, { agent: string; defaultModel: string; max_tokens: number }> = {
-  openai: {
-    agent: "openAIAgent",
-    defaultModel: "gpt-4o",
-    max_tokens: 8192,
-  },
-  anthropic: {
-    agent: "anthropicAgent",
-    defaultModel: "claude-3-7-sonnet-20250219",
-    max_tokens: 8192,
-  },
-  gemini: {
-    agent: "geminiAgent",
-    defaultModel: "gemini-1.5-flash",
-    max_tokens: 8192,
-  },
-  groq: {
-    agent: "groqAgent",
-    defaultModel: "llama3-8b-8192",
-    max_tokens: 4096,
-  },
-} as const;
+import { MulmoBeat, MulmoStudioMultiLingualData } from "../types/index.js";
+import { provider2LLMAgent } from "./provider2agent.js";
+import type { LLM } from "./provider2agent.js"; // TODO remove
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
   const llmKey = _llm ?? "openai";
-  const agent = llmConfig[llmKey]?.agent ?? llmConfig.openai.agent;
-  const model = _model ?? llmConfig[llmKey]?.defaultModel ?? llmConfig.openai.defaultModel;
-  const max_tokens = llmConfig[llmKey]?.max_tokens ?? llmConfig.openai.max_tokens;
+  const agent = provider2LLMAgent[llmKey]?.agentName ?? provider2LLMAgent.openai.agentName;
+  const model = _model ?? provider2LLMAgent[llmKey]?.defaultModel ?? provider2LLMAgent.openai.defaultModel;
+  const max_tokens = provider2LLMAgent[llmKey]?.max_tokens ?? provider2LLMAgent.openai.max_tokens;
 
   return { agent, model, max_tokens };
 };
@@ -70,45 +46,101 @@ export function userAssert(condition: boolean, message: string): asserts conditi
   }
 }
 
-export const settings2GraphAIConfig = (settings?: Record<string, string>): ConfigDataDictionary<DefaultConfigData> => {
-  const config: ConfigDataDictionary<DefaultConfigData> = {};
-  if (settings) {
-    if (settings.OPENAI_API_KEY) {
-      config.openAIAgent = {
-        apiKey: settings.OPENAI_API_KEY,
-      };
-      config.ttsOpenaiAgent = {
-        apiKey: settings.OPENAI_API_KEY,
-      };
-      config.imageOpenaiAgent = {
-        apiKey: settings.OPENAI_API_KEY,
-      };
-    }
-    if (settings.ANTHROPIC_API_TOKEN) {
-      config.anthropicAgent = {
-        apiKey: settings.ANTHROPIC_API_TOKEN,
-      };
-    }
-    if (settings.REPLICATE_API_TOKEN) {
-      config.movieReplicateAgent = {
-        apiKey: settings.REPLICATE_API_TOKEN,
-      };
-    }
-    if (settings.NIJIVOICE_API_KEY) {
-      config.ttsNijivoiceAgent = {
-        apiKey: settings.NIJIVOICE_API_KEY,
-      };
-    }
-    if (settings.ELEVENLABS_API_KEY) {
-      config.ttsElevenlabsAgent = {
-        apiKey: settings.ELEVENLABS_API_KEY,
-      };
-    }
+export const settings2GraphAIConfig = (
+  settings?: Record<string, string>,
+  env?: Record<string, string | undefined>,
+): ConfigDataDictionary<DefaultConfigData> => {
+  const getKey = (prefix: string, key: string) => {
+    return settings?.[`${prefix}_${key}`] ?? settings?.[key] ?? env?.[`${prefix}_${key}`] ?? env?.[key];
+  };
+
+  const config: ConfigDataDictionary<DefaultConfigData> = {
+    openAIAgent: {
+      apiKey: getKey("LLM", "OPENAI_API_KEY"),
+      baseURL: getKey("LLM", "OPENAI_BASE_URL"),
+    },
+    ttsOpenaiAgent: {
+      apiKey: getKey("TTS", "OPENAI_API_KEY"),
+      baseURL: getKey("TTS", "OPENAI_BASE_URL"),
+    },
+    imageOpenaiAgent: {
+      apiKey: getKey("IMAGE", "OPENAI_API_KEY"),
+      baseURL: getKey("IMAGE", "OPENAI_BASE_URL"),
+    },
+    imageGoogleAgent: {
+      projectId: getKey("IMAGE", "GOOGLE_PROJECT_ID"),
+    },
+    anthropicAgent: {
+      apiKey: getKey("LLM", "ANTHROPIC_API_TOKEN"),
+    },
+    movieReplicateAgent: {
+      apiKey: getKey("MOVIE", "REPLICATE_API_TOKEN"),
+    },
+    movieGoogleAgent: {
+      projectId: getKey("MOVIE", "GOOGLE_PROJECT_ID"),
+    },
+    ttsNijivoiceAgent: {
+      apiKey: getKey("TTS", "NIJIVOICE_API_KEY"),
+    },
+    ttsElevenlabsAgent: {
+      apiKey: getKey("TTS", "ELEVENLABS_API_KEY"),
+    },
+    soundEffectReplicateAgent: {
+      apiKey: getKey("SOUND_EFFECT", "REPLICATE_API_TOKEN"),
+    },
+    lipSyncReplicateAgent: {
+      apiKey: getKey("LIPSYNC", "REPLICATE_API_TOKEN"),
+    },
+
     // TODO
     // browserlessAgent
     // ttsGoogleAgent
     // geminiAgent, groqAgent for tool
     // TAVILY_API_KEY ( for deep research)
+  };
+  return deepClean(config) ?? {};
+};
+
+export const getExtention = (contentType: string | null, url: string) => {
+  if (contentType?.includes("jpeg") || contentType?.includes("jpg")) {
+    return "jpg";
+  } else if (contentType?.includes("png")) {
+    return "png";
   }
-  return config;
+  // Fall back to URL extension
+  const urlExtension = url.split(".").pop()?.toLowerCase();
+  if (urlExtension && ["jpg", "jpeg", "png"].includes(urlExtension)) {
+    return urlExtension === "jpeg" ? "jpg" : urlExtension;
+  }
+  return "png"; // default
+};
+
+// deepClean
+
+type Primitive = string | number | boolean | symbol | bigint;
+type CleanableValue = Primitive | null | undefined | CleanableObject | CleanableValue[];
+type CleanableObject = { [key: string]: CleanableValue };
+
+export const deepClean = <T extends CleanableValue>(input: T): T | undefined => {
+  if (input === null || input === undefined || input === "") {
+    return undefined;
+  }
+
+  if (Array.isArray(input)) {
+    const cleanedArray = input.map(deepClean).filter((v): v is Exclude<T, undefined> => v !== undefined);
+    return cleanedArray.length > 0 ? (cleanedArray as unknown as T) : undefined;
+  }
+
+  if (typeof input === "object") {
+    const result: Record<string, CleanableValue> = {};
+    for (const [key, value] of Object.entries(input)) {
+      const cleaned = deepClean(value);
+      if (cleaned !== undefined) {
+        result[key] = cleaned;
+      }
+    }
+    return Object.keys(result).length > 0 ? (result as T) : undefined;
+  }
+
+  return input;
 };

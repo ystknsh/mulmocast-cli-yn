@@ -4,7 +4,8 @@ import test from "node:test";
 import assert from "node:assert";
 import { fileURLToPath } from "url";
 import { z } from "zod";
-import { mulmoScriptSchema, mulmoScriptTemplateSchema } from "../../src/types/schema.js";
+import { mulmoScriptSchema, mulmoPromptTemplateSchema } from "../../src/types/schema.js";
+import { MulmoScriptMethods } from "../../src/methods/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +16,11 @@ const validateJsonFile = (filePath: string, schema: z.ZodObject<any>): { isValid
   try {
     const content = fs.readFileSync(filePath, "utf-8");
     const jsonData = JSON.parse(content);
-    schema.parse(jsonData);
+    if (schema === mulmoScriptSchema) {
+      MulmoScriptMethods.validate(jsonData);
+    } else {
+      schema.parse(jsonData);
+    }
 
     return { isValid: true };
   } catch (error) {
@@ -70,13 +75,13 @@ test("JSON files in scripts directory should conform to mulmoScriptSchema", asyn
   }
 });
 
-test("JSON files in templates directory should conform to mulmoScriptTemplateSchema", async (t) => {
+test("JSON files in templates directory should conform to mulmoPromptTemplateSchema", async (t) => {
   const templatesDir = path.resolve(__dirname, "../../assets/templates");
   const jsonFiles = getJsonFilesInDirectory(templatesDir);
 
   for (const filePath of jsonFiles) {
     await t.test(`Validating template: ${path.basename(filePath)}`, async () => {
-      const result = validateJsonFile(filePath, mulmoScriptTemplateSchema);
+      const result = validateJsonFile(filePath, mulmoPromptTemplateSchema);
       if (!result.isValid) {
         assert.fail(`File validation failed: ${result.error}`);
       }

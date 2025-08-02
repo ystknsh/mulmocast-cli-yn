@@ -3,11 +3,15 @@ import path from "path";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
-import type { MulmoScript, MulmoScriptTemplateFile, MulmoStudioContext } from "../types/index.js";
-import { MulmoScriptTemplateMethods, MulmoStudioContextMethods } from "../methods/index.js";
-import { mulmoScriptTemplateSchema } from "../types/schema.js";
+import type { MulmoScript, MulmoPromptTemplateFile, MulmoPromptTemplate, MulmoStudioContext } from "../types/index.js";
+import { MulmoStudioContextMethods } from "../methods/index.js";
+import { mulmoPromptTemplateSchema } from "../types/schema.js";
 import { PDFMode } from "../types/index.js";
-import { ZodSchema } from "zod";
+import { ZodSchema, ZodType } from "zod";
+import { getMulmoScriptTemplateSystemPrompt } from "./prompt.js";
+
+const promptTemplateDirName = "./assets/templates";
+const scriptTemplateDirName = "./scripts/templates";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,9 +64,9 @@ export function readMulmoScriptFile<T = MulmoScript>(
       mulmoDataPath: scriptPath,
       fileName: parsedPath.name,
     };
-  } catch (__error) {
+  } catch (error) {
     if (errorMessage) {
-      GraphAILogger.info("read file format is broken.");
+      GraphAILogger.info("read file format is broken.", error);
     }
     return null;
   }
@@ -100,9 +104,14 @@ export const getAudioFilePath = (audioDirPath: string, dirName: string, fileName
   }
   return path.resolve(audioDirPath, dirName, fileName + ".mp3");
 };
-export const getAudioArtifactFilePath = (outDirPath: string, fileName: string) => {
-  return path.resolve(outDirPath, fileName + ".mp3");
+
+export const getAudioArtifactFilePath = (context: MulmoStudioContext) => {
+  const suffix = context.lang ? `_${context.lang}` : "";
+  const fileName = MulmoStudioContextMethods.getFileName(context);
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+  return path.resolve(outDirPath, fileName + suffix + ".mp3");
 };
+
 export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lang?: string, caption?: string) => {
   const suffix = lang ? `_${lang}` : "";
   const suffix2 = caption ? `__${caption}` : "";
@@ -110,14 +119,27 @@ export const getOutputVideoFilePath = (outDirPath: string, fileName: string, lan
 };
 // image
 export const imageSuffix = "p";
+
 export const getBeatPngImagePath = (context: MulmoStudioContext, index: number) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  const beat = context.studio.script.beats[index]; // beat could be undefined only in a test case.
+  if (beat?.id) {
+    return `${imageProjectDirPath}/${beat.id}.png`;
+  }
   return `${imageProjectDirPath}/${index}${imageSuffix}.png`;
 };
-export const getBeatMoviePath = (context: MulmoStudioContext, index: number) => {
+
+export const getBeatMoviePaths = (context: MulmoStudioContext, index: number) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
-  return `${imageProjectDirPath}/${index}.mov`;
+  const beat = context.studio.script.beats[index]; // beat could be undefined only in a test case.
+  const filename = beat?.id ? `${beat.id}` : `${index}`;
+  return {
+    movieFile: `${imageProjectDirPath}/${filename}.mov`,
+    soundEffectFile: `${imageProjectDirPath}/${filename}_sound.mov`,
+    lipSyncFile: `${imageProjectDirPath}/${filename}_lipsync.mov`,
+  };
 };
+
 export const getReferenceImagePath = (context: MulmoStudioContext, key: string, extension: string) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   return `${imageProjectDirPath}/${key}.${extension}`;
@@ -134,8 +156,9 @@ export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMo
   }
   return path.resolve(outDirPath, `${fileName}_${pdfMode}.pdf`);
 };
-export const getTemplateFilePath = (templateName: string) => {
-  return path.resolve(npmRoot, "./assets/templates/" + templateName + ".json");
+
+export const getPromptTemplateFilePath = (promptTemplateName: string) => {
+  return path.resolve(npmRoot, promptTemplateDirName, promptTemplateName + ".json");
 };
 
 export const mkdir = (dirPath: string) => {
@@ -176,32 +199,42 @@ export const getFullPath = (baseDirPath: string | undefined, file: string) => {
   return path.resolve(file);
 };
 
-export const readScriptTemplateFile = (scriptName: string) => {
-  const scriptPath = path.resolve(npmRoot, "./scripts/templates", scriptName);
-  const scriptData = fs.readFileSync(scriptPath, "utf-8");
+// script and prompt template
+export const readScriptTemplateFile = (scriptTemplateFileName: string): MulmoScript => {
+  const scriptTemplatePath = path.resolve(npmRoot, scriptTemplateDirName, scriptTemplateFileName);
+  const scriptTemplateData = fs.readFileSync(scriptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the script here to eliminate default values.
-  return JSON.parse(scriptData);
+  return JSON.parse(scriptTemplateData);
 };
 
-export const readTemplatePrompt = (templateName: string) => {
-  const templatePath = getTemplateFilePath(templateName);
-  const templateData = fs.readFileSync(templatePath, "utf-8");
+const readPromptTemplateFile = (promptTemplateFileName: string): MulmoPromptTemplateFile => {
+  const promptTemplatePath = getPromptTemplateFilePath(promptTemplateFileName);
+  const promptTemplateData = fs.readFileSync(promptTemplatePath, "utf-8");
   // NOTE: We don't want to schema parse the template here to eliminate default values.
-  const template = JSON.parse(templateData);
+  return JSON.parse(promptTemplateData);
+};
 
-  const script = (() => {
-    if (template.scriptName) {
-      const script = readScriptTemplateFile(template.scriptName);
-      return { ...script, ...(template.presentationStyle ?? {}) };
-    }
-    return undefined;
-  })();
-  const prompt = MulmoScriptTemplateMethods.getSystemPrompt(template, script);
+const mulmoScriptTemplate2Script = (scriptTemplate: MulmoPromptTemplate): MulmoScript | undefined => {
+  if (scriptTemplate.scriptName) {
+    const scriptTemplateData = readScriptTemplateFile(scriptTemplate.scriptName);
+    return { ...scriptTemplateData, ...(scriptTemplate.presentationStyle ?? {}) };
+  }
+  return undefined;
+};
+export const getScriptFromPromptTemplate = (promptTemplateFileName: string): MulmoScript | undefined => {
+  const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
+  return mulmoScriptTemplate2Script(promptTemplate);
+};
+
+export const readTemplatePrompt = (promptTemplateFileName: string): string => {
+  const promptTemplate = readPromptTemplateFile(promptTemplateFileName);
+  const script = mulmoScriptTemplate2Script(promptTemplate);
+  const prompt = getMulmoScriptTemplateSystemPrompt(promptTemplate, script);
   return prompt;
 };
 
-export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
-  const templatesDir = path.resolve(npmRoot, "./assets/templates");
+const getPromptTemplates = <T>(dirPath: string, schema: ZodType | null): T[] => {
+  const templatesDir = path.resolve(npmRoot, dirPath);
 
   if (!fs.existsSync(templatesDir)) {
     return [];
@@ -209,15 +242,29 @@ export const getAvailableTemplates = (): MulmoScriptTemplateFile[] => {
 
   const files = fs.readdirSync(templatesDir);
   return files.map((file) => {
-    const template = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
-    return {
-      ...mulmoScriptTemplateSchema.parse(template),
-      filename: file.replace(/\.json$/, ""),
-    };
+    try {
+      const promptTemplate = JSON.parse(fs.readFileSync(path.resolve(templatesDir, file), "utf-8"));
+      return {
+        ...(schema ? schema.parse(promptTemplate) : promptTemplate),
+        filename: file.replace(/\.json$/, ""),
+      };
+    } catch (e) {
+      GraphAILogger.info("file: " + file);
+      GraphAILogger.info(e);
+      return {};
+    }
   });
 };
 
-export const writingMessage = (filePath: string) => {
+export const getAvailablePromptTemplates = (): MulmoPromptTemplateFile[] => {
+  return getPromptTemplates<MulmoPromptTemplateFile>(promptTemplateDirName, mulmoPromptTemplateSchema);
+};
+export const getAvailableScriptTemplates = (): MulmoScript[] => {
+  return getPromptTemplates<MulmoScript>(scriptTemplateDirName, null);
+};
+// end of template
+
+export const writingMessage = (filePath: string): void => {
   GraphAILogger.debug(`writing: ${filePath}`);
 };
 

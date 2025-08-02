@@ -2,7 +2,7 @@ import test from "node:test";
 // import assert from "node:assert";
 
 import { getFileObject } from "../../src/cli/helpers.js";
-import { createOrUpdateStudioData } from "../../src/utils/preprocess.js";
+import { createStudioData } from "../../src/utils/context.js";
 import { audio, images, movie } from "../../src/actions/index.js";
 
 import path from "path";
@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-test("test images", async () => {
+test("test images and movie", async () => {
   // const fileDirs = getFileObject({ file: "hello.yaml", basedir: __dirname });
   const fileDirs = getFileObject({ file: "hello.yaml" });
 
@@ -118,7 +118,7 @@ test("test images", async () => {
     ],
   };
 
-  const studio = createOrUpdateStudioData(mulmoScript, null, "hello");
+  const studio = createStudioData(mulmoScript, "hello");
   const context = {
     studio,
     fileDirs,
@@ -138,6 +138,7 @@ test("test images", async () => {
         movie: {},
         multiLingual: {},
         caption: {},
+        html: {},
       },
     },
     presentationStyle: studio.script,

@@ -3,8 +3,11 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
 
+import type { AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentParams, ReplicateMovieAgentConfig } from "../types/agent.js";
+import { provider2MovieAgent } from "../utils/provider2agent.js";
+
 async function generateMovie(
-  model: `${string}/${string}` | undefined,
+  model: `${string}/${string}`,
   apiKey: string,
   prompt: string,
   imagePath: string | undefined,
@@ -16,10 +19,11 @@ async function generateMovie(
   });
 
   const input = {
-    prompt: prompt,
-    duration: duration,
+    prompt,
+    duration,
     image: undefined as string | undefined,
     start_image: undefined as string | undefined,
+    first_frame_image: undefined as string | undefined,
     aspect_ratio: aspectRatio, // only for bytedance/seedance-1-lite
     // resolution: "720p", // only for bytedance/seedance-1-lite
     // fps: 24, // only for bytedance/seedance-1-lite
@@ -32,19 +36,22 @@ async function generateMovie(
   if (imagePath) {
     const buffer = readFileSync(imagePath);
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-    if (model === "kwaivgi/kling-v2.1") {
-      input.start_image = base64Image;
+    const start_image = provider2MovieAgent.replicate.modelParams[model]?.start_image;
+    if (start_image === "first_frame_image" || start_image === "image" || start_image === "start_image") {
+      input[start_image] = base64Image;
+    } else if (start_image === undefined) {
+      throw new Error(`Model ${model} does not support image-to-video generation`);
     } else {
       input.image = base64Image;
     }
   }
 
   try {
-    const output = await replicate.run(model ?? "bytedance/seedance-1-lite", { input });
+    const output = await replicate.run(model, { input });
 
     // Download the generated video
     if (output && typeof output === "object" && "url" in output) {
-      const videoUrl = (output.url as () => string)();
+      const videoUrl = (output.url as () => URL)();
       const videoResponse = await fetch(videoUrl);
 
       if (!videoResponse.ok) {
@@ -72,27 +79,40 @@ export const getAspectRatio = (canvasSize: { width: number; height: number }): s
   }
 };
 
-export type MovieReplicateConfig = {
-  apiKey?: string;
-};
-
-export const movieReplicateAgent: AgentFunction<
-  { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number },
-  { buffer: Buffer },
-  { prompt: string; imagePath?: string },
-  MovieReplicateConfig
-> = async ({ namedInputs, params, config }) => {
+export const movieReplicateAgent: AgentFunction<ReplicateMovieAgentParams, AgentBufferResult, MovieAgentInputs, ReplicateMovieAgentConfig> = async ({
+  namedInputs,
+  params,
+  config,
+}) => {
   const { prompt, imagePath } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
-  const duration = params.duration ?? 5;
-  const apiKey = config?.apiKey ?? process.env.REPLICATE_API_TOKEN;
+  const model = params.model ?? provider2MovieAgent.replicate.defaultModel;
+  if (!provider2MovieAgent.replicate.modelParams[model]) {
+    throw new Error(`Model ${model} is not supported`);
+  }
+  const duration = (() => {
+    const durations = provider2MovieAgent.replicate.modelParams[model].durations;
+    if (params.duration) {
+      const largerDurations = durations.filter((d) => d >= params.duration!);
+      return largerDurations.length > 0 ? largerDurations[0] : durations[durations.length - 1];
+    } else {
+      return durations[0];
+    }
+  })();
 
+  if (!provider2MovieAgent.replicate.modelParams[model].durations.includes(duration)) {
+    throw new Error(
+      `Duration ${duration} is not supported for model ${model}. Supported durations: ${provider2MovieAgent.replicate.modelParams[model].durations.join(", ")}`,
+    );
+  }
+
+  const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("REPLICATE_API_TOKEN environment variable is required");
   }
 
   try {
-    const buffer = await generateMovie(params.model, apiKey, prompt, imagePath, aspectRatio, duration);
+    const buffer = await generateMovie(model, apiKey, prompt, imagePath, aspectRatio, duration);
     if (buffer) {
       return { buffer };
     }

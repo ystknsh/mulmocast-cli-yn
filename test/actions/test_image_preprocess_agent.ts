@@ -5,12 +5,10 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { MulmoStudioContext, MulmoBeat } from "../../src/types/index.js";
+import { imagePreprocessAgent } from "../../src/actions/image_agents.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Import the actual imagePreprocessAgent function from the source
-const { imagePreprocessAgent } = await import("../../src/actions/images.js");
 
 // Helper function to create mock context
 const createMockContext = (): MulmoStudioContext => ({
@@ -56,6 +54,7 @@ const createMockContext = (): MulmoStudioContext => ({
       movie: {},
       multiLingual: {},
       caption: {},
+      html: {},
     },
   },
 });
@@ -79,7 +78,7 @@ test("imagePreprocessAgent - basic functionality", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/0p.png",
-    referenceImage: "/test/images/test_studio/0p.png",
+    referenceImageForMovie: "/test/images/test_studio/0p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -88,7 +87,12 @@ test("imagePreprocessAgent - basic functionality", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -128,9 +132,13 @@ test("imagePreprocessAgent - with movie prompt and text", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/1.mov",
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
     imagePath: "/test/images/test_studio/1p.png",
     imageFromMovie: true,
-    images: [],
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -158,9 +166,13 @@ test("imagePreprocessAgent - movie prompt only (no image prompt)", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/2.mov",
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
     imagePath: "/test/images/test_studio/2p.png",
     imageFromMovie: true,
-    images: [],
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -203,7 +215,7 @@ test("imagePreprocessAgent - with imageNames", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/7p.png",
-    referenceImage: "/test/images/test_studio/7p.png",
+    referenceImageForMovie: "/test/images/test_studio/7p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -212,7 +224,12 @@ test("imagePreprocessAgent - with imageNames", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: ["/path/to/image1.png", "/path/to/image2.png"],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -245,7 +262,7 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
 
   const expected = {
     imagePath: "/test/images/test_studio/8p.png",
-    referenceImage: "/test/images/test_studio/8p.png",
+    referenceImageForMovie: "/test/images/test_studio/8p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -254,7 +271,12 @@ test("imagePreprocessAgent - without imageNames (uses all imageRefs)", async () 
       moderation: "auto",
     },
     movieFile: undefined,
-    images: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: ["/path/to/image1.png", "/path/to/image2.png", "/path/to/image3.png"],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -288,7 +310,7 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/9p.png",
-    referenceImage: "/test/images/test_studio/9p.png",
+    referenceImageForMovie: "/test/images/test_studio/9p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -297,7 +319,12 @@ test("imagePreprocessAgent - filters undefined image references", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: ["/path/to/image1.png", "/path/to/image2.png"],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: ["/path/to/image1.png", "/path/to/image2.png"],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -330,7 +357,7 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
 
   const expected = {
     imagePath: "/test/images/test_studio/10p.png",
-    referenceImage: "/test/images/test_studio/10p.png",
+    referenceImageForMovie: "/test/images/test_studio/10p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nvivid",
     imageParams: {
       provider: "openai",
@@ -339,7 +366,12 @@ test("imagePreprocessAgent - merges beat and imageAgentInfo imageParams", async 
       moderation: "auto", // From beat (override)
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -367,7 +399,7 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/12p.png",
-    referenceImage: "/test/images/test_studio/12p.png",
+    referenceImageForMovie: "/test/images/test_studio/12p.png",
     prompt: "generate image appropriate for the text. text: Test beat text\nnatural",
     imageParams: {
       provider: "openai",
@@ -376,7 +408,12 @@ test("imagePreprocessAgent - empty imageRefs", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -411,7 +448,7 @@ test("imagePreprocessAgent - with real sample data", async () => {
 
     const expected = {
       imagePath: "/test/images/test/1p.png",
-      referenceImage: "/test/images/test/1p.png",
+      referenceImageForMovie: "/test/images/test/1p.png",
       prompt: "Blue sky, a flock of birds\n<style>sumie-style",
       imageParams: {
         provider: "openai",
@@ -420,7 +457,12 @@ test("imagePreprocessAgent - with real sample data", async () => {
         moderation: "auto", // From imageAgentInfo
       },
       movieFile: undefined,
-      images: [],
+      movieAgentInfo: {
+        agent: "movieReplicateAgent",
+        movieParams: {},
+      },
+      referenceImages: [],
+      beatDuration: undefined,
       imageAgentInfo: {
         agent: "imageOpenaiAgent",
         imageParams: {
@@ -453,7 +495,7 @@ test("imagePreprocessAgent - text only", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/13p.png",
-    referenceImage: "/test/images/test_studio/13p.png",
+    referenceImageForMovie: "/test/images/test_studio/13p.png",
     prompt: "generate image appropriate for the text. text: Only text content\nnatural",
     imageParams: {
       provider: "openai",
@@ -462,7 +504,12 @@ test("imagePreprocessAgent - text only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -494,7 +541,7 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/14p.png",
-    referenceImage: "/test/images/test_studio/14p.png",
+    referenceImageForMovie: "/test/images/test_studio/14p.png",
     prompt: "Only image prompt\nnatural",
     imageParams: {
       provider: "openai",
@@ -503,7 +550,12 @@ test("imagePreprocessAgent - imagePrompt only", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -542,8 +594,12 @@ test("imagePreprocessAgent - moviePrompt only", async () => {
     },
     imagePath: "/test/images/test_studio/15p.png",
     movieFile: "/test/images/test_studio/15.mov",
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
     imageFromMovie: true,
-    images: [],
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -575,8 +631,12 @@ test("imagePreprocessAgent - text + moviePrompt (no imagePrompt)", async () => {
     },
     imagePath: "/test/images/test_studio/16p.png",
     movieFile: "/test/images/test_studio/16.mov",
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
     imageFromMovie: true,
-    images: [],
+    beatDuration: undefined,
   };
 
   assert.deepStrictEqual(result, expected);
@@ -599,7 +659,7 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/17p.png",
-    referenceImage: "/test/images/test_studio/17p.png",
+    referenceImageForMovie: "/test/images/test_studio/17p.png",
     prompt: "Image prompt\nnatural",
     imageParams: {
       provider: "openai",
@@ -608,7 +668,12 @@ test("imagePreprocessAgent - imagePrompt + moviePrompt (no text)", async () => {
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/17.mov",
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -640,7 +705,7 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
 
   const expected = {
     imagePath: "/test/images/test_studio/18p.png",
-    referenceImage: "/test/images/test_studio/18p.png",
+    referenceImageForMovie: "/test/images/test_studio/18p.png",
     prompt: "Image prompt\nnatural", // imagePrompt takes precedence over text
     imageParams: {
       provider: "openai",
@@ -649,7 +714,12 @@ test("imagePreprocessAgent - text + imagePrompt + moviePrompt (all three)", asyn
       moderation: "auto",
     },
     movieFile: "/test/images/test_studio/18.mov",
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -680,7 +750,7 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
 
   const expected = {
     imagePath: "/test/images/test_studio/19p.png",
-    referenceImage: "/test/images/test_studio/19p.png",
+    referenceImageForMovie: "/test/images/test_studio/19p.png",
     prompt: "generate image appropriate for the text. text: undefined\nnatural",
     imageParams: {
       provider: "openai",
@@ -689,7 +759,12 @@ test("imagePreprocessAgent - no text, no imagePrompt, no moviePrompt", async () 
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -720,7 +795,7 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/20p.png",
-    referenceImage: "/test/images/test_studio/20p.png",
+    referenceImageForMovie: "/test/images/test_studio/20p.png",
     prompt: "Custom image prompt\nnatural", // imagePrompt takes precedence
     imageParams: {
       provider: "openai",
@@ -729,7 +804,12 @@ test("imagePreprocessAgent - with both text and imagePrompt", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -764,8 +844,9 @@ test("imagePreprocessAgent - with imageParams override", async () => {
 
   const expected = {
     imagePath: "/test/images/test_studio/21p.png",
-    referenceImage: "/test/images/test_studio/21p.png",
+    referenceImageForMovie: "/test/images/test_studio/21p.png",
     prompt: "A beautiful sunset\nphotorealistic",
+    beatDuration: undefined,
     imageAgentInfo: {
       agent: "imageOpenaiAgent",
       imageParams: {
@@ -782,7 +863,624 @@ test("imagePreprocessAgent - with imageParams override", async () => {
       moderation: "auto",
     },
     movieFile: undefined,
-    images: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+// soundEffectPrompt parameter tests(no movie)
+test("imagePreprocessAgent - with soundEffectPrompt only", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    soundEffectPrompt: "Birds chirping in the background",
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 22,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/22p.png",
+    referenceImageForMovie: "/test/images/test_studio/22p.png",
+    prompt: "generate image appropriate for the text. text: Test text\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+// no movie
+test("imagePreprocessAgent - soundEffectPrompt + imagePrompt", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    imagePrompt: "A forest scene",
+    soundEffectPrompt: "Birds chirping and wind blowing",
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 23,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/23p.png",
+    referenceImageForMovie: "/test/images/test_studio/23p.png",
+    prompt: "A forest scene\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+test("imagePreprocessAgent - soundEffectPrompt + moviePrompt (no imagePrompt)", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    moviePrompt: "A forest scene with movement",
+    soundEffectPrompt: "Birds chirping and leaves rustling",
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 24,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    imagePath: "/test/images/test_studio/24p.png",
+    movieFile: "/test/images/test_studio/24.mov",
+    soundEffectAgentInfo: {
+      agentName: "soundEffectReplicateAgent",
+      defaultModel: "zsxkib/mmaudio",
+      models: ["zsxkib/mmaudio"],
+      modelParams: {
+        "zsxkib/mmaudio": {
+          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
+        },
+      },
+    },
+    soundEffectModel: "zsxkib/mmaudio",
+    soundEffectFile: "/test/images/test_studio/24_sound.mov",
+    soundEffectPrompt: "Birds chirping and leaves rustling",
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    imageFromMovie: true,
+    beatDuration: undefined,
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+test("imagePreprocessAgent - soundEffectPrompt + imagePrompt + moviePrompt", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    imagePrompt: "A peaceful forest",
+    moviePrompt: "Trees swaying gently",
+    soundEffectPrompt: "Nature sounds with gentle breeze",
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 25,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/25p.png",
+    referenceImageForMovie: "/test/images/test_studio/25p.png",
+    prompt: "A peaceful forest\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: "/test/images/test_studio/25.mov",
+    soundEffectAgentInfo: {
+      agentName: "soundEffectReplicateAgent",
+      defaultModel: "zsxkib/mmaudio",
+      models: ["zsxkib/mmaudio"],
+      modelParams: {
+        "zsxkib/mmaudio": {
+          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
+        },
+      },
+    },
+    soundEffectModel: "zsxkib/mmaudio",
+    soundEffectFile: "/test/images/test_studio/25_sound.mov",
+    soundEffectPrompt: "Nature sounds with gentle breeze",
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+// enableLipSync parameter tests(no movie)
+test("imagePreprocessAgent - with enableLipSync true", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 26,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/26p.png",
+    referenceImageForMovie: "/test/images/test_studio/26p.png",
+    prompt: "generate image appropriate for the text. text: Test text\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/26_lipsync.mov",
+    audioFile: undefined,
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+// no movie
+test("imagePreprocessAgent - enableLipSync + imagePrompt", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    imagePrompt: "Portrait of a person speaking",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 27,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/27p.png",
+    referenceImageForMovie: "/test/images/test_studio/27p.png",
+    prompt: "Portrait of a person speaking\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/27_lipsync.mov",
+    audioFile: undefined,
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+test("imagePreprocessAgent - enableLipSync + moviePrompt (no imagePrompt)", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    moviePrompt: "Person speaking with lip movement",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 28,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    imagePath: "/test/images/test_studio/28p.png",
+    movieFile: "/test/images/test_studio/28.mov",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/28_lipsync.mov",
+    audioFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    imageFromMovie: true,
+    beatDuration: undefined,
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+test("imagePreprocessAgent - enableLipSync + imagePrompt + moviePrompt", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    imagePrompt: "Close-up of person's face",
+    moviePrompt: "Subtle lip movements while speaking",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 29,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/29p.png",
+    referenceImageForMovie: "/test/images/test_studio/29p.png",
+    prompt: "Close-up of person's face\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: "/test/images/test_studio/29.mov",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/29_lipsync.mov",
+    audioFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+// Combined soundEffectPrompt + enableLipSync tests ( no movie)
+test("imagePreprocessAgent - soundEffectPrompt + enableLipSync", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    soundEffectPrompt: "Background music",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 30,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/30p.png",
+    referenceImageForMovie: "/test/images/test_studio/30p.png",
+    prompt: "generate image appropriate for the text. text: Test text\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/30_lipsync.mov",
+    audioFile: undefined,
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+// no movie
+test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + imagePrompt", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    imagePrompt: "Singer performing on stage",
+    soundEffectPrompt: "Applause and background music",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 31,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imagePath: "/test/images/test_studio/31p.png",
+    referenceImageForMovie: "/test/images/test_studio/31p.png",
+    prompt: "Singer performing on stage\nnatural",
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/31_lipsync.mov",
+    audioFile: undefined,
+    referenceImages: [],
+    beatDuration: undefined,
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+test("imagePreprocessAgent - soundEffectPrompt + enableLipSync + moviePrompt (no imagePrompt)", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Test text",
+    moviePrompt: "Performance with synchronized audio and lip movement",
+    soundEffectPrompt: "Live concert atmosphere",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 32,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    imagePath: "/test/images/test_studio/32p.png",
+    movieFile: "/test/images/test_studio/32.mov",
+    soundEffectAgentInfo: {
+      agentName: "soundEffectReplicateAgent",
+      defaultModel: "zsxkib/mmaudio",
+      models: ["zsxkib/mmaudio"],
+      modelParams: {
+        "zsxkib/mmaudio": {
+          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
+        },
+      },
+    },
+    soundEffectModel: "zsxkib/mmaudio",
+    soundEffectFile: "/test/images/test_studio/32_sound.mov",
+    soundEffectPrompt: "Live concert atmosphere",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/32_lipsync.mov",
+    audioFile: undefined,
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
+    imageFromMovie: true,
+    beatDuration: undefined,
+  };
+
+  assert.deepStrictEqual(result, expected);
+});
+
+test("imagePreprocessAgent - all parameters: soundEffectPrompt + enableLipSync + imagePrompt + moviePrompt + text", async () => {
+  const context = createMockContext();
+  const beat = createMockBeat({
+    text: "Welcome to our presentation",
+    imagePrompt: "Professional speaker at podium",
+    moviePrompt: "Speaker gesturing while presenting",
+    soundEffectPrompt: "Ambient conference room sound",
+    enableLipSync: true,
+  });
+
+  const result = await imagePreprocessAgent({
+    context,
+    beat,
+    index: 33,
+    imageRefs: {},
+  });
+
+  const expected = {
+    imageParams: {
+      provider: "openai",
+      model: "dall-e-3",
+      style: "natural",
+      moderation: "auto",
+    },
+    movieFile: "/test/images/test_studio/33.mov",
+    soundEffectAgentInfo: {
+      agentName: "soundEffectReplicateAgent",
+      defaultModel: "zsxkib/mmaudio",
+      models: ["zsxkib/mmaudio"],
+      modelParams: {
+        "zsxkib/mmaudio": {
+          identifier: "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
+        },
+      },
+    },
+    soundEffectModel: "zsxkib/mmaudio",
+    soundEffectFile: "/test/images/test_studio/33_sound.mov",
+    soundEffectPrompt: "Ambient conference room sound",
+    lipSyncAgentName: "lipSyncReplicateAgent",
+    lipSyncModel: "bytedance/omni-human",
+    lipSyncFile: "/test/images/test_studio/33_lipsync.mov",
+    audioFile: undefined,
+    beatDuration: undefined,
+    imagePath: "/test/images/test_studio/33p.png",
+    referenceImageForMovie: "/test/images/test_studio/33p.png",
+    imageAgentInfo: {
+      agent: "imageOpenaiAgent",
+      imageParams: {
+        model: "dall-e-3",
+        moderation: "auto",
+        provider: "openai",
+        style: "natural",
+      },
+    },
+    prompt: "Professional speaker at podium\nnatural",
+    referenceImages: [],
+    movieAgentInfo: {
+      agent: "movieReplicateAgent",
+      movieParams: {},
+    },
   };
 
   assert.deepStrictEqual(result, expected);

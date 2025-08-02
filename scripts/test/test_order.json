@@ -1,5 +1,6 @@
 {
-  "$mulmocast": { "version": "1.0" },
+  "$mulmocast": { "version": "1.1" },
+  "lang": "en",
   "beats": [
     {
       "text": "The number 1 stands alone—independent, bold, and often lonely. In stories, the lone hero begins their journey without companions, carving their path through courage. Think of Neo in The Matrix, 'The One', chosen to awaken humanity. Or the number 1 in binary—on or off, light or dark. It reminds us that every great movement starts with a single step, a single decision. Just one person can spark a revolution or change history. As Lao Tzu said, 'The journey of a thousand miles begins with one step.'",
