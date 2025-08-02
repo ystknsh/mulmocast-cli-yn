@@ -67,4 +67,5 @@ export const replacementsJa: Replacement[] = [
   { from: "危険な面", to: "危険なめん" },
   { from: "その通り！", to: "その通り。" },
   { from: "%", to: "パーセント" },
+  { from: "IPO", to: "アイピーオー" },
 ];
