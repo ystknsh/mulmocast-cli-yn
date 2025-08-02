@@ -17,7 +17,8 @@ export const localizedTextSchema = z
     lang: langSchema,
     // caption: z.string(),
     texts: z.array(z.string()).optional(),
-    ttsTexts: z.array(z.string()).optional(),
+    ttsTexts: z.array(z.string()).optional(), // TODO remove
+    cacheKey: z.string(),
     duration: z.number().optional(), // generated // video duration time(ms)
     // filename: z.string().optional(), // generated //
   })
@@ -468,6 +469,7 @@ export const mulmoStudioBeatSchema = z
 
 export const mulmoStudioMultiLingualDataSchema = z.object({
   multiLingualTexts: multiLingualTextsSchema,
+  cacheKey: z.string().optional(),
 });
 
 export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1);
