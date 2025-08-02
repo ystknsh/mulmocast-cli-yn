@@ -474,6 +474,10 @@ export const mulmoStudioMultiLingualDataSchema = z.object({
 });
 
 export const mulmoStudioMultiLingualSchema = z.array(mulmoStudioMultiLingualDataSchema).min(1);
+export const mulmoStudioMultiLingualFileSchema = z.object({
+  version: z.literal(currentMulmoScriptVersion),
+  multiLingual: mulmoStudioMultiLingualSchema,
+});
 
 export const mulmoSessionStateSchema = z.object({
   inSession: z.object({

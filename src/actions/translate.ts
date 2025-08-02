@@ -160,9 +160,10 @@ const translateGraph: GraphData = {
     targetLangs: {},
     mergeStudioResult: {
       isResult: true,
-      agent: "mergeObjectAgent",
+      agent: "copyAgent",
       inputs: {
-        items: [{ multiLingual: ":beatsMap.mergeMultiLingualData" }],
+        version: "1.1",
+        multiLingual: ":beatsMap.mergeMultiLingualData",
       },
     },
     beatsMap: {
@@ -179,11 +180,10 @@ const translateGraph: GraphData = {
       graph: beatGraph,
     },
     writeOutput: {
-      // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputMultilingualFilePath",
-        text: ":mergeStudioResult.multiLingual.toJSON()",
+        text: ":mergeStudioResult.toJSON()",
       },
     },
   },

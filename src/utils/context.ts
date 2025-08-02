@@ -1,11 +1,11 @@
 import { GraphAILogger } from "graphai";
 import fs from "fs";
 import { readMulmoScriptFile, fetchMulmoScriptFile } from "./file.js";
-import type { MulmoStudio, MulmoScript, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
-import { mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
+import type { MulmoStudio, MulmoScript, MulmoPresentationStyle, MulmoStudioMultiLingual, FileObject } from "../types/type.js";
+import { mulmoStudioSchema, mulmoCaptionParamsSchema, mulmoStudioMultiLingualFileSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
 import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/index.js";
 
-import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema, FileObject } from "../types/index.js";
+import { currentMulmoScriptVersion } from "./const.js";
 
 const mulmoCredit = (speaker: string) => {
   return {
@@ -104,13 +104,14 @@ export const getMultiLingual = (multilingualFilePath: string, studioBeatsLength:
     return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
   }
   const jsonData = readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-  const result = mulmoStudioMultiLingualSchema.safeParse(jsonData);
-  const dataSet = result.success ? result.data : [];
-  while (dataSet.length < studioBeatsLength) {
-    dataSet.push({ multiLingualTexts: {} });
+
+  const result = mulmoStudioMultiLingualFileSchema.safeParse(jsonData);
+  const dataSet = result.success ? result.data : { multiLingual: [], version: currentMulmoScriptVersion };
+  while (dataSet.multiLingual.length < studioBeatsLength) {
+    dataSet.multiLingual.push({ multiLingualTexts: {} });
   }
-  dataSet.length = studioBeatsLength;
-  return dataSet;
+  dataSet.multiLingual.length = studioBeatsLength;
+  return dataSet.multiLingual;
 };
 
 export const getPresentationStyle = (presentationStylePath: string | undefined): MulmoPresentationStyle | null => {
