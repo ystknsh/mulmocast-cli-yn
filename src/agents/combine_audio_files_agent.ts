@@ -127,7 +127,7 @@ const voiceOverProcess = (
     if (voiceStartAt) {
       const remainingDuration = movieDuration - voiceStartAt;
       const duration = remaining - remainingDuration;
-      userAssert(duration >= 0, `Invalid startAt: At index(${idx}), avaiable duration(${duration}) < 0`);
+      userAssert(duration >= 0, `Invalid startAt: At index(${idx}), available duration(${duration}) < 0`);
       beatDurations.push(duration);
       subBeatDurations.silenceDuration = duration - subBeatDurations.audioDuration;
       userAssert(subBeatDurations.silenceDuration >= 0, `Duration Overwrap: At index(${idx}), silenceDuration(${subBeatDurations.silenceDuration}) < 0`);
