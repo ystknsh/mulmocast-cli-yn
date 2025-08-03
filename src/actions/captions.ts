@@ -35,7 +35,10 @@ const graph_data: GraphData = {
                 const template = getHTMLFile("caption");
                 const text = (() => {
                   const multiLingual = context.multiLingual;
-                  if (captionParams.lang && multiLingual) {
+                  if (captionParams.lang === context.studio.script.lang) {
+                    return beat.text;
+                  }
+                  if (captionParams.lang && multiLingual?.[index]?.multiLingualTexts?.[captionParams.lang]) {
                     return multiLingual[index].multiLingualTexts[captionParams.lang].text;
                   }
                   GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${captionParams.lang}`);
