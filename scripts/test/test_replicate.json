@@ -49,6 +49,16 @@
       }
     },
     {
+      "id": "veo-3-fast with a start image",
+      "text": "google/veo-3-fast with a start image",
+      "duration": 8,
+      "imagePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
+      "movieParams": {
+        "model": "google/veo-3-fast"
+      }
+    },
+    {
       "id": "seedance-1-lite",
       "text": "bytedance seedance-1-lite",
       "moviePrompt": "a woman is walking through a busy Tokyo street at night, she is wearing dark sunglasses",
