@@ -259,7 +259,7 @@ export const translateBeat = async (
     const results = await graph.run<MulmoStudioMultiLingualData>();
 
     const multiLingual = getMultiLingual(outputMultilingualFilePath, context.studio.beats.length);
-    multiLingual[index] = results.mergeMultiLingualData;
+    multiLingual[index] = results.mergeMultiLingualData!;
     const data = {
       version: currentMulmoScriptVersion,
       multiLingual,
