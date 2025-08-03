@@ -1,4 +1,4 @@
-import { MulmoScript, mulmoScriptSchema } from "../types/index.js";
+import { type MulmoScript, type MulmoStudioMultiLingual, mulmoScriptSchema, mulmoStudioMultiLingualFileSchema } from "../types/index.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validate_1_0 = (script: any): any => {
@@ -37,5 +37,19 @@ export const MulmoScriptMethods = {
       { ...defaultLang, ...script },
     );
     return mulmoScriptSchema.parse(validatedScript);
+  },
+};
+
+export const MulmoStudioMultiLingualMethod = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  validate(jsonData: any, studioBeatsLength: number): MulmoStudioMultiLingual {
+    // TODO version check
+    const result = mulmoStudioMultiLingualFileSchema.safeParse(jsonData);
+    const dataSet = result.success ? result.data.multiLingual : [];
+    while (dataSet.length < studioBeatsLength) {
+      dataSet.push({ multiLingualTexts: {} });
+    }
+    dataSet.length = studioBeatsLength;
+    return dataSet;
   },
 };

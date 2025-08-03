@@ -88,13 +88,14 @@ const beatGraph = {
       agent: (namedInputs: { text?: string; multiLinguals?: MulmoStudioMultiLingualData[]; beatIndex: number }) => {
         const { multiLinguals, beatIndex, text } = namedInputs;
         const cacheKey = hashSHA256(text ?? "");
-        if (!multiLinguals?.[beatIndex]) {
+        const multiLingual = multiLinguals?.[beatIndex];
+        if (!multiLingual) {
           return { cacheKey, multiLingualTexts: {} };
         }
         return {
-          multiLingualTexts: Object.keys(multiLinguals?.[beatIndex].multiLingualTexts).reduce((tmp: MultiLingualTexts, lang) => {
-            if (multiLinguals?.[beatIndex].multiLingualTexts[lang].cacheKey === cacheKey) {
-              tmp[lang] = multiLinguals?.[beatIndex].multiLingualTexts[lang];
+          multiLingualTexts: Object.keys(multiLingual.multiLingualTexts).reduce((tmp: MultiLingualTexts, lang) => {
+            if (multiLingual.multiLingualTexts[lang].cacheKey === cacheKey) {
+              tmp[lang] = multiLingual.multiLingualTexts[lang];
             }
             return tmp;
           }, {}),
@@ -159,9 +160,10 @@ const translateGraph: GraphData = {
     targetLangs: {},
     mergeStudioResult: {
       isResult: true,
-      agent: "mergeObjectAgent",
+      agent: "copyAgent",
       inputs: {
-        items: [{ multiLingual: ":beatsMap.mergeMultiLingualData" }],
+        version: "1.1",
+        multiLingual: ":beatsMap.mergeMultiLingualData",
       },
     },
     beatsMap: {
@@ -178,11 +180,10 @@ const translateGraph: GraphData = {
       graph: beatGraph,
     },
     writeOutput: {
-      // console: { before: true },
       agent: "fileWriteAgent",
       inputs: {
         file: ":outputMultilingualFilePath",
-        text: ":mergeStudioResult.multiLingual.toJSON()",
+        text: ":mergeStudioResult.toJSON()",
       },
     },
   },
@@ -263,4 +264,5 @@ export const translate = async (
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", false);
   }
+  return context;
 };
