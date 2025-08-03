@@ -1,13 +1,17 @@
 import "dotenv/config";
-import { GraphAI, assert, isNull } from "graphai";
+import { createHash } from "crypto";
+import fs from "fs";
+
+import { GraphAI, assert, isNull, GraphAILogger } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { createHash } from "crypto";
 
 import { recursiveSplitJa } from "../utils/string.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
+import { getMultiLingual } from "../utils/context.js";
+import { currentMulmoScriptVersion } from "../utils/const.js";
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
@@ -83,6 +87,7 @@ const beatGraph = {
     targetLangs: {},
     context: {},
     beat: {},
+    __mapIndex: {},
     // for cache
     multiLingual: {
       agent: (namedInputs: { text?: string; multiLinguals?: MulmoStudioMultiLingualData[]; beatIndex: number }) => {
@@ -224,6 +229,55 @@ const agentFilters = [
     nodeIds: ["localizedText"],
   },
 ];
+
+export const translateBeat = async (
+  index: number,
+  context: MulmoStudioContext,
+  targetLangs: string[],
+  args?: { settings?: Record<string, string>; callbacks?: CallbackFunction[] },
+) => {
+  const { settings, callbacks } = args ?? {};
+
+  // Validate inputs
+  if (index < 0 || index >= context.studio.script.beats.length) {
+    throw new Error(`Invalid beat index: ${index}. Must be between 0 and ${context.studio.script.beats.length - 1}`);
+  }
+  if (!targetLangs || targetLangs.length === 0) {
+    throw new Error("targetLangs must be a non-empty array");
+  }
+  try {
+    const fileName = MulmoStudioContextMethods.getFileName(context);
+    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
+    mkdir(outDirPath);
+
+    const config = settings2GraphAIConfig(settings, process.env);
+    assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
+
+    const graph = new GraphAI(beatGraph, { ...vanillaAgents, fileWriteAgent, openAIAgent }, { agentFilters, config });
+    graph.injectValue("context", context);
+    graph.injectValue("targetLangs", targetLangs);
+    graph.injectValue("beat", context.studio.script.beats[index]);
+    graph.injectValue("__mapIndex", index);
+    if (callbacks) {
+      callbacks.forEach((callback) => {
+        graph.registerCallback(callback);
+      });
+    }
+    const results = await graph.run<MulmoStudioMultiLingualData>();
+
+    const multiLingual = getMultiLingual(outputMultilingualFilePath, context.studio.beats.length);
+    multiLingual[index] = results.mergeMultiLingualData!;
+    const data = {
+      version: currentMulmoScriptVersion,
+      multiLingual,
+    };
+    fs.writeFileSync(outputMultilingualFilePath, JSON.stringify(data, null, 2), "utf8");
+    writingMessage(outputMultilingualFilePath);
+  } catch (error) {
+    GraphAILogger.log(error);
+  }
+};
 
 export const translate = async (
   context: MulmoStudioContext,
