@@ -92,12 +92,12 @@ export const provider2MovieAgent = {
       },
       "google/veo-3": {
         durations: [8],
-        start_image: undefined,
+        start_image: "image",
         price_per_sec: 0.75,
       },
       "google/veo-3-fast": {
         durations: [8],
-        start_image: undefined,
+        start_image: "image",
         price_per_sec: 0.4,
       },
       "minimax/video-01": {
