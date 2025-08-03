@@ -126,6 +126,37 @@ MulmoCastでは、一つの音声（ナレーション）を複数のBeatにま�
 }
 ```
 
+## 言語別スピーカー設定
 
+MulmoCastは、同じスピーカーでも言語によって異なる音声設定を使用できる「言語別スピーカー」機能をサポートしています。これにより、多言語コンテンツの作成時に、各言語に最適な音声プロバイダーや音声を選択できます。
 
+**サンプルファイル**: [`scripts/test/test_lang.json`](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_lang.json)
 
+### 基本的な使い方
+
+スピーカー定義の中に`lang`プロパティを追加し、言語コードごとに異なる音声設定を指定します：
+
+```json
+{
+  "speechParams": {
+    "speakers": {
+      "Presenter": {
+        "provider": "openai",
+        "voiceId": "shimmer",
+        "lang": {
+          "ja": {
+            "provider": "nijivoice",
+            "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### 動作の仕組み
+
+1. **デフォルト設定**: `provider`と`voiceId`で指定された設定がデフォルトとして使用されます
+2. **言語別上書き**: スクリプトの`lang`プロパティと一致する言語設定があれば、それが優先されます
+3. **フォールバック**: 該当する言語設定がない場合は、デフォルト設定が使用されます
