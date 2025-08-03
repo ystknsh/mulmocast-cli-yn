@@ -139,20 +139,15 @@ test("test beat translate", async () => {
   await translateBeat(1, context, ["fr"]);
 });
 
-
 test("test beat translate", async () => {
   const context = getContext();
   context.multiLingual[1].multiLingualTexts = {
-    "fr": {
-      "lang": "fr",
-      "text": "## Original Language\nen\n## Language\nfr\n## Target\nCeci est un tableau au format markdown.",
-      "texts": [
-        "## Original Language\nen\n## Language\nfr\n## Target\nCeci est un tableau au format markdown."
-      ],
-      "ttsTexts": [
-        "## Original Language\nen\n## Language\nfr\n## Target\nCeci est un tableau au format markdown."
-      ],
-      "cacheKey": "2fb7fad6991c3a99ad3c5d3b0bc63f545b6ae25d06385c5ab2b11f71c0bf60f8"
+    fr: {
+      lang: "fr",
+      text: "## Original Language\nen\n## Language\nfr\n## Target\nCeci est un tableau au format markdown.",
+      texts: ["## Original Language\nen\n## Language\nfr\n## Target\nCeci est un tableau au format markdown."],
+      ttsTexts: ["## Original Language\nen\n## Language\nfr\n## Target\nCeci est un tableau au format markdown."],
+      cacheKey: "2fb7fad6991c3a99ad3c5d3b0bc63f545b6ae25d06385c5ab2b11f71c0bf60f8",
     },
   };
   await translateBeat(1, context, ["de"]);
