@@ -1,11 +1,9 @@
 import { GraphAILogger } from "graphai";
 import fs from "fs";
 import { readMulmoScriptFile, fetchMulmoScriptFile } from "./file.js";
-import type { MulmoStudio, MulmoScript, MulmoPresentationStyle, MulmoStudioMultiLingual } from "../types/type.js";
-import { mulmoStudioSchema, mulmoCaptionParamsSchema } from "../types/index.js";
-import { MulmoPresentationStyleMethods, MulmoScriptMethods } from "../methods/index.js";
-
-import { mulmoPresentationStyleSchema, mulmoStudioMultiLingualSchema, FileObject } from "../types/index.js";
+import type { MulmoStudio, MulmoScript, MulmoPresentationStyle, MulmoStudioMultiLingual, MulmoStudioMultiLingualFile, FileObject } from "../types/type.js";
+import { mulmoStudioSchema, mulmoCaptionParamsSchema, mulmoPresentationStyleSchema } from "../types/schema.js";
+import { MulmoPresentationStyleMethods, MulmoScriptMethods, MulmoStudioMultiLingualMethod } from "../methods/index.js";
 
 const mulmoCredit = (speaker: string) => {
   return {
@@ -103,13 +101,10 @@ export const getMultiLingual = (multilingualFilePath: string, studioBeatsLength:
   if (!fs.existsSync(multilingualFilePath)) {
     return [...Array(studioBeatsLength)].map(() => ({ multiLingualTexts: {} }));
   }
-  const jsonData = readMulmoScriptFile<MulmoStudioMultiLingual>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
-  const dataSet = mulmoStudioMultiLingualSchema.parse(jsonData);
-  while (dataSet.length < studioBeatsLength) {
-    dataSet.push({ multiLingualTexts: {} });
-  }
-  dataSet.length = studioBeatsLength;
-  return dataSet;
+  const jsonData =
+    readMulmoScriptFile<MulmoStudioMultiLingualFile>(multilingualFilePath, "ERROR: File does not exist " + multilingualFilePath)?.mulmoData ?? null;
+
+  return MulmoStudioMultiLingualMethod.validate(jsonData, studioBeatsLength);
 };
 
 export const getPresentationStyle = (presentationStylePath: string | undefined): MulmoPresentationStyle | null => {

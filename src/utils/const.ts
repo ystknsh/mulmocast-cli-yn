@@ -1,3 +1,5 @@
+export const currentMulmoScriptVersion = "1.1";
+
 export const outDirName = "output";
 export const audioDirName = "audio";
 export const imageDirName = "images";
