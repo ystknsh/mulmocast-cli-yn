@@ -1,14 +1,17 @@
 import "dotenv/config";
+import { createHash } from "crypto";
+import fs from "fs";
+
 import { GraphAI, assert, isNull, GraphAILogger } from "graphai";
 import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
-import { createHash } from "crypto";
 
 import { recursiveSplitJa } from "../utils/string.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
 import { getMultiLingual } from "../utils/context.js";
+import { currentMulmoScriptVersion } from "../utils/const.js";
 import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
@@ -257,7 +260,12 @@ export const translateBeat = async (
 
     const multiLingual = getMultiLingual(outputMultilingualFilePath, context.studio.beats.length);
     multiLingual[index] = results.mergeMultiLingualData;
-    // writingMessage(outputMultilingualFilePath);
+    const data = {
+      version: currentMulmoScriptVersion,
+      multiLingual,
+    };
+    fs.writeFileSync(outputMultilingualFilePath, JSON.stringify(data, null, 2), "utf8");
+    writingMessage(outputMultilingualFilePath);
   } catch (error) {
     GraphAILogger.log(error);
   }
