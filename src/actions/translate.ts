@@ -237,6 +237,14 @@ export const translateBeat = async (
   args?: { settings?: Record<string, string>; callbacks?: CallbackFunction[] },
 ) => {
   const { settings, callbacks } = args ?? {};
+
+  // Validate inputs
+  if (index < 0 || index >= context.studio.script.beats.length) {
+    throw new Error(`Invalid beat index: ${index}. Must be between 0 and ${context.studio.script.beats.length - 1}`);
+  }
+  if (!targetLangs || targetLangs.length === 0) {
+    throw new Error("targetLangs must be a non-empty array");
+  }
   try {
     const fileName = MulmoStudioContextMethods.getFileName(context);
     const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);

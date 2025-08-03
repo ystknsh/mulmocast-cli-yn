@@ -139,7 +139,7 @@ test("test beat translate", async () => {
   await translateBeat(1, context, ["fr"]);
 });
 
-test("test beat translate", async () => {
+test("test beat translate - fresh translation", async () => {
   const context = getContext();
   context.multiLingual[1].multiLingualTexts = {
     fr: {
