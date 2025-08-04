@@ -29,9 +29,9 @@ export const text2hash = (input: string): string => {
   return crypto.createHash("sha256").update(input).digest("hex");
 };
 
-export const localizedText = (beat: MulmoBeat, multiLingualData?: MulmoStudioMultiLingualData, lang?: string) => {
-  if (lang && multiLingualData?.multiLingualTexts?.[lang]?.text) {
-    return multiLingualData.multiLingualTexts[lang].text;
+export const localizedText = (beat: MulmoBeat, multiLingualData?: MulmoStudioMultiLingualData, targetLang?: string) => {
+  if (targetLang && multiLingualData?.multiLingualTexts?.[targetLang]?.text) {
+    return multiLingualData.multiLingualTexts[targetLang].text;
   }
   return beat.text;
 };
