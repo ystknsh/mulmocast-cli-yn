@@ -26,6 +26,7 @@
     "./scripts/test",
     "./assets/audio/silent60sec.mp3",
     "./assets/html/",
+    "./assets/images/",
     "./assets/templates/"
   ],
   "directories": {
