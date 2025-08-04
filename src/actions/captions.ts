@@ -3,6 +3,7 @@ import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile, getCaptionImagePath, getOutputStudioFilePath } from "../utils/file.js";
+import { localizedText } from "../utils/utils.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import { MulmoStudioContextMethods, MulmoPresentationStyleMethods } from "../methods/index.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
@@ -33,14 +34,11 @@ const graph_data: GraphData = {
                 const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = getCaptionImagePath(context, index);
                 const template = getHTMLFile("caption");
-                const text = (() => {
-                  const multiLingual = context.multiLingual;
-                  if (captionParams.lang && multiLingual) {
-                    return multiLingual[index].multiLingualTexts[captionParams.lang].text;
-                  }
+
+                if (captionParams.lang && !context.multiLingual?.[index]?.multiLingualTexts?.[captionParams.lang]) {
                   GraphAILogger.warn(`No multiLingual caption found for beat ${index}, lang: ${captionParams.lang}`);
-                  return beat.text;
-                })();
+                }
+                const text = localizedText(beat, context.multiLingual?.[index], captionParams.lang, context.studio.script.lang);
                 const htmlData = interpolate(template, {
                   caption: text,
                   width: `${canvasSize.width}`,
