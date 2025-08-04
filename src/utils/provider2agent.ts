@@ -1,3 +1,5 @@
+// node & browser
+
 export const provider2TTSAgent = {
   nijivoice: {
     agentName: "ttsNijivoiceAgent",

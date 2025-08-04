@@ -1,3 +1,6 @@
+// node & browser
+import type { LANG, LocalizedText } from "../types/index.js";
+
 // split ja
 export function splitIntoSentencesJa(paragraph: string, divider: string, minimum: number): string[] {
   const sentences = paragraph
@@ -69,3 +72,16 @@ export const replacementsJa: Replacement[] = [
   { from: "%", to: "パーセント" },
   { from: "IPO", to: "アイピーオー" },
 ];
+
+export const splitText = (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
+  const { localizedText, targetLang } = namedInputs;
+  // Cache
+  if (localizedText.texts) {
+    return localizedText.texts;
+  }
+  if (targetLang === "ja") {
+    return recursiveSplitJa(localizedText.text);
+  }
+  // not split
+  return [localizedText.text];
+};
