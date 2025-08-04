@@ -8,11 +8,11 @@ import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { recursiveSplitJa } from "../utils/string.js";
+import { splitText } from "../utils/string.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
 import { getMultiLingual } from "../utils/context.js";
 import { currentMulmoScriptVersion } from "../utils/const.js";
-import { LANG, LocalizedText, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
+import type { LANG, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
@@ -50,18 +50,7 @@ export const translateTextGraph = {
       agent: "openAIAgent",
     },
     splitText: {
-      agent: (namedInputs: { localizedText: LocalizedText; targetLang: LANG }) => {
-        const { localizedText, targetLang } = namedInputs;
-        // Cache
-        if (localizedText.texts) {
-          return localizedText.texts;
-        }
-        if (targetLang === "ja") {
-          return recursiveSplitJa(localizedText.text);
-        }
-        // not split
-        return [localizedText.text];
-      },
+      agent: splitText,
       inputs: {
         targetLang: ":targetLang",
         localizedText: ":localizedText",

@@ -3,3 +3,4 @@
 export * from "./types/index.js";
 export * from "./utils/provider2agent.js";
 export * from "./utils/const.js";
+export * from "./utils/string.js";
