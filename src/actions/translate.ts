@@ -1,5 +1,4 @@
 import "dotenv/config";
-import { createHash } from "crypto";
 import fs from "fs";
 
 import { GraphAI, assert, isNull, GraphAILogger } from "graphai";
@@ -13,15 +12,12 @@ import { settings2GraphAIConfig } from "../utils/utils.js";
 import { getMultiLingual } from "../utils/context.js";
 import { currentMulmoScriptVersion } from "../utils/const.js";
 import type { LANG, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
-import { getOutputMultilingualFilePath, mkdir, writingMessage } from "../utils/file.js";
+import { getOutputMultilingualFilePath, mkdir, writingMessage, hashSHA256 } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const vanillaAgents = agents.default ?? agents;
 
-const hashSHA256 = (text: string) => {
-  return createHash("sha256").update(text, "utf8").digest("hex");
-};
 // 1. translateGraph / map each beats.
 // 2. beatGraph / map each target lang.
 // 3. translateTextGraph / translate text.
@@ -219,6 +215,14 @@ const agentFilters = [
   },
 ];
 
+export const getOutputMultilingualFilePathAndMkdir = (context: MulmoStudioContext) => {
+  const fileName = MulmoStudioContextMethods.getFileName(context);
+  const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
+  const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
+  mkdir(outDirPath);
+  return { outputMultilingualFilePath, outDirPath };
+};
+
 export const translateBeat = async (
   index: number,
   context: MulmoStudioContext,
@@ -235,10 +239,7 @@ export const translateBeat = async (
     throw new Error("targetLangs must be a non-empty array");
   }
   try {
-    const fileName = MulmoStudioContextMethods.getFileName(context);
-    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
-    mkdir(outDirPath);
+    const { outputMultilingualFilePath } = getOutputMultilingualFilePathAndMkdir(context);
 
     const config = settings2GraphAIConfig(settings, process.env);
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
@@ -278,10 +279,7 @@ export const translate = async (
   const { settings, callbacks } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
-    const fileName = MulmoStudioContextMethods.getFileName(context);
-    const outDirPath = MulmoStudioContextMethods.getOutDirPath(context);
-    const outputMultilingualFilePath = getOutputMultilingualFilePath(outDirPath, fileName);
-    mkdir(outDirPath);
+    const { outputMultilingualFilePath, outDirPath } = getOutputMultilingualFilePathAndMkdir(context);
 
     const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
     const config = settings2GraphAIConfig(settings, process.env);

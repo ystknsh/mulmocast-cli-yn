@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
@@ -279,4 +280,8 @@ export const generateTimestampedFileName = (prefix: string) => {
   const now = new Date();
   const pad = (n: number) => n.toString().padStart(2, "0");
   return `${prefix}_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+};
+
+export const hashSHA256 = (text: string) => {
+  return createHash("sha256").update(text, "utf8").digest("hex");
 };
