@@ -20,6 +20,9 @@
       }
     }
   },
+  "imageParams": {
+    "provider": "mock"
+  },
   "beats": [
     {
       "text": "Hello World",
