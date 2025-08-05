@@ -3,6 +3,20 @@
     "version": "1.1"
   },
   "lang": "en",
+  "movieParams": {
+    "provider": "mock"
+  },
+  "speechParams": {
+    "speakers": {
+      "Presenter": {
+        "displayName": {
+          "en": "Presenter"
+        },
+        "voiceId": "ae42d8b0-0c4b-4289-95b7-cf988569af36",
+        "provider": "mock"
+      }
+    }
+  },
   "imageParams": {
     "provider": "mock"
   },
