@@ -23,6 +23,10 @@
   "beats": [
     {
       "text": "Hello World"
+    },
+    {
+      "text": "Hello World",
+      "moviePrompt": "fire"
     }
   ]
 }
