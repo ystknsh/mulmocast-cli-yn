@@ -66,6 +66,7 @@ export const provider2MovieAgent = {
       "google/veo-3-fast",
       "minimax/video-01",
       "minimax/hailuo-02",
+      "minimax/hailuo-02-fast",
       "pixverse/pixverse-v4.5",
       "wan-video/wan-2.2-i2v-480p-fast",
       "wan-video/wan-2.2-t2v-480p-fast",
@@ -105,12 +106,12 @@ export const provider2MovieAgent = {
       },
       "google/veo-3": {
         durations: [8],
-        start_image: undefined,
+        start_image: "image",
         price_per_sec: 0.75,
       },
       "google/veo-3-fast": {
         durations: [8],
-        start_image: undefined,
+        start_image: "image",
         price_per_sec: 0.4,
       },
       "minimax/video-01": {
@@ -122,6 +123,11 @@ export const provider2MovieAgent = {
         durations: [6], // NOTE: 10 for only 720p
         start_image: "first_frame_image",
         price_per_sec: 0.08,
+      },
+      "minimax/hailuo-02-fast": {
+        durations: [6, 10], // NOTE: 512P
+        start_image: "first_frame_image",
+        price_per_sec: 0.0166,
       },
       "pixverse/pixverse-v4.5": {
         durations: [5, 8],
