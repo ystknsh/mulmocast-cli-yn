@@ -9,7 +9,7 @@ import mediaMockAgent from "./media_mock_agent.js";
 import ttsElevenlabsAgent from "./tts_elevenlabs_agent.js";
 import ttsNijivoiceAgent from "./tts_nijivoice_agent.js";
 import ttsOpenaiAgent from "./tts_openai_agent.js";
-import ttsGoogleAgent from "./tts_google_agent.ts";
+import ttsGoogleAgent from "./tts_google_agent.js";
 import validateSchemaAgent from "./validate_schema_agent.js";
 import soundEffectReplicateAgent from "./sound_effect_replicate_agent.js";
 import lipSyncReplicateAgent from "./lipsync_replicate_agent.js";
