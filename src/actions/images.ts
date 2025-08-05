@@ -39,6 +39,7 @@ const imageAgents = {
 const movieAgents = {
   movieGoogleAgent,
   movieReplicateAgent,
+  mediaMockAgent,
 };
 const soundEffectAgents = {
   soundEffectReplicateAgent,
@@ -96,6 +97,7 @@ const beat_graph_data = {
       defaultValue: {},
       agent: ":htmlImageAgentInfo.agent",
       inputs: {
+        media: "html",
         prompt: ":preprocessor.htmlPrompt",
         system: ":preprocessor.htmlImageSystemPrompt",
         params: {
@@ -141,6 +143,7 @@ const beat_graph_data = {
       agent: ":preprocessor.imageAgentInfo.agent",
       retry: 2,
       inputs: {
+        media: "image",
         prompt: ":preprocessor.prompt",
         referenceImages: ":preprocessor.referenceImages",
         cache: {
@@ -163,6 +166,7 @@ const beat_graph_data = {
       if: ":preprocessor.movieFile",
       agent: ":preprocessor.movieAgentInfo.agent",
       inputs: {
+        media: "movie",
         onComplete: [":imageGenerator", ":imagePlugin"], // to wait for imageGenerator to finish
         prompt: ":beat.moviePrompt",
         imagePath: ":preprocessor.referenceImageForMovie",

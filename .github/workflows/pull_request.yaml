@@ -15,6 +15,9 @@ permissions:
   contents: read
   actions: write
 
+env:
+  OPENAI_API_KEY: dummuy
+  
 jobs:
   lint_test:
 
@@ -43,6 +46,8 @@ jobs:
     - run: yarn run cli movie scripts/test/test_no_audio_with_credit.json
     - run: yarn run cli movie scripts/test/test_transition_no_audio.json
     - run: yarn run cli movie scripts/test/test_slideout_left_no_audio.json
+    - run: yarn run cli movie scripts/test/test_hello_caption.json
+    - run: yarn run cli movie scripts/test/test_hello_image.json
     - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode slide --pdf_size a4
     - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode talk --pdf_size a4
     - run: yarn run cli pdf scripts/test/test_order.json --pdf_mode handout --pdf_size a4
