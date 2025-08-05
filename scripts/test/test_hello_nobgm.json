@@ -1,0 +1,21 @@
+{
+  "$mulmocast": {
+    "version": "1.1"
+  },
+  "lang": "en",
+  "audioParams": {
+    "bgmVolume": 0
+  },
+  "beats": [
+    {
+      "text": "Hello World",
+      "image": {
+        "type": "textSlide",
+        "slide": {
+          "title": "Hello World",
+          "bullets": ["Hello", "World"]
+        }
+      }
+    }
+  ]
+}
