@@ -141,6 +141,7 @@ const beat_graph_data = {
       agent: ":preprocessor.imageAgentInfo.agent",
       retry: 2,
       inputs: {
+        media: "image",
         prompt: ":preprocessor.prompt",
         referenceImages: ":preprocessor.referenceImages",
         cache: {

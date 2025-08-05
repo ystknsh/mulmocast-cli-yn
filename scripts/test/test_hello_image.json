@@ -1,0 +1,14 @@
+{
+  "$mulmocast": {
+    "version": "1.1"
+  },
+  "lang": "en",
+  "imageParams": {
+    "provider": "mock"
+  },
+  "beats": [
+    {
+      "text": "Hello World"
+    }
+  ]
+}

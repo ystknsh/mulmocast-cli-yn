@@ -25,6 +25,7 @@ export const provider2TTSAgent = {
   },
   mock: {
     agentName: "mediaMockAgent",
+    hasLimitedConcurrency: true,
     defaultModel: "mock-model",
     models: ["mock-model"],
   },
