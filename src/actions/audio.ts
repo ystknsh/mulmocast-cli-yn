@@ -193,16 +193,6 @@ const graph_data: GraphData = {
       },
       defaultValue: {},
     },
-    title: {
-      agent: "copyAgent",
-      params: {
-        namedKey: "title",
-      },
-      inputs: {
-        title: "\n${:context.studio.script.title}\n\n${:context.studio.script.description}\nReference: ${:context.studio.script.reference}\n",
-        waitFor: [":addBGM", ":handleNoBGM"],
-      },
-    },
   },
 };
 
