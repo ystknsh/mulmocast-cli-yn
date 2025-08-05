@@ -1,6 +1,12 @@
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
+import fs from "fs";
+import { silent60secPath } from "../utils/file.js";
 
-export const mediaMockAgent: AgentFunction = async () => {
+export const mediaMockAgent: AgentFunction = async ({ namedInputs }) => {
+  if (namedInputs.media === "audio") {
+    const buffer = fs.readFileSync(silent60secPath());
+    return { buffer };
+  }
   GraphAILogger.debug("agent dryRun");
   return { buffer: Buffer.from([]) };
 };

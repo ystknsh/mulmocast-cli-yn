@@ -9,6 +9,7 @@ import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
 import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import ttsGoogleAgent from "../agents/tts_google_agent.js";
 import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
+import mediaMockAgent from "../agents/media_mock_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
@@ -100,6 +101,7 @@ const graph_tts: GraphData = {
       if: ":preprocessor.needsTTS",
       agent: ":preprocessor.ttsAgent",
       inputs: {
+        media: "audio",
         text: ":preprocessor.text",
         provider: ":preprocessor.provider",
         lang: ":preprocessor.lang",
@@ -217,6 +219,7 @@ const audioAgents = {
   ttsNijivoiceAgent,
   ttsGoogleAgent,
   ttsElevenlabsAgent,
+  mediaMockAgent,
   addBGMAgent,
   combineAudioFilesAgent,
 };

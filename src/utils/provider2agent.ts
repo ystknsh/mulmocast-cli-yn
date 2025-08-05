@@ -23,6 +23,11 @@ export const provider2TTSAgent = {
     // https://elevenlabs.io/docs/models
     models: ["eleven_multilingual_v2", "eleven_turbo_v2_5", "eleven_turbo_v2", "eleven_flash_v2_5", "eleven_flash_v2"],
   },
+  mock: {
+    agentName: "mediaMockAgent",
+    defaultModel: "mock-model",
+    models: ["mock-model"],
+  },
 };
 
 export const provider2ImageAgent = {
@@ -35,6 +40,11 @@ export const provider2ImageAgent = {
     agentName: "imageGoogleAgent",
     defaultModel: "imagen-3.0-fast-generate-001",
     models: ["imagen-3.0-fast-generate-001", "imagen-3.0-generate-002", "imagen-3.0-capability-001"],
+  },
+  mock: {
+    agentName: "mediaMockAgent",
+    defaultModel: "mock-model",
+    models: ["mock-model"],
   },
 };
 
@@ -134,6 +144,11 @@ export const provider2MovieAgent = {
     agentName: "movieGoogleAgent",
     defaultModel: "veo-2.0-generate-001",
     models: ["veo-2.0-generate-001"],
+  },
+  mock: {
+    agentName: "mediaMockAgent",
+    defaultModel: "mock-model",
+    models: ["mock-model"],
   },
 };
 
