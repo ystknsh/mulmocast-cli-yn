@@ -1,4 +1,5 @@
 import "dotenv/config";
+import fs from "fs";
 
 import { GraphAI, TaskManager } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
@@ -174,7 +175,22 @@ const graph_data: GraphData = {
           musicFile: ":musicFile",
         },
       },
-      isResult: true,
+      defaultValue: {},
+    },
+    handleNoBGM: {
+      agent: async (namedInputs: { voiceFile: string; outputFile: string }) => {
+        const { voiceFile, outputFile } = namedInputs;
+        await fs.promises.copyFile(voiceFile, outputFile);
+        return {
+          voiceFile,
+          outputFile,
+        };
+      },
+      if: ":context.presentationStyle.audioParams.bgmVolume.equal(0)",
+      inputs: {
+        voiceFile: ":audioCombinedFilePath",
+        outputFile: ":audioArtifactFilePath",
+      },
       defaultValue: {},
     },
     title: {
@@ -184,7 +200,7 @@ const graph_data: GraphData = {
       },
       inputs: {
         title: "\n${:context.studio.script.title}\n\n${:context.studio.script.description}\nReference: ${:context.studio.script.reference}\n",
-        waitFor: ":addBGM",
+        waitFor: [":addBGM", ":handleNoBGM"],
       },
     },
   },
