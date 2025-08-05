@@ -17,6 +17,9 @@
       }
     }
   },
+  "htmlImageParams": {
+    "provider": "mock"
+  },
   "imageParams": {
     "provider": "mock"
   },
@@ -27,6 +30,13 @@
     {
       "text": "Hello World",
       "moviePrompt": "fire"
+    },
+    {
+      "text": "Hello World",
+      "htmlPrompt": {
+        "prompt": "fire",
+        "data": []
+      }
     }
   ]
 }
