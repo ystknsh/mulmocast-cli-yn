@@ -124,12 +124,22 @@
     },
     {
       "id": "hailuo-02-image",
-      "text": "minimax/hailuo-02 with ghibli-styleimage",
+      "text": "minimax/hailuo-02 with start image",
       "duration": 6,
       "imagePrompt": "a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, Ghibli style",
       "moviePrompt": "televised footage of a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
       "movieParams": {
         "model": "minimax/hailuo-02"
+      }
+    },
+    {
+      "id": "hailuo-02-fast",
+      "text": "minimax/hailuo-02-fast with no start image",
+      "duration": 10,
+      "imagePrompt": "televised footage of a cat preparing to dive into a swimming pool at the olympics, from a 10m high diving board",
+      "moviePrompt": "a cat is doing an acrobatic dive into a swimming pool at the olympics, from a 10m high diving board, flips and spins",
+      "movieParams": {
+        "model": "minimax/hailuo-02-fast"
       }
     },
     {
