@@ -1,3 +1,4 @@
+import { GraphAILogger } from "graphai";
 import { type MulmoScript, type MulmoStudioMultiLingual, mulmoScriptSchema, mulmoStudioMultiLingualFileSchema } from "../types/index.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,6 +46,9 @@ export const MulmoStudioMultiLingualMethod = {
   validate(jsonData: any, studioBeatsLength: number): MulmoStudioMultiLingual {
     // TODO version check
     const result = mulmoStudioMultiLingualFileSchema.safeParse(jsonData);
+    if (!result.success) {
+      GraphAILogger.warn("multiLingual file validation failed.");
+    }
     const dataSet = result.success ? result.data.multiLingual : [];
     while (dataSet.length < studioBeatsLength) {
       dataSet.push({ multiLingualTexts: {} });

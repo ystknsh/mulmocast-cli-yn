@@ -1,4 +1,5 @@
 import "dotenv/config";
+import fs from "fs";
 
 import { GraphAI, TaskManager } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
@@ -9,6 +10,7 @@ import combineAudioFilesAgent from "../agents/combine_audio_files_agent.js";
 import ttsOpenaiAgent from "../agents/tts_openai_agent.js";
 import ttsGoogleAgent from "../agents/tts_google_agent.js";
 import ttsElevenlabsAgent from "../agents/tts_elevenlabs_agent.js";
+import mediaMockAgent from "../agents/media_mock_agent.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 
@@ -100,6 +102,7 @@ const graph_tts: GraphData = {
       if: ":preprocessor.needsTTS",
       agent: ":preprocessor.ttsAgent",
       inputs: {
+        media: "audio",
         text: ":preprocessor.text",
         provider: ":preprocessor.provider",
         lang: ":preprocessor.lang",
@@ -172,7 +175,22 @@ const graph_data: GraphData = {
           musicFile: ":musicFile",
         },
       },
-      isResult: true,
+      defaultValue: {},
+    },
+    handleNoBGM: {
+      agent: async (namedInputs: { voiceFile: string; outputFile: string }) => {
+        const { voiceFile, outputFile } = namedInputs;
+        await fs.promises.copyFile(voiceFile, outputFile);
+        return {
+          voiceFile,
+          outputFile,
+        };
+      },
+      if: ":context.presentationStyle.audioParams.bgmVolume.equal(0)",
+      inputs: {
+        voiceFile: ":audioCombinedFilePath",
+        outputFile: ":audioArtifactFilePath",
+      },
       defaultValue: {},
     },
     title: {
@@ -182,7 +200,7 @@ const graph_data: GraphData = {
       },
       inputs: {
         title: "\n${:context.studio.script.title}\n\n${:context.studio.script.description}\nReference: ${:context.studio.script.reference}\n",
-        waitFor: ":addBGM",
+        waitFor: [":addBGM", ":handleNoBGM"],
       },
     },
   },
@@ -217,6 +235,7 @@ const audioAgents = {
   ttsNijivoiceAgent,
   ttsGoogleAgent,
   ttsElevenlabsAgent,
+  mediaMockAgent,
   addBGMAgent,
   combineAudioFilesAgent,
 };

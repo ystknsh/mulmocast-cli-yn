@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
 import { parse as yamlParse } from "yaml";
 import { fileURLToPath } from "url";
 import { GraphAILogger } from "graphai";
@@ -172,6 +173,7 @@ export const mkdir = (dirPath: string) => {
 // export const silentLastPath = path.resolve(npmRoot, "./assets/audio/silent800.mp3");
 export const silent60secPath = () => path.resolve(npmRoot, "./assets/audio/silent60sec.mp3");
 export const defaultBGMPath = () => "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/story002.mp3";
+export const mulmoCreditPath = () => path.resolve(npmRoot, "./assets/images/mulmocast_credit.png");
 
 export const getHTMLFile = (filename: string) => {
   const htmlPath = path.resolve(npmRoot, `./assets/html/${filename}.html`);
@@ -279,4 +281,8 @@ export const generateTimestampedFileName = (prefix: string) => {
   const now = new Date();
   const pad = (n: number) => n.toString().padStart(2, "0");
   return `${prefix}_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+};
+
+export const hashSHA256 = (text: string) => {
+  return createHash("sha256").update(text, "utf8").digest("hex");
 };

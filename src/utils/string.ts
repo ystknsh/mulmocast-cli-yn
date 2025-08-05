@@ -62,6 +62,7 @@ export const replacementsJa: Replacement[] = [
   { from: "Groq", to: "グロック" },
   { from: "TSMC", to: "ティーエスエムシー" },
   { from: "NVIDIA", to: "エヌビディア" },
+  { from: "PER", to: "ピーイーアール" },
   { from: "1つ", to: "ひとつ" },
   { from: "2つ", to: "ふたつ" },
   { from: "3つ", to: "みっつ" },

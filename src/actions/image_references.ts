@@ -7,7 +7,7 @@ import { graphOption } from "./images.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../methods/index.js";
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImagePromptMedia } from "../types/index.js";
 
-import { imageGoogleAgent, imageOpenaiAgent } from "../agents/index.js";
+import { imageGoogleAgent, imageOpenaiAgent, mediaMockAgent } from "../agents/index.js";
 
 // public api
 // Application may call this function directly to generate reference image.
@@ -31,6 +31,7 @@ export const generateReferenceImage = async (inputs: {
         agent: imageAgentInfo.agent,
         retry: 2,
         inputs: {
+          media: "image",
           prompt,
           cache: {
             force: [context.force, force ?? false],
@@ -49,7 +50,7 @@ export const generateReferenceImage = async (inputs: {
   };
 
   const options = await graphOption(context);
-  const graph = new GraphAI(image_graph_data, { imageGoogleAgent, imageOpenaiAgent }, options);
+  const graph = new GraphAI(image_graph_data, { imageGoogleAgent, imageOpenaiAgent, mediaMockAgent }, options);
   await graph.run<{ output: MulmoStudioBeat[] }>();
   return imagePath;
 };

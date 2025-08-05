@@ -23,6 +23,12 @@ export const provider2TTSAgent = {
     // https://elevenlabs.io/docs/models
     models: ["eleven_multilingual_v2", "eleven_turbo_v2_5", "eleven_turbo_v2", "eleven_flash_v2_5", "eleven_flash_v2"],
   },
+  mock: {
+    agentName: "mediaMockAgent",
+    hasLimitedConcurrency: true,
+    defaultModel: "mock-model",
+    models: ["mock-model"],
+  },
 };
 
 export const provider2ImageAgent = {
@@ -35,6 +41,11 @@ export const provider2ImageAgent = {
     agentName: "imageGoogleAgent",
     defaultModel: "imagen-3.0-fast-generate-001",
     models: ["imagen-3.0-fast-generate-001", "imagen-3.0-generate-002", "imagen-3.0-capability-001"],
+  },
+  mock: {
+    agentName: "mediaMockAgent",
+    defaultModel: "mock-model",
+    models: ["mock-model"],
   },
 };
 
@@ -141,6 +152,11 @@ export const provider2MovieAgent = {
     defaultModel: "veo-2.0-generate-001",
     models: ["veo-2.0-generate-001"],
   },
+  mock: {
+    agentName: "mediaMockAgent",
+    defaultModel: "mock-model",
+    models: ["mock-model"],
+  },
 };
 
 export const provider2SoundEffectAgent = {
@@ -216,6 +232,11 @@ export const provider2LLMAgent = {
     defaultModel: "llama3-8b-8192",
     max_tokens: 4096,
   },
+  mock: {
+    agentName: "mediaMockAgent",
+    defaultModel: "mock",
+    max_tokens: 4096,
+  },
 } as const;
 
 export const defaultProviders: {
@@ -239,4 +260,4 @@ export const defaultProviders: {
 export const llm = Object.keys(provider2LLMAgent) as (keyof typeof provider2LLMAgent)[];
 export type LLM = keyof typeof provider2LLMAgent;
 
-export const htmlLLMProvider = ["openai", "anthropic"];
+export const htmlLLMProvider = ["openai", "anthropic", "mock"];
