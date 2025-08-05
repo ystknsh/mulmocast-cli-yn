@@ -97,7 +97,7 @@ const beat_graph_data = {
       defaultValue: {},
       agent: ":htmlImageAgentInfo.agent",
       inputs: {
-        "media": "html",
+        media: "html",
         prompt: ":preprocessor.htmlPrompt",
         system: ":preprocessor.htmlImageSystemPrompt",
         params: {

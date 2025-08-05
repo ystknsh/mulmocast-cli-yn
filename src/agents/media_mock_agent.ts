@@ -22,7 +22,7 @@ export const mediaMockAgent: AgentFunction = async ({ namedInputs }) => {
     return { buffer };
   }
   if (namedInputs.media === "html") {
-    return { text: "<html><title>test</title><body>test</body></html>"}
+    return { text: "<html><title>test</title><body>test</body></html>" };
   }
   GraphAILogger.debug("agent dryRun");
   return { buffer: Buffer.from([]) };
