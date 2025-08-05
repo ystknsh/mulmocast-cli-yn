@@ -1,4 +1,5 @@
 import "dotenv/config";
+import fs from "fs";
 
 import { GraphAI, TaskManager } from "graphai";
 import type { GraphData, CallbackFunction } from "graphai";
@@ -177,12 +178,9 @@ const graph_data: GraphData = {
       defaultValue: {},
     },
     handleNoBGM: {
-      agent: async (namedInputs: {
-        voiceFile: string;
-        outputFile: string;
-      } ) => {
+      agent: async (namedInputs: { voiceFile: string; outputFile: string }) => {
         const { voiceFile, outputFile } = namedInputs;
-        console.log("***", voiceFile, outputFile);
+        await fs.promises.copyFile(voiceFile, outputFile);
         return {
           voiceFile,
           outputFile,
