@@ -1,5 +1,5 @@
-import select from '@inquirer/select';
-import input from '@inquirer/input';
+import select from "@inquirer/select";
+import input from "@inquirer/input";
 
 import { getAvailablePromptTemplates } from "./file.js";
 
