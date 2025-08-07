@@ -79,8 +79,8 @@ export const settings2GraphAIConfig = (
     movieReplicateAgent: {
       apiKey: getKey("MOVIE", "REPLICATE_API_TOKEN"),
     },
-    movieGoogleAgent: {
-      projectId: getKey("MOVIE", "GOOGLE_PROJECT_ID"),
+    movieGenAIAgent: {
+      apiKey: getKey("MOVIE", "GEMINI_API_KEY"),
     },
     ttsNijivoiceAgent: {
       apiKey: getKey("TTS", "NIJIVOICE_API_KEY"),
