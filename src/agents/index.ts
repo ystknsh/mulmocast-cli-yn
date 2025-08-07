@@ -3,7 +3,7 @@ import combineAudioFilesAgent from "./combine_audio_files_agent.js";
 import imageGenAIAgent from "./image_genai_agent.js";
 import imageOpenaiAgent from "./image_openai_agent.js";
 import tavilySearchAgent from "./tavily_agent.js";
-import movieGoogleAgent from "./movie_google_agent.js";
+import movieGenAIAgent from "./movie_genai_agent.js";
 import movieReplicateAgent from "./movie_replicate_agent.js";
 import mediaMockAgent from "./media_mock_agent.js";
 import ttsElevenlabsAgent from "./tts_elevenlabs_agent.js";
@@ -31,7 +31,7 @@ export {
   imageGenAIAgent,
   imageOpenaiAgent,
   tavilySearchAgent,
-  movieGoogleAgent,
+  movieGenAIAgent,
   movieReplicateAgent,
   mediaMockAgent,
   ttsElevenlabsAgent,

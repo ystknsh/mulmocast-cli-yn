@@ -13,7 +13,7 @@ import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/
 import {
   imageGenAIAgent,
   imageOpenaiAgent,
-  movieGoogleAgent,
+  movieGenAIAgent,
   movieReplicateAgent,
   mediaMockAgent,
   soundEffectReplicateAgent,
@@ -36,7 +36,7 @@ const imageAgents = {
   imageOpenaiAgent,
 };
 const movieAgents = {
-  movieGoogleAgent,
+  movieGenAIAgent,
   movieReplicateAgent,
   mediaMockAgent,
 };
