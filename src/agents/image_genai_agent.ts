@@ -16,7 +16,6 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
   const apiKey = config?.apiKey;
 
   try {
-    console.log("**** Generating image with model:", model, apiKey);
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateImages({
       model,
