@@ -136,17 +136,20 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
     // Poll the operation status until the video is ready.
     while (!responce.operation.done) {
       console.log("Waiting for video generation to complete...");
-      await sleep(3000);
+      await sleep(5000);
       responce.operation = await ai.operations.getVideosOperation(responce);
     }
     if (!responce.operation.response?.generatedVideos) {
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
-    const encodedMovie = responce.operation.response.generatedVideos[0].video?.videoBytes;
-    if (!encodedMovie) {
+    const uri = responce.operation.response.generatedVideos[0].video?.uri;
+    if (!uri) {
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
-    return { buffer: Buffer.from(encodedMovie, "base64") };
+    console.log("**** Downloading movie from:", uri);
+    const response = await fetch(uri);
+    const arrayBuffer = await response.arrayBuffer();
+    return { buffer: Buffer.from(arrayBuffer) };
   } catch (error) {
     GraphAILogger.info("Failed to generate movie:", (error as Error).message);
     throw error;
