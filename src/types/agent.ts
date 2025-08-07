@@ -32,6 +32,7 @@ export type GoogleImageAgentConfig = {
   projectId?: string;
   token?: string;
 };
+export type GenAIImageAgentConfig = { apiKey?: string };
 
 // movie
 //   inputs
