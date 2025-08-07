@@ -38,9 +38,9 @@ export const provider2ImageAgent = {
     models: ["dall-e-3", "gpt-image-1"],
   },
   google: {
-    agentName: "imageGoogleAgent",
-    defaultModel: "imagen-3.0-fast-generate-001",
-    models: ["imagen-3.0-fast-generate-001", "imagen-3.0-generate-002", "imagen-3.0-capability-001"],
+    agentName: "imageGenAIAgent",
+    defaultModel: "imagen-4.0-generate-preview-06-06",
+    models: ["imagen-3.0-generate-002", "imagen-4.0-generate-preview-06-06", "imagen-4.0-ultra-generate-preview-06-06"],
   },
   mock: {
     agentName: "mediaMockAgent",

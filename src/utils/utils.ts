@@ -70,8 +70,8 @@ export const settings2GraphAIConfig = (
       apiKey: getKey("IMAGE", "OPENAI_API_KEY"),
       baseURL: getKey("IMAGE", "OPENAI_BASE_URL"),
     },
-    imageGoogleAgent: {
-      projectId: getKey("IMAGE", "GOOGLE_PROJECT_ID"),
+    imageGenAIAgent: {
+      projectId: getKey("IMAGE", "GEMINI_API_KEY"),
     },
     anthropicAgent: {
       apiKey: getKey("LLM", "ANTHROPIC_API_TOKEN"),
