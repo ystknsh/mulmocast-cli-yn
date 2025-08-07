@@ -14,6 +14,9 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? provider2ImageAgent["google"].defaultModel;
   const apiKey = config?.apiKey;
+  if (!apiKey) {
+    throw new Error("API key is required for Google GenAI agent");
+  }
 
   try {
     const ai = new GoogleGenAI({ apiKey });

@@ -1,6 +1,5 @@
 import addBGMAgent from "./add_bgm_agent.js";
 import combineAudioFilesAgent from "./combine_audio_files_agent.js";
-import imageGoogleAgent from "./image_google_agent.js";
 import imageGenAIAgent from "./image_genai_agent.js";
 import imageOpenaiAgent from "./image_openai_agent.js";
 import tavilySearchAgent from "./tavily_agent.js";
@@ -29,7 +28,6 @@ export {
   textInputAgent,
   addBGMAgent,
   combineAudioFilesAgent,
-  imageGoogleAgent,
   imageGenAIAgent,
   imageOpenaiAgent,
   tavilySearchAgent,
