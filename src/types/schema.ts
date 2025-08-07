@@ -211,7 +211,7 @@ export const mulmoFillOptionSchema = z
   })
   .describe("How to handle aspect ratio differences between image and canvas");
 
-export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent) as [string, ...string[]]).default(defaultProviders.text2image);
+export const text2ImageProviderSchema = z.enum(Object.keys(provider2ImageAgent) as [string, ...string[]]).optional();
 
 // NOTE: This is for UI only. (until we figure out how to use it in mulmoImageParamsSchema)
 export const mulmoOpenAIImageModelSchema = z
@@ -232,7 +232,7 @@ export const mulmoGoogleImageModelSchema = z
 
 export const mulmoImageParamsSchema = z
   .object({
-    provider: text2ImageProviderSchema, // has default value
+    provider: text2ImageProviderSchema, // has no default value (do not change it)
     model: z.string().optional(), // default: provider specific
     quality: z.string().optional(), // optional image quality (model specific)
     style: z.string().optional(), // optional image style
