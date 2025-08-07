@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger, TaskManager } from "graphai";
 import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
-import { GoogleAuth } from "google-auth-library";
 
 import * as vanilla from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -12,7 +11,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
 import {
-  imageGoogleAgent,
+  imageGenAIAgent,
   imageOpenaiAgent,
   movieGoogleAgent,
   movieReplicateAgent,
@@ -24,7 +23,7 @@ import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../met
 
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
-import { userAssert, settings2GraphAIConfig } from "../utils/utils.js";
+import { settings2GraphAIConfig } from "../utils/utils.js";
 import { extractImageFromMovie, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
 
 import { getImageRefs } from "./image_references.js";
@@ -33,7 +32,7 @@ import { imagePreprocessAgent, imagePluginAgent, htmlImageGeneratorAgent } from 
 const vanillaAgents = vanilla.default ?? vanilla;
 
 const imageAgents = {
-  imageGoogleAgent,
+  imageGenAIAgent,
   imageOpenaiAgent,
 };
 const movieAgents = {
@@ -354,20 +353,6 @@ const graph_data: GraphData = {
   },
 };
 
-const googleAuth = async () => {
-  try {
-    const auth = new GoogleAuth({
-      scopes: ["https://www.googleapis.com/auth/cloud-platform"],
-    });
-    const client = await auth.getClient();
-    const accessToken = await client.getAccessToken();
-    return accessToken.token!;
-  } catch (error) {
-    GraphAILogger.info("install gcloud and run 'gcloud auth application-default login'");
-    throw error;
-  }
-};
-
 export const graphOption = async (context: MulmoStudioContext, settings?: Record<string, string>) => {
   const options: GraphOptions = {
     agentFilters: [
@@ -380,19 +365,7 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),
   };
 
-  const provider = MulmoPresentationStyleMethods.getText2ImageProvider(context.presentationStyle.imageParams?.provider);
-
-  const config = settings2GraphAIConfig(settings, process.env);
-
-  // We need to get google's auth token only if the google is the text2image provider.
-  if (provider === "google" || context.presentationStyle.movieParams?.provider === "google") {
-    userAssert(!!config.movieGoogleAgent || !!config.imageGoogleAgent, "GOOGLE_PROJECT_ID is not set");
-    GraphAILogger.log("google was specified as text2image engine");
-    const token = await googleAuth();
-    config["imageGoogleAgent"].token = token;
-    config["movieGoogleAgent"].token = token;
-  }
-  options.config = config;
+  options.config = settings2GraphAIConfig(settings, process.env);
   return options;
 };
 
