@@ -34,7 +34,7 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
     if (image && image.imageBytes) {
       return { buffer: Buffer.from(image.imageBytes, "base64") };
     }
-    throw new Error("ERROR: geneateImage returned no image bytes");
+    throw new Error("ERROR: generateImage returned no image bytes");
   } catch (error) {
     GraphAILogger.info("Failed to generate image:", error);
     throw error;
