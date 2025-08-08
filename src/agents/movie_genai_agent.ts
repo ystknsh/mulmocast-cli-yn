@@ -3,98 +3,7 @@ import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
 import type { AgentBufferResult, GenAIImageAgentConfig, GoogleMovieAgentParams, MovieAgentInputs } from "../types/agent.js";
-import { GoogleGenAI, PersonGeneration, SafetyFilterLevel } from "@google/genai";
-
-async function generateMovie(
-  projectId: string | undefined,
-  model: string,
-  token: string | undefined,
-  prompt: string,
-  imagePath: string | undefined,
-  aspectRatio: string,
-  duration: number,
-): Promise<Buffer | undefined> {
-  const GOOGLE_IMAGEN_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${model}`;
-
-  const payload = {
-    instances: [
-      {
-        prompt,
-        image: undefined as { bytesBase64Encoded: string; mimeType: string } | undefined,
-      },
-    ],
-    parameters: {
-      sampleCount: 1,
-      aspectRatio,
-      safetySetting: "block_only_high",
-      personGeneration: "allow_all",
-      durationSeconds: duration,
-    },
-  };
-
-  if (imagePath) {
-    const buffer = readFileSync(imagePath);
-    const bytesBase64Encoded = buffer.toString("base64");
-
-    payload.instances[0].image = {
-      bytesBase64Encoded,
-      mimeType: "image/png",
-    };
-  }
-
-  // Make the API call using fetch
-  const response = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:predictLongRunning`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    GraphAILogger.info("create project on google cloud console and setup the project. More details see readme.");
-    throw new Error(`Error: ${response.status} - ${response.statusText}`);
-  }
-  const initialResponse = await response.json();
-  const fetchBody = {
-    operationName: initialResponse.name,
-  };
-
-  const completeResponse = await (async () => {
-    while (true) {
-      GraphAILogger.info("...waiting for movie generation...");
-      await sleep(3000);
-      const operationResponse = await fetch(`${GOOGLE_IMAGEN_ENDPOINT}:fetchPredictOperation`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(fetchBody),
-      });
-      if (!operationResponse.ok) {
-        throw new Error(`Error: ${operationResponse.status} - ${operationResponse.statusText}`);
-      }
-      const responseData = await operationResponse.json();
-      if (responseData.done) {
-        if (responseData.error) {
-          GraphAILogger.info("Prompt: ", prompt);
-          throw new Error(`Error: ${responseData.error.message}`);
-        }
-        if (!responseData.response.videos) {
-          throw new Error(`No video: ${JSON.stringify(responseData, null, 2)}`);
-        }
-        return responseData.response;
-      }
-    }
-  })();
-  const encodedMovie = completeResponse.videos[0].bytesBase64Encoded;
-  if (encodedMovie) {
-    return Buffer.from(encodedMovie, "base64");
-  }
-  return undefined;
-}
+import { GoogleGenAI, PersonGeneration } from "@google/genai";
 
 export const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
   if (canvasSize.width > canvasSize.height) {
@@ -119,7 +28,6 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
   if (!apiKey) {
     throw new Error("API key is required for Google GenAI agent");
   }
-  console.log("**** Generating movie with model:", model, apiKey);
 
   try {
     const ai = new GoogleGenAI({ apiKey });
@@ -143,21 +51,14 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
     const video = responce.operation.response.generatedVideos[0].video;
-    console.log("**** video:", video);
-    const uri = video?.uri;
-    if (!uri) {
+    if (!video) {
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
-    console.log("**** Downloading movie from:", uri, "to\n", movieFile);
-    const file = await ai.files.get({
-      name: uri,
-    }); 
-    console.log("**** file:", file);
     await ai.files.download({
-      file: uri,
+      file: video,
       downloadPath: movieFile,
     });
-    await sleep(10000);
+    await sleep(5000); // HACK: Without this, the file is not ready yet.
     return { saved: movieFile };
   } catch (error) {
     GraphAILogger.info("Failed to generate movie:", (error as Error).message);

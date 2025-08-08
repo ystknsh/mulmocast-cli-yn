@@ -40,7 +40,6 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, true);
     const output = ((await next(context)) as { buffer?: Buffer; text?: string; saved?: boolean }) || undefined;
     const { buffer, text, saved } = output ?? {};
-    console.log("**** output: ", output);
     if (saved) {
       return true;
     }
@@ -53,7 +52,6 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
       await fsPromise.writeFile(file, text, "utf-8");
       return true;
     } else if (saved) {
-      console.log("**** saved:", saved);
       return true;
     }
     GraphAILogger.log("no cache, no buffer: " + file);

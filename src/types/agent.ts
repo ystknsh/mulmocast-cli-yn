@@ -13,7 +13,7 @@ export type OpenAIImageOptions = {
   quality?: OpenAIImageQuality;
 };
 
-export type AgentBufferResult = { buffer: Buffer };
+export type AgentBufferResult = { buffer?: Buffer; saved?: string; text?: string };
 export type AgentPromptInputs = { prompt: string };
 export type AgentTextInputs = { text: string };
 export type AgentErrorResult = { error: unknown };
