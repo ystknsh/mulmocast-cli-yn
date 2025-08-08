@@ -3,7 +3,7 @@ import { GraphAILogger, sleep } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 
 import type { AgentBufferResult, GenAIImageAgentConfig, GoogleMovieAgentParams, MovieAgentInputs } from "../types/agent.js";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, PersonGeneration } from "@google/genai";
 
 export const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
   if (canvasSize.width > canvasSize.height) {
@@ -37,6 +37,7 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
       config: {
         durationSeconds: duration,
         aspectRatio,
+        personGeneration: undefined as PersonGeneration | undefined,
       },
       image: undefined as { imageBytes: string; mimeType: string } | undefined,
     };
@@ -48,6 +49,8 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
         imageBytes,
         mimeType: "image/png",
       };
+    } else {
+      payload.config.personGeneration = PersonGeneration.ALLOW_ALL;
     }
     const operation = await ai.models.generateVideos(payload);
 
