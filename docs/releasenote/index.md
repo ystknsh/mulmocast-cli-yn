@@ -1,7 +1,90 @@
 # RELEASE NOTE
 
-# v1.1.5
+# v1.1.11
+## RELEASE NOTE
+**MulmoCast CLI v1.1.11** improves audio processing robustness and expands video generation capabilities with important bug fixes and new model support.
 
+### Enhancements
+*   **Video Generation**: Added support for the new, faster "minimax/hailuo-02-fast" model and enabled start image support for Google's Veo3 model to improve video continuity ([sample](https://github.com/receptron/mulmocast-cli/blob/v1.1.11/scripts/test/test_replicate.json)).
+*   **Japanese TTS**: Improved Japanese text-to-speech pronunciation by adding a phonetic mapping for the acronym "PER".
+
+### Bug Fixes
+*   **Audio Processing**: Fixed a bug where video generation would fail when background music volume was set to zero. The audio pipeline was also refactored for simplicity.
+*   **Processing Efficiency**: Sound effect and lip-sync generation is now correctly skipped for beats that do not produce video output.
+
+### Technical Improvements
+*   **Testing**: Introduced comprehensive mock media agents to allow for reliable testing of audio, image, and video generation without requiring external API access ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_hello_image.json), [sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_hello_caption.json)).
+*   **Code Quality**: Consolidated numerous import statements in the audio processing module for better code organization and maintainability.
+
+# v1.1.10
+## RELEASE NOTE
+**MulmoCast CLI v1.1.10** is a maintenance release that improves library integration, packaging, and dependency management.
+
+### Technical Improvements
+*   **API & Utilities**: Added new utility functions (`hashSHA256`, `getOutputMultilingualFilePathAndMkdir`) to centralize file and cache key management, making the API cleaner for library consumers.
+*   **Packaging**: The `./assets/images/` directory is now included in the npm package, ensuring image assets are available when MulmoCast is used as a dependency.
+*   **Dependencies**: Updated core packages, including `inquirer`, `marked`, and `typescript-eslint`, for improved stability and security.
+
+# v1.1.9
+## RELEASE NOTE
+**MulmoCast CLI v1.1.9** significantly expands multilingual capabilities with support for 8 new languages and improves text processing infrastructure for better global content creation.
+
+### New Features
+*   **Expanded Language Support**: Added support for 8 new languages: German (`de`), Chinese (`zh-CN`, `zh-TW`), Korean (`ko`), Italian (`it`), Portuguese (`pt`), Arabic (`ar`), and Hindi (`hi`).
+
+### Bug Fixes & Technical Improvements
+*   **Multilingual Captions**: Improved caption handling to correctly prioritize original script text when the target language matches, preventing unnecessary translations.
+*   **Code Quality**: Refactored multilingual text handling by centralizing the `localizedText` and `splitText` utility functions, improving code modularity and maintainability.
+
+# v1.1.8
+## RELEASE NOTE
+**MulmoCast CLI v1.1.8** is a focused release that improves the library's public API and enhances documentation for multilingual voice configuration.
+
+### Technical Improvements
+*   **API Enhancement**: Context management utilities are now exported from the main Node.js entry point, providing a cleaner and more stable API for developers using MulmoCast as a library.
+
+### Documentation
+*   **Multilingual Voice Configuration**: Added documentation with examples for the language-specific speaker configuration feature.
+
+# v1.1.7
+## RELEASE NOTE
+**MulmoCast CLI v1.1.7** is a maintenance release focused on improving the translation system, enhancing code quality, and updating dependencies.
+
+### Technical Improvements
+*   **Translation System**: Refactored the translation workflow to use more efficient hash-based caching and modular processing for individual beats, improving performance and cache management.
+*   **Multilingual Data Structure**: Added versioning to multilingual data files and centralized version management to improve maintainability and schema validation.
+*   **Code Quality**:
+    *   Refactored multiple files to use the optional chaining operator (`?.`) for cleaner code.
+    *   Fixed several minor typos in sample scripts and error messages.
+*   **Dependencies**: Updated TypeScript to `v5.9.2`.
+
+### Samples & Documentation
+*   **Content Updates**: Corrected text in the Figma IPO sample script for better consistency ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.7/scripts/snakajima/figma_ipo.json)).
+
+# v1.1.6
+## RELEASE NOTE
+**MulmoCast CLI v1.1.6** introduces new video generation models, enhances multilingual support, and improves lip-sync functionality.
+
+### New Features & Enhancements
+*   **New Video Models**: Added support for two cost-effective 480p Replicate models: `wan-2.2-i2v-480p-fast` (image-to-video) and `wan-2.2-t2v-480p-fast` (text-to-video) ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_replicate.json)).
+*   **Lip-Sync Model**: Added support for the `bytedance/omni-human` lip-sync model for image-to-video generation ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_lipsync.json)).
+
+### Technical Improvements & Bug Fixes
+*   **Performance**: Sound effect and lip-sync processing is now skipped for beats that do not produce video output. 
+*   **Multilingual Support**:
+    *   Added French (`fr`) and Spanish (`es`) to the list of supported languages. 
+    *   Made the `lang` property a required field in the MulmoScript schema for consistency. 
+    *   Fixed a bug in the translation cache that caused issues when switching between languages. 
+*   **Code Refactoring**: Consolidated and simplified context management, translation functions, and parameter naming for better maintainability. 
+*   **Japanese TTS**: Moved Japanese-specific text pre-processing to a dedicated agent filter for better quality. 
+
+### Samples & Documentation
+*   **New Sample**: Added a Figma IPO presentation script to demonstrate image-only lip-sync ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/snakajima/figma_ipo.json)).
+*   **Testing**: Expanded the language test script (⁠test_lang.json) with more comprehensive English test cases to validate multilingual functionality ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_lang.json)).
+*   **Documentation**: Updated `image.md` with new rules for sound effect and lip-sync generation ([docs](https://github.com/receptron/mulmocast-cli/blob/1.1.6/docs/image.md)). 
+
+# v1.1.5
+## RELEASE NOTE
 **MulmoCast CLI v1.1.5** enhances multilingual content creation with language-specific speaker support and introduces image quality controls for better content customization.
 
 ### New Features
@@ -13,7 +96,7 @@
 - **Package Contents**: Test scripts are now included in the npm package, providing library users with more examples and reference implementations.
 
 # v1.1.4
-
+## RELEASE NOTE
 **MulmoCast CLI v1.1.4** is a maintenance release that enhances the internal template system with improved data generation and a more optimized build process.
 
 ### Technical Improvements
@@ -21,14 +104,14 @@
 - **Build Process**: Streamlined the build workflow by integrating code formatting into the template generation step.
 
 # v1.1.3
-
+## RELEASE NOTE
 **MulmoCast CLI v1.1.3** is a maintenance release that reverts recent template system changes to restore stability.
 
 ### System Stability
 - **Template System Rollback**: Reverted changes from v1.1.2 related to the template system. Template loading is restored to a file system-based approach, and the build process has been updated accordingly to ensure reliable behavior.
 
 # v1.1.2
-
+## RELEASE NOTE
 **MulmoCast CLI v1.1.2** enhances lip sync capabilities with additional model support and improves template system performance.
 
 ### Enhancements
@@ -44,6 +127,7 @@
 - Updated all test scripts to use schema version 1.1 for consistency.
 
 # v1.1.1
+## RELEASE NOTE
 
 **MulmoCast CLI v1.1.1** introduces realistic lip sync capabilities and enhances the template system with improved performance and stability.
 
