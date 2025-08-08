@@ -142,16 +142,22 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
     if (!responce.operation.response?.generatedVideos) {
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
-    const uri = responce.operation.response.generatedVideos[0].video?.uri;
+    const video = responce.operation.response.generatedVideos[0].video;
+    console.log("**** video:", video);
+    const uri = video?.uri;
     if (!uri) {
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
-    console.log("**** Downloading movie from:", uri);
-    const file = await ai.files.download({
+    console.log("**** Downloading movie from:", uri, "to\n", movieFile);
+    const file = await ai.files.get({
+      name: uri,
+    }); 
+    console.log("**** file:", file);
+    await ai.files.download({
       file: uri,
       downloadPath: movieFile,
     });
-    return { buffer: undefined };
+    return { saved: movieFile };
   } catch (error) {
     GraphAILogger.info("Failed to generate movie:", (error as Error).message);
     throw error;
