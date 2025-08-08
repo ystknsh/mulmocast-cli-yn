@@ -31,7 +31,7 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
 
   try {
     const ai = new GoogleGenAI({ apiKey });
-    const operation = await ai.models.generateVideos({
+    const payload = {
       model,
       prompt,
       config: {
@@ -39,7 +39,20 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
         aspectRatio,
         personGeneration: PersonGeneration.ALLOW_ALL,
       },
-    });
+      image: undefined as { bytesBase64Encoded: string; mimeType: string } | undefined,
+    };
+    if (imagePath) {
+      const buffer = readFileSync(imagePath);
+      const bytesBase64Encoded = buffer.toString("base64");
+
+      payload.image = {
+        bytesBase64Encoded,
+        mimeType: "image/png",
+      };
+    }
+    console.log("**** payload:", payload);
+    const operation = await ai.models.generateVideos(payload);
+
     const responce = { operation };
     // Poll the operation status until the video is ready.
     while (!responce.operation.done) {
