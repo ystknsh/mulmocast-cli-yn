@@ -54,18 +54,18 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
     }
     const operation = await ai.models.generateVideos(payload);
 
-    const responce = { operation };
+    const response = { operation };
     // Poll the operation status until the video is ready.
-    while (!responce.operation.done) {
+    while (!response.operation.done) {
       await sleep(5000);
-      responce.operation = await ai.operations.getVideosOperation(responce);
+      response.operation = await ai.operations.getVideosOperation(response);
     }
-    if (!responce.operation.response?.generatedVideos) {
-      throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
+    if (!response.operation.response?.generatedVideos) {
+      throw new Error(`No video: ${JSON.stringify(response.operation, null, 2)}`);
     }
-    const video = responce.operation.response.generatedVideos[0].video;
+    const video = response.operation.response.generatedVideos[0].video;
     if (!video) {
-      throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
+      throw new Error(`No video: ${JSON.stringify(response.operation, null, 2)}`);
     }
     await ai.files.download({
       file: video,
