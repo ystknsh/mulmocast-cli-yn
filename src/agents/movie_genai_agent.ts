@@ -111,7 +111,7 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
   params,
   config,
 }) => {
-  const { prompt, imagePath } = namedInputs;
+  const { prompt, imagePath, movieFile } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? "veo-2.0-generate-001"; // "veo-3.0-generate-preview";
   const duration = params.duration ?? 8;
@@ -147,9 +147,11 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
       throw new Error(`No video: ${JSON.stringify(responce.operation, null, 2)}`);
     }
     console.log("**** Downloading movie from:", uri);
-    const response = await fetch(uri);
-    const arrayBuffer = await response.arrayBuffer();
-    return { buffer: Buffer.from(arrayBuffer) };
+    const file = await ai.files.download({
+      file: uri,
+      downloadPath: movieFile,
+    });
+    return { buffer: undefined };
   } catch (error) {
     GraphAILogger.info("Failed to generate movie:", (error as Error).message);
     throw error;

@@ -36,7 +36,7 @@ export type GenAIImageAgentConfig = { apiKey?: string };
 
 // movie
 //   inputs
-export type MovieAgentInputs = AgentPromptInputs & { imagePath?: string };
+export type MovieAgentInputs = AgentPromptInputs & { imagePath?: string; movieFile: string };
 //   params
 export type GoogleMovieAgentParams = ImageAgentParams & { duration?: number };
 export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number };
