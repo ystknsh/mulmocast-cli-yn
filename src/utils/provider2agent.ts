@@ -214,7 +214,7 @@ export const provider2LipSyncAgent = {
 export const provider2LLMAgent = {
   openai: {
     agentName: "openAIAgent",
-    defaultModel: "gpt-4o",
+    defaultModel: "gpt-5",
     max_tokens: 8192,
   },
   anthropic: {

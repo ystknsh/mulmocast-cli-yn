@@ -158,5 +158,5 @@ export const htmlImageSystemPrompt = (canvasSize: MulmoCanvasDimension) => {
     "Include a balanced mix of comments, graphs, and illustrations to enhance visual impact.",
     "Output only the HTML code. Do not include any comments, explanations, or additional information outside the HTML.",
     "If data is provided, use it effectively to populate the slide.",
-  ];
+  ].join("\n");
 };
