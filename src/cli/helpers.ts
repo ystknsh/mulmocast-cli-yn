@@ -58,9 +58,11 @@ export const getFileObject = (args: {
       // We generate a new unique script file from clipboard text in the output directory
       const generatedFileName = generateTimestampedFileName("script");
       const clipboardText = clipboardy.readSync();
+      const json = JSON.parse(clipboardText);
+      const formattedText = JSON.stringify(json, null, 2);
       const resolvedFilePath = resolveDirPath(outDirPath, `${generatedFileName}.json`);
       mkdir(outDirPath);
-      fs.writeFileSync(resolvedFilePath, clipboardText, "utf8");
+      fs.writeFileSync(resolvedFilePath, formattedText, "utf8");
       return { fileOrUrl: resolvedFilePath, fileName: generatedFileName };
     }
     const resolvedFileOrUrl = file ?? "";

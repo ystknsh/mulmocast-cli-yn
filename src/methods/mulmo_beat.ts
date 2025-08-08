@@ -5,7 +5,7 @@ import { findImagePlugin } from "../utils/image_plugins/index.js";
 export const MulmoBeatMethods = {
   getHtmlPrompt(beat: MulmoBeat) {
     if (beat?.htmlPrompt?.data) {
-      return beat.htmlPrompt.prompt + "\n\n data\n" + JSON.stringify(beat.htmlPrompt.data, null, 2);
+      return beat.htmlPrompt.prompt + "\n\n[data]\n" + JSON.stringify(beat.htmlPrompt.data, null, 2);
     }
     return beat?.htmlPrompt?.prompt;
   },
