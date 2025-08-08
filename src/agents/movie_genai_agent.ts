@@ -157,6 +157,7 @@ export const movieGenAIAgent: AgentFunction<GoogleMovieAgentParams, AgentBufferR
       file: uri,
       downloadPath: movieFile,
     });
+    await sleep(10000);
     return { saved: movieFile };
   } catch (error) {
     GraphAILogger.info("Failed to generate movie:", (error as Error).message);
