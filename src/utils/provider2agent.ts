@@ -148,7 +148,7 @@ export const provider2MovieAgent = {
     } as Record<ReplicateModel, { durations: number[]; start_image: string | undefined; last_image?: string; price_per_sec: number }>,
   },
   google: {
-    agentName: "movieGoogleAgent",
+    agentName: "movieGenAIAgent",
     defaultModel: "veo-2.0-generate-001",
     models: ["veo-2.0-generate-001"],
   },
