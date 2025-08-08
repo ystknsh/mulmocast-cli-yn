@@ -4,122 +4,84 @@
 ## RELEASE NOTE
 **MulmoCast CLI v1.1.11** improves audio processing robustness and expands video generation capabilities with important bug fixes and new model support.
 
-### Video Generation Enhancements
-- **Google Veo3 Start Image Support**: Added initial frame image functionality for better video continuity and control over opening scenes.
-- **New Fast Video Model**: Introduced "minimax/hailuo-02-fast" model for quicker video generation turnaround. ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_replicate.json))
+### Enhancements
+*   **Video Generation**: Added support for the new, faster "minimax/hailuo-02-fast" model and enabled start image support for Google's Veo3 model to improve video continuity ([sample](https://github.com/receptron/mulmocast-cli/blob/v1.1.11/scripts/test/test_replicate.json)).
+*   **Japanese TTS**: Improved Japanese text-to-speech pronunciation by adding a phonetic mapping for the acronym "PER".
 
 ### Bug Fixes
-- **BGM-Free Presentations**: Fixed movie generation failure when background music is disabled (bgmVolume: 0). ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_hello_nobgm.json))
+*   **Audio Processing**: Fixed a bug where video generation would fail when background music volume was set to zero. The audio pipeline was also refactored for simplicity.
+*   **Processing Efficiency**: Sound effect and lip-sync generation is now correctly skipped for beats that do not produce video output.
 
 ### Technical Improvements
-- **Japanese TTS Pronunciation**: Added proper pronunciation for "PER" acronym in Japanese text-to-speech.
-- **Audio Pipeline Simplification**: Refactored background music processing to eliminate conditional logic complexity while maintaining functionality.
-- **Mock Testing Infrastructure**: Added comprehensive mock agents for testing without external API dependencies. ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_hello_caption.json))
-- **Code Organization**: Consolidated imports and improved module structure for better maintainability.
-
-This release focuses on fixing audio processing issues and expanding video generation options while strengthening the testing infrastructure.
+*   **Testing**: Introduced comprehensive mock media agents to allow for reliable testing of audio, image, and video generation without requiring external API access ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_hello_image.json), [sample](https://github.com/receptron/mulmocast-cli/blob/1.1.11/scripts/test/test_hello_caption.json)).
+*   **Code Quality**: Consolidated numerous import statements in the audio processing module for better code organization and maintainability.
 
 # v1.1.10
 ## RELEASE NOTE
-**MulmoCast CLI v1.1.10** is primarily a maintenance and library integration release that improves utility functions, packaging configuration, and dependency management for enhanced application integration.
+**MulmoCast CLI v1.1.10** is a maintenance release that improves library integration, packaging, and dependency management.
 
-### Application Integration & Utilities
-- **SHA-256 Hash Generation**: Added `hashSHA256` function in `src/utils/file.ts` for creating secure hash values in application integration scenarios.
-- **Multilingual File Path Management**: Introduced `getOutputMultilingualFilePathAndMkdir` helper function for centralized output file path and directory creation logic.
-- **Enhanced Translation Workflow**: Updated `src/actions/translate.ts` and `src/methods/mulmo_script.ts` to use new utility functions for better code modularity.
-
-### Packaging & Distribution
-- **Asset Bundle Configuration**: Updated `package.json` to include `./assets/images/` directory in the "files" array, ensuring image assets are properly bundled in npm package distributions.
-- **Library Integration**: Enhanced package configuration for applications consuming MulmoCast as a library dependency.
-
-### Dependency Maintenance
-- **Package Updates**: Updated inquirer (^12.9.0), marked (^16.1.2), and typescript-eslint (^8.39.0) to latest patch versions for improved stability and security.
-- **Security Improvements**: Incorporated bug fixes and security enhancements from upstream package maintainers.
-
-This release focuses on strengthening the foundation for library integration while maintaining project stability through routine dependency updates and improved utility organization.
+### Technical Improvements
+*   **API & Utilities**: Added new utility functions (`hashSHA256`, `getOutputMultilingualFilePathAndMkdir`) to centralize file and cache key management, making the API cleaner for library consumers.
+*   **Packaging**: The `./assets/images/` directory is now included in the npm package, ensuring image assets are available when MulmoCast is used as a dependency.
+*   **Dependencies**: Updated core packages, including `inquirer`, `marked`, and `typescript-eslint`, for improved stability and security.
 
 # v1.1.9
 ## RELEASE NOTE
 **MulmoCast CLI v1.1.9** significantly expands multilingual capabilities with support for 8 new languages and improves text processing infrastructure for better global content creation.
 
-### Major Language Expansion
-- **8 New Languages Added**: Added support for German (de), Simplified Chinese (zh-CN), Traditional Chinese (zh-TW), Korean (ko), Italian (it), Portuguese (pt), Arabic (ar), and Hindi (hi), expanding from 4 to 12 total supported languages for truly global content creation capabilities.
+### New Features
+*   **Expanded Language Support**: Added support for 8 new languages: German (`de`), Chinese (`zh-CN`, `zh-TW`), Korean (`ko`), Italian (`it`), Portuguese (`pt`), Arabic (`ar`), and Hindi (`hi`).
 
-### Multilingual System Improvements
-- **Enhanced Caption Handling**: Fixed multilingual caption selection logic with improved fallback mechanism that prioritizes original script text when languages match, reducing processing overhead and improving reliability.
-- **Centralized Text Processing**: Refactored text processing utilities including `localizedText` and `splitText` functions to centralized locations with comprehensive test coverage for better code organization and maintainability.
-
-### Technical Improvements
-- **Improved Error Handling**: Added warning logging for multilingual text unavailability to provide better debugging information when working with multiple languages.
-- **Enhanced Text Splitting**: Moved text splitting logic to dedicated utility with language-specific processing (especially for Japanese) and efficient caching mechanisms.
-- **Better API Organization**: Updated exports to make text processing utilities accessible throughout the application for improved developer experience.
-
-This release focuses on making MulmoCast a truly global platform by tripling language support and strengthening the multilingual text processing foundation for reliable international content creation.
+### Bug Fixes & Technical Improvements
+*   **Multilingual Captions**: Improved caption handling to correctly prioritize original script text when the target language matches, preventing unnecessary translations.
+*   **Code Quality**: Refactored multilingual text handling by centralizing the `localizedText` and `splitText` utility functions, improving code modularity and maintainability.
 
 # v1.1.8
 ## RELEASE NOTE
-**MulmoCast CLI v1.1.8** is a focused release that improves library integration and provides comprehensive documentation for multilingual voice configuration features.
+**MulmoCast CLI v1.1.8** is a focused release that improves the library's public API and enhances documentation for multilingual voice configuration.
 
-### Documentation & Guidance
-- **Multilingual Voice Configuration**: Updated documentation in `docs/sound_and_voice.md` with clear examples showing how to configure different voice providers and voices for each language within a single presentation. This documentation covers the language-specific speaker functionality that was previously available but not properly documented.
+### Technical Improvements
+*   **API Enhancement**: Context management utilities are now exported from the main Node.js entry point, providing a cleaner and more stable API for developers using MulmoCast as a library.
 
-### Library Integration
-- **Context API Export**: Enhanced library API by exporting context utilities through the main Node.js entry point, providing cleaner API access for developers building tools and applications with MulmoCast. External packages can now access context management functions without relying on internal module paths.
-
-### Developer Experience
-- **Stable API Surface**: Library consumers benefit from more stable API access and reduced coupling with internal code organization, making it easier to build and maintain custom integrations and tools.
-
-This documentation-focused release helps creators better understand existing multilingual capabilities while improving the developer experience for those building custom tools and integrations with MulmoCast.
+### Documentation
+*   **Multilingual Voice Configuration**: Added documentation with examples for the language-specific speaker configuration feature.
 
 # v1.1.7
 ## RELEASE NOTE
-**MulmoCast CLI v1.1.7** focuses on translation system improvements, code quality enhancements, and comprehensive documentation updates for more efficient multilingual content creation.
+**MulmoCast CLI v1.1.7** is a maintenance release focused on improving the translation system, enhancing code quality, and updating dependencies.
 
-### Translation Enhancements
-- **Individual Beat Translation**: New translateBeat function enables selective translation of specific content segments without regenerating entire presentations, perfect for targeted updates
-- **Advanced Translation Performance**: Enhanced caching system with SHA-256 hash-based keys and improved cache management for faster processing and better preservation of existing translations
-- **Multilingual Version Management**: Centralized version control system eliminates hardcoded version strings and improves maintainability across language configurations
+### Technical Improvements
+*   **Translation System**: Refactored the translation workflow to use more efficient hash-based caching and modular processing for individual beats, improving performance and cache management.
+*   **Multilingual Data Structure**: Added versioning to multilingual data files and centralized version management to improve maintainability and schema validation.
+*   **Code Quality**:
+    *   Refactored multiple files to use the optional chaining operator (`?.`) for cleaner code.
+    *   Fixed several minor typos in sample scripts and error messages.
+*   **Dependencies**: Updated TypeScript to `v5.9.2`.
 
-### Code Quality & Maintenance
-- **TypeScript Updates**: Upgraded development dependency from 5.7.3 to 5.9.2 with enhanced development tooling
-- **Code Refactoring**: Implemented optional chaining operators across multiple files for cleaner null/undefined handling and improved readability
-- **Text Quality Improvements**: Fixed typographical errors in sample content and system error messages for more professional output
-
-### Documentation & Historical Records
-- **Complete Version History**: Added comprehensive release notes for versions v1.1.1 through v1.1.5, providing complete documentation of all features and improvements
-- **Better Organization**: Reorganized documentation structure with improved folder organization for easier navigation and reference
-
-### System Stability
-- **Enhanced Translation Cache**: Improved functionality prevents language switching issues and preserves multilingual data integrity
-- **Testing Coverage**: Added comprehensive test cases for individual beat translation and enhanced validation workflows
-- **Configuration Optimizations**: Refined presentation settings and updated Japanese text processing rules for better output quality
-
-This release strengthens MulmoCast's multilingual content creation foundation with more efficient translation workflows, improved code maintainability, and comprehensive historical documentation.
+### Samples & Documentation
+*   **Content Updates**: Corrected text in the Figma IPO sample script for better consistency ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.7/scripts/snakajima/figma_ipo.json)).
 
 # v1.1.6
 ## RELEASE NOTE
-**MulmoCast CLI v1.1.6** introduces cost-effective video generation models, advanced lip-sync capabilities, expanded language support, and comprehensive multilingual system improvements.
+**MulmoCast CLI v1.1.6** introduces new video generation models, enhances multilingual support, and improves lip-sync functionality.
 
-### New Features
-- **Cost-Effective Video Models**: Added wan-2.2-i2v-480p-fast and wan-2.2-t2v-480p-fast models offering 480p video generation at $0.012/second - significantly cheaper than existing options ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_replicate.json))
-- **Advanced Lip-Sync**: New bytedance/omni-human model enables high-quality lip-sync from static images, perfect for creating talking avatar videos ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_lipsync.json))
-- **Expanded Language Support**: Added French and Spanish support, joining English and Japanese for truly multilingual content creation
-- **Japanese TTS Enhancement**: Specialized text processing filter for nijivoice TTS provider improves Japanese audio quality with percent symbol handling
+### New Features & Enhancements
+*   **New Video Models**: Added support for two cost-effective 480p Replicate models: `wan-2.2-i2v-480p-fast` (image-to-video) and `wan-2.2-t2v-480p-fast` (text-to-video) ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_replicate.json)).
+*   **Lip-Sync Model**: Added support for the `bytedance/omni-human` lip-sync model for image-to-video generation ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_lipsync.json)).
 
-### Language & Internationalization
-- **Required Language Properties**: Made lang property mandatory in MulmoScript schema with backward compatibility for versions 1.0 and 1.1
-- **Translation System Improvements**: Enhanced translation cache functionality and fixed language switching persistence issues
-- **Comprehensive Language Testing**: Expanded test suite with various duration options for reliable multilingual content ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_lang.json))
+### Technical Improvements & Bug Fixes
+*   **Performance**: Sound effect and lip-sync processing is now skipped for beats that do not produce video output. 
+*   **Multilingual Support**:
+    *   Added French (`fr`) and Spanish (`es`) to the list of supported languages. 
+    *   Made the `lang` property a required field in the MulmoScript schema for consistency. 
+    *   Fixed a bug in the translation cache that caused issues when switching between languages. 
+*   **Code Refactoring**: Consolidated and simplified context management, translation functions, and parameter naming for better maintainability. 
+*   **Japanese TTS**: Moved Japanese-specific text pre-processing to a dedicated agent filter for better quality. 
 
-### Technical Improvements
-- **Performance Optimizations**: Conditional processing skips sound effects when no movie output is required, improving resource efficiency
-- **Code Quality**: Consolidated studio data functions, improved parameter naming clarity, and simplified function signatures for better maintainability
-- **Documentation Updates**: Added clear rules for sound effects and lip-sync processing ([docs](https://github.com/receptron/mulmocast-cli/blob/1.1.6/docs/image.md))
-
-### Samples & Templates
-- **Figma IPO Sample**: Japanese presentation script showcasing advanced lip-sync and TTS integration ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/snakajima/figma_ipo.json))
-
-This release significantly expands MulmoCast's multilingual capabilities and video generation options while maintaining excellent code quality and system reliability.
+### Samples & Documentation
+*   **New Sample**: Added a Figma IPO presentation script to demonstrate image-only lip-sync ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/snakajima/figma_ipo.json)).
+*   **Testing**: Expanded the language test script (⁠test_lang.json) with more comprehensive English test cases to validate multilingual functionality ([sample](https://github.com/receptron/mulmocast-cli/blob/1.1.6/scripts/test/test_lang.json)).
+*   **Documentation**: Updated `image.md` with new rules for sound effect and lip-sync generation ([docs](https://github.com/receptron/mulmocast-cli/blob/1.1.6/docs/image.md)). 
 
 # v1.1.5
 ## RELEASE NOTE
