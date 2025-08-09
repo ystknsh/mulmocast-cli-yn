@@ -109,7 +109,7 @@ const getOutputOption = (audioId: string, videoId: string) => {
 const addCaptions = (ffmpegContext: FfmpegContext, concatVideoId: string, context: MulmoStudioContext, caption: string | undefined) => {
   const beatsWithCaptions = context.studio.beats.filter(({ captionFile }) => captionFile);
   if (caption && beatsWithCaptions.length > 0) {
-    const introPadding = context.presentationStyle.audioParams.introPadding;
+    const introPadding = MulmoStudioContextMethods.getIntroPadding(context);
     return beatsWithCaptions.reduce((acc, beat, index) => {
       const { startAt, duration, captionFile } = beat;
       if (startAt !== undefined && duration !== undefined && captionFile !== undefined) {
@@ -216,7 +216,7 @@ const createVideo = async (audioArtifactFilePath: string, outputVideoPath: strin
     const extraPadding = (() => {
       // We need to consider only intro and outro padding because the other paddings were already added to the beat.duration
       if (index === 0) {
-        return context.presentationStyle.audioParams.introPadding;
+        return MulmoStudioContextMethods.getIntroPadding(context);
       } else if (index === context.studio.beats.length - 1) {
         return context.presentationStyle.audioParams.outroPadding;
       }
