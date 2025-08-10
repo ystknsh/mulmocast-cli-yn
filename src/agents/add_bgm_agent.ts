@@ -3,6 +3,7 @@ import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { MulmoStudioContext } from "../types/index.js";
 import { FfmpegContextAddInput, FfmpegContextInit, FfmpegContextGenerateOutput, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 
 const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: string; outputFile: string; context: MulmoStudioContext }> = async ({
   namedInputs,
@@ -19,7 +20,7 @@ const addBGMAgent: AgentFunction<{ musicFile: string }, string, { voiceFile: str
   }
 
   const { duration: speechDuration } = await ffmpegGetMediaDuration(voiceFile);
-  const introPadding = context.presentationStyle.audioParams.introPadding;
+  const introPadding = MulmoStudioContextMethods.getIntroPadding(context);
   const outroPadding = context.presentationStyle.audioParams.outroPadding;
   const totalDuration = speechDuration + introPadding + outroPadding;
   GraphAILogger.log("totalDucation:", speechDuration, totalDuration);

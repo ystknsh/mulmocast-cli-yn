@@ -78,4 +78,11 @@ export const MulmoStudioContextMethods = {
     }
     return context.studio.script.lang !== context.lang;
   },
+  getIntroPadding(context: MulmoStudioContext): number {
+    if (context.studio.script.beats[0].enableLipSync) {
+      // NOTE: We must set introPadding to 0 when enableLipSync is true. Otherwise, the lipsync will be out of sync.
+      return 0;
+    }
+    return context.presentationStyle.audioParams.introPadding;
+  },
 };
