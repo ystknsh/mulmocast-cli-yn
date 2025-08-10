@@ -11,6 +11,7 @@ export type OpenAIImageOptions = {
   size: OpenAIImageSize;
   moderation?: OpenAIImageModeration;
   quality?: OpenAIImageQuality;
+  background?: "opaque" | "transparent" | "auto";
 };
 
 export type AgentBufferResult = { buffer?: Buffer; saved?: string; text?: string };

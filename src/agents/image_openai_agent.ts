@@ -41,6 +41,7 @@ export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBuffer
     prompt,
     n: 1,
     size,
+    background: "opaque",
   };
   if (model === "gpt-image-1") {
     imageOptions.moderation = moderation || "auto";
