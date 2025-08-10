@@ -101,7 +101,8 @@ export const MulmoPresentationStyleMethods = {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
     const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
-    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider) as keyof typeof provider2ImageAgent;
+    const provider =
+      (MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider) as keyof typeof provider2ImageAgent) ?? defaultProviders.text2image;
     const agentInfo = provider2ImageAgent[provider];
 
     // The default text2image model is gpt-image-1 from OpenAI, and to use it you must have an OpenAI account and have verified your identity. If this is not possible, please specify dall-e-3 as the model.
