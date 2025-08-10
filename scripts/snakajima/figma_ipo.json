@@ -53,10 +53,7 @@
   ],
   "movieParams": { "provider": "replicate", "model": "bytedance/seedance-1-lite" },
   "audioParams": {
-    "bgm": { "kind": "url", "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3" },
-    "introPadding": 0,
-    "padding": 0,
-    "closingPadding": 0
+    "bgm": { "kind": "url", "url": "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3" }
   },
   "canvasSize": { "width": 1024, "height": 1536 },
   "speechParams": { "speakers": { "Presenter": { "provider": "nijivoice", "voiceId": "9d9ed276-49ee-443a-bc19-26e6136d05f0" } } },
