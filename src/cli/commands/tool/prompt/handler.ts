@@ -15,5 +15,5 @@ export const handler = async (argv: ToolCliArgs<{ template?: string }>) => {
     template,
   });
 
-  await dumpPromptFromTemplate({ templateName: template });
+  await dumpPromptFromTemplate({ templateName: template, suppressFirstStatement: false });
 };
