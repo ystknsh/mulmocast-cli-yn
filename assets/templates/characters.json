@@ -11,6 +11,6 @@
       "height": 1024
     }
   },
-  "systemPrompt": "Generate a script for a the given story with multiple characters. Generate image prompts for each character, and make references to them in the beats. Use the JSON below as a template.",
+  "systemPrompt": "Use multiple characters. Generate image prompts for each character, and make references to them in the beats. Use the JSON below as a template.",
   "scriptName": "image_refs.json"
 }

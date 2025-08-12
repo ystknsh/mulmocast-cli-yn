@@ -1,7 +1,7 @@
 {
   "title": "Student and Teacher",
   "description": "Interactive discussion between a student and teacher",
-  "systemPrompt": "この件について、内容全てを高校生にも分かるように、太郎くん(Student)と先生(Teacher)の会話、という形の台本をArtifactとして作って。ただし要点はしっかりと押さえて。以下に別のトピックに関するサンプルを貼り付けます。このJSONフォーマットに従って。",
+  "systemPrompt": "全てを高校生にも分かるように、太郎くん(Student)と先生(Teacher)の会話、という形の台本にして。ただし要点はしっかりと押さえて。以下に別のトピックに関するサンプルを貼り付けます。このJSONフォーマットに従って。",
   "presentationStyle": {
     "$mulmocast": {
       "version": "1.1",
