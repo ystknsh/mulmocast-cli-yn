@@ -623,6 +623,7 @@ export const scriptTemplates = [
         },
       },
     },
+    lang: "en",
     title: "[TITLE OF THE PRESENTAITON OR STORY]",
   },
   {
@@ -1125,6 +1126,7 @@ export const scriptTemplates = [
       lang: "en",
     },
     filename: "voice_over",
+    lang: "en",
     title: "Voice Over Test",
   },
 ];
