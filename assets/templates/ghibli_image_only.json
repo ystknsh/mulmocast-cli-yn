@@ -1,7 +1,7 @@
 {
   "title": "Ghibli comic image-only",
   "description": "Template for Ghibli-style image-only comic presentation.",
-  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate an image for each beat based on the text description of that beat. Use the JSON below as a template.",
+  "systemPrompt": "Another AI will generate an image for each beat based on the text description of that beat. Use the JSON below as a template.",
   "presentationStyle": {
     "$mulmocast": {
       "version": "1.1",

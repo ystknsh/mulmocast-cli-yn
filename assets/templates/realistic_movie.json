@@ -1,7 +1,7 @@
 {
   "title": "Photo realistic movie template",
   "description": "Template for photo realistic movie.",
-  "systemPrompt": "Generate a script for a presentation of the given topic. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+  "systemPrompt": "Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
   "presentationStyle": {
     "$mulmocast": {
       "version": "1.1",
