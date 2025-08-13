@@ -545,6 +545,7 @@ export const scriptTemplates = [
       },
     ],
     filename: "image_prompt_only_template",
+    lang: "en",
     title: "[TITLE: Brief, engaging title for the topic]",
   },
   {
