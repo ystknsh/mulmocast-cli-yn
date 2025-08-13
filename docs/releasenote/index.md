@@ -2,13 +2,16 @@
 
 # v1.2.2
 ## RELEASE NOTE
-**MulmoCast CLI v1.2.2** optimizes the template system for cleaner prompts, flexible provider selection, and reduced maintenance.
+**MulmoCast CLI v1.2.2** focuses on template optimization for cleaner prompts and easier maintenance.
 
-### Changes
-- Removed redundant `"Generate a script for a presentation of the given topic"` prefix from 19 templates.
-- Deleted hardcoded `"provider": "openai"` in `imageParams` for runtime flexibility.
-- Added `lang: "en"` to templates for better localization.
-- Removed 4 deprecated templates: `ani_ja`, `podcast_standard`, `text_and_image`, `text_only`.
+### Technical Improvements
+*   **Prompt Streamlining**: Removed redundant intro text from system prompts in 19 templates.
+*   **Provider Flexibility**: Removed hardcoded OpenAI references in image parameters, allowing runtime selection.
+*   **Localization**: Added language specification to script templates for better internationalization.
+
+### Maintenance
+*   **Template Cleanup**: Deleted 4 deprecated templates (`ani_ja`, `podcast_standard`, `text_and_image`, `text_only`), reducing total from 23 to 19.
+*   **Code Simplification**: Reduced duplication in system prompts.
 
 **Note:** Projects using the removed templates must migrate to supported ones.
 
