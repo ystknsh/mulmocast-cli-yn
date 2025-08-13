@@ -90,6 +90,15 @@ body:
     validations:
       required: false
 
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: Run `node --version`
+      placeholder: "e.g., v20.10.0"
+    validations:
+      required: true
+
   - type: textarea
     id: mulmo-script
     attributes:
