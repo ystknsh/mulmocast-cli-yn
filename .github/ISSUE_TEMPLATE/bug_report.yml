@@ -1,0 +1,145 @@
+name: Bug report
+description: Create a report to help us improve
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Run command: mulmo ...
+        2. With options: ...
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installation Method
+      description: How did you install MulmoCast?
+      options:
+        - npm/yarn global install (mulmocast package)
+        - GitHub source (cloned repository)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: cli-version
+    attributes:
+      label: Version
+      description: |
+        - For npm: Run `mulmo --version`
+        - For GitHub: Check package.json or git commit hash
+      placeholder: "e.g., 1.2.2 or commit abc123"
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What OS are you using?
+      options:
+        - macOS
+        - Windows
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: OS Version
+      description: e.g., macOS 14.0, Windows 11, Ubuntu 22.04
+      placeholder: "Version"
+    validations:
+      required: false
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: Run `node --version`
+      placeholder: "e.g., v20.10.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: mulmo-script
+    attributes:
+      label: MulmoScript Used
+      description: Paste your MulmoScript JSON inside the provided template below (replace the placeholder)
+      value: |
+        <details>
+        <summary>MulmoScript (click to expand)</summary>
+        
+        ```json
+        {
+          "title": "Replace this with your MulmoScript",
+          "beats": [...]
+        }
+        ```
+        
+        </details>
+    validations:
+      required: false
+
+  - type: textarea
+    id: error-output
+    attributes:
+      label: Error Output
+      description: Paste error messages or logs inside the provided template below
+      value: |
+        <details>
+        <summary>Error logs (click to expand)</summary>
+        
+        ```shell
+        Replace this with your error output
+        ```
+        
+        </details>
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here (e.g., relevant .env settings without sensitive data).
+    validations:
+      required: false
