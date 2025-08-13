@@ -1,0 +1,122 @@
+name: Feature request
+description: Suggest an idea for MulmoCast
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a new feature!
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear and concise description of what the problem is.
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen.
+      placeholder: I would like to be able to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: A clear and concise description of any alternative solutions or features you've considered.
+      placeholder: Other approaches that might work...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Category
+      description: What type of feature is this?
+      options:
+        - New output format (video, audio, PDF, etc.)
+        - AI provider integration
+        - CLI improvement
+        - MulmoScript enhancement
+        - Performance optimization
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: How important is this feature to you?
+      description: Help us understand the priority
+      options:
+        - Critical - blocking my work
+        - High - significant improvement to workflow
+        - Medium - nice to have
+        - Low - minor enhancement
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe your specific use case for this feature
+      placeholder: |
+        I need this feature for...
+        It would help me to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: example-script
+    attributes:
+      label: Example MulmoScript
+      description: If applicable, provide an example of how this feature might work in MulmoScript
+      value: |
+        <details>
+        <summary>Example MulmoScript (click to expand)</summary>
+        
+        ```json
+        {
+          "title": "Example showing the proposed feature",
+          "beats": [...]
+        }
+        ```
+        
+        </details>
+    validations:
+      required: false
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation suggestions
+      description: If you have ideas about how this could be implemented, please share them
+      placeholder: This could be implemented by...
+    validations:
+      required: false
+
+  - type: checkbox
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be willing to contribute to this feature?
+      options:
+        - label: I'm willing to submit a PR for this feature
+          required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context, mockups, or screenshots about the feature request here.
+    validations:
+      required: false
