@@ -37,12 +37,26 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installation Method
+      description: How did you install MulmoCast?
+      options:
+        - npm/yarn global install (mulmocast package)
+        - GitHub source (cloned repository)
+        - Other
+    validations:
+      required: true
+
   - type: input
     id: cli-version
     attributes:
-      label: MulmoCast CLI Version
-      description: Run `yarn cli --version` or check package.json
-      placeholder: "e.g., 1.2.2"
+      label: Version
+      description: |
+        - For npm: Run `mulmo --version`
+        - For GitHub: Check package.json or git commit hash
+      placeholder: "e.g., 1.2.2 or commit abc123"
     validations:
       required: true
 
