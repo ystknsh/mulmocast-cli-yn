@@ -1,5 +1,60 @@
 # RELEASE NOTE
 
+# v1.2.2
+## RELEASE NOTE
+**MulmoCast CLI v1.2.2** focuses on template optimization for cleaner prompts and easier maintenance.
+
+### Technical Improvements
+*   **Prompt Streamlining**: Removed redundant intro text from system prompts in 19 templates.
+*   **Provider Flexibility**: Removed hardcoded OpenAI references in image parameters, allowing runtime selection.
+*   **Localization**: Added language specification to script templates for better internationalization.
+
+### Maintenance
+*   **Template Cleanup**: Deleted 4 deprecated templates (`ani_ja`, `podcast_standard`, `text_and_image`, `text_only`), reducing total from 23 to 19.
+*   **Code Simplification**: Reduced duplication in system prompts.
+
+**Note:** Projects using the removed templates must migrate to supported ones.
+
+# v1.2.1
+## RELEASE NOTE
+**MulmoCast CLI v1.2.1** is a maintenance release focused on stability, synchronization, and library integration enhancements.
+
+### Technical Improvements
+* **Custom Prompt Support**: Added `suppressFirstStatement` option to `dumpPromptFromTemplate` for library integration, allowing custom introductions while preserving template-specific instructions. Refactored 19 templates to remove standardized introductions and removed 4 deprecated templates.
+* **Audio-Video Sync Logic**: Centralized intro padding calculation via new `getIntroPadding` method for consistent lip-sync alignment across movie actions, BGM processing, and captions.
+* **Solid Background Images**: Added `background="opaque"` default for OpenAI image generation to avoid transparency issues in video production; supported by `gpt-image-1` but not DALL·E 3.
+* **Dependency Cleanup**: Removed unused `google-auth-library` and local `sleep` function, consolidating to GraphAI's version.
+* **Updated ESLint**: Bumped from 9.32.0 to 9.33.0.
+
+### Samples
+* **Character Enhancement**: Intensified tsundere personality expression in anime presentation templates ([ani.json](https://github.com/receptron/mulmocast-cli/blob/1.2.1/assets/templates/ani.json), [ani_ja.json](https://github.com/receptron/mulmocast-cli/blob/1.2.1/assets/templates/ani_ja.json)).
+
+### Bug Fixes
+* **Image Provider Fallback**: Prevented undefined provider errors by defaulting to `defaultProviders.text2image` (OpenAI) when no image generation provider is specified.
+
+# v1.2.0
+## RELEASE NOTE
+**MulmoCast CLI v1.2.0** delivers major AI upgrades with GPT-5 as the default model, full Google GenAI SDK integration for both image and video generation, and enhanced multimedia capabilities.
+
+### Breaking Changes
+*   **Google GenAI SDK Authentication**: The `google-auth-library` package has been removed. Image and video generation now use the `@google/genai` SDK with API key authentication (`GEMINI_API_KEY`), replacing the previous OAuth/service account JSON method.
+
+### New Features
+*   **GPT-5 Default Model**: All script generation now defaults to OpenAI's GPT-5 for more creative and contextually aware results.
+*   **Google GenAI SDK for Images & Videos**: Simplified setup—just set `GEMINI_API_KEY` to generate with Google's latest Imagen 4.0 and Veo 2.0 models ([sample config](https://github.com/receptron/mulmocast-cli/blob/1.2.0/scripts/test/test_genai.json)).
+*   **Advanced Video Generation**: Added `veo-2.0-generate-001` model with flexible aspect ratios (16:9, 9:16, 1:1), image-to-video capability, 5-second polling for generation status, and direct-to-file saving.
+*   **Imagen 4.0 Images**: Updated default to `imagen-4.0-generate-preview-06-06`, supporting higher quality, aspect ratio control, and person generation settings.
+
+### Technical Improvements
+*   **Modular Dependencies**: Replaced monolithic `inquirer` with `@inquirer/input` and `@inquirer/select` to reduce bundle size and dependency complexity.
+*   **Enhanced File Handling**: Direct file saving improves memory efficiency for large video outputs.
+*   **Type Safety Enhancements**: Added `saved` and `text` to `AgentBufferResult` and mandatory `movieFile` to `MovieAgentInputs`.
+*   **JSON Pretty-Print**: Clipboard operations now format JSON with proper indentation.
+*   **HTML Template Metadata**: Added `presentationStyle` with mulmocast version, credit timing, language settings, and canvas dimensions (1536x1024).
+
+### Documentation & Maintenance
+*   **Dependency Updates**: Updated `@graphai/input_agents`, `puppeteer`, `yaml`; removed unused `google-auth-library`.
+
 # v1.1.11
 ## RELEASE NOTE
 **MulmoCast CLI v1.1.11** improves audio processing robustness and expands video generation capabilities with important bug fixes and new model support.
