@@ -23,7 +23,7 @@ body:
       label: To Reproduce
       description: Steps to reproduce the behavior
       placeholder: |
-        1. Run command: yarn cli ...
+        1. Run command: mulmo ...
         2. With options: ...
         3. See error
     validations:
@@ -94,15 +94,19 @@ body:
     id: mulmo-script
     attributes:
       label: MulmoScript Used
-      description: |
-        Paste the MulmoScript JSON that caused the issue.
-        This will be automatically collapsed in the issue using <details> tags.
-      placeholder: |
+      description: Paste your MulmoScript JSON inside the provided template below (replace the placeholder)
+      value: |
+        <details>
+        <summary>MulmoScript (click to expand)</summary>
+        
+        ```json
         {
-          "title": "...",
+          "title": "Replace this with your MulmoScript",
           "beats": [...]
         }
-      render: json
+        ```
+        
+        </details>
     validations:
       required: false
 
