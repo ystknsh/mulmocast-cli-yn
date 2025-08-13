@@ -3,6 +3,15 @@ description: Suggest an idea for MulmoCast
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
+  - type: checkboxes
+    id: pre-flight-checks
+    attributes:
+      label: Preliminary Checks
+      description: Before submitting, please make sure you have done the following.
+      options:
+        - label: I have searched the existing issues and have not found a similar feature request.
+          required: true
+
   - type: markdown
     attributes:
       value: |
@@ -11,7 +20,7 @@ body:
   - type: textarea
     id: problem-statement
     attributes:
-      label: Is your feature request related to a problem?
+      label: Is your feature request related to a problem? Please describe.
       description: A clear and concise description of what the problem is.
       placeholder: I'm always frustrated when...
     validations:
@@ -36,22 +45,6 @@ body:
       required: false
 
   - type: dropdown
-    id: feature-type
-    attributes:
-      label: Feature Category
-      description: What type of feature is this?
-      options:
-        - New output format (video, audio, PDF, etc.)
-        - AI provider integration
-        - CLI improvement
-        - MulmoScript enhancement
-        - Performance optimization
-        - Documentation
-        - Other
-    validations:
-      required: true
-
-  - type: dropdown
     id: priority
     attributes:
       label: How important is this feature to you?
@@ -74,26 +67,6 @@ body:
         It would help me to...
     validations:
       required: true
-
-  - type: textarea
-    id: example-script
-    attributes:
-      label: Example MulmoScript
-      description: If applicable, provide an example of how this feature might work in MulmoScript
-      value: |
-        <details>
-        <summary>Example MulmoScript (click to expand)</summary>
-        
-        ```json
-        {
-          "title": "Example showing the proposed feature",
-          "beats": [...]
-        }
-        ```
-        
-        </details>
-    validations:
-      required: false
 
   - type: textarea
     id: implementation
