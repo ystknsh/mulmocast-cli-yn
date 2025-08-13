@@ -23,10 +23,9 @@ body:
       label: To Reproduce
       description: Steps to reproduce the behavior
       placeholder: |
-        1. Go to '...'
-        2. Click on '...'
-        3. Scroll down to '...'
-        4. See error
+        1. Run command: yarn cli ...
+        2. With options: ...
+        3. See error
     validations:
       required: true
 
@@ -35,6 +34,15 @@ body:
     attributes:
       label: Expected behavior
       description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: input
+    id: cli-version
+    attributes:
+      label: MulmoCast CLI Version
+      description: Run `yarn cli --version` or check package.json
+      placeholder: "e.g., 1.2.2"
     validations:
       required: true
 
@@ -69,9 +77,34 @@ body:
       required: false
 
   - type: textarea
+    id: mulmo-script
+    attributes:
+      label: MulmoScript Used
+      description: |
+        Paste the MulmoScript JSON that caused the issue.
+        This will be automatically collapsed in the issue using <details> tags.
+      placeholder: |
+        {
+          "title": "...",
+          "beats": [...]
+        }
+      render: json
+    validations:
+      required: false
+
+  - type: textarea
+    id: error-output
+    attributes:
+      label: Error Output
+      description: Paste any error messages or logs
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
     id: additional
     attributes:
       label: Additional context
-      description: Add any other context about the problem here.
+      description: Add any other context about the problem here (e.g., relevant .env settings without sensitive data).
     validations:
       required: false
