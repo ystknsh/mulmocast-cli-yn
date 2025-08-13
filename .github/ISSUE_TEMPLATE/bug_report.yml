@@ -114,8 +114,16 @@ body:
     id: error-output
     attributes:
       label: Error Output
-      description: Paste any error messages or logs
-      render: shell
+      description: Paste error messages or logs inside the provided template below
+      value: |
+        <details>
+        <summary>Error logs (click to expand)</summary>
+        
+        ```shell
+        Replace this with your error output
+        ```
+        
+        </details>
     validations:
       required: false
 
