@@ -19,10 +19,8 @@
 ## RELEASE NOTE
 **MulmoCast CLI v1.2.1** is a maintenance release focused on stability, synchronization, and library integration enhancements.
 
-### New Features
-* **Custom Prompt Support**: Added `suppressFirstStatement` option to `dumpPromptFromTemplate` for library integration, allowing custom introductions while preserving template-specific instructions. Refactored 19 templates to remove standardized introductions and removed 4 deprecated templates.
-
 ### Technical Improvements
+* **Custom Prompt Support**: Added `suppressFirstStatement` option to `dumpPromptFromTemplate` for library integration, allowing custom introductions while preserving template-specific instructions. Refactored 19 templates to remove standardized introductions and removed 4 deprecated templates.
 * **Audio-Video Sync Logic**: Centralized intro padding calculation via new `getIntroPadding` method for consistent lip-sync alignment across movie actions, BGM processing, and captions.
 * **Solid Background Images**: Added `background="opaque"` default for OpenAI image generation to avoid transparency issues in video production; supported by `gpt-image-1` but not DALL·E 3.
 * **Dependency Cleanup**: Removed unused `google-auth-library` and local `sleep` function, consolidating to GraphAI's version.
