@@ -1,10 +1,3 @@
----
-name: Feature or Bug Fix
-about: Propose a new feature or submit a bug fix. Use this for most changes.
-title: ''
-labels: ''
----
-
 ## Description
 <!-- Provide a brief description of the changes in this PR -->
 
