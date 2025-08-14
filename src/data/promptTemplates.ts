@@ -102,6 +102,12 @@ export const promptTemplates = [
       speechParams: {
         speakers: {
           Presenter: {
+            lang: {
+              ja: {
+                provider: "nijivoice",
+                voiceId: "9d9ed276-49ee-443a-bc19-26e6136d05f0",
+              },
+            },
             speechOptions: {
               instruction: "Speak in a slightly high-pitched, curt tone with sudden flustered shifts—like a tsundere anime girl.",
             },
@@ -113,7 +119,7 @@ export const promptTemplates = [
     scriptName: "image_prompts_template.json",
     systemPrompt:
       "言葉づかいは思いっきりツンデレにして。Another AI will generate comic for each beat based on the image prompt of that beat. You don't need to specify the style of the image, just describe the scene. Mention the reference in one of beats, if it exists. Use the JSON below as a template. Create appropriate amount of beats, and make sure the beats are coherent and flow well.",
-    title: "Presentation with Ani",
+    title: "Presentation by Ani",
   },
   {
     description: "Template for business presentation.",
