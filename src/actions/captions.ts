@@ -29,7 +29,7 @@ const graph_data: GraphData = {
             agent: async (namedInputs: { beat: MulmoBeat; context: MulmoStudioContext; index: number }) => {
               const { beat, context, index } = namedInputs;
               try {
-                MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, true);
+                MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, beat.id, true);
                 const captionParams = mulmoCaptionParamsSchema.parse({ ...context.studio.script.captionParams, ...beat.captionParams });
                 const canvasSize = MulmoPresentationStyleMethods.getCanvasSize(context.presentationStyle);
                 const imagePath = getCaptionImagePath(context, index);
@@ -49,7 +49,7 @@ const graph_data: GraphData = {
                 context.studio.beats[index].captionFile = imagePath;
                 return imagePath;
               } finally {
-                MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, false);
+                MulmoStudioContextMethods.setBeatSessionState(context, "caption", index, beat.id, false);
               }
             },
             inputs: {

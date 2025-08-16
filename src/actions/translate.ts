@@ -201,10 +201,10 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
     return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   try {
-    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, true);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, beat.id, true);
     return await next(context);
   } finally {
-    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, false);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, beat.id, false);
   }
 };
 const agentFilters = [
