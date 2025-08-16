@@ -14,6 +14,9 @@ export const imageOpenaiAgent: AgentFunction<OpenAIImageAgentParams, AgentBuffer
   const { prompt, referenceImages } = namedInputs;
   const { moderation, canvasSize, quality } = params;
   const { apiKey, baseURL } = { ...config };
+  if (!apiKey) {
+    throw new Error("OpenAI API key is required (OPENAI_API_KEY)");
+  }
   const model = params.model ?? provider2ImageAgent["openai"].defaultModel;
   const openai = new OpenAI({ apiKey, baseURL });
   const size = (() => {
