@@ -1,4 +1,4 @@
-import { GraphAILogger, assert } from "graphai";
+import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import type { NijivoiceTTSAgentParams, AgentBufferResult, AgentTextInputs, AgentErrorResult, AgentConfig } from "../types/agent.js";
 
