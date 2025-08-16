@@ -87,7 +87,7 @@
     "graphai": "^2.0.14",
     "marked": "^16.1.2",
     "ora": "^8.2.0",
-    "puppeteer": "^24.16.0",
+    "puppeteer": "^24.16.2",
     "replicate": "^1.0.1",
     "yaml": "^2.8.1",
     "yargs": "^18.0.0",
@@ -106,9 +106,9 @@
     "eslint-plugin-sonarjs": "^3.0.4",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
-    "tsx": "^4.20.3",
+    "tsx": "^4.20.4",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.0"
+    "typescript-eslint": "^8.39.1"
   },
   "engines": {
     "node": ">=18.0.0"
