@@ -15,7 +15,7 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
   const model = params.model ?? provider2ImageAgent["google"].defaultModel;
   const apiKey = config?.apiKey;
   if (!apiKey) {
-    throw new Error("API key is required for Google GenAI agent");
+    throw new Error("Google GenAI API key is required (GEMINI_API_KEY)");
   }
 
   try {
