@@ -106,6 +106,7 @@ const graph_tts: GraphData = {
           force: [":context.force"],
           file: ":preprocessor.audioPath",
           index: ":__mapIndex",
+          id: ":beat.id",
           mulmoContext: ":context",
           sessionType: "audio",
         },
