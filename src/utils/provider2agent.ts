@@ -216,7 +216,7 @@ export const provider2LLMAgent = {
     agentName: "openAIAgent",
     defaultModel: "gpt-5",
     max_tokens: 8192,
-    models: ["gpt-5", "gpt5-nano", "gpt-5-mini", "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano", "o3", "o3-ini", "o3-pro", "o1", "o1-pro", "gpt-4o", "gpt-4o-mini"],
+    models: ["gpt-5", "gpt-5-nano", "gpt-5-mini", "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano", "o3", "o3-mini", "o3-pro", "o1", "o1-pro", "gpt-4o", "gpt-4o-mini"],
   },
   anthropic: {
     agentName: "anthropicAgent",
@@ -226,7 +226,6 @@ export const provider2LLMAgent = {
       "claude-opus-4-1-20250805",
       "claude-opus-4-20250514",
       "claude-sonnet-4-20250514",
-      "claude-3-7-sonnet-20250219",
       "claude-3-7-sonnet-20250219",
       "claude-3-haiku-20240307",
     ],
