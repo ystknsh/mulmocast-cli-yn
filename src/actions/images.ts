@@ -369,9 +369,9 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
       },
     ],
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),
+    config: settings2GraphAIConfig(settings, process.env),
   };
 
-  options.config = settings2GraphAIConfig(settings, process.env);
   return options;
 };
 

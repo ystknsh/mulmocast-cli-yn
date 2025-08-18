@@ -1,3 +1,4 @@
+import { type CallbackFunction } from "graphai";
 import {
   langSchema,
   localizedTextSchema,
@@ -182,4 +183,9 @@ export type InitOptions = {
   l?: string;
   c?: string;
   p?: string;
+};
+
+export type PublicAPIArgs = {
+  settings?: Record<string, string>;
+  callbacks?: CallbackFunction[];
 };
