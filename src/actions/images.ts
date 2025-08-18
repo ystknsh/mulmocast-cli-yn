@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import { GraphAI, GraphAILogger, TaskManager } from "graphai";
-import type { GraphOptions, GraphData, CallbackFunction } from "graphai";
+import type { GraphOptions, GraphData } from "graphai";
 
 import * as vanilla from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
@@ -9,7 +9,7 @@ import { anthropicAgent } from "@graphai/anthropic_agent";
 
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
-import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams } from "../types/index.js";
+import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams, PublicAPIArgs } from "../types/index.js";
 import {
   imageGenAIAgent,
   imageOpenaiAgent,
@@ -369,9 +369,9 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
       },
     ],
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),
+    config: settings2GraphAIConfig(settings, process.env),
   };
 
-  options.config = settings2GraphAIConfig(settings, process.env);
   return options;
 };
 
@@ -399,7 +399,8 @@ const prepareGenerateImages = async (context: MulmoStudioContext) => {
 type ImageOptions = {
   imageAgents: Record<string, unknown>;
 };
-const generateImages = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[], options?: ImageOptions) => {
+const generateImages = async (context: MulmoStudioContext, args?: PublicAPIArgs & { options?: ImageOptions }) => {
+  const { settings, callbacks, options } = args ?? {};
   const optionImageAgents = options?.imageAgents ?? {};
   const injections = await prepareGenerateImages(context);
   const graphaiAgent = {
@@ -420,18 +421,10 @@ const generateImages = async (context: MulmoStudioContext, settings?: Record<str
 };
 
 // public api
-export const images = async (
-  context: MulmoStudioContext,
-  args?: {
-    settings?: Record<string, string>;
-    callbacks?: CallbackFunction[];
-    options?: ImageOptions;
-  },
-): Promise<MulmoStudioContext> => {
-  const { settings, callbacks, options } = args ?? {};
+export const images = async (context: MulmoStudioContext, args?: PublicAPIArgs & { options?: ImageOptions }): Promise<MulmoStudioContext> => {
   try {
     MulmoStudioContextMethods.setSessionState(context, "image", true);
-    const newContext = await generateImages(context, settings, callbacks, options);
+    const newContext = await generateImages(context, args);
     MulmoStudioContextMethods.setSessionState(context, "image", false);
     return newContext;
   } catch (error) {
@@ -444,12 +437,13 @@ export const images = async (
 export const generateBeatImage = async (inputs: {
   index: number;
   context: MulmoStudioContext;
-  settings?: Record<string, string>;
-  callbacks?: CallbackFunction[];
-  forceMovie?: boolean;
-  forceImage?: boolean;
+  args?: PublicAPIArgs & {
+    forceMovie?: boolean;
+    forceImage?: boolean;
+  };
 }) => {
-  const { index, context, settings, callbacks, forceMovie, forceImage } = inputs;
+  const { index, context, args } = inputs;
+  const { settings, callbacks, forceMovie, forceImage } = args ?? {};
   const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(beat_graph_data, defaultAgents, options);
