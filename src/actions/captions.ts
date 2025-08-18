@@ -1,6 +1,6 @@
-import { MulmoStudioContext, MulmoBeat, mulmoCaptionParamsSchema } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, PublicAPIArgs, mulmoCaptionParamsSchema } from "../types/index.js";
 import { GraphAI, GraphAILogger } from "graphai";
-import type { GraphData, CallbackFunction } from "graphai";
+import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile, getCaptionImagePath, getOutputStudioFilePath } from "../utils/file.js";
 import { localizedText } from "../utils/utils.js";
@@ -73,7 +73,8 @@ const graph_data: GraphData = {
   },
 };
 
-export const captions = async (context: MulmoStudioContext, callbacks?: CallbackFunction[]) => {
+export const captions = async (context: MulmoStudioContext, args?: PublicAPIArgs) => {
+  const { callbacks } = args ?? {};
   if (MulmoStudioContextMethods.getCaption(context)) {
     try {
       MulmoStudioContextMethods.setSessionState(context, "caption", true);

@@ -1,13 +1,13 @@
 import "dotenv/config";
 
 import { GraphAI, TaskManager } from "graphai";
-import type { GraphData, CallbackFunction } from "graphai";
+import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { ttsNijivoiceAgent, ttsOpenaiAgent, ttsGoogleAgent, ttsElevenlabsAgent, addBGMAgent, combineAudioFilesAgent, mediaMockAgent } from "../agents/index.js";
 
-import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, text2SpeechProviderSchema } from "../types/index.js";
+import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingualData, PublicAPIArgs, text2SpeechProviderSchema } from "../types/index.js";
 
 import { fileCacheAgentFilter, nijovoiceTextAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
@@ -209,7 +209,8 @@ const audioAgents = {
   combineAudioFilesAgent,
 };
 
-export const generateBeatAudio = async (index: number, context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
+export const generateBeatAudio = async (index: number, context: MulmoStudioContext, args?: PublicAPIArgs) => {
+  const { settings, callbacks } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
     const fileName = MulmoStudioContextMethods.getFileName(context);
@@ -240,7 +241,8 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
   }
 };
 
-export const audio = async (context: MulmoStudioContext, settings?: Record<string, string>, callbacks?: CallbackFunction[]) => {
+export const audio = async (context: MulmoStudioContext, args?: PublicAPIArgs) => {
+  const { settings, callbacks } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
     const fileName = MulmoStudioContextMethods.getFileName(context);

@@ -2,7 +2,7 @@ import "dotenv/config";
 import fs from "fs";
 
 import { GraphAI, assert, isNull, GraphAILogger } from "graphai";
-import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData, CallbackFunction } from "graphai";
+import type { GraphData, AgentFilterFunction, DefaultParamsType, DefaultResultData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
@@ -11,7 +11,15 @@ import { splitText } from "../utils/string.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
 import { getMultiLingual } from "../utils/context.js";
 import { currentMulmoScriptVersion } from "../utils/const.js";
-import type { LANG, MulmoStudioContext, MulmoBeat, MulmoStudioMultiLingualData, MulmoStudioMultiLingual, MultiLingualTexts } from "../types/index.js";
+import type {
+  LANG,
+  MulmoStudioContext,
+  MulmoBeat,
+  MulmoStudioMultiLingualData,
+  MulmoStudioMultiLingual,
+  MultiLingualTexts,
+  PublicAPIArgs,
+} from "../types/index.js";
 import { getOutputMultilingualFilePath, mkdir, writingMessage, hashSHA256 } from "../utils/file.js";
 import { translateSystemPrompt, translatePrompts } from "../utils/prompt.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
@@ -223,12 +231,7 @@ export const getOutputMultilingualFilePathAndMkdir = (context: MulmoStudioContex
   return { outputMultilingualFilePath, outDirPath };
 };
 
-export const translateBeat = async (
-  index: number,
-  context: MulmoStudioContext,
-  targetLangs: string[],
-  args?: { settings?: Record<string, string>; callbacks?: CallbackFunction[] },
-) => {
+export const translateBeat = async (index: number, context: MulmoStudioContext, targetLangs: string[], args?: PublicAPIArgs) => {
   const { settings, callbacks } = args ?? {};
 
   // Validate inputs
@@ -269,13 +272,7 @@ export const translateBeat = async (
   }
 };
 
-export const translate = async (
-  context: MulmoStudioContext,
-  args?: {
-    callbacks?: CallbackFunction[];
-    settings?: Record<string, string>;
-  },
-) => {
+export const translate = async (context: MulmoStudioContext, args?: PublicAPIArgs) => {
   const { settings, callbacks } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
