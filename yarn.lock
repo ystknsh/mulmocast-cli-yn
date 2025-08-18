@@ -251,15 +251,15 @@
   resolved "https://registry.yarnpkg.com/@google/generative-ai/-/generative-ai-0.24.1.tgz#634a3c06f8ea7a6125c1b0d6c1e66bb11afb52c9"
   integrity sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q==
 
-"@graphai/agent_utils@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@graphai/agent_utils/-/agent_utils-2.0.2.tgz#19ffad2833c13eeeb79caa162aaac5d241fb89fc"
-  integrity sha512-HumHi5Kz3mC3+5o/6AO47+kDe0nsdQY3pRxUy/pTeBIoWODn4S4YbMleA9F6FMJtDhxNW/zExLuSgX9czr4S4w==
+"@graphai/agent_utils@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@graphai/agent_utils/-/agent_utils-2.0.4.tgz#8b56e1a27e0a991bedf3610ac238fe77ee925c85"
+  integrity sha512-mNne4ftCmiNd0A/L8Rs/aVYkUHiFi/ids0iJ0PxWPRqo4q/KQG927J5EU7RFkCWftkga98ew6bhBhWfin4Bulw==
 
-"@graphai/anthropic_agent@^2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@graphai/anthropic_agent/-/anthropic_agent-2.0.9.tgz#1e0e4d8ee35a29be5f7c505f2d6ae2e64a38eadc"
-  integrity sha512-9W6gt50eZjriGZflRbKHYllyNC/Z9hPb1PGda9bQtKqh45SX9v5CWdHUZ69GvIUEYyaE946URT5+e75vFNxLKA==
+"@graphai/anthropic_agent@^2.0.10":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@graphai/anthropic_agent/-/anthropic_agent-2.0.10.tgz#adccd453d70ec68cd5228df2216b88d108e402a9"
+  integrity sha512-LSHPo8XBOIqVtv+2LtPfErErGgVMwJW2PVdxVxJqytGCbkfA9p/ixv7uOIvBnyH+9SQk6zGhEw78URGhPzg81Q==
   dependencies:
     "@anthropic-ai/sdk" "^0.60.0"
     "@graphai/llm_utils" "^2.0.3"
@@ -310,17 +310,17 @@
   resolved "https://registry.yarnpkg.com/@graphai/stream_agent_filter/-/stream_agent_filter-2.0.2.tgz#128250d8de876ffcfe8db488170ea43ac8c9d9f0"
   integrity sha512-S45q/cnzc8s2FTOUUcCCvMTOW7M7H1En10lKI5YCgH7UhmIeM3aP4x43fxTazeX9mqAC6od01wYIIDBvK/B2yA==
 
-"@graphai/vanilla@^2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-2.0.10.tgz#fb65e78b30488dc8d4a49d27db9a66839835ec96"
-  integrity sha512-0T/zCvFEyvJBb4nqbcSunlMS4Llhg9BoQSmqON03Cwoj+kcrC7yTfRfpNtUB1PXbwP6NNOhCCQHwkN6X6WIXgA==
+"@graphai/vanilla@^2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@graphai/vanilla/-/vanilla-2.0.12.tgz#1f1edf3e7f207c6f2ae02e4e5388a13493756981"
+  integrity sha512-kCzU33iFJHIsyvM491Nl8zH6+B2hzOAtVZWT2F3cjrADZ+YrGio2LKjsOVt78ky4GUEJm+ovxJWxeP042JFNZg==
   dependencies:
-    "@graphai/agent_utils" "^2.0.2"
+    "@graphai/agent_utils" "^2.0.4"
 
-"@graphai/vanilla_node_agents@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@graphai/vanilla_node_agents/-/vanilla_node_agents-2.0.1.tgz#9244f1ba597a5379afbf4b1473d2f2bfe2e620ae"
-  integrity sha512-CzcGQg091nmRWdMLDgFppI3uzPrHntmP32Be3s6aVkqLK70gJrqf9cto2RobCMeT0GUYbs8q6EIVbBbHR/BHYg==
+"@graphai/vanilla_node_agents@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@graphai/vanilla_node_agents/-/vanilla_node_agents-2.0.4.tgz#9a75c98e6dfd326aca8b8b27b219bc7eea1edfcd"
+  integrity sha512-TSIH2P8UgsvCGceWGh5a27SXoXUo0nUCPa6kAD604e28QckOVAPHeuEqRLHJseXPOLYzPbUDkldYPYQIWQxjKg==
 
 "@grpc/grpc-js@^1.12.6":
   version "1.13.3"
@@ -544,10 +544,10 @@
     tar-fs "^3.1.0"
     yargs "^17.7.2"
 
-"@receptron/test_utils@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@receptron/test_utils/-/test_utils-2.0.1.tgz#9625da8947679636709f77c55c8b6c05b7041b5c"
-  integrity sha512-iG3TMc75Ig01diL4gbvaVflP6/bk4kRQmszHV4xqtogGw1hUknjuTOvhPxqtiLH5X1GmXpGP4IsKfeIkWucLVg==
+"@receptron/test_utils@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@receptron/test_utils/-/test_utils-2.0.3.tgz#2740f5997a44624da859c2ed80707ea82113d34e"
+  integrity sha512-WY67kMLchQeviNoD6xmjA/73LQu5apfK27Bjghgtl6BnGouFAtZvVWHKi0Q2FW2FTU9meO6FZSeIqkaxok4fdg==
   dependencies:
     yaml "^2.8.1"
 
