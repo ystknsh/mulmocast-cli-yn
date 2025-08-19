@@ -1039,6 +1039,32 @@ export const scriptTemplates = [
     },
     beats: [
       {
+        imageNames: ["[CHARACTER_ID_1]", "[CHARACTER_ID_2]"],
+        imagePrompt: "[IMAGE_PROMPT FOR THIS BEAT with both characters]",
+        text: "[STORY TEXT FOR THIS BEAT FOR THIS BEAT]",
+      },
+      {
+        imageNames: ["[CHARACTER_ID_1]"],
+        imagePrompt: "[IMAGE_PROMPT FOR THIS BEAT with a single character]",
+        text: "[STORY TEXT FOR THIS BEAT FOR THIS BEAT]",
+      },
+      {
+        imageNames: ["[CHARACTER_ID_2]"],
+        imagePrompt: "[IMAGE_PROMPT FOR THIS BEAT with another character]",
+        text: "[STORY TEXT FOR THIS BEAT FOR THIS BEAT]",
+      },
+    ],
+    filename: "story_with_characters",
+    lang: "en",
+    title: "[TITLE: Brief, engaging title for the topic]",
+  },
+  {
+    $mulmocast: {
+      credit: "closing",
+      version: "1.1",
+    },
+    beats: [
+      {
         text: "[OPENING_BEAT: Introduce the topic with a hook. Reference the source material and set up why this topic matters. Usually 2-3 sentences that grab attention and provide context.]",
       },
       {

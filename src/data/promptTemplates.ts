@@ -769,6 +769,63 @@ export const promptTemplates = [
     title: "Short movie template",
   },
   {
+    description: "Template for Multi-character Story.",
+    filename: "sifi_story",
+    presentationStyle: {
+      $mulmocast: {
+        credit: "closing",
+        version: "1.1",
+      },
+      audioParams: {
+        audioVolume: 1,
+        bgmVolume: 0.2,
+        closingPadding: 0.8,
+        introPadding: 1,
+        outroPadding: 1,
+        padding: 0.3,
+        suppressSpeech: false,
+      },
+      canvasSize: {
+        height: 1024,
+        width: 1536,
+      },
+      imageParams: {
+        images: {
+          "[CHARACTER_1_ID]": {
+            prompt: "[IMAGE PROMPT FOR THIS CHARACTER]",
+            type: "imagePrompt",
+          },
+          "[CHARACTER_2_ID]": {
+            prompt: "[IMAGE PROMPT FOR THIS CHARACTER]",
+            type: "imagePrompt",
+          },
+        },
+        style:
+          "<style>A dreamy, hyper-detailed anime style that blends photorealistic backgrounds with vibrant, saturated colors. The skies are often filled with luminous clouds, dazzling sunsets, or star-filled nights, rendered with a glowing, almost ethereal quality. Urban landscapes and rural scenery are meticulously illustrated, with attention to tiny details like reflections in puddles, neon lights, or the texture of grass swaying in the wind. Characters are drawn with soft, expressive features, standing out against the breathtaking environments, creating a sense of emotional depth and lyrical atmosphere. The overall mood is cinematic, romantic, and filled with a sense of fleeting beauty and longing.</style>",
+      },
+      movieParams: {
+        provider: "replicate",
+      },
+      soundEffectParams: {
+        provider: "replicate",
+      },
+      speechParams: {
+        speakers: {
+          Presenter: {
+            displayName: {
+              en: "Presenter",
+            },
+            voiceId: "shimmer",
+          },
+        },
+      },
+    },
+    scriptName: "story_with_characters.json",
+    systemPrompt:
+      "Break the story into multiple beats, and put the story text in 'text' field. Generate image prompt for each character in the imageParams.images. Another AI will generate image for each beat based on its imagePrompt and specified characters in 'imageNames'. You don't need to repeat the image style in those image prompts. Use the JSON below as a template.",
+    title: "Multi-character Story",
+  },
+  {
     description: "Template for A Movie Trailer.",
     filename: "trailer",
     presentationStyle: {
