@@ -256,10 +256,10 @@
   resolved "https://registry.yarnpkg.com/@graphai/agent_utils/-/agent_utils-2.0.4.tgz#8b56e1a27e0a991bedf3610ac238fe77ee925c85"
   integrity sha512-mNne4ftCmiNd0A/L8Rs/aVYkUHiFi/ids0iJ0PxWPRqo4q/KQG927J5EU7RFkCWftkga98ew6bhBhWfin4Bulw==
 
-"@graphai/anthropic_agent@^2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@graphai/anthropic_agent/-/anthropic_agent-2.0.10.tgz#adccd453d70ec68cd5228df2216b88d108e402a9"
-  integrity sha512-LSHPo8XBOIqVtv+2LtPfErErGgVMwJW2PVdxVxJqytGCbkfA9p/ixv7uOIvBnyH+9SQk6zGhEw78URGhPzg81Q==
+"@graphai/anthropic_agent@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@graphai/anthropic_agent/-/anthropic_agent-2.0.11.tgz#a04095d557ae67fda54a383bdac693a8218c88c2"
+  integrity sha512-Ob3L4O/vPYny9NNvlbW9PQhhN2nwPlkoDyNIciFjiyshLU6UvSPet9GO7qWOTLaK2Nx4hER3IoGbQl/4Q7OlaQ==
   dependencies:
     "@anthropic-ai/sdk" "^0.60.0"
     "@graphai/llm_utils" "^2.0.3"
@@ -1137,10 +1137,10 @@ callsites@^3.0.0:
   resolved "https://registry.npmjs.org/callsites/-/callsites-3.1.0.tgz"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-canvas@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/canvas/-/canvas-3.1.2.tgz#a98406ef6178d31e39eb7dc0a488b1181555b792"
-  integrity sha512-Z/tzFAcBzoCvJlOSlCnoekh1Gu8YMn0J51+UAuXJAbW1Z6I9l2mZgdD7738MepoeeIcUdDtbMnOg6cC7GJxy/g==
+canvas@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/canvas/-/canvas-3.2.0.tgz#877c51aabdb99cbb5b2b378138a6cdd681e9d390"
+  integrity sha512-jk0GxrLtUEmW/TmFsk2WghvgHe8B0pxGilqCL21y8lHkPUGa6FTsnCNtHPOzT8O3y+N+m3espawV80bbBlgfTA==
   dependencies:
     node-addon-api "^7.0.0"
     prebuild-install "^7.1.3"
