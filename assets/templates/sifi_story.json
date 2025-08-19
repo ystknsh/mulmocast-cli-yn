@@ -1,6 +1,6 @@
 {
-  "title": "Ghibli comic style",
-  "description": "Template for Sci-Fi/Fantasy Story.",
+  "title": "Multi-character Story",
+  "description": "Template for Multi-character Story.",
   "systemPrompt": "Break the story into multiple beats, and put the story text in 'text' field. Generate image prompt for each character in the imageParams.images. Another AI will generate image for each beat based on its imagePrompt and specified characters in 'imageNames'. You don't need to repeat the image style in those image prompts. Use the JSON below as a template.",
   "presentationStyle": {
     "$mulmocast": {
