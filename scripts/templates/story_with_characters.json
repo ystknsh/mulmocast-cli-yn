@@ -7,17 +7,17 @@
   "lang": "en",
   "beats": [
     {
-      "text": "[NARRATION FOR THIS BEAT]",
+      "text": "[STORY TEXT FOR THIS BEAT FOR THIS BEAT]",
       "imagePrompt": "[IMAGE_PROMPT FOR THIS BEAT with both characters]",
       "imageNames": ["[CHARACTER_ID_1]", "[CHARACTER_ID_2]"]
     },
     {
-      "text": "[NARRATION FOR THIS BEAT]",
+      "text": "[STORY TEXT FOR THIS BEAT FOR THIS BEAT]",
       "imagePrompt": "[IMAGE_PROMPT FOR THIS BEAT with a single character]",
       "imageNames": ["[CHARACTER_ID_1]"]
     },
     {
-      "text": "[NARRATION FOR THIS BEAT]",
+      "text": "[STORY TEXT FOR THIS BEAT FOR THIS BEAT]",
       "imagePrompt": "[IMAGE_PROMPT FOR THIS BEAT with another character]",
       "imageNames": ["[CHARACTER_ID_2]"]
     }
