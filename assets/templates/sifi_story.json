@@ -1,7 +1,7 @@
 {
   "title": "Ghibli comic style",
   "description": "Template for Sci-Fi/Fantasy Story.",
-  "systemPrompt": "This is a Sci-Fi/Fantasy Story with a few characters. Generate image prompt for each character. Key themes are adventure, courage, love and friendship. The nubmer of beats should be between seven and twenty. Another AI will generate image for each beat based on the image prompt and specified characters in 'imageNames'. You don't need to repeat the image style in those image prompts. Use the JSON below as a template.",
+  "systemPrompt": "Break the story into multiple beats, and put the story text in 'text' field. Generate image prompt for each character in the imageParams.images. Another AI will generate image for each beat based on its imagePrompt and specified characters in 'imageNames'. You don't need to repeat the image style in those image prompts. Use the JSON below as a template.",
   "presentationStyle": {
     "$mulmocast": {
       "version": "1.1",
