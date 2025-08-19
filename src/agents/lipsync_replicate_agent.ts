@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import Replicate from "replicate";
@@ -22,11 +22,20 @@ export const lipSyncReplicateAgent: AgentFunction<ReplicateLipSyncAgentParams, A
     auth: apiKey,
   });
 
-  const videoBuffer = movieFile ? readFileSync(movieFile) : undefined;
+  if (!audioFile || !existsSync(audioFile)) {
+    throw new Error(`lipSyncReplicateAgent audioFile not exist: ${audioFile}`);
+  }
+
   const audioBuffer = readFileSync(audioFile);
+  const videoBuffer = movieFile ? readFileSync(movieFile) : undefined;
   const imageBuffer = imageFile ? readFileSync(imageFile) : undefined;
-  const videoUri = videoBuffer ? `data:video/quicktime;base64,${videoBuffer.toString("base64")}` : undefined;
+
+  if (!videoBuffer && !imageBuffer) {
+    throw new Error("lipSyncReplicateAgent Either movieFile or imageFile is required");
+  }
+
   const audioUri = `data:audio/wav;base64,${audioBuffer.toString("base64")}`;
+  const videoUri = videoBuffer ? `data:video/quicktime;base64,${videoBuffer.toString("base64")}` : undefined;
   const imageUri = imageBuffer ? `data:image/png;base64,${imageBuffer.toString("base64")}` : undefined;
 
   const input = {
