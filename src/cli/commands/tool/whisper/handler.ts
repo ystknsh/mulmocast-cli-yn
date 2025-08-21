@@ -3,43 +3,12 @@ import { ToolCliArgs } from "../../../../types/cli_types.js";
 import { existsSync, createReadStream, writeFileSync, mkdirSync } from "fs";
 import { resolve, basename, extname, join } from "path";
 import OpenAI from "openai";
-import { MulmoScript } from "../../../../types/index.js";
-
-const script: MulmoScript = {
-  $mulmocast: {
-    version: "1.1",
-    credit: "closing",
-  },
-  canvasSize: {
-    width: 1536,
-    height: 1024,
-  },
-  lang: "en",
-  title: "Music Video",
-  audioParams: {
-    bgm: {
-      kind: "path",
-      path: "to_be_filled.mp3",
-    },
-    padding: 0.0,
-    introPadding: 0.0,
-    closingPadding: 0.0,
-    outroPadding: 0.0,
-    bgmVolume: 1.0,
-    audioVolume: 1.0,
-    suppressSpeech: true,
-  },
-  beats: [],
-}
+import { mulmoScriptSchema } from "../../../../types/index.js";
 
 export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
   const { file } = argv;
   const fullPath = resolve(file);
   const filename = basename(file, extname(file));
-  
-  console.log(`File path: ${fullPath}`);
-  console.log(`Filename: ${filename}`);
-  
   if (!existsSync(fullPath)) {
     console.error(`Error: File '${fullPath}' does not exist.`);
     process.exit(1);
@@ -51,6 +20,33 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
     process.exit(1);
   }
 
+  const script = mulmoScriptSchema.parse({
+    $mulmocast: {
+      version: "1.1",
+      credit: "closing",
+    },
+    canvasSize: {
+      width: 1536,
+      height: 1024,
+    },
+    lang: "en",
+    title: "Music Video",
+    beats: [{ text: "Hello, world!" }],
+    audioParams: {
+      bgm: {
+        kind: "path",
+        path: fullPath,
+      },
+      padding: 0.0,
+      introPadding: 0.0,
+      closingPadding: 0.0,
+      outroPadding: 0.0,
+      bgmVolume: 1.0,
+      audioVolume: 0.0,
+      suppressSpeech: true,
+    }
+  });
+  
   try {
     const openai = new OpenAI({ apiKey });
     
