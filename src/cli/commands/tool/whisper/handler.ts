@@ -62,8 +62,6 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
 
     const openai = new OpenAI({ apiKey });
 
-    GraphAILogger.info(`Transcribing audio file: ${file}`);
-
     const transcription = await openai.audio.transcriptions.create({
       file: createReadStream(fullPath),
       model: "whisper-1",
@@ -81,12 +79,14 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
         return {
           text: segment.text,
           duration,
+          /*
           image: {
             type: "textSlide",
             slide: {
               title: "Place Holder",
             },
           },
+          */
         };
       });
 
