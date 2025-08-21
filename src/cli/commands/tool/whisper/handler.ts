@@ -3,25 +3,12 @@ import { ToolCliArgs } from "../../../../types/cli_types.js";
 import { existsSync, createReadStream, writeFileSync, mkdirSync } from "fs";
 import { resolve, basename, extname, join } from "path";
 import OpenAI from "openai";
-import { mulmoScriptSchema } from "../../../../types/index.js";
+import { mulmoScriptSchema, MulmoScript } from "../../../../types/index.js";
 import { ffmpegGetMediaDuration } from "../../../../utils/ffmpeg_utils.js";
+import { GraphAILogger } from "graphai";
 
-export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
-  const { file } = argv;
-  const fullPath = resolve(file);
-  const filename = basename(file, extname(file));
-  if (!existsSync(fullPath)) {
-    console.error(`Error: File '${fullPath}' does not exist.`);
-    process.exit(1);
-  }
-
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error("Error: OPENAI_API_KEY environment variable is required");
-    process.exit(1);
-  }
-
-  const script = mulmoScriptSchema.parse({
+const createMulmoScript = (fullPath: string, beats: { text: string; duration: number }[]): MulmoScript => {
+  return mulmoScriptSchema.parse({
     $mulmocast: {
       version: "1.1",
       credit: "closing",
@@ -32,7 +19,7 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
     },
     lang: "en",
     title: "Music Video",
-    beats: [{ text: "Hello, world!" }],
+    beats,
     audioParams: {
       bgm: {
         kind: "path",
@@ -47,15 +34,31 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
       suppressSpeech: true,
     },
   });
+};
+
+export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
+  const { file } = argv;
+  const fullPath = resolve(file);
+  const filename = basename(file, extname(file));
+  if (!existsSync(fullPath)) {
+    GraphAILogger.error(`Error: File '${fullPath}' does not exist.`);
+    process.exit(1);
+  }
+
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    GraphAILogger.error("Error: OPENAI_API_KEY environment variable is required");
+    process.exit(1);
+  }
 
   try {
     // Get audio duration using FFmpeg
     const { duration: audioDuration } = await ffmpegGetMediaDuration(fullPath);
-    console.log(`Audio duration: ${audioDuration.toFixed(2)} seconds`);
+    GraphAILogger.info(`Audio duration: ${audioDuration.toFixed(2)} seconds`);
 
     const openai = new OpenAI({ apiKey });
 
-    console.log(`Transcribing audio file: ${file}`);
+    GraphAILogger.info(`Transcribing audio file: ${file}`);
 
     const transcription = await openai.audio.transcriptions.create({
       file: createReadStream(fullPath),
@@ -65,37 +68,41 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
     });
 
     if (transcription.segments) {
-      script.beats = transcription.segments.map((segment, index) => {
+      // Create beats from transcription segments
+      const beats = transcription.segments.map((segment, index) => {
         const duration = Math.round((segment.end - (index === 0 ? 0 : segment.start)) * 100) / 100;
         return {
           text: segment.text,
-          duration: duration,
+          duration,
         };
       });
 
       // Calculate total duration of all beats
-      const totalBeatsDuration = script.beats.reduce((sum, beat) => sum + (beat.duration || 0), 0);
+      const totalBeatsDuration = beats.reduce((sum, beat) => sum + beat.duration, 0);
 
       // If audio is longer than total beats duration, extend the last beat
-      if (audioDuration > totalBeatsDuration && script.beats.length > 0) {
-        const lastBeat = script.beats[script.beats.length - 1];
+      if (audioDuration > totalBeatsDuration && beats.length > 0) {
+        const lastBeat = beats[beats.length - 1];
         const extension = audioDuration - totalBeatsDuration;
-        lastBeat.duration = (lastBeat.duration || 0) + extension;
-        console.log(`Extended last beat by ${extension.toFixed(2)} seconds to match audio duration`);
+        lastBeat.duration = lastBeat.duration + extension;
+        GraphAILogger.info(`Extended last beat by ${extension.toFixed(2)} seconds to match audio duration`);
       }
-    }
 
-    // Save script to output directory
-    const outputDir = "output";
-    if (!existsSync(outputDir)) {
-      mkdirSync(outputDir, { recursive: true });
-    }
+      // Create the script with the processed beats
+      const script = createMulmoScript(fullPath, beats);
 
-    const outputPath = join(outputDir, `${filename}.json`);
-    writeFileSync(outputPath, JSON.stringify(script, null, 2));
-    console.log(`Script saved to: ${outputPath}`);
+      // Save script to output directory
+      const outputDir = "output";
+      if (!existsSync(outputDir)) {
+        mkdirSync(outputDir, { recursive: true });
+      }
+
+      const outputPath = join(outputDir, `${filename}.json`);
+      writeFileSync(outputPath, JSON.stringify(script, null, 2));
+      GraphAILogger.info(`Script saved to: ${outputPath}`);
+    }
   } catch (error) {
-    console.error("Error transcribing audio:", error);
+    GraphAILogger.error("Error transcribing audio:", error);
     process.exit(1);
   }
 };
