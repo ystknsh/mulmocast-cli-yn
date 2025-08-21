@@ -4,6 +4,7 @@ import { existsSync, createReadStream, writeFileSync, mkdirSync } from "fs";
 import { resolve, basename, extname, join } from "path";
 import OpenAI from "openai";
 import { mulmoScriptSchema } from "../../../../types/index.js";
+import { ffmpegGetMediaDuration } from "../../../../utils/ffmpeg_utils.js";
 
 export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
   const { file } = argv;
@@ -17,6 +18,17 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     console.error("Error: OPENAI_API_KEY environment variable is required");
+    process.exit(1);
+  }
+
+  // Get audio duration using FFmpeg
+  let audioDuration: number;
+  try {
+    const { duration } = await ffmpegGetMediaDuration(fullPath);
+    audioDuration = duration;
+    console.log(`Audio duration: ${audioDuration.toFixed(2)} seconds`);
+  } catch (error) {
+    console.error("Error getting audio duration:", error);
     process.exit(1);
   }
 
