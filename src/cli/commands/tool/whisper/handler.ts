@@ -19,6 +19,10 @@ const createMulmoScript = (fullPath: string, beats: { text: string; duration: nu
     },
     lang: "en",
     title: "Music Video",
+    captionParams: {
+      lang: "en",
+      styles: ["font-size: 64px", "width: 90%", "padding-left: 5%", "padding-right: 5%"]
+    },
     beats,
     audioParams: {
       bgm: {
