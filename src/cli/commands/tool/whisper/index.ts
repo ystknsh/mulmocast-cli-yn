@@ -1,4 +1,4 @@
-export const command = "whisper";
-export const desc = "Print whisper to console";
+export const command = "whisper <file>";
+export const desc = "Process file with whisper";
 export { builder } from "./builder.js";
 export { handler } from "./handler.js";
