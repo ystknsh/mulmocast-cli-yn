@@ -21,17 +21,6 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
     process.exit(1);
   }
 
-  // Get audio duration using FFmpeg
-  let audioDuration: number;
-  try {
-    const { duration } = await ffmpegGetMediaDuration(fullPath);
-    audioDuration = duration;
-    console.log(`Audio duration: ${audioDuration.toFixed(2)} seconds`);
-  } catch (error) {
-    console.error("Error getting audio duration:", error);
-    process.exit(1);
-  }
-
   const script = mulmoScriptSchema.parse({
     $mulmocast: {
       version: "1.1",
@@ -56,19 +45,23 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
       bgmVolume: 1.0,
       audioVolume: 0.0,
       suppressSpeech: true,
-    }
+    },
   });
-  
+
   try {
+    // Get audio duration using FFmpeg
+    const { duration: audioDuration } = await ffmpegGetMediaDuration(fullPath);
+    console.log(`Audio duration: ${audioDuration.toFixed(2)} seconds`);
+
     const openai = new OpenAI({ apiKey });
-    
+
     console.log(`Transcribing audio file: ${file}`);
-    
+
     const transcription = await openai.audio.transcriptions.create({
       file: createReadStream(fullPath),
       model: "whisper-1",
       response_format: "verbose_json",
-      timestamp_granularities: ["word", "segment"]
+      timestamp_granularities: ["word", "segment"],
     });
 
     if (transcription.segments) {
@@ -77,8 +70,19 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
         return {
           text: segment.text,
           duration: duration,
-        }
+        };
       });
+
+      // Calculate total duration of all beats
+      const totalBeatsDuration = script.beats.reduce((sum, beat) => sum + (beat.duration || 0), 0);
+
+      // If audio is longer than total beats duration, extend the last beat
+      if (audioDuration > totalBeatsDuration && script.beats.length > 0) {
+        const lastBeat = script.beats[script.beats.length - 1];
+        const extension = audioDuration - totalBeatsDuration;
+        lastBeat.duration = (lastBeat.duration || 0) + extension;
+        console.log(`Extended last beat by ${extension.toFixed(2)} seconds to match audio duration`);
+      }
     }
 
     // Save script to output directory
@@ -86,11 +90,10 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
     if (!existsSync(outputDir)) {
       mkdirSync(outputDir, { recursive: true });
     }
-    
+
     const outputPath = join(outputDir, `${filename}.json`);
     writeFileSync(outputPath, JSON.stringify(script, null, 2));
     console.log(`Script saved to: ${outputPath}`);
-
   } catch (error) {
     console.error("Error transcribing audio:", error);
     process.exit(1);

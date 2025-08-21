@@ -9,6 +9,7 @@ import { Argv } from "yargs";
 export const command = "tool <command>";
 export const desc = "Generate Mulmo script and other tools";
 
-export const builder = (y: Argv) => y.command(scriptingCmd).command(promptCmd).command(schemaCmd).command(storyToScriptCmd).command(whisperCmd).demandCommand().strict();
+export const builder = (y: Argv) =>
+  y.command(scriptingCmd).command(promptCmd).command(schemaCmd).command(storyToScriptCmd).command(whisperCmd).demandCommand().strict();
 
 export const handler = (__argv: ToolCliArgs) => {};
