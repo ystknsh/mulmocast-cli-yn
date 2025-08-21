@@ -21,7 +21,7 @@ const createMulmoScript = (fullPath: string, beats: { text: string; duration: nu
     title: "Music Video",
     captionParams: {
       lang: "en",
-      styles: ["font-size: 64px", "width: 90%", "padding-left: 5%", "padding-right: 5%"]
+      styles: ["font-size: 64px", "width: 90%", "padding-left: 5%", "padding-right: 5%"],
     },
     beats,
     audioParams: {
@@ -72,25 +72,23 @@ export const handler = async (argv: ToolCliArgs<{ file: string }>) => {
     });
 
     if (transcription.segments) {
+      const starts = transcription.segments.map((segment) => segment.start);
+      starts[0] = 0;
+      starts.push(audioDuration);
       // Create beats from transcription segments
       const beats = transcription.segments.map((segment, index) => {
-        const duration = Math.round((segment.end - (index === 0 ? 0 : segment.start)) * 100) / 100;
+        const duration = Math.round((starts[index + 1] - starts[index]) * 100) / 100;
         return {
           text: segment.text,
           duration,
+          image: {
+            type: "textSlide",
+            slide: {
+              title: "Place Holder",
+            },
+          },
         };
       });
-
-      // Calculate total duration of all beats
-      const totalBeatsDuration = beats.reduce((sum, beat) => sum + beat.duration, 0);
-
-      // If audio is longer than total beats duration, extend the last beat
-      if (audioDuration > totalBeatsDuration && beats.length > 0) {
-        const lastBeat = beats[beats.length - 1];
-        const extension = audioDuration - totalBeatsDuration;
-        lastBeat.duration = lastBeat.duration + extension;
-        GraphAILogger.info(`Extended last beat by ${extension.toFixed(2)} seconds to match audio duration`);
-      }
 
       // Create the script with the processed beats
       const script = createMulmoScript(fullPath, beats);
