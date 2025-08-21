@@ -16,7 +16,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
   const { context, beat, index, imageRefs } = namedInputs;
 
   const studioBeat = context.studio.beats[index];
-  const imagePath = getBeatPngImagePath(context, index);
+  const { imagePath } = getBeatPngImagePath(context, index);
   if (beat.htmlPrompt) {
     const htmlPrompt = MulmoBeatMethods.getHtmlPrompt(beat);
     const htmlPath = imagePath.replace(/\.[^/.]+$/, ".html");
@@ -85,7 +85,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
 export const imagePluginAgent = async (namedInputs: { context: MulmoStudioContext; beat: MulmoBeat; index: number }) => {
   const { context, beat, index } = namedInputs;
-  const imagePath = getBeatPngImagePath(context, index);
+  const { imagePath } = getBeatPngImagePath(context, index);
 
   const plugin = MulmoBeatMethods.getPlugin(beat);
   try {

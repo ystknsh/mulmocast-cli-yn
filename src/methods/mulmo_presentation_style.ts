@@ -161,7 +161,7 @@ export const MulmoPresentationStyleMethods = {
       provider,
       agent: defaultConfig.agentName,
       model,
-      max_tokens: defaultConfig.max_tokens,
+      // max_tokens: defaultConfig.max_tokens,
     };
   },
   getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {
