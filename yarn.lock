@@ -238,10 +238,10 @@
   dependencies:
     google-gax "^5.0.0"
 
-"@google/genai@^1.13.0":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@google/genai/-/genai-1.13.0.tgz#1db0fdd1dff64bd5e93109df2abfe619a891dd70"
-  integrity sha512-BxilXzE8cJ0zt5/lXk6KwuBcIT9P2Lbi2WXhwWMbxf1RNeC68/8DmYQqMrzQP333CieRMdbDXs0eNCphLoScWg==
+"@google/genai@^1.15.0":
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/@google/genai/-/genai-1.15.0.tgz#0eab6dbc1a7c29a8a7b8c509b615524b48fce1cf"
+  integrity sha512-4CSW+hRTESWl3xVtde7pkQ3E+dDFhDq+m4ztmccRctZfx1gKy3v0M9STIMGk6Nq0s6O2uKMXupOZQ1JGorXVwQ==
   dependencies:
     google-auth-library "^9.14.2"
     ws "^8.18.0"
@@ -297,13 +297,13 @@
   resolved "https://registry.yarnpkg.com/@graphai/llm_utils/-/llm_utils-2.0.3.tgz#abdb91d606c2ca304aeeacc67e33255a543c4488"
   integrity sha512-ardK9+E/I2jUQKjOXJ+IaVPW5tAN1Yk8LhjUf/PYm7DmeLdcsq4/TMLo7PbHlvwgOymd66OFe8CGjZ0epvN3+w==
 
-"@graphai/openai_agent@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@graphai/openai_agent/-/openai_agent-2.0.5.tgz#8d149ab41b53245a7892fb253ddec33060091fe6"
-  integrity sha512-CLsW1zAAPQTp0ky2RspnrYQCT9gAaZvfpy1WO7FIZA8edy8VX34VDBptqvp4y8NFtK8mRC+LQ2krWpLcGHfrNg==
+"@graphai/openai_agent@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@graphai/openai_agent/-/openai_agent-2.0.7.tgz#95681965c5e34d6ca29871b99aaa9699567d88f3"
+  integrity sha512-Xh6FoxJpJDIBeLFiP9E5G03Bpoj0JjYFxletNtuiD+x0SvCZAIy1QAGd7ceEdq9UcWGbkbrLgzRs3kZ7dlDaAg==
   dependencies:
     "@graphai/llm_utils" "^2.0.3"
-    openai "^5.12.2"
+    openai "^5.15.0"
 
 "@graphai/stream_agent_filter@^2.0.2":
   version "2.0.2"
@@ -434,10 +434,10 @@
   resolved "https://registry.yarnpkg.com/@js-sdsl/ordered-map/-/ordered-map-4.4.2.tgz#9299f82874bab9e4c7f9c48d865becbfe8d6907c"
   integrity sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==
 
-"@modelcontextprotocol/sdk@^1.15.1":
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.15.1.tgz#30a235f91e144b62ef1810bc63679e423bac37ec"
-  integrity sha512-W/XlN9c528yYn+9MQkVjxiTPgPxoxt+oczfjHBDsJx0+59+O7B75Zhsp0B16Xbwbz8ANISDajh6+V7nIcPMc5w==
+"@modelcontextprotocol/sdk@^1.17.3":
+  version "1.17.3"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.17.3.tgz#cf92354220f0183d28179e96a9bf3a8f6d3211ae"
+  integrity sha512-JPwUKWSsbzx+DLFznf/QZ32Qa+ptfbUlHhRLrBQBAFu9iI1iYvizM4p+zhhRDceSsPutXp4z+R/HPVphlIiclg==
   dependencies:
     ajv "^6.12.6"
     content-type "^1.0.5"
@@ -531,10 +531,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@puppeteer/browsers@2.10.6":
-  version "2.10.6"
-  resolved "https://registry.yarnpkg.com/@puppeteer/browsers/-/browsers-2.10.6.tgz#0b1b5046ec4918a4fd4e4c9383153a80af288bd2"
-  integrity sha512-pHUn6ZRt39bP3698HFQlu2ZHCkS/lPcpv7fVQcGBSzNNygw171UXAKrCUhy+TEMw4lEttOKDgNpb04hwUAJeiQ==
+"@puppeteer/browsers@2.10.7":
+  version "2.10.7"
+  resolved "https://registry.yarnpkg.com/@puppeteer/browsers/-/browsers-2.10.7.tgz#a28f622b2da0ee131c9a576d25d8c4e31fc24135"
+  integrity sha512-wHWLkQWBjHtajZeqCB74nsa/X70KheyOhySYBRmVQDJiNj0zjZR/naPCvdWjMhcG1LmjaMV/9WtTo5mpe8qWLw==
   dependencies:
     debug "^4.4.1"
     extract-zip "^2.0.1"
@@ -551,10 +551,10 @@
   dependencies:
     yaml "^2.8.1"
 
-"@tavily/core@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@tavily/core/-/core-0.5.9.tgz#6f59746688b41187512d2515892a4fbd441b38ff"
-  integrity sha512-NkKurKU/xBnjmvp5he6tQLk/6reaeoHXYPVWghGk0mRtkr3ttaPqUu+aIe2Ssa5rozPz9HpNUlRM3/xleCarRw==
+"@tavily/core@^0.5.11":
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/@tavily/core/-/core-0.5.11.tgz#62e1ab918a2d63f2aa616361840f52dea42a3e05"
+  integrity sha512-SHYjpWgeyHpJNZh8RZCUcRtb228ymLzNlVOqrfCql6vOlSiz8q3wy5VEVtfdN881pg6wHPLa2Rra3xVyPhuYuw==
   dependencies:
     axios "^1.7.7"
     https-proxy-agent "^7.0.6"
@@ -1163,10 +1163,10 @@ chownr@^1.1.1:
   resolved "https://registry.npmjs.org/chownr/-/chownr-1.1.4.tgz"
   integrity sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==
 
-chromium-bidi@7.3.1:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/chromium-bidi/-/chromium-bidi-7.3.1.tgz#021b8864cbd5ad0401620a7eb4ef5a2a0011591b"
-  integrity sha512-i+BMGluhZZc4Jic9L1aHJBTfaopxmCqQxGklyMcqFx4fvF3nI4BJ3bCe1ad474nvYRIo/ZN/VrdA4eOaRZua4Q==
+chromium-bidi@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/chromium-bidi/-/chromium-bidi-8.0.0.tgz#d73c9beed40317adf2bcfeb9a47087003cd467ec"
+  integrity sha512-d1VmE0FD7lxZQHzcDUCKZSNRtRwISXDsdg4HjdTR5+Ll5nQ/vzU12JeNmupD6VWffrPSlrnGhEWlLESKH3VO+g==
   dependencies:
     mitt "^3.0.1"
     zod "^3.24.1"
@@ -3128,10 +3128,10 @@ onetime@^7.0.0:
   dependencies:
     mimic-function "^5.0.0"
 
-openai@^5.12.2:
-  version "5.12.2"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-5.12.2.tgz#512ab6b80eb8414837436e208f1b951442b97761"
-  integrity sha512-xqzHHQch5Tws5PcKR2xsZGX9xtch+JQFz5zb14dGqlshmmDAFBFEWmeIpf7wVqWV+w7Emj7jRgkNJakyKE0tYQ==
+openai@^5.15.0:
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-5.15.0.tgz#de3ae6d0914f7a0fcc12d0faa21a2289f9d5cc5d"
+  integrity sha512-kcUdws8K/A8m02I+IqFBwO51gS+87GP89yWEufGbzEi8anBz4FB/bti2QxaJdGwwY4mwJGzx85XO7TuL/Tpu1w==
 
 optionator@^0.9.3:
   version "0.9.4"
@@ -3400,28 +3400,28 @@ punycode@^2.1.0:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
-puppeteer-core@24.16.2:
-  version "24.16.2"
-  resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-24.16.2.tgz#f210ca0efefb7ded0f40fb783878968913b83206"
-  integrity sha512-areKSSQzpoHa5nCk3uD/o504yjrW5ws0N6jZfdFZ3a4H+Q7NBgvuDydjN5P87jN4Rj+eIpLcK3ELOThTtYuuxg==
+puppeteer-core@24.17.0:
+  version "24.17.0"
+  resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-24.17.0.tgz#66eaa3532d06c22fbbdc36e09f416cb69b8c8637"
+  integrity sha512-RYOBKFiF+3RdwIZTEacqNpD567gaFcBAOKTT7742FdB1icXudrPI7BlZbYTYWK2wgGQUXt9Zi1Yn+D5PmCs4CA==
   dependencies:
-    "@puppeteer/browsers" "2.10.6"
-    chromium-bidi "7.3.1"
+    "@puppeteer/browsers" "2.10.7"
+    chromium-bidi "8.0.0"
     debug "^4.4.1"
     devtools-protocol "0.0.1475386"
     typed-query-selector "^2.12.0"
     ws "^8.18.3"
 
-puppeteer@^24.16.2:
-  version "24.16.2"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-24.16.2.tgz#e3c08b26b7832779c0e1dbef0542f5242aadde16"
-  integrity sha512-eNjKzwjITM4Lvho6iHb+VQamadUBgc8TsjAApsKi5N8DXipxAaAZWssBOFsrIOLo4eYWYj0Qk5gmr4wBSqzJWw==
+puppeteer@^24.17.0:
+  version "24.17.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-24.17.0.tgz#2fa286ed7b755846ef6064c1ee42b5491abcd21b"
+  integrity sha512-CGrmJ8WgilK3nyE73k+pbxHggETPpEvL6AQ9H5JSK1RgZRGMQVJ+iO3MocGm9yBQXQJ9U5xijyLvkYXFeb0/+g==
   dependencies:
-    "@puppeteer/browsers" "2.10.6"
-    chromium-bidi "7.3.1"
+    "@puppeteer/browsers" "2.10.7"
+    chromium-bidi "8.0.0"
     cosmiconfig "^9.0.0"
     devtools-protocol "0.0.1475386"
-    puppeteer-core "24.16.2"
+    puppeteer-core "24.17.0"
     typed-query-selector "^2.12.0"
 
 qs@^6.14.0:
@@ -3530,10 +3530,10 @@ regexp.prototype.flags@^1.5.4:
     gopd "^1.2.0"
     set-function-name "^2.0.2"
 
-replicate@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/replicate/-/replicate-1.0.1.tgz#c1f4bdd4fc29bbaf44af07662d23a858409421e9"
-  integrity sha512-EY+rK1YR5bKHcM9pd6WyaIbv6m2aRIvHfHDh51j/LahlHTLKemTYXF6ptif2sLa+YospupAsIoxw8Ndt5nI3vg==
+replicate@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/replicate/-/replicate-1.1.0.tgz#6e3fbb5fcc605a91ab503725043293e43b1de61a"
+  integrity sha512-6D49t/etFvRUz7hOseEmI6mxm3vypFPffpTR37Gai924s6JmeNmnPk+QooFINYsq4Gu5HYlg49ut6zxwhfKxqQ==
   optionalDependencies:
     readable-stream ">=4.0.0"
 
