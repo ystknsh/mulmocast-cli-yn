@@ -207,7 +207,7 @@ const beat_graph_data = {
           return { hasMovieAudio: true };
         }
         const sourceFile = namedInputs.movieFile || namedInputs.imageFile;
-        if (!sourceFile) {
+        if (!sourceFile || !fs.existsSync(sourceFile)) {
           return { hasMovieAudio: false };
         }
         const { hasAudio } = await ffmpegGetMediaDuration(sourceFile);
