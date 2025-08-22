@@ -126,7 +126,8 @@ export const getBeatPngImagePath = (context: MulmoStudioContext, index: number) 
   const beat = context.studio.script.beats[index]; // beat could be undefined only in a test case.
   const filename = beat?.id ? `${beat.id}` : `${index}${imageSuffix}`;
   const imagePath = `${imageProjectDirPath}/${filename}.png`;
-  return { imagePath };
+  const htmlImageFile = `${imageProjectDirPath}/${filename}_html.png`;
+  return { imagePath, htmlImageFile };
 };
 
 export const getBeatMoviePaths = (context: MulmoStudioContext, index: number) => {

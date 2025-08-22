@@ -16,11 +16,11 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
   const { context, beat, index, imageRefs } = namedInputs;
 
   const studioBeat = context.studio.beats[index];
-  const { imagePath } = getBeatPngImagePath(context, index);
+  const { imagePath, htmlImageFile } = getBeatPngImagePath(context, index);
   if (beat.htmlPrompt) {
     const htmlPrompt = MulmoBeatMethods.getHtmlPrompt(beat);
     const htmlPath = imagePath.replace(/\.[^/.]+$/, ".html");
-    return { imagePath, htmlPrompt, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
+    return { imagePath, htmlPrompt, htmlImageFile, htmlPath, htmlImageSystemPrompt: htmlImageSystemPrompt(context.presentationStyle.canvasSize) };
   }
 
   const imageAgentInfo = MulmoPresentationStyleMethods.getImageAgentInfo(context.presentationStyle, beat);
