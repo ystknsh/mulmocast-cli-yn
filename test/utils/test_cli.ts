@@ -68,6 +68,7 @@ test("test createStudioData", async () => {
       beats: [
         { text: "hello" },
         {
+          id: "mulmo_credit",
           speaker: "Presenter",
           text: "",
           image: {
@@ -126,6 +127,7 @@ test("test createStudioData", async () => {
       beats: [
         { text: "hello" },
         {
+          id: "mulmo_credit",
           speaker: "Test",
           text: "",
           image: {

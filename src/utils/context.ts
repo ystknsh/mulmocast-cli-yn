@@ -7,6 +7,7 @@ import { MulmoPresentationStyleMethods, MulmoScriptMethods, MulmoStudioMultiLing
 
 const mulmoCredit = (speaker: string) => {
   return {
+    id: "mulmo_credit",
     speaker,
     text: "",
     image: {
