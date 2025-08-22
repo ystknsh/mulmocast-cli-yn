@@ -124,10 +124,10 @@ export const imageSuffix = "p";
 export const getBeatPngImagePath = (context: MulmoStudioContext, index: number) => {
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   const beat = context.studio.script.beats[index]; // beat could be undefined only in a test case.
-  if (beat?.id) {
-    return `${imageProjectDirPath}/${beat.id}.png`;
-  }
-  return `${imageProjectDirPath}/${index}${imageSuffix}.png`;
+  const filename = beat?.id ? `${beat.id}` : `${index}${imageSuffix}`;
+  const imagePath = `${imageProjectDirPath}/${filename}.png`;
+  const htmlImageFile = `${imageProjectDirPath}/${filename}_html.png`;
+  return { imagePath, htmlImageFile };
 };
 
 export const getBeatMoviePaths = (context: MulmoStudioContext, index: number) => {

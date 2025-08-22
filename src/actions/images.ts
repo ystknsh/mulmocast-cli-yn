@@ -135,7 +135,7 @@ const beat_graph_data = {
       inputs: {
         htmlText: ":htmlReader.htmlText",
         canvasSize: ":context.presentationStyle.canvasSize",
-        file: ":preprocessor.imagePath",
+        file: ":preprocessor.htmlImageFile",
       },
     },
     imageGenerator: {
@@ -207,7 +207,7 @@ const beat_graph_data = {
           return { hasMovieAudio: true };
         }
         const sourceFile = namedInputs.movieFile || namedInputs.imageFile;
-        if (!sourceFile) {
+        if (!sourceFile || !fs.existsSync(sourceFile)) {
           return { hasMovieAudio: false };
         }
         const { hasAudio } = await ffmpegGetMediaDuration(sourceFile);
@@ -276,6 +276,7 @@ const beat_graph_data = {
         soundEffectFile: ":preprocessor.soundEffectFile",
         lipSyncFile: ":preprocessor.lipSyncFile",
         hasMovieAudio: ":audioChecker.hasMovieAudio",
+        htmlImageFile: ":preprocessor.htmlImageFile",
       },
       output: {
         imageFile: ".imageFile",
@@ -283,6 +284,7 @@ const beat_graph_data = {
         soundEffectFile: ".soundEffectFile",
         lipSyncFile: ".lipSyncFile",
         hasMovieAudio: ".hasMovieAudio",
+        htmlImageFile: ".htmlImageFile",
       },
       isResult: true,
     },
