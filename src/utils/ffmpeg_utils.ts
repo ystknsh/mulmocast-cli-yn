@@ -62,8 +62,8 @@ export const FfmpegContextGenerateOutput = (context: FfmpegContext, output: stri
         GraphAILogger.error("Error occurred:", err);
         GraphAILogger.error("FFmpeg stdout:", stdout);
         GraphAILogger.error("FFmpeg stderr:", stderr);
-        GraphAILogger.info("Video/Audio creation failed. An unexpected error occurred.");
-        reject();
+        GraphAILogger.info("Video/Audio creation failed.", err.message);
+        reject(err);
       })
       .on("end", () => {
         resolve(0);
