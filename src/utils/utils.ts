@@ -143,3 +143,8 @@ export const deepClean = <T extends CleanableValue>(input: T): T | undefined => 
 
   return input;
 };
+
+export const beatId = (id: string | undefined, index: number) => {
+  const key = id ?? `__index__${index}`;
+  return key;
+};
