@@ -185,7 +185,7 @@ const generatePDF = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSiz
 
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
+    await page.setContent(html, { waitUntil: "domcontentloaded" });
     await page.pdf({
       path: outputPdfPath,
       printBackground: true,
