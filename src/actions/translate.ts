@@ -8,7 +8,8 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { splitText } from "../utils/string.js";
-import { settings2GraphAIConfig, beatId, multiLingualObjectToArray } from "../utils/utils.js";
+import { settings2GraphAIConfig, multiLingualObjectToArray } from "../utils/utils.js";
+import { beatId } from "../utils/common.js";
 import { getMultiLingual } from "../utils/context.js";
 import { currentMulmoScriptVersion } from "../utils/const.js";
 import type {
