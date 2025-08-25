@@ -83,7 +83,7 @@ const beatGraph = {
     __mapIndex: {},
     // for cache
     multiLingual: {
-      agent: (namedInputs: { text?: string; multiLinguals?: MulmoStudioMultiLingualData[]; beatIndex: number }) => {
+      agent: (namedInputs: { beat: MulmoBeat, text?: string; multiLinguals?: Record<string, MulmoStudioMultiLingualData>; beatIndex: number }) => {
         const { multiLinguals, beatIndex, text, beat } = namedInputs;
         const key = beatId(beat?.id, beatIndex);
         const cacheKey = hashSHA256(text ?? "");
@@ -163,7 +163,7 @@ const translateGraph: GraphData = {
       agent: (namedInputs) => {
         const { multiLingual, beats } = namedInputs;
 
-        const multiLingualObject = beats.reduce((tmp, beat, beatIndex) => {
+        const multiLingualObject = beats.reduce((tmp: MulmoStudioMultiLingual, beat: MulmoBeat, beatIndex: number) => {
           const key = beatId(beat?.id, beatIndex);
           tmp[key] = multiLingual[beatIndex];
           return tmp;
