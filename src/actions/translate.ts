@@ -8,7 +8,7 @@ import { openAIAgent } from "@graphai/openai_agent";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 import { splitText } from "../utils/string.js";
-import { settings2GraphAIConfig, beatId } from "../utils/utils.js";
+import { settings2GraphAIConfig, beatId, multiLingualObjectToArray } from "../utils/utils.js";
 import { getMultiLingual } from "../utils/context.js";
 import { currentMulmoScriptVersion } from "../utils/const.js";
 import type {
@@ -83,7 +83,7 @@ const beatGraph = {
     __mapIndex: {},
     // for cache
     multiLingual: {
-      agent: (namedInputs: { beat: MulmoBeat, text?: string; multiLinguals?: Record<string, MulmoStudioMultiLingualData>; beatIndex: number }) => {
+      agent: (namedInputs: { beat: MulmoBeat; text?: string; multiLinguals?: Record<string, MulmoStudioMultiLingualData>; beatIndex: number }) => {
         const { multiLinguals, beatIndex, text, beat } = namedInputs;
         const key = beatId(beat?.id, beatIndex);
         const cacheKey = hashSHA256(text ?? "");
@@ -274,7 +274,7 @@ export const translateBeat = async (index: number, context: MulmoStudioContext, 
     }
     const results = await graph.run<MulmoStudioMultiLingualData>();
 
-    const multiLingual = getMultiLingual(outputMultilingualFilePath, context.studio.beats.length);
+    const multiLingual = getMultiLingual(outputMultilingualFilePath, context.studio.beats);
     const key = beatId(context.studio.script.beats[index]?.id, index);
     multiLingual[key] = results.mergeMultiLingualData!;
     const data = {
@@ -313,7 +313,7 @@ export const translate = async (context: MulmoStudioContext, args?: PublicAPIArg
     const results = await graph.run<{ multiLingual: MulmoStudioMultiLingual }>();
     writingMessage(outputMultilingualFilePath);
     if (results.mergeStudioResult) {
-      context.multiLingual = results.mergeStudioResult.multiLingual;
+      context.multiLingual = multiLingualObjectToArray(results?.mergeStudioResult?.multiLingual, context.studio.script.beats);
     }
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", false);
