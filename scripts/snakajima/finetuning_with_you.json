@@ -38,12 +38,7 @@
   },
   "captionParams": {
     "lang": "en",
-    "styles": [
-      "font-size: 64px",
-      "width: 90%",
-      "padding-left: 5%",
-      "padding-right: 5%"
-    ]
+    "styles": ["font-size: 64px", "width: 90%", "padding-left: 5%", "padding-right: 5%"]
   },
   "audioParams": {
     "padding": 0,
@@ -63,7 +58,7 @@
   "beats": [
     {
       "text": "Finetuning with you",
-      "duration": 7.00,
+      "duration": 7.0,
       "imagePrompt": "Close-up of a female KPOP singer standing under soft spotlight, long flowing silver dress shimmering, delicate hand on chest, dreamy gaze toward the camera, dark concert stage background."
     },
     {
