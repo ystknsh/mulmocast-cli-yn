@@ -171,7 +171,7 @@ const translateGraph: GraphData = {
         }, {});
 
         return {
-          version: "1.1",
+          version: currentMulmoScriptVersion,
           multiLingual: multiLingualObject,
         };
       },
