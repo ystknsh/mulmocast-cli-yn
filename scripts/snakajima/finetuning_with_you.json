@@ -19,7 +19,16 @@
   },
   "imageParams": {
     "provider": "openai",
-    "images": {}
+    "style": "<style>Vibrant 3D animation style inspired by K-pop aesthetics, with glossy, stylized characters. The overall visual style combines elements of modern animation, game cinematics, and fashion-forward character design, with sleek outlines, glowing effects, and a polished, cinematic finish.</style>",
+    "images": {
+      "min": {
+        "type": "image",
+        "source": {
+          "kind": "url",
+          "url": "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/min-3d.png"
+        }
+      }
+    }
   },
   "movieParams": {
     "provider": "replicate"
