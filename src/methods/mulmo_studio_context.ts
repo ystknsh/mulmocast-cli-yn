@@ -1,6 +1,6 @@
 import path from "path";
 import { BeatSessionType, MulmoStudioContext, SessionProgressCallback, SessionType } from "../types/index.js";
-import { beatId } from "../utils/common.js";
+import { beatId } from "../utils/utils.js";
 import { GraphAILogger } from "graphai";
 
 const sessionProgressCallbacks = new Set<SessionProgressCallback>();
