@@ -11,7 +11,8 @@ import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual
 
 import { fileCacheAgentFilter, nijovoiceTextAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
-import { text2hash, localizedText, settings2GraphAIConfig } from "../utils/utils.js";
+import { localizedText, settings2GraphAIConfig } from "../utils/utils.js";
+import { text2hash } from "../utils/utils_node.js";
 import { provider2TTSAgent } from "../utils/provider2agent.js";
 
 import { MulmoPresentationStyleMethods } from "../methods/index.js";

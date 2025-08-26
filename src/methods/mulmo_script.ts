@@ -1,6 +1,8 @@
+// node & browser
+
 import { GraphAILogger } from "graphai";
 import { type MulmoStudioBeat, type MulmoScript, type MulmoStudioMultiLingual, mulmoScriptSchema, mulmoStudioMultiLingualFileSchema } from "../types/index.js";
-import { beatId } from "../utils/common.js";
+import { beatId } from "../utils/utils.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validate_1_0 = (script: any): any => {

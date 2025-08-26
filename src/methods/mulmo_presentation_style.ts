@@ -1,4 +1,5 @@
-import "dotenv/config";
+// node & browser
+
 import { isNull } from "graphai";
 import { userAssert } from "../utils/utils.js";
 import {
