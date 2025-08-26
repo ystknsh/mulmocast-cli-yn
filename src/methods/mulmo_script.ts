@@ -1,4 +1,8 @@
-// node & browser
+/**
+ * Browser-friendly packages only.
+ * (No Node.js built-ins like fs, path, dotenv, etc.)
+ * Works in both Node.js and modern browsers.
+ */
 
 import { GraphAILogger } from "graphai";
 import { type MulmoStudioBeat, type MulmoScript, type MulmoStudioMultiLingual, mulmoScriptSchema, mulmoStudioMultiLingualFileSchema } from "../types/index.js";

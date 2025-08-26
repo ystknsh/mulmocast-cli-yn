@@ -1,4 +1,9 @@
-import path from "path";
+/**
+ * Browser-friendly packages only.
+ * (No Node.js built-ins like fs, path, dotenv, etc.)
+ * Works in both Node.js and modern browsers.
+ */
+
 import { BeatSessionType, MulmoStudioContext, SessionProgressCallback, SessionType } from "../types/index.js";
 import { beatId } from "../utils/utils.js";
 import { GraphAILogger } from "graphai";
@@ -31,9 +36,6 @@ const notifyBeatStateChange = (context: MulmoStudioContext, sessionType: BeatSes
 };
 
 export const MulmoStudioContextMethods = {
-  resolveAssetPath(context: MulmoStudioContext, relativePath: string): string {
-    return path.resolve(context.fileDirs.mulmoFileDirPath, relativePath);
-  },
   getAudioDirPath(context: MulmoStudioContext): string {
     return context.fileDirs.audioDirPath;
   },

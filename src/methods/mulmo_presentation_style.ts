@@ -1,4 +1,8 @@
-// node & browser
+/**
+ * Browser-friendly packages only.
+ * (No Node.js built-ins like fs, path, dotenv, etc.)
+ * Works in both Node.js and modern browsers.
+ */
 
 import { isNull } from "graphai";
 import { userAssert } from "../utils/utils.js";
