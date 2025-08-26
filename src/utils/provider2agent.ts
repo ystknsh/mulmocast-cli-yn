@@ -40,7 +40,7 @@ export const provider2ImageAgent = {
   google: {
     agentName: "imageGenAIAgent",
     defaultModel: "imagen-4.0-generate-preview-06-06",
-    models: ["imagen-3.0-generate-002", "imagen-4.0-generate-preview-06-06", "imagen-4.0-ultra-generate-preview-06-06"],
+    models: ["imagen-3.0-generate-002", "imagen-4.0-generate-preview-06-06", "imagen-4.0-ultra-generate-preview-06-06", "gemini-2.5-flash-image-preview"],
   },
   mock: {
     agentName: "mediaMockAgent",
