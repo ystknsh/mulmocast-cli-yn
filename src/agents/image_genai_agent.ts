@@ -1,3 +1,4 @@
+import fs from "fs";
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import { getAspectRatio } from "./movie_google_agent.js";
@@ -10,7 +11,7 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
   params,
   config,
 }) => {
-  const { prompt } = namedInputs;
+  const { prompt, referenceImages } = namedInputs;
   const aspectRatio = getAspectRatio(params.canvasSize);
   const model = params.model ?? provider2ImageAgent["google"].defaultModel;
   const apiKey = config?.apiKey;
@@ -21,7 +22,12 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
   try {
     const ai = new GoogleGenAI({ apiKey });
     if (model === "gemini-2.5-flash-image-preview") {
-      const contents = [ { text: prompt } ];
+      const contents: { text?: string; inlineData?: { mimeType: string; data: string } }[] = [{ text: prompt }];
+      referenceImages?.forEach((imagePath) => {
+        const imageData = fs.readFileSync(imagePath);
+        const base64Image = imageData.toString("base64");
+        contents.push({ inlineData: { mimeType: "image/png", data: base64Image } });
+      });
       const response = await ai.models.generateContent({ model, contents });
       if (!response.candidates?.[0]?.content?.parts) {
         throw new Error("ERROR: generateContent returned no candidates");
