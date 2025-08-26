@@ -5,7 +5,7 @@ import fsPromise from "fs/promises";
 import type { AgentFilterFunction } from "graphai";
 import { GraphAILogger } from "graphai";
 import { writingMessage } from "./file.js";
-import { text2hash } from "./utils.js";
+import { text2hash } from "./utils_node.js";
 import { MulmoStudioContextMethods } from "../methods/mulmo_studio_context.js";
 import { replacementsJa, replacePairsJa } from "../utils/string.js";
 

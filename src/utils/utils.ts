@@ -1,10 +1,8 @@
-import * as crypto from "crypto";
 import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
 import { MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual, MulmoStudioMultiLingualData } from "../types/index.js";
-import { provider2LLMAgent } from "./provider2agent.js";
+import { type LLM, provider2LLMAgent } from "./provider2agent.js";
 import { beatId } from "./common.js";
-import type { LLM } from "./provider2agent.js"; // TODO remove
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
   const llmKey = _llm ?? "openai";
@@ -24,10 +22,6 @@ export const chunkArray = <T>(array: T[], size = 3): T[][] => {
 
 export const isHttp = (fileOrUrl: string) => {
   return /^https?:\/\//.test(fileOrUrl);
-};
-
-export const text2hash = (input: string): string => {
-  return crypto.createHash("sha256").update(input).digest("hex");
 };
 
 export const localizedText = (beat: MulmoBeat, multiLingualData?: MulmoStudioMultiLingualData, targetLang?: string, defaultLang?: string) => {
