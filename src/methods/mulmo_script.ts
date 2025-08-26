@@ -1,3 +1,5 @@
+// node & browser
+
 import { GraphAILogger } from "graphai";
 import { type MulmoStudioBeat, type MulmoScript, type MulmoStudioMultiLingual, mulmoScriptSchema, mulmoStudioMultiLingualFileSchema } from "../types/index.js";
 import { beatId } from "../utils/utils.js";

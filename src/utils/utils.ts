@@ -1,3 +1,5 @@
+// node & browser
+
 import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
 import { MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual, MulmoStudioMultiLingualData } from "../types/index.js";
