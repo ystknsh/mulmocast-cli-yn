@@ -3,6 +3,7 @@ import type { ConfigDataDictionary, DefaultConfigData } from "graphai";
 
 import { MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual, MulmoStudioMultiLingualData } from "../types/index.js";
 import { provider2LLMAgent } from "./provider2agent.js";
+import { beatId } from "./common.js";
 import type { LLM } from "./provider2agent.js"; // TODO remove
 
 export const llmPair = (_llm?: LLM, _model?: string) => {
@@ -142,11 +143,6 @@ export const deepClean = <T extends CleanableValue>(input: T): T | undefined => 
   }
 
   return input;
-};
-
-export const beatId = (id: string | undefined, index: number) => {
-  const key = id ?? `__index__${index}`;
-  return key;
 };
 
 export const multiLingualObjectToArray = (multiLingual: MulmoStudioMultiLingual | undefined, beats: MulmoStudioBeat[]) => {
