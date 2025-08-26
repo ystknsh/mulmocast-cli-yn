@@ -169,6 +169,11 @@ export const mkdir = (dirPath: string) => {
   }
 };
 
+// asset path
+export const resolveAssetPath = (context: MulmoStudioContext, relativePath: string): string => {
+  return path.resolve(context.fileDirs.mulmoFileDirPath, relativePath);
+};
+
 // export const silentPath = path.resolve(npmRoot, "./assets/audio/silent300.mp3");
 // export const silentLastPath = path.resolve(npmRoot, "./assets/audio/silent800.mp3");
 export const silent60secPath = () => path.resolve(npmRoot, "./assets/audio/silent60sec.mp3");
