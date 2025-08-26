@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import puppeteer from "puppeteer";
-import { GraphAILogger } from "graphai";
+import { GraphAILogger, sleep } from "graphai";
 import { MulmoStudioContext, PDFMode, PDFSize } from "../types/index.js";
 import { MulmoPresentationStyleMethods } from "../methods/index.js";
 import { localizedText, isHttp } from "../utils/utils.js";
@@ -186,6 +186,7 @@ const generatePDF = async (context: MulmoStudioContext, pdfMode: PDFMode, pdfSiz
   try {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "domcontentloaded" });
+    await sleep(1000);
     await page.pdf({
       path: outputPdfPath,
       printBackground: true,
