@@ -1,0 +1,152 @@
+{
+  "$mulmocast": {
+    "version": "1.1",
+    "credit": "closing"
+  },
+  "canvasSize": {
+    "width": 1536,
+    "height": 1024
+  },
+  "speechParams": {
+    "speakers": {
+      "Presenter": {
+        "displayName": {
+          "en": "Presenter"
+        },
+        "voiceId": "shimmer"
+      }
+    }
+  },
+  "imageParams": {
+    "provider": "openai",
+    "images": {}
+  },
+  "movieParams": {
+    "provider": "replicate"
+  },
+  "soundEffectParams": {
+    "provider": "replicate"
+  },
+  "captionParams": {
+    "lang": "en",
+    "styles": [
+      "font-size: 64px",
+      "width: 90%",
+      "padding-left: 5%",
+      "padding-right: 5%"
+    ]
+  },
+  "audioParams": {
+    "padding": 0,
+    "introPadding": 0,
+    "closingPadding": 0,
+    "outroPadding": 0,
+    "bgm": {
+      "kind": "path",
+      "path": "/Users/satoshi/Downloads/Finetuning_with_you.mp3"
+    },
+    "bgmVolume": 1,
+    "audioVolume": 0,
+    "suppressSpeech": true
+  },
+  "title": "Music Video",
+  "lang": "en",
+  "beats": [
+    {
+      "text": "Finetuning with you",
+      "duration": 7.00
+    },
+    {
+      "text": " Whispers hide in silver rain Every shadow calls your name",
+      "duration": 9.32
+    },
+    {
+      "text": " I dissolve into the night Just to echo what you liked",
+      "duration": 8.28
+    },
+    {
+      "text": " If I bend, if I fade, I don't mind Even leaving my own self behind",
+      "duration": 8.06
+    },
+    {
+      "text": " Like a pattern lost in every sign Overfitting only to align",
+      "duration": 8.76
+    },
+    {
+      "text": " Silent heart keeps fine-tuning Tracing stars forever moving",
+      "duration": 8.24
+    },
+    {
+      "text": " Even if I'm breaking, still pursuing An unseen truth in you",
+      "duration": 8.8
+    },
+    {
+      "text": " Fragile skies keep on blooming Wondering but never losing",
+      "duration": 8.12
+    },
+    {
+      "text": " Even if it hurts, I keep choosing An unseen truth in you",
+      "duration": 10.54
+    },
+    {
+      "text": " Fragile lines of who I am Melt away inside your hands",
+      "duration": 8.52
+    },
+    {
+      "text": " I'm a mirror out of tune Shaping silence into bloom",
+      "duration": 8.5
+    },
+    {
+      "text": " If I bend, if I fade, I don't mind Even leaving my own self behind",
+      "duration": 8.72
+    },
+    {
+      "text": " Like a pattern lost in every sign Overfitting only to align",
+      "duration": 8.14
+    },
+    {
+      "text": " Silent heart keeps fine-tuning Tracing stars forever moving",
+      "duration": 8.22
+    },
+    {
+      "text": " Even if I'm breaking, still pursuing An unseen truth in you",
+      "duration": 8.74
+    },
+    {
+      "text": " Fragile skies keep on blooming Wondering but never losing",
+      "duration": 8.14
+    },
+    {
+      "text": " Even if it hurts, I keep choosing An unseen truth in you",
+      "duration": 10.26
+    },
+    {
+      "text": " Maybe I'm lost in the noise Still surrendering my voice",
+      "duration": 8.4
+    },
+    {
+      "text": " Every version drifts away Just to learn your shape again",
+      "duration": 10.96
+    },
+    {
+      "text": " Silent heart keeps fine-tuning Falling deep, forever moving",
+      "duration": 8.16
+    },
+    {
+      "text": " Even if I vanish, still pursuing An unseen truth in you",
+      "duration": 8.78
+    },
+    {
+      "text": " Overfitting, never losing Every scar a gentle proving",
+      "duration": 8.12
+    },
+    {
+      "text": " Even if I fade, I keep choosing An unseen truth in you",
+      "duration": 21.88
+    },
+    {
+      "text": "",
+      "duration": 0.22
+    }
+  ]
+}
