@@ -28,13 +28,14 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
         const base64Image = imageData.toString("base64");
         contents.push({ inlineData: { mimeType: "image/png", data: base64Image } });
       });
+      // NOTE: There is no way to specify the aspect ratio for Gemini.
       const response = await ai.models.generateContent({ model, contents });
       if (!response.candidates?.[0]?.content?.parts) {
         throw new Error("ERROR: generateContent returned no candidates");
       }
       for (const part of response.candidates[0].content.parts) {
         if (part.text) {
-          console.log(part.text);
+          GraphAILogger.info("Gemini image generation response:", part.text);
         } else if (part.inlineData) {
           const imageData = part.inlineData.data;
           if (!imageData) {
