@@ -1,9 +1,10 @@
 import { MulmoStudioContext, MulmoBeat, MulmoCanvasDimension, MulmoImageParams } from "../types/index.js";
 import { MulmoPresentationStyleMethods, MulmoStudioContextMethods, MulmoBeatMethods } from "../methods/index.js";
-import { getBeatPngImagePath, getBeatMoviePaths } from "../utils/file.js";
+import { getBeatPngImagePath, getBeatMoviePaths, getAudioFilePath } from "../utils/file.js";
 import { imagePrompt, htmlImageSystemPrompt } from "../utils/prompt.js";
 import { renderHTMLToImage } from "../utils/markdown.js";
 import { GraphAILogger } from "graphai";
+import { beatId } from "../utils/utils.js";
 
 const htmlStyle = (context: MulmoStudioContext, beat: MulmoBeat) => {
   return {
@@ -35,6 +36,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     lipSyncFile?: string;
     lipSyncModel?: string;
     lipSyncAgentName?: string;
+    lipSyncTrimAudio?: boolean; // instruction to trim audio from the BGM
     audioFile?: string;
     beatDuration?: number;
   } = {
@@ -59,10 +61,17 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     returnValue.lipSyncAgentName = lipSyncAgentInfo.agentName;
     returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? lipSyncAgentInfo.defaultModel;
     returnValue.lipSyncFile = moviePaths.lipSyncFile;
-    // Audio file will be set from the beat's audio file when available
-    returnValue.audioFile = studioBeat?.audioFile;
+    if (context.studio.script.audioParams?.suppressSpeech) {
+      returnValue.lipSyncTrimAudio = true;
+      const folderName = MulmoStudioContextMethods.getFileName(context);
+      const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
+      const fileName = `${beatId(beat.id, index)}_trimmed.mp3`;
+      returnValue.audioFile = getAudioFilePath(audioDirPath, folderName, fileName);
+    } else {
+      // Audio file will be set from the beat's audio file when available
+      returnValue.audioFile = studioBeat?.audioFile;
+    }
   }
-
   if (beat.image) {
     const plugin = MulmoBeatMethods.getPlugin(beat);
     const pluginPath = plugin.path({ beat, context, imagePath, ...htmlStyle(context, beat) });
