@@ -69,7 +69,8 @@
     {
       "text": "Whispers hide in silver rain. Every shadow calls your name.",
       "duration": 9.32,
-      "imagePrompt": "Singer walking alone at night in neon-lit rainy street, holding a clear umbrella, raindrops sparkling, wearing a black mini dress with thigh-high boots, reflective puddles surrounding her."
+      "imagePrompt": "Singer walking alone at night in neon-lit rainy street, holding a clear umbrella, raindrops sparkling, wearing a black mini dress with thigh-high boots, reflective puddles surrounding her.",
+      "enableLipSync": true
     },
     {
       "text": "I dissolve into the night. Just to echo what you liked.",
