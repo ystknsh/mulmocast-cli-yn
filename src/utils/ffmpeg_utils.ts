@@ -115,11 +115,11 @@ export const trimMusic = (inputFile: string, startTime: number, duration: number
     }
 
     const chunks: Buffer[] = [];
-    
+
     ffmpeg(inputFile)
       .seekInput(startTime)
       .duration(duration)
-      .format('mp3')
+      .format("mp3")
       .on("start", () => {
         GraphAILogger.log(`Trimming audio from ${startTime}s for ${duration}s...`);
       })
@@ -133,7 +133,7 @@ export const trimMusic = (inputFile: string, startTime: number, duration: number
         resolve(buffer);
       })
       .pipe()
-      .on('data', (chunk: Buffer) => {
+      .on("data", (chunk: Buffer) => {
         chunks.push(chunk);
       });
   });

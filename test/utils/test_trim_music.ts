@@ -1,3 +1,4 @@
+import { GraphAILogger } from "graphai";
 import test from "node:test";
 import assert from "node:assert";
 import fs from "fs";
@@ -12,7 +13,7 @@ test("test trimMusic with valid audio URL", async () => {
   const duration = 5;
 
   const result = await trimMusic(TEST_AUDIO_URL, startTime, duration);
-  
+
   assert(Buffer.isBuffer(result), "Should return a Buffer");
   assert(result.length > 0, "Buffer should not be empty");
 
@@ -21,11 +22,11 @@ test("test trimMusic with valid audio URL", async () => {
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-  
+
   const outputPath = path.join(outputDir, "trimmed.mp3");
   fs.writeFileSync(outputPath, result);
-  
-  console.log(`Trimmed music saved to: ${outputPath}`);
+
+  GraphAILogger.info(`Trimmed music saved to: ${outputPath}`);
   assert(fs.existsSync(outputPath), "Output file should exist");
 });
 
@@ -39,7 +40,7 @@ test("test trimMusic with invalid file path", async () => {
       await trimMusic(invalidPath, startTime, duration);
     },
     /File not found/,
-    "Should throw error for non-existent file"
+    "Should throw error for non-existent file",
   );
 });
 
@@ -52,7 +53,7 @@ test("test trimMusic with invalid duration", async () => {
       await trimMusic(TEST_AUDIO_URL, startTime, duration);
     },
     /Invalid duration/,
-    "Should throw error for negative duration"
+    "Should throw error for negative duration",
   );
 });
 
@@ -65,7 +66,7 @@ test("test trimMusic with zero duration", async () => {
       await trimMusic(TEST_AUDIO_URL, startTime, duration);
     },
     /Invalid duration/,
-    "Should throw error for zero duration"
+    "Should throw error for zero duration",
   );
 });
 
@@ -74,7 +75,7 @@ test("test trimMusic with different start time", async () => {
   const duration = 3;
 
   const result = await trimMusic(TEST_AUDIO_URL, startTime, duration);
-  
+
   assert(Buffer.isBuffer(result), "Should return a Buffer");
   assert(result.length > 0, "Buffer should not be empty");
 });
@@ -84,7 +85,7 @@ test("test trimMusic with longer duration", async () => {
   const duration = 10;
 
   const result = await trimMusic(TEST_AUDIO_URL, startTime, duration);
-  
+
   assert(Buffer.isBuffer(result), "Should return a Buffer");
   assert(result.length > 0, "Buffer should not be empty");
 });
