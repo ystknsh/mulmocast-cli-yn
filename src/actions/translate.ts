@@ -296,13 +296,15 @@ export const translateBeat = async (index: number, context: MulmoStudioContext, 
   }
 };
 
-export const translate = async (context: MulmoStudioContext, args?: PublicAPIArgs) => {
+export const translate = async (context: MulmoStudioContext, args?: PublicAPIArgs & { targetLangs?: string[] }) => {
   const { settings, callbacks } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "multiLingual", true);
     const { outputMultilingualFilePath, outDirPath } = getOutputMultilingualFilePathAndMkdir(context);
 
-    const targetLangs = [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
+    const targetLangs = args?.targetLangs
+      ? args?.targetLangs
+      : [...new Set([context.lang, context.studio.script.captionParams?.lang].filter((x) => !isNull(x)))];
     const config = settings2GraphAIConfig(settings, process.env);
 
     assert(!!config?.openAIAgent?.apiKey, "The OPENAI_API_KEY environment variable is missing or empty");
