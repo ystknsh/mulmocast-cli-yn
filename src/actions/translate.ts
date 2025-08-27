@@ -161,11 +161,18 @@ const translateGraph: GraphData = {
     mergeStudioResult: {
       isResult: true,
       agent: (namedInputs) => {
-        const { multiLingual, beats } = namedInputs;
-
+        const { multiLingual, beats, originalMultiLingual } = namedInputs;
         const multiLingualObject = beats.reduce((tmp: MulmoStudioMultiLingual, beat: MulmoBeat, beatIndex: number) => {
           const key = beatId(beat?.id, beatIndex);
-          tmp[key] = multiLingual[beatIndex];
+          const originalData = originalMultiLingual[beatIndex]?.multiLingualTexts ?? {};
+          const { multiLingualTexts, cacheKey } = multiLingual[beatIndex];
+          tmp[key] = {
+            cacheKey,
+            multiLingualTexts: {
+              ...originalData,
+              ...multiLingualTexts,
+            },
+          };
           return tmp;
         }, {});
 
@@ -175,7 +182,8 @@ const translateGraph: GraphData = {
         };
       },
       inputs: {
-        multiLingual: ":beatsMap.mergeMultiLingualData",
+        originalMultiLingual: ":context.multiLingual", // original
+        multiLingual: ":beatsMap.mergeMultiLingualData", // update
         beats: ":context.studio.script.beats",
       },
     },
