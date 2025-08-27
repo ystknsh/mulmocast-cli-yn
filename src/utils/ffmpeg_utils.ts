@@ -102,34 +102,39 @@ export const extractImageFromMovie = (movieFile: string, imagePath: string): Pro
   });
 };
 
-export const trimMusic = (inputFile: string, outputPath: string, startTime: number, endTime: number): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
+export const trimMusic = (inputFile: string, startTime: number, duration: number): Promise<Buffer> => {
+  return new Promise<Buffer>((resolve, reject) => {
     if (!inputFile.startsWith("http://") && !inputFile.startsWith("https://") && !fs.existsSync(inputFile)) {
       reject(new Error(`File not found: ${inputFile}`));
       return;
     }
 
-    const duration = endTime - startTime;
     if (duration <= 0) {
-      reject(new Error(`Invalid time range: start time (${startTime}) must be less than end time (${endTime})`));
+      reject(new Error(`Invalid duration: duration (${duration}) must be greater than 0`));
       return;
     }
 
+    const chunks: Buffer[] = [];
+    
     ffmpeg(inputFile)
       .seekInput(startTime)
       .duration(duration)
-      .output(outputPath)
+      .format('mp3')
       .on("start", () => {
-        GraphAILogger.log(`Trimming audio from ${startTime}s to ${endTime}s...`);
+        GraphAILogger.log(`Trimming audio from ${startTime}s for ${duration}s...`);
       })
       .on("error", (err) => {
         GraphAILogger.error("Error occurred while trimming audio:", err);
         reject(err);
       })
       .on("end", () => {
-        GraphAILogger.log(`Audio trimmed successfully: ${outputPath}`);
-        resolve();
+        const buffer = Buffer.concat(chunks);
+        GraphAILogger.log(`Audio trimmed successfully, buffer size: ${buffer.length} bytes`);
+        resolve(buffer);
       })
-      .run();
+      .pipe()
+      .on('data', (chunk: Buffer) => {
+        chunks.push(chunk);
+      });
   });
 };
