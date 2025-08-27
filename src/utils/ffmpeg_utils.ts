@@ -101,3 +101,35 @@ export const extractImageFromMovie = (movieFile: string, imagePath: string): Pro
       .run();
   });
 };
+
+export const trimMusic = (inputFile: string, outputPath: string, startTime: number, endTime: number): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    if (!inputFile.startsWith("http://") && !inputFile.startsWith("https://") && !fs.existsSync(inputFile)) {
+      reject(new Error(`File not found: ${inputFile}`));
+      return;
+    }
+
+    const duration = endTime - startTime;
+    if (duration <= 0) {
+      reject(new Error(`Invalid time range: start time (${startTime}) must be less than end time (${endTime})`));
+      return;
+    }
+
+    ffmpeg(inputFile)
+      .seekInput(startTime)
+      .duration(duration)
+      .output(outputPath)
+      .on("start", () => {
+        GraphAILogger.log(`Trimming audio from ${startTime}s to ${endTime}s...`);
+      })
+      .on("error", (err) => {
+        GraphAILogger.error("Error occurred while trimming audio:", err);
+        reject(err);
+      })
+      .on("end", () => {
+        GraphAILogger.log(`Audio trimmed successfully: ${outputPath}`);
+        resolve();
+      })
+      .run();
+  });
+};
