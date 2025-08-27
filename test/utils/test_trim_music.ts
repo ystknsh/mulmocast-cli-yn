@@ -8,7 +8,7 @@ import { trimMusic } from "../../src/utils/ffmpeg_utils.js";
 const TEST_AUDIO_URL = "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3";
 
 test("test trimMusic with valid audio URL", async () => {
-  const startTime = 10;
+  const startTime = 15;
   const duration = 5;
 
   const result = await trimMusic(TEST_AUDIO_URL, startTime, duration);
