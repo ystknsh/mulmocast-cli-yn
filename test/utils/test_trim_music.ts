@@ -1,18 +1,32 @@
 import test from "node:test";
 import assert from "node:assert";
+import fs from "fs";
+import path from "path";
 
 import { trimMusic } from "../../src/utils/ffmpeg_utils.js";
 
 const TEST_AUDIO_URL = "https://github.com/receptron/mulmocast-media/raw/refs/heads/main/bgms/morning001.mp3";
 
 test("test trimMusic with valid audio URL", async () => {
-  const startTime = 0;
+  const startTime = 10;
   const duration = 5;
 
   const result = await trimMusic(TEST_AUDIO_URL, startTime, duration);
   
   assert(Buffer.isBuffer(result), "Should return a Buffer");
   assert(result.length > 0, "Buffer should not be empty");
+
+  // Save trimmed music to output folder
+  const outputDir = path.join(process.cwd(), "output");
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+  
+  const outputPath = path.join(outputDir, "trimmed.mp3");
+  fs.writeFileSync(outputPath, result);
+  
+  console.log(`Trimmed music saved to: ${outputPath}`);
+  assert(fs.existsSync(outputPath), "Output file should exist");
 });
 
 test("test trimMusic with invalid file path", async () => {
