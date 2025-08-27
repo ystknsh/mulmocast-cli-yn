@@ -51,14 +51,15 @@ export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat
   return getAudioPath(context, beat, audioFile);
 };
 
-const preprocessor = (namedInputs: {
+const preprocessorAgent = (namedInputs: {
   beat: MulmoBeat;
   studioBeat: MulmoStudioBeat;
   multiLingual: MulmoStudioMultiLingualData;
   context: MulmoStudioContext;
+  lang: string;
 }) => {
-  const { beat, studioBeat, multiLingual, context } = namedInputs;
-  const { lang } = context;
+  const { beat, studioBeat, multiLingual, context, lang } = namedInputs;
+  // const { lang } = context;
   const text = localizedText(beat, multiLingual, lang);
   const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat);
   const audioPath = getBeatAudioPath(text, context, beat, lang);
@@ -86,13 +87,15 @@ const graph_tts: GraphData = {
     multiLingual: {},
     context: {},
     __mapIndex: {},
+    lang: {},
     preprocessor: {
-      agent: preprocessor,
+      agent: preprocessorAgent,
       inputs: {
         beat: ":beat",
         studioBeat: ":studioBeat",
         multiLingual: ":multiLingual",
         context: ":context",
+        lang: ":lang",
       },
     },
     tts: {
@@ -122,6 +125,33 @@ const graph_tts: GraphData = {
   },
 };
 
+const graph_tts_map: GraphData = {
+  version: 0.5,
+  concurrency: 8,
+  nodes: {
+    beat: {},
+    studioBeat: {},
+    multiLingual: {},
+    context: {},
+    __mapIndex: {},
+    langs: {},
+    map: {
+      agent: "mapAgent",
+      inputs: {
+        rows: ":langs",
+        beat: ":beat",
+        studioBeat: ":studioBeat",
+        multiLingual: ":multiLingual",
+        context: ":context",
+        __mapIndex: ":__mapIndex",
+      },
+      params: {
+        rowKey: "lang",
+      },
+      graph: graph_tts,
+    },
+  },
+};
 const graph_data: GraphData = {
   version: 0.5,
   concurrency: 8,
@@ -138,6 +168,7 @@ const graph_data: GraphData = {
         studioBeat: ":context.studio.beats",
         multiLingual: ":context.multiLingual",
         context: ":context",
+        lang: ":context.lang",
       },
       params: {
         rowKey: "beat",
@@ -210,8 +241,8 @@ const audioAgents = {
   combineAudioFilesAgent,
 };
 
-export const generateBeatAudio = async (index: number, context: MulmoStudioContext, args?: PublicAPIArgs) => {
-  const { settings, callbacks } = args ?? {};
+export const generateBeatAudio = async (index: number, context: MulmoStudioContext, args?: PublicAPIArgs & { langs: string[] }) => {
+  const { settings, callbacks, langs } = args ?? {};
   try {
     MulmoStudioContextMethods.setSessionState(context, "audio", true);
     const fileName = MulmoStudioContextMethods.getFileName(context);
@@ -224,13 +255,18 @@ export const generateBeatAudio = async (index: number, context: MulmoStudioConte
 
     const config = settings2GraphAIConfig(settings);
     const taskManager = new TaskManager(getConcurrency(context));
-    const graph = new GraphAI(graph_tts, audioAgents, { agentFilters, taskManager, config });
+    const graph = new GraphAI(langs ? graph_tts_map : graph_tts, audioAgents, { agentFilters, taskManager, config });
     graph.injectValue("__mapIndex", index);
     graph.injectValue("beat", context.studio.script.beats[index]);
     graph.injectValue("studioBeat", context.studio.beats[index]);
-    graph.injectValue("multiLingual", context.multiLingual);
+    graph.injectValue("multiLingual", context.multiLingual[index]);
     graph.injectValue("context", context);
 
+    if (langs) {
+      graph.injectValue("langs", langs);
+    } else {
+      graph.injectValue("lang", context.lang);
+    }
     if (callbacks) {
       callbacks.forEach((callback) => {
         graph.registerCallback(callback);
