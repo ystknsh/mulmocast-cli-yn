@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { getFileObject } from "../../src/cli/helpers.js";
 import { createStudioData } from "../../src/utils/context.js";
-import { generateBeatAudio, listLocalizedAudioPaths } from "../../src/actions/audio.js";
+import { generateBeatAudio } from "../../src/actions/audio.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -163,5 +163,5 @@ test("test beat images", async () => {
     },
     langs: ["fr", "de"],
   });
-  console.log(listLocalizedAudioPaths(context, "de"));
+  // console.log(listLocalizedAudioPaths(context, "de"));
 });

@@ -11,7 +11,7 @@ import { MulmoStudioContext, MulmoBeat, MulmoStudioBeat, MulmoStudioMultiLingual
 
 import { fileCacheAgentFilter, nijovoiceTextAgentFilter } from "../utils/filters.js";
 import { getAudioArtifactFilePath, getAudioFilePath, getOutputStudioFilePath, resolveDirPath, defaultBGMPath, mkdir, writingMessage } from "../utils/file.js";
-import { localizedText, settings2GraphAIConfig, beatId } from "../utils/utils.js";
+import { localizedText, settings2GraphAIConfig } from "../utils/utils.js";
 import { text2hash } from "../utils/utils_node.js";
 import { provider2TTSAgent } from "../utils/provider2agent.js";
 
@@ -56,7 +56,6 @@ export const listLocalizedAudioPaths = (context: MulmoStudioContext, targetLang?
   return context.studio.script.beats.map((beat, index) => {
     const multiLingual = context.multiLingual[index];
     const text = localizedText(beat, multiLingual, lang);
-    console.log(text, multiLingual);
     return getBeatAudioPath(text, context, beat, lang);
   });
 };
