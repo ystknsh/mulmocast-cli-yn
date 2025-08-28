@@ -250,6 +250,7 @@ const beat_graph_data = {
         return { buffer };
       },
       inputs: {
+        onComplete: [":imageGenerator", ":imagePlugin"],
         audioFile: ":preprocessor.audioFile",
         bgmFile: ":preprocessor.bgmFile",
         startAt: ":preprocessor.startAt",
@@ -259,8 +260,8 @@ const beat_graph_data = {
           file: ":preprocessor.audioFile",
           index: ":__mapIndex",
           id: ":beat.id",
-          sessionType: "audioTrimmer",
           mulmoContext: ":context",
+          // sessionType: undefined, // no need to notify state change
         },
       },
       defaultValue: {},

@@ -59,7 +59,10 @@ export const MulmoStudioContextMethods = {
     context.sessionState.inSession[sessionType] = value;
     notifyStateChange(context, sessionType);
   },
-  setBeatSessionState(context: MulmoStudioContext, sessionType: BeatSessionType, index: number, id: string | undefined, value: boolean) {
+  setBeatSessionState(context: MulmoStudioContext, sessionType: BeatSessionType | undefined, index: number, id: string | undefined, value: boolean) {
+    if (!sessionType) {
+      return;
+    }
     const key = beatId(id, index);
     if (value) {
       if (!context.sessionState.inBeatSession[sessionType]) {
