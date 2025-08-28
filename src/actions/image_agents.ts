@@ -65,6 +65,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? lipSyncAgentInfo.defaultModel;
     returnValue.lipSyncFile = moviePaths.lipSyncFile;
     if (context.studio.script.audioParams?.suppressSpeech) {
+      // studio beat may ot have startAt and duration yet, in case of API call from the app.
       returnValue.startAt = context.studio.beats.filter((_, i) => i < index).reduce((acc, curr) => acc + (curr.duration ?? 0), 0);
       returnValue.duration = beat.duration ?? 0;
       returnValue.lipSyncTrimAudio = true;
