@@ -39,6 +39,10 @@ export const localizedText = (beat: MulmoBeat, multiLingualData?: MulmoStudioMul
   return beat.text;
 };
 
+export function processLineBreaks(text: string) {
+  return text.replace(/\n/g, "<br>");
+}
+
 export function userAssert(condition: boolean, message: string): asserts condition {
   if (!condition) {
     throw new Error(message);
