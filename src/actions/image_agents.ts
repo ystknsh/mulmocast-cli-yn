@@ -64,9 +64,9 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     returnValue.lipSyncAgentName = lipSyncAgentInfo.agentName;
     returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? lipSyncAgentInfo.defaultModel;
     returnValue.lipSyncFile = moviePaths.lipSyncFile;
-    returnValue.startAt = studioBeat?.startAt ?? 0;
-    returnValue.duration = studioBeat?.duration ?? 0;
     if (context.studio.script.audioParams?.suppressSpeech) {
+      returnValue.startAt = studioBeat?.startAt ?? 0;
+      returnValue.duration = studioBeat?.duration ?? 0;
       returnValue.lipSyncTrimAudio = true;
       returnValue.bgmFile = MulmoMediaSourceMethods.resolve(context.studio.script.audioParams.bgm, context);
       const folderName = MulmoStudioContextMethods.getFileName(context);
