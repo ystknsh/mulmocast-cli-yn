@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { GraphAI, TaskManager,  GraphAILogger } from "graphai";
+import { GraphAI, TaskManager, GraphAILogger } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
