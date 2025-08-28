@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { GraphAI, TaskManager } from "graphai";
+import { GraphAI, TaskManager,  GraphAILogger } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
@@ -46,9 +46,19 @@ export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat
   const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
   const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat);
   const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider, model ?? ""].join(":");
+  GraphAILogger.log(`getBeatAudioPath [${hash_string}]`);
   const audioFileName = `${context.studio.filename}_${text2hash(hash_string)}`;
   const audioFile = getAudioFilePath(audioDirPath, context.studio.filename, audioFileName, lang);
   return getAudioPath(context, beat, audioFile);
+};
+
+export const listLocalizedAudioPaths = (context: MulmoStudioContext, targetLang?: string) => {
+  const lang = targetLang ?? context.lang;
+  return context.studio.script.beats.map((beat, index) => {
+    const multiLingual = context.multiLingual[index];
+    const text = localizedText(beat, multiLingual, lang);
+    return getBeatAudioPath(text, context, beat, lang);
+  });
 };
 
 const preprocessorAgent = (namedInputs: {

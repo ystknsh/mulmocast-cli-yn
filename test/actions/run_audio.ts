@@ -163,4 +163,5 @@ test("test beat images", async () => {
     },
     langs: ["fr", "de"],
   });
+  // console.log(listLocalizedAudioPaths(context, "de"));
 });
