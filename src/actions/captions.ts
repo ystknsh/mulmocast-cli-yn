@@ -3,7 +3,7 @@ import { GraphAI, GraphAILogger } from "graphai";
 import type { GraphData } from "graphai";
 import * as agents from "@graphai/vanilla";
 import { getHTMLFile, getCaptionImagePath, getOutputStudioFilePath } from "../utils/file.js";
-import { localizedText } from "../utils/utils.js";
+import { localizedText, processLineBreaks } from "../utils/utils.js";
 import { renderHTMLToImage, interpolate } from "../utils/markdown.js";
 import { MulmoStudioContextMethods, MulmoPresentationStyleMethods } from "../methods/index.js";
 import { fileWriteAgent } from "@graphai/vanilla_node_agents";
@@ -40,7 +40,7 @@ const graph_data: GraphData = {
                 }
                 const text = localizedText(beat, context.multiLingual?.[index], captionParams.lang, context.studio.script.lang);
                 const htmlData = interpolate(template, {
-                  caption: text,
+                  caption: processLineBreaks(text),
                   width: `${canvasSize.width}`,
                   height: `${canvasSize.height}`,
                   styles: captionParams.styles.join(";\n"),
