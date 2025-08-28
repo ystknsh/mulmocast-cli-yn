@@ -46,9 +46,7 @@ export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat
   const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
   const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat);
   const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider, model ?? ""].join(":");
-  if (context.verbose) {
-    GraphAILogger.info(`getBeatAudioPath [${hash_string}]`);
-  }
+  GraphAILogger.log(`getBeatAudioPath [${hash_string}]`);
   const audioFileName = `${context.studio.filename}_${text2hash(hash_string)}`;
   const audioFile = getAudioFilePath(audioDirPath, context.studio.filename, audioFileName, lang);
   return getAudioPath(context, beat, audioFile);
