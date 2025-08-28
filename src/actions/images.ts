@@ -260,8 +260,8 @@ const beat_graph_data = {
           file: ":preprocessor.audioFile",
           index: ":__mapIndex",
           id: ":beat.id",
-          sessionType: "audioTrimmer",
           mulmoContext: ":context",
+          // sessionType: undefined, // no need to notify state change
         },
       },
       defaultValue: {},
