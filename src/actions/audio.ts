@@ -35,8 +35,8 @@ const getAudioPath = (context: MulmoStudioContext, beat: MulmoBeat, audioFile: s
   return audioFile;
 };
 
-const getAudioParam = (context: MulmoStudioContext, beat: MulmoBeat) => {
-  const speaker = MulmoPresentationStyleMethods.getSpeaker(context, beat);
+const getAudioParam = (context: MulmoStudioContext, beat: MulmoBeat, lang?: string) => {
+  const speaker = MulmoPresentationStyleMethods.getSpeaker(context, beat, lang);
   const speechOptions = { ...speaker.speechOptions, ...beat.speechOptions };
   const provider = text2SpeechProviderSchema.parse(speaker.provider) as keyof typeof provider2TTSAgent;
   return { voiceId: speaker.voiceId, provider, speechOptions, model: speaker.model };
@@ -44,7 +44,7 @@ const getAudioParam = (context: MulmoStudioContext, beat: MulmoBeat) => {
 
 export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat: MulmoBeat, lang?: string) => {
   const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
-  const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat);
+  const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat, lang);
   const hash_string = [text, voiceId, speechOptions?.instruction ?? "", speechOptions?.speed ?? 1.0, provider, model ?? ""].join(":");
   GraphAILogger.log(`getBeatAudioPath [${hash_string}]`);
   const audioFileName = `${context.studio.filename}_${text2hash(hash_string)}`;
@@ -52,8 +52,8 @@ export const getBeatAudioPath = (text: string, context: MulmoStudioContext, beat
   return getAudioPath(context, beat, audioFile);
 };
 
-export const listLocalizedAudioPaths = (context: MulmoStudioContext, targetLang?: string) => {
-  const lang = targetLang ?? context.lang;
+export const listLocalizedAudioPaths = (context: MulmoStudioContext) => {
+  const lang = context.lang ?? context.studio.script.lang;
   return context.studio.script.beats.map((beat, index) => {
     const multiLingual = context.multiLingual[index];
     const text = localizedText(beat, multiLingual, lang);
@@ -71,7 +71,7 @@ const preprocessorAgent = (namedInputs: {
   const { beat, studioBeat, multiLingual, context, lang } = namedInputs;
   // const { lang } = context;
   const text = localizedText(beat, multiLingual, lang);
-  const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat);
+  const { voiceId, provider, speechOptions, model } = getAudioParam(context, beat, lang);
   const audioPath = getBeatAudioPath(text, context, beat, lang);
   studioBeat.audioFile = audioPath; // TODO: Passing by reference is difficult to maintain, so pass it using graphai inputs
   const needsTTS = !beat.audio && audioPath !== undefined;
