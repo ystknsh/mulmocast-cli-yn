@@ -250,7 +250,7 @@ const beat_graph_data = {
         console.log(`********2 lipSyncTrimAudio: ${namedInputs.bgmFile}`);
         console.log(`********3 lipSyncTrimAudio: ${namedInputs.startAt}`);
         console.log(`********4 lipSyncTrimAudio: ${namedInputs.duration}`);
-        //return await trimMusic(namedInputs.audioFile, 0, 10);
+        return await trimMusic(namedInputs.bgmFile, namedInputs.startAt, namedInputs.duration);
       },
       inputs: {
         audioFile: ":preprocessor.audioFile",

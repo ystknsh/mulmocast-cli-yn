@@ -103,6 +103,9 @@ export const extractImageFromMovie = (movieFile: string, imagePath: string): Pro
 };
 
 export const trimMusic = (inputFile: string, startTime: number, duration: number): Promise<Buffer> => {
+  console.log(`********A trimMusic: ${inputFile}`);
+  console.log(`********B trimMusic: ${startTime}`);
+  console.log(`********C trimMusic: ${duration}`);
   return new Promise<Buffer>((resolve, reject) => {
     if (!inputFile.startsWith("http://") && !inputFile.startsWith("https://") && !fs.existsSync(inputFile)) {
       reject(new Error(`File not found: ${inputFile}`));
