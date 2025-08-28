@@ -1,5 +1,5 @@
 import { MulmoStudioContext, MulmoBeat, MulmoCanvasDimension, MulmoImageParams } from "../types/index.js";
-import { MulmoPresentationStyleMethods, MulmoStudioContextMethods, MulmoBeatMethods } from "../methods/index.js";
+import { MulmoPresentationStyleMethods, MulmoStudioContextMethods, MulmoBeatMethods, MulmoMediaSourceMethods } from "../methods/index.js";
 import { getBeatPngImagePath, getBeatMoviePaths, getAudioFilePath } from "../utils/file.js";
 import { imagePrompt, htmlImageSystemPrompt } from "../utils/prompt.js";
 import { renderHTMLToImage } from "../utils/markdown.js";
@@ -37,7 +37,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     lipSyncModel?: string;
     lipSyncAgentName?: string;
     lipSyncTrimAudio?: boolean; // instruction to trim audio from the BGM
-    bgmFile?: string;
+    bgmFile?: string | null;
     startAt?: number;
     duration?: number;
     audioFile?: string;
@@ -68,12 +68,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     returnValue.duration = studioBeat?.duration ?? 0;
     if (context.studio.script.audioParams?.suppressSpeech) {
       returnValue.lipSyncTrimAudio = true;
-      returnValue.bgmFile =
-        context.studio.script.audioParams.bgm?.kind === "url"
-          ? context.studio.script.audioParams.bgm?.url
-          : context.studio.script.audioParams.bgm?.kind === "path"
-            ? context.studio.script.audioParams.bgm?.path
-            : undefined;
+      returnValue.bgmFile = MulmoMediaSourceMethods.resolve(context.studio.script.audioParams.bgm, context);
       const folderName = MulmoStudioContextMethods.getFileName(context);
       const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
       const fileName = `${beatId(beat.id, index)}_trimmed.mp3`;
