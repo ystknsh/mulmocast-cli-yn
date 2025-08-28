@@ -246,10 +246,6 @@ const beat_graph_data = {
     AudioTrimmer: {
       if: ":preprocessor.lipSyncTrimAudio",
       agent: async (namedInputs: { audioFile: string; bgmFile: string; startAt: number; duration: number }) => {
-        console.log(`********1 lipSyncTrimAudio: ${namedInputs.audioFile}`);
-        console.log(`********2 lipSyncTrimAudio: ${namedInputs.bgmFile}`);
-        console.log(`********3 lipSyncTrimAudio: ${namedInputs.startAt}`);
-        console.log(`********4 lipSyncTrimAudio: ${namedInputs.duration}`);
         const buffer = await trimMusic(namedInputs.bgmFile, namedInputs.startAt, namedInputs.duration);
         return { buffer };
       },

@@ -75,7 +75,8 @@
     {
       "text": "I dissolve into the night. Just to echo what you liked.",
       "duration": 8.28,
-      "imagePrompt": "Singer standing against a glowing city skyline at night, hair blowing in wind, long white trench coat fluttering, reaching out with one hand as if fading into the background lights."
+      "imagePrompt": "Singer standing against a glowing city skyline at night, hair blowing in wind, long white trench coat fluttering, reaching out with one hand as if fading into the background lights.",
+      "enableLipSync": true
     }
   ]
 }
