@@ -250,6 +250,7 @@ const beat_graph_data = {
         return { buffer };
       },
       inputs: {
+        onComplete: [":imageGenerator", ":imagePlugin"],
         audioFile: ":preprocessor.audioFile",
         bgmFile: ":preprocessor.bgmFile",
         startAt: ":preprocessor.startAt",
