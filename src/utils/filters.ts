@@ -37,7 +37,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     return true;
   }
   try {
-    sessionType && MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, id, true);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, id, true);
     const output = ((await next(context)) as { buffer?: Buffer; text?: string; saved?: boolean }) || undefined;
     const { buffer, text, saved } = output ?? {};
     if (saved) {
@@ -57,7 +57,7 @@ export const fileCacheAgentFilter: AgentFilterFunction = async (context, next) =
     GraphAILogger.log("no cache, no buffer: " + file);
     return false;
   } finally {
-    sessionType && MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, id, false);
+    MulmoStudioContextMethods.setBeatSessionState(mulmoContext, sessionType, index, id, false);
   }
 };
 
