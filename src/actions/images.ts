@@ -243,20 +243,29 @@ const beat_graph_data = {
       },
       defaultValue: {},
     },
-    lipSyncTrimAudio: {
+    AudioTrimmer: {
       if: ":preprocessor.lipSyncTrimAudio",
       agent: async (namedInputs: { audioFile: string; bgmFile: string; startAt: number; duration: number }) => {
         console.log(`********1 lipSyncTrimAudio: ${namedInputs.audioFile}`);
         console.log(`********2 lipSyncTrimAudio: ${namedInputs.bgmFile}`);
         console.log(`********3 lipSyncTrimAudio: ${namedInputs.startAt}`);
         console.log(`********4 lipSyncTrimAudio: ${namedInputs.duration}`);
-        return await trimMusic(namedInputs.bgmFile, namedInputs.startAt, namedInputs.duration);
+        const buffer = await trimMusic(namedInputs.bgmFile, namedInputs.startAt, namedInputs.duration);
+        return { buffer };
       },
       inputs: {
         audioFile: ":preprocessor.audioFile",
         bgmFile: ":preprocessor.bgmFile",
         startAt: ":preprocessor.startAt",
         duration: ":preprocessor.duration",
+        cache: {
+          force: [":context.force"],
+          file: ":preprocessor.audioFile",
+          index: ":__mapIndex",
+          id: ":beat.id",
+          sessionType: "audioTrimmer",
+          mulmoContext: ":context",
+        },
       },
       defaultValue: {},
     },
@@ -264,7 +273,7 @@ const beat_graph_data = {
       if: ":beat.enableLipSync",
       agent: ":preprocessor.lipSyncAgentName",
       inputs: {
-        onComplete: [":soundEffectGenerator"], // to wait for soundEffectGenerator to finish
+        onComplete: [":soundEffectGenerator", ":AudioTrimmer"], // to wait for soundEffectGenerator to finish
         movieFile: ":preprocessor.movieFile",
         imageFile: ":preprocessor.referenceImageForMovie",
         audioFile: ":preprocessor.audioFile",
@@ -384,7 +393,7 @@ export const graphOption = async (context: MulmoStudioContext, settings?: Record
       {
         name: "fileCacheAgentFilter",
         agent: fileCacheAgentFilter,
-        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent", "soundEffectGenerator", "lipSyncGenerator"],
+        nodeIds: ["imageGenerator", "movieGenerator", "htmlImageAgent", "soundEffectGenerator", "lipSyncGenerator", "AudioTrimmer"],
       },
     ],
     taskManager: new TaskManager(MulmoPresentationStyleMethods.getConcurrency(context.presentationStyle)),
