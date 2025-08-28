@@ -37,6 +37,9 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     lipSyncModel?: string;
     lipSyncAgentName?: string;
     lipSyncTrimAudio?: boolean; // instruction to trim audio from the BGM
+    bgmFile?: string;
+    startAt?: number;
+    duration?: number;
     audioFile?: string;
     beatDuration?: number;
   } = {
@@ -61,8 +64,16 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
     returnValue.lipSyncAgentName = lipSyncAgentInfo.agentName;
     returnValue.lipSyncModel = beat.lipSyncParams?.model ?? context.presentationStyle.lipSyncParams?.model ?? lipSyncAgentInfo.defaultModel;
     returnValue.lipSyncFile = moviePaths.lipSyncFile;
+    returnValue.startAt = studioBeat?.startAt ?? 0;
+    returnValue.duration = studioBeat?.duration ?? 0;
     if (context.studio.script.audioParams?.suppressSpeech) {
       returnValue.lipSyncTrimAudio = true;
+      returnValue.bgmFile =
+        context.studio.script.audioParams.bgm?.kind === "url"
+          ? context.studio.script.audioParams.bgm?.url
+          : context.studio.script.audioParams.bgm?.kind === "path"
+            ? context.studio.script.audioParams.bgm?.path
+            : undefined;
       const folderName = MulmoStudioContextMethods.getFileName(context);
       const audioDirPath = MulmoStudioContextMethods.getAudioDirPath(context);
       const fileName = `${beatId(beat.id, index)}_trimmed.mp3`;

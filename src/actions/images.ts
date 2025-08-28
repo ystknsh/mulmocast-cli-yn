@@ -24,7 +24,7 @@ import { MulmoPresentationStyleMethods, MulmoStudioContextMethods } from "../met
 import { getOutputStudioFilePath, mkdir } from "../utils/file.js";
 import { fileCacheAgentFilter } from "../utils/filters.js";
 import { settings2GraphAIConfig } from "../utils/utils.js";
-import { extractImageFromMovie, ffmpegGetMediaDuration } from "../utils/ffmpeg_utils.js";
+import { extractImageFromMovie, ffmpegGetMediaDuration, trimMusic } from "../utils/ffmpeg_utils.js";
 
 import { getImageRefs } from "./image_references.js";
 import { imagePreprocessAgent, imagePluginAgent, htmlImageGeneratorAgent } from "./image_agents.js";
@@ -240,6 +240,23 @@ const beat_graph_data = {
           sessionType: "soundEffect",
           mulmoContext: ":context",
         },
+      },
+      defaultValue: {},
+    },
+    lipSyncTrimAudio: {
+      if: ":preprocessor.lipSyncTrimAudio",
+      agent: async (namedInputs: { audioFile: string; bgmFile: string; startAt: number; duration: number }) => {
+        console.log(`********1 lipSyncTrimAudio: ${namedInputs.audioFile}`);
+        console.log(`********2 lipSyncTrimAudio: ${namedInputs.bgmFile}`);
+        console.log(`********3 lipSyncTrimAudio: ${namedInputs.startAt}`);
+        console.log(`********4 lipSyncTrimAudio: ${namedInputs.duration}`);
+        //return await trimMusic(namedInputs.audioFile, 0, 10);
+      },
+      inputs: {
+        audioFile: ":preprocessor.audioFile",
+        bgmFile: ":preprocessor.bgmFile",
+        startAt: ":preprocessor.startAt",
+        duration: ":preprocessor.duration",
       },
       defaultValue: {},
     },
