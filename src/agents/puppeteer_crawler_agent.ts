@@ -91,10 +91,10 @@ export const puppeteerCrawlerAgent: AgentFunction = async ({ namedInputs }) => {
       content: data.textContent,
     };
   } catch (e: unknown) {
-    GraphAILogger.log(JSON.stringify({ ok: false, url, error: String(e?.message || e) }));
-    return {
-      content: String(e?.message || e),
-    };
+    const errorMessage = e instanceof Error ? e.message : String(e);
+
+    GraphAILogger.log(JSON.stringify({ ok: false, url, error: errorMessage }));
+    return { content: errorMessage };
   }
 };
 
