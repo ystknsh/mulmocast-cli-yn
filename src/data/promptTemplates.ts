@@ -333,7 +333,7 @@ export const promptTemplates = [
     title: "Dr. Slump Style",
   },
   {
-    description: "Template for Ghibli-style comic presentation.",
+    description: "Ghibli-style comic.",
     filename: "ghibli_comic",
     presentationStyle: {
       $mulmocast: {
@@ -384,8 +384,66 @@ export const promptTemplates = [
     },
     scriptName: "image_prompts_template.json",
     systemPrompt:
+      "Another AI will generate comic strips for each beat based on the imagePrompt of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+    title: "Ghibli-style comic.",
+  },
+  {
+    description: "Ghibli-style comic strips with nano banana.",
+    filename: "ghibli_comic_strips",
+    presentationStyle: {
+      $mulmocast: {
+        credit: "closing",
+        version: "1.1",
+      },
+      audioParams: {
+        audioVolume: 1,
+        bgmVolume: 0.2,
+        closingPadding: 0.8,
+        introPadding: 1,
+        outroPadding: 1,
+        padding: 0.3,
+        suppressSpeech: false,
+      },
+      canvasSize: {
+        height: 1024,
+        width: 1536,
+      },
+      imageParams: {
+        images: {
+          presenter: {
+            source: {
+              kind: "url",
+              url: "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/ghibli_presenter.png",
+            },
+            type: "image",
+          },
+        },
+        model: "gemini-2.5-flash-image-preview",
+        provider: "google",
+        style:
+          "<style>Ghibli style multi-panel comic strips in landscape mode. Use speech bubbles with short, natural dialogue (1–6 words). Keep text minimal, like real comics. Let the art convey the story and emotions. Use the input image as the presenter.</style>",
+      },
+      movieParams: {
+        provider: "replicate",
+      },
+      soundEffectParams: {
+        provider: "replicate",
+      },
+      speechParams: {
+        speakers: {
+          Presenter: {
+            displayName: {
+              en: "Presenter",
+            },
+            voiceId: "shimmer",
+          },
+        },
+      },
+    },
+    scriptName: "text_only_template.json",
+    systemPrompt:
       "Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
-    title: "Ghibli comic style",
+    title: "Ghibli-style comic strips with nano banana.",
   },
   {
     description: "Template for Ghost in the shell style comic presentation.",
