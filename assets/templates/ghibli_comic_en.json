@@ -1,6 +1,6 @@
 {
-  "title": "Ghibli comic style",
-  "description": "Template for Ghibli-style comic presentation.",
+  "title": "Ghibli-style comic strips.",
+  "description": "Ghibli-style comic strips.",
   "systemPrompt": "Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
   "presentationStyle": {
     "$mulmocast": {
