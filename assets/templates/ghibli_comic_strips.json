@@ -26,5 +26,5 @@
       }
     }
   },
-  "scriptName": "image_prompts_template.json"
+  "scriptName": "text_only_template.json"
 }
