@@ -12,6 +12,8 @@
       "height": 1024
     },
     "imageParams": {
+      "provider": "google",
+      "model": "gemini-2.5-flash-image-preview",
       "style": "<style>Ghibli style multi panel comic strips. Texts in speech bubbles.</style>",
       "images": {
         "presenter": {
