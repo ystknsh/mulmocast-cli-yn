@@ -71,6 +71,8 @@ const beat_graph_data = {
     __mapIndex: {},
     forceMovie: { value: false },
     forceImage: { value: false },
+    forceLipSync: { value: false },
+    forceSoundEffect: { value: false },
     preprocessor: {
       agent: imagePreprocessAgent,
       inputs: {
@@ -233,7 +235,7 @@ const beat_graph_data = {
           duration: ":preprocessor.beatDuration",
         },
         cache: {
-          force: [":context.force"],
+          force: [":context.force", ":forceSoundEffect"],
           file: ":preprocessor.soundEffectFile",
           index: ":__mapIndex",
           id: ":beat.id",
@@ -280,7 +282,7 @@ const beat_graph_data = {
           duration: ":preprocessor.beatDuration",
         },
         cache: {
-          force: [":context.force"],
+          force: [":context.force", ":forceLipSync"],
           file: ":preprocessor.lipSyncFile",
           index: ":__mapIndex",
           id: ":beat.id",
@@ -465,10 +467,12 @@ export const generateBeatImage = async (inputs: {
   args?: PublicAPIArgs & {
     forceMovie?: boolean;
     forceImage?: boolean;
+    forceLipSync?: boolean;
+    forceSoundEffect?: boolean;
   };
 }) => {
   const { index, context, args } = inputs;
-  const { settings, callbacks, forceMovie, forceImage } = args ?? {};
+  const { settings, callbacks, forceMovie, forceImage, forceLipSync, forceSoundEffect } = args ?? {};
   const options = await graphOption(context, settings);
   const injections = await prepareGenerateImages(context);
   const graph = new GraphAI(beat_graph_data, defaultAgents, options);
@@ -481,6 +485,8 @@ export const generateBeatImage = async (inputs: {
   graph.injectValue("beat", context.studio.script.beats[index]);
   graph.injectValue("forceMovie", forceMovie ?? false);
   graph.injectValue("forceImage", forceImage ?? false);
+  graph.injectValue("forceLipSync", forceLipSync ?? false);
+  graph.injectValue("forceSoundEffect", forceSoundEffect ?? false);
   if (callbacks) {
     callbacks.forEach((callback) => {
       graph.registerCallback(callback);
