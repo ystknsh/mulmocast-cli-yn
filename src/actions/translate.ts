@@ -87,7 +87,7 @@ const beatGraph = {
         const { multiLinguals, beatIndex, text, beat } = namedInputs;
         const key = beatId(beat?.id, beatIndex);
         const cacheKey = hashSHA256(text ?? "");
-        const multiLingual = multiLinguals?.[key];
+        const multiLingual = multiLinguals?.[beatIndex];
         if (!multiLingual) {
           return { cacheKey, multiLingualTexts: {} };
         }
@@ -224,15 +224,18 @@ const localizedTextCacheAgentFilter: AgentFilterFunction<
 
   // same language
   if (targetLang === lang) {
+    GraphAILogger.log(`translate: ${beatIndex} same lang`);
     return { text: beat.text };
   }
 
   // The original text is unchanged and the target language text is present
   if (multiLingual.cacheKey === multiLingual.multiLingualTexts[targetLang]?.cacheKey) {
+    GraphAILogger.log(`translate: ${beatIndex} cache hit`);
     return { text: multiLingual.multiLingualTexts[targetLang].text };
   }
   try {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, beat.id, true);
+    GraphAILogger.log(`translate: ${beatIndex} run`);
     return await next(context);
   } finally {
     MulmoStudioContextMethods.setBeatSessionState(mulmoContext, "multiLingual", beatIndex, beat.id, false);
