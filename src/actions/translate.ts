@@ -83,9 +83,8 @@ const beatGraph = {
     __mapIndex: {},
     // for cache
     multiLingual: {
-      agent: (namedInputs: { beat: MulmoBeat; text?: string; multiLinguals?: Record<string, MulmoStudioMultiLingualData>; beatIndex: number }) => {
-        const { multiLinguals, beatIndex, text, beat } = namedInputs;
-        const key = beatId(beat?.id, beatIndex);
+      agent: (namedInputs: { text?: string; multiLinguals?: Record<string, MulmoStudioMultiLingualData>; beatIndex: number }) => {
+        const { multiLinguals, beatIndex, text } = namedInputs;
         const cacheKey = hashSHA256(text ?? "");
         const multiLingual = multiLinguals?.[beatIndex];
         if (!multiLingual) {
@@ -103,7 +102,6 @@ const beatGraph = {
       },
       inputs: {
         text: ":beat.text",
-        beat: ":beat",
         beatIndex: ":__mapIndex",
         multiLinguals: ":context.multiLingual",
       },
