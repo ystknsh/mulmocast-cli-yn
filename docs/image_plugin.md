@@ -13,12 +13,12 @@ beatのimage プロパティがセットされているとImage Pluginによっ�
 }
 ```
 
-pluginの実装はsrc/utils/image_plugins/にある。
+pluginの実装は[src/utils/image_plugins/](../src/utils/image_plugins)にある。
 pluginを追加する場合は、
 
 - このdirにPluginのソースを追加
-- このdirのindex.tsのimagePluginsに追加
-- src/types/schema.tsのmulmoImageAssetSchemaに追加
+- このdirの[index.ts](../src/utils/image_plugins/index.ts)のimagePluginsに追加
+- [src/types/schema.ts](../src/types/schema.ts)のmulmoImageAssetSchemaに追加
 
 
 # Image Pluginの実装
@@ -34,15 +34,15 @@ Image Pluginは、
 のinterfaceを持つ。
 
 ### path
-pathは、生成されるimageのpath.
+pathは、生成されるimageのpathを返す関数.
 主に3種類のpathのうちのいずれかを返す。
 
-- paramsでmulmocast共通のimagePathが渡されるので、それをそのまま使う(utils.tsのparrotingImagePath関数)
-- type = sourceのときにlocalのimageを参照する場合は、そのpathを返す(source.tsのprocessSource関数)
+- paramsでmulmocast共通のimagePathが渡されるので、それをそのまま使う([utils.ts](../src/utils/image_plugins/utils.ts)のparrotingImagePath関数)
+- type = sourceかつlocalのファイルを参照するときに、その参照するlocalのimageのpathをそのまま返す([source.ts](../src/utils/image_plugins/source.ts)のprocessSource関数)
 - pathを返さない( undefinedを返す) そのbeatがデータを持たない特殊なケース。beatのreference, voice over。
 
 ### process
 
-実際の画像を生成する関数
-paramsを受け取って画像を生成する。
-return でimagePathを返しているが、現在は使ってない。（ので、型的にはvoid)
+- 実際の画像を生成する関数
+- paramsを受け取って画像を生成する。
+- return でimagePathを返しているが、現在は使ってない。（ので、型的にはvoid)
