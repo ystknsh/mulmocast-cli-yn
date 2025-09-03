@@ -1,11 +1,7 @@
 import { ImageProcessorParams } from "../../types/index.js";
 import { parrotingImagePath } from "./utils.js";
 import { htmlPlugin } from "mulmocast-vision";
-
-let rootDir: string | undefined = undefined;
-export const updateVisionRootDir = (dir: string) => {
-  rootDir = dir;
-};
+import { resolve as resolvePath } from "path";
 
 export const imageType = "vision";
 
@@ -14,7 +10,9 @@ const toCreateName = (str: string): string => {
 };
 
 const processVision = async (params: ImageProcessorParams) => {
-  const { beat, imagePath } = params;
+  const { beat, imagePath, context } = params;
+
+  const rootDir = context.fileDirs.nodeModuleRootPath ? resolvePath(context.fileDirs.nodeModuleRootPath, "mulmocast-vision") : undefined;
   if (!beat?.image || beat.image.type !== imageType) return;
 
   const handler = new htmlPlugin({ rootDir });
