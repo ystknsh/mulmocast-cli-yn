@@ -167,7 +167,7 @@ export const mulmoVoiceOverMediaSchema = z
 export const mulmoVisionMediaSchema = z
   .object({
     type: z.literal("vision"),
-    name: z.string(),
+    style: z.string(),
     data: z.record(z.string(), z.any()),
   })
   .strict();

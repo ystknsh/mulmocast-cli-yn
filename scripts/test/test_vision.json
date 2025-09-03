@@ -11,7 +11,7 @@
       "text": "",
       "image": {
         "type": "vision",
-        "name": "sectionDividerPage",
+        "style": "sectionDividerPage",
         "data": {
           "heading": "How AI Is Reshaping Referencing",
           "subheading": "From sources to systems: reliability, traceability, and credit in the age of models"

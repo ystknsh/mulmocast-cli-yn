@@ -11,7 +11,7 @@
       "text": "sectionDividerPage",
       "image": {
         "type": "vision",
-        "name": "sectionDividerPage",
+        "style": "sectionDividerPage",
         "data": {
           "heading": "How AI Is Reshaping Referencing",
           "subheading": "From sources to systems: reliability, traceability, and credit in the age of models"
@@ -24,7 +24,7 @@
       "text": "agendaPage",
       "image": {
         "type": "vision",
-        "name": "agendaPage",
+        "style": "agendaPage",
         "data": {
           "title": "Agenda",
           "items": [
@@ -43,7 +43,7 @@
       "text": "executiveSummaryPage",
       "image": {
         "type": "vision",
-        "name": "executiveSummaryPage",
+        "style": "executiveSummaryPage",
         "data": {
           "title": "Executive Summary",
           "bullets": [
@@ -62,7 +62,7 @@
       "text": "keyMessageWithSupportsPage",
       "image": {
         "type": "vision",
-        "name": "keyMessageWithSupportsPage",
+        "style": "keyMessageWithSupportsPage",
         "data": {
           "headline": "Trustworthy referencing is a prerequisite for AI at scale.",
           "supports": [
@@ -79,7 +79,7 @@
       "text": "hypothesisPage",
       "image": {
         "type": "vision",
-        "name": "hypothesisPage",
+        "style": "hypothesisPage",
         "data": {
           "hypothesis": "Firms that implement verifiable AI referencing will reduce risk and accelerate adoption.",
           "implications": [
@@ -101,7 +101,7 @@
       "text": "issueTreePage",
       "image": {
         "type": "vision",
-        "name": "issueTreePage",
+        "style": "issueTreePage",
         "data": {
           "rootIssue": "How to ensure accurate, compliant AI referencing?",
           "branches": [
@@ -118,7 +118,7 @@
       "text": "driverTreePage",
       "image": {
         "type": "vision",
-        "name": "driverTreePage",
+        "style": "driverTreePage",
         "data": {
           "metric": "Reference accuracy rate (%)",
           "drivers": [
@@ -135,7 +135,7 @@
       "text": "meceListPage",
       "image": {
         "type": "vision",
-        "name": "meceListPage",
+        "style": "meceListPage",
         "data": {
           "title": "MECE: Reference Risk Areas",
           "groups": [
@@ -161,7 +161,7 @@
       "text": "pyramidPrinciplePage",
       "image": {
         "type": "vision",
-        "name": "pyramidPrinciplePage",
+        "style": "pyramidPrinciplePage",
         "data": {
           "keyMessage": "Verifiable references unlock safe, scalable AI adoption.",
           "supports": ["Reduces legal and reputational risk", "Improves stakeholder confidence", "Shortens audit cycles"],
@@ -179,7 +179,7 @@
       "text": "scqaPage",
       "image": {
         "type": "vision",
-        "name": "scqaPage",
+        "style": "scqaPage",
         "data": {
           "situation": "Teams increasingly rely on AI to synthesize knowledge and draft outputs.",
           "complication": "AI can misattribute or fabricate sources, risking credibility and compliance.",
@@ -194,7 +194,7 @@
       "text": "swotPage",
       "image": {
         "type": "vision",
-        "name": "swotPage",
+        "style": "swotPage",
         "data": {
           "strengths": ["Speed of synthesis", "Scalable drafting", "Broad corpus reach"],
           "weaknesses": ["Hallucinations", "Opaque provenance", "Reviewer overload"],
@@ -209,7 +209,7 @@
       "text": "threeCPage",
       "image": {
         "type": "vision",
-        "name": "threeCPage",
+        "style": "threeCPage",
         "data": {
           "company": ["Commit to verifiable AI outputs", "Invest in governed retrieval"],
           "customer": ["Needs trustworthy citations", "Wants explorable sources"],
@@ -223,7 +223,7 @@
       "text": "fourPPage",
       "image": {
         "type": "vision",
-        "name": "fourPPage",
+        "style": "fourPPage",
         "data": {
           "product": ["Reference-safe AI assistant", "Evidence panel", "Citation export"],
           "price": ["Tiered by audit features", "Enterprise compliance add-ons"],
@@ -238,7 +238,7 @@
       "text": "sevenSPage",
       "image": {
         "type": "vision",
-        "name": "sevenSPage",
+        "style": "sevenSPage",
         "data": {
           "strategy": "Make 'trustworthy references' a core AI value prop",
           "structure": "Central knowledge governance with federated champions",
@@ -256,7 +256,7 @@
       "text": "valueChainPage",
       "image": {
         "type": "vision",
-        "name": "valueChainPage",
+        "style": "valueChainPage",
         "data": {
           "primary": ["Ingestion", "Indexing", "Retrieval", "Generation", "Review", "Publication"],
           "support": ["Governance", "Security", "Compliance", "Training", "Monitoring"]
@@ -269,7 +269,7 @@
       "text": "porterFiveForcesPage",
       "image": {
         "type": "vision",
-        "name": "porterFiveForcesPage",
+        "style": "porterFiveForcesPage",
         "data": {
           "newEntrants": ["AI-first doc tools", "Verification startups"],
           "suppliers": ["Model providers", "Content licensors"],
@@ -285,7 +285,7 @@
       "text": "businessModelCanvasPage",
       "image": {
         "type": "vision",
-        "name": "businessModelCanvasPage",
+        "style": "businessModelCanvasPage",
         "data": {
           "blocks": {
             "Key Partners": ["Model vendors", "Content platforms", "Auditors"],
@@ -307,7 +307,7 @@
       "text": "customerJourneyPage",
       "image": {
         "type": "vision",
-        "name": "customerJourneyPage",
+        "style": "customerJourneyPage",
         "data": {
           "stages": ["Discover", "Draft", "Verify", "Publish", "Audit"],
           "touchpoints": [
@@ -326,7 +326,7 @@
       "text": "stakeholderMapPage",
       "image": {
         "type": "vision",
-        "name": "stakeholderMapPage",
+        "style": "stakeholderMapPage",
         "data": {
           "stakeholders": [
             {
@@ -363,7 +363,7 @@
       "text": "raciPage",
       "image": {
         "type": "vision",
-        "name": "raciPage",
+        "style": "raciPage",
         "data": {
           "tasks": ["Define policy", "Implement RAG", "Roll out training", "Monitor KPIs"],
           "roles": ["Legal", "Engineering", "L&D", "Ops"],
@@ -382,7 +382,7 @@
       "text": "okrKpiDashboardPage",
       "image": {
         "type": "vision",
-        "name": "okrKpiDashboardPage",
+        "style": "okrKpiDashboardPage",
         "data": {
           "title": "Reference Quality KPIs",
           "metrics": [
@@ -414,7 +414,7 @@
       "text": "balancedScorecardPage",
       "image": {
         "type": "vision",
-        "name": "balancedScorecardPage",
+        "style": "balancedScorecardPage",
         "data": {
           "perspectives": [
             {
@@ -443,7 +443,7 @@
       "text": "quarterlyRoadmapPage",
       "image": {
         "type": "vision",
-        "name": "quarterlyRoadmapPage",
+        "style": "quarterlyRoadmapPage",
         "data": {
           "quarters": ["Q1", "Q2", "Q3", "Q4"],
           "items": [
@@ -473,7 +473,7 @@
       "text": "milestoneTimelinePage",
       "image": {
         "type": "vision",
-        "name": "milestoneTimelinePage",
+        "style": "milestoneTimelinePage",
         "data": {
           "title": "Implementation Timeline",
           "milestones": [
@@ -507,7 +507,7 @@
       "text": "ganttSimplePage",
       "image": {
         "type": "vision",
-        "name": "ganttSimplePage",
+        "style": "ganttSimplePage",
         "data": {
           "tasks": [
             {
@@ -540,7 +540,7 @@
       "text": "waterfallPage",
       "image": {
         "type": "vision",
-        "name": "waterfallPage",
+        "style": "waterfallPage",
         "data": {
           "title": "Time Savings from AI Referencing (hrs/month)",
           "steps": [
@@ -570,7 +570,7 @@
       "text": "funnelPage",
       "image": {
         "type": "vision",
-        "name": "funnelPage",
+        "style": "funnelPage",
         "data": {
           "stages": [
             {
@@ -599,7 +599,7 @@
       "text": "twoByTwoMatrixPage",
       "image": {
         "type": "vision",
-        "name": "twoByTwoMatrixPage",
+        "style": "twoByTwoMatrixPage",
         "data": {
           "xAxis": "Evidence depth",
           "yAxis": "Ease of use",
@@ -613,7 +613,7 @@
       "text": "bcgMatrixPage",
       "image": {
         "type": "vision",
-        "name": "bcgMatrixPage",
+        "style": "bcgMatrixPage",
         "data": {
           "stars": ["Signed-citation AI editors"],
           "cashCows": ["Governed enterprise search"],
@@ -628,7 +628,7 @@
       "text": "geMcKinseyMatrixPage",
       "image": {
         "type": "vision",
-        "name": "geMcKinseyMatrixPage",
+        "style": "geMcKinseyMatrixPage",
         "data": {
           "industryAttractiveness": ["Regulatory clarity", "IP-safe corpora", "Audit tooling"],
           "competitiveStrength": ["Corpus quality", "Model integration", "Compliance features"],
@@ -658,7 +658,7 @@
       "text": "marimekkoPlaceholderPage",
       "image": {
         "type": "vision",
-        "name": "marimekkoPlaceholderPage",
+        "style": "marimekkoPlaceholderPage",
         "data": {
           "title": "Content Types by Share & Effort",
           "categories": ["Academic", "News", "Internal docs", "Web"]
@@ -671,7 +671,7 @@
       "text": "bubbleChartPlaceholderPage",
       "image": {
         "type": "vision",
-        "name": "bubbleChartPlaceholderPage",
+        "style": "bubbleChartPlaceholderPage",
         "data": {
           "title": "Risk vs Impact vs Adoption",
           "points": [
@@ -703,7 +703,7 @@
       "text": "heatmapPlaceholderPage",
       "image": {
         "type": "vision",
-        "name": "heatmapPlaceholderPage",
+        "style": "heatmapPlaceholderPage",
         "data": {
           "rows": ["Teams"],
           "cols": ["Accuracy", "Provenance", "Speed", "Compliance"],
@@ -717,7 +717,7 @@
       "text": "kpiHighlightPage",
       "image": {
         "type": "vision",
-        "name": "kpiHighlightPage",
+        "style": "kpiHighlightPage",
         "data": {
           "title": "KPI Highlights",
           "kpis": [
@@ -746,7 +746,7 @@
       "text": "beforeAfterPage",
       "image": {
         "type": "vision",
-        "name": "beforeAfterPage",
+        "style": "beforeAfterPage",
         "data": {
           "title": "Before vs After AI Referencing",
           "before": ["Manual searches", "Inconsistent citations", "Slow audits"],
@@ -760,7 +760,7 @@
       "text": "optionEvaluationPage",
       "image": {
         "type": "vision",
-        "name": "optionEvaluationPage",
+        "style": "optionEvaluationPage",
         "data": {
           "criteria": ["Accuracy", "Latency", "Compliance", "Cost"],
           "options": ["Generic chatbot", "RAG + signing", "Manual review"],
@@ -778,7 +778,7 @@
       "text": "riskMitigationPage",
       "image": {
         "type": "vision",
-        "name": "riskMitigationPage",
+        "style": "riskMitigationPage",
         "data": {
           "risks": [
             {
@@ -809,7 +809,7 @@
       "text": "positioningMapPage",
       "image": {
         "type": "vision",
-        "name": "positioningMapPage",
+        "style": "positioningMapPage",
         "data": {
           "xAxis": "Compliance readiness",
           "yAxis": "User adoption",
@@ -839,7 +839,7 @@
       "text": "tamSamSomPage",
       "image": {
         "type": "vision",
-        "name": "tamSamSomPage",
+        "style": "tamSamSomPage",
         "data": {
           "tam": 50000000000,
           "sam": 12000000000,
@@ -854,7 +854,7 @@
       "text": "marketDriversPage",
       "image": {
         "type": "vision",
-        "name": "marketDriversPage",
+        "style": "marketDriversPage",
         "data": {
           "title": "Market Growth Drivers",
           "drivers": ["Regulatory push for provenance", "Enterprise AI adoption", "Cost pressure to automate reviews"]
@@ -867,7 +867,7 @@
       "text": "revenueModelPage",
       "image": {
         "type": "vision",
-        "name": "revenueModelPage",
+        "style": "revenueModelPage",
         "data": {
           "streams": ["Seats", "Usage", "Compliance add-on"],
           "pricingNotes": "Discounts for academic & nonprofit segments with strict compliance needs."
@@ -880,7 +880,7 @@
       "text": "costStructurePage",
       "image": {
         "type": "vision",
-        "name": "costStructurePage",
+        "style": "costStructurePage",
         "data": {
           "buckets": ["Compute", "Licenses", "Storage", "Review ops"],
           "fixedVsVariable": ["Fixed: platform & storage", "Variable: compute & review time"]
@@ -893,7 +893,7 @@
       "text": "orgChartPage",
       "image": {
         "type": "vision",
-        "name": "orgChartPage",
+        "style": "orgChartPage",
         "data": {
           "nodes": [
             {
@@ -921,7 +921,7 @@
       "text": "capabilityMaturityPage",
       "image": {
         "type": "vision",
-        "name": "capabilityMaturityPage",
+        "style": "capabilityMaturityPage",
         "data": {
           "capabilities": [
             {
@@ -946,7 +946,7 @@
       "text": "techRoadmapPage",
       "image": {
         "type": "vision",
-        "name": "techRoadmapPage",
+        "style": "techRoadmapPage",
         "data": {
           "phases": ["MVP", "Scale", "Certify"],
           "items": [
@@ -972,7 +972,7 @@
       "text": "digitalMaturityPage",
       "image": {
         "type": "vision",
-        "name": "digitalMaturityPage",
+        "style": "digitalMaturityPage",
         "data": {
           "dimensions": ["Data", "Process", "People", "Tech"],
           "levels": [3, 3, 2, 4],
@@ -986,7 +986,7 @@
       "text": "ecosystemMapPage",
       "image": {
         "type": "vision",
-        "name": "ecosystemMapPage",
+        "style": "ecosystemMapPage",
         "data": {
           "categories": ["Models", "Content", "Tooling", "Auditors"],
           "entities": [
@@ -1016,7 +1016,7 @@
       "text": "changeCurvePage",
       "image": {
         "type": "vision",
-        "name": "changeCurvePage",
+        "style": "changeCurvePage",
         "data": {
           "stages": ["Awareness", "Understanding", "Adoption", "Advocacy"],
           "notes": "Evidence-first culture requires incentives and leadership modeling."
@@ -1029,7 +1029,7 @@
       "text": "communicationPlanPage",
       "image": {
         "type": "vision",
-        "name": "communicationPlanPage",
+        "style": "communicationPlanPage",
         "data": {
           "audiences": ["Executives", "Managers", "Contributors"],
           "channels": ["Town halls", "Docs add-in tips", "Slack nudges"],
@@ -1043,7 +1043,7 @@
       "text": "integrationPlanPage",
       "image": {
         "type": "vision",
-        "name": "integrationPlanPage",
+        "style": "integrationPlanPage",
         "data": {
           "workstreams": ["Tech", "Policy", "Training", "Ops"],
           "milestones": ["MVP live", "Org-wide training", "Audit pilot"]
@@ -1056,7 +1056,7 @@
       "text": "benchmarkingTablePage",
       "image": {
         "type": "vision",
-        "name": "benchmarkingTablePage",
+        "style": "benchmarkingTablePage",
         "data": {
           "metrics": ["Accuracy", "Provenance", "Latency", "Cost"],
           "competitors": ["Manual", "Generic chatbot", "Signed AI editor"]
@@ -1069,7 +1069,7 @@
       "text": "surveyResultsPage",
       "image": {
         "type": "vision",
-        "name": "surveyResultsPage",
+        "style": "surveyResultsPage",
         "data": {
           "questions": ["Do you trust AI references?", "Is evidence easy to review?"],
           "summaries": ["Trust increased post-signing rollout.", "Review time dropped by 35%."]
@@ -1082,7 +1082,7 @@
       "text": "personasPage",
       "image": {
         "type": "vision",
-        "name": "personasPage",
+        "style": "personasPage",
         "data": {
           "personas": [
             {
@@ -1105,7 +1105,7 @@
       "text": "segmentationPage",
       "image": {
         "type": "vision",
-        "name": "segmentationPage",
+        "style": "segmentationPage",
         "data": {
           "segments": ["Academic", "Enterprise", "Media"],
           "descriptors": ["Risk tolerance", "Compliance needs", "Speed expectations"]
@@ -1118,7 +1118,7 @@
       "text": "pricingWaterfallPage",
       "image": {
         "type": "vision",
-        "name": "pricingWaterfallPage",
+        "style": "pricingWaterfallPage",
         "data": {
           "steps": [
             {
@@ -1147,7 +1147,7 @@
       "text": "sensitivityAnalysisPage",
       "image": {
         "type": "vision",
-        "name": "sensitivityAnalysisPage",
+        "style": "sensitivityAnalysisPage",
         "data": {
           "variables": ["Corpus coverage", "Reviewer time", "Compute cost"],
           "scenarios": ["Best case", "Expected", "Stress"]
@@ -1160,7 +1160,7 @@
       "text": "pLBreakdownPage",
       "image": {
         "type": "vision",
-        "name": "pLBreakdownPage",
+        "style": "pLBreakdownPage",
         "data": {
           "categories": ["Revenue", "COGS", "Opex"],
           "values": [20, 8, 6]
@@ -1173,7 +1173,7 @@
       "text": "cashFlowPage",
       "image": {
         "type": "vision",
-        "name": "cashFlowPage",
+        "style": "cashFlowPage",
         "data": {
           "inflows": [8, 10, 12, 14],
           "outflows": [6, 7, 8, 9]
@@ -1186,7 +1186,7 @@
       "text": "balanceSheetPage",
       "image": {
         "type": "vision",
-        "name": "balanceSheetPage",
+        "style": "balanceSheetPage",
         "data": {
           "assets": ["Cash", "Intangibles", "Receivables"],
           "liabilities": ["Deferred revenue", "Accounts payable"],
@@ -1200,7 +1200,7 @@
       "text": "shareholderValueTreePage",
       "image": {
         "type": "vision",
-        "name": "shareholderValueTreePage",
+        "style": "shareholderValueTreePage",
         "data": {
           "drivers": ["Adoption", "Retention", "Compliance premium"]
         }
@@ -1212,7 +1212,7 @@
       "text": "npvSummaryPage",
       "image": {
         "type": "vision",
-        "name": "npvSummaryPage",
+        "style": "npvSummaryPage",
         "data": {
           "npv": 12500000,
           "assumptions": ["3-year horizon", "10% discount rate", "Compliance uplift included"]
@@ -1225,7 +1225,7 @@
       "text": "scenarioPlanningPage",
       "image": {
         "type": "vision",
-        "name": "scenarioPlanningPage",
+        "style": "scenarioPlanningPage",
         "data": {
           "scenarios": ["Tight regulation", "Moderate", "Self-regulation"],
           "impacts": ["Higher audit cost", "Balanced investment", "Faster rollout"]
@@ -1238,7 +1238,7 @@
       "text": "complianceHeatmapPage",
       "image": {
         "type": "vision",
-        "name": "complianceHeatmapPage",
+        "style": "complianceHeatmapPage",
         "data": {
           "areas": ["Copyright", "Privacy", "Disclosure"],
           "levels": ["Green", "Amber", "Red"]
@@ -1251,7 +1251,7 @@
       "text": "esgFrameworkPage",
       "image": {
         "type": "vision",
-        "name": "esgFrameworkPage",
+        "style": "esgFrameworkPage",
         "data": {
           "environmental": ["Efficient compute", "Green datacenters"],
           "social": ["Source credit", "Anti-bias reviews"],
@@ -1265,7 +1265,7 @@
       "text": "csrInitiativesPage",
       "image": {
         "type": "vision",
-        "name": "csrInitiativesPage",
+        "style": "csrInitiativesPage",
         "data": {
           "initiatives": ["Open citations to public research", "Academic partnerships"]
         }
@@ -1277,7 +1277,7 @@
       "text": "sustainabilityRoadmapPage",
       "image": {
         "type": "vision",
-        "name": "sustainabilityRoadmapPage",
+        "style": "sustainabilityRoadmapPage",
         "data": {
           "phases": ["Measure", "Reduce", "Offset"],
           "actions": ["Track energy per query", "Optimize inference", "Offset remaining"]
@@ -1290,7 +1290,7 @@
       "text": "circularEconomyMapPage",
       "image": {
         "type": "vision",
-        "name": "circularEconomyMapPage",
+        "style": "circularEconomyMapPage",
         "data": {
           "loops": ["Data ingestion", "Use", "Feedback", "Curation"]
         }
@@ -1302,7 +1302,7 @@
       "text": "innovationFunnelPage",
       "image": {
         "type": "vision",
-        "name": "innovationFunnelPage",
+        "style": "innovationFunnelPage",
         "data": {
           "stages": ["Ideas", "Prototypes", "Pilots", "Scale"],
           "counts": [120, 24, 8, 3]
@@ -1315,7 +1315,7 @@
       "text": "productRoadmapPage",
       "image": {
         "type": "vision",
-        "name": "productRoadmapPage",
+        "style": "productRoadmapPage",
         "data": {
           "releases": ["R1", "R2", "R3"],
           "items": [
@@ -1341,7 +1341,7 @@
       "text": "launchPlanPage",
       "image": {
         "type": "vision",
-        "name": "launchPlanPage",
+        "style": "launchPlanPage",
         "data": {
           "workstreams": ["Marketing", "Sales", "Success"],
           "milestones": ["Beta cohort", "GA", "Case studies"],
@@ -1355,7 +1355,7 @@
       "text": "pipelineFunnelPage",
       "image": {
         "type": "vision",
-        "name": "pipelineFunnelPage",
+        "style": "pipelineFunnelPage",
         "data": {
           "stages": ["Leads", "Qualified", "Trials", "Paid"],
           "values": [400, 220, 120, 60]
@@ -1368,7 +1368,7 @@
       "text": "salesDashboardPage",
       "image": {
         "type": "vision",
-        "name": "salesDashboardPage",
+        "style": "salesDashboardPage",
         "data": {
           "metrics": ["Win rate 32%", "Cycle time 48d", "Avg deal $85k"],
           "notes": "Education on value of signed references shortens cycles."
@@ -1381,7 +1381,7 @@
       "text": "marketingMixPage",
       "image": {
         "type": "vision",
-        "name": "marketingMixPage",
+        "style": "marketingMixPage",
         "data": {
           "levers": ["Content marketing", "Compliance webinars", "Partner co-sell", "Analyst briefings"],
           "notes": "Lead with risk reduction and measurable trust."
@@ -1394,7 +1394,7 @@
       "text": "customerSuccessJourneyPage",
       "image": {
         "type": "vision",
-        "name": "customerSuccessJourneyPage",
+        "style": "customerSuccessJourneyPage",
         "data": {
           "stages": ["Onboard", "Adopt", "Expand", "Renew"],
           "metrics": ["Time-to-value", "Feature usage", "CSAT", "Renewal rate"]
@@ -1407,7 +1407,7 @@
       "text": "supportOrgModelPage",
       "image": {
         "type": "vision",
-        "name": "supportOrgModelPage",
+        "style": "supportOrgModelPage",
         "data": {
           "tiers": ["Tier 1", "Tier 2", "Tier 3"],
           "roles": ["Agent", "Specialist", "Engineer"]
@@ -1420,7 +1420,7 @@
       "text": "partnershipMapPage",
       "image": {
         "type": "vision",
-        "name": "partnershipMapPage",
+        "style": "partnershipMapPage",
         "data": {
           "categories": ["Licensing", "Technology", "Audit"],
           "partners": [
@@ -1446,7 +1446,7 @@
       "text": "mAPipelinePage",
       "image": {
         "type": "vision",
-        "name": "mAPipelinePage",
+        "style": "mAPipelinePage",
         "data": {
           "stages": ["Identify", "Evaluate", "Negotiate", "Integrate"],
           "targets": ["Evidence startup X", "Audit SaaS Y"]
@@ -1459,7 +1459,7 @@
       "text": "synergyCapturePage",
       "image": {
         "type": "vision",
-        "name": "synergyCapturePage",
+        "style": "synergyCapturePage",
         "data": {
           "sources": ["Cross-sell", "Shared infra", "Joint R&D"],
           "values": [4, 1.5, 2]
@@ -1472,7 +1472,7 @@
       "text": "cultureValuesPage",
       "image": {
         "type": "vision",
-        "name": "cultureValuesPage",
+        "style": "cultureValuesPage",
         "data": {
           "values": ["Truth", "Transparency", "Accountability"],
           "behaviors": ["Cite sources", "Log context", "Flag uncertainty"]
@@ -1485,7 +1485,7 @@
       "text": "thankYouContactPage",
       "image": {
         "type": "vision",
-        "name": "thankYouContactPage",
+        "style": "thankYouContactPage",
         "data": {
           "message": "Thank you!",
           "name": "AI Referencing Taskforce",
