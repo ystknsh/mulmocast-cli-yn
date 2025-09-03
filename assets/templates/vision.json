@@ -1,0 +1,6 @@
+{
+  "title": "Vision presentation",
+  "description": "Template for vision presentation.",
+  "systemPrompt": "Pick the appropriate style for each beat and add required data for it. For each beat, put an appropriate text into the text field for the presenter to read to explain the generated slide. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+  "scriptName": "vision.json"
+}
