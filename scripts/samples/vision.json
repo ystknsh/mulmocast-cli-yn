@@ -105,21 +105,9 @@
         "data": {
           "rootIssue": "How to ensure accurate, compliant AI referencing?",
           "branches": [
-            [
-              "Provenance capture",
-              "Source governance",
-              "Traceability"
-            ],
-            [
-              "Legal & licensing",
-              "Attribution norms",
-              "Fair use boundaries"
-            ],
-            [
-              "User behavior",
-              "Training & prompts",
-              "Review workflows"
-            ]
+            ["Provenance capture", "Source governance", "Traceability"],
+            ["Legal & licensing", "Attribution norms", "Fair use boundaries"],
+            ["User behavior", "Training & prompts", "Review workflows"]
           ]
         }
       }
@@ -134,21 +122,9 @@
         "data": {
           "metric": "Reference accuracy rate (%)",
           "drivers": [
-            [
-              "Governed corpus coverage",
-              "Retriever quality",
-              "Index freshness"
-            ],
-            [
-              "Citation rendering logic",
-              "Signed-source support",
-              "Reviewer adherence"
-            ],
-            [
-              "User prompt hygiene",
-              "Auto-evidence insertion",
-              "UI nudges"
-            ]
+            ["Governed corpus coverage", "Retriever quality", "Index freshness"],
+            ["Citation rendering logic", "Signed-source support", "Reviewer adherence"],
+            ["User prompt hygiene", "Auto-evidence insertion", "UI nudges"]
           ]
         }
       }
@@ -165,27 +141,15 @@
           "groups": [
             {
               "label": "Technical",
-              "items": [
-                "Hallucinations",
-                "Retriever gaps",
-                "Version drift"
-              ]
+              "items": ["Hallucinations", "Retriever gaps", "Version drift"]
             },
             {
               "label": "Legal",
-              "items": [
-                "Copyright",
-                "Licensing",
-                "Privacy & PII"
-              ]
+              "items": ["Copyright", "Licensing", "Privacy & PII"]
             },
             {
               "label": "Operational",
-              "items": [
-                "Review latency",
-                "Policy ambiguity",
-                "Training gaps"
-              ]
+              "items": ["Review latency", "Policy ambiguity", "Training gaps"]
             }
           ]
         }
@@ -200,27 +164,11 @@
         "name": "pyramidPrinciplePage",
         "data": {
           "keyMessage": "Verifiable references unlock safe, scalable AI adoption.",
-          "supports": [
-            "Reduces legal and reputational risk",
-            "Improves stakeholder confidence",
-            "Shortens audit cycles"
-          ],
+          "supports": ["Reduces legal and reputational risk", "Improves stakeholder confidence", "Shortens audit cycles"],
           "details": [
-            [
-              "Use source whitelists",
-              "Track doc versions",
-              "Sign evidence blobs"
-            ],
-            [
-              "Expose citations in UI",
-              "Link to canonical sources",
-              "Store prompts & context"
-            ],
-            [
-              "Automate QA sampling",
-              "Monitor reference KPIs",
-              "Escalate anomalies"
-            ]
+            ["Use source whitelists", "Track doc versions", "Sign evidence blobs"],
+            ["Expose citations in UI", "Link to canonical sources", "Store prompts & context"],
+            ["Automate QA sampling", "Monitor reference KPIs", "Escalate anomalies"]
           ]
         }
       }
@@ -248,26 +196,10 @@
         "type": "vision",
         "name": "swotPage",
         "data": {
-          "strengths": [
-            "Speed of synthesis",
-            "Scalable drafting",
-            "Broad corpus reach"
-          ],
-          "weaknesses": [
-            "Hallucinations",
-            "Opaque provenance",
-            "Reviewer overload"
-          ],
-          "opportunities": [
-            "New evidence UX",
-            "Standardized attribution",
-            "Automated audits"
-          ],
-          "threats": [
-            "Regulatory fines",
-            "Misinformation",
-            "IP disputes"
-          ]
+          "strengths": ["Speed of synthesis", "Scalable drafting", "Broad corpus reach"],
+          "weaknesses": ["Hallucinations", "Opaque provenance", "Reviewer overload"],
+          "opportunities": ["New evidence UX", "Standardized attribution", "Automated audits"],
+          "threats": ["Regulatory fines", "Misinformation", "IP disputes"]
         }
       }
     },
@@ -279,18 +211,9 @@
         "type": "vision",
         "name": "threeCPage",
         "data": {
-          "company": [
-            "Commit to verifiable AI outputs",
-            "Invest in governed retrieval"
-          ],
-          "customer": [
-            "Needs trustworthy citations",
-            "Wants explorable sources"
-          ],
-          "competitor": [
-            "Adopting reference-safe workflows",
-            "Marketing 'trust' as a differentiator"
-          ]
+          "company": ["Commit to verifiable AI outputs", "Invest in governed retrieval"],
+          "customer": ["Needs trustworthy citations", "Wants explorable sources"],
+          "competitor": ["Adopting reference-safe workflows", "Marketing 'trust' as a differentiator"]
         }
       }
     },
@@ -302,25 +225,10 @@
         "type": "vision",
         "name": "fourPPage",
         "data": {
-          "product": [
-            "Reference-safe AI assistant",
-            "Evidence panel",
-            "Citation export"
-          ],
-          "price": [
-            "Tiered by audit features",
-            "Enterprise compliance add-ons"
-          ],
-          "place": [
-            "Browser extension",
-            "Docs add-in",
-            "APIs"
-          ],
-          "promotion": [
-            "Risk reduction ROI",
-            "Case studies",
-            "Compliance partnerships"
-          ]
+          "product": ["Reference-safe AI assistant", "Evidence panel", "Citation export"],
+          "price": ["Tiered by audit features", "Enterprise compliance add-ons"],
+          "place": ["Browser extension", "Docs add-in", "APIs"],
+          "promotion": ["Risk reduction ROI", "Case studies", "Compliance partnerships"]
         }
       }
     },
@@ -350,21 +258,8 @@
         "type": "vision",
         "name": "valueChainPage",
         "data": {
-          "primary": [
-            "Ingestion",
-            "Indexing",
-            "Retrieval",
-            "Generation",
-            "Review",
-            "Publication"
-          ],
-          "support": [
-            "Governance",
-            "Security",
-            "Compliance",
-            "Training",
-            "Monitoring"
-          ]
+          "primary": ["Ingestion", "Indexing", "Retrieval", "Generation", "Review", "Publication"],
+          "support": ["Governance", "Security", "Compliance", "Training", "Monitoring"]
         }
       }
     },
@@ -376,27 +271,11 @@
         "type": "vision",
         "name": "porterFiveForcesPage",
         "data": {
-          "newEntrants": [
-            "AI-first doc tools",
-            "Verification startups"
-          ],
-          "suppliers": [
-            "Model providers",
-            "Content licensors"
-          ],
-          "buyers": [
-            "Enterprises",
-            "Universities",
-            "Newsrooms"
-          ],
-          "substitutes": [
-            "Manual research",
-            "Traditional search-only"
-          ],
-          "rivalry": [
-            "Platform ecosystems",
-            "Vertical specialists"
-          ]
+          "newEntrants": ["AI-first doc tools", "Verification startups"],
+          "suppliers": ["Model providers", "Content licensors"],
+          "buyers": ["Enterprises", "Universities", "Newsrooms"],
+          "substitutes": ["Manual research", "Traditional search-only"],
+          "rivalry": ["Platform ecosystems", "Vertical specialists"]
         }
       }
     },
@@ -409,51 +288,15 @@
         "name": "businessModelCanvasPage",
         "data": {
           "blocks": {
-            "Key Partners": [
-              "Model vendors",
-              "Content platforms",
-              "Auditors"
-            ],
-            "Key Activities": [
-              "Indexing",
-              "Retrieval",
-              "Signing",
-              "QA"
-            ],
-            "Key Resources": [
-              "Curated corpora",
-              "Embeddings index",
-              "Audit logs"
-            ],
-            "Value Propositions": [
-              "Trustworthy AI outputs",
-              "Time saved",
-              "Reduced risk"
-            ],
-            "Customer Relationships": [
-              "Embedded in workflows",
-              "SLAs"
-            ],
-            "Channels": [
-              "Add-ins",
-              "APIs",
-              "Marketplace"
-            ],
-            "Customer Segments": [
-              "Legal",
-              "Research",
-              "Editorial"
-            ],
-            "Cost Structure": [
-              "Compute",
-              "Licenses",
-              "Review ops"
-            ],
-            "Revenue Streams": [
-              "Seats",
-              "Usage",
-              "Compliance tier"
-            ]
+            "Key Partners": ["Model vendors", "Content platforms", "Auditors"],
+            "Key Activities": ["Indexing", "Retrieval", "Signing", "QA"],
+            "Key Resources": ["Curated corpora", "Embeddings index", "Audit logs"],
+            "Value Propositions": ["Trustworthy AI outputs", "Time saved", "Reduced risk"],
+            "Customer Relationships": ["Embedded in workflows", "SLAs"],
+            "Channels": ["Add-ins", "APIs", "Marketplace"],
+            "Customer Segments": ["Legal", "Research", "Editorial"],
+            "Cost Structure": ["Compute", "Licenses", "Review ops"],
+            "Revenue Streams": ["Seats", "Usage", "Compliance tier"]
           }
         }
       }
@@ -466,34 +309,13 @@
         "type": "vision",
         "name": "customerJourneyPage",
         "data": {
-          "stages": [
-            "Discover",
-            "Draft",
-            "Verify",
-            "Publish",
-            "Audit"
-          ],
+          "stages": ["Discover", "Draft", "Verify", "Publish", "Audit"],
           "touchpoints": [
-            [
-              "Search UI",
-              "Corpus filters"
-            ],
-            [
-              "Editor plugin",
-              "Reference panel"
-            ],
-            [
-              "Reviewer queue",
-              "Signed citations"
-            ],
-            [
-              "Export formats",
-              "Permalinks"
-            ],
-            [
-              "Randomized QA",
-              "Dashboards"
-            ]
+            ["Search UI", "Corpus filters"],
+            ["Editor plugin", "Reference panel"],
+            ["Reviewer queue", "Signed citations"],
+            ["Export formats", "Permalinks"],
+            ["Randomized QA", "Dashboards"]
           ]
         }
       }
@@ -543,43 +365,13 @@
         "type": "vision",
         "name": "raciPage",
         "data": {
-          "tasks": [
-            "Define policy",
-            "Implement RAG",
-            "Roll out training",
-            "Monitor KPIs"
-          ],
-          "roles": [
-            "Legal",
-            "Engineering",
-            "L&D",
-            "Ops"
-          ],
+          "tasks": ["Define policy", "Implement RAG", "Roll out training", "Monitor KPIs"],
+          "roles": ["Legal", "Engineering", "L&D", "Ops"],
           "assignments": [
-            [
-              "A",
-              "R",
-              "C",
-              "I"
-            ],
-            [
-              "C",
-              "A/R",
-              "I",
-              "I"
-            ],
-            [
-              "I",
-              "C",
-              "A/R",
-              "I"
-            ],
-            [
-              "C",
-              "R",
-              "I",
-              "A"
-            ]
+            ["A", "R", "C", "I"],
+            ["C", "A/R", "I", "I"],
+            ["I", "C", "A/R", "I"],
+            ["C", "R", "I", "A"]
           ]
         }
       }
@@ -627,31 +419,19 @@
           "perspectives": [
             {
               "name": "Financial",
-              "items": [
-                "Reduce rework costs",
-                "Avoid penalties"
-              ]
+              "items": ["Reduce rework costs", "Avoid penalties"]
             },
             {
               "name": "Customer",
-              "items": [
-                "Trust score ↑",
-                "NPS ↑"
-              ]
+              "items": ["Trust score ↑", "NPS ↑"]
             },
             {
               "name": "Internal",
-              "items": [
-                "QA automation",
-                "Corpus governance"
-              ]
+              "items": ["QA automation", "Corpus governance"]
             },
             {
               "name": "Learning & Growth",
-              "items": [
-                "Reviewer upskilling",
-                "Prompt playbooks"
-              ]
+              "items": ["Reviewer upskilling", "Prompt playbooks"]
             }
           ]
         }
@@ -665,12 +445,7 @@
         "type": "vision",
         "name": "quarterlyRoadmapPage",
         "data": {
-          "quarters": [
-            "Q1",
-            "Q2",
-            "Q3",
-            "Q4"
-          ],
+          "quarters": ["Q1", "Q2", "Q3", "Q4"],
           "items": [
             {
               "quarter": "Q1",
@@ -828,20 +603,7 @@
         "data": {
           "xAxis": "Evidence depth",
           "yAxis": "Ease of use",
-          "quadrants": [
-            [
-              "Scholarly databases"
-            ],
-            [
-              "AI assistants with signing"
-            ],
-            [
-              "Raw web search"
-            ],
-            [
-              "Legacy manual workflows"
-            ]
-          ]
+          "quadrants": [["Scholarly databases"], ["AI assistants with signing"], ["Raw web search"], ["Legacy manual workflows"]]
         }
       }
     },
@@ -853,18 +615,10 @@
         "type": "vision",
         "name": "bcgMatrixPage",
         "data": {
-          "stars": [
-            "Signed-citation AI editors"
-          ],
-          "cashCows": [
-            "Governed enterprise search"
-          ],
-          "questionMarks": [
-            "Generative browsers"
-          ],
-          "dogs": [
-            "Unverified copy-paste tools"
-          ]
+          "stars": ["Signed-citation AI editors"],
+          "cashCows": ["Governed enterprise search"],
+          "questionMarks": ["Generative browsers"],
+          "dogs": ["Unverified copy-paste tools"]
         }
       }
     },
@@ -876,16 +630,8 @@
         "type": "vision",
         "name": "geMcKinseyMatrixPage",
         "data": {
-          "industryAttractiveness": [
-            "Regulatory clarity",
-            "IP-safe corpora",
-            "Audit tooling"
-          ],
-          "competitiveStrength": [
-            "Corpus quality",
-            "Model integration",
-            "Compliance features"
-          ],
+          "industryAttractiveness": ["Regulatory clarity", "IP-safe corpora", "Audit tooling"],
+          "competitiveStrength": ["Corpus quality", "Model integration", "Compliance features"],
           "placements": [
             {
               "name": "Signed AI editor",
@@ -915,12 +661,7 @@
         "name": "marimekkoPlaceholderPage",
         "data": {
           "title": "Content Types by Share & Effort",
-          "categories": [
-            "Academic",
-            "News",
-            "Internal docs",
-            "Web"
-          ]
+          "categories": ["Academic", "News", "Internal docs", "Web"]
         }
       }
     },
@@ -964,23 +705,9 @@
         "type": "vision",
         "name": "heatmapPlaceholderPage",
         "data": {
-          "rows": [
-            "Teams"
-          ],
-          "cols": [
-            "Accuracy",
-            "Provenance",
-            "Speed",
-            "Compliance"
-          ],
-          "values": [
-            [
-              8,
-              7,
-              9,
-              6
-            ]
-          ]
+          "rows": ["Teams"],
+          "cols": ["Accuracy", "Provenance", "Speed", "Compliance"],
+          "values": [[8, 7, 9, 6]]
         }
       }
     },
@@ -1022,16 +749,8 @@
         "name": "beforeAfterPage",
         "data": {
           "title": "Before vs After AI Referencing",
-          "before": [
-            "Manual searches",
-            "Inconsistent citations",
-            "Slow audits"
-          ],
-          "after": [
-            "Governed retrieval",
-            "Standardized citations",
-            "Signed evidence"
-          ]
+          "before": ["Manual searches", "Inconsistent citations", "Slow audits"],
+          "after": ["Governed retrieval", "Standardized citations", "Signed evidence"]
         }
       }
     },
@@ -1043,36 +762,12 @@
         "type": "vision",
         "name": "optionEvaluationPage",
         "data": {
-          "criteria": [
-            "Accuracy",
-            "Latency",
-            "Compliance",
-            "Cost"
-          ],
-          "options": [
-            "Generic chatbot",
-            "RAG + signing",
-            "Manual review"
-          ],
+          "criteria": ["Accuracy", "Latency", "Compliance", "Cost"],
+          "options": ["Generic chatbot", "RAG + signing", "Manual review"],
           "scores": [
-            [
-              5,
-              7,
-              9,
-              6
-            ],
-            [
-              8,
-              7,
-              9,
-              7
-            ],
-            [
-              9,
-              3,
-              10,
-              4
-            ]
+            [5, 7, 9, 6],
+            [8, 7, 9, 7],
+            [9, 3, 10, 4]
           ]
         }
       }
@@ -1162,11 +857,7 @@
         "name": "marketDriversPage",
         "data": {
           "title": "Market Growth Drivers",
-          "drivers": [
-            "Regulatory push for provenance",
-            "Enterprise AI adoption",
-            "Cost pressure to automate reviews"
-          ]
+          "drivers": ["Regulatory push for provenance", "Enterprise AI adoption", "Cost pressure to automate reviews"]
         }
       }
     },
@@ -1178,11 +869,7 @@
         "type": "vision",
         "name": "revenueModelPage",
         "data": {
-          "streams": [
-            "Seats",
-            "Usage",
-            "Compliance add-on"
-          ],
+          "streams": ["Seats", "Usage", "Compliance add-on"],
           "pricingNotes": "Discounts for academic & nonprofit segments with strict compliance needs."
         }
       }
@@ -1195,16 +882,8 @@
         "type": "vision",
         "name": "costStructurePage",
         "data": {
-          "buckets": [
-            "Compute",
-            "Licenses",
-            "Storage",
-            "Review ops"
-          ],
-          "fixedVsVariable": [
-            "Fixed: platform & storage",
-            "Variable: compute & review time"
-          ]
+          "buckets": ["Compute", "Licenses", "Storage", "Review ops"],
+          "fixedVsVariable": ["Fixed: platform & storage", "Variable: compute & review time"]
         }
       }
     },
@@ -1269,11 +948,7 @@
         "type": "vision",
         "name": "techRoadmapPage",
         "data": {
-          "phases": [
-            "MVP",
-            "Scale",
-            "Certify"
-          ],
+          "phases": ["MVP", "Scale", "Certify"],
           "items": [
             {
               "phase": "MVP",
@@ -1299,18 +974,8 @@
         "type": "vision",
         "name": "digitalMaturityPage",
         "data": {
-          "dimensions": [
-            "Data",
-            "Process",
-            "People",
-            "Tech"
-          ],
-          "levels": [
-            3,
-            3,
-            2,
-            4
-          ],
+          "dimensions": ["Data", "Process", "People", "Tech"],
+          "levels": [3, 3, 2, 4],
           "notes": "Prioritize training and governance backlog."
         }
       }
@@ -1323,12 +988,7 @@
         "type": "vision",
         "name": "ecosystemMapPage",
         "data": {
-          "categories": [
-            "Models",
-            "Content",
-            "Tooling",
-            "Auditors"
-          ],
+          "categories": ["Models", "Content", "Tooling", "Auditors"],
           "entities": [
             {
               "category": "Models",
@@ -1358,12 +1018,7 @@
         "type": "vision",
         "name": "changeCurvePage",
         "data": {
-          "stages": [
-            "Awareness",
-            "Understanding",
-            "Adoption",
-            "Advocacy"
-          ],
+          "stages": ["Awareness", "Understanding", "Adoption", "Advocacy"],
           "notes": "Evidence-first culture requires incentives and leadership modeling."
         }
       }
@@ -1376,16 +1031,8 @@
         "type": "vision",
         "name": "communicationPlanPage",
         "data": {
-          "audiences": [
-            "Executives",
-            "Managers",
-            "Contributors"
-          ],
-          "channels": [
-            "Town halls",
-            "Docs add-in tips",
-            "Slack nudges"
-          ],
+          "audiences": ["Executives", "Managers", "Contributors"],
+          "channels": ["Town halls", "Docs add-in tips", "Slack nudges"],
           "cadence": "Bi-weekly updates for first two quarters"
         }
       }
@@ -1398,17 +1045,8 @@
         "type": "vision",
         "name": "integrationPlanPage",
         "data": {
-          "workstreams": [
-            "Tech",
-            "Policy",
-            "Training",
-            "Ops"
-          ],
-          "milestones": [
-            "MVP live",
-            "Org-wide training",
-            "Audit pilot"
-          ]
+          "workstreams": ["Tech", "Policy", "Training", "Ops"],
+          "milestones": ["MVP live", "Org-wide training", "Audit pilot"]
         }
       }
     },
@@ -1420,17 +1058,8 @@
         "type": "vision",
         "name": "benchmarkingTablePage",
         "data": {
-          "metrics": [
-            "Accuracy",
-            "Provenance",
-            "Latency",
-            "Cost"
-          ],
-          "competitors": [
-            "Manual",
-            "Generic chatbot",
-            "Signed AI editor"
-          ]
+          "metrics": ["Accuracy", "Provenance", "Latency", "Cost"],
+          "competitors": ["Manual", "Generic chatbot", "Signed AI editor"]
         }
       }
     },
@@ -1442,14 +1071,8 @@
         "type": "vision",
         "name": "surveyResultsPage",
         "data": {
-          "questions": [
-            "Do you trust AI references?",
-            "Is evidence easy to review?"
-          ],
-          "summaries": [
-            "Trust increased post-signing rollout.",
-            "Review time dropped by 35%."
-          ]
+          "questions": ["Do you trust AI references?", "Is evidence easy to review?"],
+          "summaries": ["Trust increased post-signing rollout.", "Review time dropped by 35%."]
         }
       }
     },
@@ -1465,18 +1088,12 @@
             {
               "name": "Researcher",
               "bio": "Synthesizes reports daily",
-              "needs": [
-                "Accurate citations",
-                "Deep sources"
-              ]
+              "needs": ["Accurate citations", "Deep sources"]
             },
             {
               "name": "Editor",
               "bio": "Approves publications",
-              "needs": [
-                "Fast verification",
-                "Audit trail"
-              ]
+              "needs": ["Fast verification", "Audit trail"]
             }
           ]
         }
@@ -1490,16 +1107,8 @@
         "type": "vision",
         "name": "segmentationPage",
         "data": {
-          "segments": [
-            "Academic",
-            "Enterprise",
-            "Media"
-          ],
-          "descriptors": [
-            "Risk tolerance",
-            "Compliance needs",
-            "Speed expectations"
-          ]
+          "segments": ["Academic", "Enterprise", "Media"],
+          "descriptors": ["Risk tolerance", "Compliance needs", "Speed expectations"]
         }
       }
     },
@@ -1540,16 +1149,8 @@
         "type": "vision",
         "name": "sensitivityAnalysisPage",
         "data": {
-          "variables": [
-            "Corpus coverage",
-            "Reviewer time",
-            "Compute cost"
-          ],
-          "scenarios": [
-            "Best case",
-            "Expected",
-            "Stress"
-          ]
+          "variables": ["Corpus coverage", "Reviewer time", "Compute cost"],
+          "scenarios": ["Best case", "Expected", "Stress"]
         }
       }
     },
@@ -1561,16 +1162,8 @@
         "type": "vision",
         "name": "pLBreakdownPage",
         "data": {
-          "categories": [
-            "Revenue",
-            "COGS",
-            "Opex"
-          ],
-          "values": [
-            20,
-            8,
-            6
-          ]
+          "categories": ["Revenue", "COGS", "Opex"],
+          "values": [20, 8, 6]
         }
       }
     },
@@ -1582,18 +1175,8 @@
         "type": "vision",
         "name": "cashFlowPage",
         "data": {
-          "inflows": [
-            8,
-            10,
-            12,
-            14
-          ],
-          "outflows": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "inflows": [8, 10, 12, 14],
+          "outflows": [6, 7, 8, 9]
         }
       }
     },
@@ -1605,19 +1188,9 @@
         "type": "vision",
         "name": "balanceSheetPage",
         "data": {
-          "assets": [
-            "Cash",
-            "Intangibles",
-            "Receivables"
-          ],
-          "liabilities": [
-            "Deferred revenue",
-            "Accounts payable"
-          ],
-          "equity": [
-            "Paid-in capital",
-            "Retained earnings"
-          ]
+          "assets": ["Cash", "Intangibles", "Receivables"],
+          "liabilities": ["Deferred revenue", "Accounts payable"],
+          "equity": ["Paid-in capital", "Retained earnings"]
         }
       }
     },
@@ -1629,11 +1202,7 @@
         "type": "vision",
         "name": "shareholderValueTreePage",
         "data": {
-          "drivers": [
-            "Adoption",
-            "Retention",
-            "Compliance premium"
-          ]
+          "drivers": ["Adoption", "Retention", "Compliance premium"]
         }
       }
     },
@@ -1646,11 +1215,7 @@
         "name": "npvSummaryPage",
         "data": {
           "npv": 12500000,
-          "assumptions": [
-            "3-year horizon",
-            "10% discount rate",
-            "Compliance uplift included"
-          ]
+          "assumptions": ["3-year horizon", "10% discount rate", "Compliance uplift included"]
         }
       }
     },
@@ -1662,16 +1227,8 @@
         "type": "vision",
         "name": "scenarioPlanningPage",
         "data": {
-          "scenarios": [
-            "Tight regulation",
-            "Moderate",
-            "Self-regulation"
-          ],
-          "impacts": [
-            "Higher audit cost",
-            "Balanced investment",
-            "Faster rollout"
-          ]
+          "scenarios": ["Tight regulation", "Moderate", "Self-regulation"],
+          "impacts": ["Higher audit cost", "Balanced investment", "Faster rollout"]
         }
       }
     },
@@ -1683,16 +1240,8 @@
         "type": "vision",
         "name": "complianceHeatmapPage",
         "data": {
-          "areas": [
-            "Copyright",
-            "Privacy",
-            "Disclosure"
-          ],
-          "levels": [
-            "Green",
-            "Amber",
-            "Red"
-          ]
+          "areas": ["Copyright", "Privacy", "Disclosure"],
+          "levels": ["Green", "Amber", "Red"]
         }
       }
     },
@@ -1704,18 +1253,9 @@
         "type": "vision",
         "name": "esgFrameworkPage",
         "data": {
-          "environmental": [
-            "Efficient compute",
-            "Green datacenters"
-          ],
-          "social": [
-            "Source credit",
-            "Anti-bias reviews"
-          ],
-          "governance": [
-            "Audit logs",
-            "Policy oversight"
-          ]
+          "environmental": ["Efficient compute", "Green datacenters"],
+          "social": ["Source credit", "Anti-bias reviews"],
+          "governance": ["Audit logs", "Policy oversight"]
         }
       }
     },
@@ -1727,10 +1267,7 @@
         "type": "vision",
         "name": "csrInitiativesPage",
         "data": {
-          "initiatives": [
-            "Open citations to public research",
-            "Academic partnerships"
-          ]
+          "initiatives": ["Open citations to public research", "Academic partnerships"]
         }
       }
     },
@@ -1742,16 +1279,8 @@
         "type": "vision",
         "name": "sustainabilityRoadmapPage",
         "data": {
-          "phases": [
-            "Measure",
-            "Reduce",
-            "Offset"
-          ],
-          "actions": [
-            "Track energy per query",
-            "Optimize inference",
-            "Offset remaining"
-          ]
+          "phases": ["Measure", "Reduce", "Offset"],
+          "actions": ["Track energy per query", "Optimize inference", "Offset remaining"]
         }
       }
     },
@@ -1763,12 +1292,7 @@
         "type": "vision",
         "name": "circularEconomyMapPage",
         "data": {
-          "loops": [
-            "Data ingestion",
-            "Use",
-            "Feedback",
-            "Curation"
-          ]
+          "loops": ["Data ingestion", "Use", "Feedback", "Curation"]
         }
       }
     },
@@ -1780,18 +1304,8 @@
         "type": "vision",
         "name": "innovationFunnelPage",
         "data": {
-          "stages": [
-            "Ideas",
-            "Prototypes",
-            "Pilots",
-            "Scale"
-          ],
-          "counts": [
-            120,
-            24,
-            8,
-            3
-          ]
+          "stages": ["Ideas", "Prototypes", "Pilots", "Scale"],
+          "counts": [120, 24, 8, 3]
         }
       }
     },
@@ -1803,11 +1317,7 @@
         "type": "vision",
         "name": "productRoadmapPage",
         "data": {
-          "releases": [
-            "R1",
-            "R2",
-            "R3"
-          ],
+          "releases": ["R1", "R2", "R3"],
           "items": [
             {
               "release": "R1",
@@ -1833,21 +1343,9 @@
         "type": "vision",
         "name": "launchPlanPage",
         "data": {
-          "workstreams": [
-            "Marketing",
-            "Sales",
-            "Success"
-          ],
-          "milestones": [
-            "Beta cohort",
-            "GA",
-            "Case studies"
-          ],
-          "risks": [
-            "Overpromise",
-            "Adoption lag",
-            "Change resistance"
-          ]
+          "workstreams": ["Marketing", "Sales", "Success"],
+          "milestones": ["Beta cohort", "GA", "Case studies"],
+          "risks": ["Overpromise", "Adoption lag", "Change resistance"]
         }
       }
     },
@@ -1859,18 +1357,8 @@
         "type": "vision",
         "name": "pipelineFunnelPage",
         "data": {
-          "stages": [
-            "Leads",
-            "Qualified",
-            "Trials",
-            "Paid"
-          ],
-          "values": [
-            400,
-            220,
-            120,
-            60
-          ]
+          "stages": ["Leads", "Qualified", "Trials", "Paid"],
+          "values": [400, 220, 120, 60]
         }
       }
     },
@@ -1882,11 +1370,7 @@
         "type": "vision",
         "name": "salesDashboardPage",
         "data": {
-          "metrics": [
-            "Win rate 32%",
-            "Cycle time 48d",
-            "Avg deal $85k"
-          ],
+          "metrics": ["Win rate 32%", "Cycle time 48d", "Avg deal $85k"],
           "notes": "Education on value of signed references shortens cycles."
         }
       }
@@ -1899,12 +1383,7 @@
         "type": "vision",
         "name": "marketingMixPage",
         "data": {
-          "levers": [
-            "Content marketing",
-            "Compliance webinars",
-            "Partner co-sell",
-            "Analyst briefings"
-          ],
+          "levers": ["Content marketing", "Compliance webinars", "Partner co-sell", "Analyst briefings"],
           "notes": "Lead with risk reduction and measurable trust."
         }
       }
@@ -1917,18 +1396,8 @@
         "type": "vision",
         "name": "customerSuccessJourneyPage",
         "data": {
-          "stages": [
-            "Onboard",
-            "Adopt",
-            "Expand",
-            "Renew"
-          ],
-          "metrics": [
-            "Time-to-value",
-            "Feature usage",
-            "CSAT",
-            "Renewal rate"
-          ]
+          "stages": ["Onboard", "Adopt", "Expand", "Renew"],
+          "metrics": ["Time-to-value", "Feature usage", "CSAT", "Renewal rate"]
         }
       }
     },
@@ -1940,16 +1409,8 @@
         "type": "vision",
         "name": "supportOrgModelPage",
         "data": {
-          "tiers": [
-            "Tier 1",
-            "Tier 2",
-            "Tier 3"
-          ],
-          "roles": [
-            "Agent",
-            "Specialist",
-            "Engineer"
-          ]
+          "tiers": ["Tier 1", "Tier 2", "Tier 3"],
+          "roles": ["Agent", "Specialist", "Engineer"]
         }
       }
     },
@@ -1961,11 +1422,7 @@
         "type": "vision",
         "name": "partnershipMapPage",
         "data": {
-          "categories": [
-            "Licensing",
-            "Technology",
-            "Audit"
-          ],
+          "categories": ["Licensing", "Technology", "Audit"],
           "partners": [
             {
               "name": "Content provider A",
@@ -1991,16 +1448,8 @@
         "type": "vision",
         "name": "mAPipelinePage",
         "data": {
-          "stages": [
-            "Identify",
-            "Evaluate",
-            "Negotiate",
-            "Integrate"
-          ],
-          "targets": [
-            "Evidence startup X",
-            "Audit SaaS Y"
-          ]
+          "stages": ["Identify", "Evaluate", "Negotiate", "Integrate"],
+          "targets": ["Evidence startup X", "Audit SaaS Y"]
         }
       }
     },
@@ -2012,16 +1461,8 @@
         "type": "vision",
         "name": "synergyCapturePage",
         "data": {
-          "sources": [
-            "Cross-sell",
-            "Shared infra",
-            "Joint R&D"
-          ],
-          "values": [
-            4,
-            1.5,
-            2
-          ]
+          "sources": ["Cross-sell", "Shared infra", "Joint R&D"],
+          "values": [4, 1.5, 2]
         }
       }
     },
@@ -2033,16 +1474,8 @@
         "type": "vision",
         "name": "cultureValuesPage",
         "data": {
-          "values": [
-            "Truth",
-            "Transparency",
-            "Accountability"
-          ],
-          "behaviors": [
-            "Cite sources",
-            "Log context",
-            "Flag uncertainty"
-          ]
+          "values": ["Truth", "Transparency", "Accountability"],
+          "behaviors": ["Cite sources", "Log context", "Flag uncertainty"]
         }
       }
     },
