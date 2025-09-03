@@ -9,7 +9,18 @@ import * as pluginBeat from "./beat.js";
 import * as pluginVoiceOver from "./voice_over.js";
 import * as pluginVision from "./vision.js";
 
-const imagePlugins = [pluginTextSlide, pluginMarkdown, pluginImage, pluginChart, pluginMermaid, pluginMovie, pluginHtmlTailwind, pluginBeat, pluginVoiceOver, pluginVision];
+const imagePlugins = [
+  pluginTextSlide,
+  pluginMarkdown,
+  pluginImage,
+  pluginChart,
+  pluginMermaid,
+  pluginMovie,
+  pluginHtmlTailwind,
+  pluginBeat,
+  pluginVoiceOver,
+  pluginVision,
+];
 
 export const findImagePlugin = (imageType?: string) => {
   return imagePlugins.find((plugin) => plugin.imageType === imageType);

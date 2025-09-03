@@ -10,4 +10,3 @@ test("test imagePlugin mermaid", async () => {
   // const path = plugin.path({ imagePath: "expectImagePath" });
   // assert.equal(path, "expectImagePath");
 });
-
