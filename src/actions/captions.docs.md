@@ -1,0 +1,37 @@
+---
+generated_at: 2025-09-03T23:45:43.814Z
+---
+
+# captions
+
+This file is an auto-generated documentation of the GraphAI graph structure defined in:
+[https://github.com/receptron/mulmocast-cli/blob/main/src/actions/captions.ts](https://github.com/receptron/mulmocast-cli/blob/main/src/actions/captions.ts)
+
+## Graph Structure
+
+The following Mermaid diagram shows the GraphAI graph structure defined in this script:
+
+```mermaid
+flowchart TD
+  n_context(context)
+  n_outputStudioFilePath(outputStudioFilePath)
+  subgraph n_map[map: mapAgent]
+    n_map_generateCaption(generateCaption<br/>agent)
+    n_map_beat --> n_map_generateCaption
+    n_map_context --> n_map_generateCaption
+    n_map___mapIndex --> n_map_generateCaption
+  end
+  n_context -- studio.script.beats --> n_map
+  n_context --> n_map
+  n_fileWrite(fileWrite<br/>fileWriteAgent)
+  n_map -- generateCaption --> n_fileWrite
+  n_outputStudioFilePath --> n_fileWrite
+  n_context -- studio.toJSON() --> n_fileWrite
+  class n_context,n_outputStudioFilePath staticNode
+  class n_map_generateCaption,n_fileWrite computedNode
+  class n_map nestedGraph
+```
+
+---
+
+*This document is auto-generated. Please do not edit manually.*

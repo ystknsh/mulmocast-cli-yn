@@ -1,0 +1,90 @@
+import fs from "fs";
+import path from "path";
+import { mermaid } from "./graph_to_mermaid.js";
+import { GraphData } from "graphai";
+
+const GRAPH_DATA_VARIABLE_NAME = "graph_data";
+
+const loadTemplate = (): string => {
+  const templatePath = path.join(process.cwd(), "automation", "generate_actions_docs", "docs_template.md");
+  return fs.readFileSync(templatePath, "utf8");
+};
+
+const replaceTemplate = (template: string, replacements: Record<string, string>): string => {
+  let result = template;
+  Object.entries(replacements).forEach(([key, value]) => {
+    result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
+  });
+  return result;
+};
+
+const generateMermaid = (graphData: GraphData): string => {
+  return mermaid(graphData);
+};
+
+const extractGraphData = async (filePath: string): Promise<GraphData | null> => {
+  try {
+    const module = await import(filePath);
+
+    if (module[GRAPH_DATA_VARIABLE_NAME]) {
+      return module[GRAPH_DATA_VARIABLE_NAME];
+    }
+
+    return null;
+  } catch (error) {
+    throw new Error(`  Import failed for ${filePath}: ${error}`);
+    return null;
+  }
+};
+
+const generateGitHubUrl = (filePath: string): string => {
+  const repoOwner = "receptron";
+  const repoName = "mulmocast-cli";
+  const branch = "main";
+
+  const relativePath = filePath.replace(process.cwd(), "").replace(/^\//, "");
+
+  return `https://github.com/${repoOwner}/${repoName}/blob/${branch}/${relativePath}`;
+};
+
+const generateDocument = async (scriptPath: string): Promise<void> => {
+  const scriptName = path.basename(scriptPath, ".ts");
+  const scriptDir = path.dirname(scriptPath);
+
+  const graphData = await extractGraphData(scriptPath);
+
+  if (!graphData) {
+    return;
+  }
+
+  const mermaidDiagram = generateMermaid(graphData);
+  const githubUrl = generateGitHubUrl(scriptPath);
+
+  const template = loadTemplate();
+  const replacements = {
+    SCRIPT_NAME: scriptName,
+    SCRIPT_PATH: githubUrl,
+    MERMAID_DIAGRAM: mermaidDiagram,
+    GENERATED_DATE: new Date().toISOString(),
+  };
+
+  const document = replaceTemplate(template, replacements);
+
+  const outputPath = path.join(scriptDir, `${scriptName}.docs.md`);
+  fs.writeFileSync(outputPath, document);
+};
+
+const main = async (): Promise<void> => {
+  const actionsDir = path.join(process.cwd(), "src", "actions");
+
+  const files = fs.readdirSync(actionsDir).filter((file) => file.endsWith(".ts") && file !== "index.ts");
+
+  for (const file of files) {
+    const filePath = path.join(actionsDir, file);
+    await generateDocument(filePath);
+  }
+};
+
+main().catch((error) => {
+  throw new Error(error);
+});
