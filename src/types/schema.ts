@@ -164,6 +164,14 @@ export const mulmoVoiceOverMediaSchema = z
   })
   .strict();
 
+export const mulmoVisionMediaSchema = z
+  .object({
+    type: z.literal("vision"),
+    name: z.string(),
+    data: z.record(z.string(), z.any()),
+  })
+  .strict();
+
 export const mulmoImageAssetSchema = z.union([
   mulmoMarkdownMediaSchema,
   mulmoWebMediaSchema,
@@ -177,6 +185,7 @@ export const mulmoImageAssetSchema = z.union([
   mulmoHtmlTailwindMediaSchema,
   mulmoBeatReferenceMediaSchema,
   mulmoVoiceOverMediaSchema,
+  mulmoVisionMediaSchema,
 ]);
 
 const mulmoAudioMediaSchema = z
