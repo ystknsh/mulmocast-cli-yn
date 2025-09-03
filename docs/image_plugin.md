@@ -27,11 +27,16 @@ Image Pluginは、
 
 ```
 {
+ imageType: string;
  process: async (params: ImageProcessorParams): void;
  path: (params: ImageProcessorParams): string;
 }
 ```
 のinterfaceを持つ。
+
+### imageType
+
+uniqなtype. beatのimage.type. 
 
 ### path
 pathは、生成されるimageのpathを返す関数.
