@@ -8,7 +8,7 @@
     {
       "id": "first",
       "speaker": "Presenter",
-      "text": "This is a local image.",
+      "text": "",
       "image": {
         "type": "vision",
         "name": "sectionDividerPage",
