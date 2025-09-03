@@ -17,8 +17,8 @@ const processVision = async (params: ImageProcessorParams) => {
 
   const handler = new htmlPlugin({ rootDir });
 
-  await handler[toCreateName(beat.image.name) as keyof htmlPlugin](beat.image.data, {
-    name: beat.image.name,
+  await handler[toCreateName(beat.image.style) as keyof htmlPlugin](beat.image.data, {
+    name: beat.image.style,
     imageFilePath: imagePath,
     htmlFilePath: imagePath.replace(/\.png$/, ".html"),
   });
