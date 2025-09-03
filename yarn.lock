@@ -2551,10 +2551,10 @@ ms@^2.0.0, ms@^2.1.3:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mulmocast-vision@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/mulmocast-vision/-/mulmocast-vision-0.0.1.tgz#5cc250a94d2e8ef61d6629e3c472d73de7b5e915"
-  integrity sha512-stvZi4HG+7S1aOwLzpe0kz520e4YrlEWlqf+BI4KrMM+upeESBoeCEueRAMNqhOBiHtpvRHBE088pwNKW+SoUw==
+mulmocast-vision@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/mulmocast-vision/-/mulmocast-vision-0.0.2.tgz#cdb69f247c70e37a9c43a06f8f539ab8e1e4ff78"
+  integrity sha512-RCo8X85oSq/2KxsNEpeSXBIMUjzVrbKZhWleAqK8K2UFcTUmnMjGNj6u149FmdZOhj1T4dt45r7gNDANy1LIbg==
   dependencies:
     "@graphai/openai_agent" "^2.0.7"
     "@modelcontextprotocol/sdk" "^1.17.4"
