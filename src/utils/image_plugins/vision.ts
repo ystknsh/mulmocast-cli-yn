@@ -2,7 +2,6 @@ import { ImageProcessorParams } from "../../types/index.js";
 import { parrotingImagePath } from "./utils.js";
 import { htmlPlugin } from "mulmocast-vision";
 
-
 let rootDir: string | undefined = undefined;
 export const updateVisionRootDir = (dir: string) => {
   rootDir = dir;
