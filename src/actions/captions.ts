@@ -10,7 +10,7 @@ import { fileWriteAgent } from "@graphai/vanilla_node_agents";
 
 const vanillaAgents = agents.default ?? agents;
 
-const graph_data: GraphData = {
+export const graph_data: GraphData = {
   version: 0.5,
   nodes: {
     context: {},

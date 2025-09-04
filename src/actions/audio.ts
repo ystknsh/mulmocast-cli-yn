@@ -162,7 +162,7 @@ const graph_tts_map: GraphData = {
     },
   },
 };
-const graph_data: GraphData = {
+export const graph_data: GraphData = {
   version: 0.5,
   concurrency: 8,
   nodes: {

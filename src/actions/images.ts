@@ -317,7 +317,7 @@ const beat_graph_data = {
   },
 };
 
-const graph_data: GraphData = {
+export const graph_data: GraphData = {
   version: 0.5,
   concurrency: 4,
   nodes: {
