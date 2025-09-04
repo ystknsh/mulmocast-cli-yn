@@ -4,6 +4,10 @@
   },
   "lang": "en",
   "title": "Sample Presentation",
+  "canvasSize": {
+    "width": 1536,
+    "height": 1024
+  },
   "beats": [
     {
       "text": "sectionDividerPage",
