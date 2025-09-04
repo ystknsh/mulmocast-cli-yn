@@ -443,7 +443,7 @@ export const promptTemplates = [
     scriptName: "text_only_template.json",
     systemPrompt:
       "Another AI will generate comic strips for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
-    title: "Ghibli-style comic strips with nano banana.",
+    title: "Ghibli-style comic strips",
   },
   {
     description: "Template for Ghost in the shell style comic presentation.",
@@ -931,5 +931,13 @@ export const promptTemplates = [
     systemPrompt:
       "This script is for a movie trailer. Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English.",
     title: "Movie Trailer template",
+  },
+  {
+    description: "Template for business analysis presentation.",
+    filename: "vision",
+    scriptName: "vision.json",
+    systemPrompt:
+      "First, determine a set of slides (=beats) to present, and choose an appropriate style for each beat (from the JSON template blow) and add required data for it. For each beat, put an appropriate text to the text field for the presenter to read for that slide in details. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+    title: "Business Analysis",
   },
 ];
