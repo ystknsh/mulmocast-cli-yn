@@ -1,6 +1,6 @@
 // copied from https://github.com/receptron/graphai/blob/main/packages/cli/src/mermaid.ts
 
-import { type GraphData, inputs2dataSources } from "graphai";
+import { type GraphData, type NodeData, inputs2dataSources, isComputedNodeData } from "graphai";
 
 type MermaidState = {
   lines: string[];
@@ -15,7 +15,7 @@ const sanitizeNodeId = (nodeId: string): string => {
   return `n_${nodeId.replace(/\./g, "_")}`;
 };
 
-const sanitizeAgentName = (agent: any): string => {
+const sanitizeAgentName = (agent: unknown): string => {
   if (typeof agent === "string") {
     return agent;
   }
@@ -43,7 +43,7 @@ const formatLine = (content: string, depth: number = 0): string => {
   return BASE_INDENT + BASE_INDENT.repeat(depth) + content;
 };
 
-const processConnections = (inputs: any, targetNodeId: string, parentPath: string, state: MermaidState): void => {
+const processConnections = (inputs: unknown, targetNodeId: string, parentPath: string, state: MermaidState): void => {
   const depth = getIndentLevel(parentPath);
   let sources = inputs2dataSources(inputs);
   if (!Array.isArray(sources)) {
@@ -65,7 +65,7 @@ const processConnections = (inputs: any, targetNodeId: string, parentPath: strin
   });
 };
 
-const processNode = (nodeId: string, node: any, parentPath: string, state: MermaidState): void => {
+const processNode = (nodeId: string, node: NodeData, parentPath: string, state: MermaidState): void => {
   const fullNodeId = getFullNodeId(nodeId, parentPath);
   const mermaidNodeId = sanitizeNodeId(fullNodeId);
   const depth = getIndentLevel(parentPath);
@@ -81,16 +81,17 @@ const processNode = (nodeId: string, node: any, parentPath: string, state: Merma
 
     state.lines.push(formatLine("end", depth));
     state.nestedGraphNodes.push(mermaidNodeId);
-  } else if ("agent" in node) {
+  } else if (isComputedNodeData(node)) {
     const agentName = sanitizeAgentName(node.agent);
     state.lines.push(formatLine(`${mermaidNodeId}(${nodeId}<br/>${agentName})`, depth));
     state.computedNodes.push(mermaidNodeId);
   } else {
+    // Static nodes or fallback for unknown node types
     state.lines.push(formatLine(`${mermaidNodeId}(${nodeId})`, depth));
     state.staticNodes.push(mermaidNodeId);
   }
 
-  if (node.inputs) {
+  if ("inputs" in node && node.inputs) {
     processConnections(node.inputs, fullNodeId, parentPath, state);
   }
 
