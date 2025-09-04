@@ -20,8 +20,6 @@ From the repo root:
 
 ```bash
 yarn generate_action_docs
-# or
-npm run generate_action_docs
 ```
 
 This regenerates `*.docs.md` for files under `src/actions/`. If a file has no `*_graph_data` / `graph_data` export, no doc is produced.
