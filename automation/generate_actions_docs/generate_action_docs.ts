@@ -3,7 +3,7 @@ import path from "path";
 import { mermaid } from "./graph_to_mermaid.js";
 import { GraphData } from "graphai";
 
-const GRAPH_DATA_VARIABLE_NAME = "graph_data";
+const GRAPH_DATA_SUFFIX = "_graph_data";
 
 const loadTemplate = (): string => {
   const templatePath = path.join(process.cwd(), "automation", "generate_actions_docs", "docs_template.md");
@@ -22,18 +22,20 @@ const generateMermaid = (graphData: GraphData): string => {
   return mermaid(graphData);
 };
 
-const extractGraphData = async (filePath: string): Promise<GraphData | null> => {
+const extractGraphDataList = async (filePath: string): Promise<Array<{ name: string; graphData: GraphData }>> => {
   try {
     const module = await import(filePath);
+    const results: Array<{ name: string; graphData: GraphData }> = [];
 
-    if (module[GRAPH_DATA_VARIABLE_NAME]) {
-      return module[GRAPH_DATA_VARIABLE_NAME];
-    }
+    Object.entries(module).forEach(([key, value]) => {
+      if (key.endsWith(GRAPH_DATA_SUFFIX) && value) {
+        results.push({ name: key, graphData: value as GraphData });
+      }
+    });
 
-    return null;
+    return results;
   } catch (error) {
     throw new Error(`  Import failed for ${filePath}: ${error}`);
-    return null;
   }
 };
 
@@ -51,20 +53,25 @@ const generateDocument = async (scriptPath: string): Promise<void> => {
   const scriptName = path.basename(scriptPath, ".ts");
   const scriptDir = path.dirname(scriptPath);
 
-  const graphData = await extractGraphData(scriptPath);
+  const graphDataList = await extractGraphDataList(scriptPath);
 
-  if (!graphData) {
+  if (!graphDataList.length) {
     return;
   }
 
-  const mermaidDiagram = generateMermaid(graphData);
+  const mermaidSections = graphDataList
+    .map(({ name, graphData }) => {
+      const diagram = generateMermaid(graphData);
+      return [`### ${name}`, "", "```mermaid", diagram, "```"].join("\n");
+    })
+    .join("\n\n");
   const githubUrl = generateGitHubUrl(scriptPath);
 
   const template = loadTemplate();
   const replacements = {
     SCRIPT_NAME: scriptName,
     SCRIPT_PATH: githubUrl,
-    MERMAID_DIAGRAM: mermaidDiagram,
+    MERMAID_SECTIONS: mermaidSections,
     GENERATED_DATE: new Date().toISOString(),
   };
 
