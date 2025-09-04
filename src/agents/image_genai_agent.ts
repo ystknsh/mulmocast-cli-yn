@@ -1,11 +1,20 @@
 import fs from "fs";
 import { GraphAILogger } from "graphai";
 import type { AgentFunction, AgentFunctionInfo } from "graphai";
-import { getAspectRatio } from "./movie_google_agent.js";
 import { provider2ImageAgent } from "../utils/provider2agent.js";
 import type { AgentBufferResult, ImageAgentInputs, ImageAgentParams, GenAIImageAgentConfig } from "../types/agent.js";
 import { GoogleGenAI, PersonGeneration } from "@google/genai";
 import { blankImagePath, blankSquareImagePath, blankVerticalImagePath } from "../utils/file.js";
+
+const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
+  if (canvasSize.width > canvasSize.height) {
+    return "16:9";
+  } else if (canvasSize.width < canvasSize.height) {
+    return "9:16";
+  } else {
+    return "1:1";
+  }
+};
 
 export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult, ImageAgentInputs, GenAIImageAgentConfig> = async ({
   namedInputs,
