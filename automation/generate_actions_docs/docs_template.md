@@ -4,16 +4,14 @@ generated_at: {{GENERATED_DATE}}
 
 # {{SCRIPT_NAME}}
 
-This file is an auto-generated documentation of the GraphAI graph structure defined in:
+This file is an auto-generated documentation of the GraphAI graph structure defined in: 
 [{{SCRIPT_PATH}}]({{SCRIPT_PATH}})
 
-## Graph Structure
+## Graph Structures
 
-The following Mermaid diagram shows the GraphAI graph structure defined in this script:
+The following Mermaid diagrams show the GraphAI graph structures defined in this script. Each section corresponds to a variable named `*_graph_data`:
 
-```mermaid
-{{MERMAID_DIAGRAM}}
-```
+{{MERMAID_SECTIONS}}
 
 ---
 
