@@ -24,7 +24,7 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
     const ai = new GoogleGenAI({ apiKey });
     if (model === "gemini-2.5-flash-image-preview") {
       const contents: { text?: string; inlineData?: { mimeType: string; data: string } }[] = [{ text: prompt }];
-      const images = referenceImages ?? [];
+      const images = [...(referenceImages ?? [])];
       // NOTE: There is no way to explicitly specify the aspect ratio for Gemini. This is just a hint.
       if (aspectRatio === "9:16") {
         images.push(blankVerticalImagePath());
