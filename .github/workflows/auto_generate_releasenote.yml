@@ -69,7 +69,9 @@ jobs:
         uses: google-github-actions/run-gemini-cli@v0
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          args: "run create_github_releasenote ${{ steps.version.outputs.slug_version }}"
+          prompt: |
+            "STEP1 read .gemini/commands/create_github_releasenote.toml
+             STEP2 run create_github_releasenote.toml using ${{ steps.version.outputs.slug_version }}"
       
       - name: Debug Gemini CLI output
         run: |
