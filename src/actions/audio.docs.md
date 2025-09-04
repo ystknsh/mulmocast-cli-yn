@@ -1,15 +1,17 @@
 ---
-generated_at: 2025-09-03T23:45:43.812Z
+generated_at: 2025-09-04T12:47:52.499Z
 ---
 
 # audio
 
-This file is an auto-generated documentation of the GraphAI graph structure defined in:
+This file is an auto-generated documentation of the GraphAI graph structure defined in: 
 [https://github.com/receptron/mulmocast-cli/blob/main/src/actions/audio.ts](https://github.com/receptron/mulmocast-cli/blob/main/src/actions/audio.ts)
 
-## Graph Structure
+## Graph Structures
 
-The following Mermaid diagram shows the GraphAI graph structure defined in this script:
+The following Mermaid diagrams show the GraphAI graph structures defined in this script. Each section corresponds to a variable named `*_graph_data`:
+
+### audio_graph_data
 
 ```mermaid
 flowchart TD

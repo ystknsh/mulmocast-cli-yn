@@ -1,15 +1,153 @@
 ---
-generated_at: 2025-09-03T23:45:43.839Z
+generated_at: 2025-09-04T12:47:52.515Z
 ---
 
 # images
 
-This file is an auto-generated documentation of the GraphAI graph structure defined in:
+This file is an auto-generated documentation of the GraphAI graph structure defined in: 
 [https://github.com/receptron/mulmocast-cli/blob/main/src/actions/images.ts](https://github.com/receptron/mulmocast-cli/blob/main/src/actions/images.ts)
 
-## Graph Structure
+## Graph Structures
 
-The following Mermaid diagram shows the GraphAI graph structure defined in this script:
+The following Mermaid diagrams show the GraphAI graph structures defined in this script. Each section corresponds to a variable named `*_graph_data`:
+
+### beat_graph_data
+
+```mermaid
+flowchart TD
+  n_context(context)
+  n_htmlImageAgentInfo(htmlImageAgentInfo)
+  n_imageRefs(imageRefs)
+  n_beat(beat)
+  n___mapIndex(__mapIndex)
+  n_forceMovie(forceMovie)
+  n_forceImage(forceImage)
+  n_forceLipSync(forceLipSync)
+  n_forceSoundEffect(forceSoundEffect)
+  n_preprocessor(preprocessor<br/>imagePreprocessAgent)
+  n_context --> n_preprocessor
+  n_beat --> n_preprocessor
+  n___mapIndex --> n_preprocessor
+  n_imageRefs --> n_preprocessor
+  n_imagePlugin(imagePlugin<br/>imagePluginAgent)
+  n_context --> n_imagePlugin
+  n_beat --> n_imagePlugin
+  n___mapIndex --> n_imagePlugin
+  n_preprocessor --> n_imagePlugin
+  n_htmlImageAgent(htmlImageAgent<br/>:htmlImageAgentInfo.agent)
+  n_preprocessor -- htmlPrompt --> n_htmlImageAgent
+  n_preprocessor -- htmlImageSystemPrompt --> n_htmlImageAgent
+  n_htmlImageAgentInfo -- model --> n_htmlImageAgent
+  n_htmlImageAgentInfo -- max_tokens --> n_htmlImageAgent
+  n_context -- force --> n_htmlImageAgent
+  n_forceImage --> n_htmlImageAgent
+  n_preprocessor -- htmlPath --> n_htmlImageAgent
+  n___mapIndex --> n_htmlImageAgent
+  n_beat -- id --> n_htmlImageAgent
+  n_context --> n_htmlImageAgent
+  n_htmlReader(htmlReader<br/>agent)
+  n_htmlImageAgent --> n_htmlReader
+  n_preprocessor -- htmlPath --> n_htmlReader
+  n_htmlImageGenerator(htmlImageGenerator<br/>htmlImageGeneratorAgent)
+  n_htmlReader -- htmlText --> n_htmlImageGenerator
+  n_context -- presentationStyle.canvasSize --> n_htmlImageGenerator
+  n_preprocessor -- htmlImageFile --> n_htmlImageGenerator
+  n_imageGenerator(imageGenerator<br/>:preprocessor.imageAgentInfo.agent)
+  n_preprocessor -- prompt --> n_imageGenerator
+  n_preprocessor -- referenceImages --> n_imageGenerator
+  n_context -- force --> n_imageGenerator
+  n_forceImage --> n_imageGenerator
+  n_preprocessor -- imagePath --> n_imageGenerator
+  n___mapIndex --> n_imageGenerator
+  n_beat -- id --> n_imageGenerator
+  n_context --> n_imageGenerator
+  n_preprocessor -- imageParams.model --> n_imageGenerator
+  n_preprocessor -- imageParams.moderation --> n_imageGenerator
+  n_context -- presentationStyle.canvasSize --> n_imageGenerator
+  n_preprocessor -- imageParams.quality --> n_imageGenerator
+  n_movieGenerator(movieGenerator<br/>:preprocessor.movieAgentInfo.agent)
+  n_imageGenerator --> n_movieGenerator
+  n_imagePlugin --> n_movieGenerator
+  n_beat -- moviePrompt --> n_movieGenerator
+  n_preprocessor -- referenceImageForMovie --> n_movieGenerator
+  n_preprocessor -- movieFile --> n_movieGenerator
+  n_context -- force --> n_movieGenerator
+  n_forceMovie --> n_movieGenerator
+  n_preprocessor -- movieFile --> n_movieGenerator
+  n___mapIndex --> n_movieGenerator
+  n_beat -- id --> n_movieGenerator
+  n_context --> n_movieGenerator
+  n_preprocessor -- movieAgentInfo.movieParams.model --> n_movieGenerator
+  n_preprocessor -- beatDuration --> n_movieGenerator
+  n_context -- presentationStyle.canvasSize --> n_movieGenerator
+  n_imageFromMovie(imageFromMovie<br/>agent)
+  n_movieGenerator --> n_imageFromMovie
+  n_preprocessor -- imagePath --> n_imageFromMovie
+  n_preprocessor -- movieFile --> n_imageFromMovie
+  n_audioChecker(audioChecker<br/>agent)
+  n_movieGenerator --> n_audioChecker
+  n_htmlImageGenerator --> n_audioChecker
+  n_soundEffectGenerator --> n_audioChecker
+  n_preprocessor -- movieFile --> n_audioChecker
+  n_preprocessor -- imagePath --> n_audioChecker
+  n_preprocessor -- soundEffectFile --> n_audioChecker
+  n_soundEffectGenerator(soundEffectGenerator<br/>:preprocessor.soundEffectAgentInfo.agentName)
+  n_movieGenerator --> n_soundEffectGenerator
+  n_preprocessor -- soundEffectPrompt --> n_soundEffectGenerator
+  n_preprocessor -- movieFile --> n_soundEffectGenerator
+  n_preprocessor -- soundEffectFile --> n_soundEffectGenerator
+  n_preprocessor -- soundEffectModel --> n_soundEffectGenerator
+  n_preprocessor -- beatDuration --> n_soundEffectGenerator
+  n_context -- force --> n_soundEffectGenerator
+  n_forceSoundEffect --> n_soundEffectGenerator
+  n_preprocessor -- soundEffectFile --> n_soundEffectGenerator
+  n___mapIndex --> n_soundEffectGenerator
+  n_beat -- id --> n_soundEffectGenerator
+  n_context --> n_soundEffectGenerator
+  n_AudioTrimmer(AudioTrimmer<br/>agent)
+  n_imageGenerator --> n_AudioTrimmer
+  n_imagePlugin --> n_AudioTrimmer
+  n_preprocessor -- audioFile --> n_AudioTrimmer
+  n_preprocessor -- bgmFile --> n_AudioTrimmer
+  n_preprocessor -- startAt --> n_AudioTrimmer
+  n_preprocessor -- duration --> n_AudioTrimmer
+  n_context -- force --> n_AudioTrimmer
+  n_preprocessor -- audioFile --> n_AudioTrimmer
+  n___mapIndex --> n_AudioTrimmer
+  n_beat -- id --> n_AudioTrimmer
+  n_context --> n_AudioTrimmer
+  n_lipSyncGenerator(lipSyncGenerator<br/>:preprocessor.lipSyncAgentName)
+  n_soundEffectGenerator --> n_lipSyncGenerator
+  n_AudioTrimmer --> n_lipSyncGenerator
+  n_preprocessor -- movieFile --> n_lipSyncGenerator
+  n_preprocessor -- referenceImageForMovie --> n_lipSyncGenerator
+  n_preprocessor -- audioFile --> n_lipSyncGenerator
+  n_preprocessor -- lipSyncFile --> n_lipSyncGenerator
+  n_preprocessor -- lipSyncModel --> n_lipSyncGenerator
+  n_preprocessor -- beatDuration --> n_lipSyncGenerator
+  n_context -- force --> n_lipSyncGenerator
+  n_forceLipSync --> n_lipSyncGenerator
+  n_preprocessor -- lipSyncFile --> n_lipSyncGenerator
+  n___mapIndex --> n_lipSyncGenerator
+  n_beat -- id --> n_lipSyncGenerator
+  n_context --> n_lipSyncGenerator
+  n_output(output<br/>copyAgent)
+  n_imageFromMovie --> n_output
+  n_htmlImageGenerator --> n_output
+  n_audioChecker --> n_output
+  n_soundEffectGenerator --> n_output
+  n_lipSyncGenerator --> n_output
+  n_preprocessor -- imagePath --> n_output
+  n_preprocessor -- movieFile --> n_output
+  n_preprocessor -- soundEffectFile --> n_output
+  n_preprocessor -- lipSyncFile --> n_output
+  n_audioChecker -- hasMovieAudio --> n_output
+  n_preprocessor -- htmlImageFile --> n_output
+  class n_context,n_htmlImageAgentInfo,n_imageRefs,n_beat,n___mapIndex,n_forceMovie,n_forceImage,n_forceLipSync,n_forceSoundEffect staticNode
+  class n_preprocessor,n_imagePlugin,n_htmlImageAgent,n_htmlReader,n_htmlImageGenerator,n_imageGenerator,n_movieGenerator,n_imageFromMovie,n_audioChecker,n_soundEffectGenerator,n_AudioTrimmer,n_lipSyncGenerator,n_output computedNode
+```
+
+### images_graph_data
 
 ```mermaid
 flowchart TD
