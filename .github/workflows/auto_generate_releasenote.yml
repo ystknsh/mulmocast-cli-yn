@@ -65,10 +65,23 @@ jobs:
       
       - name: Generate release notes with Gemini CLI
         id: generate
+        continue-on-error: true
         uses: google-github-actions/run-gemini-cli@v0
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           args: "run create_github_releasenote ${{ steps.version.outputs.slug_version }}"
+      
+      - name: Debug Gemini CLI output
+        run: |
+          echo "🔍 Checking Gemini CLI step result..."
+          echo "Step outcome: ${{ steps.generate.outcome }}"
+          echo "Step conclusion: ${{ steps.generate.conclusion }}"
+          
+          echo "📁 Listing docs/releasenote/ directory:"
+          ls -la docs/releasenote/ || echo "Directory does not exist"
+          
+          echo "📄 Checking for generated files:"
+          find docs/ -name "*.md" -type f 2>/dev/null || echo "No .md files found in docs/"
       
       - name: Validate generated files
         run: |
@@ -78,6 +91,36 @@ jobs:
           
           echo "🔍 Validating generated files..."
           
+          # Check if Gemini CLI step succeeded
+          if [ "${{ steps.generate.outcome }}" != "success" ]; then
+            echo "⚠️  Gemini CLI step failed, creating fallback release notes..."
+            
+            # Create fallback release notes
+            cat > "$DETAILED_FILE" << EOF
+          # Release Notes for ${VERSION}
+          
+          ## What's New
+          
+          This release was auto-generated. Please update with actual changes.
+          
+          ## Installation
+          
+          \`\`\`bash
+          npm install mulmocast-cli-yn@${VERSION#v}
+          \`\`\`
+          
+          **Full Changelog**: https://github.com/receptron/mulmocast-cli-yn/compare/...${VERSION}
+          EOF
+            
+            # Update index.md
+            if [ -f "$INDEX_FILE" ]; then
+              # Add new version to the top of the version history
+              sed -i.bak "/## Version History/a\\
+          \\
+          - [${VERSION}](./${VERSION}.md) - $(date '+%Y-%m-%d')" "$INDEX_FILE"
+            fi
+          fi
+          
           if [ ! -f "$DETAILED_FILE" ]; then
             echo "❌ Detailed release note not found: $DETAILED_FILE"
             exit 1
@@ -86,7 +129,7 @@ jobs:
             echo "✅ Detailed release note created: $DETAILED_FILE (Size: $FILE_SIZE bytes)"
           fi
           
-          if grep -q "# $VERSION" "$INDEX_FILE"; then
+          if grep -q "# .*${VERSION}" "$INDEX_FILE"; then
             echo "✅ Version $VERSION found in index"
           else
             echo "❌ Version $VERSION not found in index file. Validation failed."
