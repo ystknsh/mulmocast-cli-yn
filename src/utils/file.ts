@@ -181,6 +181,7 @@ export const defaultBGMPath = () => "https://github.com/receptron/mulmocast-medi
 export const mulmoCreditPath = () => path.resolve(npmRoot, "./assets/images/mulmocast_credit.png");
 export const blankImagePath = () => path.resolve(npmRoot, "./assets/images/blank.png");
 export const blankVerticalImagePath = () => path.resolve(npmRoot, "./assets/images/blank_v.png");
+export const blankSquareImagePath = () => path.resolve(npmRoot, "./assets/images/blank_sq.png");
 
 export const getHTMLFile = (filename: string) => {
   const htmlPath = path.resolve(npmRoot, `./assets/html/${filename}.html`);
