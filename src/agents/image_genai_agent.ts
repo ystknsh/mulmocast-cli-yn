@@ -25,6 +25,7 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
     if (model === "gemini-2.5-flash-image-preview") {
       const contents: { text?: string; inlineData?: { mimeType: string; data: string } }[] = [{ text: prompt }];
       const images = referenceImages ?? [];
+      // NOTE: There is no way to explicitly specify the aspect ratio for Gemini. This is just a hint.
       if (aspectRatio === "9:16") {
         images.push(blankVerticalImagePath());
       } else if (aspectRatio === "1:1") {
@@ -37,7 +38,6 @@ export const imageGenAIAgent: AgentFunction<ImageAgentParams, AgentBufferResult,
         const base64Image = imageData.toString("base64");
         contents.push({ inlineData: { mimeType: "image/png", data: base64Image } });
       });
-      // NOTE: There is no way to specify the aspect ratio for Gemini.
       const response = await ai.models.generateContent({ model, contents });
       if (!response.candidates?.[0]?.content?.parts) {
         throw new Error("ERROR: generateContent returned no candidates");
