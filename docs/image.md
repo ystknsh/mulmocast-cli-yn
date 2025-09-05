@@ -12,10 +12,10 @@
 
 ## Beat画像・動画生成ルール一覧表
 
-| 条件 | image property | text | htmlPrompt | imagePrompt | moviePrompt | 音声処理 *3 *4 | 画像処理 | 動画処理 *2 *3| 参照セクション |
+| 条件 | image property | text | htmlPrompt | imagePrompt | moviePrompt | 音声処理 *4 *5 | 画像処理 | 動画処理 *3 *4| 参照セクション |
 |------|:-----:|:----:|:----------:|:-----------:|:-----------:|----------|----------|----------|----------------|
-| **1** | ✓ | (✓) |  |  |  | textを利用してTTS | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
-| **1** | ✓ *1 | (✓) |  |  |  | textを利用してTTS | なし | image.typeプラグイン |
+| **1** | ✓*1 | (✓) |  |  |  | textを利用してTTS | image.typeプラグイン | なし | [1. image.typeの処理](#1-imagetypeの処理) |
+| **1** | *2 | (✓) |  |  |  | textを利用してTTS | なし | image.typeプラグイン |
 | **1+6** | ✓ | (✓) |  |  | ✓ | textを利用してTTS | image.typeプラグイン | 画像+moviePromptで動画生成 | [6. moviePrompt and (image or imagePrompt)](#6-movieprompt-and-image-or-imageprompt) |
 | **2** |  | (✓) | ✓ |  |  | textを利用してTTS | htmlPromptでHTML生成→画像化 | なし | [2. htmlPrompt](#2-htmlprompt) |
 | **3** |  | (✓) |  | ✓ |  | textを利用してTTS | imagePromptで画像生成 | なし | [3. imagePrompt](#3-imageprompt) |
@@ -24,10 +24,11 @@
 | **5** |  | ✓ |  |  |  | textを利用してTTS | text を imagePrompt として画像生成 | なし | [5. no imagePrompt and moviePrompt](#5-no-imageprompt-and-movieprompt) |
 
 ### 注釈
-- *1 image.type = movie の場合
-- *2 「動画あり」かつ「`soundEffectPrompt`」の時にサウンド効果を付与した動画を生成する
-- *3 「動画あり」かつ「音声データあり」の時にリップシンク処理を行った動画を生成する
-- *4  `suppressSpeech: true` に設定すると TTS は行わない
+- *1 image.type = movie 以外の場合
+- *2 image.type = movie の場合
+- *3 「動画あり」かつ「`soundEffectPrompt`」の時にサウンド効果を付与した動画を生成する
+- *4 「動画あり」かつ「音声データあり」の時にリップシンク処理を行った動画を生成する
+- *5  `suppressSpeech: true` に設定すると TTS は行わない
 
 ### 表の見方
 - **✓**: 設定されている
