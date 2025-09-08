@@ -11,7 +11,7 @@ test("test imagePlugin mermaid", async () => {
   assert.equal(path, "expectImagePath");
 });
 
-test("test imagePlugin image", async () => {
+test("test imagePlugin image url", async () => {
   const plugin = findImagePlugin("image");
   assert.equal(plugin.imageType, "image");
 
@@ -28,6 +28,23 @@ test("test imagePlugin image", async () => {
     {},
   );
   assert.equal(path, "expectImagePath");
+});
+
+test("test imagePlugin image path", async () => {
+  const plugin = findImagePlugin("image");
+  assert.equal(plugin.imageType, "image");
+
+  const path = plugin.path({
+    imagePath: "unexpectImagePath",
+    beat: {
+      image: {
+        type: "image",
+        source: { kind: "path", path: "expectImagePath" },
+      },
+    },
+    context: { fileDirs: { mulmoFileDirPath: "/bin" } },
+  });
+  assert.equal(path, "/bin/expectImagePath");
 });
 
 test("test imagePlugin beat", async () => {

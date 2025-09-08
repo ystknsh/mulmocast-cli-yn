@@ -41,5 +41,5 @@ export const pathSource = (params: ImageProcessorParams) => {
       return path;
     }
   }
-  return;
+  return undefined;
 };
