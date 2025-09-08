@@ -29,3 +29,17 @@ export const processSource = (imageType: ImageType) => {
     throw new Error(`ERROR: unknown ${imageType} source type`);
   };
 };
+
+export const pathSource = (params: ImageProcessorParams) => {
+  const { beat, context } = params;
+  if (beat.image?.type == "image") {
+    if (beat.image.source?.kind === "url") {
+      return params.imagePath;
+    }
+    const path = MulmoMediaSourceMethods.resolve(beat.image.source, context);
+    if (path) {
+      return path;
+    }
+  }
+  return;
+};
