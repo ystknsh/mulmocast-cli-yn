@@ -15,7 +15,7 @@ test("test imagePlugin image", async () => {
   const plugin = findImagePlugin("image");
   assert.equal(plugin.imageType, "image");
 
-  const path = await plugin.path(
+  const path = plugin.path(
     {
       imagePath: "expectImagePath",
       beat: {
