@@ -84,7 +84,7 @@ export const imagePreprocessAgent = async (namedInputs: { context: MulmoStudioCo
 
   if (beat.image) {
     const plugin = MulmoBeatMethods.getPlugin(beat);
-    const pluginPath = plugin.path({ beat, context, imagePath, ...htmlStyle(context, beat) });
+    const pluginPath = await plugin.path({ beat, context, imagePath, ...htmlStyle(context, beat) });
     // undefined prompt indicates that image generation is not needed
     return { ...returnValue, imagePath: pluginPath, referenceImageForMovie: pluginPath };
   }
