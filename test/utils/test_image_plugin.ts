@@ -15,8 +15,19 @@ test("test imagePlugin image", async () => {
   const plugin = findImagePlugin("image");
   assert.equal(plugin.imageType, "image");
 
-  const path = plugin.path({ imagePath: "expectImagePath", beat: { image: { type: "image", source: { kind: "url", url: "https://example.com" } } } }, {});
-  assert.equal(path, "https://example.com");
+  const path = await plugin.path(
+    {
+      imagePath: "expectImagePath",
+      beat: {
+        image: {
+          type: "image",
+          source: { kind: "url", url: "https://raw.githubusercontent.com/receptron/mulmocast-media/refs/heads/main/characters/min_anime.pn" },
+        },
+      },
+    },
+    {},
+  );
+  assert.equal(path, "expectImagePath");
 });
 
 test("test imagePlugin beat", async () => {
