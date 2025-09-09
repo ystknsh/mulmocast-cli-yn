@@ -63,9 +63,6 @@ test("test createStudioData", async () => {
         images: {},
         provider: "openai",
       },
-      movieParams: {
-        provider: "replicate",
-      },
       beats: [
         { text: "hello" },
         {
@@ -121,9 +118,6 @@ test("test createStudioData", async () => {
       imageParams: {
         images: {},
         provider: "openai",
-      },
-      movieParams: {
-        provider: "replicate",
       },
       beats: [
         { text: "hello" },
