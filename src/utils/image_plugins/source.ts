@@ -30,16 +30,21 @@ export const processSource = (imageType: ImageType) => {
   };
 };
 
-export const pathSource = (params: ImageProcessorParams) => {
-  const { beat, context } = params;
-  if (beat.image?.type == "image") {
-    if (beat.image.source?.kind === "url") {
-      return params.imagePath;
+export const pathSource = (imageType: ImageType) => {
+  return (params: ImageProcessorParams) => {
+    const { beat, context } = params;
+    if (beat.image?.type == "image") {
+      if (beat.image.source?.kind === "url") {
+        if (imageType === "image") {
+          return params.imagePath;
+        }
+        return params.imagePath.replace(/\.png$/, ".mov");
+      }
+      const path = MulmoMediaSourceMethods.resolve(beat.image.source, context);
+      if (path) {
+        return path;
+      }
     }
-    const path = MulmoMediaSourceMethods.resolve(beat.image.source, context);
-    if (path) {
-      return path;
-    }
-  }
-  return undefined;
+    return undefined;
+  };
 };
