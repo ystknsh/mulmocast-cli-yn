@@ -44,8 +44,8 @@ export const provider2ImageAgent = {
   },
   replicate: {
     agentName: "imageReplicateAgent",
-    defaultModel: "black-forest-labs/flux-schnell",
-    models: ["black-forest-labs/flux-1.1-pro", "black-forest-labs/flux-schnell", "stability-ai/stable-diffusion-3", "bytedance/sdxl-lightning-4step"],
+    defaultModel: "bytedance/seedream-4",
+    models: ["bytedance/seedream-4", "qwen/qwen-image"],
   },
   mock: {
     agentName: "mediaMockAgent",
