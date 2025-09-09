@@ -38,7 +38,7 @@ export const processSource = (imageType: ImageType) => {
   };
 };
 
-export const pathSource = (imageType: ImageType) => {
+export const pathSource = (__: ImageType) => {
   return (params: ImageProcessorParams) => {
     const { beat, context } = params;
     if (beat.image?.type == "image" || beat.image?.type == "movie") {
