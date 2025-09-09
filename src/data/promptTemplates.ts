@@ -555,6 +555,53 @@ export const promptTemplates = [
     title: "Business presentation in HTML",
   },
   {
+    description: "Template for image prompt (no style, no images).",
+    filename: "image_prompt",
+    presentationStyle: {
+      $mulmocast: {
+        credit: "closing",
+        version: "1.1",
+      },
+      audioParams: {
+        audioVolume: 1,
+        bgmVolume: 0.2,
+        closingPadding: 0.8,
+        introPadding: 1,
+        outroPadding: 1,
+        padding: 0.3,
+        suppressSpeech: false,
+      },
+      canvasSize: {
+        height: 1024,
+        width: 1536,
+      },
+      imageParams: {
+        images: {},
+        provider: "openai",
+      },
+      movieParams: {
+        provider: "replicate",
+      },
+      soundEffectParams: {
+        provider: "replicate",
+      },
+      speechParams: {
+        speakers: {
+          Presenter: {
+            displayName: {
+              en: "Presenter",
+            },
+            voiceId: "shimmer",
+          },
+        },
+      },
+    },
+    scriptName: "image_prompts_template.json",
+    systemPrompt:
+      "Another AI will generate images for each beat based on the image prompt of that beat. Movie prompts must be written in English. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+    title: "Plain Image Prompt",
+  },
+  {
     description: "Template for One Piece style comic presentation.",
     filename: "onepiece_comic",
     presentationStyle: {
