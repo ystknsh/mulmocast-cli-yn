@@ -266,6 +266,49 @@ export const promptTemplates = [
     title: "American Comic Strips",
   },
   {
+    description: "Template for documentary, biography, and other long form content.",
+    filename: "documentary",
+    presentationStyle: {
+      $mulmocast: {
+        credit: "closing",
+        version: "1.1",
+      },
+      audioParams: {
+        audioVolume: 1,
+        bgmVolume: 0.2,
+        closingPadding: 0.8,
+        introPadding: 1,
+        outroPadding: 1,
+        padding: 0.3,
+        suppressSpeech: false,
+      },
+      canvasSize: {
+        height: 1024,
+        width: 1536,
+      },
+      imageParams: {
+        style: "<style>Photo realistic and cinematic. Let the art convey the story and emotions without text. Use the image for the aspect ratio</style>",
+      },
+      soundEffectParams: {
+        provider: "replicate",
+      },
+      speechParams: {
+        speakers: {
+          Presenter: {
+            displayName: {
+              en: "Presenter",
+            },
+            voiceId: "shimmer",
+          },
+        },
+      },
+    },
+    scriptName: "text_only_template.json",
+    systemPrompt:
+      "Generate 30 to 40 beats. Another AI will generate image for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+    title: "Documentary",
+  },
+  {
     description: "Template for Dr. Slump style comic presentation.",
     filename: "drslump_comic",
     presentationStyle: {
