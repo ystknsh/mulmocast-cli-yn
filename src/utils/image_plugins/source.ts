@@ -5,6 +5,13 @@ import { MulmoMediaSourceMethods } from "../../methods/mulmo_media_source.js";
 
 type ImageType = "image" | "movie";
 
+function fixExtention(path: string, imageType: ImageType) {
+  if (imageType === "movie") {
+    return path.replace(/\.png$/, ".mov");
+  }
+  return path;
+}
+
 export const processSource = (imageType: ImageType) => {
   return async (params: ImageProcessorParams) => {
     const { beat, context } = params;
@@ -18,8 +25,9 @@ export const processSource = (imageType: ImageType) => {
       const buffer = Buffer.from(await response.arrayBuffer());
 
       // Detect file extension from Content-Type header or URL
-      await fs.promises.writeFile(params.imagePath, buffer);
-      return params.imagePath;
+      const imagePath = fixExtention(params.imagePath, beat.image.type);
+      await fs.promises.writeFile(imagePath, buffer);
+      return imagePath;
     }
     const path = MulmoMediaSourceMethods.resolve(beat.image.source, context);
     if (path) {
@@ -33,18 +41,15 @@ export const processSource = (imageType: ImageType) => {
 export const pathSource = (imageType: ImageType) => {
   return (params: ImageProcessorParams) => {
     const { beat, context } = params;
-    if (beat.image?.type == "image") {
+    if (beat.image?.type == "image" || beat.image?.type == "movie") {
       if (beat.image.source?.kind === "url") {
-        if (imageType === "image") {
-          return params.imagePath;
-        }
-        return params.imagePath.replace(/\.png$/, ".mov");
+        return fixExtention(params.imagePath, beat.image.type);
       }
       const path = MulmoMediaSourceMethods.resolve(beat.image.source, context);
       if (path) {
         return path;
       }
+      return undefined;
     }
-    return undefined;
   };
 };
