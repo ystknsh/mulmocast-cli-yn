@@ -1,0 +1,19 @@
+{
+  "title": "Documentary",
+  "description": "Template for documentary, biography, and other long form content.",
+  "systemPrompt": "Generate 30 to 40 beats. Another AI will generate image for each beat based on the text description of that beat. Mention the reference in one of beats, if it exists. Use the JSON below as a template.",
+  "presentationStyle": {
+    "$mulmocast": {
+      "version": "1.1",
+      "credit": "closing"
+    },
+    "imageParams": {
+      "style": "<style>Photo realistic and cinematic. Let the art convey the story and emotions without text. Use the image for the aspect ratio</style>"
+    },
+    "canvasSize": {
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "scriptName": "text_only_template.json"
+}
