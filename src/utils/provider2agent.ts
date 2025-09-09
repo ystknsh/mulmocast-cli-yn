@@ -42,6 +42,11 @@ export const provider2ImageAgent = {
     defaultModel: "gemini-2.5-flash-image-preview",
     models: ["imagen-3.0-generate-002", "imagen-4.0-generate-preview-06-06", "imagen-4.0-ultra-generate-preview-06-06", "gemini-2.5-flash-image-preview"],
   },
+  replicate: {
+    agentName: "imageReplicateAgent",
+    defaultModel: "black-forest-labs/flux-schnell",
+    models: ["black-forest-labs/flux-1.1-pro", "black-forest-labs/flux-schnell", "stability-ai/stable-diffusion-3", "bytedance/sdxl-lightning-4step"],
+  },
   mock: {
     agentName: "mediaMockAgent",
     defaultModel: "mock-model",

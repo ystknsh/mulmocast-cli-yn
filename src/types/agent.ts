@@ -27,6 +27,12 @@ export type OpenAIImageAgentInputs = AgentPromptInputs & { referenceImages: stri
 //   params
 export type ImageAgentParams = { model: string; canvasSize: { width: number; height: number } };
 export type OpenAIImageAgentParams = ImageAgentParams & { moderation: OpenAIImageModeration | null | undefined; quality?: OpenAIImageQuality };
+export type ReplicateImageAgentParams = ImageAgentParams & {
+  aspectRatio?: string;
+  outputSize?: number;
+  steps?: number;
+  guidanceScale?: number;
+};
 //   config
 export type OpenAIImageAgentConfig = { baseURL?: string; apiKey?: string };
 export type GoogleImageAgentConfig = {
@@ -34,6 +40,7 @@ export type GoogleImageAgentConfig = {
   token?: string;
 };
 export type GenAIImageAgentConfig = { apiKey?: string };
+export type ReplicateImageAgentConfig = AgentConfig;
 
 // movie
 //   inputs
