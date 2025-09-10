@@ -1105,10 +1105,10 @@ export const scriptTemplates = [
             heading: "How AI Is Reshaping Referencing",
             subheading: "From sources to systems: reliability, traceability, and credit in the age of models",
           },
-          style: "sectionDividerPage",
+          style: "sectionDividerSlide",
           type: "vision",
         },
-        text: "sectionDividerPage",
+        text: "sectionDividerSlide",
       },
       {
         image: {
@@ -1122,10 +1122,10 @@ export const scriptTemplates = [
             ],
             title: "Agenda",
           },
-          style: "agendaPage",
+          style: "agendaSlide",
           type: "vision",
         },
-        text: "agendaPage",
+        text: "agendaSlide",
       },
       {
         image: {
@@ -1139,10 +1139,10 @@ export const scriptTemplates = [
             ],
             title: "Executive Summary",
           },
-          style: "executiveSummaryPage",
+          style: "executiveSummarySlide",
           type: "vision",
         },
-        text: "executiveSummaryPage",
+        text: "executiveSummarySlide",
       },
       {
         image: {
@@ -1154,10 +1154,10 @@ export const scriptTemplates = [
               "Tooling gaps persist between LLM outputs and enterprise compliance systems.",
             ],
           },
-          style: "keyMessageWithSupportsPage",
+          style: "keyMessageWithSupportsSlide",
           type: "vision",
         },
-        text: "keyMessageWithSupportsPage",
+        text: "keyMessageWithSupportsSlide",
       },
       {
         image: {
@@ -1174,10 +1174,10 @@ export const scriptTemplates = [
               "Train users on prompt patterns that preserve attribution.",
             ],
           },
-          style: "hypothesisPage",
+          style: "hypothesisSlide",
           type: "vision",
         },
-        text: "hypothesisPage",
+        text: "hypothesisSlide",
       },
       {
         image: {
@@ -1189,10 +1189,10 @@ export const scriptTemplates = [
             ],
             rootIssue: "How to ensure accurate, compliant AI referencing?",
           },
-          style: "issueTreePage",
+          style: "issueTreeSlide",
           type: "vision",
         },
-        text: "issueTreePage",
+        text: "issueTreeSlide",
       },
       {
         image: {
@@ -1204,10 +1204,10 @@ export const scriptTemplates = [
             ],
             metric: "Reference accuracy rate (%)",
           },
-          style: "driverTreePage",
+          style: "driverTreeSlide",
           type: "vision",
         },
-        text: "driverTreePage",
+        text: "driverTreeSlide",
       },
       {
         image: {
@@ -1228,10 +1228,10 @@ export const scriptTemplates = [
             ],
             title: "MECE: Reference Risk Areas",
           },
-          style: "meceListPage",
+          style: "meceListSlide",
           type: "vision",
         },
-        text: "meceListPage",
+        text: "meceListSlide",
       },
       {
         image: {
@@ -1244,10 +1244,10 @@ export const scriptTemplates = [
             keyMessage: "Verifiable references unlock safe, scalable AI adoption.",
             supports: ["Reduces legal and reputational risk", "Improves stakeholder confidence", "Shortens audit cycles"],
           },
-          style: "pyramidPrinciplePage",
+          style: "pyramidPrincipleSlide",
           type: "vision",
         },
-        text: "pyramidPrinciplePage",
+        text: "pyramidPrincipleSlide",
       },
       {
         image: {
@@ -1257,10 +1257,10 @@ export const scriptTemplates = [
             question: "How can we ensure references are accurate, traceable, and compliant?",
             situation: "Teams increasingly rely on AI to synthesize knowledge and draft outputs.",
           },
-          style: "scqaPage",
+          style: "scqaSlide",
           type: "vision",
         },
-        text: "scqaPage",
+        text: "scqaSlide",
       },
       {
         image: {
@@ -1270,10 +1270,10 @@ export const scriptTemplates = [
             threats: ["Regulatory fines", "Misinformation", "IP disputes"],
             weaknesses: ["Hallucinations", "Opaque provenance", "Reviewer overload"],
           },
-          style: "swotPage",
+          style: "swotSlide",
           type: "vision",
         },
-        text: "swotPage",
+        text: "swotSlide",
       },
       {
         image: {
@@ -1282,10 +1282,10 @@ export const scriptTemplates = [
             competitor: ["Adopting reference-safe workflows", "Marketing 'trust' as a differentiator"],
             customer: ["Needs trustworthy citations", "Wants explorable sources"],
           },
-          style: "threeCPage",
+          style: "threeCSlide",
           type: "vision",
         },
-        text: "threeCPage",
+        text: "threeCSlide",
       },
       {
         image: {
@@ -1295,10 +1295,10 @@ export const scriptTemplates = [
             product: ["Reference-safe AI assistant", "Evidence panel", "Citation export"],
             promotion: ["Risk reduction ROI", "Case studies", "Compliance partnerships"],
           },
-          style: "fourPPage",
+          style: "fourPSlide",
           type: "vision",
         },
-        text: "fourPPage",
+        text: "fourPSlide",
       },
       {
         image: {
@@ -1311,10 +1311,10 @@ export const scriptTemplates = [
             style: "Evidence-first culture",
             systems: "RAG, signing, audit logs integrated in content tools",
           },
-          style: "sevenSPage",
+          style: "sevenSSlide",
           type: "vision",
         },
-        text: "sevenSPage",
+        text: "sevenSSlide",
       },
       {
         image: {
@@ -1322,10 +1322,10 @@ export const scriptTemplates = [
             primary: ["Ingestion", "Indexing", "Retrieval", "Generation", "Review", "Publication"],
             support: ["Governance", "Security", "Compliance", "Training", "Monitoring"],
           },
-          style: "valueChainPage",
+          style: "valueChainSlide",
           type: "vision",
         },
-        text: "valueChainPage",
+        text: "valueChainSlide",
       },
       {
         image: {
@@ -1336,10 +1336,10 @@ export const scriptTemplates = [
             substitutes: ["Manual research", "Traditional search-only"],
             suppliers: ["Model providers", "Content licensors"],
           },
-          style: "porterFiveForcesPage",
+          style: "porterFiveForcesSlide",
           type: "vision",
         },
-        text: "porterFiveForcesPage",
+        text: "porterFiveForcesSlide",
       },
       {
         image: {
@@ -1356,10 +1356,10 @@ export const scriptTemplates = [
               Channels: ["Add-ins", "APIs", "Marketplace"],
             },
           },
-          style: "businessModelCanvasPage",
+          style: "businessModelCanvasSlide",
           type: "vision",
         },
-        text: "businessModelCanvasPage",
+        text: "businessModelCanvasSlide",
       },
       {
         image: {
@@ -1373,10 +1373,10 @@ export const scriptTemplates = [
               ["Randomized QA", "Dashboards"],
             ],
           },
-          style: "customerJourneyPage",
+          style: "customerJourneySlide",
           type: "vision",
         },
-        text: "customerJourneyPage",
+        text: "customerJourneySlide",
       },
       {
         image: {
@@ -1408,10 +1408,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "stakeholderMapPage",
+          style: "stakeholderMapSlide",
           type: "vision",
         },
-        text: "stakeholderMapPage",
+        text: "stakeholderMapSlide",
       },
       {
         image: {
@@ -1425,10 +1425,10 @@ export const scriptTemplates = [
             roles: ["Legal", "Engineering", "L&D", "Ops"],
             tasks: ["Define policy", "Implement RAG", "Roll out training", "Monitor KPIs"],
           },
-          style: "raciPage",
+          style: "raciSlide",
           type: "vision",
         },
-        text: "raciPage",
+        text: "raciSlide",
       },
       {
         image: {
@@ -1455,10 +1455,10 @@ export const scriptTemplates = [
             ],
             title: "Reference Quality KPIs",
           },
-          style: "okrKpiDashboardPage",
+          style: "okrKpiDashboardSlide",
           type: "vision",
         },
-        text: "okrKpiDashboardPage",
+        text: "okrKpiDashboardSlide",
       },
       {
         image: {
@@ -1482,10 +1482,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "balancedScorecardPage",
+          style: "balancedScorecardSlide",
           type: "vision",
         },
-        text: "balancedScorecardPage",
+        text: "balancedScorecardSlide",
       },
       {
         image: {
@@ -1510,10 +1510,10 @@ export const scriptTemplates = [
             ],
             quarters: ["Q1", "Q2", "Q3", "Q4"],
           },
-          style: "quarterlyRoadmapPage",
+          style: "quarterlyRoadmapSlide",
           type: "vision",
         },
-        text: "quarterlyRoadmapPage",
+        text: "quarterlyRoadmapSlide",
       },
       {
         image: {
@@ -1542,10 +1542,10 @@ export const scriptTemplates = [
             ],
             title: "Implementation Timeline",
           },
-          style: "milestoneTimelinePage",
+          style: "milestoneTimelineSlide",
           type: "vision",
         },
-        text: "milestoneTimelinePage",
+        text: "milestoneTimelineSlide",
       },
       {
         image: {
@@ -1573,10 +1573,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "ganttSimplePage",
+          style: "ganttSimpleSlide",
           type: "vision",
         },
-        text: "ganttSimplePage",
+        text: "ganttSimpleSlide",
       },
       {
         image: {
@@ -1601,10 +1601,10 @@ export const scriptTemplates = [
             ],
             title: "Time Savings from AI Referencing (hrs/month)",
           },
-          style: "waterfallPage",
+          style: "waterfallSlide",
           type: "vision",
         },
-        text: "waterfallPage",
+        text: "waterfallSlide",
       },
       {
         image: {
@@ -1628,10 +1628,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "funnelPage",
+          style: "funnelSlide",
           type: "vision",
         },
-        text: "funnelPage",
+        text: "funnelSlide",
       },
       {
         image: {
@@ -1640,10 +1640,10 @@ export const scriptTemplates = [
             xAxis: "Evidence depth",
             yAxis: "Ease of use",
           },
-          style: "twoByTwoMatrixPage",
+          style: "twoByTwoMatrixSlide",
           type: "vision",
         },
-        text: "twoByTwoMatrixPage",
+        text: "twoByTwoMatrixSlide",
       },
       {
         image: {
@@ -1653,10 +1653,10 @@ export const scriptTemplates = [
             questionMarks: ["Generative browsers"],
             stars: ["Signed-citation AI editors"],
           },
-          style: "bcgMatrixPage",
+          style: "bcgMatrixSlide",
           type: "vision",
         },
-        text: "bcgMatrixPage",
+        text: "bcgMatrixSlide",
       },
       {
         image: {
@@ -1681,10 +1681,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "geMcKinseyMatrixPage",
+          style: "geMcKinseyMatrixSlide",
           type: "vision",
         },
-        text: "geMcKinseyMatrixPage",
+        text: "geMcKinseyMatrixSlide",
       },
       {
         image: {
@@ -1692,10 +1692,10 @@ export const scriptTemplates = [
             categories: ["Academic", "News", "Internal docs", "Web"],
             title: "Content Types by Share & Effort",
           },
-          style: "marimekkoPlaceholderPage",
+          style: "marimekkoPlaceholderSlide",
           type: "vision",
         },
-        text: "marimekkoPlaceholderPage",
+        text: "marimekkoPlaceholderSlide",
       },
       {
         image: {
@@ -1722,10 +1722,10 @@ export const scriptTemplates = [
             ],
             title: "Risk vs Impact vs Adoption",
           },
-          style: "bubbleChartPlaceholderPage",
+          style: "bubbleChartPlaceholderSlide",
           type: "vision",
         },
-        text: "bubbleChartPlaceholderPage",
+        text: "bubbleChartPlaceholderSlide",
       },
       {
         image: {
@@ -1734,10 +1734,10 @@ export const scriptTemplates = [
             rows: ["Teams"],
             values: [[8, 7, 9, 6]],
           },
-          style: "heatmapPlaceholderPage",
+          style: "heatmapPlaceholderSlide",
           type: "vision",
         },
-        text: "heatmapPlaceholderPage",
+        text: "heatmapPlaceholderSlide",
       },
       {
         image: {
@@ -1761,10 +1761,10 @@ export const scriptTemplates = [
             ],
             title: "KPI Highlights",
           },
-          style: "kpiHighlightPage",
+          style: "kpiHighlightSlide",
           type: "vision",
         },
-        text: "kpiHighlightPage",
+        text: "kpiHighlightSlide",
       },
       {
         image: {
@@ -1773,10 +1773,10 @@ export const scriptTemplates = [
             before: ["Manual searches", "Inconsistent citations", "Slow audits"],
             title: "Before vs After AI Referencing",
           },
-          style: "beforeAfterPage",
+          style: "beforeAfterSlide",
           type: "vision",
         },
-        text: "beforeAfterPage",
+        text: "beforeAfterSlide",
       },
       {
         image: {
@@ -1789,10 +1789,10 @@ export const scriptTemplates = [
               [9, 3, 10, 4],
             ],
           },
-          style: "optionEvaluationPage",
+          style: "optionEvaluationSlide",
           type: "vision",
         },
-        text: "optionEvaluationPage",
+        text: "optionEvaluationSlide",
       },
       {
         image: {
@@ -1818,10 +1818,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "riskMitigationPage",
+          style: "riskMitigationSlide",
           type: "vision",
         },
-        text: "riskMitigationPage",
+        text: "riskMitigationSlide",
       },
       {
         image: {
@@ -1846,10 +1846,10 @@ export const scriptTemplates = [
             xAxis: "Compliance readiness",
             yAxis: "User adoption",
           },
-          style: "positioningMapPage",
+          style: "positioningMapSlide",
           type: "vision",
         },
-        text: "positioningMapPage",
+        text: "positioningMapSlide",
       },
       {
         image: {
@@ -1859,10 +1859,10 @@ export const scriptTemplates = [
             som: 3000000000,
             tam: 50000000000,
           },
-          style: "tamSamSomPage",
+          style: "tamSamSomSlide",
           type: "vision",
         },
-        text: "tamSamSomPage",
+        text: "tamSamSomSlide",
       },
       {
         image: {
@@ -1870,10 +1870,10 @@ export const scriptTemplates = [
             drivers: ["Regulatory push for provenance", "Enterprise AI adoption", "Cost pressure to automate reviews"],
             title: "Market Growth Drivers",
           },
-          style: "marketDriversPage",
+          style: "marketDriversSlide",
           type: "vision",
         },
-        text: "marketDriversPage",
+        text: "marketDriversSlide",
       },
       {
         image: {
@@ -1881,10 +1881,10 @@ export const scriptTemplates = [
             pricingNotes: "Discounts for academic & nonprofit segments with strict compliance needs.",
             streams: ["Seats", "Usage", "Compliance add-on"],
           },
-          style: "revenueModelPage",
+          style: "revenueModelSlide",
           type: "vision",
         },
-        text: "revenueModelPage",
+        text: "revenueModelSlide",
       },
       {
         image: {
@@ -1892,10 +1892,10 @@ export const scriptTemplates = [
             buckets: ["Compute", "Licenses", "Storage", "Review ops"],
             fixedVsVariable: ["Fixed: platform & storage", "Variable: compute & review time"],
           },
-          style: "costStructurePage",
+          style: "costStructureSlide",
           type: "vision",
         },
-        text: "costStructurePage",
+        text: "costStructureSlide",
       },
       {
         image: {
@@ -1918,10 +1918,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "orgChartPage",
+          style: "orgChartSlide",
           type: "vision",
         },
-        text: "orgChartPage",
+        text: "orgChartSlide",
       },
       {
         image: {
@@ -1941,10 +1941,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "capabilityMaturityPage",
+          style: "capabilityMaturitySlide",
           type: "vision",
         },
-        text: "capabilityMaturityPage",
+        text: "capabilityMaturitySlide",
       },
       {
         image: {
@@ -1965,10 +1965,10 @@ export const scriptTemplates = [
             ],
             phases: ["MVP", "Scale", "Certify"],
           },
-          style: "techRoadmapPage",
+          style: "techRoadmapSlide",
           type: "vision",
         },
-        text: "techRoadmapPage",
+        text: "techRoadmapSlide",
       },
       {
         image: {
@@ -1977,10 +1977,10 @@ export const scriptTemplates = [
             levels: [3, 3, 2, 4],
             notes: "Prioritize training and governance backlog.",
           },
-          style: "digitalMaturityPage",
+          style: "digitalMaturitySlide",
           type: "vision",
         },
-        text: "digitalMaturityPage",
+        text: "digitalMaturitySlide",
       },
       {
         image: {
@@ -2005,10 +2005,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "ecosystemMapPage",
+          style: "ecosystemMapSlide",
           type: "vision",
         },
-        text: "ecosystemMapPage",
+        text: "ecosystemMapSlide",
       },
       {
         image: {
@@ -2016,10 +2016,10 @@ export const scriptTemplates = [
             notes: "Evidence-first culture requires incentives and leadership modeling.",
             stages: ["Awareness", "Understanding", "Adoption", "Advocacy"],
           },
-          style: "changeCurvePage",
+          style: "changeCurveSlide",
           type: "vision",
         },
-        text: "changeCurvePage",
+        text: "changeCurveSlide",
       },
       {
         image: {
@@ -2028,10 +2028,10 @@ export const scriptTemplates = [
             cadence: "Bi-weekly updates for first two quarters",
             channels: ["Town halls", "Docs add-in tips", "Slack nudges"],
           },
-          style: "communicationPlanPage",
+          style: "communicationPlanSlide",
           type: "vision",
         },
-        text: "communicationPlanPage",
+        text: "communicationPlanSlide",
       },
       {
         image: {
@@ -2039,10 +2039,10 @@ export const scriptTemplates = [
             milestones: ["MVP live", "Org-wide training", "Audit pilot"],
             workstreams: ["Tech", "Policy", "Training", "Ops"],
           },
-          style: "integrationPlanPage",
+          style: "integrationPlanSlide",
           type: "vision",
         },
-        text: "integrationPlanPage",
+        text: "integrationPlanSlide",
       },
       {
         image: {
@@ -2050,10 +2050,10 @@ export const scriptTemplates = [
             competitors: ["Manual", "Generic chatbot", "Signed AI editor"],
             metrics: ["Accuracy", "Provenance", "Latency", "Cost"],
           },
-          style: "benchmarkingTablePage",
+          style: "benchmarkingTableSlide",
           type: "vision",
         },
-        text: "benchmarkingTablePage",
+        text: "benchmarkingTableSlide",
       },
       {
         image: {
@@ -2061,10 +2061,10 @@ export const scriptTemplates = [
             questions: ["Do you trust AI references?", "Is evidence easy to review?"],
             summaries: ["Trust increased post-signing rollout.", "Review time dropped by 35%."],
           },
-          style: "surveyResultsPage",
+          style: "surveyResultsSlide",
           type: "vision",
         },
-        text: "surveyResultsPage",
+        text: "surveyResultsSlide",
       },
       {
         image: {
@@ -2082,10 +2082,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "personasPage",
+          style: "personasSlide",
           type: "vision",
         },
-        text: "personasPage",
+        text: "personasSlide",
       },
       {
         image: {
@@ -2093,10 +2093,10 @@ export const scriptTemplates = [
             descriptors: ["Risk tolerance", "Compliance needs", "Speed expectations"],
             segments: ["Academic", "Enterprise", "Media"],
           },
-          style: "segmentationPage",
+          style: "segmentationSlide",
           type: "vision",
         },
-        text: "segmentationPage",
+        text: "segmentationSlide",
       },
       {
         image: {
@@ -2120,10 +2120,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "pricingWaterfallPage",
+          style: "pricingWaterfallSlide",
           type: "vision",
         },
-        text: "pricingWaterfallPage",
+        text: "pricingWaterfallSlide",
       },
       {
         image: {
@@ -2131,10 +2131,10 @@ export const scriptTemplates = [
             scenarios: ["Best case", "Expected", "Stress"],
             variables: ["Corpus coverage", "Reviewer time", "Compute cost"],
           },
-          style: "sensitivityAnalysisPage",
+          style: "sensitivityAnalysisSlide",
           type: "vision",
         },
-        text: "sensitivityAnalysisPage",
+        text: "sensitivityAnalysisSlide",
       },
       {
         image: {
@@ -2142,10 +2142,10 @@ export const scriptTemplates = [
             categories: ["Revenue", "COGS", "Opex"],
             values: [20, 8, 6],
           },
-          style: "pLBreakdownPage",
+          style: "pLBreakdownSlide",
           type: "vision",
         },
-        text: "pLBreakdownPage",
+        text: "pLBreakdownSlide",
       },
       {
         image: {
@@ -2153,10 +2153,10 @@ export const scriptTemplates = [
             inflows: [8, 10, 12, 14],
             outflows: [6, 7, 8, 9],
           },
-          style: "cashFlowPage",
+          style: "cashFlowSlide",
           type: "vision",
         },
-        text: "cashFlowPage",
+        text: "cashFlowSlide",
       },
       {
         image: {
@@ -2165,20 +2165,20 @@ export const scriptTemplates = [
             equity: ["Paid-in capital", "Retained earnings"],
             liabilities: ["Deferred revenue", "Accounts payable"],
           },
-          style: "balanceSheetPage",
+          style: "balanceSheetSlide",
           type: "vision",
         },
-        text: "balanceSheetPage",
+        text: "balanceSheetSlide",
       },
       {
         image: {
           data: {
             drivers: ["Adoption", "Retention", "Compliance premium"],
           },
-          style: "shareholderValueTreePage",
+          style: "shareholderValueTreeSlide",
           type: "vision",
         },
-        text: "shareholderValueTreePage",
+        text: "shareholderValueTreeSlide",
       },
       {
         image: {
@@ -2186,10 +2186,10 @@ export const scriptTemplates = [
             assumptions: ["3-year horizon", "10% discount rate", "Compliance uplift included"],
             npv: 12500000,
           },
-          style: "npvSummaryPage",
+          style: "npvSummarySlide",
           type: "vision",
         },
-        text: "npvSummaryPage",
+        text: "npvSummarySlide",
       },
       {
         image: {
@@ -2197,10 +2197,10 @@ export const scriptTemplates = [
             impacts: ["Higher audit cost", "Balanced investment", "Faster rollout"],
             scenarios: ["Tight regulation", "Moderate", "Self-regulation"],
           },
-          style: "scenarioPlanningPage",
+          style: "scenarioPlanningSlide",
           type: "vision",
         },
-        text: "scenarioPlanningPage",
+        text: "scenarioPlanningSlide",
       },
       {
         image: {
@@ -2208,10 +2208,10 @@ export const scriptTemplates = [
             areas: ["Copyright", "Privacy", "Disclosure"],
             levels: ["Green", "Amber", "Red"],
           },
-          style: "complianceHeatmapPage",
+          style: "complianceHeatmapSlide",
           type: "vision",
         },
-        text: "complianceHeatmapPage",
+        text: "complianceHeatmapSlide",
       },
       {
         image: {
@@ -2220,20 +2220,20 @@ export const scriptTemplates = [
             governance: ["Audit logs", "Policy oversight"],
             social: ["Source credit", "Anti-bias reviews"],
           },
-          style: "esgFrameworkPage",
+          style: "esgFrameworkSlide",
           type: "vision",
         },
-        text: "esgFrameworkPage",
+        text: "esgFrameworkSlide",
       },
       {
         image: {
           data: {
             initiatives: ["Open citations to public research", "Academic partnerships"],
           },
-          style: "csrInitiativesPage",
+          style: "csrInitiativesSlide",
           type: "vision",
         },
-        text: "csrInitiativesPage",
+        text: "csrInitiativesSlide",
       },
       {
         image: {
@@ -2241,20 +2241,20 @@ export const scriptTemplates = [
             actions: ["Track energy per query", "Optimize inference", "Offset remaining"],
             phases: ["Measure", "Reduce", "Offset"],
           },
-          style: "sustainabilityRoadmapPage",
+          style: "sustainabilityRoadmapSlide",
           type: "vision",
         },
-        text: "sustainabilityRoadmapPage",
+        text: "sustainabilityRoadmapSlide",
       },
       {
         image: {
           data: {
             loops: ["Data ingestion", "Use", "Feedback", "Curation"],
           },
-          style: "circularEconomyMapPage",
+          style: "circularEconomyMapSlide",
           type: "vision",
         },
-        text: "circularEconomyMapPage",
+        text: "circularEconomyMapSlide",
       },
       {
         image: {
@@ -2262,10 +2262,10 @@ export const scriptTemplates = [
             counts: [120, 24, 8, 3],
             stages: ["Ideas", "Prototypes", "Pilots", "Scale"],
           },
-          style: "innovationFunnelPage",
+          style: "innovationFunnelSlide",
           type: "vision",
         },
-        text: "innovationFunnelPage",
+        text: "innovationFunnelSlide",
       },
       {
         image: {
@@ -2286,10 +2286,10 @@ export const scriptTemplates = [
             ],
             releases: ["R1", "R2", "R3"],
           },
-          style: "productRoadmapPage",
+          style: "productRoadmapSlide",
           type: "vision",
         },
-        text: "productRoadmapPage",
+        text: "productRoadmapSlide",
       },
       {
         image: {
@@ -2298,10 +2298,10 @@ export const scriptTemplates = [
             risks: ["Overpromise", "Adoption lag", "Change resistance"],
             workstreams: ["Marketing", "Sales", "Success"],
           },
-          style: "launchPlanPage",
+          style: "launchPlanSlide",
           type: "vision",
         },
-        text: "launchPlanPage",
+        text: "launchPlanSlide",
       },
       {
         image: {
@@ -2309,10 +2309,10 @@ export const scriptTemplates = [
             stages: ["Leads", "Qualified", "Trials", "Paid"],
             values: [400, 220, 120, 60],
           },
-          style: "pipelineFunnelPage",
+          style: "pipelineFunnelSlide",
           type: "vision",
         },
-        text: "pipelineFunnelPage",
+        text: "pipelineFunnelSlide",
       },
       {
         image: {
@@ -2320,10 +2320,10 @@ export const scriptTemplates = [
             metrics: ["Win rate 32%", "Cycle time 48d", "Avg deal $85k"],
             notes: "Education on value of signed references shortens cycles.",
           },
-          style: "salesDashboardPage",
+          style: "salesDashboardSlide",
           type: "vision",
         },
-        text: "salesDashboardPage",
+        text: "salesDashboardSlide",
       },
       {
         image: {
@@ -2331,10 +2331,10 @@ export const scriptTemplates = [
             levers: ["Content marketing", "Compliance webinars", "Partner co-sell", "Analyst briefings"],
             notes: "Lead with risk reduction and measurable trust.",
           },
-          style: "marketingMixPage",
+          style: "marketingMixSlide",
           type: "vision",
         },
-        text: "marketingMixPage",
+        text: "marketingMixSlide",
       },
       {
         image: {
@@ -2342,10 +2342,10 @@ export const scriptTemplates = [
             metrics: ["Time-to-value", "Feature usage", "CSAT", "Renewal rate"],
             stages: ["Onboard", "Adopt", "Expand", "Renew"],
           },
-          style: "customerSuccessJourneyPage",
+          style: "customerSuccessJourneySlide",
           type: "vision",
         },
-        text: "customerSuccessJourneyPage",
+        text: "customerSuccessJourneySlide",
       },
       {
         image: {
@@ -2353,10 +2353,10 @@ export const scriptTemplates = [
             roles: ["Agent", "Specialist", "Engineer"],
             tiers: ["Tier 1", "Tier 2", "Tier 3"],
           },
-          style: "supportOrgModelPage",
+          style: "supportOrgModelSlide",
           type: "vision",
         },
-        text: "supportOrgModelPage",
+        text: "supportOrgModelSlide",
       },
       {
         image: {
@@ -2377,10 +2377,10 @@ export const scriptTemplates = [
               },
             ],
           },
-          style: "partnershipMapPage",
+          style: "partnershipMapSlide",
           type: "vision",
         },
-        text: "partnershipMapPage",
+        text: "partnershipMapSlide",
       },
       {
         image: {
@@ -2388,10 +2388,10 @@ export const scriptTemplates = [
             stages: ["Identify", "Evaluate", "Negotiate", "Integrate"],
             targets: ["Evidence startup X", "Audit SaaS Y"],
           },
-          style: "mAPipelinePage",
+          style: "mAPipelineSlide",
           type: "vision",
         },
-        text: "mAPipelinePage",
+        text: "mAPipelineSlide",
       },
       {
         image: {
@@ -2399,10 +2399,10 @@ export const scriptTemplates = [
             sources: ["Cross-sell", "Shared infra", "Joint R&D"],
             values: [4, 1.5, 2],
           },
-          style: "synergyCapturePage",
+          style: "synergyCaptureSlide",
           type: "vision",
         },
-        text: "synergyCapturePage",
+        text: "synergyCaptureSlide",
       },
       {
         image: {
@@ -2410,10 +2410,10 @@ export const scriptTemplates = [
             behaviors: ["Cite sources", "Log context", "Flag uncertainty"],
             values: ["Truth", "Transparency", "Accountability"],
           },
-          style: "cultureValuesPage",
+          style: "cultureValuesSlide",
           type: "vision",
         },
-        text: "cultureValuesPage",
+        text: "cultureValuesSlide",
       },
       {
         image: {
@@ -2424,10 +2424,10 @@ export const scriptTemplates = [
             style: "AI Referencing Taskforce",
             url: "https://example.com/ai-references",
           },
-          style: "thankYouContactPage",
+          style: "thankYouContactSlide",
           type: "vision",
         },
-        text: "thankYouContactPage",
+        text: "thankYouContactSlide",
       },
     ],
     canvasSize: {
