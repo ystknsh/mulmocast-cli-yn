@@ -70,6 +70,9 @@ export const settings2GraphAIConfig = (
       apiKey: getKey("IMAGE", "OPENAI_API_KEY"),
       baseURL: getKey("IMAGE", "OPENAI_BASE_URL"),
     },
+    imageReplicateAgent: {
+      apiKey: getKey("IMAGE", "REPLICATE_API_TOKEN"),
+    },
     imageGenAIAgent: {
       apiKey: getKey("IMAGE", "GEMINI_API_KEY"),
     },
