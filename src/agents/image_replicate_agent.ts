@@ -1,5 +1,6 @@
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
 import Replicate from "replicate";
+import { getAspectRatio } from "./movie_replicate_agent.js";
 
 import type { AgentBufferResult, ImageAgentInputs, AgentConfig } from "../types/agent.js";
 
@@ -24,7 +25,7 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
     prompt,
     width: canvasSize.width,
     height: canvasSize.height,
-  } as { prompt: string; width: number; height: number, size?: string, aspect_ratio?: string  };
+  } as { prompt: string; width: number; height: number; size?: string; aspect_ratio?: string };
 
   if (model === "bytedance/seedream-4") {
     input.size = "custom";
@@ -39,7 +40,7 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
       input.height = 1024;
     }
   } else if (model === "qwen/qwen-image") {
-    input.aspect_ratio = "3:4"
+    input.aspect_ratio = getAspectRatio(canvasSize);
   }
 
   // Add image if provided (for image-to-image generation)
