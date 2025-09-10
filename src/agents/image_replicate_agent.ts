@@ -27,101 +27,9 @@ type ReplicateImageModel = keyof typeof REPLICATE_IMAGE_MODELS;
 
 export type ReplicateImageAgentParams = ImageAgentParams & {
   model?: ReplicateImageModel;
-  aspectRatio?: string;
-  outputSize?: number;
-  steps?: number;
-  guidanceScale?: number;
 };
 
 export type ReplicateImageAgentConfig = AgentConfig;
-
-const getAspectRatio = (canvasSize: { width: number; height: number }): string => {
-  const ratio = canvasSize.width / canvasSize.height;
-
-  if (Math.abs(ratio - 1) < 0.1) return "1:1";
-  if (Math.abs(ratio - 16 / 9) < 0.1) return "16:9";
-  if (Math.abs(ratio - 9 / 16) < 0.1) return "9:16";
-  if (Math.abs(ratio - 2 / 3) < 0.1) return "2:3";
-  if (Math.abs(ratio - 3 / 2) < 0.1) return "3:2";
-  if (Math.abs(ratio - 4 / 5) < 0.1) return "4:5";
-  if (Math.abs(ratio - 5 / 4) < 0.1) return "5:4";
-
-  // Default fallback based on orientation
-  if (ratio > 1) return "16:9";
-  if (ratio < 1) return "9:16";
-  return "1:1";
-};
-
-async function generateImage(
-  model: ReplicateImageModel,
-  apiKey: string,
-  prompt: string,
-  aspectRatio: string,
-  outputSize: number,
-  steps?: number,
-  guidanceScale?: number,
-): Promise<Buffer> {
-  const replicate = new Replicate({
-    auth: apiKey,
-  });
-
-  const input: Record<string, unknown> = {
-    prompt,
-    aspect_ratio: aspectRatio,
-    output_format: "png",
-    output_quality: 90,
-  };
-
-  // Add model-specific parameters
-  if (model === "black-forest-labs/flux-1.1-pro") {
-    input.width = outputSize;
-    input.height = outputSize;
-    input.safety_tolerance = 2;
-    if (steps) input.steps = steps;
-    if (guidanceScale) input.guidance = guidanceScale;
-  } else if (model === "black-forest-labs/flux-schnell") {
-    input.width = outputSize;
-    input.height = outputSize;
-    if (steps) input.num_inference_steps = steps;
-  } else if (model === "stability-ai/stable-diffusion-3") {
-    input.width = outputSize;
-    input.height = outputSize;
-    if (steps) input.num_inference_steps = steps;
-    if (guidanceScale) input.guidance_scale = guidanceScale;
-  } else if (model === "bytedance/sdxl-lightning-4step") {
-    input.width = outputSize;
-    input.height = outputSize;
-    if (guidanceScale) input.guidance_scale = guidanceScale;
-  }
-
-  try {
-    const output = await replicate.run(model, { input });
-
-    // Handle different output formats
-    let imageUrl: string;
-    if (Array.isArray(output) && output.length > 0) {
-      imageUrl = output[0] as string;
-    } else if (typeof output === "string") {
-      imageUrl = output;
-    } else if (output && typeof output === "object" && "url" in output) {
-      imageUrl = (output.url as () => URL)().toString();
-    } else {
-      throw new Error("Unexpected output format from Replicate");
-    }
-
-    // Download the generated image
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) {
-      throw new Error(`Error downloading image: ${imageResponse.status} - ${imageResponse.statusText}`);
-    }
-
-    const arrayBuffer = await imageResponse.arrayBuffer();
-    return Buffer.from(arrayBuffer);
-  } catch (error) {
-    GraphAILogger.info("Replicate image generation error:", error);
-    throw error;
-  }
-}
 
 export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, AgentBufferResult, ImageAgentInputs, ReplicateImageAgentConfig> = async ({
   namedInputs,
@@ -129,7 +37,14 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
   config,
 }) => {
   const { prompt } = namedInputs;
-  const { canvasSize, model, aspectRatio, outputSize, steps, guidanceScale } = params;
+  const { canvasSize, model } = params;
+  const apiKey = config?.apiKey;
+  if (!apiKey) {
+    throw new Error("Replicate API key is required (REPLICATE_API_TOKEN)");
+  }
+  const replicate = new Replicate({
+    auth: apiKey,
+  });
 
   // Default model
   const selectedModel: ReplicateImageModel = model ?? "black-forest-labs/flux-schnell";
@@ -139,29 +54,47 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
     throw new Error(`Model ${selectedModel} is not supported. Available models: ${Object.keys(REPLICATE_IMAGE_MODELS).join(", ")}`);
   }
 
-  // Determine aspect ratio
-  const targetAspectRatio = aspectRatio ?? getAspectRatio(canvasSize);
-  const modelConfig = REPLICATE_IMAGE_MODELS[selectedModel];
+  const input = {
+    prompt,
+    width: canvasSize.width,
+    height: canvasSize.height,
+  };
 
-  // Validate aspect ratio support
-  if (!modelConfig.aspectRatios.includes(targetAspectRatio as (typeof modelConfig.aspectRatios)[number])) {
-    GraphAILogger.info(`Warning: Aspect ratio ${targetAspectRatio} not officially supported by ${selectedModel}, using anyway`);
+  // Add image if provided (for image-to-image generation)
+  /*
+  if (imagePath) {
+    const buffer = readFileSync(imagePath);
+    const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
+    const start_image = provider2MovieAgent.replicate.modelParams[model]?.start_image;
+    if (start_image === "first_frame_image" || start_image === "image" || start_image === "start_image") {
+      input[start_image] = base64Image;
+    } else if (start_image === undefined) {
+      throw new Error(`Model ${model} does not support image-to-video generation`);
+    } else {
+      input.image = base64Image;
+    }
   }
-
-  // Determine output size
-  const targetOutputSize = outputSize ?? Math.min(modelConfig.maxOutputSize, Math.max(canvasSize.width, canvasSize.height));
-
-  const apiKey = config?.apiKey;
-  if (!apiKey) {
-    throw new Error("Replicate API key is required (REPLICATE_API_TOKEN)");
-  }
+  */
 
   try {
-    const buffer = await generateImage(selectedModel, apiKey, prompt, targetAspectRatio, targetOutputSize, steps, guidanceScale);
+    const output = await replicate.run(model, { input });
 
-    return { buffer };
+    // Download the generated video
+    if (output && typeof output === "object" && "url" in output) {
+      const imageUrl = (output.url as () => URL)();
+      const imageResponse = await fetch(imageUrl);
+
+      if (!imageResponse.ok) {
+        throw new Error(`Error downloading video: ${imageResponse.status} - ${imageResponse.statusText}`);
+      }
+
+      const arrayBuffer = await imageResponse.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      return { buffer };
+    }
+    throw new Error("ERROR: generateImage returned undefined");
   } catch (error) {
-    GraphAILogger.info("Failed to generate image:", (error as Error).message);
+    GraphAILogger.info("Replicate generation error:", error);
     throw error;
   }
 };
