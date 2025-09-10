@@ -13,6 +13,7 @@ import { MulmoStudioContext, MulmoStudioBeat, MulmoImageParams, PublicAPIArgs } 
 import {
   imageGenAIAgent,
   imageOpenaiAgent,
+  imageReplicateAgent,
   movieGenAIAgent,
   movieReplicateAgent,
   mediaMockAgent,
@@ -34,6 +35,7 @@ const vanillaAgents = vanilla.default ?? vanilla;
 const imageAgents = {
   imageGenAIAgent,
   imageOpenaiAgent,
+  imageReplicateAgent,
 };
 const movieAgents = {
   movieGenAIAgent,

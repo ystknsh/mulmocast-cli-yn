@@ -27,6 +27,14 @@ export type OpenAIImageAgentInputs = AgentPromptInputs & { referenceImages: stri
 //   params
 export type ImageAgentParams = { model: string; canvasSize: { width: number; height: number } };
 export type OpenAIImageAgentParams = ImageAgentParams & { moderation: OpenAIImageModeration | null | undefined; quality?: OpenAIImageQuality };
+export type ReplicateImageAgentParams = {
+  model: `${string}/${string}` | undefined;
+  canvasSize: { width: number; height: number };
+  aspectRatio?: string;
+  outputSize?: number;
+  steps?: number;
+  guidanceScale?: number;
+};
 //   config
 export type OpenAIImageAgentConfig = { baseURL?: string; apiKey?: string };
 export type GoogleImageAgentConfig = {
@@ -34,6 +42,7 @@ export type GoogleImageAgentConfig = {
   token?: string;
 };
 export type GenAIImageAgentConfig = { apiKey?: string };
+export type ReplicateImageAgentConfig = AgentConfig;
 
 // movie
 //   inputs
@@ -41,7 +50,6 @@ export type MovieAgentInputs = AgentPromptInputs & { imagePath?: string; movieFi
 //   params
 export type GoogleMovieAgentParams = ImageAgentParams & { duration?: number };
 export type ReplicateMovieAgentParams = { model: `${string}/${string}` | undefined; canvasSize: { width: number; height: number }; duration?: number };
-
 // sound effect
 export type ReplicateSoundEffectAgentParams = { model: `${string}/${string}` | undefined; duration?: number };
 export type SoundEffectAgentInputs = AgentPromptInputs & { soundEffectFile: string; movieFile: string };

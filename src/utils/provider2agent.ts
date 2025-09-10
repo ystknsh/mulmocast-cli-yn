@@ -42,6 +42,11 @@ export const provider2ImageAgent = {
     defaultModel: "gemini-2.5-flash-image-preview",
     models: ["imagen-3.0-generate-002", "imagen-4.0-generate-preview-06-06", "imagen-4.0-ultra-generate-preview-06-06", "gemini-2.5-flash-image-preview"],
   },
+  replicate: {
+    agentName: "imageReplicateAgent",
+    defaultModel: "bytedance/seedream-4",
+    models: ["bytedance/seedream-4", "qwen/qwen-image"],
+  },
   mock: {
     agentName: "mediaMockAgent",
     defaultModel: "mock-model",
