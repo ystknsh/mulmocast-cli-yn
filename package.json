@@ -88,7 +88,7 @@
     "graphai": "^2.0.14",
     "jsdom": "^26.1.0",
     "marked": "^16.2.1",
-    "mulmocast-vision": "^0.0.9",
+    "mulmocast-vision": "^0.1.1",
     "ora": "^8.2.0",
     "puppeteer": "^24.19.0",
     "replicate": "^1.1.0",
@@ -109,7 +109,7 @@
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.42.0"
+    "typescript-eslint": "^8.43.0"
   },
   "engines": {
     "node": ">=18.0.0"
