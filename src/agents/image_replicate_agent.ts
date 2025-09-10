@@ -3,32 +3,6 @@ import Replicate from "replicate";
 
 import type { AgentBufferResult, ImageAgentInputs, ImageAgentParams, AgentConfig } from "../types/agent.js";
 
-// Common Replicate image generation models
-const REPLICATE_IMAGE_MODELS = {
-  "black-forest-labs/flux-1.1-pro": {
-    aspectRatios: ["1:1", "16:9", "9:16", "2:3", "3:2", "4:5", "5:4"],
-    maxOutputSize: 2048,
-  },
-  "black-forest-labs/flux-schnell": {
-    aspectRatios: ["1:1", "16:9", "9:16", "2:3", "3:2", "4:5", "5:4"],
-    maxOutputSize: 1024,
-  },
-  "stability-ai/stable-diffusion-3": {
-    aspectRatios: ["1:1", "16:9", "9:16", "2:3", "3:2", "4:5", "5:4"],
-    maxOutputSize: 1024,
-  },
-  "bytedance/sdxl-lightning-4step": {
-    aspectRatios: ["1:1", "16:9", "9:16"],
-    maxOutputSize: 1024,
-  },
-} as const;
-
-type ReplicateImageModel = keyof typeof REPLICATE_IMAGE_MODELS;
-
-export type ReplicateImageAgentParams = ImageAgentParams & {
-  model?: ReplicateImageModel;
-};
-
 export type ReplicateImageAgentConfig = AgentConfig;
 
 export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, AgentBufferResult, ImageAgentInputs, ReplicateImageAgentConfig> = async ({
@@ -45,14 +19,6 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
   const replicate = new Replicate({
     auth: apiKey,
   });
-
-  // Default model
-  const selectedModel: ReplicateImageModel = model ?? "black-forest-labs/flux-schnell";
-
-  // Validate model
-  if (!REPLICATE_IMAGE_MODELS[selectedModel]) {
-    throw new Error(`Model ${selectedModel} is not supported. Available models: ${Object.keys(REPLICATE_IMAGE_MODELS).join(", ")}`);
-  }
 
   const input = {
     prompt,
