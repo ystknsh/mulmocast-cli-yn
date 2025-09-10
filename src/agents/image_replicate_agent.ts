@@ -24,7 +24,7 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
     prompt,
     width: canvasSize.width,
     height: canvasSize.height,
-  } as { prompt: string; width: number; height: number, size?: string  };
+  } as { prompt: string; width: number; height: number, size?: string, aspect_ratio?: string  };
 
   if (model === "bytedance/seedream-4") {
     input.size = "custom";
@@ -38,6 +38,8 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
       input.width = Math.round(input.width * ratio);
       input.height = 1024;
     }
+  } else if (model === "qwen/qwen-image") {
+    input.aspect_ratio = "3:4"
   }
 
   // Add image if provided (for image-to-image generation)
