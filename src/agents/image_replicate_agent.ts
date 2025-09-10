@@ -23,8 +23,9 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
   const input = {
     prompt,
     width: canvasSize.width,
-    height: canvasSize.height,
+    height: canvasSize.height * 2,
   };
+  console.log("**********", input);
 
   // Add image if provided (for image-to-image generation)
   /*
@@ -46,8 +47,9 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
     const output = await replicate.run(model, { input });
 
     // Download the generated video
-    if (output && typeof output === "object" && "url" in output) {
-      const imageUrl = (output.url as () => URL)();
+    if (output && Array.isArray(output) && output.length > 0 && typeof output[0] === "object" && "url" in output[0]) {
+      const imageUrl = (output[0].url as () => URL)();
+      console.log("********** URL", imageUrl);
       const imageResponse = await fetch(imageUrl);
 
       if (!imageResponse.ok) {
@@ -55,9 +57,11 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
       }
 
       const arrayBuffer = await imageResponse.arrayBuffer();
+      console.log("********* Length", arrayBuffer.byteLength);
       const buffer = Buffer.from(arrayBuffer);
       return { buffer };
     }
+    console.log("ERROR: generateImage returned undefined", output);
     throw new Error("ERROR: generateImage returned undefined");
   } catch (error) {
     GraphAILogger.info("Replicate generation error:", error);
