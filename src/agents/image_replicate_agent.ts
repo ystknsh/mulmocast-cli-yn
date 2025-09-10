@@ -1,8 +1,10 @@
 import { AgentFunction, AgentFunctionInfo, GraphAILogger } from "graphai";
 import Replicate from "replicate";
 import { getAspectRatio } from "./movie_replicate_agent.js";
+import type { ReplicateImageAgentParams } from "../types/agent.js";
 
 import type { AgentBufferResult, ImageAgentInputs, AgentConfig } from "../types/agent.js";
+import { provider2ImageAgent } from "../utils/provider2agent.js";
 
 export type ReplicateImageAgentConfig = AgentConfig;
 
@@ -12,7 +14,8 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
   config,
 }) => {
   const { prompt } = namedInputs;
-  const { canvasSize, model } = params;
+  const { canvasSize } = params;
+  const model = params.model ?? provider2ImageAgent.replicate.defaultModel as `${string}/${string}`;
   const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("Replicate API key is required (REPLICATE_API_TOKEN)");
