@@ -15,7 +15,7 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
 }) => {
   const { prompt } = namedInputs;
   const { canvasSize } = params;
-  const model = params.model ?? provider2ImageAgent.replicate.defaultModel as `${string}/${string}`;
+  const model = params.model ?? (provider2ImageAgent.replicate.defaultModel as `${string}/${string}`);
   const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("Replicate API key is required (REPLICATE_API_TOKEN)");
