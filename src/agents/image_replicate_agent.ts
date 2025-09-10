@@ -11,7 +11,8 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
   config,
 }) => {
   const { prompt } = namedInputs;
-  const { canvasSize, model } = params;
+  const { model } = params;
+  const canvasSize = { width: params.canvasSize.width, height: params.canvasSize.height };
   const apiKey = config?.apiKey;
   if (!apiKey) {
     throw new Error("Replicate API key is required (REPLICATE_API_TOKEN)");
@@ -20,10 +21,23 @@ export const imageReplicateAgent: AgentFunction<ReplicateImageAgentParams, Agent
     auth: apiKey,
   });
 
+  if (model === "bytedance/seedream-4") {
+    if (canvasSize.width < 1024) {
+      const ratio = 1024 / canvasSize.width;
+      canvasSize.width = 1024;
+      canvasSize.height = Math.round(canvasSize.height * ratio);
+    }
+    if (canvasSize.height < 1024) {
+      const ratio = 1024 / canvasSize.height;
+      canvasSize.width = Math.round(canvasSize.width * ratio);
+      canvasSize.height = 1024;
+    }
+  }
+
   const input = {
     prompt,
     width: canvasSize.width,
-    height: canvasSize.height * 2,
+    height: canvasSize.height,
   };
 
   // Add image if provided (for image-to-image generation)
